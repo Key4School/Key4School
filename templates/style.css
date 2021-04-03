@@ -1,0 +1,28 @@
+.bandeau{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #b2acfa;
+  padding: 2%;
+}
+.iconemenu{
+  width: 25px;
+  height:auto;
+}
+.iconemenu:hover{
+  cursor: pointer;
+}
+.iconereaction{
+  width: 20px;
+  height:auto;
+}
+.iconereaction{
+  cursor: pointer;
+}
+.pub1{
+  display: flex;
+  align-items: center;
+}
+.content{
+  vertical-align: middle;
+}
