@@ -6,6 +6,7 @@ from pronotepy.ent import ile_de_france
 app = Flask(__name__)
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
+'''le lien de l'api pour plus d'info https://github.com/bain3/pronotepy'''
 # client = pronotepy.Client('https://0910626l.index-education.net/pronote/eleve.html',
 #                           username=username,
 #                           password=mdpENT,
@@ -23,10 +24,7 @@ def accueil2():
     return render_template("ma_page.html")
 
 
-#testtesttest
-
-
-
+# testtesttest
 
 
 # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
