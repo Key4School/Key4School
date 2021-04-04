@@ -6,32 +6,126 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mon lycée</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="menu.js"></script>
 </head>
 
 <body>
   <div class="bandeau">
-    <img alt="menu" src="menu.png" class="iconemenu" />
-    <input type="text" placeholder="rechercher" />
+    <div class="menu">
+      <img Onclick='divmenu()' alt="menu" src="menu.png" class="iconebandeau" />
+    </div>
+
+    <input type="text" placeholder="Recherche..." style="padding:5px;">
     <div class="profile">
-      <img alt="avatar" src="avatar.png" class="iconemenu" />
+      <img alt="avatar" src="avatar.png" class="iconebandeau" />
       <progress value="70" max="100">70 %</progress>
     </div>
-    <img alt="notif" src="cloche.png" class="iconemenu" />
+    <img Onclick='divnotif()' alt="notif" src="cloche.png" class="iconebandeau" />
   </div>
-  <br />
-  <br />
-  <div class"publications">
-    <div class="pub1">
-      <img alt="avatar" src="avatar.png" class="iconemenu" />
-      <div class="content">
-        <h2>Titre</h2>
-        <p>
-          Text
-        </p>
-        <img alt="like" src="like.png" class="iconereaction" />
-        <img alt="commentaire" src="comment.png" class="iconereaction" />
+  <div id="page">
+    <div id="multichoix">
+      <div class="ligne">
+        <img alt="home" src="home.png" class="iconemenu" />
+        <a href="index.html" class="titremenu">
+          Acceuil
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="lycee" src="lycee.png" class="iconemenu" />
+        <a href="monlycee.html" class="titremenu">
+          Mon lycée
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="classe" src="classe.png" class="iconemenu" />
+        <a href="classe.html" class="titremenu">
+          Ma classe
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="question" src="question.png" class="iconemenu" />
+        <a href="question.html" class="titremenu">
+          Poser une question
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="professeur" src="prof.png" class="iconemenu" />
+        <a href="professeur.html" class="titremenu">
+          Mes professeur
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="messages" src="msg.png" class="iconemenu" />
+        <a href="messages.html" class="titremenu">
+          Messages privés
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="archives" src="archives.png" class="iconemenu" />
+        <a href="archives.html" class="titremenu">
+          Archives
+        </a>
+      </div>
+      <img alt="parametre" src="parametre.png" class="iconeparametre" />
+
+    </div>
+    <div id="notif">
+      <div class="notif1">
+        <img alt="avatar" src="avatar.png" class="persopubli" />
+        <div class="contentnotif">
+          <h2>Nouvel atelier d'écriture</h2>
+          <p>
+            Retrouvez nous tous
+
+          </p>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class"publications">
+      <div class="pub">
+        <img alt="avatar" src="avatar.png" class="persopubli" />
+        <div class="contentpub">
+          <h2>Le CVL organise un évènement ! </h2>
+          <p>
+            Rendez-vous le 24/04/2021 dans la salle polyvalente !!
+          </p>
+          <img alt="like" src="like.png" class="iconereaction" />
+          <img alt="commentaire" src="comment.png" class="iconereaction" />
+        </div>
+      </div>
+      <div class="pub">
+        <img alt="avatar" src="avatar.png" class="persopubli" />
+        <div class="contentpub">
+          <h2>Nouvel atelier d'écriture bientôt au CDI !</h2>
+          <p>
+            Retrouvez nous tous les mercredis dans l'aile droite du CDI pour participer à notre atelier !
+            <br /><br />
+            A bientôt !<br />
+            Les documentalistes.
+          </p>
+          <img alt="like" src="like.png" class="iconereaction" />
+          <img alt="commentaire" src="comment.png" class="iconereaction" />
+        </div>
+      </div>
+      <div class="pub">
+        <img alt="avatar" src="avatar.png" class="persopubli" />
+        <div class="contentpub">
+          <h2>Bravo à tous les participants au concours  de dessin !</h2>
+          <p>
+              Voici les oeuvres des gagnants :
+          </p>
+          <img alt="image publication" src="imgvide.png" class="imagepublication"/>
+          <br />
+          <br />
+          <img alt="like" src="like.png" class="iconereaction" />
+          <img alt="commentaire" src="comment.png" class="iconereaction" />
+        </div>
+      </div>
     </div>
   </div>
+
 </body>
 
 </html>
