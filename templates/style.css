@@ -142,3 +142,28 @@ h2{
   align-items: center;
   text-align: center;
 }
+
+.ligne1profile{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.photoprofile{
+  display: flex;
+  align-items: center;
+}
+.iconeinfoprofile{
+  width: 25px;
+  height:auto;
+}
+.contentinfoprofile{
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  margin-left: 35%;
+  margin-right: 35%;
+}
+.themeligne{
+  display: flex;
+  align-items: center;
+}
