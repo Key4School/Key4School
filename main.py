@@ -14,8 +14,10 @@ app = Flask(__name__)
 #                           password=mdpENT,
 #                           ent=ile_de_france)
 
+# salut
 
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
+
 
 @app.route('/')
 def accueil():
