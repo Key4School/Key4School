@@ -22,16 +22,17 @@ def accueil():
     return render_template("index.html")
 
 
-@app.route('/accueil/')
+@app.route('/accueil')
 def accueil2():
     return render_template("index.html")
 
 
-@app.route('/messages/')
+@app.route('/messages')
 def messages():
     return render_template("messages.html")
 
-@app.route('/profile/')
+
+@app.route('/profile')
 def profile():
     return render_template("profile.html")
 
