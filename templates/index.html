@@ -5,58 +5,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mon lycée</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script src="menu.js"></script>
+  <script src="{{url_for('static',filename='js/menu.js')}}"></script>
 </head>
 
 <body>
   <div class="bandeau">
     <div class="menu">
-      <img Onclick='divmenu()' alt="menu" src="image/menu.png" class="iconebandeau" />
+      <img Onclick='divmenu()' alt="menu" src="{{url_for('static',filename='image/menu.png')}}" class="iconebandeau" />
     </div>
 
     <input type="text" placeholder="Recherche..." style="padding:5px;">
     <div class="profile">
-      <a href="profile.html"><img alt="avatar" src="image/avatar.png" class="iconebandeau" /></a>
+      <a href="profile.html"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
       <progress value="70" max="100">70 %</progress>
     </div>
-    <img Onclick='divnotif()' alt="notif" src="image/cloche.png" class="iconebandeau" />
+    <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/cloche.png')}}" class="iconebandeau" />
   </div>
   <div id="page">
     <div id="multichoix">
       <div class="ligne">
-        <img alt="home" src="image/home.png" class="iconemenu" />
+        <img alt="home" src="{{url_for('static',filename='image/home.png')}}" class="iconemenu" />
         <a href="index.html" class="titremenu">
           Acceuil
         </a>
       </div>
       <div class="ligne">
-        <img alt="lycee" src="image/lycee.png" class="iconemenu" />
+        <img alt="lycee" src="{{url_for('static',filename='image/lycee.png')}}" class="iconemenu" />
         <a href="monlycee.html" class="titremenu">
           Mon lycée
         </a>
       </div>
       <div class="ligne">
-        <img alt="classe" src="image/classe.png" class="iconemenu" />
+        <img alt="classe" src="{{url_for('static',filename='image/classe.png')}}" class="iconemenu" />
         <a href="classe.html" class="titremenu">
           Ma classe
         </a>
       </div>
       <div class="ligne">
-        <img alt="question" src="image/question.png" class="iconemenu" />
+        <img alt="question" src="{{url_for('static',filename='image/question.png')}}" class="iconemenu" />
         <a href="question.html" class="titremenu">
           Poser une question
         </a>
       </div>
       <div class="ligne">
-        <img alt="professeur" src="image/prof.png" class="iconemenu" />
+        <img alt="professeur" src="{{url_for('static',filename='image/prof.png')}}" class="iconemenu" />
         <a href="professeur.html" class="titremenu">
           Mes professeur
         </a>
       </div>
       <div class="ligne">
-        <img alt="messages" src="image/msg.png" class="iconemenu" />
+        <img alt="messages" src="{{url_for('static',filename='image/msg.png')}}" class="iconemenu" />
         <a href="messages.html" class="titremenu">
           Messages privés
         </a>
@@ -65,17 +65,17 @@
         </p>
       </div>
       <div class="ligne">
-        <img alt="archives" src="image/archives.png" class="iconemenu" />
+        <img alt="archives" src="{{url_for('static',filename='image/archives.png')}}" class="iconemenu" />
         <a href="archives.html" class="titremenu">
           Archives
         </a>
       </div>
-      <img alt="parametre" src="image/parametre.png" class="iconeparametre" />
+      <img alt="parametre" src="{{url_for('static',filename='image/parametre.png')}}" class="iconeparametre" />
 
     </div>
     <div id="notif">
       <div class="notif1">
-        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <div class="contentnotif">
           <h2>Nouvel atelier d'écriture</h2>
           <p>
@@ -88,18 +88,18 @@
     <br />
     <div class"publications">
       <div class="pub">
-        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <div class="contentpub">
           <h2>Le CVL organise un évènement ! </h2>
           <p>
             Rendez-vous le 24/04/2021 dans la salle polyvalente !!
           </p>
-          <img alt="like" src="image/like.png" class="iconereaction" />
-          <img alt="commentaire" src="image/comment.png" class="iconereaction" />
+          <img alt="like" src="{{url_for('static',filename='image/like.png')}}" class="iconereaction" />
+          <img alt="commentaire" src="{{url_for('static',filename='image/comment.png')}}" class="iconereaction" />
         </div>
       </div>
       <div class="pub">
-        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <div class="contentpub">
           <h2>Nouvel atelier d'écriture bientôt au CDI !</h2>
           <p>
@@ -108,22 +108,22 @@
             A bientôt !<br />
             Les documentalistes.
           </p>
-          <img alt="like" src="image/like.png" class="iconereaction" />
-          <img alt="commentaire" src="image/comment.png" class="iconereaction" />
+          <img alt="like" src="{{url_for('static',filename='image/like.png')}}" class="iconereaction" />
+          <img alt="commentaire" src="{{url_for('static',filename='image/comment.png')}}" class="iconereaction" />
         </div>
       </div>
       <div class="pub">
-        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <div class="contentpub">
           <h2>Bravo à tous les participants au concours  de dessin !</h2>
           <p>
               Voici les oeuvres des gagnants :
           </p>
-          <img alt="image publication" src="image/imgvide.png" class="imagepublication"/>
+          <img alt="image publication" src="{{url_for('static',filename='image/imgvide.png')}}" class="imagepublication"/>
           <br />
           <br />
-          <img alt="like" src="image/like.png" class="iconereaction" />
-          <img alt="commentaire" src="image/comment.png" class="iconereaction" />
+          <img alt="like" src="{{url_for('static',filename='image/like.png')}}" class="iconereaction" />
+          <img alt="commentaire" src="{{url_for('static',filename='image/comment.png')}}" class="iconereaction" />
         </div>
       </div>
     </div>
