@@ -1,11 +1,19 @@
 from flask import Flask, render_template, request
 import pronotepy  # api Pronote
 from pronotepy.ent import ile_de_france
+from flask_pymongo import PyMongo
 
 # Création de l'application
-
-
 app = Flask(__name__)
+
+# Récupération d'une base de données
+cluster = PyMongo(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
+# Voici deux exemples pour créer des BDD
+db_utilisateurs = cluster.db.Utilisateurs
+db_posts = cluster.db.Posts
+# Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
+db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
+
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
 '''le lien de l'api pour plus d'info https://github.com/bain3/pronotepy'''
