@@ -7,7 +7,8 @@ from flask_pymongo import PyMongo
 app = Flask(__name__)
 
 # Récupération d'une base de données
-cluster = PyMongo(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
+cluster = PyMongo(
+    app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 # Voici deux exemples pour créer des BDD
 db_utilisateurs = cluster.db.Utilisateurs
 db_posts = cluster.db.Posts
@@ -30,7 +31,8 @@ def accueil():
     return render_template("index.html")
 
 
-@app.route('/accueil/') #laisser le nom entre deux slash ca permet d'accepter toutes les urls du style http://127.0.0.1:3000/messages/ sinon ca marche pas.s
+# laisser le nom entre deux slash ca permet d'accepter toutes les urls du style http://127.0.0.1:3000/messages/ sinon ca marche pas.s
+@app.route('/accueil/')
 def accueil2():
     return render_template("index.html")
 
@@ -43,6 +45,31 @@ def messages():
 @app.route('/profile/')
 def profile():
     return render_template("profile.html")
+
+
+@app.route('/archives/')
+def archives():
+    return render_template("archives.html")
+
+
+@app.route('/classe/')
+def classe():
+    return render_template("classe.html")
+
+
+@app.route('/monlycee/')
+def monlycee():
+    return render_template("monlycee.html")
+
+
+@app.route('/professeur/')
+def archives():
+    return render_template("professeur.html")
+
+
+@app.route('/question/')
+def question():
+    return render_template("question.html")
 
 
 # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
