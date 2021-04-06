@@ -22,17 +22,17 @@ def accueil():
     return render_template("index.html")
 
 
-@app.route('/accueil')
+@app.route('/accueil/') #laisser le nom entre deux slash ca permet d'accepter toutes les urls du style http://127.0.0.1:3000/messages/ sinon ca marche pas.s
 def accueil2():
     return render_template("index.html")
 
 
-@app.route('/messages')
+@app.route('/messages/')
 def messages():
     return render_template("messages.html")
 
 
-@app.route('/profile')
+@app.route('/profile/')
 def profile():
     return render_template("profile.html")
 
