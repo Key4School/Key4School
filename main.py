@@ -12,7 +12,7 @@ cluster = PyMongo(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net
 db_utilisateurs = cluster.db.Utilisateurs
 db_posts = cluster.db.Posts
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
-db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
+# db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
 
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
