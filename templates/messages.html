@@ -8,28 +8,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- titre en haut dans le navigateur -->
   <title>Messages</title>
-<<<<<<< HEAD
   <!-- page de style -->
   <link rel="stylesheet" type="text/css" href="style.css">
-=======
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
-  <script src="{{url_for('static',filename='js/main.js')}}" type="text/javascript"></script>
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
 </head>
 
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
 <body style="overflow:hidden;">
   <!-- debut de la div pour le profile de l'utilisateur avec le nbre d'XP, sa photo de profile et la barre de progression-->
   <div class="profilemessage">
-<<<<<<< HEAD
     <!-- photo de profile -->
     <a href="profile.html"><img alt="avatar" src="image/avatar.png" class="iconebandeau" /></a>
     <!-- des espace pour separer -->
     &nbsp;&nbsp;
     <!-- afficher le nbre XP -->
-=======
-    <a href="profile.html"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>&nbsp;&nbsp;
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
     <p style="margin:0px">
       70XP
     </p>
@@ -118,12 +109,8 @@
             Participant 1, Participant 2, Participant 3, Participant 4, Participant 5, Participant 6, Participant 7, ...
           </p>
         </div>
-<<<<<<< HEAD
         <!-- les trois petit points a droite -->
         <a href="messages.html"><img src="image/3points.png" style="width: 20px;height:auto;margin-bottom:5px;" /></a>
-=======
-        <a href="messages.html"><img src="{{url_for('static',filename='image/3points.png')}}" style="width: 20px;height:auto;margin-bottom:5px;" /></a>
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;height:50%;">
@@ -173,7 +160,6 @@
       <!-- fin de tt les msg -->
       <!-- debut de la div pour envoyer le msg -->
       <div class="barreenvoi" style="margin-top:3%;min-width: 75%;max-width: 75%;">
-<<<<<<< HEAD
         <!-- icone pour envoyer une photo -->
         <img src="image/photo.png" class="iconebarremsg" />
         <!-- barre pour ecrire le msg -->
@@ -182,12 +168,6 @@
         <img src="image/flecheenvoi.png" class="iconebarremsg" />
         <!-- icone pour mettre un msg audio -->
         <img src="image/micro.png" class="iconebarremsg" />
-=======
-        <img src="{{url_for('static',filename='image/photo.png')}}" class="iconebarremsg" />
-        <input type="text" placeholder="Recherche..." style="width: 75%;margin-left: 2%;padding:5px;">
-        <img src="{{url_for('static',filename='image/flecheenvoi.png')}}" class="iconebarremsg" />
-        <img src="{{url_for('static',filename='image/micro.png')}}" class="iconebarremsg" />
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
       </div>
       <!-- fin de la div pour envoyer un msg -->
     </div>

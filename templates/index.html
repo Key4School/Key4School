@@ -8,18 +8,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- titre en haut dans le navigateur -->
   <title>Mon lycée</title>
-<<<<<<< HEAD
   <!-- page de style -->
   <link rel="stylesheet" type="text/css" href="style.css">
   <!-- importation de la bibliotheque jquery qui est requise pour faire marcher le js-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <!-- importation du JS pour afficher et enlever les div -->
   <script src="menu.js"></script>
-=======
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script src="{{url_for('static',filename='js/menu.js')}}"></script>
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
 </head>
 
 <body>
@@ -34,7 +28,6 @@
     <input type="text" placeholder="Recherche..." style="padding:5px;">
 
     <div class="profile">
-<<<<<<< HEAD
       <!-- icone avatar avec un lien qui va sur la page profil -->
       <a href="profile.html"><img alt="avatar" src="image/avatar.png" class="iconebandeau" /></a>
       <!-- barre de progression des XP -->
@@ -42,12 +35,6 @@
     </div>
     <!-- icone cloche pour les notifs -->
     <img Onclick='divnotif()' alt="notif" src="image/cloche.png" class="iconebandeau" />
-=======
-      <a href="profile.html"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
-      <progress value="70" max="100">70 %</progress>
-    </div>
-    <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/cloche.png')}}" class="iconebandeau" />
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
   </div>
   <!-- fin du bandeau en haut de la page -->
   <!-- debut de la page (en dessous du bandeau) -->
@@ -56,13 +43,9 @@
     <div id="multichoix">
       <!-- chaque div "ligne" correspond a une ligne de la div -->
       <div class="ligne">
-<<<<<<< HEAD
         <!-- icone de l'Acceuil -->
         <img alt="home" src="image/home.png" class="iconemenu" />
         <!-- lien qui reviens a l'Acceuil -->
-=======
-        <img alt="home" src="{{url_for('static',filename='image/home.png')}}" class="iconemenu" />
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
         <a href="index.html" class="titremenu">
           Acceuil
         </a>
@@ -112,26 +95,17 @@
           Archives
         </a>
       </div>
-<<<<<<< HEAD
       <!-- icone parametre en bas a gauche -->
       <img alt="parametre" src="image/parametre.png" class="iconeparametre" />
-=======
-      <img alt="parametre" src="{{url_for('static',filename='image/parametre.png')}}" class="iconeparametre" />
-
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
     </div>
     <!-- fin de la div sur le coté gauche -->
     <!-- debut div a droite qui s'affiche en cliquant sur le boutton cloche -->
     <div id="notif">
       <!-- div pour la 1ere notif -->
       <div class="notif1">
-<<<<<<< HEAD
         <!-- image de celui qui a generé la notif -->
         <img alt="avatar" src="image/avatar.png" class="persopubli" />
         <!-- contenue de la notif -->
-=======
-        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
         <div class="contentnotif">
           <h2>Nouvel atelier d'écriture</h2>
           <p>
@@ -148,13 +122,9 @@
     <div class"publications">
       <!-- div pour la 1ere publication -->
       <div class="pub">
-<<<<<<< HEAD
         <!-- photo de profile de celui qui a poster la publication -->
         <img alt="avatar" src="image/avatar.png" class="persopubli" />
         <!-- contenue de la publication -->
-=======
-        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
         <div class="contentpub">
         <!-- titre de la publication -->
           <h2>Le CVL organise un évènement ! </h2>
@@ -162,15 +132,10 @@
           <p>
             Rendez-vous le 24/04/2021 dans la salle polyvalente !!
           </p>
-<<<<<<< HEAD
           <!-- logo  coeur pour liker-->
           <img alt="like" src="image/like.png" class="iconereaction" />
           <!-- logo  msg pour commenter-->
           <img alt="commentaire" src="image/comment.png" class="iconereaction" />
-=======
-          <img alt="like" src="{{url_for('static',filename='image/like.png')}}" class="iconereaction" />
-          <img alt="commentaire" src="{{url_for('static',filename='image/comment.png')}}" class="iconereaction" />
->>>>>>> d62e8f6008a6cd7deb2c535e17e55d2e23cb32ca
         </div>
       </div>
       <!-- div pour la 2eme publication (j ai pas remis les commentaires a l interieur mais c la mm que au dessus)-->
