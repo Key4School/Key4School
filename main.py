@@ -39,5 +39,3 @@ def profile():
 
 # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
 app.run(host="127.0.0.1", port=3000)
-
-#test
