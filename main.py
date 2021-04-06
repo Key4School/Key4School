@@ -1,8 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pronotepy  # api Pronote
 from pronotepy.ent import ile_de_france
 
 # Création de l'application
+
+
 app = Flask(__name__)
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
@@ -14,14 +16,25 @@ app = Flask(__name__)
 
 
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
+
 @app.route('/')
 def accueil():
-    return render_template("ma_page.html")
+    return render_template("index.html")
 
 
-@app.route('/accueil')
+@app.route('/accueil/') #laisser le nom entre deux slash ca permet d'accepter toutes les urls du style http://127.0.0.1:3000/messages/ sinon ca marche pas.s
 def accueil2():
-    return render_template("ma_page.html")
+    return render_template("index.html")
+
+
+@app.route('/messages/')
+def messages():
+    return render_template("messages.html")
+
+
+@app.route('/profile/')
+def profile():
+    return render_template("profile.html")
 
 
 # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
