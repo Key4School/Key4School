@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <script src="menuprofile.js"></script>
+  <script src="{{url_for('static',filename='js/menuprofile.js')}}"></script>
 </head>
 
 <body>
@@ -17,42 +17,42 @@
     </div>
 
     <input type="text" placeholder="Recherche..." style="padding:5px;">
-    <img Onclick='divnotif()' alt="notif" src="image/cloche.png" class="iconebandeau" />
+    <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/cloche.png')}}" class="iconebandeau" />
   </div>
   <div id="page">
     <div id="multichoix">
       <div class="ligne">
-        <img alt="parametre" src="image/parametre.png" class="iconemenu" />
+        <img alt="parametre" src="{{url_for('static',filename='image/parametre.png')}}" class="iconemenu" />
         <a href="parametre.html" class="titremenu">
           Reglage
         </a>
       </div>
       <div class="ligne">
-        <img alt="home" src="image/home.png" class="iconemenu" />
+        <img alt="home" src="{{url_for('static',filename='image/home.png')}}" class="iconemenu" />
         <a href="index.html" class="titremenu">
           Acceuil
         </a>
       </div>
       <div class="ligne">
-        <img alt="amis proche" src="image/amis.png" class="iconemenu" />
+        <img alt="amis proche" src="{{url_for('static',filename='image/amis.png')}}" class="iconemenu" />
         <a href="amis.html" class="titremenu">
           Amis proches
         </a>
       </div>
       <div class="ligne">
-        <img alt="historique" src="image/historique.png" class="iconemenu" />
+        <img alt="historique" src="{{url_for('static',filename='image/historique.png')}}" class="iconemenu" />
         <a href="historique.html" class="titremenu">
           Historique
         </a>
       </div>
       <div class="ligne">
-        <img alt="enregistements" src="image/baniere.png" class="iconemenu" />
+        <img alt="enregistements" src="{{url_for('static',filename='image/baniere.png')}}" class="iconemenu" />
         <a href="enregistements.html" class="titremenu">
           Enregistrements
         </a>
       </div>
       <div class="ligne">
-        <img alt="se deconnecter" src="image/deconnecter.png" class="iconemenu" />
+        <img alt="se deconnecter" src="{{url_for('static',filename='image/deconnecter.png')}}" class="iconemenu" />
         <a href="deconnexion.html" class="titremenu">
           Se déconnecter
         </a>
@@ -61,7 +61,7 @@
     </div>
     <div id="notif">
       <div class="notif1">
-        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <div class="contentnotif">
           <h2>Nouvel atelier d'écriture</h2>
           <p>
@@ -78,8 +78,8 @@
       <br />
       <div class="ligne1profile">
         <div class="photoprofile">
-          <img alt="user" src="image/user.png" style="width:80px; height:auto;" />
-          <img alt="appareil photo" src="image/photo.png" style="margin-left:8%;width:40px; height:auto;" />
+          <img alt="user" src="{{url_for('static',filename='image/user.png')}}" style="width:80px; height:auto;" />
+          <img alt="appareil photo" src="{{url_for('static',filename='image/photo.png')}}" style="margin-left:8%;width:40px; height:auto;" />
         </div>
         <progress value="70" max="100">70 %</progress>
 
@@ -89,7 +89,7 @@
       <div class="contentinfoprofile">
 
         <p class="themeligne">
-          <img alt="user" src="image/editprofile.png" class="iconeinfoprofile" />
+          <img alt="user" src="{{url_for('static',filename='image/editprofile.png')}}" class="iconeinfoprofile" />
           &nbsp;&nbsp;Nom
         </p>
         <p>
@@ -99,7 +99,7 @@
       <div class="contentinfoprofile">
 
         <p class="themeligne">
-          <img alt="presentateur" src="image/presentateur.png" class="iconeinfoprofile" />
+          <img alt="presentateur" src="{{url_for('static',filename='image/presentateur.png')}}" class="iconeinfoprofile" />
           &nbsp;&nbsp;Lycée/Classe
         </p>
         <p>
@@ -109,7 +109,7 @@
       <div class="contentinfoprofile">
 
         <p class="themeligne">
-          <img alt="specialite" src="image/editprofile.png" class="iconeinfoprofile" />
+          <img alt="specialite" src="{{url_for('static',filename='image/editprofile.png')}}" class="iconeinfoprofile" />
           &nbsp;&nbsp;Spécialités
         </p>
         <p>
@@ -119,7 +119,7 @@
       <div class="contentinfoprofile">
 
         <p class="themeligne">
-          <img alt="langues" src="image/web.png" class="iconeinfoprofile" />
+          <img alt="langues" src="{{url_for('static',filename='image/web.png')}}" class="iconeinfoprofile" />
           &nbsp;&nbsp;Langues vivantes
         </p>
         <p>
@@ -132,7 +132,7 @@
       <div class="contentinfoprofile">
 
         <p class="themeligne">
-          <img alt="option" src="image/livre.png" class="iconeinfoprofile" />
+          <img alt="option" src="{{url_for('static',filename='image/livre.png')}}" class="iconeinfoprofile" />
           &nbsp;&nbsp;Option(s)
         </p>
         <p>
@@ -142,7 +142,7 @@
       <div class="contentinfoprofile">
 
         <p class="themeligne">
-          <img alt="mail" src="image/trombone.png" class="iconeinfoprofile" />
+          <img alt="mail" src="{{url_for('static',filename='image/trombone.png')}}" class="iconeinfoprofile" />
           &nbsp;&nbsp;Adresse mail ENT
         </p>
         <p>
