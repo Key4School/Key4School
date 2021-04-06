@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
-# salut
+
 @app.route('/')
 def accueil():
     return render_template("index.html")
