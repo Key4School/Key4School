@@ -2,185 +2,157 @@
 <html lang="fr">
 
 <head>
-  <!-- language utf8 pour indiquer l'encodage -->
   <meta charset="UTF-8">
-  <!-- pour l'adapter plus ou moins bien sur telephone -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- titre en haut dans le navigateur -->
   <title>Profile</title>
-  <!-- page de style -->
   <link rel="stylesheet" type="text/css" href="style.css">
-  <!-- importation de la bibliotheque jquery qui est requise pour faire marcher le js-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <!-- importation du JS pour afficher et enlever les div -->
   <script src="menuprofile.js"></script>
 </head>
 
 <body>
-  <!-- debut du bandeau en haut de la page -->
   <div class="bandeau">
-    <!-- icone menu en haut a gauche -->
     <div class="menu">
       <img Onclick='divmenu()' alt="menu" src="{{url_for('static',filename='image/menu.png')}}" class="iconebandeau" />
     </div>
-    <!-- barre rechercher  -->
+
     <input type="text" placeholder="Recherche..." style="padding:5px;">
-    <!-- icone cloche pour les notifs -->
     <img Onclick='divnotif()' alt="notif" src="image/cloche.png" class="iconebandeau" />
   </div>
-  <!-- fin du bandeau en haut de la page -->
-  <!-- div qui s'affiche a gauche en cliquant sur le boutton menu en haut a gauche -->
-  <div id="multichoix">
-    <!-- chaque div "ligne" correspond a une ligne de la div -->
-    <div class="ligne">
-      <!-- icone des parametres -->
-      <img alt="parametre" src="image/parametre.png" class="iconemenu" />
-      <!-- lien qui envoi sur la page des parametres -->
-      <a href="parametre.html" class="titremenu">
-        Reglage
-      </a>
+  <div id="page">
+    <div id="multichoix">
+      <div class="ligne">
+        <img alt="parametre" src="image/parametre.png" class="iconemenu" />
+        <a href="parametre.html" class="titremenu">
+          Reglage
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="home" src="image/home.png" class="iconemenu" />
+        <a href="index.html" class="titremenu">
+          Acceuil
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="amis proche" src="image/amis.png" class="iconemenu" />
+        <a href="amis.html" class="titremenu">
+          Amis proches
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="historique" src="image/historique.png" class="iconemenu" />
+        <a href="historique.html" class="titremenu">
+          Historique
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="enregistements" src="image/baniere.png" class="iconemenu" />
+        <a href="enregistements.html" class="titremenu">
+          Enregistrements
+        </a>
+      </div>
+      <div class="ligne">
+        <img alt="se deconnecter" src="image/deconnecter.png" class="iconemenu" />
+        <a href="deconnexion.html" class="titremenu">
+          Se déconnecter
+        </a>
+      </div>
+
     </div>
-    <div class="ligne">
-      <!-- icone de l'Acceuil -->
-      <img alt="home" src="image/home.png" class="iconemenu" />
-      <!-- lien qui reviens a l'Acceuil -->
-      <a href="index.html" class="titremenu">
-        Acceuil
-      </a>
+    <div id="notif">
+      <div class="notif1">
+        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <div class="contentnotif">
+          <h2>Nouvel atelier d'écriture</h2>
+          <p>
+            Retrouvez nous tous
+
+          </p>
+        </div>
+      </div>
     </div>
-    <!-- la mm chose qu'haut dessus mais pour les amis -->
-    <div class="ligne">
-      <img alt="amis proche" src="image/amis.png" class="iconemenu" />
-      <a href="amis.html" class="titremenu">
-        Amis proches
-      </a>
-    </div>
-    <!-- la mm chose qu'haut dessus mais pour l'hisorique -->
-    <div class="ligne">
-      <img alt="historique" src="image/historique.png" class="iconemenu" />
-      <a href="historique.html" class="titremenu">
-        Historique
-      </a>
-    </div>
-    <!-- la mm chose qu'haut dessus mais pour les enregistrements -->
-    <div class="ligne">
-      <img alt="enregistements" src="image/baniere.png" class="iconemenu" />
-      <a href="enregistements.html" class="titremenu">
-        Enregistrements
-      </a>
-    </div>
-    <!-- la mm chose qu'haut dessus mais pour se deconnecter -->
-    <div class="ligne">
-      <img alt="se deconnecter" src="image/deconnecter.png" class="iconemenu" />
-      <a href="deconnexion.html" class="titremenu">
-        Se déconnecter
-      </a>
-    </div>
-  </div>
-  <!-- fin de la div sur le coté gauche -->
-  <!-- debut div a droite qui s'affiche en cliquant sur le boutton cloche -->
-  <div id="notif">
-    <!-- div pour la 1ere notif -->
-    <div class="notif1">
-      <!-- contenue de la notif -->
-      <img alt="avatar" src="image/avatar.png" class="persopubli" />
-      <div class="contentnotif">
-        <h2>Nouvel atelier d'écriture</h2>
+    <br />
+    <div class="page">
+      <br />
+      <br />
+      <br />
+      <div class="ligne1profile">
+        <div class="photoprofile">
+          <img alt="user" src="image/user.png" style="width:80px; height:auto;" />
+          <img alt="appareil photo" src="image/photo.png" style="margin-left:8%;width:40px; height:auto;" />
+        </div>
+        <progress value="70" max="100">70 %</progress>
+
+      </div>
+      <br />
+      <br />
+      <div class="contentinfoprofile">
+
+        <p class="themeligne">
+          <img alt="user" src="image/editprofile.png" class="iconeinfoprofile" />
+          &nbsp;&nbsp;Nom
+        </p>
         <p>
-          Retrouvez nous tous
+          Exemple EXEMPLE
+        </p>
+      </div>
+      <div class="contentinfoprofile">
+
+        <p class="themeligne">
+          <img alt="presentateur" src="image/presentateur.png" class="iconeinfoprofile" />
+          &nbsp;&nbsp;Lycée/Classe
+        </p>
+        <p>
+          Exemple
+        </p>
+      </div>
+      <div class="contentinfoprofile">
+
+        <p class="themeligne">
+          <img alt="specialite" src="image/editprofile.png" class="iconeinfoprofile" />
+          &nbsp;&nbsp;Spécialités
+        </p>
+        <p>
+          Exemple, exemple, exemple
+        </p>
+      </div>
+      <div class="contentinfoprofile">
+
+        <p class="themeligne">
+          <img alt="langues" src="image/web.png" class="iconeinfoprofile" />
+          &nbsp;&nbsp;Langues vivantes
+        </p>
+        <p>
+          LVA : Exemple
+        </p>
+        <p>
+          LVB : Exemple
+        </p>
+      </div>
+      <div class="contentinfoprofile">
+
+        <p class="themeligne">
+          <img alt="option" src="image/livre.png" class="iconeinfoprofile" />
+          &nbsp;&nbsp;Option(s)
+        </p>
+        <p>
+          Exemple
+        </p>
+      </div>
+      <div class="contentinfoprofile">
+
+        <p class="themeligne">
+          <img alt="mail" src="image/trombone.png" class="iconeinfoprofile" />
+          &nbsp;&nbsp;Adresse mail ENT
+        </p>
+        <p>
+          exemple@monlycee.net
         </p>
       </div>
     </div>
-    <!-- fin de la notif 1 -->
+
   </div>
-  <!-- fin de la div pour les notifs -->
-  <br />
-  <!-- debut de la div pour la page avec les infos -->
-  <div class="page">
-    <br />
-    <br />
-    <br />
-    <!-- 1ere ligne -->
-    <div class="ligne1profile">
-      <!-- div pour coller l'icone appareil photo et la photo de profile -->
-      <div class="photoprofile">
-        <!-- photo de profile -->
-        <img alt="user" src="image/user.png" style="width:80px; height:auto;" />
-        <!-- icone appareil photo -->
-        <img alt="appareil photo" src="image/photo.png" style="margin-left:8%;width:40px; height:auto;" />
-      </div>
-      <!-- barre de progression des XP -->
-      <progress value="70" max="100">70 %</progress>
-    </div>
-    <br />
-    <br />
-    <!-- debut de la div avec les infos pour le Nom -->
-    <div class="contentinfoprofile">
-      <p class="themeligne">
-        <!-- icone -->
-        <img alt="user" src="image/editprofile.png" class="iconeinfoprofile" />
-        &nbsp;&nbsp;Nom
-      </p>
-      <!-- ce que l'utilisateur a rempli comme info pour lui -->
-      <p>
-        Exemple EXEMPLE
-      </p>
-    </div>
-    <!-- nouelle ligne pour le lycee et la classe -->
-    <div class="contentinfoprofile">
-      <p class="themeligne">
-        <img alt="presentateur" src="image/presentateur.png" class="iconeinfoprofile" />
-        &nbsp;&nbsp;Lycée/Classe
-      </p>
-      <p>
-        Exemple
-      </p>
-    </div>
-    <!-- nouelle ligne pour les spe -->
-    <div class="contentinfoprofile">
-      <p class="themeligne">
-        <img alt="specialite" src="image/editprofile.png" class="iconeinfoprofile" />
-        &nbsp;&nbsp;Spécialités
-      </p>
-      <p>
-        Exemple, exemple, exemple
-      </p>
-    </div>
-    <!-- nouelle ligne pour les langues -->
-    <div class="contentinfoprofile">
-      <p class="themeligne">
-        <img alt="langues" src="image/web.png" class="iconeinfoprofile" />
-        &nbsp;&nbsp;Langues vivantes
-      </p>
-      <p>
-        LVA : Exemple
-      </p>
-      <p>
-        LVB : Exemple
-      </p>
-    </div>
-    <!-- nouelle ligne pour les options -->
-    <div class="contentinfoprofile">
-      <p class="themeligne">
-        <img alt="option" src="image/livre.png" class="iconeinfoprofile" />
-        &nbsp;&nbsp;Option(s)
-      </p>
-      <p>
-        Exemple
-      </p>
-    </div>
-    <!-- nouelle ligne pour l'adresse mail' -->
-    <div class="contentinfoprofile">
-      <p class="themeligne">
-        <img alt="mail" src="image/trombone.png" class="iconeinfoprofile" />
-        &nbsp;&nbsp;Adresse mail ENT
-      </p>
-      <p>
-        exemple@monlycee.net
-      </p>
-    </div>
-  </div>
-  <!-- fin de la page -->
+
 </body>
 
 </html>
