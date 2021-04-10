@@ -78,10 +78,29 @@ def monlycee():
 def professeur():
     return render_template("professeur.html")
 
-
 @app.route('/question/')
 def question():
     return render_template("question.html")
+
+@app.route('/parametre/')
+def parametre():
+    return render_template("parametre.html")
+
+@app.route('/amis/')
+def amis():
+    return render_template("amis.html")
+
+@app.route('/historique/')
+def historique():
+    return render_template("hisorique.html")
+
+@app.route('/enregistements/')
+def enregistements():
+    return render_template("enregistements.html")
+
+@app.route('/deconnexion/')
+def deconnexion():
+    return render_template("deconnexion.html")
 
 
 # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000

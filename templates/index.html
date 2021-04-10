@@ -13,7 +13,7 @@
   <!-- importation de la bibliotheque jquery qui est requise pour faire marcher le js-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <!-- importation du JS pour afficher et enlever les div -->
-  <script src="menu.js"></script>
+  <script src="{{url_for('static',filename='js/menu.js')}}"></script>
 </head>
 
 <body>
@@ -29,12 +29,12 @@
 
     <div class="profile">
       <!-- icone avatar avec un lien qui va sur la page profil -->
-      <a href="profile.html"><img alt="avatar" src="image/avatar.png" class="iconebandeau" /></a>
+      <a href="{{url_for('profile')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
       <!-- barre de progression des XP -->
       <progress value="70" max="100">70 %</progress>
     </div>
     <!-- icone cloche pour les notifs -->
-    <img Onclick='divnotif()' alt="notif" src="image/cloche.png" class="iconebandeau" />
+    <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/cloche.png')}}" class="iconebandeau" />
   </div>
   <!-- fin du bandeau en haut de la page -->
   <!-- debut de la page (en dessous du bandeau) -->
@@ -44,44 +44,44 @@
       <!-- chaque div "ligne" correspond a une ligne de la div -->
       <div class="ligne">
         <!-- icone de l'Acceuil -->
-        <img alt="home" src="image/home.png" class="iconemenu" />
+        <img alt="home" src="{{url_for('static',filename='image/home.png')}}" class="iconemenu" />
         <!-- lien qui reviens a l'Acceuil -->
-        <a href="index.html" class="titremenu">
+        <a href="{{url_for('accueil')}}" class="titremenu">
           Acceuil
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour le lycee -->
       <div class="ligne">
         <img alt="lycee" src="{{url_for('static',filename='image/lycee.png')}}" class="iconemenu" />
-        <a href="monlycee.html" class="titremenu">
+        <a href="{{url_for('monlycee')}}" class="titremenu">
           Mon lycée
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour la classe -->
       <div class="ligne">
         <img alt="classe" src="{{url_for('static',filename='image/classe.png')}}" class="iconemenu" />
-        <a href="classe.html" class="titremenu">
+        <a href="{{url_for('classe')}}" class="titremenu">
           Ma classe
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour la question -->
       <div class="ligne">
         <img alt="question" src="{{url_for('static',filename='image/question.png')}}" class="iconemenu" />
-        <a href="question.html" class="titremenu">
+        <a href="{{url_for('question')}}" class="titremenu">
           Poser une question
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour les profs -->
       <div class="ligne">
         <img alt="professeur" src="{{url_for('static',filename='image/prof.png')}}" class="iconemenu" />
-        <a href="professeur.html" class="titremenu">
+        <a href="{{url_for('professeur')}}" class="titremenu">
           Mes professeur
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour les msg pv -->
       <div class="ligne">
         <img alt="messages" src="{{url_for('static',filename='image/msg.png')}}" class="iconemenu" />
-        <a href="messages.html" class="titremenu">
+        <a href="{{url_for('messages')}}" class="titremenu">
           Messages privés
         </a>
         <p class="nouvnotif">
@@ -91,12 +91,12 @@
       <!-- la mm chose qu'haut dessus mais pour les archives -->
       <div class="ligne">
         <img alt="archives" src="{{url_for('static',filename='image/archives.png')}}" class="iconemenu" />
-        <a href="archives.html" class="titremenu">
+        <a href="{{url_for('archives')}}" class="titremenu">
           Archives
         </a>
       </div>
       <!-- icone parametre en bas a gauche -->
-      <img alt="parametre" src="image/parametre.png" class="iconeparametre" />
+      <img alt="parametre" src="{{url_for('static',filename='image/parametre.png')}}" class="iconeparametre" />
     </div>
     <!-- fin de la div sur le coté gauche -->
     <!-- debut div a droite qui s'affiche en cliquant sur le boutton cloche -->
@@ -104,7 +104,7 @@
       <!-- div pour la 1ere notif -->
       <div class="notif1">
         <!-- image de celui qui a generé la notif -->
-        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <!-- contenue de la notif -->
         <div class="contentnotif">
           <h2>Nouvel atelier d'écriture</h2>
@@ -123,7 +123,7 @@
       <!-- div pour la 1ere publication -->
       <div class="pub">
         <!-- photo de profile de celui qui a poster la publication -->
-        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <!-- contenue de la publication -->
         <div class="contentpub">
         <!-- titre de la publication -->
@@ -133,9 +133,9 @@
             Rendez-vous le 24/04/2021 dans la salle polyvalente !!
           </p>
           <!-- logo  coeur pour liker-->
-          <img alt="like" src="image/like.png" class="iconereaction" />
+          <img alt="like" src="{{url_for('static',filename='image/like.png')}}" class="iconereaction" />
           <!-- logo  msg pour commenter-->
-          <img alt="commentaire" src="image/comment.png" class="iconereaction" />
+          <img alt="commentaire" src="{{url_for('static',filename='image/comment.png')}}" class="iconereaction" />
         </div>
       </div>
       <!-- div pour la 2eme publication (j ai pas remis les commentaires a l interieur mais c la mm que au dessus)-->
