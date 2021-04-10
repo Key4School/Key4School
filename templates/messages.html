@@ -11,9 +11,13 @@
   <!-- page de style -->
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
   <script src="{{url_for('static',filename='js/main.js')}}" type="text/javascript"></script>
+  <!-- on inclut la bibliothèque depuis les serveurs de Google -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript"></script>
 </head>
 
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
+
 <body style="overflow:hidden;">
   <!-- debut de la div pour le profile de l'utilisateur avec le nbre d'XP, sa photo de profile et la barre de progression-->
   <div class="profilemessage">
@@ -21,7 +25,7 @@
     <p style="margin:0px">
       70XP
     </p><!-- des espaces -->&nbsp;&nbsp;
-     <!-- barre de progression -->
+    <!-- barre de progression -->
     <progress value="70" max="100">70 %</progress>
   </div>
   <br /><br /><!-- des saut a la ligne -->
@@ -143,18 +147,14 @@
         </div>
       </div>
       <!-- fin de tt les msg -->
-      <!-- debut de la div pour envoyer le msg -->
-      <div class="barreenvoi" style="margin-top:3%;min-width: 75%;max-width: 75%;">
-        <!-- icone pour envoyer une photo -->
-        <img src="{{url_for('static',filename='image/photo.png')}}" class="iconebarremsg" />
-        <!-- barre pour ecrire le msg -->
-        <input type="text" placeholder="Envoyer un message" style="width: 75%;margin-left: 2%;padding:5px;">
-        <!-- icone pour envoyer le msg -->
-        <img src="{{url_for('static',filename='image/flecheenvoi.png')}}" class="iconebarremsg" />
-        <!-- icone pour mettre un msg audio si c'est possible c pas sur-->
-        <img src="{{url_for('static',filename='image/micro.png')}}" class="iconebarremsg" />
-      </div>
-      <!-- fin de la div pour envoyer un msg -->
+      <form id="messageForm" onsubmit="envoi(); return false;">
+        <div class="barreenvoi" style="margin-top:3%;min-width: 75%;max-width: 75%;">
+          <img src="{{url_for('static',filename='image/photo.png')}}" class="iconebarremsg" />
+          <input type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+          <button type="submit"><img src="{{url_for('static',filename='image/flecheenvoi.png')}}" class="iconebarremsg" /></button>
+          <img src="{{url_for('static',filename='image/micro.png')}}" class="iconebarremsg" />
+        </div>
+      </form>
     </div>
     <!-- fin de la div pour la partie de droite -->
   </div>
