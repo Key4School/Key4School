@@ -1,11 +1,24 @@
-from flask import Flask, render_template, request
-import pronotepy  # api Pronote
-from pronotepy.ent import ile_de_france
+from flask import Flask, render_template, request, redirect, session, url_for
+# import pronotepy  # api Pronote
+#from pronotepy.ent import ile_de_france
 from flask_pymongo import PyMongo
 from datetime import *
+from requests_oauthlib import OAuth2Session
+from flask_session import Session
+from flask.json import jsonify
+import os
 
 # Création de l'application
 app = Flask(__name__)
+app.secret_key = 'JR7XcyGWBHt2VASDFDS9W'
+
+
+# Le client secret est le code secret de l'application
+# NE PAS TOUCHER AUX 4 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
+client_id = 'code-ton-lycee'
+client_secret = 'JR7XcyGWBHt2VA9W'
+authorization_base_url = 'https://ent.iledefrance.fr/auth/oauth2/auth'
+token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
 
 # Récupération d'une base de données
 cluster = PyMongo(
@@ -39,7 +52,7 @@ def accueil2():
     return render_template("index.html")
 
 
-@app.route('/messages/')
+@app.route('/messages/', methods=['POST', 'GET'])
 def messages():
     if request.method == 'GET':
         return render_template("messages.html")
@@ -80,5 +93,64 @@ def question():
     return render_template("question.html")
 
 
-# Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-app.run(host="127.0.0.1", port=3000)
+# TOUT LE CODE QUI VA SUIVRE PERMET LA CONNEXION A L'ENT VIA OAUTH
+# Route qui va permettre de rediriger l'utilisateur sur le site d'authentification et de récupérer un token (pour pouvoir se connecter)
+@app.route("/login/")
+def demo():
+    """Step 1: User Authorization.
+    Redirect the user/resource owner to the OAuth provider (ENT)
+    using an URL with a few key OAuth parameters.
+    """
+    ENT_reply = OAuth2Session(
+        client_id, scope="userinfo", redirect_uri="http://127.0.0.1:3000/callback")
+    authorization_url, state = ENT_reply.authorization_url(
+        authorization_base_url)
+
+    # State is used to prevent CSRF, keep this for later.
+    session['oauth_state'] = state
+    return redirect(authorization_url)
+
+
+# Step 2: User authorization, this happens on the provider (site de l'ENT).
+
+# callback est la route pour le retour de l'identification
+# On utilise le token pour indiquer que c'est bien l'utilisateur qui veut se connecter depuis l'app
+@app.route("/callback/", methods=["GET"])
+def callback():
+    """ Step 3: Retrieving an access token.
+    The user has been redirected back from the provider to your registered
+    callback URL. With this redirection comes an authorization code included
+    in the redirect URL. We will use that to obtain an access token.
+    """
+
+    ENT_reply = OAuth2Session(
+        client_id, state=session['oauth_state'],  redirect_uri="http://127.0.0.1:3000/callback")
+    ENT_token = ENT_reply.fetch_token(token_url, client_id=client_id, client_secret=client_secret,
+                                      code=request.args.get('code'))
+
+    # At this point you can fetch protected resources but lets save
+    # the token and show how this is done from a persisted token
+    # in /profile.
+    session['oauth_token'] = ENT_token
+
+    return redirect(url_for('.profiletest'))
+
+
+# Fonction de test pour afficher ce que l'on récupère
+@app.route("/profiletest/", methods=["GET"])
+def profiletest():
+    """Fetching a protected resource using an OAuth 2 token.
+    """
+    print("test")
+    ENT_reply = OAuth2Session(client_id, token=session['oauth_token'])
+    return jsonify(ENT_reply.get('https://ent.iledefrance.fr/auth/oauth2/userinfo').json())
+
+
+if __name__ == "__main__":
+    # This allows us to use a plain HTTP callback
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
+
+    app.secret_key = os.urandom(24)
+    # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
+    app.run(host="127.0.0.1", port=3000, debug=True)
+    # app.run(debug=True)
