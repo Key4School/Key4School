@@ -63,7 +63,7 @@ def monlycee():
 
 
 @app.route('/professeur/')
-def archives():
+def professeur():
     return render_template("professeur.html")
 
 
