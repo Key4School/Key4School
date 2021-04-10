@@ -13,7 +13,7 @@
   <!-- importation de la bibliotheque jquery qui est requise pour faire marcher le js-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <!-- importation du JS pour afficher et enlever les div -->
-  <script src="menu.js"></script>
+  <script src="{{url_for('static',filename='js/menu.js')}}"></script>
 </head>
 
 <body>
@@ -29,12 +29,12 @@
 
     <div class="profile">
       <!-- icone avatar avec un lien qui va sur la page profil -->
-      <a href="profile.html"><img alt="avatar" src="image/avatar.png" class="iconebandeau" /></a>
+      <a href="profile.html"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
       <!-- barre de progression des XP -->
       <progress value="70" max="100">70 %</progress>
     </div>
     <!-- icone cloche pour les notifs -->
-    <img Onclick='divnotif()' alt="notif" src="image/cloche.png" class="iconebandeau" />
+    <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/image/cloche.png')}}" class="iconebandeau" />
   </div>
   <!-- fin du bandeau en haut de la page -->
   <!-- debut de la page (en dessous du bandeau) -->
@@ -44,7 +44,7 @@
       <!-- chaque div "ligne" correspond a une ligne de la div -->
       <div class="ligne">
         <!-- icone de l'Acceuil -->
-        <img alt="home" src="image/home.png" class="iconemenu" />
+        <img alt="home" src="{{url_for('static',filename='image/image/home.png')}}" class="iconemenu" />
         <!-- lien qui reviens a l'Acceuil -->
         <a href="index.html" class="titremenu">
           Acceuil
@@ -96,7 +96,7 @@
         </a>
       </div>
       <!-- icone parametre en bas a gauche -->
-      <img alt="parametre" src="image/parametre.png" class="iconeparametre" />
+      <img alt="parametre" src="{{url_for('static',filename='image/parametre.png')}}" class="iconeparametre" />
     </div>
     <!-- fin de la div sur le coté gauche -->
     <!-- debut div a droite qui s'affiche en cliquant sur le boutton cloche -->
@@ -133,9 +133,9 @@
             Rendez-vous le 24/04/2021 dans la salle polyvalente !!
           </p>
           <!-- logo  coeur pour liker-->
-          <img alt="like" src="image/like.png" class="iconereaction" />
+          <img alt="like" src="{{url_for('static',filename='image/like.png')}}" class="iconereaction" />
           <!-- logo  msg pour commenter-->
-          <img alt="commentaire" src="image/comment.png" class="iconereaction" />
+          <img alt="commentaire" src="{{url_for('static',filename='image/comment.png')}}" class="iconereaction" />
         </div>
       </div>
       <!-- div pour la 2eme publication (j ai pas remis les commentaires a l interieur mais c la mm que au dessus)-->
