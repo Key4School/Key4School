@@ -11,9 +11,9 @@ app = Flask(__name__)
 cluster = PyMongo(
     app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 # Voici deux exemples pour créer des BDD
-db_utilisateurs = cluster.db.Utilisateurs
-db_posts = cluster.db.Posts
-db_messages = cluster.db.Messages
+db_utilisateurs = cluster.db.utilisateurs
+db_demande_aide = cluster.db.demande_aide
+db_messages = cluster.db.messages
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 # db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
 
