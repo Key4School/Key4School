@@ -17,7 +17,7 @@
 <body style="overflow:hidden;">
   <!-- debut de la div pour le profile de l'utilisateur avec le nbre d'XP, sa photo de profile et la barre de progression-->
   <div class="profilemessage">
-    <a href="profile.html"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>&nbsp;&nbsp;
+    <a href="{{url_for('profile')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>&nbsp;&nbsp;
     <p style="margin:0px">
       70XP
     </p><!-- des espaces -->&nbsp;&nbsp;
@@ -29,53 +29,53 @@
   <div class="contentmessage">
     <!-- div pour afficher tout les groupes -->
     <div class="nomgroupe">
-      <a class="liengroupe" href="messages.html">
+      <a class="liengroupe" href="{{url_for('messages')}}">
         <img style="width: 30px;height:auto;margin-bottom:5%;" src="{{url_for('static',filename='image/plus.png')}}" />
       </a>
       <!-- div pour le groupe -->
       <div class="groupe">
         <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
-        <b><a class="liengroupe" href="messages.html">
+        <b><a class="liengroupe" href="{{url_for('messages')}}">
             Spé 1
           </a></b>
       </div>
       <div class="groupe">
-        <a class="liengroupe" href="messages.html">
+        <a class="liengroupe" href="{{url_for('messages')}}">
           Spé 2
         </a>
       </div>
       <div class="groupe">
-        <a class="liengroupe" href="messages.html">
+        <a class="liengroupe" href="{{url_for('messages')}}">
           Spé 3
         </a>
       </div>
       <div class="groupe">
-        <a class="liengroupe" href="messages.html">
+        <a class="liengroupe" href="{{url_for('messages')}}">
           Classe
         </a>
       </div>
       <div class="groupe">
-        <a class="liengroupe" href="messages.html">
+        <a class="liengroupe" href="{{url_for('messages')}}">
           LVA
         </a>
       </div>
       <div class="groupe">
-        <a class="liengroupe" href="messages.html">
+        <a class="liengroupe" href="{{url_for('messages')}}">
           LVB
         </a>
       </div>
       <div class="groupe">
-        <a class="liengroupe" href="messages.html">
+        <a class="liengroupe" href="{{url_for('messages')}}">
           Option
         </a>
       </div>
       <div class="groupe">
-        <a class="liengroupe" href="messages.html">
+        <a class="liengroupe" href="{{url_for('messages')}}">
           Potes
         </a>
       </div>
       <div class="groupe">
-        <a class="liengroupe" href="messages.html">
+        <a class="liengroupe" href="{{url_for('messages')}}">
           M. bidule
         </a>
       </div>
