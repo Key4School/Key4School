@@ -34,7 +34,7 @@
       <progress value="70" max="100">70 %</progress>
     </div>
     <!-- icone cloche pour les notifs -->
-    <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/image/cloche.png')}}" class="iconebandeau" />
+    <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/cloche.png')}}" class="iconebandeau" />
   </div>
   <!-- fin du bandeau en haut de la page -->
   <!-- debut de la page (en dessous du bandeau) -->
@@ -44,7 +44,7 @@
       <!-- chaque div "ligne" correspond a une ligne de la div -->
       <div class="ligne">
         <!-- icone de l'Acceuil -->
-        <img alt="home" src="{{url_for('static',filename='image/image/home.png')}}" class="iconemenu" />
+        <img alt="home" src="{{url_for('static',filename='image/home.png')}}" class="iconemenu" />
         <!-- lien qui reviens a l'Acceuil -->
         <a href="index.html" class="titremenu">
           Acceuil
@@ -104,7 +104,7 @@
       <!-- div pour la 1ere notif -->
       <div class="notif1">
         <!-- image de celui qui a generé la notif -->
-        <img alt="avatar" src="image/avatar.png" class="persopubli" />
+        <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <!-- contenue de la notif -->
         <div class="contentnotif">
           <h2>Nouvel atelier d'écriture</h2>
