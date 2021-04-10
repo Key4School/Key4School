@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 import pronotepy  # api Pronote
 from pronotepy.ent import ile_de_france
 from flask_pymongo import PyMongo
-from datetime import *
 
 # Création de l'application
 app = Flask(__name__)
@@ -13,7 +12,6 @@ cluster = PyMongo(
 # Voici deux exemples pour créer des BDD
 db_utilisateurs = cluster.db.Utilisateurs
 db_posts = cluster.db.Posts
-db_messages = cluster.db.Messages
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 # db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
 
@@ -39,19 +37,9 @@ def accueil2():
     return render_template("index.html")
 
 
-@app.route('/messages/', methods=['POST', 'GET'])
+@app.route('/messages/')
 def messages():
-    if request.method == 'GET':
-        return render_template("messages.html")
-    elif request.method == 'POST':
-        db_messages.insert_one({"id-groupe": "quand on l'aura", "id-utilisateur": "quand on l'aura",
-                                "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
-        return 'send'
-
-
-def envoiMessages():  # Pour envoyer les msg dans la db
-    db_messages.insert_one({"id-groupe": "", "id-pseudo": "",
-                            "contenu": "test pour voir si ca marche", "date-envoi": "", "img": ""})
+    return render_template("messages.html")
 
 
 @app.route('/profile/')
@@ -78,10 +66,29 @@ def monlycee():
 def professeur():
     return render_template("professeur.html")
 
-
 @app.route('/question/')
 def question():
     return render_template("question.html")
+
+@app.route('/parametre/')
+def parametre():
+    return render_template("parametre.html")
+
+@app.route('/amis/')
+def amis():
+    return render_template("amis.html")
+
+@app.route('/historique/')
+def historique():
+    return render_template("hisorique.html")
+
+@app.route('/enregistements/')
+def enregistements():
+    return render_template("enregistements.html")
+
+@app.route('/deconnexion/')
+def deconnexion():
+    return render_template("deconnexion.html")
 
 
 # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
