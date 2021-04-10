@@ -46,14 +46,14 @@
         <!-- icone de l'Acceuil -->
         <img alt="home" src="{{url_for('static',filename='image/home.png')}}" class="iconemenu" />
         <!-- lien qui reviens a l'Acceuil -->
-        <a href="{{url_for('/')}}" class="titremenu">
+        <a href="{{url_for('accueil')}}" class="titremenu">
           Acceuil
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour le lycee -->
       <div class="ligne">
         <img alt="lycee" src="{{url_for('static',filename='image/lycee.png')}}" class="iconemenu" />
-        <a href="{{url_for('/monlycee/')}}" class="titremenu">
+        <a href="{{url_for('monlycee')}}" class="titremenu">
           Mon lycée
         </a>
       </div>
@@ -67,21 +67,21 @@
       <!-- la mm chose qu'haut dessus mais pour la question -->
       <div class="ligne">
         <img alt="question" src="{{url_for('static',filename='image/question.png')}}" class="iconemenu" />
-        <a href="{{url_for('/question/')}}" class="titremenu">
+        <a href="{{url_for('question')}}" class="titremenu">
           Poser une question
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour les profs -->
       <div class="ligne">
         <img alt="professeur" src="{{url_for('static',filename='image/prof.png')}}" class="iconemenu" />
-        <a href="{{url_for('/professeur/')}}" class="titremenu">
+        <a href="{{url_for('professeur')}}" class="titremenu">
           Mes professeur
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour les msg pv -->
       <div class="ligne">
         <img alt="messages" src="{{url_for('static',filename='image/msg.png')}}" class="iconemenu" />
-        <a href="{{url_for('/messages/')}}" class="titremenu">
+        <a href="{{url_for('messages')}}" class="titremenu">
           Messages privés
         </a>
         <p class="nouvnotif">
@@ -91,7 +91,7 @@
       <!-- la mm chose qu'haut dessus mais pour les archives -->
       <div class="ligne">
         <img alt="archives" src="{{url_for('static',filename='image/archives.png')}}" class="iconemenu" />
-        <a href="{{url_for('/archives/')}}" class="titremenu">
+        <a href="{{url_for('archives')}}" class="titremenu">
           Archives
         </a>
       </div>
