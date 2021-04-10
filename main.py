@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import pronotepy  # api Pronote
 from pronotepy.ent import ile_de_france
 from flask_pymongo import PyMongo
+from datetime import *
 
 # Création de l'application
 app = Flask(__name__)
@@ -12,6 +13,7 @@ cluster = PyMongo(
 # Voici deux exemples pour créer des BDD
 db_utilisateurs = cluster.db.Utilisateurs
 db_posts = cluster.db.Posts
+db_messages = cluster.db.Messages
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 # db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
 
@@ -37,9 +39,19 @@ def accueil2():
     return render_template("index.html")
 
 
-@app.route('/messages/')
+@app.route('/messages/', methods=['POST', 'GET'])
 def messages():
-    return render_template("messages.html")
+    if request.method == 'GET':
+        return render_template("messages.html")
+    elif request.method == 'POST':
+        db_messages.insert_one({"id-groupe": "quand on l'aura", "id-utilisateur": "quand on l'aura",
+                                "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
+        return 'send'
+
+
+def envoiMessages():  # Pour envoyer les msg dans la db
+    db_messages.insert_one({"id-groupe": "", "id-pseudo": "",
+                            "contenu": "test pour voir si ca marche", "date-envoi": "", "img": ""})
 
 
 @app.route('/profile/')
