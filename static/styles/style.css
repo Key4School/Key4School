@@ -100,6 +100,7 @@
 .profilemessage{
   display: flex;
   align-items: center;
+  height: 5%;
 }
 progress{
   max-width: 75%;
@@ -188,17 +189,10 @@ h2{
   cursor: pointer;
   font-weight: bold;
 }
-.titregroupe{
-  display: flex;
-  align-items: center;
-  justify-content:space-between;
-  border: 1px solid black;
-  padding:2%;
-}
 .contentmessage{
   display: flex;
   justify-content:space-between;
-  height:90%;
+  height:95%;
 }
 .nomgroupe{
   width: 25%;
@@ -208,21 +202,31 @@ h2{
   margin-bottom: 5%;
   font-size: 20px;
 }
-.titreetmsg{
-  width:75%;
+.titregroupe{
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  border: 1px solid black;
+  padding:2%;
+  height:10%;
+}
+#titreetmsg{
   margin-right: 2%;
-  /* height: 100%; */
   margin-bottom:2%;
 }
 .messages{
-  height:45%;
+  height:80%;
   border: 1px solid black;
   padding:2%;
 }
 .barreenvoi{
+  height:10%;
   display: flex;
   align-items: center;
   justify-content:center;
+  margin-top:3%;
+  min-width: 75%;
+  max-width: 75%;
 }
 .iconebarremsg{
   width: 20px;
