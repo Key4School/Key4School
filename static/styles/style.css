@@ -194,7 +194,7 @@ h2{
   justify-content:space-between;
   height:95%;
 }
-.nomgroupe{
+#nomgroupe{
   width: 25%;
   margin-left: 5%;
   overflow-y:auto;
