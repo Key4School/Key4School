@@ -57,10 +57,12 @@ def accueil2():
 @app.route('/messages/', methods=['POST', 'GET'])
 def messages():
     if request.method == 'GET':
-        grpUtilisateur = db_utilisateurs.find_one({'_id': ObjectId('60731106ad6346bf6941d86e')}) #il faudra récupérer l'id qui sera qans un cookie
+        # il faudra récupérer l'id qui sera qans un cookie
+        grpUtilisateur = db_utilisateurs.find_one(
+            {'_id': ObjectId('60731106ad6346bf6941d86e')})
         grp = grpUtilisateur['id-groupes']
-        msgDb = db_messages.find({'id-groupe' :'quand on l\'aura'})
-        return render_template("messages.html", msgDb = msgDb, grpUtilisateur = grp)
+        msgDb = db_messages.find({'id-groupe': 'quand on l\'aura'})
+        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp)
 
     elif request.method == 'POST':
         db_messages.insert_one({"id-groupe": "quand on l'aura", "id-utilisateur": "quand on l'aura",
@@ -96,6 +98,11 @@ def professeur():
 @app.route('/question/')
 def question():
     return render_template("question.html")
+
+
+@app.route('/amis/')
+def amis():
+    return render_template("amis.html")
 
 
 # TOUT LE CODE QUI VA SUIVRE PERMET LA CONNEXION A L'ENT VIA OAUTH

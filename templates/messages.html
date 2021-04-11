@@ -133,9 +133,8 @@
       <!-- fin de tt les msg -->
       <form class="barreenvoi" id="messageForm" onsubmit="envoi(); return false;">
           <img src="{{url_for('static',filename='image/photo.png')}}" class="iconebarremsg" />
-          <input type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" id="envoimsg" style="width: 75%;margin-left: 2%;padding:5px;">
-          <button type="submit"><img src="{{url_for('static',filename='image/flecheenvoi.png')}}" class="iconebarremsg" /></button>
-          <img src="{{url_for('static',filename='image/micro.png')}}" class="iconebarremsg" />
+          <input type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+          <button style="background-color:white;border: 0px solid white;" type="submit"><img src="{{url_for('static',filename='image/flecheenvoi.png')}}" class="iconebarremsg" /></button>
       </form>
     </div>
     <!-- fin de la div pour la partie de droite -->
