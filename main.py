@@ -105,6 +105,11 @@ def amis():
     return render_template("amis.html")
 
 
+@app.route('/deconnexion/')
+def deconnexion():
+    return 'Ca va redirigé vers la connexion'
+
+
 # TOUT LE CODE QUI VA SUIVRE PERMET LA CONNEXION A L'ENT VIA OAUTH
 # Route qui va permettre de rediriger l'utilisateur sur le site d'authentification et de récupérer un token (pour pouvoir se connecter)
 @app.route("/login/")
