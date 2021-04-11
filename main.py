@@ -6,6 +6,7 @@ from datetime import *
 from requests_oauthlib import OAuth2Session
 from flask_session import Session
 from flask.json import jsonify
+from bson.objectid import ObjectId
 import os
 
 # Création de l'application
@@ -24,9 +25,10 @@ token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
 cluster = PyMongo(
     app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 # Voici deux exemples pour créer des BDD
-db_utilisateurs = cluster.db.tilisateurs
+db_utilisateurs = cluster.db.utilisateurs
 db_demande_aide = cluster.db.demande_aide
 db_messages = cluster.db.messages
+db_groupes = cluster.db.groupes
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 # db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
 
@@ -55,8 +57,10 @@ def accueil2():
 @app.route('/messages/', methods=['POST', 'GET'])
 def messages():
     if request.method == 'GET':
-        msgDb = db_messages.find({'id-groupe': 'quand on l\'aura'})
-        return render_template("messages.html", msgDb=msgDb)
+        grpUtilisateur = db_utilisateurs.find_one({'_id': ObjectId('60731106ad6346bf6941d86e')}) #il faudra récupérer l'id qui sera qans un cookie
+        grp = grpUtilisateur['id-groupes']
+        msgDb = db_messages.find({'id-groupe' :'quand on l\'aura'})
+        return render_template("messages.html", msgDb = msgDb, grpUtilisateur = grp)
 
     elif request.method == 'POST':
         db_messages.insert_one({"id-groupe": "quand on l'aura", "id-utilisateur": "quand on l'aura",
