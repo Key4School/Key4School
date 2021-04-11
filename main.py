@@ -101,11 +101,7 @@ def question():
 
 
 @app.route('/amis/')
-<<<<<<< HEAD
-def question():
-=======
 def amis():
->>>>>>> 97b8febb753071ea69153768c92bf5934ff0c441
     return render_template("amis.html")
 
 
