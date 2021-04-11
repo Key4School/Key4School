@@ -117,26 +117,17 @@
           <p class="date" style="margin:0px;text-align:right;">le 20/03 à 17h46</p>
         </div>
         <!--msg venant d'un participant du groupe (a gauche)-->
+        {% for content in msgDb%} <!--Pour chaque message -->
         <div class="participantmsg" style="background-color:#8dd7cf;">
-          <p style="font-weight: bold;margin:0px">Pseudo</p>
+          <p style="font-weight: bold;margin:0px">{{content['id-utilisateur']}}</p>
           <br>
           <p style="margin:0px">
-            Je sais pas ce n'est pas écrit sur
-            Pronote mais la classe de seconde
-            ne l'a pas vu depuis plusieurs jours
+            {{content['contenu']}} <!--On affiche le contenu du message -->
           </p>
           <br>
-          <p class="date" style="margin:0px;text-align:right;">le 20/03 à 17h46</p>
+          <p class="date" style="margin:0px;text-align:right;">{{content['date-envoi']}}</p>
         </div>
-        <!--msg venant d'un participant du groupe (a gauche)-->
-        <div class="participantmsg" style="background-color:#e9a2ad;">
-          <p style="font-weight: bold;margin:0px">Pseudo</p>
-          <br>
-          <p style="margin:0px">
-          </p>
-          <br>
-          <p class="date" style="margin:0px;text-align:right;">le 20/03 à 17h46</p>
-        </div>
+        {%endfor%}
         <!-- msg ecrit par moi (a droite) -->
         <div class="moimsg">
           <p style="margin:0px">

@@ -55,7 +55,8 @@ def accueil2():
 @app.route('/messages/', methods=['POST', 'GET'])
 def messages():
     if request.method == 'GET':
-        return render_template("messages.html")
+        msgDb = db_messages.find({'id-groupe' :'quand on l\'aura'})
+        return render_template("messages.html", msgDb = msgDb)
 
     elif request.method == 'POST':
         db_messages.insert_one({"id-groupe": "quand on l'aura", "id-utilisateur": "quand on l'aura",
