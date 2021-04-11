@@ -28,7 +28,7 @@
     <!-- barre de progression -->
     <progress value="70" max="100">70 %</progress>
   </div>
-  <br /><br /><!-- des saut a la ligne -->
+  <br />
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
   <div class="contentmessage">
     <!-- div pour afficher tout les groupes -->
@@ -102,21 +102,7 @@
         <a href="messages.html"><img src="{{url_for('static',filename='image/3points.png')}}" style="width: 20px;height:auto;margin-bottom:5px;" /></a>
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
-      <div class="messages" style="box-sizing: border-box;overflow-y: auto;height:50%;">
-        <!--msg venant d'un participant du groupe (a gauche)-->
-        <div class="participantmsg" style="background-color:#b2acfa;">
-          <!-- son pseudo -->
-          <p style="font-weight: bold;margin:0px">Pseudo</p>
-          <br>
-          <!-- son msg -->
-          <p style="margin:0px">
-            Demain M. Bidule est absent ?
-          </p>
-          <br />
-          <!-- la date -->
-          <p class="date" style="margin:0px;text-align:right;">le 20/03 à 17h46</p>
-        </div>
-        <!--msg venant d'un participant du groupe (a gauche)-->
+      <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
         {% for content in msgDb%} <!--Pour chaque message -->
         <div class="participantmsg" style="background-color:#8dd7cf;">
           <p style="font-weight: bold;margin:0px">{{content['id-utilisateur']}}</p>
@@ -125,7 +111,7 @@
             {{content['contenu']}} <!--On affiche le contenu du message -->
           </p>
           <br>
-          <p class="date" style="margin:0px;text-align:right;">{{content['date-envoi']}}</p>
+          <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
         </div>
         {%endfor%}
         <!-- msg ecrit par moi (a droite) -->
