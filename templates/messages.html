@@ -37,6 +37,14 @@
         <img style="width: 30px;height:auto;margin-bottom:5%;" src="{{url_for('static',filename='image/plus.png')}}" />
       </a>
       <!-- div pour le groupe -->
+      {%for content in grpUtilisateur%}
+      <div class="groupe">
+        <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
+        <b><a class="liengroupe" href="{{url_for('messages')}}">
+            {{content}}
+          </a></b>
+      </div>
+      {%endfor%}
       <div class="groupe">
         <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
         <b><a class="liengroupe" href="{{url_for('messages')}}">
