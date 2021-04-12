@@ -58,7 +58,7 @@ def messages():
     if request.method == 'GET':
         # il faudra récupérer l'id qui sera qans un cookie
         grp = db_groupes.find(
-            {'id-utilisateurs': {'$regex': ".*60731a7115be24651a803e20.*"}})  # on remplacera le numéro par l'id de l'user
+            {'test ne suppr svp': ObjectId("60731a7115be24651a803e20")})  # on remplacera le numéro par l'id de l'user
         if 'id' in request.args:
             msgDb = db_messages.find({'id-groupe': request.args["id"]})
             idgroupe = request.args["id"]
