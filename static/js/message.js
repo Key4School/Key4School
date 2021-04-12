@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#titreetmsg').css({
       height: (80 / 100 * ($(window).height())).toString() + 'px',
-      width: (75 / 100 * ($(window).width())).toString() + 'px',
+      width: (85 / 100 * ($(window).width())).toString() + 'px',
     });
     $('#nomgroupe').css({
         height: (90 / 100 * ($(window).height())).toString() + 'px',
