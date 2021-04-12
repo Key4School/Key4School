@@ -193,6 +193,7 @@ h2{
   display: flex;
   justify-content:space-between;
   height:95%;
+  margin-top: 5%;
 }
 #nomgroupe{
   width: 15%;
