@@ -40,56 +40,10 @@
       <div class="groupe">
         <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
         <b><a class="liengroupe" href="{{url_for('messages')}}">
-            {{content}}
+            {{content['nom']}}
           </a></b>
       </div>
       {%endfor%}
-      <div class="groupe">
-        <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
-        <b><a class="liengroupe" href="{{url_for('messages')}}">
-            Spé 1
-          </a></b>
-      </div>
-      <div class="groupe">
-        <a class="liengroupe" href="{{url_for('messages')}}">
-          Spé 2
-        </a>
-      </div>
-      <div class="groupe">
-        <a class="liengroupe" href="{{url_for('messages')}}">
-          Spé 3
-        </a>
-      </div>
-      <div class="groupe">
-        <a class="liengroupe" href="{{url_for('messages')}}">
-          Classe
-        </a>
-      </div>
-      <div class="groupe">
-        <a class="liengroupe" href="{{url_for('messages')}}">
-          LVA
-        </a>
-      </div>
-      <div class="groupe">
-        <a class="liengroupe" href="{{url_for('messages')}}">
-          LVB
-        </a>
-      </div>
-      <div class="groupe">
-        <a class="liengroupe" href="{{url_for('messages')}}">
-          Option
-        </a>
-      </div>
-      <div class="groupe">
-        <a class="liengroupe" href="{{url_for('messages')}}">
-          Potes
-        </a>
-      </div>
-      <div class="groupe">
-        <a class="liengroupe" href="{{url_for('messages')}}">
-          M. bidule
-        </a>
-      </div>
     </div>
     <!-- fin de la div pour les noms de tt les groupes -->
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->

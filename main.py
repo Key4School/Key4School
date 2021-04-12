@@ -32,7 +32,6 @@ db_groupes = cluster.db.groupes
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 # db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
 
-
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
 '''le lien de l'api pour plus d'info https://github.com/bain3/pronotepy'''
 # client = pronotepy.Client('https://0910626l.index-education.net/pronote/eleve.html',
@@ -58,9 +57,8 @@ def accueil2():
 def messages():
     if request.method == 'GET':
         # il faudra récupérer l'id qui sera qans un cookie
-        grpUtilisateur = db_utilisateurs.find_one(
-            {'_id': ObjectId('60731106ad6346bf6941d86e')})
-        grp = grpUtilisateur['id-groupes']
+        grp = db_groupes.find(
+            {'id-utilisateurs': {'$regex': ".*60731a7115be24651a803e20.*"}})
         msgDb = db_messages.find({'id-groupe': 'quand on l\'aura'})
         return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp)
 
