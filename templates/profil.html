@@ -7,13 +7,13 @@
   <!-- pour l'adapter plus ou moins bien sur telephone -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- titre en haut dans le navigateur -->
-  <title>Profile</title>
+  <title>profil</title>
   <!-- page de style -->
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
   <!-- importation de la bibliotheque jquery qui est requise pour faire marcher le js-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <!-- importation du JS pour afficher et enlever les div -->
-  <script src="{{url_for('static',filename='js/menuprofile.js')}}"></script>
+  <script src="{{url_for('static',filename='js/menuprofil.js')}}"></script>
 </head>
 
 <body>
@@ -26,9 +26,9 @@
   <!-- barre rechercher  -->
   <input type="text" placeholder="Recherche..." style="padding:5px;width: 30%;">
 
-  <div class="profile">
+  <div class="profil">
     <!-- icone avatar avec un lien qui va sur la page profil -->
-    <a href="{{url_for('profile')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
+    <a href="{{url_for('profil')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
     <!-- barre de progression des XP -->
     <progress value="70" max="100">70 %</progress>
   </div>
@@ -98,10 +98,10 @@
     <br />
     <br />
     <!-- 1ere ligne -->
-    <div class="ligne1profile">
-      <!-- div pour coller l'icone appareil photo et la photo de profile -->
-      <div class="photoprofile">
-        <!-- photo de profile -->
+    <div class="ligne1profil">
+      <!-- div pour coller l'icone appareil photo et la photo de profil -->
+      <div class="photoprofil">
+        <!-- photo de profil -->
         <img alt="user" src="{{url_for('static',filename='image/user.png')}}" style="width:80px; height:auto;" />
         <!-- icone appareil photo -->
         <img alt="appareil photo" src="{{url_for('static',filename='image/photo.png')}}" style="margin-left:8%;width:40px; height:auto;" />
@@ -112,10 +112,10 @@
     <br />
     <br />
     <!-- debut de la div avec les infos pour le Nom -->
-    <div class="contentinfoprofile">
+    <div class="contentinfoprofil">
       <p class="themeligne">
         <!-- icone -->
-        <img alt="user" src="{{url_for('static',filename='image/editprofile.png')}}" class="iconeinfoprofile" />
+        <img alt="user" src="{{url_for('static',filename='image/editprofil.png')}}" class="iconeinfoprofil" />
         &nbsp;&nbsp;Nom
       </p>
       <!-- ce que l'utilisateur a rempli comme info pour lui -->
@@ -124,9 +124,9 @@
       </p>
     </div>
     <!-- nouelle ligne pour le lycee et la classe -->
-    <div class="contentinfoprofile">
+    <div class="contentinfoprofil">
       <p class="themeligne">
-        <img alt="presentateur" src="{{url_for('static',filename='image/presentateur.png')}}" class="iconeinfoprofile" />
+        <img alt="presentateur" src="{{url_for('static',filename='image/presentateur.png')}}" class="iconeinfoprofil" />
         &nbsp;&nbsp;Lycée/Classe
       </p>
       <p>
@@ -134,9 +134,9 @@
       </p>
     </div>
     <!-- nouelle ligne pour les spe -->
-    <div class="contentinfoprofile">
+    <div class="contentinfoprofil">
       <p class="themeligne">
-        <img alt="specialite" src="{{url_for('static',filename='image/editprofile.png')}}" class="iconeinfoprofile" />
+        <img alt="specialite" src="{{url_for('static',filename='image/editprofil.png')}}" class="iconeinfoprofil" />
         &nbsp;&nbsp;Spécialités
       </p>
       <p>
@@ -144,9 +144,9 @@
       </p>
     </div>
     <!-- nouelle ligne pour les langues -->
-    <div class="contentinfoprofile">
+    <div class="contentinfoprofil">
       <p class="themeligne">
-        <img alt="langues" src="{{url_for('static',filename='image/web.png')}}" class="iconeinfoprofile" />
+        <img alt="langues" src="{{url_for('static',filename='image/web.png')}}" class="iconeinfoprofil" />
         &nbsp;&nbsp;Langues vivantes
       </p>
       <p>
@@ -157,9 +157,9 @@
       </p>
     </div>
     <!-- nouelle ligne pour les options -->
-    <div class="contentinfoprofile">
+    <div class="contentinfoprofil">
       <p class="themeligne">
-        <img alt="option" src="{{url_for('static',filename='image/livre.png')}}" class="iconeinfoprofile" />
+        <img alt="option" src="{{url_for('static',filename='image/livre.png')}}" class="iconeinfoprofil" />
         &nbsp;&nbsp;Option(s)
       </p>
       <p>
@@ -167,9 +167,9 @@
       </p>
     </div>
     <!-- nouelle ligne pour l'adresse mail' -->
-    <div class="contentinfoprofile">
+    <div class="contentinfoprofil">
       <p class="themeligne">
-        <img alt="mail" src="{{url_for('static',filename='image/trombone.png')}}" class="iconeinfoprofile" />
+        <img alt="mail" src="{{url_for('static',filename='image/trombone.png')}}" class="iconeinfoprofil" />
         &nbsp;&nbsp;Adresse mail ENT
       </p>
       <p>

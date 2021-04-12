@@ -92,12 +92,12 @@
   color: black;
   text-decoration: none;
 }
-.profile{
+.profil{
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.profilemessage{
+.profilmessage{
   display: flex;
   align-items: center;
   height: 5%;
@@ -157,20 +157,20 @@ h2{
   text-align: center;
 }
 
-.ligne1profile{
+.ligne1profil{
   display: flex;
   align-items: center;
   justify-content: space-evenly;
 }
-.photoprofile{
+.photoprofil{
   display: flex;
   align-items: center;
 }
-.iconeinfoprofile{
+.iconeinfoprofil{
   width: 25px;
   height:auto;
 }
-.contentinfoprofile{
+.contentinfoprofil{
   display: flex;
   align-items: center;
   justify-content:space-between;
