@@ -40,15 +40,6 @@
   <div id="multichoix">
     <!-- chaque div "ligne" correspond a une ligne de la div -->
     <div class="ligne">
-      <!-- icone des parametres -->
-      <img alt="parametre" src="{{url_for('static',filename='image/parametre.png')}}" class="iconemenu" />
-      <!-- lien qui envoi sur la page des parametres -->
-      <a href="parametre" class="titremenu">
-        Reglage
-      </a>
-
-    </div>
-    <div class="ligne">
       <!-- icone de l'Acceuil -->
       <img alt="home" src="{{url_for('static',filename='image/home.png')}}" class="iconemenu" />
       <!-- lien qui reviens a l'Acceuil -->
@@ -56,32 +47,67 @@
         Acceuil
       </a>
     </div>
-    <!-- la mm chose qu'haut dessus mais pour les amis -->
+    <!-- la mm chose qu'haut dessus mais pour le lycee -->
     <div class="ligne">
-      <img alt="amis proche" src="{{url_for('static',filename='image/amis.png')}}" class="iconemenu" />
-      <a href="{{url_for('amis')}}" class="titremenu">
-        Amis proches
+      <img alt="lycee" src="{{url_for('static',filename='image/lycee.png')}}" class="iconemenu" />
+      <a href="{{url_for('monlycee')}}" class="titremenu">
+        Mon lycée
       </a>
     </div>
-    <!-- la mm chose qu'haut dessus mais pour se deconnecter -->
+    <!-- la mm chose qu'haut dessus mais pour la classe -->
     <div class="ligne">
-      <img alt="se deconnecter" src="{{url_for('static',filename='image/deconnecter.png')}}" class="iconemenu" />
-      <a href="{{url_for('deconnexion')}}" class="titremenu">
-        Se déconnecter
+      <img alt="classe" src="{{url_for('static',filename='image/classe.png')}}" class="iconemenu" />
+      <a href="{{url_for('classe')}}" class="titremenu">
+        Ma classe
       </a>
     </div>
+    <!-- la mm chose qu'haut dessus mais pour la question -->
+    <div class="ligne">
+      <img alt="question" src="{{url_for('static',filename='image/question.png')}}" class="iconemenu" />
+      <a href="{{url_for('question')}}" class="titremenu">
+        Poser une question
+      </a>
+    </div>
+    <!-- la mm chose qu'haut dessus mais pour les profs -->
+    <div class="ligne">
+      <img alt="professeur" src="{{url_for('static',filename='image/prof.png')}}" class="iconemenu" />
+      <a href="{{url_for('professeur')}}" class="titremenu">
+        Mes professeur
+      </a>
+    </div>
+    <!-- la mm chose qu'haut dessus mais pour les msg pv -->
+    <div class="ligne">
+      <img alt="messages" src="{{url_for('static',filename='image/msg.png')}}" class="iconemenu" />
+      <a href="{{url_for('messages')}}" class="titremenu">
+        Messages privés
+      </a>
+      <p class="nouvnotif">
+        &nbsp;&nbsp;!
+      </p>
+    </div>
+    <!-- la mm chose qu'haut dessus mais pour les archives -->
+    <div class="ligne">
+      <img alt="archives" src="{{url_for('static',filename='image/archives.png')}}" class="iconemenu" />
+      <a href="{{url_for('archives')}}" class="titremenu">
+        Archives
+      </a>
+    </div>
+    <!-- icone parametre en bas a gauche -->
+    <img alt="parametre" src="{{url_for('static',filename='image/parametre.png')}}" class="iconeparametre" />
   </div>
   <!-- fin de la div sur le coté gauche -->
   <!-- debut div a droite qui s'affiche en cliquant sur le boutton cloche -->
   <div id="notif">
     <!-- div pour la 1ere notif -->
     <div class="notif1">
-      <!-- contenue de la notif -->
+      <!-- image de celui qui a generé la notif -->
       <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
+      <!-- contenue de la notif -->
       <div class="contentnotif">
         <h2>Nouvel atelier d'écriture</h2>
         <p>
           Retrouvez nous tous
+
         </p>
       </div>
     </div>
