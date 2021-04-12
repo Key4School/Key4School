@@ -32,9 +32,9 @@
   <div class="contentmessage">
     <!-- div pour afficher tout les groupes -->
     <div id="nomgroupe">
-      <a class="liengroupe" href="{{url_for('messages')}}">
+      <div class="liengroupe">
         <img style="width: 30px;height:auto;margin-bottom:5%;" src="{{url_for('static',filename='image/plus.png')}}" />
-      </a>
+      </div>
       <!-- div pour le groupe -->
       {%for content in grpUtilisateur%}
       <div class="groupe">
