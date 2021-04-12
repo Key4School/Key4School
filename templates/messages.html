@@ -18,15 +18,25 @@
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
 
 <body style="overflow:hidden;height:100%;width:99%;">
-  <!-- debut de la div pour le profile de l'utilisateur avec le nbre d'XP, sa photo de profile et la barre de progression-->
-  <div class="profilemessage">
-    <a href="{{url_for('profile')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>&nbsp;&nbsp;
-    <p style="margin:0px;">
-      70XP
-    </p><!-- des espaces -->&nbsp;&nbsp;
-    <!-- barre de progression -->
+ <!-- debut du bandeau en haut de la page -->
+ <div class="bandeau">
+  <!-- icone menu en haut a gauche -->
+  <div class="menu">
+    <img Onclick='divmenu()' alt="menu" src="{{url_for('static',filename='image/menu.png')}}" class="iconebandeau" />
+  </div>
+  <!-- barre rechercher  -->
+  <input type="text" placeholder="Recherche..." style="padding:5px;width: 30%;">
+
+  <div class="profile">
+    <!-- icone avatar avec un lien qui va sur la page profil -->
+    <a href="{{url_for('profile')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
+    <!-- barre de progression des XP -->
     <progress value="70" max="100">70 %</progress>
   </div>
+  <!-- icone cloche pour les notifs -->
+  <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/cloche.png')}}" class="iconebandeau" />
+</div>
+<!-- fin du bandeau en haut de la page -->
   <br />
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
   <div class="contentmessage">
