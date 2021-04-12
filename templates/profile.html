@@ -18,17 +18,24 @@
 
 <body>
   <!-- debut du bandeau en haut de la page -->
-  <div class="bandeau">
-    <!-- icone menu en haut a gauche -->
-    <div class="menu">
-      <img Onclick='divmenu()' alt="menu" src="{{url_for('static',filename='image/menu.png')}}" class="iconebandeau" />
-    </div>
-    <!-- barre rechercher  -->
-    <input type="text" placeholder="Recherche..." style="padding:5px;">
-    <!-- icone cloche pour les notifs -->
-    <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/cloche.png')}}" class="iconebandeau" />
+ <div class="bandeau">
+  <!-- icone menu en haut a gauche -->
+  <div class="menu">
+    <img Onclick='divmenu()' alt="menu" src="{{url_for('static',filename='image/menu.png')}}" class="iconebandeau" />
   </div>
-  <!-- fin du bandeau en haut de la page -->
+  <!-- barre rechercher  -->
+  <input type="text" placeholder="Recherche..." style="padding:5px;width: 30%;">
+
+  <div class="profile">
+    <!-- icone avatar avec un lien qui va sur la page profil -->
+    <a href="{{url_for('profile')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
+    <!-- barre de progression des XP -->
+    <progress value="70" max="100">70 %</progress>
+  </div>
+  <!-- icone cloche pour les notifs -->
+  <img Onclick='divnotif()' alt="notif" src="{{url_for('static',filename='image/cloche.png')}}" class="iconebandeau" />
+</div>
+<!-- fin du bandeau en haut de la page -->
   <!-- div qui s'affiche a gauche en cliquant sur le boutton menu en haut a gauche -->
   <div id="multichoix">
     <!-- chaque div "ligne" correspond a une ligne de la div -->
