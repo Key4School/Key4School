@@ -4,7 +4,7 @@ $(document).ready(function() {
       width: (85 / 100 * ($(window).width())).toString() + 'px',
   });
   $('#nomgroupe').css({
-      height: (90 / 100 * ($(window).height())).toString() + 'px',
+      height: (80 / 100 * ($(window).height())).toString() + 'px',
   });
   function envoi(){
     if($('#envoimsg').val()!=''){
