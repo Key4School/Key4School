@@ -1,3 +1,16 @@
+/* style scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: white;
+}
+::-webkit-scrollbar-thumb {
+  background: #E3E4E3;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e9ebe9;
+}
 .bandeau{
   display: flex;
   align-items: center;
