@@ -62,10 +62,11 @@ def messages():
         if 'id' in request.args:
             msgDb = db_messages.find({'id-groupe': request.args["id"]})
             idgroupe = request.args["id"]
+            infogroupes = db_groupes.find_one({"_id": ObjectId(request.args["id"]) })
         else:
             msgDb = []
             idgroupe = ''
-        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe)
+        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes)
 
     elif request.method == 'POST':
         db_messages.insert_one({"id-groupe": request.form['group'], "id-utilisateur": "quand on l'aura",
