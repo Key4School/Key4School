@@ -88,6 +88,22 @@
   z-index: 20;
   min-width: 15%;
 }
+#newgroup{
+  top: 0px;
+  right:0;
+  display: none;
+  position: fixed;
+  background: #c3cfd9;
+  padding-top: 3%;
+  padding-left:2%;
+  height: 100%;
+  color: black;
+  padding-right: 4%;
+  text-align: left;
+  margin-top: 7%;
+  z-index: 20;
+  min-width: 15%;
+}
 .titremenu{
   color: black;
   text-decoration: none;

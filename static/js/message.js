@@ -20,3 +20,15 @@ $(document).ready(function() {
     }
   }
 });
+function divnewgroup() {
+  if ($('#newgroup').css("display") == 'none') {
+    $('#newgroup').css({
+      display: "block",
+    });
+    $('#page').append('<div id="filtre" onclick="divnewgroup()" style="opacity:0;"><div>');
+  } else {
+    $('#newgroup').css({
+      display: "none",
+    });
+  }
+}

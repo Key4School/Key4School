@@ -121,8 +121,16 @@
   <div class="contentmessage">
     <!-- div pour afficher tout les groupes -->
     <div id="nomgroupe">
-      <div class="liengroupe">
+      <div class="liengroupe"  onclick="divnewgroup()">
         <img style="width: 30px;height:auto;margin-bottom:5%;" src="{{url_for('static',filename='image/plus.png')}}" />
+      </div>
+      <div id="newgroup">
+        <form autocomplete="off">
+          <p>
+            <label for="nomgroupe">Nom du groupe</label> :   <input type="text" name="nomgroupe" id="nomgroupe" maxlength='25'/><br><br>
+            <input type="checkbox" name=1 id="pseudo" /><label for="pseudo">perso1</label><br>
+          </p>
+        </form>
       </div>
       <!-- div pour le groupe -->
       {%for content in grpUtilisateur%}
