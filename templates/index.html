@@ -10,7 +10,7 @@
   <title>Mon lycée</title>
   <!-- page de style -->
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
-  <!-- importation de la bibliotheque jquery qui est requise pour faire marcher le js-->
+  <!-- importation de la bibliotheque j query qui est requise pour faire marcher le js-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <!-- importation du JS pour afficher et enlever les div -->
   <script src="{{url_for('static',filename='js/menu.js')}}"></script>
@@ -27,9 +27,9 @@
     <!-- barre rechercher  -->
     <input type="text" placeholder="Recherche..." style="padding:5px;width: 30%;">
 
-    <div class="profile">
+    <div class="profil">
       <!-- icone avatar avec un lien qui va sur la page profil -->
-      <a href="{{url_for('profile')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
+      <a href="{{url_for('profil')}}"><img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="iconebandeau" /></a>
       <!-- barre de progression des XP -->
       <progress value="70" max="100">70 %</progress>
     </div>
@@ -43,11 +43,11 @@
     <div id="multichoix">
       <!-- chaque div "ligne" correspond a une ligne de la div -->
       <div class="ligne">
-        <!-- icone de l'Acceuil -->
+        <!-- icone de l'Accueil -->
         <img alt="home" src="{{url_for('static',filename='image/home.png')}}" class="iconemenu" />
-        <!-- lien qui reviens a l'Acceuil -->
+        <!-- lien qui reviens a l'Accueil -->
         <a href="{{url_for('accueil')}}" class="titremenu">
-          Acceuil
+          Accueil
         </a>
       </div>
       <!-- la mm chose qu'haut dessus mais pour le lycee -->
@@ -71,13 +71,6 @@
           Poser une question
         </a>
       </div>
-      <!-- la mm chose qu'haut dessus mais pour les profs -->
-      <div class="ligne">
-        <img alt="professeur" src="{{url_for('static',filename='image/prof.png')}}" class="iconemenu" />
-        <a href="{{url_for('professeur')}}" class="titremenu">
-          Mes professeur
-        </a>
-      </div>
       <!-- la mm chose qu'haut dessus mais pour les msg pv -->
       <div class="ligne">
         <img alt="messages" src="{{url_for('static',filename='image/msg.png')}}" class="iconemenu" />
@@ -87,13 +80,6 @@
         <p class="nouvnotif">
           &nbsp;&nbsp;!
         </p>
-      </div>
-      <!-- la mm chose qu'haut dessus mais pour les archives -->
-      <div class="ligne">
-        <img alt="archives" src="{{url_for('static',filename='image/archives.png')}}" class="iconemenu" />
-        <a href="{{url_for('archives')}}" class="titremenu">
-          Archives
-        </a>
       </div>
       <!-- icone parametre en bas a gauche -->
       <img alt="parametre" src="{{url_for('static',filename='image/parametre.png')}}" class="iconeparametre" />
@@ -122,7 +108,7 @@
     <div class"publications">
       <!-- div pour la 1ere publication -->
       <div class="pub">
-        <!-- photo de profile de celui qui a poster la publication -->
+        <!-- photo de profil de celui qui a poster la publication -->
         <img alt="avatar" src="{{url_for('static',filename='image/avatar.png')}}" class="persopubli" />
         <!-- contenue de la publication -->
         <div class="contentpub">

@@ -1,3 +1,16 @@
+/* style scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: white;
+}
+::-webkit-scrollbar-thumb {
+  background: #E3E4E3;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e9ebe9;
+}
 .bandeau{
   display: flex;
   align-items: center;
@@ -88,16 +101,37 @@
   z-index: 20;
   min-width: 15%;
 }
+#nomnewgroupe{
+  width:50%;
+}
+#newgroup{
+  /* top: 0px;
+  right:0; */
+  display: none;
+  position: fixed;
+  z-index: 20;
+  text-align: left;
+  background: #c3cfd9;
+  color: black;
+  padding:2%;
+  /* height: 100%; */
+  /* padding-right: 4%; */
+  /* padding-top: 3%; */
+  /* padding-left:2%; */
+  /* margin-top: 7%; */
+
+  min-width: 15%;
+}
 .titremenu{
   color: black;
   text-decoration: none;
 }
-.profile{
+.profil{
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.profilemessage{
+.profilmessage{
   display: flex;
   align-items: center;
   height: 5%;
@@ -157,20 +191,20 @@ h2{
   text-align: center;
 }
 
-.ligne1profile{
+.ligne1profil{
   display: flex;
   align-items: center;
   justify-content: space-evenly;
 }
-.photoprofile{
+.photoprofil{
   display: flex;
   align-items: center;
 }
-.iconeinfoprofile{
+.iconeinfoprofil{
   width: 25px;
   height:auto;
 }
-.contentinfoprofile{
+.contentinfoprofil{
   display: flex;
   align-items: center;
   justify-content:space-between;
@@ -193,11 +227,13 @@ h2{
   display: flex;
   justify-content:space-between;
   height:95%;
+  margin-top: 5%;
 }
 #nomgroupe{
-  width: 25%;
+  width: 15%;
   margin-left: 5%;
   overflow-y:auto;
+  margin-bottom:5%;
 }
 .groupe{
   margin-bottom: 5%;

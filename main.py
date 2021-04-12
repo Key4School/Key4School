@@ -68,9 +68,9 @@ def messages():
         return 'sent'
 
 
-@app.route('/profile/')
-def profile():
-    return render_template("profile.html")
+@app.route('/profil/')
+def profil():
+    return render_template("profil.html")
 
 
 @app.route('/archives/')
@@ -145,15 +145,15 @@ def callback():
 
     # At this point you can fetch protected resources but lets save
     # the token and show how this is done from a persisted token
-    # in /profile.
+    # in /profil.
     session['oauth_token'] = ENT_token
 
-    return redirect(url_for('.profiletest'))
+    return redirect(url_for('.profiltest'))
 
 
 # Fonction de test pour afficher ce que l'on récupère
-@app.route("/profiletest/", methods=["GET"])
-def profiletest():
+@app.route("/profiltest/", methods=["GET"])
+def profiltest():
     """Fetching a protected resource using an OAuth 2 token.
     """
     print("test")
