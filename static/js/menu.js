@@ -8,6 +8,7 @@ function divmenu() {
     $('#multichoix').css({
       display: "none",
     });
+    $('#filtre').remove();
   }
 }
 function divnotif() {
@@ -20,5 +21,6 @@ function divnotif() {
     $('#notif').css({
       display: "none",
     });
+    $('#filtre').remove();
   }
 }
