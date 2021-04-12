@@ -124,7 +124,7 @@
       {%for content in grpUtilisateur%}
       <div class="groupe">
         <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
-        <a class="liengroupe current" href="{{url_for('messages')}}">
+        <a class="liengroupe current" href="{{url_for('messages')}}?id={{content['_id']}}">
             {{content['nom']}}
           </a>
       </div>
@@ -170,9 +170,10 @@
         </div>
       </div>
       <!-- fin de tt les msg -->
-      <form class="barreenvoi" id="messageForm" onsubmit="envoi(); return false;">
+      <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
           <img src="{{url_for('static',filename='image/photo.png')}}" class="iconebarremsg" />
           <input type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+          <input type='hidden' name="group" value="{{idgroupe}}" />
           <button style="background-color:white;border: 0px solid white;" type="submit"><img src="{{url_for('static',filename='image/flecheenvoi.png')}}" class="iconebarremsg" /></button>
       </form>
     </div>

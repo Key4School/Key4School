@@ -59,12 +59,16 @@ def messages():
         # il faudra récupérer l'id qui sera qans un cookie
         grp = db_groupes.find(
             {'id-utilisateurs': {'$regex': ".*60731a7115be24651a803e20.*"}})  # on remplacera le numéro par l'id de l'user
-        # ici on mettra l'id du groupe qui sera en GET
-        msgDb = db_messages.find({'id-groupe': 'quand on l\'aura'})
-        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp)
+        if 'id' in request.args:
+            msgDb = db_messages.find({'id-groupe': request.args["id"]})
+            idgroupe = request.args["id"]
+        else:
+            msgDb = []
+            idgroupe = ''
+        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe)
 
     elif request.method == 'POST':
-        db_messages.insert_one({"id-groupe": "quand on l'aura", "id-utilisateur": "quand on l'aura",
+        db_messages.insert_one({"id-groupe": request.form['group'], "id-utilisateur": "quand on l'aura",
                                 "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
         return 'sent'
 

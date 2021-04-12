@@ -1,25 +1,13 @@
 $(document).ready(function() {
   $('#titreetmsg').css({
-      height: (70 / 100 * ($(window).height())).toString() + 'px',
-      width: (85 / 100 * ($(window).width())).toString() + 'px',
+    height: (70 / 100 * ($(window).height())).toString() + 'px',
+    width: (85 / 100 * ($(window).width())).toString() + 'px',
   });
   $('#nomgroupe').css({
-      height: (80 / 100 * ($(window).height())).toString() + 'px',
+    height: (80 / 100 * ($(window).height())).toString() + 'px',
   });
-  function envoi(){
-    if($('#envoimsg').val()!=''){
-      var donnees = $('#messageForm').serialize();
-      $.ajax({
-        url: '/messages/', // on donne l'URL du fichier de traitement
-        type: "POST", // la requête est de type POST
-        data: donnees, // et on envoie nos données
-        success: function(response) {
-          $('#messageForm').trigger("reset");
-        },
-      });
-    }
-  }
 });
+
 function divnewgroup() {
   if ($('#newgroup').css("display") == 'none') {
     $('#newgroup').css({
@@ -31,4 +19,17 @@ function divnewgroup() {
       display: "none",
     });
   }
+}
+
+function envoi(e) {
+  e.preventDefault();
+  var donnees = $('#messageForm').serialize();
+  $.ajax({
+    url: '/messages/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $('#messageForm').trigger("reset");
+    },
+  });
 }
