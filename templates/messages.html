@@ -131,6 +131,7 @@
       {%endfor%}
     </div>
     <!-- fin de la div pour les noms de tt les groupes -->
+    {% if msgDb != None %}
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
     <div id="titreetmsg">
       <!-- debut de la div pour la partie haute a droite -->
@@ -178,6 +179,7 @@
       </form>
     </div>
     <!-- fin de la div pour la partie de droite -->
+    {% endif %}
   </div>
   <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
 
