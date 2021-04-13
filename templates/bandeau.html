@@ -1,15 +1,4 @@
-<nav class="navbar" role="navigation" aria-label="dropdown navigation">
-  <!-- <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
-      <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
-    </a>
-    <div class="navbar-burger" data-target="navbarExampleTransparentExample">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div> -->
-
+<nav class="navbar" role="navigation" aria-label="dropdown navigation" style="background-color:#b2acfa;padding-bottom:1%;">
   <div id="navbarExampleTransparentExample" class="navbar-menu">
     <div class="navbar-start">
       <div class="navbar-item has-dropdown is-hoverable">
@@ -18,31 +7,36 @@
         </a>
         <div class="navbar-dropdown is-boxed">
           <a class="navbar-item" href="{{url_for('accueil')}}">
-            Accueil
+            <img src="{{url_for('static',filename='image/home.png')}}" style="height:20px;width:20px;" />
+            &nbsp;&nbsp;Accueil
           </a>
           <a class="navbar-item" href="{{url_for('monlycee')}}">
-            Mon lycée
+            <img src="{{url_for('static',filename='image/lycee.png')}}" style="height:20px;width:20px;"/>
+            &nbsp;&nbsp;Mon lycée
           </a>
           <a class="navbar-item" href="{{url_for('classe')}}">
-            Ma classe
+            <img src="{{url_for('static',filename='image/classe.png')}}" style="height:20px;width:20px;"/>
+            &nbsp;&nbsp;Ma classe
           </a>
           <a class="navbar-item" href="{{url_for('question')}}">
-            Poser une question
+            <img src="{{url_for('static',filename='image/question.png')}}" style="height:20px;width:20px;"/>
+            &nbsp;&nbsp;Poser une question
           </a>
           <a class="navbar-item" href="{{url_for('messages')}}">
-            Messages privés
+            <img src="{{url_for('static',filename='image/msg.png')}}" style="height:20px;width:20px;"/>
+            &nbsp;&nbsp;Messages privés
           </a>
           <hr class="navbar-divider">
           <a class="navbar-item" href="https://bulma.io/documentation/elements/box/">
-            Paramètre
+            <img src="{{url_for('static',filename='image/parametre.png')}}" style="height:20px;width:20px;"/>
+            &nbsp;&nbsp;Paramètre
           </a>
         </div>
       </div>
-      <input type="text" placeholder="Recherche..." style="padding:5px;width: 30%;">
-      <a href="{{url_for('profil')}}"><img  src="{{url_for('static',filename='image/avatar.png')}}" style="height:30px;width:30px;" /></a>
-      <progress value="70" max="100">70 %</progress>
     </div>
-
+    <input type="text" placeholder="Recherche..." style="margin-top:1%;width: 30%;margin-right:10%;">
+    <a href="{{url_for('profil')}}"><img  src="{{url_for('static',filename='image/avatar.png')}}" style="height:30px;width:30px;margin-top:40%;margin-left:5%;" /></a>
+    <progress style="margin-top:1%;height:55%;margin-left: 1%;" value="70" max="100">70 %</progress>
     <div class="navbar-end">
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" >

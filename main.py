@@ -9,7 +9,6 @@ from flask.json import jsonify
 from bson.objectid import ObjectId
 import os
 
-#test
 # Création de l'application
 app = Flask(__name__)
 
@@ -67,7 +66,7 @@ def messages(idGroupe):
             grp = db_groupes.find(
                 {'id-utilisateurs': ObjectId("60731a7115be24651a803e20")})  # on remplacera le numéro par l'id de l'user
             if idGroupe != None:
-                msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
+                msgDb = db_messages.find({'id-groupe': idGroupe})
                 idgroupe = idGroupe
                 infogroupes = db_groupes.find_one(
                     {"_id": ObjectId(idGroupe)})
@@ -84,7 +83,7 @@ def messages(idGroupe):
             return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs)
 
         elif request.method == 'POST':
-            db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+            db_messages.insert_one({"id-groupe": request.form['group'], "id-utilisateur": "quand on l'aura",
                                     "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
             return 'sent'
     else:
@@ -134,16 +133,7 @@ def professeur():
 @app.route('/question/')
 def question():
     if 'id' in session:
-        if request.method == 'POST':
-            if 'demande' not in request.form :
-                result = db_demande_aide.find({'$text' : {'$search':request.form['research']}})
-
-                return render_template('question.html', answer = result)
-            else :
-                db_demande_aide.insert_one({"id-utilisateur": "quand on l'aura", "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere']})
-                return render_template('question.html', envoi = "Envoi réussi")
-        else :
-            return render_template('question.html')
+        return render_template("question.html")
     else:
         return redirect(url_for('login'))
 
