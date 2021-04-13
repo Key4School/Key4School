@@ -145,7 +145,7 @@ def professeur():
         return redirect(url_for('login'))
 
 
-@app.route('/question/')
+@app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
@@ -156,7 +156,7 @@ def question():
                 return render_template('question.html', answer=result)
             else:
                 db_demande_aide.insert_one(
-                    {"id-utilisateur": "quand on l'aura", "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere']})
+                    {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere']})
                 return render_template('question.html', envoi="Envoi réussi")
         else:
             return render_template('question.html')
