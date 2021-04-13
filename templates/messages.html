@@ -40,7 +40,9 @@
             <section class="modal-card-body">
               <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' /><br><br>
               {%for user in users%}
+              {%if user['_id'] != session['id']%}
               <input type="checkbox" name="{{user['_id']}}" id="pseudo" />&nbsp;&nbsp;<label for="pseudo">{{user['pseudo']}}</label><br><br />
+              {%endif%}
               {%endfor%}
             </section>
             <footer class="modal-card-foot">
