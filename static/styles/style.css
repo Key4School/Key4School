@@ -11,19 +11,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #e9ebe9;
 }
-#bandeau{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #b2acfa;
-  padding: 2%;
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  right:0px;
-  height: 5%;
-  z-index:2;
-}
+
 #page{
   margin-top: 7%;
 }
@@ -35,69 +23,6 @@
   right:0;
   background:rgba(0,0,0,0.6);
   z-index: 1;
-}
-.menu{
-  z-index:20;
-}
-.ligne{
-  display: flex;
-  align-items: center;
-  padding-bottom: 10%;
-}
-.ligne:hover{
-  cursor: pointer;
-  font-weight: bold;
-  color:#7266f6;
-}
-.iconemenu{
-  width: 20px;
-  height:auto;
-  margin-right: 5px;
-}
-.iconeparametre{
-  width: 25px;
-  height:auto;
-  bottom: 20px;
-  position: fixed;
-}
-.iconeparametre:hover{
-  cursor: pointer;
-}
-.nouvnotif{
-  color: red;
-  font-weight: bold;
-  margin:0px;
-  font-size: 30px;
-}
-#multichoix{
-  top:5%;
-  left:0;
-  display: none;
-  position: fixed;
-  background: #c3cfd9;
-  padding-top: 3%;
-  padding-left:2%;
-  height: 100%;
-  color: black;
-  padding-right: 4%;
-  text-align: left;
-  width: 175px;
-  z-index: 2;
-}
-#notif{
-  top:5%;
-  right:0;
-  display: none;
-  position: fixed;
-  background: #c3cfd9;
-  padding-top: 3%;
-  padding-left:2%;
-  height: 100%;
-  color: black;
-  padding-right: 4%;
-  text-align: left;
-  min-width: 15%;
-  z-index: 2;
 }
 #nomnewgroupe{
   width:50%;
