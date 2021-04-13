@@ -30,7 +30,7 @@ db_demande_aide = cluster.db.demande_aide
 db_messages = cluster.db.messages
 db_groupes = cluster.db.groupes
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
-db_utilisateurs.insert_one({"nom": "JEAN", "passe": "oui"})
+# db_utilisateurs.insert_one({"nom": "JEAN", "passe": "oui"})
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
 '''le lien de l'api pour plus d'info https://github.com/bain3/pronotepy'''
@@ -41,7 +41,6 @@ db_utilisateurs.insert_one({"nom": "JEAN", "passe": "oui"})
 
 
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
-
 @app.route('/')
 def accueil():
     return render_template("index.html")
@@ -163,17 +162,28 @@ def callback():
     # in /profil.
     session['oauth_token'] = ENT_token
 
-    return redirect(url_for('.profiltest'))
+    return redirect(url_for('.connexion'))
 
 
 # Fonction de test pour afficher ce que l'on récupère
-@app.route("/profiltest/", methods=["GET"])
-def profiltest():
+@app.route("/connexion/", methods=["GET"])
+def connexion():
     """Fetching a protected resource using an OAuth 2 token.
     """
-    print("test")
     ENT_reply = OAuth2Session(client_id, token=session['oauth_token'])
-    return jsonify(ENT_reply.get('https://ent.iledefrance.fr/auth/oauth2/userinfo').json())
+    data = ENT_reply.get(
+        'https://ent.iledefrance.fr/auth/oauth2/userinfo').json()
+    user = db_utilisateurs.find_one({"idENT": data['userId']})
+    if user != None:
+        session['id'] = user['_id']
+        session['pseudo'] = user['pseudo']
+    else:
+        id = ObjectId()
+        db_utilisateurs.insert_one({"_id": id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'],
+                                    "dateInscription": datetime.now(), "birth_date": data['birthDate'], "classe": data['level'], "lycee": data['schoolName']})
+        session['id'] = id
+        session['pseudo'] = data['username']
+    return redirect(url_for('accueil'))
 
 
 if __name__ == "__main__":
