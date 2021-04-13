@@ -133,9 +133,19 @@ def professeur():
 @app.route('/question/')
 def question():
     if 'id' in session:
-        return render_template("question.html")
+        if request.method == 'POST':
+            if 'demande' not in request.form :
+                result = db_demande_aide.find({'$text' : {'$search':request.form['research']}})
+                    
+                return render_template('question.html', answer = result)
+            else :
+                db_demande_aide.insert_one({"id-utilisateur": "quand on l'aura", "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere']})
+                return render_template('question.html', envoi = "Envoi réussi")
+        else :
+            return render_template('question.html')
     else:
         return redirect(url_for('login'))
+
 
 
 @app.route('/amis/')
