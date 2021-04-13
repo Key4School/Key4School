@@ -1,53 +1,68 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
-    <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
-  </head>
 
-  <body>
-    <form action ="{{url_for('question')}}" method="post">
-    <label>Titre</label>
-    <input type="text" name="titre" />
-    <label>Matière</label>
-    <select name="matiere">
-      <option value = math>Mathématiques</option>
-      <option value = fr>Français</option>
-      <option value = pc>Physiques-chimie</option>
-      <option value = nsi>NSI</option>
-    </select>
-    <br>
-    <br>
-    <label>Ma Demande</label> : <textarea placeholder="Tapez-ici" type="text" name="demande"></textarea>
-    <br>
-    <br>
-    <input type="submit" value="Envoyer">
-    </form>
-    <p>
-      {{ envoi|safe }}
-    </p>
-    <br>
-    <br>
-    <br>
-    <form action ="{{url_for('question')}}" method="post">
-      <label>Recherche :</label><input type = "text" name = "research">
-      <br>
-      <input type="submit" value="Envoyer">
-    </form>
-    <p>
-      Voici le résultat de votre recherche :
-      <br>
-      {%for content in answer%}
-        <div>
-          <h3>{{content['titre']}}</h3>
-          <p>{{content['contenu']}}</p>
-          <p>Publié le {{content['date-envoi']}} par {{content['id-utilisateur']}}</p>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+  <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  {% include "bandeau.html" %}
+  <div class="columns" style="margin-top:5%;">
+    <div class="column"></div>
+    <div class="column">
+      <form action="{{url_for('question')}}" method="post">
+        <label>Titre</label>
+        <input type="text" class="input" name="titre" /><br /><br />
+        <label>Matière</label>
+        <div class="control has-icons-left">
+          <div class="select" >
+            <select name="matiere">
+              <option value=math>Mathématiques</option>
+              <option value=fr>Français</option>
+              <option value=pc>Physiques-chimie</option>
+              <option value=nsi>NSI</option>
+            </select>
+          </div>
+          <span class="icon is-left">
+            <i class="fas fa-book"></i>
+          </span>
         </div>
+        <br>
+        <br>
+        <label>Ma Demande</label> : <textarea class="textarea" placeholder="Tapez-ici" type="text" name="demande"></textarea>
+        <br>
+        <input class="button" type="submit" value="Envoyer">
+      </form>
+      <p>
+        {{ envoi|safe }}
+      </p>
+      <!-- <br>
+      <br>
+      <br>
+      <form action="{{url_for('question')}}" method="post">
+        <label>Recherche :</label><input class="input" type="text" name="research">
+        <br>
+        <input type="submit" value="Envoyer">
+      </form>
+      <p>
+        Voici le résultat de votre recherche :
+        <br>
+        {%for content in answer%}
+      <div>
+        <h3>{{content['titre']}}</h3>
+        <p>{{content['contenu']}}</p>
+        <p>Publié le {{content['date-envoi']}} par {{content['id-utilisateur']}}</p>
+      </div>
       {%endfor%}
-    </p>
-  </body>
+      </p> -->
+    </div>
+    <div class="column"></div>
+  </div>
+</body>
+
 </html>
