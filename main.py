@@ -11,7 +11,6 @@ import os
 
 # Création de l'application
 app = Flask(__name__)
-app.secret_key = 'JR7XcyGWBHt2VASDFDS9W'
 
 
 # Le client secret est le code secret de l'application
