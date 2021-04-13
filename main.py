@@ -72,6 +72,7 @@ def messages():
             msgDb = None
             idgroupe = None
             infogroupes = None
+            infoUtilisateurs = None
         return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes,infoUtilisateurs=infoUtilisateurs)
 
     elif request.method == 'POST':
