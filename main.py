@@ -66,7 +66,7 @@ def messages(idGroupe):
             grp = db_groupes.find(
                 {'id-utilisateurs': ObjectId("60731a7115be24651a803e20")})  # on remplacera le numéro par l'id de l'user
             if idGroupe != None:
-                msgDb = db_messages.find({'id-groupe': idGroupe})
+                msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
                 idgroupe = idGroupe
                 infogroupes = db_groupes.find_one(
                     {"_id": ObjectId(idGroupe)})
@@ -83,7 +83,7 @@ def messages(idGroupe):
             return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs)
 
         elif request.method == 'POST':
-            db_messages.insert_one({"id-groupe": request.form['group'], "id-utilisateur": "quand on l'aura",
+            db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
                                     "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
             return 'sent'
     else:
