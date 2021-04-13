@@ -69,6 +69,7 @@
   font-size: 30px;
 }
 #multichoix{
+  top:5%;
   left:0;
   display: none;
   position: fixed;
@@ -83,6 +84,7 @@
   z-index: 1;
 }
 #notif{
+  top:5%;
   right:0;
   display: none;
   position: fixed;
@@ -146,14 +148,11 @@ progress{
   height: 30px;
   margin-top: 2%;
 }
-}
 .iconereaction{
+  cursor: pointer;
   width: 20px;
   height:auto;
   margin-left: 2%;
-}
-.iconereaction{
-  cursor: pointer;
 }
 .pub{
   display: flex;

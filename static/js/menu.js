@@ -1,13 +1,13 @@
-$(document).ready(function() {
-  $('#multichoix').css({
-    height: (100 / 100 * ($(window).height())).toString() + 'px',
-    top: (10 / 100 * ($(window).height())).toString() + 'px',
-  });
-  $('#notif').css({
-    height: (100 / 100 * ($(window).height())).toString() + 'px',
-    top: (10  / 100 * ($(window).height())).toString() + 'px',
-  });
-});
+// $(document).ready(function() {
+//   $('#multichoix').css({
+//     height: (100 / 100 * ($(window).height())).toString() + 'px',
+//     top: (10 / 100 * ($(window).height())).toString() + 'px',
+//   });
+//   $('#notif').css({
+//     height: (100 / 100 * ($(window).height())).toString() + 'px',
+//     top: (10  / 100 * ($(window).height())).toString() + 'px',
+//   });
+// });
 function divmenu() {
   if ($('#multichoix').css("display") == 'none') {
     $('#multichoix').css({
