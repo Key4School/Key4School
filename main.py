@@ -145,7 +145,7 @@ def professeur():
         return redirect(url_for('login'))
 
 
-@app.route('/question/', methods=['POST', 'GET'])
+@app.route('/question/' ,methods=['POST','GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
