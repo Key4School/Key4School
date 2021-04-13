@@ -11,7 +11,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #e9ebe9;
 }
-.bandeau{
+#bandeau{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,7 +22,6 @@
   left: 0px;
   right:0px;
   height: 5%;
-  z-index: 20;
 }
 #page{
   margin-top: 7%;
@@ -70,7 +69,7 @@
   font-size: 30px;
 }
 #multichoix{
-  top: 0px;
+  top:5%;
   left:0;
   display: none;
   position: fixed;
@@ -81,12 +80,11 @@
   color: black;
   padding-right: 4%;
   text-align: left;
-  margin-top: 7%;
-  z-index: 20;
   width: 175px;
+  z-index: 1;
 }
 #notif{
-  top: 0px;
+  top:5%;
   right:0;
   display: none;
   position: fixed;
@@ -97,9 +95,8 @@
   color: black;
   padding-right: 4%;
   text-align: left;
-  margin-top: 7%;
-  z-index: 20;
   min-width: 15%;
+  z-index: 1;
 }
 #nomnewgroupe{
   width:50%;
@@ -148,19 +145,17 @@ progress{
 }
 .persopubli{
   width: 30px;
-  height:auto;
+  height: 30px;
+  margin-top: 2%;
 }
 .iconereaction{
+  cursor: pointer;
   width: 20px;
   height:auto;
   margin-left: 2%;
 }
-.iconereaction{
-  cursor: pointer;
-}
 .pub{
   display: flex;
-  align-items: center;
   margin-left: 3%;
 }
 .notif1{

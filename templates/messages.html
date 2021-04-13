@@ -20,7 +20,7 @@
 
 <body style="overflow:hidden;height:100%;width:99%;">
  <!-- debut du bandeau en haut de la page -->
- <div class="bandeau">
+ <div id="bandeau">
   <!-- icone menu en haut a gauche -->
   <div class="menu">
     <img Onclick='divmenu()' alt="menu" src="{{url_for('static',filename='image/menu.png')}}" class="iconebandeau" />
@@ -142,7 +142,7 @@
           <h2>{{infogroupe['nom']}}</h2>
           <!-- liste des paricipant -->
           <p>
-            Participant 1, Participant 2, Participant 3, Participant 4, Participant 5, Participant 6, Participant 7, ...
+            {%for content in infoUtilisateurs%} {{content['nom']}}, {%endfor%}
           </p>
         </div>
         <!-- les trois petit points a droite -->
