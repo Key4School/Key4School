@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Question</title>
+  </head>
+
+  <body>
+    <form action ="{{url_for('question')}}" method="post">
+    <label>Matière</label>
+    <select name="matiere">
+      <option value = math>Mathématiques</option>
+      <option value = fr>Français</option>
+      <option value = pc>Physiques-chimie</option>
+      <option value = nsi>NSI</option>
+    </select>
+    <br>
+    <br>
+    <label>Ma Demande</label> : <textarea placeholder="Tapez-ici" type="text" name="demande"></textarea>
+    <br>
+    <br>
+    <input type="submit" value="Envoyer">
+    </form>
+    <p>
+      {{ envoi|safe }}
+    </p>
+    <br>
+    <br>
+    <br>
+    <form action ="{{url_for('question')}}" method="post">
+      <label>Recherche :</label><input type = "text" name = "research">
+      <br>
+      <input type="submit" value="Envoyer">
+    </form>
+    <p>
+      Voici le résultat de votre recherche :
+      <br>
+      {%for content in answer%}
+        <div>
+          <p>{{content['contenu']}}</p>
+          <p>Publié le {{content['date-envoi']}} par {{content['id-utilisateur']}}</p>
+        </div>
+      {%endfor%}
+    </p>
+  </body>
+</html>
