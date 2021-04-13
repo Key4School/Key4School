@@ -29,7 +29,6 @@ db_demande_aide = cluster.db.demande_aide
 db_messages = cluster.db.messages
 db_groupes = cluster.db.groupes
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
-# db_utilisateurs.insert_one({"nom": "JEAN", "passe": "oui"})
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
 '''le lien de l'api pour plus d'info https://github.com/bain3/pronotepy'''
@@ -79,12 +78,21 @@ def messages(idGroupe):
                 idgroupe = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs)
+            print(db_utilisateurs.find())
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find())
 
         elif request.method == 'POST':
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
                                     "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
             return 'sent'
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/createGroupe/', methods=['POST'])
+def createGroupe():
+    if 'id' in session:
+        return("hello")
     else:
         return redirect(url_for('login'))
 
