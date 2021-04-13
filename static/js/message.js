@@ -12,7 +12,6 @@ function divnewgroupopen(){
   $(".modal").addClass("is-active");
 }
 function divnewgroupclose(e){
-  e.preventDefault();
   $(".modal").removeClass("is-active");
 }
 

@@ -92,7 +92,15 @@ def messages(idGroupe):
 @app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
     if 'id' in session:
-        return("hello")
+        participants = []
+        for name, value in request.form.items():
+            if name == 'nomnewgroupe':
+                pass
+            else:
+                participants.append(ObjectId(name))
+        newGroupe = db_groupes.insert_one(
+            {'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants})
+        return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
 
