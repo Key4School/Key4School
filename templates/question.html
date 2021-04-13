@@ -7,6 +7,8 @@
 
   <body>
     <form action ="{{url_for('question')}}" method="post">
+    <label>Titre</label>
+    <input type="text" name="titre" />
     <label>Matière</label>
     <select name="matiere">
       <option value = math>Mathématiques</option>
@@ -37,6 +39,7 @@
       <br>
       {%for content in answer%}
         <div>
+          <h3>{{content['titre']}}</h3>
           <p>{{content['contenu']}}</p>
           <p>Publié le {{content['date-envoi']}} par {{content['id-utilisateur']}}</p>
         </div>
