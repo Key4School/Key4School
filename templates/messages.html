@@ -27,7 +27,7 @@
     <!-- div pour afficher tout les groupes -->
     <div id="nomgroupe">
       <div class="liengroupe" >
-        <img onclick="divnewgroup()" style="width: 30px;height:auto;margin-bottom:5%;" src="{{url_for('static',filename='image/plus.png')}}" />
+        <i onclick="divnewgroup()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
       <div id="newgroup" style="height:200px; overflow-y:auto;">
         <form autocomplete="off">
@@ -63,7 +63,7 @@
           </p>
         </div>
         <!-- les trois petit points a droite -->
-        <a href="messages.html"><img src="{{url_for('static',filename='image/3points.png')}}" style="width: 20px;height:auto;margin-bottom:5px;" /></a>
+        <a href="messages.html"><i class="fas fa-ellipsis-v" style="color:black;font-size: 20px;margin-bottom:5px;"></i></a>
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
@@ -89,10 +89,10 @@
       </div>
       <!-- fin de tt les msg -->
       <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
-          <img src="{{url_for('static',filename='image/photo.png')}}" class="iconebarremsg" />
-          <input type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+          <i class="fas fa-camera" style="font-size: 20px;"></i>
+          <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
           <input type='hidden' name="group" value="{{idgroupe}}" />
-          <button style="background-color:white;border: 0px solid white;" type="submit"><img src="{{url_for('static',filename='image/flecheenvoi.png')}}" class="iconebarremsg" /></button>
+          <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
       </form>
     </div>
     <!-- fin de la div pour la partie de droite -->
