@@ -124,7 +124,7 @@
       {%for content in grpUtilisateur%}
       <div class="groupe">
         <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
-        <a class="liengroupe current" href="{{url_for('messages')}}?id={{content['_id']}}">
+        <a class="liengroupe current" href="{{url_for('messages', idGroupe=content['_id'])}}">
             {{content['nom']}}
           </a>
       </div>

@@ -53,17 +53,18 @@ def accueil2():
     return render_template("index.html")
 
 
-@app.route('/messages/', methods=['POST', 'GET'])
-def messages():
+@app.route('/messages/', defaults={'idGroupe': None}, methods=['POST', 'GET'])
+@app.route('/messages/<idGroupe>', methods=['POST', 'GET'])
+def messages(idGroupe):
     if request.method == 'GET':
         # il faudra récupérer l'id qui sera qans un cookie
         grp = db_groupes.find(
             {'id-utilisateurs': ObjectId("60731a7115be24651a803e20")})  # on remplacera le numéro par l'id de l'user
-        if 'id' in request.args:
-            msgDb = db_messages.find({'id-groupe': request.args["id"]})
-            idgroupe = request.args["id"]
+        if idGroupe != None:
+            msgDb = db_messages.find({'id-groupe': idGroupe})
+            idgroupe = idGroupe
             infogroupes = db_groupes.find_one(
-                {"_id": ObjectId(request.args["id"])})
+                {"_id": ObjectId(idGroupe)})
         else:
             msgDb = None
             idgroupe = None
