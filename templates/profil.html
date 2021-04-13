@@ -13,12 +13,13 @@
   <!-- importation de la bibliotheque jquery qui est requise pour faire marcher le js-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <!-- importation du JS pour afficher et enlever les div -->
-  <script src="{{url_for('static',filename='js/menuprofil.js')}}"></script>
+  <script src="{{url_for('static',filename='js/menu.js')}}"></script>
 </head>
 
 <body>
+  {% include "bandeau.html" %}
   <!-- debut de la div pour la page avec les infos -->
-  <div class="page">
+  <div class="page"></div>
     <br />
     <br />
     <br />
@@ -114,8 +115,6 @@
         exemple@monlycee.net
       </p>
     </div>
-
-  </div>
 
   <!-- fin de la page -->
 </body>

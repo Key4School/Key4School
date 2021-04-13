@@ -22,6 +22,7 @@
   left: 0px;
   right:0px;
   height: 5%;
+  z-index:2;
 }
 #page{
   margin-top: 7%;
@@ -81,7 +82,7 @@
   padding-right: 4%;
   text-align: left;
   width: 175px;
-  z-index: 1;
+  z-index: 2;
 }
 #notif{
   top:5%;
@@ -96,7 +97,7 @@
   padding-right: 4%;
   text-align: left;
   min-width: 15%;
-  z-index: 1;
+  z-index: 2;
 }
 #nomnewgroupe{
   width:50%;
@@ -222,7 +223,7 @@ h2{
   display: flex;
   justify-content:space-between;
   height:95%;
-  /* margin-top: 5%; */
+  margin-top: 10%;
 }
 #nomgroupe{
   width: 15%;
