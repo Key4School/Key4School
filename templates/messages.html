@@ -26,26 +26,41 @@
   <div class="contentmessage">
     <!-- div pour afficher tout les groupes -->
     <div id="nomgroupe">
-      <div class="liengroupe" >
-        <i onclick="divnewgroup()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
+      <div class="liengroupe">
+        <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
-      <div id="newgroup" style="height:200px; overflow-y:auto;">
-        <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
-            <h2>Créer un nouveau groupe</h2><br /><br />
-            <label for="nomnewgroupe">Nom du groupe</label> :   <input type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25'/><br><br>
-            {%for user in users%}
-            <input type="checkbox" name="{{user['_id']}}" id="pseudo" /><label for="pseudo">{{user['pseudo']}}</label><br><br />
-            {%endfor%}
-            <input type="submit" value="Valider" />
-        </form>
+
+      <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Créer un nouveau groupe</p>
+            <button onclick="divnewgroupclose()" class="delete" aria-label="close"></button>
+          </header>
+          <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
+            <section class="modal-card-body">
+              <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' /><br><br>
+              {%for user in users%}
+              <input type="checkbox" name="{{user['_id']}}" id="pseudo" />&nbsp;&nbsp;<label for="pseudo">{{user['pseudo']}}</label><br><br />
+              {%endfor%}
+            </section>
+            <footer class="modal-card-foot">
+              <button type="submit" onclick="divnewgroupclose()" class="button is-success">Créer le groupe</button>
+              <button onclick="divnewgroupclose(event); return false;" class="button">Annuler</button>
+            </footer>
+          </form>
+        </div>
       </div>
+
+
+
       <!-- div pour le groupe -->
       {%for content in grpUtilisateur%}
       <div class="groupe">
         <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
         <a class="liengroupe current" href="{{url_for('messages', idGroupe=content['_id'])}}">
-            {{content['nom']}}
-          </a>
+          {{content['nom']}}
+        </a>
       </div>
       {%endfor%}
     </div>
@@ -69,12 +84,14 @@
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
-        {% for content in msgDb%} <!--Pour chaque message -->
+        {% for content in msgDb%}
+        <!--Pour chaque message -->
         <div class="participantmsg" style="background-color:#8dd7cf;">
           <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
           <br>
           <p style="margin:0px">
-            {{content['contenu']}} <!--On affiche le contenu du message -->
+            {{content['contenu']}}
+            <!--On affiche le contenu du message -->
           </p>
           <br>
           <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
@@ -91,10 +108,10 @@
       </div>
       <!-- fin de tt les msg -->
       <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
-          <i class="fas fa-camera" style="font-size: 20px;"></i>
-          <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
-          <input type='hidden' name="group" value="{{idgroupe}}" />
-          <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
+        <i class="fas fa-camera" style="font-size: 20px;"></i>
+        <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+        <input type='hidden' name="group" value="{{idgroupe}}" />
+        <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
       </form>
     </div>
     <!-- fin de la div pour la partie de droite -->
