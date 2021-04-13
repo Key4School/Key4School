@@ -30,10 +30,12 @@
         <i onclick="divnewgroup()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
       <div id="newgroup" style="height:200px; overflow-y:auto;">
-        <form autocomplete="off">
+        <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
             <h2>Créer un nouveau groupe</h2><br /><br />
             <label for="nomnewgroupe">Nom du groupe</label> :   <input type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25'/><br><br>
-            <input type="checkbox" name=1 id="pseudo" /><label for="pseudo">perso1</label><br><br />
+            {%for user in users%}
+            <input type="checkbox" name="{{user['_id']}}" id="pseudo" /><label for="pseudo">{{user['pseudo']}}</label><br><br />
+            {%endfor%}
             <input type="submit" value="Valider" />
         </form>
       </div>
