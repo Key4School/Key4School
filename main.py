@@ -30,7 +30,7 @@ db_demande_aide = cluster.db.demande_aide
 db_messages = cluster.db.messages
 db_groupes = cluster.db.groupes
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
-# db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
+db_utilisateurs.insert_one({"nom" : "JEAN", "passe": "oui"})
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
 '''le lien de l'api pour plus d'info https://github.com/bain3/pronotepy'''
@@ -64,11 +64,15 @@ def messages():
             idgroupe = request.args["id"]
             infogroupes = db_groupes.find_one(
                 {"_id": ObjectId(request.args["id"])})
+            infoUtilisateurs=[]
+            for content in infogroupes['id-utilisateurs']:
+                print (content)
+                infoUtilisateurs+=db_utilisateurs.find({"_id": ObjectId(content)})
         else:
             msgDb = None
             idgroupe = None
             infogroupes = None
-        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes)
+        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes,infoUtilisateurs=infoUtilisateurs)
 
     elif request.method == 'POST':
         db_messages.insert_one({"id-groupe": request.form['group'], "id-utilisateur": "quand on l'aura",
