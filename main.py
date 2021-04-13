@@ -210,8 +210,8 @@ def connexion():
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
     else:
-        db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'],
-                                    "dateInscription": datetime.now(), "birth_date": data['birthDate'], "classe": data['level'], "lycee": data['schoolName']})
+        db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
+                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName']})
         user = db_utilisateurs.find_one({"idENT": data['userId']})
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
