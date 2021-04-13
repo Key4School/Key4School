@@ -68,7 +68,7 @@
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
         {% for content in msgDb%} <!--Pour chaque message -->
         <div class="participantmsg" style="background-color:#8dd7cf;">
-          <p style="font-weight: bold;margin:0px">{{content['id-utilisateur']}}</p>
+          <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
           <br>
           <p style="margin:0px">
             {{content['contenu']}} <!--On affiche le contenu du message -->
