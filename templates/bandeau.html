@@ -2,8 +2,8 @@
   <div id="navbarExampleTransparentExample" class="navbar-menu">
     <div class="navbar-start">
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link" >
-          <i style="color: black; font-size:30px;" class="fas fa-bars" ></i>
+        <a class="navbar-link">
+          <i style="color: black; font-size:30px;" class="fas fa-bars"></i>
         </a>
         <div class="navbar-dropdown is-boxed">
           <a class="navbar-item" href="{{url_for('accueil')}}">
@@ -15,7 +15,7 @@
             &nbsp;&nbsp;Mon lycée
           </a>
           <a class="navbar-item" href="{{url_for('classe')}}">
-            <img src="{{url_for('static',filename='image/classe.png')}}" style="height:20px;width:20px;"/>
+            <i style="color: black; font-size:20px;" class="fas fa-users"></i>
             &nbsp;&nbsp;Ma classe
           </a>
           <a class="navbar-item" href="{{url_for('question')}}">
@@ -26,21 +26,22 @@
             <i style="color: black; font-size:20px;" class="fas fa-envelope"></i>
             &nbsp;&nbsp;Messages privés
           </a>
-          <hr class="navbar-divider">
-          <a class="navbar-item" href="https://bulma.io/documentation/elements/box/">
-            <i style="color: black; font-size:20px;" class="fas fa-cog"></i>
-            &nbsp;&nbsp;Paramètres
+          <a class="navbar-item" href="{{url_for('profil')}}">
+            <i style="color: black; font-size:20px;" class="fas fa-user-circle"></i>
+            &nbsp;&nbsp;Profil et préference
           </a>
         </div>
       </div>
     </div>
     <input type="text" placeholder="Recherche..." style="margin-top:1%;width: 30%;">
     <button type"submit" style="background-color:#b2acfa; border: 1px solid #b2acfa; margin-top:1%;font-size: 20px;margin-right:10%;"><i class="fas fa-search"></i></button>
-    <a href="{{url_for('profil')}}"><img  src="{{url_for('static',filename='image/avatar.png')}}" style="height:30px;width:30px;margin-top:40%;margin-left:5%;" /></a>
+    <a href="{{url_for('profil')}}">
+      <i style="color:black;font-size:30px;margin-top:40%;margin-left:5%;" class="far fa-user-circle"></i>
+    </a>
     <progress style="margin-top:1%;height:55%;margin-left: 1%;" value="70" max="100">70 %</progress>
     <div class="navbar-end">
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link" >
+        <a class="navbar-link">
           <i style="color: black; font-size:30px;" class="fas fa-bell"></i>
         </a>
         <div class="navbar-dropdown is-right">

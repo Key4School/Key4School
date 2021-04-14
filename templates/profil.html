@@ -13,6 +13,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
   <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
+  <script src="{{url_for('static',filename='js/profil.js')}}" type="text/javascript"></script>
   <!-- importation du JS pour afficher et enlever les div -->
 
 </head>
@@ -21,100 +22,117 @@
   {% include "bandeau.html" %}
   <!-- debut de la div pour la page avec les infos -->
   <div class="page"></div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <!-- 1ere ligne -->
-    <div class="ligne1profil">
-      <!-- div pour coller l'icone appareil photo et la photo de profil -->
-      <div class="photoprofil">
-        <!-- photo de profil -->
-        <img alt="user" src="{{url_for('static',filename='image/user.png')}}" style="width:80px; height:auto;" />
-        <!-- icone appareil photo -->
-        <img alt="appareil photo" src="{{url_for('static',filename='image/photo.png')}}" style="margin-left:8%;width:40px; height:auto;" />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <div class="columns">
+    <div class="column"></div>
+    <div class="column">
+      <img alt="user" src="{{url_for('static',filename='image/sans_profil.png')}}" style="width:80px; height:auto;" />
+      <i class="fas fa-camera" style="margin-left:8%;font-size:40px;"></i>
+    </div>
+    <div class="column"></div>
+    <div class="columns">
+      <div class="column">
+        <progress value="70" max="100">70 %</progress>
       </div>
-      <!-- barre de progression des XP -->
-      <progress value="70" max="100">70 %</progress>
+      <div class="column">
+        <p>
+          70XP
+        </p>
+      </div>
     </div>
-    <br />
-    <br />
-    <!-- debut de la div avec les infos pour le Nom -->
-    <div class="contentinfoprofil">
-      <p class="themeligne">
-        <!-- icone -->
-        <img alt="user" src="{{url_for('static',filename='image/editprofil.png')}}" class="iconeinfoprofil" />
-        &nbsp;&nbsp;Nom
-      </p>
-      <!-- ce que l'utilisateur a rempli comme info pour lui -->
-      <p>
-        Exemple EXEMPLE
-      </p>
+    <div class="column">
     </div>
-    <!-- nouelle ligne pour le lycee et la classe -->
-    <div class="contentinfoprofil">
-      <p class="themeligne">
-        <img alt="presentateur" src="{{url_for('static',filename='image/presentateur.png')}}" class="iconeinfoprofil" />
-        &nbsp;&nbsp;Lycée/Classe
-      </p>
-      <p>
-        Exemple/exemple
-      </p>
-    </div>
-    <!-- nouelle ligne pour les spe -->
-    <div class="contentinfoprofil">
-      <p class="themeligne">
-        <img alt="specialite" src="{{url_for('static',filename='image/editprofil.png')}}" class="iconeinfoprofil" />
-        &nbsp;&nbsp;Spécialités
-      </p>
-      <p>
-        Exemple, exemple, exemple
-      </p>
-    </div>
-    <!-- nouelle ligne pour les langues -->
-    <div class="contentinfoprofil">
-      <p class="themeligne">
-        <img alt="langues" src="{{url_for('static',filename='image/web.png')}}" class="iconeinfoprofil" />
-        &nbsp;&nbsp;Langues vivantes
-      </p>
-      <p>
-        LVA : Exemple
-      </p>
-      <p>
-        LVB : Exemple
-      </p>
-    </div>
-    <!-- nouelle ligne pour les options -->
-    <div class="contentinfoprofil">
-      <p class="themeligne">
-        <img alt="option" src="{{url_for('static',filename='image/livre.png')}}" class="iconeinfoprofil" />
-        &nbsp;&nbsp;Option(s)
-      </p>
-      <p>
-        Exemple, exemple, exemple
-      </p>
-    </div>
-     <!-- nouelle ligne pour les professeurs -->
-     <div class="contentinfoprofil">
-      <p class="themeligne">
-        <img alt="option" src="{{url_for('static',filename='image/editprofil.png')}}" class="iconeinfoprofil" />
-        &nbsp;&nbsp;Professeurs
-      </p>
-      <p>
-        Exemple, exemple, exemple
-      </p>
-    </div>
-    <!-- nouelle ligne pour l'adresse mail' -->
-    <div class="contentinfoprofil">
-      <p class="themeligne">
-        <img alt="mail" src="{{url_for('static',filename='image/trombone.png')}}" class="iconeinfoprofil" />
-        &nbsp;&nbsp;Adresse mail ENT
-      </p>
-      <p>
-        exemple@monlycee.net
-      </p>
+  </div>
+  <br />
+  <br />
+  <br />
+  <div class="column is-half is-offset-one-quarter">
+      <table class="table is-narrow">
+        <tbody>
+          <tr>
+            <td>
+              <columns>
+                <column>
+                  <i class="fas fa-user-alt" style="font-size:25px;"></i>
+                  &nbsp;&nbsp;Nom et Prenom
+                </column>
+              </columns>
+            </td>
+            <td>
+              Prenom NOM
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <columns>
+                <column>
+                  <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
+                  &nbsp;&nbsp;Lycée/Classe
+                </column>
+              </columns>
+            </td>
+            <td>
+              BP/1G10
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <columns>
+                <column>
+                  <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
+                  &nbsp;&nbsp;Date de naissance
+                </column>
+              </columns>
+            </td>
+            <td>
+              01/01/2000
+            </td>
+          </tr>
+          <form>
+          <tr>
+            <td>
+              <columns>
+                <column>
+                  <i class="far fa-smile-wink" style="font-size:25px;"></i>
+                  &nbsp;&nbsp;Pseudo
+                </column>
+              </columns>
+            </td>
+            <td>
+              <div id="contentPseudo">
+                <p onClick="inputpseudo()" id="pseudo">Pseudo</p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <columns>
+                <column>
+                  <i class="fas fa-at" style="font-size:25px;"></i>
+                  &nbsp;&nbsp;Adresse mail
+                </column>
+              </columns>
+            </td>
+            <td>
+              <div id="contentEmail">
+                <p id="email" onClick="inputemail()">exemple@gmail.com</p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <br />
+              <input type="submit" />
+            </td>
+          </tr>
+        </form>
+        </tbody>
+      </table>
     </div>
 
   <!-- fin de la page -->
