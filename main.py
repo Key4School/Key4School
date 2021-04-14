@@ -90,7 +90,7 @@ def messages(idGroupe):
 
         elif request.method == 'POST':
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": ObjectId(request.form['reponse'])})
+                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": request.form['reponse']})
             return 'sent'
     else:
         return redirect(url_for('login'))
@@ -99,6 +99,7 @@ def messages(idGroupe):
 @ app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
+        print('test')
         db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
         return 'sent'
     else:

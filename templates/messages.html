@@ -154,9 +154,8 @@
             </p>
             <br>{%if content['id-utilisateur']==session%}<form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
               <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-              <input type='hidden' name="objectif" value="supprimerMsg" />
-              <button type"submit">supprimer</button><button onclick="reponseMsg(value)" value="{{count.value}}">répondre</button><input type="hidden" id="id{{count.value}}" value="{{content['id']}}" /><input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
-            </form>{%endif%}
+              <button type"submit">supprimer</button>
+            </form>{%endif%}<button onclick="reponseMsg(value)" value="{{count.value}}">répondre</button><input type="hidden" id="id{{count.value}}" value="{{content['_id']}}" /><input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
             <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
           </div>
           {%endfor%}
