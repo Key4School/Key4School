@@ -138,7 +138,7 @@
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==session%}
-        <div  class="moimsg" style="border: 1px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
+        <div class="moimsg" style="border: 1px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
           id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
           {%else%}
           <div class="participantmsg"
@@ -171,26 +171,28 @@
                     <i class="fas fa-times"></i>
                   </span>
                 </button>
-              </form>{%endif%}
-
+              </form>
+              {%endif%}
+              <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
             </div>
-            <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+
           </div>
           {%endfor%}
-        
-        <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
-          <i class="fas fa-camera" style="font-size: 20px;"></i>
-          <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
-          <input type='hidden' name="group" value="{{idgroupe}}" />
-          <input type='hidden' id='reponse' name='reponse' value="None" />
-          <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
-        </form>
-        {% endif %}
-      </div>
-      <!-- fin de tt les msg -->
-    </div>
-    <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
 
+          <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
+            <i class="fas fa-camera" style="font-size: 20px;"></i>
+            <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+            <input type='hidden' name="group" value="{{idgroupe}}" />
+            <input type='hidden' id='reponse' name='reponse' value="None" />
+            <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
+          </form>
+          {% endif %}
+        <!-- </div> -->
+        <!-- fin de tt les msg -->
+      </div>
+      <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+    </div>
+  </div>
 </body>
 
 </html>
