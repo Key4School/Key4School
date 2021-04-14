@@ -62,3 +62,11 @@ function refresh() {
 }
 
 setInterval(refresh, 1000);
+
+function reponseMsg(nb){
+  var idMsg = document.getElementById('id'+nb).value;
+  var contentMsg = document.getElementById('contenu'+nb).value;
+  repmsg = document.getElementById('messageForm');
+  repmsg.insertAdjacentHTML('beforebegin',contentMsg);
+  document.getElementById('reponse').value = idMsg;
+}
