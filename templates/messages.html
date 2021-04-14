@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" style="overflow:hidden;">
 
 <head>
   <!-- language utf8 pour indiquer l'encodage -->
@@ -138,7 +138,7 @@
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
-        <div class="moimsg" style="border: 1px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
+        <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
           id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
           {%else%}
           <div class="participantmsg"
