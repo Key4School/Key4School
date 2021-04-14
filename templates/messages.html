@@ -15,16 +15,30 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
   <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
   <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript"></script>
+  <style>
+  .liengroupe{
+    color: black;
+    text-decoration: none;
+  }
+  .current{
+    font-weight:bold;
+  }
+  .liengroupe:hover{
+    cursor: pointer;
+    font-weight: bold;
+  }
+  </style>
 </head>
+
 
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
 
 <body style="overflow:hidden;">
   {% include "bandeau.html" %}
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
-  <div class="contentmessage">
+  <div style="display: flex;justify-content:space-between;height:95%;margin-top: 2%;">
     <!-- div pour afficher tout les groupes -->
-    <div id="nomgroupe">
+    <div id="nomgroupe" style="  width: 15%;margin-left: 5%;overflow-y:auto;margin-bottom:5%;">
       <div class="liengroupe">
         <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
@@ -72,7 +86,7 @@
           {%for content in grpUtilisateur%}
           <tr>
             <td>
-              <div class="groupe">
+              <div style="margin-bottom: 5%;font-size: 20px;">
                 <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
 
 
@@ -90,9 +104,9 @@
     <!-- fin de la div pour les noms de tt les groupes -->
     {% if msgDb != None %}
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
-    <div id="titreetmsg">
+    <div id="titreetmsg" style="margin-right: 2%;margin-bottom:2%;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div class="titregroupe">
+      <div style="display: flex;align-items: center;justify-content:space-between;border: 1px solid black;padding:2%;height:10%;">
         <!-- div avec le nom du groupe et les paticipant -->
         <div class="nomgroupeparticipents">
           <!-- nom du groupe -->
@@ -133,7 +147,7 @@
         </div>
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
-      <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
+      <div style="box-sizing: border-box;overflow-y: auto;height:80%;border: 1px solid black;padding:2%;">
         <!-- {% set count = namespace(value=0) %} -->
         {% for content in msgDb%}
         <!--Pour chaque message -->
@@ -183,7 +197,7 @@
         {% endif %}
       </div>
       <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button>
-    <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
+    <form method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;min-width: 75%;max-width: 75%;" id="messageForm" onsubmit="envoi(event); return false;">
       <i class="fas fa-camera" style="font-size: 20px;"></i>
       <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
       <input type='hidden' name="group" value="{{idgroupe}}" />
