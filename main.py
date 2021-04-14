@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 # import pronotepy  # api Pronote
-# from pronotepy.ent import ile_de_france
+#from pronotepy.ent import ile_de_france
 from flask_pymongo import PyMongo
 from datetime import *
 from requests_oauthlib import OAuth2Session
@@ -74,9 +74,9 @@ def messages(idGroupe):
                     infoUtilisateurs += db_utilisateurs.find(
                         {"_id": ObjectId(content)})
                 if session['id'] in str(infoUtilisateurs):
-                    danslegroupe = True
+                    danslegroupe=True
                 else:
-                    danslegroupe = False
+                    danslegroupe=False
                     msgDb = None
                     idgroupe = None
                     infogroupes = None
@@ -89,16 +89,19 @@ def messages(idGroupe):
             return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), session=ObjectId(session['id']))
 
         elif request.method == 'POST':
-            if request.form['objectif'] == "supprimerMsg":
-                db_messages.delete_one(
-                    {"_id": ObjectId(request.form['msgSuppr'])})
-            else:
-                db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                        "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
+            db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
             return 'sent'
     else:
         return redirect(url_for('login'))
 
+@ app.route('/suppressionMsg/', methods=['POST'])
+def supprimerMsg():
+    if 'id' in session:
+        db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
+        return 'sent'
+    else:
+        return redirect(url_for('login'))
 
 @ app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
@@ -156,7 +159,7 @@ def professeur():
         return redirect(url_for('login'))
 
 
-@app.route('/question/', methods=['POST', 'GET'])
+@app.route('/question/' ,methods=['POST','GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
@@ -234,7 +237,7 @@ def callback():
 
 
 # Fonction de test pour afficher ce que l'on récupère
-@ app.route("/connexion/", methods=["GET"])
+@app.route("/connexion/", methods=["GET"])
 def connexion():
     """Fetching a protected resource using an OAuth 2 token.
     """
