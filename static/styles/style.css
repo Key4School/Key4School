@@ -81,26 +81,6 @@ h2{
 .iconebarremsg:hover{
   cursor: pointer;
 }
-.participantmsg{
-  margin-left: 5%;
-  margin-right: 55%;
-  margin-bottom: 2%;
-  border-radius: 20px;
-  padding: 2%;
-  padding-left: 3%;
-  padding-right: 3%;
-}
-.moimsg{
-  margin-left: 55%;
-  margin-right: 5%;
-  margin-bottom: 2%;
-  border-radius: 10px;
-  padding-top: 3%;
-  padding-left: 3%;
-  padding-right: 3%;
-  padding-bottom: 2%;
-  border: 1px solid grey;
-}
 
 .current{
   font-weight:bold;
