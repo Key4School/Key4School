@@ -99,7 +99,6 @@ def messages(idGroupe):
 @ app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
-        print('test')
         db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
         return 'sent'
     else:
