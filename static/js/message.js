@@ -44,7 +44,7 @@ function supprimer(e) {
 
 $('[name="contenuMessage"]').focus();
 const messages = document.querySelector('.messages');
-messages.scrollTop = messages.scrollHeight;
+// messages.scrollTop = messages.scrollHeight;
 
 
 function refresh() {
@@ -56,7 +56,7 @@ function refresh() {
     data: "idMsg=" + dernierID + '&idgroupe=' + idGroupe, // et on envoie nos données
     success: function(html) {
       $('.messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
-      messages.scrollTop = messages.scrollHeight;
+      // messages.scrollTop = messages.scrollHeight;
     }
   });
 }
