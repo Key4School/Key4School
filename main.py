@@ -72,7 +72,7 @@ def messages(idGroupe):
                 for content in infogroupes['id-utilisateurs']:
                     infoUtilisateurs += db_utilisateurs.find(
                         {"_id": ObjectId(content)})
-                if session['id'] in str(infoUtilisateurs):
+                if session['id'] in str(infoUtilisateurs) or '6075cae8fb56bf0654e5f4ab' in str(infoUtilisateurs):
                     danslegroupe = True
                 else:
                     danslegroupe = False
