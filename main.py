@@ -66,7 +66,6 @@ def messages(idGroupe):
                 {"$or": [{"id-utilisateurs": ObjectId('6075cae8fb56bf0654e5f4ab')}, {"id-utilisateurs": ObjectId(session['id'])}]})
             if idGroupe != None:
                 msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
-                idgroupe = idGroupe
                 infogroupes = db_groupes.find_one(
                     {"_id": ObjectId(idGroupe)})
                 infoUtilisateurs = []
@@ -78,15 +77,13 @@ def messages(idGroupe):
                 else:
                     danslegroupe = False
                     msgDb = None
-                    idgroupe = None
                     infogroupes = None
                     infoUtilisateurs = None
             else:
                 msgDb = None
-                idgroupe = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']))
 
         elif request.method == 'POST':
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
