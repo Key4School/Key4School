@@ -42,7 +42,11 @@ function supprimer(e) {
   });
 }
 
-<<<<<<< HEAD
+
+$('[name="contenuMessage"]').focus();
+const messages = document.querySelector('.messages');
+messages.scrollTop = messages.scrollHeight;
+
 function reponseMsg(nb){
   var idMsg = document.getElementById('id'+nb).value;
   var contentMsg = document.getElementById('contenu'+nb).value;
@@ -50,11 +54,6 @@ function reponseMsg(nb){
   repmsg.insertAdjacentHTML('beforebegin',contentMsg);
   document.getElementById('reponse').value = idMsg;
 }
-=======
-$('[name="contenuMessage"]').focus();
-const messages = document.querySelector('.messages');
-messages.scrollTop = messages.scrollHeight;
-
 
 function refresh() {
   var dernierID = $('.messages div[id]:last').attr('id'); // on récupère l'id le plus récent
@@ -71,4 +70,3 @@ function refresh() {
 }
 
 setInterval(refresh, 1000);
->>>>>>> dfbc6050fc379d8417e1fb28f3fe3af8fa605922
