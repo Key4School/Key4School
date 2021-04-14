@@ -87,7 +87,11 @@
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
         {% for content in msgDb%}
         <!--Pour chaque message -->
+        {%if content['id-utilisateur']==session%}
+        <div class="moimsg" >
+        {%else%}
         <div class="participantmsg" style="background-color:#8dd7cf;">
+        {%endif%}
           <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
           <br>
           <p style="margin:0px">
@@ -98,14 +102,6 @@
           <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
         </div>
         {%endfor%}
-        <!-- msg ecrit par moi (a droite) -->
-        <div class="moimsg">
-          <p style="margin:0px">
-            Trop cool le fifty fifty
-          </p>
-          <br>
-          <p class="date" style="margin:0px;text-align:right;">le 20/03 à 17h46</p>
-        </div>
       </div>
       <!-- fin de tt les msg -->
       <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">

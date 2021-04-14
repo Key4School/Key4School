@@ -63,7 +63,7 @@ def messages(idGroupe):
         if request.method == 'GET':
             # il faudra récupérer l'id qui sera qans un cookie
             grp = db_groupes.find(
-                {'id-utilisateurs': ObjectId("6075cae8fb56bf0654e5f4ab")})  # on remplacera le numéro par l'id de l'user
+                {'id-utilisateurs': ObjectId(session['id'])})
             if idGroupe != None:
                 msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
                 idgroupe = idGroupe
@@ -73,13 +73,21 @@ def messages(idGroupe):
                 for content in infogroupes['id-utilisateurs']:
                     infoUtilisateurs += db_utilisateurs.find(
                         {"_id": ObjectId(content)})
+                if session['id'] in str(infoUtilisateurs):
+                    danslegroupe=True
+                else:
+                    danslegroupe=False
+                    msgDb = None
+                    idgroupe = None
+                    infogroupes = None
+                    infoUtilisateurs = None
             else:
                 msgDb = None
                 idgroupe = None
                 infogroupes = None
                 infoUtilisateurs = None
             print(db_utilisateurs.find())
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find())
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), session=ObjectId(session['id']))
 
         elif request.method == 'POST':
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
