@@ -52,7 +52,7 @@
 
               <br /><br />
               {%for user in users%}
-              {%if user['_id']!=session%}
+              {%if user['_id']!=sessionId%}
               <input type="checkbox" name="{{user['_id']}}" id="pseudo" />&nbsp;&nbsp;<label for="pseudo">{{user['pseudo']}}</label><br><br />
               {%endif%}
               {%endfor%}
@@ -137,7 +137,7 @@
         <!-- {% set count = namespace(value=0) %} -->
         {% for content in msgDb%}
         <!--Pour chaque message -->
-        {%if content['id-utilisateur']==session%}
+        {%if content['id-utilisateur']==sessionId%}
         <div class="moimsg" style="border: 1px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
           id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
           {%else%}
@@ -153,7 +153,7 @@
               <!-- {% set count.value = count.value + 1 %} -->
               <!--On affiche le contenu du message -->
             </p>
-            <br>{%if content['id-utilisateur']==session%}
+            <br>{%if content['id-utilisateur']==sessionId%}
             <!-- <div style="display: flex;align-items: center;justify-content:space-evenly;">
                <button value="{{count.value}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
                 <span class="icon is-small">
