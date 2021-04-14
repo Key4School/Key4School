@@ -119,6 +119,42 @@ def createGroupe():
         return redirect(url_for('login'))
 
 
+<<<<<<< HEAD
+=======
+@ app.route('/refreshMsg/')
+def refreshMsg():
+    if 'id' in session:
+        idGroupe = request.args['idgroupe']
+        if request.args['idMsg'] != 'undefined' and idGroupe != 'undefined':
+            dateLast = datetime.strptime(
+                request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%f')
+            infogroupes = db_groupes.find_one(
+                {"_id": ObjectId(idGroupe)})
+            infoUtilisateurs = []
+            for content in infogroupes['id-utilisateurs']:
+                infoUtilisateurs += db_utilisateurs.find(
+                    {"_id": ObjectId(content)})
+            msgDb = db_messages.find(
+                {'$and': [{'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]})
+            return render_template("refreshMessages.html", msgDb=msgDb, session=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs)
+        else:
+            return ''
+    else:
+        return redirect(url_for('login'))
+
+
+@ app.route('/changeTheme/', methods=['POST'])
+def changeTheme():
+    if 'id' in session:
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
+                                   "$set": {"couleur": request.form['couleur']}})
+        session['couleur'] = request.form['couleur']
+        return redirect(url_for('profil'))
+    else:
+        return redirect(url_for('login'))
+
+
+>>>>>>> c90a88430397013c24f68f72abe885f1911ecc3c
 @ app.route('/profil/')
 def profil():
     if 'id' in session:
@@ -248,12 +284,14 @@ def connexion():
     if user != None:
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
+        session['couleur'] = user['couleur']
     else:
         db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
-                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName']})
+                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName'], 'couleur': '#3f51b5'})
         user = db_utilisateurs.find_one({"idENT": data['userId']})
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
+        session['couleur'] = '#3f51b5'
     return redirect(url_for('accueil'))
 
 
