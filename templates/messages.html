@@ -129,6 +129,7 @@
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
+        {% set count = namespace(value=0) %}
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==session%}
@@ -156,17 +157,20 @@
           <!-- fin de tt les msg -->
 
         </div>
+
+        <!-- fin de la div pour la partie de droite -->
+        {% endif %}
         <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
           <i class="fas fa-camera" style="font-size: 20px;"></i>
           <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
           <input type='hidden' name="group" value="{{idgroupe}}" />
-          <input type='hidden' name="objectif" value="envoiMsg" />
+          <input type='hidden' id='reponse' name='reponse' value="None" />
           <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
         </form>
-        <!-- fin de la div pour la partie de droite -->
-        {% endif %}
       </div>
-      <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+      <!-- fin de tt les msg -->
+    </div>
+    <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
 
 </body>
 
