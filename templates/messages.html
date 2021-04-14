@@ -154,27 +154,28 @@
               <!--On affiche le contenu du message -->
             </p>
             <br>{%if content['id-utilisateur']==session%}
-            <div style="display: flex;align-items: center;justify-content:space-evenly;">
-              <button value="{{count.value}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+            <!-- <div style="display: flex;align-items: center;justify-content:space-evenly;">
+               <button value="{{count.value}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
                 <span class="icon is-small">
                   <i class="fas fa-reply"></i>
                 </span>
                 <span>répondre</span>
-              <!-- </button>
+              </button>
               <input type="hidden" id="id{{count.value}}" value="{{content['_id']}}" />
               <input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
               <form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
                 <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-                <button type="submit" class="button is-danger is-outlined is-small"> -->
+                <button type="submit" class="button is-danger is-outlined is-small">
                   <span>Supprimer</span>
                   <span class="icon is-small">
                     <i class="fas fa-times"></i>
                   </span>
                 </button>
               </form>
+            </div> -->
               {%endif%}
               <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
-            </div>
+
 
           </div>
           {%endfor%}
