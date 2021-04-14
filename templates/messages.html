@@ -107,17 +107,22 @@
           <div class="modal-background"></div>
           <div class="modal-card">
             <header class="modal-card-head">
-              <p class="modal-card-title">Créer un nouveau groupe</p>
+              <p class="modal-card-title">Options</p>
               <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
             </header>
             <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <p>
-                  Infos du groupe
-                </p>
-                <p>
-                  Rechercher
-                </p>
+                <form>
+                  <colums>
+                    <column>
+                      <input class="input" type="text" placeholder="Rechercher..." style="margin-top:1%;width: 70%;" />
+                    </column>
+                    <column>
+                      <button type"submit" style="background-color:white; border: 1px solid white; margin-top:1%;font-size: 20px;margin-right:10%;"><i class="fas fa-search"></i></button>
+                    </column>
+                  </colums>
+                </form>
+                
               </section>
               <footer class="modal-card-foot">
                 <button type="submit" onclick="divnewgroupclose()" class="button is-success">Créer le groupe</button>
