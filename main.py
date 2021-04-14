@@ -96,7 +96,6 @@ def messages(idGroupe):
         return redirect(url_for('login'))
 
 
-
 @ app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
