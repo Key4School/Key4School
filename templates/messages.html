@@ -19,7 +19,7 @@
 
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
 
-<body style="overflow:hidden;height:100%;width:99%;">
+<body style="overflow:hidden;">
   {% include "bandeau.html" %}
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
   <div class="contentmessage">
@@ -29,7 +29,7 @@
         <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
 
-      <div class="modal">
+      <div class="modal" id="newgrou">
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
@@ -66,16 +66,26 @@
       </div>
 
 
+      <table class="table is-narrow">
+        <tbody>
+          <!-- div pour le groupe -->
+          {%for content in grpUtilisateur%}
+          <tr>
+            <td>
+              <div class="groupe">
+                <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
 
-      <!-- div pour le groupe -->
-      {%for content in grpUtilisateur%}
-      <div class="groupe">
-        <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
-        <a class="liengroupe current" href="{{url_for('messages', idGroupe=content['_id'])}}">
-          {{content['nom']}}
-        </a>
-      </div>
-      {%endfor%}
+
+                <a class="liengroupe current" href="{{url_for('messages', idGroupe=content['_id'])}}">
+                  {{content['nom']}}
+                </a>
+
+              </div>
+            </td>
+          </tr>
+
+          {%endfor%}
+      </table>
     </div>
     <!-- fin de la div pour les noms de tt les groupes -->
     {% if msgDb != None %}
@@ -86,39 +96,66 @@
         <!-- div avec le nom du groupe et les paticipant -->
         <div class="nomgroupeparticipents">
           <!-- nom du groupe -->
-          <h2>{{infogroupe['nom']}}</h2>
+          <p style="font-weight:bold;">{{infogroupe['nom']}}</p>
           <!-- liste des paricipant -->
           <p>
             {%for content in infoUtilisateurs%} {{content['pseudo']}}, {%endfor%}
           </p>
         </div>
-        <!-- les trois petit points a droite -->
-        <a href="messages.html"><i class="fas fa-ellipsis-v" style="color:black;font-size: 20px;margin-bottom:5px;"></i></a>
+        <i onclick="divoptionopen()" class="fas fa-ellipsis-v" style="color:black;font-size: 20px;margin-bottom:5px;"></i>
+        <div class="modal" id="option">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Créer un nouveau groupe</p>
+              <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
+            </header>
+            <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
+              <section class="modal-card-body">
+                <p>
+                  Infos du groupe
+                </p>
+                <p>
+                  Rechercher
+                </p>
+              </section>
+              <footer class="modal-card-foot">
+                <button type="submit" onclick="divnewgroupclose()" class="button is-success">Créer le groupe</button>
+                <button onclick="divoptionclose(); return false;" class="button">Annuler</button>
+              </footer>
+            </form>
+          </div>
+        </div>
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==session%}
-        <div class="moimsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
-        {%else%}
-        <div class="participantmsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}" style="background-color:#8dd7cf;">
-        {%endif%}
-          <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
-          <br>
-          <p style="margin:0px">
-            {{content['contenu']}}
-            <!--On affiche le contenu du message -->
-          </p>
-          <br>{%if content['id-utilisateur']==session%}<form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
-            <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-            <input type='hidden' name="objectif" value="supprimerMsg" />
-            <button type"submit">supprimer</button>
-          </form>{%endif%}
-          <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+        <div class="moimsg"
+          id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
+          {%else%}
+          <div class="participantmsg"
+            id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}"
+            style="background-color:#8dd7cf;">
+            {%endif%}
+            <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
+            <br>
+            <p style="margin:0px">
+              {{content['contenu']}}
+              <!--On affiche le contenu du message -->
+            </p>
+            <br>{%if content['id-utilisateur']==session%}<form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
+              <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
+              <input type='hidden' name="objectif" value="supprimerMsg" />
+              <button type"submit">supprimer</button>
+            </form>{%endif%}
+            <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+          </div>
+          {%endfor%}
+          <!-- fin de tt les msg -->
+
         </div>
-        {%endfor%}
-        <!-- fin de tt les msg -->
         <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
           <i class="fas fa-camera" style="font-size: 20px;"></i>
           <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
@@ -126,11 +163,10 @@
           <input type='hidden' name="objectif" value="envoiMsg" />
           <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
         </form>
+        <!-- fin de la div pour la partie de droite -->
+        {% endif %}
       </div>
-      <!-- fin de la div pour la partie de droite -->
-      {% endif %}
-    </div>
-    <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+      <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
 
 </body>
 

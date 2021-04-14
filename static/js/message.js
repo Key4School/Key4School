@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#titreetmsg').css({
-    height: (70 / 100 * ($(window).height())).toString() + 'px',
-    width: (85 / 100 * ($(window).width())).toString() + 'px',
+    height: (80 / 100 * ($(window).height())).toString() + 'px',
+    width: (75 / 100 * ($(window).width())).toString() + 'px',
   });
   $('#nomgroupe').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
@@ -9,11 +9,19 @@ $(document).ready(function() {
 });
 
 function divnewgroupopen() {
-  $(".modal").addClass("is-active");
+  $("#newgrou").addClass("is-active");
 }
 
 function divnewgroupclose(e) {
-  $(".modal").removeClass("is-active");
+  $("#newgrou").removeClass("is-active");
+}
+
+function divoptionopen() {
+  $("#option").addClass("is-active");
+}
+
+function divoptionclose(e) {
+  $("#option").removeClass("is-active");
 }
 
 function envoi(e) {
