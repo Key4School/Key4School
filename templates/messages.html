@@ -58,7 +58,7 @@
               {%endfor%}
             </section>
             <footer class="modal-card-foot">
-              <button class="button is-success">Créer le groupe</button>
+              <button type="submit" onclick="divnewgroupclose()" class="button is-success">Créer le groupe</button>
               <button onclick="divnewgroupclose(event); return false;" class="button">Annuler</button>
             </footer>
           </form>
@@ -134,7 +134,7 @@
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
-        {% set count = namespace(value=0) %}
+        <!-- {% set count = namespace(value=0) %} -->
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==session%}
@@ -149,7 +149,7 @@
             <br>
             <p style="margin:0px">
               {{content['contenu']}}
-              {% set count.value = count.value + 1 %}
+              <!-- {% set count.value = count.value + 1 %} -->
               <!--On affiche le contenu du message -->
             </p>
             <br>{%if content['id-utilisateur']==session%}
@@ -159,12 +159,12 @@
                   <i class="fas fa-reply"></i>
                 </span>
                 <span>répondre</span>
-              </button>
+              <!-- </button>
               <input type="hidden" id="id{{count.value}}" value="{{content['_id']}}" />
               <input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
               <form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
                 <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-                <button type="submit" class="button is-danger is-outlined is-small">
+                <button type="submit" class="button is-danger is-outlined is-small"> -->
                   <span>Supprimer</span>
                   <span class="icon is-small">
                     <i class="fas fa-times"></i>
@@ -181,6 +181,7 @@
         </div>
 
         <!-- fin de la div pour la partie de droite -->
+        <div id='champReponse'></div><button onclick="enleverRep()" id='buttonRep' style="display:none;"></button>
         <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
           <i class="fas fa-camera" style="font-size: 20px;"></i>
           <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">

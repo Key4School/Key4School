@@ -66,10 +66,15 @@ setInterval(refresh, 1000);
 function reponseMsg(nb){
   var idMsg = document.getElementById('id'+nb).value;
   var contentMsg = document.getElementById('contenu'+nb).value;
-  alert (idMsg);
   repmsg = document.getElementById('messageForm');
-  repmsg.insertAdjacentHTML('beforebegin',contentMsg);
+  document.getElementById('champReponse').innerHTML=contentMsg;
+  document.getElementById('buttonRep').style.display = block;
   document.getElementById('reponse').value = idMsg;
   idMsg = "None";
   contentMsg = "";
+}
+
+function enleverRep(){
+  document.getElementById('champReponse').innerHTML="";
+  document.getElementById('buttonRep').style.display = none;
 }
