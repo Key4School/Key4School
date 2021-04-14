@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 # import pronotepy  # api Pronote
-#from pronotepy.ent import ile_de_france
+# from pronotepy.ent import ile_de_france
 from flask_pymongo import PyMongo
 from datetime import *
 from requests_oauthlib import OAuth2Session
@@ -78,8 +78,7 @@ def messages(idGroupe):
                 idgroupe = None
                 infogroupes = None
                 infoUtilisateurs = None
-            print(db_utilisateurs.find())
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find())
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find({'_id': {'$ne': ObjectId(session['id'])}}))
 
         elif request.method == 'POST':
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
@@ -89,7 +88,7 @@ def messages(idGroupe):
         return redirect(url_for('login'))
 
 
-@app.route('/createGroupe/', methods=['POST'])
+@ app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
     if 'id' in session:
         participants = []
@@ -105,7 +104,7 @@ def createGroupe():
         return redirect(url_for('login'))
 
 
-@app.route('/profil/')
+@ app.route('/profil/')
 def profil():
     if 'id' in session:
         return render_template("profil.html")
@@ -113,7 +112,7 @@ def profil():
         return redirect(url_for('login'))
 
 
-@app.route('/archives/')
+@ app.route('/archives/')
 def archives():
     if 'id' in session:
         return render_template("archives.html")
@@ -121,7 +120,7 @@ def archives():
         return redirect(url_for('login'))
 
 
-@app.route('/classe/')
+@ app.route('/classe/')
 def classe():
     if 'id' in session:
         return render_template("classe.html")
@@ -129,7 +128,7 @@ def classe():
         return redirect(url_for('login'))
 
 
-@app.route('/monlycee/')
+@ app.route('/monlycee/')
 def monlycee():
     if 'id' in session:
         return render_template("monlycee.html")
@@ -137,7 +136,7 @@ def monlycee():
         return redirect(url_for('login'))
 
 
-@app.route('/professeur/')
+@ app.route('/professeur/')
 def professeur():
     if 'id' in session:
         return render_template("professeur.html")
@@ -145,7 +144,7 @@ def professeur():
         return redirect(url_for('login'))
 
 
-@app.route('/question/')
+@ app.route('/question/')
 def question():
     if 'id' in session:
         if request.method == 'POST':
@@ -164,7 +163,7 @@ def question():
         return redirect(url_for('login'))
 
 
-@app.route('/amis/')
+@ app.route('/amis/')
 def amis():
     if 'id' in session:
         return render_template("amis.html")
@@ -172,7 +171,7 @@ def amis():
         return redirect(url_for('login'))
 
 
-@app.route('/deconnexion/')
+@ app.route('/deconnexion/')
 def deconnexion():
     for s in session:
         session[s] = None
@@ -181,7 +180,7 @@ def deconnexion():
 
 # TOUT LE CODE QUI VA SUIVRE PERMET LA CONNEXION A L'ENT VIA OAUTH
 # Route qui va permettre de rediriger l'utilisateur sur le site d'authentification et de récupérer un token (pour pouvoir se connecter)
-@app.route("/login/")
+@ app.route("/login/")
 def login():
     """Step 1: User Authorization.
     Redirect the user/resource owner to the OAuth provider (ENT)
@@ -201,7 +200,7 @@ def login():
 
 # callback est la route pour le retour de l'identification
 # On utilise le token pour indiquer que c'est bien l'utilisateur qui veut se connecter depuis l'app
-@app.route("/callback/", methods=["GET"])
+@ app.route("/callback/", methods=["GET"])
 def callback():
     """ Step 3: Retrieving an access token.
     The user has been redirected back from the provider to your registered
@@ -223,7 +222,7 @@ def callback():
 
 
 # Fonction de test pour afficher ce que l'on récupère
-@app.route("/connexion/", methods=["GET"])
+@ app.route("/connexion/", methods=["GET"])
 def connexion():
     """Fetching a protected resource using an OAuth 2 token.
     """
