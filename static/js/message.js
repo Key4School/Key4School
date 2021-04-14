@@ -9,11 +9,19 @@ $(document).ready(function() {
 });
 
 function divnewgroupopen() {
-  $(".modal").addClass("is-active");
+  $("#newgrou").addClass("is-active");
 }
 
 function divnewgroupclose(e) {
-  $(".modal").removeClass("is-active");
+  $("#newgrou").removeClass("is-active");
+}
+
+function divoptionopen() {
+  $("#option").addClass("is-active");
+}
+
+function divoptionclose(e) {
+  $("#option").removeClass("is-active");
 }
 
 function envoi(e) {
