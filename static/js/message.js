@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#titreetmsg').css({
-    height: (80 / 100 * ($(window).height())).toString() + 'px',
-    width: (75 / 100 * ($(window).width())).toString() + 'px',
+    height: (70 / 100 * ($(window).height())).toString() + 'px',
+    width: (85 / 100 * ($(window).width())).toString() + 'px',
   });
   $('#nomgroupe').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
@@ -9,19 +9,11 @@ $(document).ready(function() {
 });
 
 function divnewgroupopen() {
-  $("#newgrou").addClass("is-active");
+  $(".modal").addClass("is-active");
 }
 
 function divnewgroupclose(e) {
-  $("#newgrou").removeClass("is-active");
-}
-
-function divoptionopen() {
-  $("#option").addClass("is-active");
-}
-
-function divoptionclose(e) {
-  $("#option").removeClass("is-active");
+  $(".modal").removeClass("is-active");
 }
 
 function envoi(e) {
@@ -41,7 +33,7 @@ function supprimer(e) {
   e.preventDefault();
   var donnees = $('#suppressionMsg').serialize();
   $.ajax({
-    url: '/suppressionMsg/',
+    url: '/messages/',
     type: "POST",
     data: donnees,
     success: function(response) {
@@ -50,18 +42,10 @@ function supprimer(e) {
   });
 }
 
-
 $('[name="contenuMessage"]').focus();
 const messages = document.querySelector('.messages');
 messages.scrollTop = messages.scrollHeight;
 
-function reponseMsg(nb){
-  var idMsg = document.getElementById('id'+nb).value;
-  var contentMsg = document.getElementById('contenu'+nb).value;
-  repmsg = document.getElementById('messageForm');
-  repmsg.insertAdjacentHTML('beforebegin',contentMsg);
-  document.getElementById('reponse').value = idMsg;
-}
 
 function refresh() {
   var dernierID = $('.messages div[id]:last').attr('id'); // on récupère l'id le plus récent
