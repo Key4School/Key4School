@@ -32,11 +32,19 @@ function supprimer(e) {
   e.preventDefault();
   var donnees = $('#suppressionMsg').serialize();
   $.ajax({
-    url: '/messages/',
+    url: '/suppressionMsg/',
     type: "POST",
     data: donnees,
     success: function(response) {
       $('#suppressionMsg').trigger("reset");
     },
   });
+}
+
+function reponseMsg(nb){
+  var idMsg = document.getElementById('id'+nb).value;
+  var contentMsg = document.getElementById('contenu'+nb).value;
+  repmsg = document.getElementById('messageForm');
+  repmsg.insertAdjacentHTML('beforebegin',contentMsg);
+  document.getElementById('reponse').value = idMsg;
 }

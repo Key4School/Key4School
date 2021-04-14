@@ -90,7 +90,7 @@ def messages(idGroupe):
 
         elif request.method == 'POST':
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
+                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "","reponse": ObjectId(request.form['reponse'])})
             return 'sent'
     else:
         return redirect(url_for('login'))
