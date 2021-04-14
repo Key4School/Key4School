@@ -51,7 +51,8 @@
   <br />
   <br />
   <br />
-  <div class="column is-half is-offset-one-quarter">
+  <div style="display: flex;align-items: center;justify-content:space-evenly;">
+    <div>
       <table class="table is-narrow">
         <tbody>
           <tr>
@@ -94,48 +95,99 @@
             </td>
           </tr>
           <form>
-          <tr>
-            <td>
-              <columns>
-                <column>
-                  <i class="far fa-smile-wink" style="font-size:25px;"></i>
-                  &nbsp;&nbsp;Pseudo
-                </column>
-              </columns>
-            </td>
-            <td>
-              <div id="contentPseudo">
-                <p onClick="inputpseudo()" id="pseudo">Pseudo</p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <columns>
-                <column>
-                  <i class="fas fa-at" style="font-size:25px;"></i>
-                  &nbsp;&nbsp;Adresse mail
-                </column>
-              </columns>
-            </td>
-            <td>
-              <div id="contentEmail">
-                <p id="email" onClick="inputemail()">exemple@gmail.com</p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <br />
-              <input type="submit" />
-            </td>
-          </tr>
-        </form>
+            <tr>
+              <td>
+                <columns>
+                  <column>
+                    <i class="far fa-smile-wink" style="font-size:25px;"></i>
+                    &nbsp;&nbsp;Pseudo
+                  </column>
+                </columns>
+              </td>
+              <td>
+                <div id="contentPseudo">
+                  <p onClick="inputpseudo()" id="pseudo">Pseudo</p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <columns>
+                  <column>
+                    <i class="fas fa-at" style="font-size:25px;"></i>
+                    &nbsp;&nbsp;Adresse mail
+                  </column>
+                </columns>
+              </td>
+              <td>
+                <div id="contentEmail">
+                  <p id="email" onClick="inputemail()">exemple@gmail.com</p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <br />
+                <input class="button" type="submit" />
+              </td>
+            </tr>
+          </form>
         </tbody>
       </table>
     </div>
+    <div>
+      <form>
+        <label for"color-select">Choisir une couleur de thème :</label><br />
+          <label class="radio">
+            <div style="display: flex;align-items: center;justify-content:space-evenly;">
+              <input type="radio" name="couleur" value="#D50000">&nbsp;&nbsp;
+              <p id="couleur" style="background-color:#D50000;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+            </div>
+          </label>
+          <br />
+          <label class="radio">
+            <div style="display: flex;align-items: center;justify-content:space-evenly;">
+              <input type="radio" name="couleur" value="#039be5">&nbsp;&nbsp;
+              <p id="couleur" style="background-color:#039be5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+            </div>
+          </label>
+          <br />
+          <label class="radio">
+            <div style="display: flex;align-items: center;justify-content:space-evenly;">
+              <input type="radio" name="couleur" value="#0b8043">&nbsp;&nbsp;
+              <p id="couleur" style="background-color:#0b8043;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+            </div>
+          </label>
+        <br />
+        <label class="radio">
+          <div style="display: flex;align-items: center;justify-content:space-evenly;">
+            <input type="radio" name="couleur" value="#3f51b5">&nbsp;&nbsp;
+            <p id="couleur" style="background-color:#3f51b5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+          </div>
+        </label>
+      <br />
+      <label class="radio">
+        <div style="display: flex;align-items: center;justify-content:space-evenly;">
+          <input type="radio" name="couleur" value="#8e24aa">&nbsp;&nbsp;
+          <p id="couleur" style="background-color:#8e24aa;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+        </div>
+      </label>
+    <br />
+    <label class="radio">
+      <div style="display: flex;align-items: center;justify-content:space-evenly;">
+        <input type="radio" name="couleur" value="#f5511d">&nbsp;&nbsp;
+        <p id="couleur" style="background-color:#f5511d;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+      </div>
+    </label>
+  <br />
+        <br />
+        <input class="button" type="submit" value="Valider" />
+      </form>
+    </div>
 
-  <!-- fin de la page -->
+
+
+    <!-- fin de la page -->
 </body>
 
 </html>
