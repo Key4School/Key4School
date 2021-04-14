@@ -1,21 +1,24 @@
 {% for content in msgDb%}
 <!--Pour chaque message -->
 {%if content['id-utilisateur']==session%}
-<div class="moimsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
-{%else%}
-<div class="participantmsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}" style="background-color:#8dd7cf;">
-{%endif%}
-  <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
-  <br>
-  <p style="margin:0px">
-    {{content['contenu']}}
-    <!--On affiche le contenu du message -->
-  </p>
-  <br>{%if content['id-utilisateur']==session%}<form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
-    <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-    <input type='hidden' name="objectif" value="supprimerMsg" />
-    <button type"submit">supprimer</button>
-  </form>{%endif%}
-  <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
-</div>
-{%endfor%}
+<div class="moimsg"
+  id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
+  {%else%}
+  <div class="participantmsg"
+    id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}"
+    style="background-color:#8dd7cf;">
+    {%endif%}
+    <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
+    <br>
+    <p style="margin:0px">
+      {{content['contenu']}}
+      {% set count.value = count.value + 1 %}
+      <!--On affiche le contenu du message -->
+    </p>
+    <br>{%if content['id-utilisateur']==session%}<form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
+      <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
+      <button type"submit">supprimer</button>
+    </form>{%endif%}<button onclick="reponseMsg(value)" value="{{count.value}}">répondre</button><input type="hidden" id="id{{count.value}}" value="{{content['_id']}}" /><input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
+    <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+  </div>
+  {%endfor%}
