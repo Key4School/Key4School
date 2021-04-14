@@ -135,6 +135,17 @@ def refreshMsg():
         return redirect(url_for('login'))
 
 
+@ app.route('/changeTheme/', methods=['POST'])
+def changeTheme():
+    if 'id' in session:
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
+                                   "$set": {"couleur": request.form['couleur']}})
+        session['couleur'] = request.form['couleur']
+        return redirect(url_for('profil'))
+    else:
+        return redirect(url_for('login'))
+
+
 @ app.route('/profil/')
 def profil():
     if 'id' in session:
@@ -264,12 +275,14 @@ def connexion():
     if user != None:
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
+        session['couleur'] = user['couleur']
     else:
         db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
-                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName']})
+                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName'], 'couleur': '#3f51b5'})
         user = db_utilisateurs.find_one({"idENT": data['userId']})
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
+        session['couleur'] = '#3f51b5'
     return redirect(url_for('accueil'))
 
 
