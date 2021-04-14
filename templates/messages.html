@@ -106,7 +106,7 @@
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
     <div id="titreetmsg" style="margin-right: 2%;margin-bottom:2%;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex;align-items: center;justify-content:space-between;border: 1px solid black;padding:2%;height:10%;">
+      <div style="display: flex;align-items: center;justify-content:space-between;border: 1px solid {{session['couleur']}};padding:2%;height:10%;">
         <!-- div avec le nom du groupe et les paticipant -->
         <div class="nomgroupeparticipents">
           <!-- nom du groupe -->
@@ -147,7 +147,7 @@
         </div>
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
-      <div style="box-sizing: border-box;overflow-y: auto;height:80%;border: 1px solid black;padding:2%;">
+      <div style="box-sizing: border-box;overflow-y: auto;height:80%;border: 1px solid {{session['couleur']}};padding:2%;">
         <!-- {% set count = namespace(value=0) %} -->
         {% for content in msgDb%}
         <!--Pour chaque message -->
