@@ -66,33 +66,46 @@ def messages(idGroupe):
                 {"$or": [{"id-utilisateurs": ObjectId('6075cae8fb56bf0654e5f4ab')}, {"id-utilisateurs": ObjectId(session['id'])}]})
             if idGroupe != None:
                 msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
+                idgroupe = idGroupe
                 infogroupes = db_groupes.find_one(
                     {"_id": ObjectId(idGroupe)})
                 infoUtilisateurs = []
                 for content in infogroupes['id-utilisateurs']:
                     infoUtilisateurs += db_utilisateurs.find(
                         {"_id": ObjectId(content)})
+<<<<<<< HEAD
+                if session['id'] in str(infoUtilisateurs):
+                    danslegroupe=True
+=======
                 if session['id'] in str(infoUtilisateurs) or '6075cae8fb56bf0654e5f4ab' in str(infoUtilisateurs):
                     danslegroupe = True
+>>>>>>> 6c4fdb60e1ae6832a3c8b18a8fb192b4bab6a396
                 else:
                     danslegroupe = False
                     msgDb = None
+                    idgroupe = None
                     infogroupes = None
                     infoUtilisateurs = None
             else:
                 msgDb = None
+                idgroupe = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), session=ObjectId(session['id']))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), session=ObjectId(session['id']))
 
         elif request.method == 'POST':
-            if request.form['objectif'] == "supprimerMsg":
-                db_messages.delete_one(
-                    {"_id": ObjectId(request.form['msgSuppr'])})
-            else:
-                db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                        "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
+            db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": ObjectId(request.form['reponse'])})
             return 'sent'
+    else:
+        return redirect(url_for('login'))
+
+
+@ app.route('/suppressionMsg/', methods=['POST'])
+def supprimerMsg():
+    if 'id' in session:
+        db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
+        return 'sent'
     else:
         return redirect(url_for('login'))
 
@@ -113,6 +126,8 @@ def createGroupe():
         return redirect(url_for('login'))
 
 
+<<<<<<< HEAD
+=======
 @ app.route('/refreshMsg/')
 def refreshMsg():
     if 'id' in session:
@@ -135,6 +150,18 @@ def refreshMsg():
         return redirect(url_for('login'))
 
 
+@ app.route('/changeTheme/', methods=['POST'])
+def changeTheme():
+    if 'id' in session:
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
+                                   "$set": {"couleur": request.form['couleur']}})
+        session['couleur'] = request.form['couleur']
+        return redirect(url_for('profil'))
+    else:
+        return redirect(url_for('login'))
+
+
+>>>>>>> c90a88430397013c24f68f72abe885f1911ecc3c
 @ app.route('/profil/')
 def profil():
     if 'id' in session:
@@ -253,7 +280,7 @@ def callback():
 
 
 # Fonction de test pour afficher ce que l'on récupère
-@ app.route("/connexion/", methods=["GET"])
+@app.route("/connexion/", methods=["GET"])
 def connexion():
     """Fetching a protected resource using an OAuth 2 token.
     """
@@ -264,12 +291,14 @@ def connexion():
     if user != None:
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
+        session['couleur'] = user['couleur']
     else:
         db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
-                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName']})
+                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName'], 'couleur': '#3f51b5'})
         user = db_utilisateurs.find_one({"idENT": data['userId']})
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
+        session['couleur'] = '#3f51b5'
     return redirect(url_for('accueil'))
 
 

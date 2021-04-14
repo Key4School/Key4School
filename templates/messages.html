@@ -129,9 +129,11 @@
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
+        {% set count = namespace(value=0) %}
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==session%}
+<<<<<<< HEAD
         <div class="moimsg"
           id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
           {%else%}
@@ -155,6 +157,24 @@
           {%endfor%}
           <!-- fin de tt les msg -->
 
+=======
+        <div class="moimsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
+        {%else%}
+        <div class="participantmsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}" style="background-color:#8dd7cf;">
+        {%endif%}
+          <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
+          <br>
+          <p style="margin:0px">
+            {{content['contenu']}}
+            {% set count.value = count.value + 1 %}
+            <!--On affiche le contenu du message -->
+          </p>
+          <br>{%if content['id-utilisateur']==session%}<form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
+            <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
+            <button type"submit">supprimer</button>
+          </form>{%endif%}<button onclick="reponseMsg(value)" id='réponse' value="{{count.value}}">répondre</button><input type='hidden' id='id{{count.value}}' value="{{content['_id']}}" /><input type='hidden' id='contenu{{count.value}}' value="{{content['contenu']}}" />
+          <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+>>>>>>> 5423ebb1c22e779fb60fb0acbab74790fd80ad1e
         </div>
         <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
           <i class="fas fa-camera" style="font-size: 20px;"></i>
@@ -166,7 +186,20 @@
         <!-- fin de la div pour la partie de droite -->
         {% endif %}
       </div>
+<<<<<<< HEAD
       <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+=======
+      <!-- fin de tt les msg -->
+      <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
+        <i class="fas fa-camera" style="font-size: 20px;"></i>
+        <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+        <input type='hidden' name="group" value="{{idgroupe}}" />
+        <input type='hidden' id='reponse' name='reponse' value="None" />
+        <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
+      </form>
+    </div>
+    <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+>>>>>>> 5423ebb1c22e779fb60fb0acbab74790fd80ad1e
 
 </body>
 
