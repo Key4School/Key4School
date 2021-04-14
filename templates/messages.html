@@ -39,6 +39,18 @@
           <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
             <section class="modal-card-body">
               <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' /><br><br>
+              <form>
+                <colums>
+                  <column>
+                    <input class="input" type="text" placeholder="Recherche une personne" style="margin-top:1%;width: 30%;" />
+                  </column>
+                  <column>
+                    <button type"submit" style="background-color:white; border: 1px solid white; margin-top:1%;font-size: 20px;margin-right:10%;"><i class="fas fa-search"></i></button>
+                  </column>
+                </colums>
+              </form>
+
+              <br /><br />
               {%for user in users%}
               {%if user['_id']!=session%}
               <input type="checkbox" name="{{user['_id']}}" id="pseudo" />&nbsp;&nbsp;<label for="pseudo">{{user['pseudo']}}</label><br><br />
@@ -89,9 +101,9 @@
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==session%}
-        <div class="moimsg" >
+        <div class="moimsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
         {%else%}
-        <div class="participantmsg" style="background-color:#8dd7cf;">
+        <div class="participantmsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}" style="background-color:#8dd7cf;">
         {%endif%}
           <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
           <br>
@@ -107,7 +119,16 @@
           <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
         </div>
         {%endfor%}
+        <!-- fin de tt les msg -->
+        <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
+          <i class="fas fa-camera" style="font-size: 20px;"></i>
+          <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+          <input type='hidden' name="group" value="{{idgroupe}}" />
+          <input type='hidden' name="objectif" value="envoiMsg" />
+          <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
+        </form>
       </div>
+<<<<<<< HEAD
       <!-- fin de tt les msg -->
       <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
         <i class="fas fa-camera" style="font-size: 20px;"></i>
@@ -116,11 +137,12 @@
         <input type='hidden' id='reponse' name='reponse' value="None" />
         <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
       </form>
+=======
+      <!-- fin de la div pour la partie de droite -->
+      {% endif %}
+>>>>>>> dfbc6050fc379d8417e1fb28f3fe3af8fa605922
     </div>
-    <!-- fin de la div pour la partie de droite -->
-    {% endif %}
-  </div>
-  <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+    <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
 
 </body>
 
