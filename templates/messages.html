@@ -100,7 +100,6 @@
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==session%}
-<<<<<<< HEAD
         <div class="moimsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
         {%else%}
         <div class="participantmsg" id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}" style="background-color:#8dd7cf;">
@@ -117,26 +116,6 @@
             <button type"submit">supprimer</button>
           </form>{%endif%}
           <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
-=======
-        <div class="moimsg">
-          {%else%}
-          <div class="participantmsg" style="background-color:#8dd7cf;">
-            {%endif%}
-            <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
-            <br>
-            <p style="margin:0px">
-              {{content['contenu']}}
-              <!--On affiche le contenu du message -->
-            </p>
-            <br>{%if content['id-utilisateur']==session%}<form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
-              <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-              <input type='hidden' name="objectif" value="supprimerMsg" />
-              <button type"submit">supprimer</button>
-            </form>{%endif%}
-            <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
-          </div>
-          {%endfor%}
->>>>>>> 175e7f26f591af8725b6a85391d50603faf61815
         </div>
         <!-- fin de tt les msg -->
         <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">

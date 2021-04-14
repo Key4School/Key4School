@@ -120,9 +120,15 @@ def refreshMsg():
         if request.args['idMsg'] != 'undefined' and idGroupe != 'undefined':
             dateLast = datetime.strptime(
                 request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%f')
+            infogroupes = db_groupes.find_one(
+                {"_id": ObjectId(idGroupe)})
+            infoUtilisateurs = []
+            for content in infogroupes['id-utilisateurs']:
+                infoUtilisateurs += db_utilisateurs.find(
+                    {"_id": ObjectId(content)})
             msgDb = db_messages.find(
                 {'$and': [{'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]})
-            return render_template("refreshMessages.html", msgDb=msgDb, session=ObjectId(session['id']))
+            return render_template("refreshMessages.html", msgDb=msgDb, session=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs)
         else:
             return ''
     else:
