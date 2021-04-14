@@ -97,6 +97,7 @@
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div class="messages" style="box-sizing: border-box;overflow-y: auto;">
+        {% set count = namespace(value=0) %}
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==session%}
@@ -108,13 +109,13 @@
           <br>
           <p style="margin:0px">
             {{content['contenu']}}
+            {% set count.value = count.value + 1 %}
             <!--On affiche le contenu du message -->
           </p>
           <br>{%if content['id-utilisateur']==session%}<form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
             <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-            <input type='hidden' name="objectif" value="supprimerMsg" />
             <button type"submit">supprimer</button>
-          </form>{%endif%}
+          </form>{%endif%}<button onclick="reponseMsg(value)" id='réponse' value="{{count.value}}">répondre</button><input type='hidden' id='id{{count.value}}' value="{{content['_id']}}" /><input type='hidden' id='contenu{{count.value}}' value="{{content['contenu']}}" />
           <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
         </div>
         {%endfor%}
@@ -127,8 +128,14 @@
           <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
         </form>
       </div>
-      <!-- fin de la div pour la partie de droite -->
-      {% endif %}
+      <!-- fin de tt les msg -->
+      <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
+        <i class="fas fa-camera" style="font-size: 20px;"></i>
+        <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+        <input type='hidden' name="group" value="{{idgroupe}}" />
+        <input type='hidden' id='reponse' name='reponse' value="None" />
+        <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
+      </form>
     </div>
     <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
 

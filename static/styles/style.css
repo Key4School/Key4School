@@ -11,126 +11,13 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #e9ebe9;
 }
-
-#page{
-  margin-top: 7%;
-}
-#filtre{
-  position:fixed;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  background:rgba(0,0,0,0.6);
-  z-index: 1;
-}
-#nomnewgroupe{
-  width:50%;
-}
-#newgroup{
-  /* top: 0px;
-  right:0; */
-  display: none;
-  position: fixed;
-  z-index: 20;
-  text-align: left;
-  background: #c3cfd9;
-  color: black;
-  padding:2%;
-  /* height: 100%; */
-  /* padding-right: 4%; */
-  /* padding-top: 3%; */
-  /* padding-left:2%; */
-  /* margin-top: 7%; */
-
-  min-width: 15%;
-}
-.titremenu{
-  color: black;
-  text-decoration: none;
-}
-.profil{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 .profilmessage{
   display: flex;
   align-items: center;
   height: 5%;
 }
-progress{
-  max-width: 75%;
-}
-.iconebandeau{
-  width: 25px;
-  height:auto;
-}
-.iconebandeau:hover{
-  cursor: pointer;
-}
-.persopubli{
-  width: 30px;
-  height: 30px;
-  margin-top: 2%;
-}
-.iconereaction{
-  cursor: pointer;
-  width: 20px;
-  height:auto;
-  margin-left: 2%;
-}
-.pub{
-  display: flex;
-  margin-left: 3%;
-}
-.notif1{
-  display: flex;
-  align-items: center;
-}
-.contentpub{
-  vertical-align: middle;
-  border: 1px solid #E4E3E4;
-  padding:1%;
-  margin:2%;
-  min-width: 30%;
-  background-color: #dfe6ed;
-}
-.contentnotif{
-  vertical-align: middle;
-  border: 1px solid #E4E3E4;
-  padding:3%;
-  margin:2%;
-  min-width: 80%;
-  background-color: #dfe6ed;
-}
 h2{
   margin:1%;
-}
-.imagepublication{
-  align-items: center;
-  text-align: center;
-}
-
-.ligne1profil{
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-}
-.photoprofil{
-  display: flex;
-  align-items: center;
-}
-.iconeinfoprofil{
-  width: 25px;
-  height:auto;
-}
-.contentinfoprofil{
-  display: flex;
-  align-items: center;
-  justify-content:space-between;
-  margin-left: 35%;
-  margin-right: 35%;
 }
 .themeligne{
   display: flex;

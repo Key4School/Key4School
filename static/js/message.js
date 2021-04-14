@@ -33,7 +33,7 @@ function supprimer(e) {
   e.preventDefault();
   var donnees = $('#suppressionMsg').serialize();
   $.ajax({
-    url: '/messages/',
+    url: '/suppressionMsg/',
     type: "POST",
     data: donnees,
     success: function(response) {
@@ -42,10 +42,18 @@ function supprimer(e) {
   });
 }
 
+
 $('[name="contenuMessage"]').focus();
 const messages = document.querySelector('.messages');
 messages.scrollTop = messages.scrollHeight;
 
+function reponseMsg(nb){
+  var idMsg = document.getElementById('id'+nb).value;
+  var contentMsg = document.getElementById('contenu'+nb).value;
+  repmsg = document.getElementById('messageForm');
+  repmsg.insertAdjacentHTML('beforebegin',contentMsg);
+  document.getElementById('reponse').value = idMsg;
+}
 
 function refresh() {
   var dernierID = $('.messages div[id]:last').attr('id'); // on récupère l'id le plus récent
