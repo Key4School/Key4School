@@ -58,7 +58,7 @@
               {%endfor%}
             </section>
             <footer class="modal-card-foot">
-              <button type="submit" onclick="divnewgroupclose()" class="button is-success">Créer le groupe</button>
+              <button class="button is-success">Créer le groupe</button>
               <button onclick="divnewgroupclose(event); return false;" class="button">Annuler</button>
             </footer>
           </form>
@@ -161,7 +161,15 @@
                  <i class="fas fa-times"></i>
                </span>
              </button>
-            </form>{%endif%}<button onclick="reponseMsg(value)" value="{{count.value}}">répondre</button><input type="hidden" id="id{{count.value}}" value="{{content['_id']}}" /><input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
+            </form>{%endif%}
+            <button value="{{count.value}}" onclick="reponseMsg(value)" class="button is-success">
+              <span class="icon is-small">
+                <i class="fas fa-reply"></i>
+              </span>
+              <span>répondre</span>
+            </button>
+            <input type="hidden" id="id{{count.value}}" value="{{content['_id']}}" />
+            <input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
             <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
           </div>
           {%endfor%}
