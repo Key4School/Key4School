@@ -64,12 +64,11 @@ function refresh() {
 setInterval(refresh, 1000);
 
 function reponseMsg(nb){
-  var idMsg = document.getElementById('id'+nb).value;
   var contentMsg = document.getElementById('contenu'+nb).value;
   repmsg = document.getElementById('messageForm');
   document.getElementById('champReponse').innerHTML=contentMsg;
-  document.getElementById('buttonRep').style.display = block;
-  document.getElementById('reponse').value = idMsg;
+  // document.getElementById('buttonRep').style.display = block;
+  document.getElementById('reponse').value = nb;
   idMsg = "None";
   contentMsg = "";
 }

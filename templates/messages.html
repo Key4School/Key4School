@@ -168,15 +168,14 @@
               <!--On affiche le contenu du message -->
             </p>
             <br>{%if content['id-utilisateur']==sessionId%}
-            <!-- <div style="display: flex;align-items: center;justify-content:space-evenly;">
-               <button value="{{count.value}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+            <div style="display: flex;align-items: center;justify-content:space-evenly;">
+               <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
                 <span class="icon is-small">
                   <i class="fas fa-reply"></i>
                 </span>
                 <span>répondre</span>
               </button>
-              <input type="hidden" id="id{{count.value}}" value="{{content['_id']}}" />
-              <input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
+              <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
               <form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
                 <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
                 <button type="submit" class="button is-danger is-outlined is-small">
@@ -186,7 +185,17 @@
                   </span>
                 </button>
               </form>
-            </div> -->
+            </div>
+            {%else%}
+            <div style="display: flex;align-items: center;justify-content:space-evenly;">
+               <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+                <span class="icon is-small">
+                  <i class="fas fa-reply"></i>
+                </span>
+                <span>répondre</span>
+              </button>
+              <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+            </div>
               {%endif%}
               <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
 
@@ -196,6 +205,7 @@
 
         {% endif %}
       </div>
+      <div id='champReponse'></div> <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
       <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button>
     <form method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;min-width: 75%;max-width: 75%;" id="messageForm" onsubmit="envoi(event); return false;">
       <i class="fas fa-camera" style="font-size: 20px;"></i>
