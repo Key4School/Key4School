@@ -27,3 +27,16 @@ function envoi(e) {
     },
   });
 }
+
+function supprimer(e) {
+  e.preventDefault();
+  var donnees = $('#suppressionMsg').serialize();
+  $.ajax({
+    url: '/messages/',
+    type: "POST",
+    data: donnees,
+    success: function(response) {
+      $('#suppressionMsg').trigger("reset");
+    },
+  });
+}

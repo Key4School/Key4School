@@ -63,7 +63,7 @@ def messages(idGroupe):
         if request.method == 'GET':
             # il faudra récupérer l'id qui sera qans un cookie
             grp = db_groupes.find(
-                {'id-utilisateurs': ObjectId("6075cae8fb56bf0654e5f4ab")})  # on remplacera le numéro par l'id de l'user
+                {'id-utilisateurs': ObjectId(session['id'])})
             if idGroupe != None:
                 msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
                 idgroupe = idGroupe
@@ -73,16 +73,28 @@ def messages(idGroupe):
                 for content in infogroupes['id-utilisateurs']:
                     infoUtilisateurs += db_utilisateurs.find(
                         {"_id": ObjectId(content)})
+                if session['id'] in str(infoUtilisateurs):
+                    danslegroupe = True
+                else:
+                    danslegroupe = False
+                    msgDb = None
+                    idgroupe = None
+                    infogroupes = None
+                    infoUtilisateurs = None
             else:
                 msgDb = None
                 idgroupe = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find({'_id': {'$ne': ObjectId(session['id'])}}))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), session=ObjectId(session['id']))
 
         elif request.method == 'POST':
-            db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
+            if request.form['objectif'] == "supprimerMsg":
+                db_messages.delete_one(
+                    {"_id": ObjectId(request.form['msgSuppr'])})
+            else:
+                db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                                        "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": ""})
             return 'sent'
     else:
         return redirect(url_for('login'))
@@ -144,7 +156,7 @@ def professeur():
         return redirect(url_for('login'))
 
 
-@ app.route('/question/')
+@app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
@@ -155,7 +167,7 @@ def question():
                 return render_template('question.html', answer=result)
             else:
                 db_demande_aide.insert_one(
-                    {"id-utilisateur": "quand on l'aura", "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere']})
+                    {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere']})
                 return render_template('question.html', envoi="Envoi réussi")
         else:
             return render_template('question.html')
