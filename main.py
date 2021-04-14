@@ -73,13 +73,8 @@ def messages(idGroupe):
                 for content in infogroupes['id-utilisateurs']:
                     infoUtilisateurs += db_utilisateurs.find(
                         {"_id": ObjectId(content)})
-<<<<<<< HEAD
-                if session['id'] in str(infoUtilisateurs):
-                    danslegroupe=True
-=======
                 if session['id'] in str(infoUtilisateurs) or '6075cae8fb56bf0654e5f4ab' in str(infoUtilisateurs):
                     danslegroupe = True
->>>>>>> 6c4fdb60e1ae6832a3c8b18a8fb192b4bab6a396
                 else:
                     danslegroupe = False
                     msgDb = None
@@ -126,8 +121,6 @@ def createGroupe():
         return redirect(url_for('login'))
 
 
-<<<<<<< HEAD
-=======
 @ app.route('/refreshMsg/')
 def refreshMsg():
     if 'id' in session:
@@ -161,7 +154,6 @@ def changeTheme():
         return redirect(url_for('login'))
 
 
->>>>>>> c90a88430397013c24f68f72abe885f1911ecc3c
 @ app.route('/profil/')
 def profil():
     if 'id' in session:
