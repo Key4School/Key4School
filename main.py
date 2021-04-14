@@ -63,7 +63,7 @@ def messages(idGroupe):
         if request.method == 'GET':
             # il faudra récupérer l'id qui sera qans un cookie
             grp = db_groupes.find(
-                {'id-utilisateurs': ObjectId(session['id'])})
+                {"$or": [{"id-utilisateurs": ObjectId('6075cae8fb56bf0654e5f4ab')}, {"id-utilisateurs": ObjectId(session['id'])}]})
             if idGroupe != None:
                 msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
                 idgroupe = idGroupe
@@ -103,7 +103,7 @@ def messages(idGroupe):
 @ app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
     if 'id' in session:
-        participants = []
+        participants = [ObjectId(session['id'])]
         for name, value in request.form.items():
             if name == 'nomnewgroupe':
                 pass
