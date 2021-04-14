@@ -66,29 +66,27 @@ def messages(idGroupe):
                 {"$or": [{"id-utilisateurs": ObjectId('6075cae8fb56bf0654e5f4ab')}, {"id-utilisateurs": ObjectId(session['id'])}]})
             if idGroupe != None:
                 msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
+                idgroupe = idGroupe
                 infogroupes = db_groupes.find_one(
                     {"_id": ObjectId(idGroupe)})
                 infoUtilisateurs = []
                 for content in infogroupes['id-utilisateurs']:
                     infoUtilisateurs += db_utilisateurs.find(
                         {"_id": ObjectId(content)})
-<<<<<<< HEAD
                 if session['id'] in str(infoUtilisateurs):
                     danslegroupe=True
-=======
-                if session['id'] in str(infoUtilisateurs) or '6075cae8fb56bf0654e5f4ab' in str(infoUtilisateurs):
-                    danslegroupe = True
->>>>>>> dfbc6050fc379d8417e1fb28f3fe3af8fa605922
                 else:
                     danslegroupe=False
                     msgDb = None
+                    idgroupe = None
                     infogroupes = None
                     infoUtilisateurs = None
             else:
                 msgDb = None
+                idgroupe = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), session=ObjectId(session['id']))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idgroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), session=ObjectId(session['id']))
 
         elif request.method == 'POST':
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
@@ -117,28 +115,6 @@ def createGroupe():
         newGroupe = db_groupes.insert_one(
             {'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
-    else:
-        return redirect(url_for('login'))
-
-
-@ app.route('/refreshMsg/')
-def refreshMsg():
-    if 'id' in session:
-        idGroupe = request.args['idgroupe']
-        if request.args['idMsg'] != 'undefined' and idGroupe != 'undefined':
-            dateLast = datetime.strptime(
-                request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%f')
-            infogroupes = db_groupes.find_one(
-                {"_id": ObjectId(idGroupe)})
-            infoUtilisateurs = []
-            for content in infogroupes['id-utilisateurs']:
-                infoUtilisateurs += db_utilisateurs.find(
-                    {"_id": ObjectId(content)})
-            msgDb = db_messages.find(
-                {'$and': [{'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]})
-            return render_template("refreshMessages.html", msgDb=msgDb, session=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs)
-        else:
-            return ''
     else:
         return redirect(url_for('login'))
 
