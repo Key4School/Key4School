@@ -145,6 +145,7 @@
             id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}"
             style="  margin-left: 5%;margin-right: 55%;margin-bottom: 2%;border-radius: 20px;padding: 2%;padding-left: 3%;padding-right: 3%;background-color:#8dd7cf;">
             {%endif%}
+
             <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
             <br>
             <p style="margin:0px">
@@ -176,12 +177,16 @@
             <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
           </div>
           {%endfor%}
+<<<<<<< HEAD
           <!-- fin de tt les msg -->
 
         </div>
 
         <!-- fin de la div pour la partie de droite -->
         <div id='champReponse'></div><button onclick="enleverRep()" id='buttonRep' style="display:none;"></button>
+=======
+        
+>>>>>>> af13a99d51b46b929a268fd425b8947c6aca8ca7
         <form method="post" class="barreenvoi" id="messageForm" onsubmit="envoi(event); return false;">
           <i class="fas fa-camera" style="font-size: 20px;"></i>
           <input class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
