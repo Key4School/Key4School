@@ -51,20 +51,25 @@ function envoi(e) {
 //   });
 // }
 
-$('[name="contenuMessage"]').focus();
-const messages = document.querySelector('.messages');
+$('#inputMsg').focus();
+const messages = document.getElementById('messages');
 // messages.scrollTop = messages.scrollHeight;
 
+var start = new Date();
 
 function refresh() {
-  var dernierID = $('.messages div[id]:last').attr('id'); // on récupère l'id le plus récent
-  var idGroupe=$('[name="group"]').attr("value");
+  var dernierID = $('#messages div[id]:last').attr('id'); // on récupère l'id le plus récent
+  var idGroupe = $('[name="group"]').attr("value");
+  if (dernierID === undefined) {
+    dernierID = start.toISOString();
+  }
+  console.log(dernierID);
   $.ajax({
     url: "/refreshMsg/",
     type: "GET",
     data: "idMsg=" + dernierID + '&idgroupe=' + idGroupe, // et on envoie nos données
     success: function(html) {
-      $('.messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
+      $('#messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
       // messages.scrollTop = messages.scrollHeight;
     }
   });
@@ -72,18 +77,18 @@ function refresh() {
 
 setInterval(refresh, 1000);
 
-function reponseMsg(nb){
-  var contentMsg = document.getElementById('contenu'+nb).value;
+function reponseMsg(nb) {
+  var contentMsg = document.getElementById('contenu' + nb).value;
   repmsg = document.getElementById('messageForm');
-  document.getElementById('champReponse').innerHTML=contentMsg;
+  document.getElementById('champReponse').innerHTML = contentMsg;
   // document.getElementById('buttonRep').style.display = block;
   document.getElementById('reponse').value = nb;
   idMsg = "None";
   contentMsg = "";
 }
 
-function enleverRep(){
-  document.getElementById('champReponse').innerHTML="";
+function enleverRep() {
+  document.getElementById('champReponse').innerHTML = "";
   // document.getElementById('buttonRep').style.display = none;
-  document.getElementById('reponse').value ="None";
+  document.getElementById('reponse').value = "None";
 }
