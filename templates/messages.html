@@ -203,7 +203,7 @@
             </div>
             <br>
             <p style="margin:0px">
-              {{content['contenu']}}
+              {{content['contenu']}}{%if "rep"in content%} en réponse à : {{content['rep']['contenu']}}{%endif%}
               <!--On affiche le contenu du message -->
             </p>
             <br>

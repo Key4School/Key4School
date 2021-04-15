@@ -65,7 +65,25 @@ def messages(idGroupe):
             grp = db_groupes.find(
                 {"$or": [{"id-utilisateurs": ObjectId('6075cae8fb56bf0654e5f4ab')}, {"id-utilisateurs": ObjectId(session['id'])}]})
             if idGroupe != None:
-                msgDb = db_messages.find({'id-groupe': ObjectId(idGroupe)})
+                msgDb = db_messages.aggregate([
+                    {'$match':{'id-groupe':ObjectId(idGroupe)}},
+                    {'$lookup':
+                        {
+                            'from': 'messages',
+                            'localField': 'reponse',
+                            'foreignField': '_id',
+                            'as': 'rep',
+                            }
+                    },{'$set': { 'rep': { '$arrayElemAt': [ "$rep", 0 ] } } },
+                    {'$project':{
+                        '_id':1,
+                        'id-groupes':1,
+                        'id-utilisateur':1,
+                        'contenu':1,
+                        'date-envoi':1,
+                        'rep':1,
+                    }},
+                ])
                 infogroupes = db_groupes.find_one(
                     {"_id": ObjectId(idGroupe)})
                 infoUtilisateurs = []
