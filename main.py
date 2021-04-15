@@ -66,22 +66,22 @@ def messages(idGroupe):
                 {"$or": [{"id-utilisateurs": ObjectId('6075cae8fb56bf0654e5f4ab')}, {"id-utilisateurs": ObjectId(session['id'])}]})
             if idGroupe != None:
                 msgDb = db_messages.aggregate([
-                    {'$match':{'id-groupe':ObjectId(idGroupe)}},
+                    {'$match': {'id-groupe': ObjectId(idGroupe)}},
                     {'$lookup':
                         {
                             'from': 'messages',
                             'localField': 'reponse',
                             'foreignField': '_id',
                             'as': 'rep',
-                            }
-                    },{'$set': { 'rep': { '$arrayElemAt': [ "$rep", 0 ] } } },
-                    {'$project':{
-                        '_id':1,
-                        'id-groupes':1,
-                        'id-utilisateur':1,
-                        'contenu':1,
-                        'date-envoi':1,
-                        'rep':1,
+                        }
+                     }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                    {'$project': {
+                        '_id': 1,
+                        'id-groupes': 1,
+                        'id-utilisateur': 1,
+                        'contenu': 1,
+                        'date-envoi': 1,
+                        'rep': 1,
                     }},
                 ])
                 infogroupes = db_groupes.find_one(
@@ -104,10 +104,10 @@ def messages(idGroupe):
             return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']))
 
         elif request.method == 'POST':
-            if request.form['reponse']!= "None":
-                reponse=ObjectId(request.form['reponse'])
-            else :
-                reponse="None"
+            if request.form['reponse'] != "None":
+                reponse = ObjectId(request.form['reponse'])
+            else:
+                reponse = "None"
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
                                     "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": reponse})
             return 'sent'
@@ -118,7 +118,7 @@ def messages(idGroupe):
 @ app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
-        idGroupe=request.form['grp']
+        idGroupe = request.form['grp']
         db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
         return redirect(url_for('messages', idGroupe=idGroupe))
     else:
@@ -145,18 +145,36 @@ def createGroupe():
 def refreshMsg():
     if 'id' in session:
         idGroupe = request.args['idgroupe']
-        if request.args['idMsg'] != 'undefined' and idGroupe != 'undefined':
+        if request.args['idMsg'] != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
             dateLast = datetime.strptime(
-                request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%f')
+                request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
             infogroupes = db_groupes.find_one(
                 {"_id": ObjectId(idGroupe)})
             infoUtilisateurs = []
             for content in infogroupes['id-utilisateurs']:
                 infoUtilisateurs += db_utilisateurs.find(
                     {"_id": ObjectId(content)})
-            msgDb = db_messages.find(
-                {'$and': [{'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]})
-            return render_template("refreshMessages.html", msgDb=msgDb, session=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs)
+            msgDb = db_messages.aggregate([
+                {'$match': {'$and': [
+                    {'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]}},
+                {'$lookup':
+                    {
+                        'from': 'messages',
+                        'localField': 'reponse',
+                        'foreignField': '_id',
+                        'as': 'rep',
+                    }
+                 }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                {'$project': {
+                    '_id': 1,
+                    'id-groupes': 1,
+                    'id-utilisateur': 1,
+                    'contenu': 1,
+                    'date-envoi': 1,
+                    'rep': 1,
+                }},
+            ])
+            return render_template("refreshMessages.html", msgDb=msgDb, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs)
         else:
             return ''
     else:
@@ -214,7 +232,7 @@ def professeur():
         return redirect(url_for('login'))
 
 
-@app.route('/question/', methods=['POST', 'GET'])
+@ app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
@@ -292,7 +310,7 @@ def callback():
 
 
 # Fonction de test pour afficher ce que l'on récupère
-@app.route("/connexion/", methods=["GET"])
+@ app.route("/connexion/", methods=["GET"])
 def connexion():
     """Fetching a protected resource using an OAuth 2 token.
     """
