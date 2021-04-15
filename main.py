@@ -250,13 +250,28 @@ def question():
     else:
         return redirect(url_for('login'))
 
-@app.route('/recherche/')
+@app.route('/recherche')
 def recherche():
-    #searchKey = request.args['search']
-    if not 'search' in request.args or request.args['search'] == '':
-        return redirect(url_for('accueil'))
+    if 'id' in session:
+        if 'search' in request.args and not request.args['search'] == '':
+            firstResult = db_demande_aide.find(
+                {'$text': {'$search': request.args['search']}})
+
+            result = []
+            for a in firstResult:
+                result.append({
+                    'titre': a['titre'],
+                    'contenu': a['contenu'],
+                    'date-envoi': a['date-envoi'],
+                    'matière': a['matière']
+                })
+
+            return render_template('recherche.html', results = result)
+
+        else:
+            return redirect(url_for('accueil'))
     else:
-        return render_template('recherche.html')
+        return redirect(url_for('login'))
 
 
 @ app.route('/amis/')
