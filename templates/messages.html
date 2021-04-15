@@ -216,7 +216,7 @@
                 <span>répondre</span>
               </button>
               <input type="hidden"   id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
-              <form method="post" action="http://127.0.0.1:3000/suppressionMsg/" class="supprimer" id="suppressionMsg" >
+              <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg" >
                 <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
                 <button type="submit" class="button is-danger is-outlined is-small">
                   <span>Supprimer</span>
