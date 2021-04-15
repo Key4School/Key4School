@@ -28,6 +28,7 @@
       <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
       <form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
         <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
+        <input type='hidden' name="grp" value="{{idgroupe}}" />
         <button type="submit" class="button is-danger is-outlined is-small">
           <span>Supprimer</span>
           <span class="icon is-small">

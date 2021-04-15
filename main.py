@@ -95,10 +95,10 @@ def messages(idGroupe):
 
 @ app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
-    print (ObjectId(request.form['msgSuppr']))
     if 'id' in session:
+        idGroupe=request.form['grp']
         db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
-        return redirect(url_for('messages'))
+        return redirect(url_for('messages', idGroupe=idGroupe))
     else:
         return redirect(url_for('login'))
 
