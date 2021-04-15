@@ -1,43 +1,54 @@
 {% for content in msgDb%}
 <!--Pour chaque message -->
-{%if content['id-utilisateur']==session%}
-<div class="moimsg" style="border: 1px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
+{%if content['id-utilisateur']==sessionId%}
+<div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
   id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}">
   {%else%}
   <div class="participantmsg"
     id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}"
     style="  margin-left: 5%;margin-right: 55%;margin-bottom: 2%;border-radius: 20px;padding: 2%;padding-left: 3%;padding-right: 3%;background-color:#8dd7cf;">
     {%endif%}
-
-    <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
+    <div style="display: flex;align-items: center;justify-content:space-between;">
+      <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
+    </div>
     <br>
     <p style="margin:0px">
       {{content['contenu']}}
       <!-- {% set count.value = count.value + 1 %} -->
       <!--On affiche le contenu du message -->
     </p>
-    <br>{%if content['id-utilisateur']==session%}
+    <br>
+    {%if content['id-utilisateur']==sessionId%}
     <div style="display: flex;align-items: center;justify-content:space-evenly;">
-      <button value="{{count.value}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+      <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
         <span class="icon is-small">
           <i class="fas fa-reply"></i>
         </span>
         <span>répondre</span>
-      <!-- </button>
-      <input type="hidden" id="id{{count.value}}" value="{{content['_id']}}" />
-      <input type="hidden" id="contenu{{count.value}}" value="{{content['contenu']}}" />
+      </button>
+      <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
       <form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
         <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-        <button type="submit" class="button is-danger is-outlined is-small"> -->
+        <button type="submit" class="button is-danger is-outlined is-small">
           <span>Supprimer</span>
           <span class="icon is-small">
             <i class="fas fa-times"></i>
           </span>
         </button>
       </form>
-      {%endif%}
-      <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
     </div>
+    {%else%}
+    <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+      <span class="icon is-small">
+        <i class="fas fa-reply"></i>
+      </span>
+      <span>répondre</span>
+    </button>
+    <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+
+    {%endif%}
+    <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+
 
   </div>
   {%endfor%}

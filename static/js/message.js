@@ -35,6 +35,7 @@ function envoi(e) {
       $('#messageForm').trigger("reset");
     },
   });
+  enleverRep();
 }
 
 function supprimer(e) {
@@ -83,5 +84,6 @@ function reponseMsg(nb){
 
 function enleverRep(){
   document.getElementById('champReponse').innerHTML="";
-  document.getElementById('buttonRep').style.display = none;
+  // document.getElementById('buttonRep').style.display = none;
+  document.getElementById('reponse').value ="None";
 }
