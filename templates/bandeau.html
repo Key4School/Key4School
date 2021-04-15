@@ -30,8 +30,8 @@
         </div>
       </div>
     </div>
-    <form action="{{url_for('recherche')}}" method="GET">
-      <input type="text" name="search" placeholder="Recherche..." style="margin-top:1%;width: 30%;">
+    <form action="{{url_for('recherche')}}" method="GET" style="margin-top:1%;width: 30%;">
+      <input type="text" name="search" placeholder="Recherche..." >
       <button type="submit" style="background-color:{{session['couleur']}}; border: 1px solid {{session['couleur']}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i class="fas fa-search"></i></button>
     </form>
 
