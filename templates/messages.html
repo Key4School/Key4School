@@ -162,6 +162,44 @@
             {%endif%}
             <div style="display: flex;align-items: center;justify-content:space-between;">
               <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
+              <div class="navbar-item has-dropdown is-hoverable">
+                <div class="navbar-link">
+                </div>
+                <div class="navbar-dropdown">
+                  {%if content['id-utilisateur']==sessionId%}
+                  <div class="navbar-item">
+                    <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+                      <span class="icon is-small">
+                        <i class="fas fa-reply"></i>
+                      </span>
+                      <span>répondre</span>
+                    </button>
+                    <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+                  </div>
+                  <div class="navbar-item">
+                    <form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
+                      <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
+                      <button type="submit" class="button is-danger is-outlined is-small">
+                        <span>Supprimer</span>
+                        <span class="icon is-small">
+                          <i class="fas fa-times"></i>
+                        </span>
+                      </button>
+                    </form>
+                  </div>
+                  {%else%}
+                  <div class="navbar-item">
+                    <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+                      <span class="icon is-small">
+                        <i class="fas fa-reply"></i>
+                      </span>
+                      <span>répondre</span>
+                    </button>
+                    <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+                  </div>
+                  {%endif%}
+                </div>
+              </div>
             </div>
             <br>
             <p style="margin:0px">
