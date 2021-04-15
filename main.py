@@ -232,6 +232,14 @@ def question():
     else:
         return redirect(url_for('login'))
 
+@app.route('/recherche/')
+def recherche():
+    #searchKey = request.args['search']
+    if not 'search' in request.args or request.args['search'] == '':
+        return redirect(url_for('accueil'))
+    else:
+        return render_template('recherche.html')
+
 
 @ app.route('/amis/')
 def amis():
