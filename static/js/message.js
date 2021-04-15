@@ -38,18 +38,18 @@ function envoi(e) {
   enleverRep();
 }
 
-function supprimer(e) {
-  e.preventDefault();
-  var donnees = $('#suppressionMsg').serialize();
-  $.ajax({
-    url: '/suppressionMsg/',
-    type: "POST",
-    data: donnees,
-    success: function(response) {
-      $('#suppressionMsg').trigger("reset");
-    },
-  });
-}
+// function supprimer(e) { ne sert plus pour le moment
+//   e.preventDefault();
+//   var donnees = $('#suppressionMsg').serialize();
+//   $.ajax({
+//     url: '/suppressionMsg/',
+//     type: "POST",
+//     data: donnees,
+//     success: function(response) {
+//       $('#suppressionMsg').trigger("reset");
+//     },
+//   });
+// }
 
 $('[name="contenuMessage"]').focus();
 const messages = document.querySelector('.messages');

@@ -150,7 +150,6 @@
       </div>
       <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
       <div style="box-sizing: border-box;overflow-y: auto;height:80%;border: 1px solid {{session['couleur']}};padding:2%;">
-        <!-- {% set count = namespace(value=0) %} -->
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
@@ -167,7 +166,6 @@
             <br>
             <p style="margin:0px">
               {{content['contenu']}}
-              <!-- {% set count.value = count.value + 1 %} -->
               <!--On affiche le contenu du message -->
             </p>
             <br>
@@ -179,8 +177,8 @@
                 </span>
                 <span>répondre</span>
               </button>
-              <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
-              <form method="post" class="supprimer" id="suppressionMsg" onsubmit="supprimer(event); return false;">
+              <input type="hidden"   id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+              <form method="post" action="http://127.0.0.1:3000/suppressionMsg/" class="supprimer" id="suppressionMsg" >
                 <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
                 <button type="submit" class="button is-danger is-outlined is-small">
                   <span>Supprimer</span>
