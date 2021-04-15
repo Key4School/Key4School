@@ -86,8 +86,12 @@ def messages(idGroupe):
             return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']))
 
         elif request.method == 'POST':
+            if request.form['reponse']!= "None":
+                reponse=ObjectId(request.form['reponse'])
+            else :
+                reponse="None"
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": request.form['reponse']})
+                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": reponse})
             return 'sent'
     else:
         return redirect(url_for('login'))
