@@ -202,11 +202,11 @@ def profil():
 
 @ app.route("/updateprofile/", methods=["POST"])
 def updateprofile():
-    if 'id' in session:
-        if request.form['snap']=="":
-            snap= "non-renseigné"
+    if 'id' in session: #on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
+        if request.form['snap']=="":  # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
+            snap= "non-renseigné"    #si c vide je mets non-renseigné
         else:
-            snap = request.form['snap']
+            snap = request.form['snap'] #sinon je mets ce qu'il ya dans le form
         if request.form['insta']=="":
             insta= "non-renseigné"
         else:
@@ -232,6 +232,7 @@ def updateprofile():
         else:
             langues = request.form['langues']
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set":{'pseudo': pseudo,'email': email, 'insta': insta,'snap': snap,'telephone': telephone,'interets': interet,'langues':langues,}})
+        #requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
