@@ -195,7 +195,20 @@ def changeTheme():
 @ app.route('/profil/')
 def profil():
     if 'id' in session:
-        return render_template("profil.html")
+        profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+        return render_template("profil.html", profilUtilisateur=profilUtilisateur)
+    else:
+        return redirect(url_for('login'))
+
+@ app.route("/updateprofile/", methods=["POST"])
+def updateprofile():
+    if 'id' in session:
+        if request.form['snap']=="":
+            snap= "non-renseigné"
+        else:
+            snap = request.form['snap']
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set":{'pseudo': request.form['pseudo'],'email': str(request.form['email']), 'insta': request.form['insta'],'snap': snap,'telephone': request.form['telephone'],'interets': request.form['interet'],'langue': request.form['langues'],}})
+        return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
 
@@ -353,6 +366,7 @@ def connexion():
         session['pseudo'] = user['pseudo']
         session['couleur'] = '#3f51b5'
     return redirect(url_for('accueil'))
+
 
 
 if __name__ == "__main__":

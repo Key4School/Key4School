@@ -67,7 +67,7 @@
               </columns>
             </td>
             <td>
-              Prenom NOM
+              {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
             </td>
           </tr>
             <tr>
@@ -81,7 +81,8 @@
               </td>
               <td>
                 <div id="contentPseudo">
-                  <p onClick="inputpseudo()" id="pseudo">Pseudo</p>
+                  <input type="hidden" value="{{profilUtilisateur['pseudo']}}" name="pseudo"/>
+                  <p onClick="inputpseudo()" id="pseudo">{{profilUtilisateur['pseudo']}}</p>
                 </div>
               </td>
             </tr>
@@ -122,7 +123,8 @@
               </td>
               <td>
                 <div id="contentLv">
-                  <p onClick="inputlv()" id="lv">Exemple, exemple</p>
+                  <input type="hidden" value="{{profilUtilisateur['langues']}}" name="langues"/>
+                  <p onClick="inputlv()" id="lv">{{profilUtilisateur['langues']}}</p>
                 </div>
               </td>
             </tr>
@@ -181,7 +183,8 @@
               </td>
               <td>
                 <div id="contentEmail">
-                  <p id="email" onClick="inputemail()">exemple@gmail.com</p>
+                  <input type="hidden" name="email" type="email" value="{{profilUtilisateur['email']}}" />
+                  <p id="email" onClick="inputemail()">{{profilUtilisateur['email']}}</p>
                 </div>
               </td>
             </tr>
@@ -196,7 +199,8 @@
               </td>
               <td>
                 <div id="contentInstagram">
-                  <p id="instagram" onClick="inputinstagram()">Exemple</p>
+                  <input type="hidden" name="insta" value="{{profilUtilisateur['insta']}}" />
+                  <p id="instagram" onClick="inputinstagram()">{{profilUtilisateur['insta']}}</p>
                 </div>
               </td>
             </tr>
@@ -211,7 +215,8 @@
               </td>
               <td>
                 <div id="contentSnapchat">
-                  <p id="snapchat" onClick="inputsnapchat()">Exemple</p>
+                  <input type="hidden" name="snap" value="{{profilUtilisateur['snap']}}" />
+                  <p id="snapchat" onClick="inputsnapchat()">{{profilUtilisateur['snap']}}</p>
                 </div>
               </td>
             </tr>
@@ -226,7 +231,8 @@
               </td>
               <td>
                 <div id="contentPhone">
-                  <p id="phone" onClick="inputphone()">XX XX XX XX XX</p>
+                  <input type="hidden" name="telephone" value="{{profilUtilisateur['telephone']}}" />
+                  <p id="phone" onClick="inputphone()">{{profilUtilisateur['telephone']}}</p>
                 </div>
               </td>
             </tr>
@@ -241,7 +247,8 @@
               </td>
               <td>
                 <div id="contentInteret">
-                  <p id="interet" onClick="inputinteret()">Exemple</p>
+                  <input type="hidden" name="interet" value="{{profilUtilisateur['interets']}}" />
+                  <p id="interet" onClick="inputinteret()">{{profilUtilisateur['interets']}}</p>
                 </div>
               </td>
             </tr>
