@@ -195,44 +195,49 @@ def changeTheme():
 @ app.route('/profil/')
 def profil():
     if 'id' in session:
-        profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+        profilUtilisateur = db_utilisateurs.find_one(
+            {'_id': ObjectId(session['id'])})
         return render_template("profil.html", profilUtilisateur=profilUtilisateur)
     else:
         return redirect(url_for('login'))
 
+
 @ app.route("/updateprofile/", methods=["POST"])
 def updateprofile():
-    if 'id' in session: #on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
-        if request.form['snap']=="":  # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
-            snap= "non-renseigné"    #si c vide je mets non-renseigné
+    if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
+        # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
+        if request.form['snap'] == "":
+            snap = "non-renseigné"  # si c vide je mets non-renseigné
         else:
-            snap = request.form['snap'] #sinon je mets ce qu'il ya dans le form
-        if request.form['insta']=="":
-            insta= "non-renseigné"
+            # sinon je mets ce qu'il ya dans le form
+            snap = request.form['snap']
+        if request.form['insta'] == "":
+            insta = "non-renseigné"
         else:
             insta = request.form['insta']
-        if request.form['pseudo']=="":
-            pseudo= "non-renseigné"
+        if request.form['pseudo'] == "":
+            pseudo = "non-renseigné"
         else:
             pseudo = request.form['pseudo']
-        if request.form['email']=="":
-            email= "non-renseigné"
+        if request.form['email'] == "":
+            email = "non-renseigné"
         else:
             email = request.form['email']
-        if request.form['telephone']=="":
-            telephone= "non-renseigné"
+        if request.form['telephone'] == "":
+            telephone = "non-renseigné"
         else:
             telephone = request.form['telephone']
-        if request.form['interet']=="":
-            interet= "non-renseigné"
+        if request.form['interet'] == "":
+            interet = "non-renseigné"
         else:
             interet = request.form['interet']
-        if request.form['langues']=="":
-            langues= "non-renseigné"
+        if request.form['langues'] == "":
+            langues = "non-renseigné"
         else:
             langues = request.form['langues']
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set":{'pseudo': pseudo,'email': email, 'insta': insta,'snap': snap,'telephone': telephone,'interets': interet,'langues':langues,}})
-        #requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set": {
+                                   'pseudo': pseudo, 'email': email, 'insta': insta, 'snap': snap, 'telephone': telephone, 'interets': interet, 'langues': langues, }})
+        # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
@@ -288,6 +293,7 @@ def question():
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/recherche')
 def recherche():
     if 'id' in session:
@@ -304,7 +310,7 @@ def recherche():
                     'matière': a['matière']
                 })
 
-            return render_template('recherche.html', results = result)
+            return render_template('recherche.html', results=result)
 
         else:
             return redirect(url_for('accueil'))
@@ -383,6 +389,7 @@ def connexion():
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
+        return redirect(url_for('accueil'))
     else:
         db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
                                     "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName'], 'couleur': '#3f51b5'})
@@ -390,8 +397,7 @@ def connexion():
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
         session['couleur'] = '#3f51b5'
-    return redirect(url_for('accueil'))
-
+        return redirect(url_for('profil'))
 
 
 if __name__ == "__main__":
