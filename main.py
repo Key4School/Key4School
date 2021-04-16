@@ -207,7 +207,31 @@ def updateprofile():
             snap= "non-renseigné"
         else:
             snap = request.form['snap']
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set":{'pseudo': request.form['pseudo'],'email': str(request.form['email']), 'insta': request.form['insta'],'snap': snap,'telephone': request.form['telephone'],'interets': request.form['interet'],'langue': request.form['langues'],}})
+        if request.form['insta']=="":
+            insta= "non-renseigné"
+        else:
+            insta = request.form['insta']
+        if request.form['pseudo']=="":
+            pseudo= "non-renseigné"
+        else:
+            pseudo = request.form['pseudo']
+        if request.form['email']=="":
+            email= "non-renseigné"
+        else:
+            email = request.form['email']
+        if request.form['telephone']=="":
+            telephone= "non-renseigné"
+        else:
+            telephone = request.form['telephone']
+        if request.form['interet']=="":
+            interet= "non-renseigné"
+        else:
+            interet = request.form['interet']
+        if request.form['langues']=="":
+            langues= "non-renseigné"
+        else:
+            langues = request.form['langues']
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set":{'pseudo': pseudo,'email': email, 'insta': insta,'snap': snap,'telephone': telephone,'interets': interet,'langues':langues,}})
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
