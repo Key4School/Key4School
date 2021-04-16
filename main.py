@@ -174,7 +174,7 @@ def refreshMsg():
                     'rep': 1,
                 }},
             ])
-            return render_template("refreshMessages.html", msgDb=msgDb, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs)
+            return render_template("refreshMessages.html", msgDb=msgDb, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=idGroupe)
         else:
             return ''
     else:
