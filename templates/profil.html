@@ -84,7 +84,7 @@
                 &nbsp;&nbsp;Date de naissance
             </td>
             <td>
-              01/01/2000
+              {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
             </td>
           </tr>
           <tr>
@@ -93,7 +93,7 @@
                 &nbsp;&nbsp;Lycée/Classe
             </td>
             <td>
-              BP/1G10
+              {{profilUtilisateur['lycee']}}/{{profilUtilisateur['classe']}}
             </td>
           </tr>
             <tr>
@@ -216,7 +216,7 @@
             </td>
             <td>
               <div class="select" >
-                <select name="caractere" value="{{profilUtilisateur['caractere']}}">
+                <select name="caractere">
                   <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
                   <option value="tr"{%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
                   <option value="det"{%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
