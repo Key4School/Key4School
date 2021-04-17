@@ -9,6 +9,7 @@ $(document).ready(function() {
   $('#listeuser').css({
     height: (40 / 100 * ($(window).height())).toString() + 'px',
   });
+  searchUser();
 });
 
 function divnewgroupopen() {
@@ -41,6 +42,25 @@ function envoi(e) {
   enleverRep();
 }
 
+function searchUser() {
+  var recherche = $('#searchUser').val();
+  $.ajax({
+    url: '/searchUser_newgroup/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: {
+      'search': recherche
+    }, // et on envoie nos données
+    success: function(response) {
+      $('#listeuser').html(response);
+    },
+  });
+}
+
+$('#searchUser').keyup(function() {
+  console.log('hello');
+  searchUser();
+});
+
 // function supprimer(e) { ne sert plus pour le moment
 //   e.preventDefault();
 //   var donnees = $('#suppressionMsg').serialize();
@@ -66,7 +86,6 @@ function refresh() {
   if (dernierID === undefined) {
     dernierID = start.toISOString();
   }
-  console.log(dernierID);
   $.ajax({
     url: "/refreshMsg/",
     type: "GET",

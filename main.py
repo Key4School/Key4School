@@ -125,6 +125,28 @@ def supprimerMsg():
         return redirect(url_for('login'))
 
 
+@ app.route('/searchUser_newgroup/', methods=['POST'])
+def searchUser_newgroup():
+    if 'id' in session:
+        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': '^' + request.form['search']}},
+                                              {'nom': {'$regex': '^' +
+                                                       request.form['search']}},
+                                              {'prenom': {'$regex': '^' +
+                                                          request.form['search']}},
+                                              {'lycee': {'$regex': '^' +
+                                                         request.form['search']}},
+                                              {'email': {'$regex': '^' +
+                                                         request.form['search']}},
+                                              {'insta': {'$regex': '^' +
+                                                         request.form['search']}},
+                                              {'snap': {'$regex': '^' +
+                                                        request.form['search']}},
+                                              {'telephone': {'$regex': '^' + request.form['search']}}]}).limit(30)
+        return render_template("searchUser_newgroup.html", users=users)
+    else:
+        return redirect(url_for('login'))
+
+
 @ app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
     if 'id' in session:
@@ -285,7 +307,7 @@ def question():
         return redirect(url_for('login'))
 
 
-@app.route('/recherche')
+@ app.route('/recherche')
 def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
