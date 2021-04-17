@@ -216,18 +216,18 @@
             </td>
             <td>
               <div class="select" >
-                <select name="Je suis....">
-                  <option value=joy>Joyeux.se</option>
-                  <option value=tr>Triste</option>
-                  <option value=det>Déterminé.e</option>
-                  <option value=fat>Fatigué.e</option>
-                  <option value=dro>Drôle</option>
-                  <option value=ti>Timide</option>
-                  <option value=crea>Créatif.ve</option>
-                  <option value=ser>Sérieux.se</option>
-                  <option value=op>Optimiste</option>
-                  <option value=pe>Pessimiste</option>
-                  <option value=ro>Romantique</option>
+                <select name="caractere" value="{{profilUtilisateur['caractere']}}">
+                  <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
+                  <option value="tr"{%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
+                  <option value="det"{%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
+                  <option value="fat"{%if profilUtilisateur['caractere']=="fat"%}selected{%endif%}>Fatigué.e</option>
+                  <option value="dro"{%if profilUtilisateur['caractere']=="dro"%}selected{%endif%}>Drôle</option>
+                  <option value="ti"{%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}>Timide</option>
+                  <option value="crea"{%if profilUtilisateur['caractere']=="crea"%}selected{%endif%}>Créatif.ve</option>
+                  <option value="ser"{%if profilUtilisateur['caractere']=="ser"%}selected{%endif%}>Sérieux.se</option>
+                  <option value="op"{%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
+                  <option value="pe"{%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
+                  <option value="ro"{%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
                 </select>
               </div>
             </td>

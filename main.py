@@ -236,7 +236,7 @@ def updateprofile():
         else:
             langues = request.form['langues']
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set": {
-                                   'pseudo': pseudo, 'email': email, 'insta': insta, 'snap': snap, 'telephone': telephone, 'interets': interet, 'langues': langues, }})
+                                   'pseudo': pseudo, 'email': email, 'insta': insta, 'snap': snap, 'telephone': telephone, 'interets': interet, 'langues': langues,'caractere':request.form['caractere'] }})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
