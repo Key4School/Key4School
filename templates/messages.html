@@ -45,7 +45,7 @@
         <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
 
-      <div class="modal" id="newgrou">
+      <div class="modal" id="newgrou" style="overflow:hidden;">
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
@@ -65,13 +65,14 @@
                   </column>
                 </colums>
               </form>
-
               <br /><br />
-              {%for user in users%}
-              {%if user['_id']!=sessionId%}
-              <input type="checkbox" name="{{user['_id']}}" id="pseudo" />&nbsp;&nbsp;<label for="pseudo">{{user['pseudo']}}</label><br><br />
-              {%endif%}
-              {%endfor%}
+              <div id="listeuser" style="overflow:auto;">
+                {%for user in users%}
+                {%if user['_id']!=sessionId%}
+                <input type="checkbox" name="{{user['_id']}}" id="pseudo" />&nbsp;&nbsp;<label for="pseudo">{{user['pseudo']}}</label><br><br />
+                {%endif%}
+                {%endfor%}
+              </div>
             </section>
             <footer class="modal-card-foot">
               <button type="submit" onclick="divnewgroupclose()" class="button is-success">Créer le groupe</button>

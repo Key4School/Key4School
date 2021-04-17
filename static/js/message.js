@@ -6,6 +6,9 @@ $(document).ready(function() {
   $('#nomgroupe').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
   });
+  $('#listeuser').css({
+    height: (40 / 100 * ($(window).height())).toString() + 'px',
+  });
 });
 
 function divnewgroupopen() {
