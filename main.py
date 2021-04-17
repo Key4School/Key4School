@@ -227,7 +227,7 @@ def updateprofile():
         else:
             langues = request.form['langues']
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set": {
-                                   'pseudo': pseudo, 'email': email, 'telephone': telephone, 'interets': interet, 'langues': langues,'caractere':request.form['caractere'] }})
+                                   'pseudo': pseudo, 'email': email, 'telephone': telephone, 'interets': interet, 'langues': langues, 'caractere': request.form['caractere']}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
@@ -382,8 +382,16 @@ def connexion():
         session['couleur'] = user['couleur']
         return redirect(url_for('accueil'))
     else:
+        if data['level'] == 'PREMIERE GENERALE & TECHNO YC BT':
+            classe = '1G'
+        elif data['level'] == 'SECONDE GENERALE & TECHNO YC BT':
+            classe = '2GT'
+        elif data['level'] == 'TERMINALE GENERALE & TECHNO YC BT':
+            classe = 'TG'
+        else:
+            classe = data['level']
         db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
-                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": data['level'], "lycee": data['schoolName'], 'couleur': '#3f51b5'})
+                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'couleur': '#3f51b5'})
         user = db_utilisateurs.find_one({"idENT": data['userId']})
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
