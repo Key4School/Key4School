@@ -72,9 +72,9 @@
                   &nbsp;&nbsp;Pseudo
               </td>
               <td>
-                <div id="contentPseudo">
+                <div id="contentpseudo">
                   <input type="hidden" value="{{profilUtilisateur['pseudo']}}" name="pseudo"/>
-                  <p onClick="inputpseudo()" id="pseudo">{{profilUtilisateur['pseudo']}}</p>
+                  <p onClick='input("pseudo")' id="pseudo">{{profilUtilisateur['pseudo']}}</p>
                 </div>
               </td>
             </tr>
@@ -101,9 +101,9 @@
                 <i class="fas fa-globe" style="font-size:25px;"></i>
                     &nbsp;&nbsp;Langue(s) vivante(s)
               <td>
-                <div id="contentLv">
+                <div id="contentlv">
                   <input type="hidden" value="{{profilUtilisateur['langues']}}" name="langues"/>
-                  <p onClick="inputlv()" id="lv">{{profilUtilisateur['langues']}}</p>
+                  <p onClick="input('lv')" id="lv">{{profilUtilisateur['langues']}}</p>
                 </div>
               </td>
             </tr>
@@ -114,9 +114,9 @@
             </td>
             <td>
               <div id="contentoptions">
-                <!-- <input type="hidden" value="{{profilUtilisateur['langues']}}" name="langues"/> -->
-                <p onClick="inputoptions()" id="options">
-                  <!-- {{profilUtilisateur['langues']}} -->
+                <input type="hidden" value="{{profilUtilisateur['options']}}" name="options"/>
+                <p onClick="input('options')" id="options">
+                  {{profilUtilisateur['options']}}
                 </p>
               </div>
             </td>
@@ -128,9 +128,9 @@
             </td>
             <td>
               <div id="contentspe">
-                <!-- <input type="hidden" value="{{profilUtilisateur['langues']}}" name="langues"/> -->
-                <p onClick="inputspe()" id="spe">
-                  <!-- {{profilUtilisateur['langues']}} -->
+                <input type="hidden" value="{{profilUtilisateur['spe']}}" name="spe"/>
+                <p onClick="input('spe')" id="spe">
+                  {{profilUtilisateur['spe']}}
                 </p>
               </div>
             </td>
@@ -143,45 +143,12 @@
             <tr>
               <td>
                 <i class="fas fa-at" style="font-size:25px;"></i>
-                    &nbsp;&nbsp;Adresse mail ENT
-              </td>
-              <td>
-                exemple@monlycee.net
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="fas fa-at" style="font-size:25px;"></i>
                     &nbsp;&nbsp;Adresse mail
               </td>
               <td>
-                <div id="contentEmail">
+                <div id="contentemail">
                   <input type="hidden" name="email" type="email" value="{{profilUtilisateur['email']}}" />
-                  <p id="email" onClick="inputemail()">{{profilUtilisateur['email']}}</p>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="fab fa-instagram" style="font-size:25px;"></i>
-                    &nbsp;&nbsp;Instagram
-              </td>
-              <td>
-                <div id="contentInstagram">
-                  <input type="hidden" name="insta" value="{{profilUtilisateur['insta']}}" />
-                  <p id="instagram" onClick="inputinstagram()">{{profilUtilisateur['insta']}}</p>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <i class="fab fa-snapchat-square" style="font-size:25px;"></i>
-                    &nbsp;&nbsp;Snapchat
-              </td>
-              <td>
-                <div id="contentSnapchat">
-                  <input type="hidden" name="snap" value="{{profilUtilisateur['snap']}}" />
-                  <p id="snapchat" onClick="inputsnapchat()">{{profilUtilisateur['snap']}}</p>
+                  <p id="email" onClick="input('email')">{{profilUtilisateur['email']}}</p>
                 </div>
               </td>
             </tr>
@@ -191,9 +158,9 @@
                     &nbsp;&nbsp;Téléphone
               </td>
               <td>
-                <div id="contentPhone">
+                <div id="contentphone">
                   <input type="hidden" name="telephone" value="{{profilUtilisateur['telephone']}}" />
-                  <p id="phone" onClick="inputphone()">{{profilUtilisateur['telephone']}}</p>
+                  <p id="phone" onClick="input('phone')">{{profilUtilisateur['telephone']}}</p>
                 </div>
               </td>
             </tr>
@@ -205,7 +172,7 @@
               <td>
                 <div id="contentInteret">
                   <input type="hidden" name="interet" value="{{profilUtilisateur['interets']}}" />
-                  <p id="interet" onClick="inputinteret()">{{profilUtilisateur['interets']}}</p>
+                  <p id="interet" onClick="input('interet')">{{profilUtilisateur['interets']}}</p>
                 </div>
               </td>
             </tr>
