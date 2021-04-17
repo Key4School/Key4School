@@ -216,7 +216,15 @@
 
           {% endif %}
         </div>
-        <div id='champReponse'></div><button onclick="enleverRep()">ne plus répondre</button>
+        <div style="display: flex;align-items: center;">
+          <div id='champReponse'></div>&nbsp;&nbsp;
+          <button onclick="enleverRep()" class="button is-danger is-outlined is-small">
+            <span>Ne plus répondre</span>
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+          </button>
+        </div>
         <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
         <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button>
         <form method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;min-width: 75%;max-width: 75%;" id="messageForm" onsubmit="envoi(event); return false;">
