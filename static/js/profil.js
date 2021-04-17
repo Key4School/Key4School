@@ -41,3 +41,15 @@ function inputlv(){
     $('#contentLv').html('<input class="input" name="langues" id="Lv" type="text" value="' + lv + '"/>'); // remplace le code HTML actuel par celui-ci
   }
 }
+function inputoptions(){
+  if($('#options')!==undefined){
+    var lv= $('#options').html(); // renvoie le texte contenu à l'intérieur du paragraphe
+    $('#contentoptions').html('<input class="input" name="options" id="inputoptions" type="text" value="' + options + '"/>'); // remplace le code HTML actuel par celui-ci
+  }
+}
+function inputspe(){
+  if($('#spe')!==undefined){
+    var lv= $('#spe').html(); // renvoie le texte contenu à l'intérieur du paragraphe
+    $('#contentspe').html('<input class="input" name="spe" id="inputspe" type="text" value="' + spe + '"/>'); // remplace le code HTML actuel par celui-ci
+  }
+}
