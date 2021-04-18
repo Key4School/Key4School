@@ -2,22 +2,30 @@
 <html>
 
 <head>
+  <!-- language utf8 pour indiquer l'encodage -->
   <meta charset="utf-8">
+  <!-- pour l'adapter plus ou moins bien sur telephone -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- titre en haut dans le navigateur -->
   <title>Question</title>
+    <!-- page de style -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
   <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
+  <!-- Bandeau -->
   {% include "bandeau.html" %}
   <div class="columns" style="margin-top:5%;">
     <div class="column"></div>
     <div class="column">
       <form action="{{url_for('question')}}" method="post">
+        <!-- Titre question -->
         <label>Titre</label>
+        <!-- Zone pour mettre le titre  -->
         <input type="text" class="input" name="titre" /><br /><br />
+        <!-- Choix matière -->
         <label>Matière</label>
         <div class="control has-icons-left">
           <div class="select" >
@@ -52,8 +60,10 @@
         </div>
         <br>
         <br>
+        <!-- Texte demande -->
         <label>Ma Demande</label> : <textarea class="textarea" placeholder="Tapez-ici" type="text" name="demande"></textarea>
         <br>
+        <!-- Bouton pour envoyer la demande d'aide -->
         <input class="button" type="submit" value="Envoyer">
       </form>
       <p>
