@@ -101,9 +101,9 @@
                 <i class="fas fa-globe" style="font-size:25px;"></i>
                     &nbsp;&nbsp;Langue(s) vivante(s)
               <td>
-                <div id="contentlv">
+                <div id="contentlangues">
                   <input type="hidden" value="{{profilUtilisateur['langues']}}" name="langues"/>
-                  <p onClick="input('lv')" id="lv">{{profilUtilisateur['langues']}}</p>
+                  <p onClick="input('langues')" id="langues">{{profilUtilisateur['langues']}}{%if profilUtilisateur['langues']==""%}Non-renseigné{%endif%}</p>
                 </div>
               </td>
             </tr>
@@ -116,7 +116,7 @@
               <div id="contentoptions">
                 <input type="hidden" value="{{profilUtilisateur['options']}}" name="options"/>
                 <p onClick="input('options')" id="options">
-                  {{profilUtilisateur['options']}}
+                  {{profilUtilisateur['options']}}{%if profilUtilisateur['options']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
@@ -130,7 +130,7 @@
               <div id="contentspe">
                 <input type="hidden" value="{{profilUtilisateur['spe']}}" name="spe"/>
                 <p onClick="input('spe')" id="spe">
-                  {{profilUtilisateur['spe']}}
+                  {{profilUtilisateur['spe']}}{%if profilUtilisateur['spe']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
@@ -148,7 +148,7 @@
               <td>
                 <div id="contentemail">
                   <input type="hidden" name="email" type="email" value="{{profilUtilisateur['email']}}" />
-                  <p id="email" onClick="input('email')">{{profilUtilisateur['email']}}</p>
+                  <p id="email" onClick="input('email')">{{profilUtilisateur['email']}}{%if profilUtilisateur['email']==""%}Non-renseigné{%endif%}</p>
                 </div>
               </td>
             </tr>
@@ -158,9 +158,9 @@
                     &nbsp;&nbsp;Téléphone
               </td>
               <td>
-                <div id="contentphone">
+                <div id="contenttelephone">
                   <input type="hidden" name="telephone" value="{{profilUtilisateur['telephone']}}" />
-                  <p id="phone" onClick="input('phone')">{{profilUtilisateur['telephone']}}</p>
+                  <p id="telephone" onClick="input('telephone')">{{profilUtilisateur['telephone']}}{%if profilUtilisateur['telephone']==""%}Non-renseigné{%endif%}</p>
                 </div>
               </td>
             </tr>
@@ -170,9 +170,9 @@
                     &nbsp;&nbsp;Centres d'intérêt
               </td>
               <td>
-                <div id="contentInteret">
-                  <input type="hidden" name="interet" value="{{profilUtilisateur['interets']}}" />
-                  <p id="interet" onClick="input('interet')">{{profilUtilisateur['interets']}}</p>
+                <div id="contentinterets">
+                  <input type="hidden" name="interets" value="{{profilUtilisateur['interets']}}" />
+                  <p id="interets" onClick="input('interets')">{{profilUtilisateur['interets']}}{%if profilUtilisateur['interets']==""%}Non-renseigné{%endif%}</p>
                 </div>
               </td>
             </tr>

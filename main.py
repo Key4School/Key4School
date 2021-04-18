@@ -228,28 +228,8 @@ def profil():
 def updateprofile():
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
-        if request.form['pseudo'] == "":
-            pseudo = "non-renseigné"
-        else:
-            pseudo = request.form['pseudo']
-        if request.form['email'] == "":
-            email = "non-renseigné"
-        else:
-            email = request.form['email']
-        if request.form['telephone'] == "":
-            telephone = "non-renseigné"
-        else:
-            telephone = request.form['telephone']
-        if request.form['interet'] == "":
-            interet = "non-renseigné"
-        else:
-            interet = request.form['interet']
-        if request.form['langues'] == "":
-            langues = "non-renseigné"
-        else:
-            langues = request.form['langues']
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set": {
-                                   'pseudo': pseudo, 'email': email, 'telephone': telephone, 'interets': interet, 'langues': langues, 'caractere': request.form['caractere']}})
+                                   'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'langues': request.form['langues'], 'caractere': request.form['caractere'], 'options': request.form['options'],'spe':request.form['spe']}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
