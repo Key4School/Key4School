@@ -19,8 +19,9 @@
 </head>
 
 <body>
+  <!-- Bandeau -->
   {% include "bandeau.html" %}
-  <!-- debut de la div pour la page avec les infos -->
+  <!-- Début de la div pour la page avec les infos -->
   <div class="page"></div>
   <br />
   <br />
@@ -28,6 +29,7 @@
   <br />
   <br />
   <br />
+  <!-- Espace photo de profil -->
   <div class="columns">
     <div class="column"></div>
     <div class="column">
@@ -36,6 +38,7 @@
     </div>
     <div class="column"></div>
     <div class="columns">
+      <!-- Barre de progression -->
       <div class="column">
         <progress value="70" max="100">70 %</progress>
       </div>
@@ -52,11 +55,15 @@
   <br />
   <br />
   <div style="display: flex;align-items: center;justify-content:space-evenly;">
+   <!-- Début informations -->
     <div>
+      <!-- Informations puliques -->
       <form method="POST" action="/updateprofile/">
       <div style="font-weight: bold; font-size:large;">Informations publiques :</div>
+      <!-- Début tableau informations publiques -->
       <table class="table is-narrow">
         <tbody>
+          <!-- Nom et prénom -->
           <tr>
             <td>
               <i class="fas fa-user-alt" style="font-size:25px;"></i>
@@ -66,6 +73,7 @@
               {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
             </td>
           </tr>
+          <!-- Pseudo -->
             <tr>
               <td>
                 <i class="far fa-smile-wink" style="font-size:25px;"></i>
@@ -78,6 +86,7 @@
                 </div>
               </td>
             </tr>
+            <!-- Date de naissance -->
           <tr>
             <td>
               <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
@@ -87,6 +96,7 @@
               {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
             </td>
           </tr>
+          <!-- Lycée et classe -->
           <tr>
             <td>
               <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
@@ -96,6 +106,7 @@
               {{profilUtilisateur['lycee']}}/{{profilUtilisateur['classe']}}
             </td>
           </tr>
+          <!-- Langues -->
             <tr>
               <td>
                 <i class="fas fa-globe" style="font-size:25px;"></i>
@@ -107,6 +118,7 @@
                 </div>
               </td>
             </tr>
+            <!-- Options -->
           <tr>
             <td>
               <i class="fas fa-book" style="font-size:25px;"></i>
@@ -121,6 +133,7 @@
               </div>
             </td>
           </tr>
+          <!-- Spécialités -->
           <tr>
             <td>
               <i class="fas fa-book-open" style="font-size:25px;"></i>
@@ -137,9 +150,13 @@
           </tr>
         </tbody>
       </table>
+      <!-- Fin tableau informations publiques -->
+      <!-- Informations privées -->
       <div style="font-weight: bold; font-size:large;">Informations privées :</div>
+      <!-- Début tableau informations privées -->
       <table class="table is-narrow">
         <tbody>
+          <!-- Mail -->
             <tr>
               <td>
                 <i class="fas fa-at" style="font-size:25px;"></i>
@@ -152,6 +169,7 @@
                 </div>
               </td>
             </tr>
+            <!-- Téléphone -->
             <tr>
               <td>
                 <i class="fas fa-phone-alt" style="font-size:25px;"></i>
@@ -164,6 +182,7 @@
                 </div>
               </td>
             </tr>
+            <!-- Centres d'intérêt -->
             <tr>
               <td>
                 <i class="far fa-smile-beam" style="font-size:25px;"></i>
@@ -176,6 +195,7 @@
                 </div>
               </td>
             </tr>
+            <!-- Caractère -->
           <tr>
             <td>
               <i class="fas fa-user" style="font-size:25px;"></i>
@@ -199,6 +219,7 @@
               </div>
             </td>
           </tr>
+          <!-- Bouton pour valider les informations -->
             <tr>
               <td>
                 <br />
@@ -207,11 +228,16 @@
             </tr>
         </tbody>
       </table>
+      <!-- Fin tableau informations privées -->
     </form>
-    </div>
+   </div>
+   <!-- Fin informations -->
+   <!-- Début choix couleurs -->
     <div>
       <form action="{{url_for('changeTheme')}}" method="POST">
+        <!-- Titre choix couleurs -->
         <label for"color-select">Choisir une couleur de thème :</label><br />
+        <!-- Couleur 1 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             <input type="radio" name="couleur" value="#D50000" {%if session['couleur']=='#D50000'%}checked{%endif%}>&nbsp;&nbsp;
@@ -219,6 +245,7 @@
           </div>
         </label>
         <br />
+        <!-- Couleur 2 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             <input type="radio" name="couleur" value="#039be5" {%if session['couleur']=='#039be5'%}checked{%endif%}>&nbsp;&nbsp;
@@ -226,6 +253,7 @@
           </div>
         </label>
         <br />
+        <!-- Couleur 3 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             <input type="radio" name="couleur" value="#0b8043" {%if session['couleur']=='#0b8043'%}checked{%endif%}>&nbsp;&nbsp;
@@ -233,6 +261,7 @@
           </div>
         </label>
         <br />
+        <!-- Couleur 4 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             <input type="radio" name="couleur" value="#3f51b5" {%if session['couleur']=='#3f51b5'%}checked{%endif%}>&nbsp;&nbsp;
@@ -240,6 +269,7 @@
           </div>
         </label>
         <br />
+        <!-- Couleur 5 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             <input type="radio" name="couleur" value="#8e24aa" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
@@ -247,6 +277,7 @@
           </div>
         </label>
         <br />
+        <!-- Couleur 6 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             <input type="radio" name="couleur" value="#f5511d" {%if session['couleur']=='#f5511d'%}checked{%endif%}>&nbsp;&nbsp;
@@ -255,14 +286,14 @@
         </label>
         <br />
         <br />
+        <!-- Bouton pour valider le choix de la couleur -->
         <input class="button" type="submit" value="Valider" />
       </form>
     </div>
-
-
+    <!-- Fin choix couleurs -->
 
   </div>
- <!-- fin de la page -->
+<!-- fin de la page -->
 </body>
 
 </html>
