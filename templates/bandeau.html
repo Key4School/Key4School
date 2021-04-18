@@ -43,11 +43,12 @@
     </form>
     <!-- Profil -->
     <a href="{{url_for('profil')}}">
-      <i style="color:black;font-size:30px;margin-top:40%;margin-left:5%;" class="far fa-user-circle"></i>
+      <i style="color:black;font-size:30px;margin-top:40%;" class="fas fa-user-circle"></i>
     </a>
     <!-- Barre de progression -->
-    <progress style="margin-top:1%;height:55%;margin-left: 1%;" value="70" max="100">70 %</progress>
-    
+    <div style="width:15%; margin-top: 15px; padding:5px;">
+    <progress class="progress is-info" value="70" max="100">70%</progress>
+    </div>
     <!-- Partie droite de la barre de navigation -->
     <div class="navbar-end">
       <!-- Début notifications -->
