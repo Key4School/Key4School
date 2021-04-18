@@ -10,6 +10,9 @@ $(document).ready(function() {
     height: (40 / 100 * ($(window).height())).toString() + 'px',
   });
   searchUser();
+  $('#searchUser').keyup(function() {
+    searchUser();
+  });
 });
 
 function divnewgroupopen() {
@@ -55,11 +58,6 @@ function searchUser() {
     },
   });
 }
-
-$('#searchUser').keyup(function() {
-  console.log('hello');
-  searchUser();
-});
 
 // function supprimer(e) { ne sert plus pour le moment
 //   e.preventDefault();

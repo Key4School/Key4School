@@ -115,7 +115,7 @@ def messages(idGroupe):
         return redirect(url_for('login'))
 
 
-@ app.route('/suppressionMsg/', methods=['POST'])
+@app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
         idGroupe = request.form['grp']
@@ -125,29 +125,29 @@ def supprimerMsg():
         return redirect(url_for('login'))
 
 
-@ app.route('/searchUser_newgroup/', methods=['POST'])
+@app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
-        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': '^' + request.form['search']}},
-                                              {'nom': {'$regex': '^' +
-                                                       request.form['search']}},
-                                              {'prenom': {'$regex': '^' +
-                                                          request.form['search']}},
-                                              {'lycee': {'$regex': '^' +
-                                                         request.form['search']}},
-                                              {'email': {'$regex': '^' +
-                                                         request.form['search']}},
-                                              {'insta': {'$regex': '^' +
-                                                         request.form['search']}},
-                                              {'snap': {'$regex': '^' +
-                                                        request.form['search']}},
-                                              {'telephone': {'$regex': '^' + request.form['search']}}]}).limit(30)
+        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': '^' + request.form['search'], '$options': 'i'}},
+                                              {'nom': {
+                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                              {'prenom': {
+                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                              {'lycee': {
+                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                              {'email': {
+                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                              {'insta': {
+                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                              {'snap': {
+                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                              {'telephone': {'$regex': '^' + request.form['search'], '$options': 'i'}}]}).limit(30)
         return render_template("searchUser_newgroup.html", users=users)
     else:
         return redirect(url_for('login'))
 
 
-@ app.route('/createGroupe/', methods=['POST'])
+@app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
     if 'id' in session:
         participants = [ObjectId(session['id'])]
@@ -163,7 +163,7 @@ def createGroupe():
         return redirect(url_for('login'))
 
 
-@ app.route('/refreshMsg/')
+@app.route('/refreshMsg/')
 def refreshMsg():
     if 'id' in session:
         idGroupe = request.args['idgroupe']
@@ -203,7 +203,7 @@ def refreshMsg():
         return redirect(url_for('login'))
 
 
-@ app.route('/changeTheme/', methods=['POST'])
+@app.route('/changeTheme/', methods=['POST'])
 def changeTheme():
     if 'id' in session:
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
@@ -214,7 +214,7 @@ def changeTheme():
         return redirect(url_for('login'))
 
 
-@ app.route('/profil/')
+@app.route('/profil/')
 def profil():
     if 'id' in session:
         profilUtilisateur = db_utilisateurs.find_one(
@@ -224,7 +224,7 @@ def profil():
         return redirect(url_for('login'))
 
 
-@ app.route("/updateprofile/", methods=["POST"])
+@app.route("/updateprofile/", methods=["POST"])
 def updateprofile():
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
@@ -256,7 +256,7 @@ def updateprofile():
         return redirect(url_for('login'))
 
 
-@ app.route('/archives/')
+@app.route('/archives/')
 def archives():
     if 'id' in session:
         return render_template("archives.html")
@@ -264,7 +264,7 @@ def archives():
         return redirect(url_for('login'))
 
 
-@ app.route('/classe/')
+@app.route('/classe/')
 def classe():
     if 'id' in session:
         return render_template("classe.html")
@@ -272,7 +272,7 @@ def classe():
         return redirect(url_for('login'))
 
 
-@ app.route('/monlycee/')
+@app.route('/monlycee/')
 def monlycee():
     if 'id' in session:
         return render_template("monlycee.html")
@@ -280,7 +280,7 @@ def monlycee():
         return redirect(url_for('login'))
 
 
-@ app.route('/professeur/')
+@app.route('/professeur/')
 def professeur():
     if 'id' in session:
         return render_template("professeur.html")
@@ -288,7 +288,7 @@ def professeur():
         return redirect(url_for('login'))
 
 
-@ app.route('/question/', methods=['POST', 'GET'])
+@app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
@@ -307,7 +307,7 @@ def question():
         return redirect(url_for('login'))
 
 
-@ app.route('/recherche')
+@app.route('/recherche')
 def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
@@ -331,7 +331,7 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@ app.route('/amis/')
+@app.route('/amis/')
 def amis():
     if 'id' in session:
         return render_template("amis.html")
@@ -339,7 +339,7 @@ def amis():
         return redirect(url_for('login'))
 
 
-@ app.route('/deconnexion/')
+@app.route('/deconnexion/')
 def deconnexion():
     for s in session:
         session[s] = None
@@ -348,7 +348,7 @@ def deconnexion():
 
 # TOUT LE CODE QUI VA SUIVRE PERMET LA CONNEXION A L'ENT VIA OAUTH
 # Route qui va permettre de rediriger l'utilisateur sur le site d'authentification et de récupérer un token (pour pouvoir se connecter)
-@ app.route("/login/")
+@app.route("/login/")
 def login():
     """Step 1: User Authorization.
     Redirect the user/resource owner to the OAuth provider (ENT)
@@ -368,7 +368,7 @@ def login():
 
 # callback est la route pour le retour de l'identification
 # On utilise le token pour indiquer que c'est bien l'utilisateur qui veut se connecter depuis l'app
-@ app.route("/callback/", methods=["GET"])
+@app.route("/callback/", methods=["GET"])
 def callback():
     """ Step 3: Retrieving an access token.
     The user has been redirected back from the provider to your registered
@@ -390,7 +390,7 @@ def callback():
 
 
 # Fonction de test pour afficher ce que l'on récupère
-@ app.route("/connexion/", methods=["GET"])
+@app.route("/connexion/", methods=["GET"])
 def connexion():
     """Fetching a protected resource using an OAuth 2 token.
     """
