@@ -312,7 +312,7 @@ def question():
     if 'id' in session:
         if request.method == 'POST':            
             db_demande_aide.insert_one(
-                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "nb-de-likes": 0, "id-like":[] , "nb-de-dislikes": 0, "id-dislike": [], "réponses associées" : []})
+                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées" : [], "likes": []})
             
             return render_template('question.html', envoi="Envoi réussi")
         else:
