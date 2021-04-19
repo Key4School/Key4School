@@ -271,16 +271,11 @@ def professeur():
 @app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
-        if request.method == 'POST':
-            if 'demande' not in request.form:
-                result = db_demande_aide.find(
-                    {'$text': {'$search': request.form['research']}})
-
-                return render_template('question.html', answer=result)
-            else:
-                db_demande_aide.insert_one(
-                    {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere']})
-                return render_template('question.html', envoi="Envoi réussi")
+        if request.method == 'POST':            
+            db_demande_aide.insert_one(
+                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "nb-de-likes": 0, "id-like":[] , "nb-de-dislikes": 0, "id-dislike": [], "réponses associées" : []})
+            
+            return render_template('question.html', envoi="Envoi réussi")
         else:
             return render_template('question.html')
     else:
@@ -297,10 +292,12 @@ def recherche():
             result = []
             for a in firstResult:
                 result.append({
+                    'idMsg': a['_id'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
                     'date-envoi': a['date-envoi'],
-                    'matière': a['matière']
+                    'matière': a['matière'],
+                    'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
 
             return render_template('recherche.html', results=result)
