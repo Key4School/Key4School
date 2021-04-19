@@ -42,7 +42,38 @@ db_groupes = cluster.db.groupes
 @app.route('/')
 def accueil():
     if 'id' in session:
-        return render_template("index.html")
+        toutesDemandes = db_demande_aide.aggregate([
+            { '$sort': { 'date-envoi': -1 } },
+            { '$limit' : 5 }
+        ]) # ici on récupère les 5 dernières demandes les plus récentes
+
+        demandes = []
+        for a in toutesDemandes: # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
+            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
+            tempsStr = '' # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+            if diffTemps // (60 * 60 * 24 * 7): # semaines
+                tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
+                if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
+                    tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+            elif diffTemps // (60 * 60 * 24): # jours
+                tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
+                if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
+                    tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+            elif diffTemps // (60 * 60): # heures
+                tempsStr += '{}h '.format(diffTemps // (60 * 60))
+                if (diffTemps % (60 * 60)) // 60: # minutes
+                    tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+
+            demandes.append({ # on ajoute à la liste ce qui nous interesse 
+                'idMsg': a['_id'],
+                'titre': a['titre'],
+                'contenu': a['contenu'],
+                'temps': tempsStr,
+                'matière': a['matière'],
+                'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+            })
+
+        return render_template("index.html", demandes = demandes)
     else:
         return redirect(url_for('login'))
 
@@ -290,9 +321,9 @@ def recherche():
                 {'$text': {'$search': request.args['search']}})
 
             result = []
-            for a in firstResult:
+            for a in firstResult: # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
-                tempsStr = ''
+                tempsStr = '' # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
                 if diffTemps // (60 * 60 * 24 * 7): # semaines
                     tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
                     if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
@@ -306,13 +337,13 @@ def recherche():
                     if (diffTemps % (60 * 60)) // 60: # minutes
                         tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
 
-                result.append({
+                result.append({ # on ajoute à la liste ce qui nous interesse 
                     'idMsg': a['_id'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
                     'temps': tempsStr,
                     'matière': a['matière'],
-                    'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
+                    'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 })
 
             return render_template('recherche.html', results=result)
