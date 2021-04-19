@@ -101,14 +101,14 @@ function reponseMsg(nb) {
   var contentMsg = document.getElementById('contenu' + nb).value;
   repmsg = document.getElementById('messageForm');
   document.getElementById('champReponse').innerHTML = contentMsg;
-  // document.getElementById('buttonRep').style.display = block;
   document.getElementById('reponse').value = nb;
   idMsg = "None";
   contentMsg = "";
+  document.getElementById('buttonRep').style.display = "block";
 }
 
 function enleverRep() {
   document.getElementById('champReponse').innerHTML = "";
-  // document.getElementById('buttonRep').style.display = none;
   document.getElementById('reponse').value = "None";
+  document.getElementById('buttonRep').style.display = "none";
 }
