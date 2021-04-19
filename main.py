@@ -64,12 +64,20 @@ def accueil():
                 if (diffTemps % (60 * 60)) // 60: # minutes
                     tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
 
+            # on check si l'utilisateur a déjà liké le post
+            if session['id'] in a['likes']:
+                a_like = True
+            else:
+                a_like = False
+
             demandes.append({ # on ajoute à la liste ce qui nous interesse 
                 'idMsg': a['_id'],
                 'titre': a['titre'],
                 'contenu': a['contenu'],
                 'temps': tempsStr,
                 'matière': a['matière'],
+                'nb-likes': len(a['likes']),
+                'a_like': a_like,
                 'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
             })
 
@@ -337,12 +345,20 @@ def recherche():
                     if (diffTemps % (60 * 60)) // 60: # minutes
                         tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
 
+                # on check si l'utilisateur a déjà liké le post
+                if session['id'] in a['likes']:
+                    a_like = True
+                else:
+                    a_like = False
+
                 result.append({ # on ajoute à la liste ce qui nous interesse 
                     'idMsg': a['_id'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
                     'temps': tempsStr,
                     'matière': a['matière'],
+                    'nb-likes': len(a['likes']),
+                    'a_like': a_like,
                     'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 })
 
@@ -352,6 +368,37 @@ def recherche():
             return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
+
+
+@app.route('/likePost/<idPost>', methods=['POST'])
+def likePost(idPost):
+    if 'id' in session:
+        if 'idPost' != None:
+            # on récupère les likes de la demande d'aide
+            demande = db_demande_aide.find_one({ "_id": ObjectId(idPost) })
+            likes = demande['likes']
+            newLikes = list(likes)
+
+            # on check mtn si l'utilisateur a déjà liké la demande
+            if session['id'] in likes:
+                newLikes.remove(session['id']) # on supprime son like
+            else:
+                newLikes.append(session['id']) # on ajoute son like
+
+            # on update dans la DB
+            db_demande_aide.update(
+                { '_id': ObjectId(idPost) },
+                { '$set':
+                    { 'likes': newLikes }
+                }
+            )
+
+            return { 'newNbLikes': len(newLikes) }, 200 # on retourne enfin le nouveau nb de likes
+
+        else:
+            abort(400) # il manque l'id du message
+    else:
+        abort(401) # non autorisé 
 
 
 @app.route('/amis/')
