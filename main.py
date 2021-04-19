@@ -291,11 +291,26 @@ def recherche():
 
             result = []
             for a in firstResult:
+                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
+                tempsStr = ''
+                if diffTemps // (60 * 60 * 24 * 7): # semaines
+                    tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
+                    if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
+                        tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+                elif diffTemps // (60 * 60 * 24): # jours
+                    tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
+                    if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
+                        tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+                elif diffTemps // (60 * 60): # heures
+                    tempsStr += '{}h '.format(diffTemps // (60 * 60))
+                    if (diffTemps % (60 * 60)) // 60: # minutes
+                        tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+
                 result.append({
                     'idMsg': a['_id'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
-                    'date-envoi': a['date-envoi'],
+                    'temps': tempsStr,
                     'matière': a['matière'],
                     'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })

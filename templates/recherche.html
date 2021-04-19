@@ -29,13 +29,6 @@
   <div class="column">
     {%for r in results %}
       <!-- Début publi -->
-      <div class="question">
-        <h3>{{r['title']}}</h3>
-        <h5>{{r['matière']}}</h5>
-        <p>{{r['contenu']}}</p>
-        <pre>{{r['date-envoi']}}</pre>
-      </div>
-
       <div class="box">
         <article class="media">
           <div class="media-left">
@@ -47,25 +40,25 @@
           <!-- Contenu publication -->
           <div class="media-content">
             <div class="content">
-              <p>
+              <p style="margin-bottom: 5px;">
                 <!-- Nom utilisateur ; pseudo ; temps -->
-                <strong>{{r['user']['nom']}} {{r['user']['prenom']}}</strong> <small>@{{r['user']['pseudo']}}</small> <small>31m</small>
-                <br>
-                <!-- Titre -->
-                <h3>{{r['titre']}}</h3>
-                <!-- Texte publication -->
-                {{r['contenu']}}
+                <strong>{{r['user']['nom']}} {{r['user']['prenom']}}</strong> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
+              </p>
+              <!-- Titre -->
+              <h3 style="margin-top: 0;">{{r['titre']}}</h3>
+              <!-- Texte publication -->
+              <p>{{r['contenu']}}</p>
               </p>
             </div>
             <!-- Icons like et commentaire -->
             <nav class="level is-mobile">
               <div class="level-left">
-                <a class="level-item" aria-label="like" onClick="like({{r['idMsg']}})">
+                <a class="level-item" aria-label="like" onClick="like('{{r['idMsg']}}')">
                   <span class="icon is-small">
-                    <i id=like1 class="far fa-thumbs-up" aria-hidden="true" onClick="dislike({{r['idMsg']}})"></i>
+                    <i id=like1 class="far fa-thumbs-up" aria-hidden="true"></i>
                   </span>
                 </a>
-                <a class="level-item" aria-label="dislike">
+                <a class="level-item" aria-label="dislike" onClick="dislike('{{r['idMsg']}}')">
                   <span class="icon is-small">
                     <i id=dislike1 class="far fa-thumbs-down" aria-hidden="true"></i>
                   </span>
