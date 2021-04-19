@@ -16,9 +16,6 @@ function like(id){
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-  })
-    .then(nbLikes => {
-      console.log(nbLikes);
-    });
+  });
 }
 
