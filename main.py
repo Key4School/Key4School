@@ -70,7 +70,7 @@ def accueil():
             else:
                 a_like = False
 
-            demandes.append({ # on ajoute à la liste ce qui nous interesse 
+            demandes.append({ # on ajoute à la liste ce qui nous interesse
                 'idMsg': a['_id'],
                 'titre': a['titre'],
                 'contenu': a['contenu'],
@@ -310,10 +310,10 @@ def professeur():
 @app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
-        if request.method == 'POST':            
+        if request.method == 'POST':
             db_demande_aide.insert_one(
                 {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées" : [], "likes": []})
-            
+
             return render_template('question.html', envoi="Envoi réussi")
         else:
             return render_template('question.html')
@@ -351,7 +351,7 @@ def recherche():
                 else:
                     a_like = False
 
-                result.append({ # on ajoute à la liste ce qui nous interesse 
+                result.append({ # on ajoute à la liste ce qui nous interesse
                     'idMsg': a['_id'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
@@ -398,7 +398,7 @@ def likePost(idPost):
         else:
             abort(400) # il manque l'id du message
     else:
-        abort(401) # non autorisé 
+        abort(401) # non autorisé
 
 
 @app.route('/amis/')
