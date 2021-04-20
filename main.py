@@ -63,6 +63,8 @@ def accueil():
                 tempsStr += '{}h '.format(diffTemps // (60 * 60))
                 if (diffTemps % (60 * 60)) // 60: # minutes
                     tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+            else:
+                tempsStr = '1min'
 
             # on check si l'utilisateur a déjà liké le post
             if session['id'] in a['likes']:
@@ -344,6 +346,8 @@ def recherche():
                     tempsStr += '{}h '.format(diffTemps // (60 * 60))
                     if (diffTemps % (60 * 60)) // 60: # minutes
                         tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+                else:
+                    tempsStr = '1min'
 
                 # on check si l'utilisateur a déjà liké le post
                 if session['id'] in a['likes']:
