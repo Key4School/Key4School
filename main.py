@@ -43,25 +43,28 @@ db_groupes = cluster.db.groupes
 def accueil():
     if 'id' in session:
         toutesDemandes = db_demande_aide.aggregate([
-            { '$sort': { 'date-envoi': -1 } },
-            { '$limit' : 5 }
-        ]) # ici on récupère les 5 dernières demandes les plus récentes
+            {'$sort': {'date-envoi': -1}},
+            {'$limit': 5}
+        ])  # ici on récupère les 5 dernières demandes les plus récentes
 
         demandes = []
-        for a in toutesDemandes: # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
-            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
-            tempsStr = '' # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-            if diffTemps // (60 * 60 * 24 * 7): # semaines
+        for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
+            # on convertit en nombre de secondes la durée depuis le post
+            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+            tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+            if diffTemps // (60 * 60 * 24 * 7):  # semaines
                 tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-                if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
-                    tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-            elif diffTemps // (60 * 60 * 24): # jours
+                if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
+                    tempsStr += '{}j '.format((diffTemps %
+                                               (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+            elif diffTemps // (60 * 60 * 24):  # jours
                 tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-                if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
-                    tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
-            elif diffTemps // (60 * 60): # heures
+                if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
+                    tempsStr += '{}h '.format((diffTemps %
+                                               (60 * 60 * 24)) // (60 * 60))
+            elif diffTemps // (60 * 60):  # heures
                 tempsStr += '{}h '.format(diffTemps // (60 * 60))
-                if (diffTemps % (60 * 60)) // 60: # minutes
+                if (diffTemps % (60 * 60)) // 60:  # minutes
                     tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
             else:
                 tempsStr = '{}min'.format(diffTemps // 60)
@@ -72,7 +75,7 @@ def accueil():
             else:
                 a_like = False
 
-            demandes.append({ # on ajoute à la liste ce qui nous interesse
+            demandes.append({  # on ajoute à la liste ce qui nous interesse
                 'idMsg': a['_id'],
                 'titre': a['titre'],
                 'contenu': a['contenu'],
@@ -80,10 +83,11 @@ def accueil():
                 'matière': a['matière'],
                 'nb-likes': len(a['likes']),
                 'a_like': a_like,
-                'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
 
-        return render_template("index.html", demandes = demandes)
+        return render_template("index.html", demandes=demandes)
     else:
         return redirect(url_for('login'))
 
@@ -314,7 +318,7 @@ def question():
     if 'id' in session:
         if request.method == 'POST':
             db_demande_aide.insert_one(
-                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées" : [], "likes": []})
+                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": [], "likes": []})
 
             return render_template('question.html', envoi="Envoi réussi")
         else:
@@ -331,21 +335,27 @@ def recherche():
                 {'$text': {'$search': request.args['search']}})
 
             result = []
-            for a in firstResult: # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
-                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
-                tempsStr = '' # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-                if diffTemps // (60 * 60 * 24 * 7): # semaines
-                    tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-                    if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
-                        tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-                elif diffTemps // (60 * 60 * 24): # jours
+            for a in firstResult:  # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
+                # on convertit en nombre de secondes la durée depuis le post
+                diffTemps = int(
+                    (datetime.now() - a['date-envoi']).total_seconds())
+                tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+                if diffTemps // (60 * 60 * 24 * 7):  # semaines
+                    tempsStr += '{}sem '.format(diffTemps //
+                                                (60 * 60 * 24 * 7))
+                    if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
+                        tempsStr += '{}j '.format((diffTemps %
+                                                   (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+                elif diffTemps // (60 * 60 * 24):  # jours
                     tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-                    if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
-                        tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
-                elif diffTemps // (60 * 60): # heures
+                    if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
+                        tempsStr += '{}h '.format((diffTemps %
+                                                   (60 * 60 * 24)) // (60 * 60))
+                elif diffTemps // (60 * 60):  # heures
                     tempsStr += '{}h '.format(diffTemps // (60 * 60))
-                    if (diffTemps % (60 * 60)) // 60: # minutes
-                        tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+                    if (diffTemps % (60 * 60)) // 60:  # minutes
+                        tempsStr += '{}min '.format(diffTemps %
+                                                    (60 * 60) // 60)
                 else:
                     tempsStr = '{}min'.format(diffTemps // 60)
 
@@ -355,7 +365,7 @@ def recherche():
                 else:
                     a_like = False
 
-                result.append({ # on ajoute à la liste ce qui nous interesse
+                result.append({  # on ajoute à la liste ce qui nous interesse
                     'idMsg': a['_id'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
@@ -363,7 +373,8 @@ def recherche():
                     'matière': a['matière'],
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
-                    'user' : db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
 
             return render_template('recherche.html', results=result)
@@ -379,30 +390,31 @@ def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
             # on récupère les likes de la demande d'aide
-            demande = db_demande_aide.find_one({ "_id": ObjectId(idPost) })
+            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
             likes = demande['likes']
             newLikes = list(likes)
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
-                newLikes.remove(session['id']) # on supprime son like
+                newLikes.remove(session['id'])  # on supprime son like
             else:
-                newLikes.append(session['id']) # on ajoute son like
+                newLikes.append(session['id'])  # on ajoute son like
 
             # on update dans la DB
             db_demande_aide.update(
-                { '_id': ObjectId(idPost) },
-                { '$set':
-                    { 'likes': newLikes }
-                }
+                {'_id': ObjectId(idPost)},
+                {'$set':
+                    {'likes': newLikes}
+                 }
             )
 
-            return { 'newNbLikes': len(newLikes) }, 200 # on retourne enfin le nouveau nb de likes
+            # on retourne enfin le nouveau nb de likes
+            return {'newNbLikes': len(newLikes)}, 200
 
         else:
-            abort(400) # il manque l'id du message
+            abort(400)  # il manque l'id du message
     else:
-        abort(401) # non autorisé
+        abort(401)  # non autorisé
 
 
 @app.route('/amis/')
@@ -476,23 +488,37 @@ def connexion():
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
+        session['type'] = user['type']
         return redirect(url_for('accueil'))
     else:
-        if data['level'] == 'PREMIERE GENERALE & TECHNO YC BT':
-            classe = '1G'
-        elif data['level'] == 'SECONDE GENERALE & TECHNO YC BT':
-            classe = '2GT'
-        elif data['level'] == 'TERMINALE GENERALE & TECHNO YC BT':
-            classe = 'TG'
+        if data['type'] == "ELEVE":
+            if data['level'] == 'PREMIERE GENERALE & TECHNO YC BT':
+                classe = '1G'
+            elif data['level'] == 'SECONDE GENERALE & TECHNO YC BT':
+                classe = '2GT'
+            elif data['level'] == 'TERMINALE GENERALE & TECHNO YC BT':
+                classe = 'TG'
+            else:
+                classe = data['level']
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
+                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type']})
+            user = db_utilisateurs.find_one({"idENT": data['userId']})
+            session['id'] = str(user['_id'])
+            session['pseudo'] = user['pseudo']
+            session['couleur'] = '#3f51b5'
+            session['type'] = user['type']
+            return redirect(url_for('profil'))
+        elif data['type'] == 'ENSEIGNANT':
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
+                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type']})
+            user = db_utilisateurs.find_one({"idENT": data['userId']})
+            session['id'] = str(user['_id'])
+            session['pseudo'] = user['pseudo']
+            session['couleur'] = '#3f51b5'
+            session['type'] = user['type']
+            return redirect(url_for('profil'))
         else:
-            classe = data['level']
-        db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
-                                    "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'couleur': '#3f51b5'})
-        user = db_utilisateurs.find_one({"idENT": data['userId']})
-        session['id'] = str(user['_id'])
-        session['pseudo'] = user['pseudo']
-        session['couleur'] = '#3f51b5'
-        return redirect(url_for('profil'))
+            return redirect("https://ent.iledefrance.fr/auth/login")
 
 
 if __name__ == "__main__":
