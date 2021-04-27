@@ -184,6 +184,14 @@
                   <p id="email" onClick="input('email')">{{profilUtilisateur['email']}}{%if profilUtilisateur['email']==""%}Non-renseigné{%endif%}</p>
                 </div>
               </td>
+              <td>
+                <div class="select" >
+                  <select name="emailVisibilite">
+                    <option value="pv">privé</option>
+                    <option value="pb">public</option>
+                  </select>
+                </div>
+              </td>
             </tr>
             <!-- Téléphone -->
             <tr>
@@ -197,6 +205,14 @@
                   <p id="telephone" onClick="input('telephone')">{{profilUtilisateur['telephone']}}{%if profilUtilisateur['telephone']==""%}Non-renseigné{%endif%}</p>
                 </div>
               </td>
+              <td>
+                <div class="select" >
+                  <select name="telephoneVisibilite">
+                    <option value="pv">privé</option>
+                    <option value="pb">public</option>
+                  </select>
+                </div>
+              </td>
             </tr>
             <!-- Centres d'intérêt -->
             <tr>
@@ -208,6 +224,14 @@
                 <div id="contentinterets">
                   <input type="hidden" name="interets" value="{{profilUtilisateur['interets']}}" />
                   <p id="interets" onClick="input('interets')">{{profilUtilisateur['interets']}}{%if profilUtilisateur['interets']==""%}Non-renseigné{%endif%}</p>
+                </div>
+              </td>
+              <td>
+                <div class="select" >
+                  <select name="interetsVisibilite">
+                    <option value="pv">privé</option>
+                    <option value="pb">public</option>
+                  </select>
                 </div>
               </td>
             </tr>
@@ -231,6 +255,14 @@
                   <option value="op"{%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
                   <option value="pe"{%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
                   <option value="ro"{%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="select" >
+                <select name="caractereVisibilite">
+                  <option value="pv">privé</option>
+                  <option value="pb">public</option>
                 </select>
               </div>
             </td>
