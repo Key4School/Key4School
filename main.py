@@ -43,28 +43,26 @@ db_groupes = cluster.db.groupes
 def accueil():
     if 'id' in session:
         toutesDemandes = db_demande_aide.aggregate([
-            {'$sort': {'date-envoi': -1}},
-            {'$limit': 5}
+            { '$sort': { 'date-envoi': -1 } },
+            { '$limit': 5 }
         ])  # ici on récupère les 5 dernières demandes les plus récentes
 
         demandes = []
         for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
-            # on convertit en nombre de secondes la durée depuis le post
-            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
-            tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-            if diffTemps // (60 * 60 * 24 * 7):  # semaines
+            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
+            tempsStr = ''  
+            # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+            if diffTemps // (60 * 60 * 24 * 7): # semaines
                 tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-                if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
-                    tempsStr += '{}j '.format((diffTemps %
-                                               (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-            elif diffTemps // (60 * 60 * 24):  # jours
+                if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
+                    tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+            elif diffTemps // (60 * 60 * 24): # jours
                 tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-                if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
-                    tempsStr += '{}h '.format((diffTemps %
-                                               (60 * 60 * 24)) // (60 * 60))
-            elif diffTemps // (60 * 60):  # heures
+                if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
+                    tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+            elif diffTemps // (60 * 60): # heures
                 tempsStr += '{}h '.format(diffTemps // (60 * 60))
-                if (diffTemps % (60 * 60)) // 60:  # minutes
+                if (diffTemps % (60 * 60)) // 60: # minutes
                     tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
             else:
                 tempsStr = '{}min'.format(diffTemps // 60)
@@ -75,7 +73,7 @@ def accueil():
             else:
                 a_like = False
 
-            demandes.append({  # on ajoute à la liste ce qui nous interesse
+            demandes.append({ # on ajoute à la liste ce qui nous interesse
                 'idMsg': a['_id'],
                 'titre': a['titre'],
                 'contenu': a['contenu'],
@@ -83,11 +81,10 @@ def accueil():
                 'matière': a['matière'],
                 'nb-likes': len(a['likes']),
                 'a_like': a_like,
-                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
+                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
             })
 
-        return render_template("index.html", demandes=demandes)
+        return render_template("index.html", demandes = demandes)
     else:
         return redirect(url_for('login'))
 
@@ -336,26 +333,21 @@ def recherche():
 
             result = []
             for a in firstResult:  # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
-                # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int(
-                    (datetime.now() - a['date-envoi']).total_seconds())
-                tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-                if diffTemps // (60 * 60 * 24 * 7):  # semaines
-                    tempsStr += '{}sem '.format(diffTemps //
-                                                (60 * 60 * 24 * 7))
-                    if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
-                        tempsStr += '{}j '.format((diffTemps %
-                                                   (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
+                tempsStr = '' 
+                # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+                if diffTemps // (60 * 60 * 24 * 7): # semaines
+                    tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
+                    if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
+                        tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
                 elif diffTemps // (60 * 60 * 24):  # jours
                     tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-                    if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
-                        tempsStr += '{}h '.format((diffTemps %
-                                                   (60 * 60 * 24)) // (60 * 60))
-                elif diffTemps // (60 * 60):  # heures
+                    if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
+                        tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+                elif diffTemps // (60 * 60): # heures
                     tempsStr += '{}h '.format(diffTemps // (60 * 60))
                     if (diffTemps % (60 * 60)) // 60:  # minutes
-                        tempsStr += '{}min '.format(diffTemps %
-                                                    (60 * 60) // 60)
+                        tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
                 else:
                     tempsStr = '{}min'.format(diffTemps // 60)
 
@@ -373,11 +365,10 @@ def recherche():
                     'matière': a['matière'],
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
-                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
+                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 })
 
-            return render_template('recherche.html', results=result)
+            return render_template('recherche.html', results = result)
 
         else:
             return redirect(url_for('accueil'))
@@ -385,36 +376,36 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@app.route('/likePost/<idPost>', methods=['POST'])
+@app.route('/likePost/<idPost>', methods = ['POST'])
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
             # on récupère les likes de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
+            demande = db_demande_aide.find_one({ "_id": ObjectId(idPost) })
             likes = demande['likes']
             newLikes = list(likes)
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
-                newLikes.remove(session['id'])  # on supprime son like
+                newLikes.remove(session['id']) # on supprime son like
             else:
-                newLikes.append(session['id'])  # on ajoute son like
+                newLikes.append(session['id']) # on ajoute son like
 
             # on update dans la DB
             db_demande_aide.update(
-                {'_id': ObjectId(idPost)},
-                {'$set':
-                    {'likes': newLikes}
-                 }
+                { '_id': ObjectId(idPost) },
+                { '$set':
+                    { 'likes': newLikes }
+                }
             )
 
             # on retourne enfin le nouveau nb de likes
-            return {'newNbLikes': len(newLikes)}, 200
+            return { 'newNbLikes': len(newLikes) }, 200
 
         else:
-            abort(400)  # il manque l'id du message
+            abort(400) # il manque l'id du message
     else:
-        abort(401)  # non autorisé
+        abort(401) # non autorisé
 
 
 @app.route('/amis/')
