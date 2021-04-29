@@ -86,16 +86,6 @@
                 </div>
               </td>
             </tr>
-            <!-- Date de naissance -->
-          <tr>
-            <td>
-              <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
-                &nbsp;&nbsp;Date de naissance
-            </td>
-            <td>
-              {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
-            </td>
-          </tr>
           <!-- Lycée et classe -->
           <tr>
             <td>
@@ -148,54 +138,8 @@
               </div>
             </td>
           </tr>
-        </tbody>
-      </table>
-      <!-- Fin tableau informations publiques -->
-      <!-- Informations privées -->
-      <div style="font-weight: bold; font-size:large;">Informations privées :</div>
-      <!-- Début tableau informations privées -->
-      <table class="table is-narrow">
-        <tbody>
-          <!-- Mail -->
-            <tr>
-              <td>
-                <i class="fas fa-at" style="font-size:25px;"></i>
-                    &nbsp;&nbsp;Adresse mail
-              </td>
-              <td>
-                <div id="contentemail">
-                  <input type="hidden" name="email" type="email" value="{{profilUtilisateur['email']}}" />
-                  <p id="email" onClick="input('email')">{{profilUtilisateur['email']}}{%if profilUtilisateur['email']==""%}Non-renseigné{%endif%}</p>
-                </div>
-              </td>
-            </tr>
-            <!-- Téléphone -->
-            <tr>
-              <td>
-                <i class="fas fa-phone-alt" style="font-size:25px;"></i>
-                    &nbsp;&nbsp;Téléphone
-              </td>
-              <td>
-                <div id="contenttelephone">
-                  <input type="hidden" name="telephone" value="{{profilUtilisateur['telephone']}}" />
-                  <p id="telephone" onClick="input('telephone')">{{profilUtilisateur['telephone']}}{%if profilUtilisateur['telephone']==""%}Non-renseigné{%endif%}</p>
-                </div>
-              </td>
-            </tr>
-            <!-- Centres d'intérêt -->
-            <tr>
-              <td>
-                <i class="far fa-smile-beam" style="font-size:25px;"></i>
-                    &nbsp;&nbsp;Centres d'intérêt
-              </td>
-              <td>
-                <div id="contentinterets">
-                  <input type="hidden" name="interets" value="{{profilUtilisateur['interets']}}" />
-                  <p id="interets" onClick="input('interets')">{{profilUtilisateur['interets']}}{%if profilUtilisateur['interets']==""%}Non-renseigné{%endif%}</p>
-                </div>
-              </td>
-            </tr>
-            <!-- Caractère -->
+          {%for element in profilUtilisateur['elementPublic']%}
+          {%if element=="caractere"%}
           <tr>
             <td>
               <i class="fas fa-user" style="font-size:25px;"></i>
@@ -218,7 +162,138 @@
                 </select>
               </div>
             </td>
+            <td>
+              <div class="select" >
+                <select name="caractereVisibilite">
+                  <option value="pv">privé</option>
+                  <option value="pb"selected>public</option>
+                </select>
+              </div>
+            </td>
           </tr>
+          {%elif element=="birth_date"%}
+          <tr>
+            <td>
+              <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Date de naissance
+            </td>
+            <td>
+              {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
+            </td>
+            <td>
+              <div class="select" >
+                <select name="birth_dateVisibilite">
+                  <option value="pv">privé</option>
+                  <option value="pb"selected>public</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          {%else%}
+          <tr>
+            <td>
+              <i {%if element=="email"%}class="fas fa-at"{%endif%}{%if element=="telephone"%}class="fas fa-phone-alt"{%endif%}{%if element=="interets"%}class="far fa-smile-beam"{%endif%} style="font-size:25px;"></i>
+                  &nbsp;&nbsp;{%if element=="email"%}adresse mail{%endif%}{%if element=="telephone"%}Téléphone{%endif%}{%if element=="interets"%}Centres d'intérêts{%endif%}
+            </td>
+            <td>
+              <div id="content{{element}}">
+                <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
+                <p id="{{element}}" onClick="input('{{element}}')">{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
+              </div>
+            </td>
+            <td>
+              <div class="select" >
+                <select name="{{element}}Visibilite">
+                  <option value="pv">privé</option>
+                  <option value="pb" selected>public</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          {%endif%}
+          {%endfor%}
+        </tbody>
+      </table>
+      <!-- Fin tableau informations publiques -->
+      <!-- Informations privées -->
+      <div style="font-weight: bold; font-size:large;">Informations privées :</div>
+      <!-- Début tableau informations privées -->
+      <table class="table is-narrow">
+        <tbody>
+        {%for element in profilUtilisateur['elementPrive']%}
+        {%if element=="caractere"%}
+        <tr>
+          <td>
+            <i class="fas fa-user" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Caractère
+          </td>
+          <td>
+            <div class="select" >
+              <select name="caractere">
+                <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
+                <option value="tr"{%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
+                <option value="det"{%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
+                <option value="fat"{%if profilUtilisateur['caractere']=="fat"%}selected{%endif%}>Fatigué.e</option>
+                <option value="dro"{%if profilUtilisateur['caractere']=="dro"%}selected{%endif%}>Drôle</option>
+                <option value="ti"{%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}>Timide</option>
+                <option value="crea"{%if profilUtilisateur['caractere']=="crea"%}selected{%endif%}>Créatif.ve</option>
+                <option value="ser"{%if profilUtilisateur['caractere']=="ser"%}selected{%endif%}>Sérieux.se</option>
+                <option value="op"{%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
+                <option value="pe"{%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
+                <option value="ro"{%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
+              </select>
+            </div>
+          </td>
+          <td>
+            <div class="select" >
+              <select name="caractereVisibilite">
+                <option value="pv"selected>privé</option>
+                <option value="pb">public</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        {%elif element=="birth_date"%}
+        <tr>
+          <td>
+            <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Date de naissance
+          </td>
+          <td>
+            {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
+          </td>
+          <td>
+            <div class="select" >
+              <select name="birth_dateVisibilite">
+                <option value="pv"selected>privé</option>
+                <option value="pb">public</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        {%else%}
+        <tr>
+          <td>
+            <i {%if element=="email"%}class="fas fa-at"{%endif%}{%if element=="telephone"%}class="fas fa-phone-alt"{%endif%}{%if element=="interets"%}class="far fa-smile-beam"{%endif%} style="font-size:25px;"></i>
+                &nbsp;&nbsp;{%if element=="email"%}adresse mail{%endif%}{%if element=="birth_date"%}date de naissance{%endif%}{%if element=="telephone"%}Téléphone{%endif%}{%if element=="interets"%}Centres d'intérêts{%endif%}
+          </td>
+          <td>
+            <div id="content{{element}}">
+              <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
+              <p id="{{element}}" onClick="input('{{element}}')">{%if element=="birth_date"%}{{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}{%else%}{{profilUtilisateur[element]}}{%endif%}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
+            </div>
+          </td>
+          <td>
+            <div class="select" >
+              <select name="{{element}}Visibilite">
+                <option value="pv"selected>privé</option>
+                <option value="pb">public</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        {%endif%}
+        {%endfor%}
           <!-- Bouton pour valider les informations -->
             <tr>
               <td>

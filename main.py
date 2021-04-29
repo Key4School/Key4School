@@ -270,8 +270,20 @@ def profil():
 def updateprofile():
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
+        elementPrive=[]
+        elementPublic=[]
+        for content in request.form :
+            if request.form[content] == "pv":
+                elementPrive.append(content.replace('Visibilite', ''))
+            elif request.form[content] == "pb":
+                elementPublic.append(content.replace('Visibilite', ''))
+
+        # if request.form['pseudoVisibilite'] == "pv":
+        #     elementPrive.append("pseudo")
+        # elif request.form['pseudoVisibilite'] == "pb":
+        #     elementPublic.append("pseudo")
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set": {
-                                   'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'langues': request.form['langues'], 'caractere': request.form['caractere'], 'options': request.form['options'], 'spe': request.form['spe']}})
+                                   'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'langues': request.form['langues'], 'caractere': request.form['caractere'], 'options': request.form['options'], 'spe': request.form['spe'], 'elementPrive':elementPrive,'elementPublic':elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
