@@ -293,34 +293,10 @@ def updateprofile():
         return redirect(url_for('login'))
 
 
-@app.route('/archives/')
-def archives():
+@app.route('/comments/')
+def comments():
     if 'id' in session:
-        return render_template("archives.html")
-    else:
-        return redirect(url_for('login'))
-
-
-@app.route('/classe/')
-def classe():
-    if 'id' in session:
-        return render_template("classe.html")
-    else:
-        return redirect(url_for('login'))
-
-
-@app.route('/monlycee/')
-def monlycee():
-    if 'id' in session:
-        return render_template("monlycee.html")
-    else:
-        return redirect(url_for('login'))
-
-
-@app.route('/professeur/')
-def professeur():
-    if 'id' in session:
-        return render_template("professeur.html")
+        return render_template("comments.html")
     else:
         return redirect(url_for('login'))
 
