@@ -16,13 +16,17 @@
   <!-- importation du JS pour afficher et enlever les div -->
   <script src="{{url_for('static',filename='js/profil.js')}}" type="text/javascript"></script>
   <script src="{{url_for('static',filename='js/publication.js')}}" type="text/javascript"></script>
-
+  <style>
+    .logoBouton:hover {
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
   {% include "bandeau.html" %}
-  
-  
+
+
 
  <!-- debut de la div pour tt les publications -->
  <div class="columns" style="margin-top:5%;">
@@ -57,9 +61,9 @@
                 <a class="level-item" aria-label="like" onClick="like('{{r['idMsg']}}')">
                   <span class="icon is-small">
                     {% if r['a_like'] %}
-                      <i id="like_{{r['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i> 
+                      <i id="like_{{r['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
                     {% else %}
-                      <i id="like_{{r['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i> 
+                      <i id="like_{{r['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
                     {% endif %}
                   </span>
                 </a>
