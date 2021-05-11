@@ -12,10 +12,27 @@ function like(id){
 
   fetch(`likePost/${id}`, {
     method: 'post',
-    headers: { 
+    headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
   });
 }
+function sign(id){
+  selectionlike = document.getElementById("sign_"+id).className
+  if (selectionlike == "far fa-thumbs-up") {
+    document.getElementById("sign_"+id).className = "fas fa-thumbs-up";
 
+  }
+  if (selectionlike == "fas fa-thumbs-up"){
+    document.getElementById("sign_"+id).className = "far fa-thumbs-up";
+  }
+
+  fetch(`signPost/${id}`, {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  });
+}

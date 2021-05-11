@@ -75,6 +75,11 @@ def accueil():
             else:
                 a_like = False
 
+            if session['id'] in a['sign']:
+                a_sign = True
+            else:
+                a_sign = False
+
             demandes.append({  # on ajoute à la liste ce qui nous interesse
                 'idMsg': a['_id'],
                 'titre': a['titre'],
@@ -83,6 +88,7 @@ def accueil():
                 'matière': a['matière'],
                 'nb-likes': len(a['likes']),
                 'a_like': a_like,
+                'a_sign': a_sign,
                 # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
@@ -446,6 +452,7 @@ def likePost(idPost):
 def signPost(idPost):
     if 'id' in session:
         if 'idPost' != None:
+            print ("yes")
             # on récupère les signalements de la demande d'aide
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
             sign = demande['sign']
@@ -458,7 +465,7 @@ def signPost(idPost):
                 newSign.append(session['id'])  # on ajoute son like
 
             # on update dans la DB
-            db_demande_aide.update(
+            db_demande_aide.update_one(
                 {'_id': ObjectId(idPost)},
                 {'$set':
                     {'sign': newSign}
