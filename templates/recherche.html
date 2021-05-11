@@ -36,7 +36,7 @@
       <a href="{{url_for('recherche_user', search=search)}}">Voir plus de profils</a>
     {%endif%}
     {%for user in users%}
-      <img src="{{url_for('static',filename='image/sans_profil.png')}}"/>
+      <img src="{{url_for('static',filename='image/sans_profil.png')}}" style="width:80px; height:auto;"/>
       {{user['pseudo']}}
     {%endfor%}
 
