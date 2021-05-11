@@ -404,6 +404,37 @@ def likePost(idPost):
     else:
         abort(401)  # non autorisé
 
+@app.route('/signPost/<idPost>', methods=['POST'])
+def signPost(idPost):
+    if 'id' in session:
+        if 'idPost' != None:
+            # on récupère les signalements de la demande d'aide
+            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
+            sign = demande['sign']
+            newSign = list(sign)
+
+            # on check mtn si l'utilisateur a déjà liké la demande
+            if session['id'] in sign:
+                newSign.remove(session['id'])  # on supprime son like
+            else:
+                newSign.append(session['id'])  # on ajoute son like
+
+            # on update dans la DB
+            db_demande_aide.update(
+                {'_id': ObjectId(idPost)},
+                {'$set':
+                    {'sign': newSign}
+                 }
+            )
+
+            # on retourne enfin le nouveau nb de likes
+            return {'newNbsign': len(newSign)}, 200
+
+        else:
+            abort(400)  # il manque l'id du message
+    else:
+        abort(401)  # non autorisé
+
 
 @app.route('/amis/')
 def amis():
