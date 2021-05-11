@@ -32,7 +32,9 @@
  <div class="columns" style="margin-top:5%;">
   <div class="column"></div>
   <div class="column">
-    <a href="{{url_for('recherche_user', search=search)}}">Voir plus de profils</a>
+    {%if user!=None%}
+      <a href="{{url_for('recherche_user', search=search)}}">Voir plus de profils</a>
+    {%endif%}
     {%for user in users%}
       <img src="{{url_for('static',filename='image/sans_profil.png')}}"/>
       {{user['pseudo']}}
