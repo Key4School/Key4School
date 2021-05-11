@@ -173,20 +173,20 @@ def supprimerMsg():
 @app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
-        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': '^' + request.form['search'], '$options': 'i'}},
+        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': request.form['search'], '$options': 'i'}},
                                               {'nom': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                                  '$regex': request.form['search'], '$options': 'i'}},
                                               {'prenom': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                                  '$regex': request.form['search'], '$options': 'i'}},
                                               {'lycee': {
                                                   '$regex': request.form['search'], '$options': 'i'}},
                                               {'email': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                                  '$regex': request.form['search'], '$options': 'i'}},
                                               {'insta': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                                  '$regex': request.form['search'], '$options': 'i'}},
                                               {'snap': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
-                                              {'telephone': {'$regex': '^' + request.form['search'], '$options': 'i'}}]}).limit(30)
+                                                  '$regex': request.form['search'], '$options': 'i'}},
+                                              {'telephone': {'$regex': request.form['search'], '$options': 'i'}}]}).limit(30)
         return render_template("searchUser_newgroup.html", users=users)
     else:
         return redirect(url_for('login'))
@@ -273,9 +273,9 @@ def profil():
 def updateprofile():
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
-        elementPrive=[]
-        elementPublic=[]
-        for content in request.form :
+        elementPrive = []
+        elementPublic = []
+        for content in request.form:
             if request.form[content] == "pv":
                 elementPrive.append(content.replace('Visibilite', ''))
             elif request.form[content] == "pb":
@@ -286,7 +286,7 @@ def updateprofile():
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set": {
-                                   'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'langues': request.form['langues'], 'caractere': request.form['caractere'], 'options': request.form['options'], 'spe': request.form['spe'], 'elementPrive':elementPrive,'elementPublic':elementPublic}})
+                                   'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'langues': request.form['langues'], 'caractere': request.form['caractere'], 'options': request.form['options'], 'spe': request.form['spe'], 'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
@@ -365,10 +365,47 @@ def recherche():
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
 
-            return render_template('recherche.html', results=result)
+            users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': request.args['search'], '$options': 'i'}},
+                                                  {'nom': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'prenom': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'lycee': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'email': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'insta': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'snap': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'telephone': {'$regex': request.args['search'], '$options': 'i'}}]}).limit(3)
+
+            return render_template('recherche.html', results=result, users=users, search=request.args['search'])
 
         else:
             return redirect(url_for('accueil'))
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/rechercheUser')
+def recherche_user(search):
+    if 'id' in session:
+        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
+                                              {'nom': {
+                                                  '$regex': search, '$options': 'i'}},
+                                              {'prenom': {
+                                                  '$regex': search, '$options': 'i'}},
+                                              {'lycee': {
+                                                  '$regex': search, '$options': 'i'}},
+                                              {'email': {
+                                                  '$regex': search, '$options': 'i'}},
+                                              {'insta': {
+                                                  '$regex': search, '$options': 'i'}},
+                                              {'snap': {
+                                                  '$regex': search, '$options': 'i'}},
+                                              {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
+        return render_template('rechercheUser.html', users=users)
     else:
         return redirect(url_for('login'))
 
