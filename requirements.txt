@@ -3,3 +3,4 @@ Flask-PyMongo
 Flask-Session
 requests-oauthlib
 bson
+dnspython
