@@ -452,7 +452,7 @@ def likePost(idPost):
 def signPost(idPost):
     if 'id' in session:
         if 'idPost' != None:
-            print ("yes")
+            print("yes")
             # on récupère les signalements de la demande d'aide
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
             sign = demande['sign']
@@ -590,6 +590,9 @@ if __name__ == "__main__":
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
 
     app.secret_key = os.urandom(24)
-    # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-    app.run(host="127.0.0.1", port=3000, debug=True)
-    # app.run(debug=True)
+    if 'HEROKU' in os.environ:
+        # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
+        app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
+    else:
+        # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
+        app.run(host="127.0.0.1", port=3000, debug=True)
