@@ -389,22 +389,22 @@ def recherche():
 
 
 @app.route('/rechercheUser')
-def recherche_user(search):
+def recherche_user():
     if 'id' in session:
-        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
+        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': request.args['search'], '$options': 'i'}},
                                               {'nom': {
-                                                  '$regex': search, '$options': 'i'}},
+                                                  '$regex': request.args['search'], '$options': 'i'}},
                                               {'prenom': {
-                                                  '$regex': search, '$options': 'i'}},
+                                                  '$regex': request.args['search'], '$options': 'i'}},
                                               {'lycee': {
-                                                  '$regex': search, '$options': 'i'}},
+                                                  '$regex': request.args['search'], '$options': 'i'}},
                                               {'email': {
-                                                  '$regex': search, '$options': 'i'}},
+                                                  '$regex': request.args['search'], '$options': 'i'}},
                                               {'insta': {
-                                                  '$regex': search, '$options': 'i'}},
+                                                  '$regex': request.args['search'], '$options': 'i'}},
                                               {'snap': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
+                                                  '$regex': request.args['search'], '$options': 'i'}},
+                                              {'telephone': {'$regex': request.args['search'], '$options': 'i'}}]}).limit(30)
         return render_template('rechercheUser.html', users=users)
     else:
         return redirect(url_for('login'))
