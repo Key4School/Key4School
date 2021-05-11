@@ -458,11 +458,11 @@ def signPost(idPost):
             sign = demande['sign']
             newSign = list(sign)
 
-            # on check mtn si l'utilisateur a déjà liké la demande
+            # on check mtn si l'utilisateur a déjà signalé la demande
             if session['id'] in sign:
-                newSign.remove(session['id'])  # on supprime son like
+                newSign.remove(session['id'])  # on supprime son signalement
             else:
-                newSign.append(session['id'])  # on ajoute son like
+                newSign.append(session['id'])  # on ajoute son signalement
 
             # on update dans la DB
             db_demande_aide.update_one(
@@ -472,7 +472,7 @@ def signPost(idPost):
                  }
             )
 
-            # on retourne enfin le nouveau nb de likes
+            # on retourne enfin le nouveau nb de signalement
             return {'newNbsign': len(newSign)}, 200
 
         else:
