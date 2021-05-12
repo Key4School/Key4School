@@ -1,3 +1,4 @@
+var id;
 function like(id){
   selectionlike = document.getElementById("like_"+id).className
   if (selectionlike == "far fa-thumbs-up") {
@@ -20,16 +21,16 @@ function like(id){
 }
 
 
-function sign(id){
+function sign(rep){
+  id=rep;
   selectionlike = document.getElementById("sign_"+id).className
   if (selectionlike == "far fa-flag") {
     document.getElementById("idSignalé").value = id;
     signalisationOpen();
-    document.getElementById("sign_"+id).className = "fas fa-flag";
+
 
   }
   if (selectionlike == "fas fa-flag"){
-    document.getElementById("sign_"+id).className = "far fa-flag";
     document.getElementById("idDesignalé").value = id;
     designalisationOpen();
   }
@@ -61,6 +62,7 @@ function signaler(e) {
     success: function(response) {
       $('#signalement').trigger("reset");
       signalisationClose();
+      document.getElementById("sign_"+id).className = "fas fa-flag";
     },
   });
 }
@@ -75,6 +77,7 @@ function designaler(e) {
     success: function(response) {
       $('#designalement').trigger("reset");
       designalisationClose();
+      document.getElementById("sign_"+id).className = "far fa-flag";
     },
   });
 }

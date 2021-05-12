@@ -494,7 +494,7 @@ def signPost():
             #         {'sign': newSign}
             #      }
             # )
-            return ('yes')
+            return 'sent'
 
 
         else:
