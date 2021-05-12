@@ -36,3 +36,11 @@ function sign(id){
     },
   });
 }
+
+function signalisationOpen() {
+  $("#signalisation").addClass("is-active");
+}
+
+function signialisationClose() {
+  $("#signalisation").removeClass("is-active");
+}

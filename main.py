@@ -454,7 +454,7 @@ def likePost(idPost):
         abort(401)  # non autorisé
 
 
-@app.route('/signPost/<idPost>', methods=['POST'])
+@app.route('/signPost/', methods=['POST'])
 def signPost(idPost):
     if 'id' in session:
         if 'idPost' != None:
