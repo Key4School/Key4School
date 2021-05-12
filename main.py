@@ -455,12 +455,12 @@ def likePost(idPost):
 
 
 @app.route('/signPost/', methods=['POST'])
-def signPost(idPost):
+def signPost():
     if 'id' in session:
-        if 'idPost' != None:
+        if request.form['idSignalé'] != None:
             print("yes")
             # on récupère les signalements de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
+            demande = db_demande_aide.find_one({"_id": ObjectId(request.form['idSignalé'])})
             sign = demande['sign']
             newSign = list(sign)
 
@@ -472,12 +472,12 @@ def signPost(idPost):
 
             # on update dans la DB
             db_demande_aide.update_one(
-                {'_id': ObjectId(idPost)},
+                {'_id': ObjectId(request.form['idSignalé'])},
                 {'$set':
                     {'sign': newSign}
                  }
             )
-
+            return ("yes")
             # on retourne enfin le nouveau nb de signalement
             # return {'newNbsign': len(newSign)}, 200
 

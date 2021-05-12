@@ -18,29 +18,40 @@ function like(id){
     },
   });
 }
+
+
 function sign(id){
   selectionlike = document.getElementById("sign_"+id).className
   if (selectionlike == "far fa-flag") {
+    alert (id);
+    document.getElementById("idSignalé").value = id;
+    signalisationOpen();
     document.getElementById("sign_"+id).className = "fas fa-flag";
 
   }
   if (selectionlike == "fas fa-flag"){
     document.getElementById("sign_"+id).className = "far fa-flag";
   }
-
-  fetch(`signPost/${id}`, {
-    method: 'post',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-  });
 }
 
 function signalisationOpen() {
   $("#signalisation").addClass("is-active");
 }
 
-function signialisationClose() {
+function signalisationClose() {
   $("#signalisation").removeClass("is-active");
+}
+
+function signaler(e) {
+  e.preventDefault();
+  var donnees = $('#signalement').serialize();
+  $.ajax({
+    url: '/signPost/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $('#signalement').trigger("reset");
+      signalisationClose();
+    },
+  });
 }

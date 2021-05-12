@@ -31,10 +31,14 @@
       <header class="modal-card-head">
         <p class="modal-card-title">Signalement</p>
       </header>
-      <form action="{{url_for('signPost')}}" method="POST" autocomplete="off">
+      <form onsubmit="signaler(event); return false;" id="signalement" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous ce message." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;">
+          <input type='hidden' id="idSignalé" name='idSignalé' value="" />
+        </section>
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Signaler</button>
-          <button onclick="signalisationclose(); return false;" class="button">Annuler</button>
+          <button onclick="signalisationClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>
     </div>
@@ -83,7 +87,7 @@
                       <i class="far fa-comment" aria-hidden="true"></i>
                     </span>
                   </a>
-                  <a class="level-item" aria-label="sign" onClick="signalisationOpen()">
+                  <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
                     <span class="icon is-small">
                       {% if d['a_sign'] %}
                         <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
