@@ -312,7 +312,7 @@ def question():
     if 'id' in session:
         if request.method == 'POST':
             db_demande_aide.insert_one(
-                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": [], "likes": []})
+                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": [], "likes": [], "sign":[]})
 
             return render_template('question.html', envoi="Envoi réussi")
         else:
@@ -359,6 +359,11 @@ def recherche():
                 else:
                     a_like = False
 
+                if session['id'] in a['sign']:
+                     a_sign = True
+                else:
+                    a_sign = False
+
                 result.append({  # on ajoute à la liste ce qui nous interesse
                     'idMsg': a['_id'],
                     'titre': a['titre'],
@@ -367,6 +372,7 @@ def recherche():
                     'matière': a['matière'],
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
+                    'a_sign': a_sign,
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
@@ -473,7 +479,7 @@ def signPost(idPost):
             )
 
             # on retourne enfin le nouveau nb de signalement
-            return {'newNbsign': len(newSign)}, 200
+            # return {'newNbsign': len(newSign)}, 200
 
         else:
             abort(400)  # il manque l'id du message
