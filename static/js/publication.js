@@ -20,12 +20,12 @@ function like(id){
 }
 function sign(id){
   selectionlike = document.getElementById("sign_"+id).className
-  if (selectionlike == "far fa-thumbs-up") {
-    document.getElementById("sign_"+id).className = "fas fa-thumbs-up";
+  if (selectionlike == "far fa-flag") {
+    document.getElementById("sign_"+id).className = "fas fa-flag";
 
   }
-  if (selectionlike == "fas fa-thumbs-up"){
-    document.getElementById("sign_"+id).className = "far fa-thumbs-up";
+  if (selectionlike == "fas fa-flag"){
+    document.getElementById("sign_"+id).className = "far fa-flag";
   }
 
   fetch(`signPost/${id}`, {
