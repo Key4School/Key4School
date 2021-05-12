@@ -80,6 +80,15 @@
                     <i class="far fa-comment" aria-hidden="true"></i>
                   </span>
                 </a>
+                <a class="level-item" aria-label="sign" onClick="sign('{{r['idMsg']}}')">
+                  <span class="icon is-small">
+                    {% if r['a_sign'] %}
+                      <i id="sign_{{r['idMsg']}}" class="fas fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
+                    {% else %}
+                      <i id="sign_{{r['idMsg']}}" class="far fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
+                    {% endif %}
+                  </span>
+                </a>
               </div>
             </nav>
           </div>
