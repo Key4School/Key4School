@@ -23,7 +23,6 @@ function like(id){
 function sign(id){
   selectionlike = document.getElementById("sign_"+id).className
   if (selectionlike == "far fa-flag") {
-    alert (id);
     document.getElementById("idSignalé").value = id;
     signalisationOpen();
     document.getElementById("sign_"+id).className = "fas fa-flag";
@@ -31,6 +30,8 @@ function sign(id){
   }
   if (selectionlike == "fas fa-flag"){
     document.getElementById("sign_"+id).className = "far fa-flag";
+    document.getElementById("idDesignalé").value = id;
+    designalisationOpen();
   }
 }
 
@@ -40,6 +41,14 @@ function signalisationOpen() {
 
 function signalisationClose() {
   $("#signalisation").removeClass("is-active");
+}
+
+function designalisationOpen() {
+  $("#designalisation").addClass("is-active");
+}
+
+function designalisationClose() {
+  $("#designalisation").removeClass("is-active");
 }
 
 function signaler(e) {
@@ -52,6 +61,20 @@ function signaler(e) {
     success: function(response) {
       $('#signalement').trigger("reset");
       signalisationClose();
+    },
+  });
+}
+
+function designaler(e) {
+  e.preventDefault();
+  var donnees = $('#designalement').serialize();
+  $.ajax({
+    url: '/signPost/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $('#designalement').trigger("reset");
+      designalisationClose();
     },
   });
 }

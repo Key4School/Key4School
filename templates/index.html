@@ -43,6 +43,24 @@
       </form>
     </div>
   </div>
+  <div class="modal" id="designalisation" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Retrait de signalement</p>
+      </header>
+      <form onsubmit="designaler(event); return false;" id="designalement" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type='hidden' id="idDesignalé" name='idSignalé' value="" />
+          Etes vous sur de vouloir enlever cette signalisation
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">oui</button>
+          <button onclick="signalisationClose(); return false;" class="button">annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   <!-- debut de la div pour tt les publications -->
   <div class="columns" style="margin-top:5%;">
     <div class="column"></div>

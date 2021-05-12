@@ -467,19 +467,33 @@ def signPost():
             # on check mtn si l'utilisateur a déjà signalé la demande
             if session['id'] in sign:
                 newSign.remove(session['id'])  # on supprime son signalement
+                db_demande_aide.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$pull':
+                        {'sign': session['id']}
+                     }
+                )
             else:
+                print('test')
                 newSign.append(session['id'])  # on ajoute son signalement
+                raison = {request.form['Raison']}
+                db_demande_aide.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$push':
+                        {'sign': session['id'],
+                        'motif':{'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
+                     }
+                )
 
             # on update dans la DB
-            db_demande_aide.update_one(
-                {'_id': ObjectId(request.form['idSignalé'])},
-                {'$set':
-                    {'sign': newSign}
-                 }
-            )
-            return ("yes")
-            # on retourne enfin le nouveau nb de signalement
-            # return {'newNbsign': len(newSign)}, 200
+            # db_demande_aide.update_one(
+            #     {'_id': ObjectId(request.form['idSignalé'])},
+            #     {'$set':
+            #         {'sign': newSign}
+            #      }
+            # )
+            return ('yes')
+
 
         else:
             abort(400)  # il manque l'id du message
