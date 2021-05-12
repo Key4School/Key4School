@@ -469,10 +469,12 @@ def signPost():
                 newSign.remove(session['id'])  # on supprime son signalement
                 db_demande_aide.update_one(
                     {'_id': ObjectId(request.form['idSignalé'])},
-                    {'$pull':
-                        {'sign': session['id']}
-                     }
+                    {'$pull':{
+                        'sign': session['id'],
+                        'motif':{'id': ObjectId(session['id'])}}
+                        },
                 )
+
             else:
                 print('test')
                 newSign.append(session['id'])  # on ajoute son signalement
