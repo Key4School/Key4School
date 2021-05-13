@@ -9,6 +9,7 @@ from flask.json import jsonify
 from bson.objectid import ObjectId
 from bson import Binary
 import os
+import gridfs
 
 # Création de l'application
 app = Flask(__name__)
@@ -29,6 +30,8 @@ db_utilisateurs = cluster.db.utilisateurs
 db_demande_aide = cluster.db.demande_aide
 db_messages = cluster.db.messages
 db_groupes = cluster.db.groupes
+db_files = cluster.db.fs.files
+db_chunks =cluster.db.fs.chunks
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
@@ -271,8 +274,7 @@ def profil():
     if 'id' in session:
         profilUtilisateur = db_utilisateurs.find_one(
             {'_id': ObjectId(session['id'])})
-        imgProfil = cluster.send_file("test")
-        return render_template("profil.html", profilUtilisateur=profilUtilisateur, imgProfil=imgProfil)
+        return render_template("profil.html", profilUtilisateur=profilUtilisateur)
     else:
         return redirect(url_for('login'))
 
@@ -310,7 +312,13 @@ def updateprofile():
 @app.route('/updateImg/', methods=['POST'])
 def updateImg():
     if 'id' in session:
+        MyImage = db_files.find({'filename': session['id']})
+        for a in MyImage:
+            db_files.delete_one({'_id': a['_id']})
+            db_chunks.delete_many({'files_id': a['_id']})
         cluster.save_file(session['id'], request.files['Newpicture'])
+        image = db_files.find_one({'filename': session['id']})
+        db_utilisateurs.update_one({'_id': ObjectId(session['id'])},{'$set': {'imgProfile': image['_id']}})
         # img = request.files['Newpicture'].read()
         # db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {'$set':{'imgProfile': Binary(img)}})
         return redirect(url_for('profil'))
@@ -476,7 +484,6 @@ def likePost(idPost):
 def signPost():
     if 'id' in session:
         if request.form['idSignalé'] != None:
-            print("yes")
             # on récupère les signalements de la demande d'aide
             demande = db_demande_aide.find_one({"_id": ObjectId(request.form['idSignalé'])})
             sign = demande['sign']
@@ -494,7 +501,6 @@ def signPost():
                 )
 
             else:
-                print('test')
                 newSign.append(session['id'])  # on ajoute son signalement
                 raison = {request.form['Raison']}
                 db_demande_aide.update_one(
