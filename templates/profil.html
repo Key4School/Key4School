@@ -37,7 +37,7 @@
   <div class="columns">
     <div class="column"></div>
     <div class="column">
-      <img alt="user" src="{%if 'imgProfile' in profilUtilisateur %}{url_for('userImg', profilImg = profilUtilisateur['_id'])}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
+      <img alt="user" src="{%if 'imgProfile' in profilUtilisateur %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
       <form method="post" action="{{url_for('updateImg')}}" enctype='multipart/form-data'>
         <input type="file" accept="image/png, image/jpeg" name="Newpicture" required />
         <button type="submit">
