@@ -7,6 +7,7 @@ from requests_oauthlib import OAuth2Session
 from flask_session import Session
 from flask.json import jsonify
 from bson.objectid import ObjectId
+from bson import Binary
 import os
 
 # Création de l'application
@@ -270,7 +271,15 @@ def profil():
     if 'id' in session:
         profilUtilisateur = db_utilisateurs.find_one(
             {'_id': ObjectId(session['id'])})
-        return render_template("profil.html", profilUtilisateur=profilUtilisateur)
+        imgProfil = cluster.send_file("test")
+        return render_template("profil.html", profilUtilisateur=profilUtilisateur, imgProfil=imgProfil)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/userImg/<profilImg>')
+def userImg(profilImg):
+    if 'id' in session:
+        return cluster.send_file(profilImg)
     else:
         return redirect(url_for('login'))
 
@@ -291,13 +300,22 @@ def updateprofile():
         #     elementPrive.append("pseudo")
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set": {
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {
                                    'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'langues': request.form['langues'], 'caractere': request.form['caractere'], 'options': request.form['options'], 'spe': request.form['spe'], 'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
 
+@app.route('/updateImg/', methods=['POST'])
+def updateImg():
+    if 'id' in session:
+        cluster.save_file(session['id'], request.files['Newpicture'])
+        # img = request.files['Newpicture'].read()
+        # db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {'$set':{'imgProfile': Binary(img)}})
+        return redirect(url_for('profil'))
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/comments/')
 def comments():

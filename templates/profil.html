@@ -37,8 +37,13 @@
   <div class="columns">
     <div class="column"></div>
     <div class="column">
-      <img alt="user" src="{{url_for('static',filename='image/sans_profil.png')}}" style="width:80px; height:auto;" />
-      <i class="fas fa-camera" style="margin-left:8%;font-size:40px;"></i>
+      <img alt="user" src="{{url_for('userImg', profilImg = profilUtilisateur['_id'])}}" style="width:80px; height:auto;" />
+      <form method="post" action="{{url_for('updateImg')}}" enctype='multipart/form-data'>
+        <input type="file" accept="image/png, image/jpeg" name="Newpicture" required />
+        <button type="submit">
+          <i class="fas fa-camera" style="margin-left:8%;font-size:40px;"></i>
+        </button>
+      </form>
     </div>
     <div class="column"></div>
     <div class="columns">
