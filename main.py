@@ -282,7 +282,6 @@ def profil():
 @app.route('/userImg/<profilImg>')
 def userImg(profilImg):
     if 'id' in session:
-        print(profilImg)
         return cluster.send_file(profilImg)
     else:
         return redirect(url_for('login'))
@@ -324,8 +323,7 @@ def updateImg():
             db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
                                        '$set': {'imgProfile': "", 'nomImg': ""}})
         elif request.form['but'] == "replace":
-            ImgNom = request.files['Newpicture'].filename + \
-                'imgProfile' + session['id']
+            ImgNom = request.files['Newpicture'].filename + 'imgProfile' + session['id']
             MyImage = db_files.find(
                 {'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
@@ -333,8 +331,7 @@ def updateImg():
                 db_chunks.delete_many({'files_id': a['_id']})
             cluster.save_file(ImgNom, request.files['Newpicture'])
             image = db_files.find_one({'filename': ImgNom})
-            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
-                                       '$set': {'imgProfile': image['_id'], 'nomImg': ImgNom}})
+            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {'$set': {'imgProfile': image['_id'], 'nomImg': ImgNom}})
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
