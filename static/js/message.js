@@ -95,7 +95,7 @@ function refresh() {
   });
 }
 
-setInterval(refresh, 1000);
+setInterval(refresh, 100000);
 
 function reponseMsg(nb) {
   var contentMsg = document.getElementById('contenu' + nb).value;
@@ -163,6 +163,7 @@ function testcomp(){
 }
 
 var mediaRecorder = "";
+var formData = new FormData();
 
 function enregistrer(){
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -185,13 +186,21 @@ function enregistrer(){
           }
           mediaRecorder.onstop = function(e) {
             console.log(chunks);
-
-
             const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
             chunks = [];
-            const audioURL = window.URL.createObjectURL(blob);
-            document.getElementById('audioMsg').value = audioURL;
             console.log(blob);
+            var form = new FormData();
+            form.append('audio', blob);
+            $.ajax({
+              url: "/uploadAudio/",
+              type: "POST",
+              data: form,
+              processData: false,
+              contentType: false,
+              cache: false,
+              success: function(){console.log('réussi');}
+            });
+
             // // deleteButton.onclick = function(e) {
             // //   let evtTgt = e.target;
             // //   evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
@@ -212,12 +221,7 @@ function enregistrer(){
 
 
 
-// function enregistrer(){
-//   mediaRecorder.start();
-//   console.log(mediaRecorder.state);
-//   console.log("recorder started");
-// }
-//
+
 function stop(){
   mediaRecorder.stop();
   console.log(mediaRecorder.state);

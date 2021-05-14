@@ -55,7 +55,7 @@ def accueil():
         for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
             # on convertit en nombre de secondes la durée depuis le post
             diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
-            tempsStr = convertTime(diffTemps)  
+            tempsStr = convertTime(diffTemps)
 
             # on check si l'utilisateur a déjà liké le post
             if session['id'] in a['likes']:
@@ -148,11 +148,18 @@ def messages(idGroupe):
             else:
                 reponse = "None"
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": reponse, 'son': request.files['audioMsg']})
+                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": reponse})
             return 'sent'
     else:
         return redirect(url_for('login'))
 
+@app.route('/uploadAudio/', methods=['POST'])
+def uploadAudio():
+    if 'id' in session:
+        cluster.save_file("test", request.files['audio'])
+        return('yes')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
