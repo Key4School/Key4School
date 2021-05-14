@@ -31,7 +31,7 @@ db_demande_aide = cluster.db.demande_aide
 db_messages = cluster.db.messages
 db_groupes = cluster.db.groupes
 db_files = cluster.db.fs.files
-db_chunks =cluster.db.fs.chunks
+db_chunks = cluster.db.fs.chunks
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
@@ -278,10 +278,11 @@ def profil():
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/userImg/<profilImg>')
 def userImg(profilImg):
     if 'id' in session:
-        print (profilImg)
+        print(profilImg)
         return cluster.send_file(profilImg)
     else:
         return redirect(url_for('login'))
@@ -310,27 +311,34 @@ def updateprofile():
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/updateImg/', methods=['POST'])
 def updateImg():
     if 'id' in session:
         if request.form['but'] == "remove":
-            MyImage = db_files.find({'filename': {'$regex':'imgProfile'+session['id']}})
+            MyImage = db_files.find(
+                {'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
                 db_files.delete_one({'_id': a['_id']})
                 db_chunks.delete_many({'files_id': a['_id']})
-            db_utilisateurs.update_one({'_id': ObjectId(session['id'])},{'$set': {'imgProfile': "", 'nomImg':""}})
+            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
+                                       '$set': {'imgProfile': "", 'nomImg': ""}})
         elif request.form['but'] == "replace":
-            ImgNom = request.files['Newpicture'].filename+'imgProfile'+session['id']
-            MyImage = db_files.find({'filename': {'$regex':'imgProfile'+session['id']}})
+            ImgNom = request.files['Newpicture'].filename + \
+                'imgProfile' + session['id']
+            MyImage = db_files.find(
+                {'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
                 db_files.delete_one({'_id': a['_id']})
                 db_chunks.delete_many({'files_id': a['_id']})
             cluster.save_file(ImgNom, request.files['Newpicture'])
             image = db_files.find_one({'filename': ImgNom})
-            db_utilisateurs.update_one({'_id': ObjectId(session['id'])},{'$set': {'imgProfile': image['_id'], 'nomImg':ImgNom}})
+            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
+                                       '$set': {'imgProfile': image['_id'], 'nomImg': ImgNom}})
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/comments/')
 def comments():
@@ -345,7 +353,7 @@ def question():
     if 'id' in session:
         if request.method == 'POST':
             db_demande_aide.insert_one(
-                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": [], "likes": [], "sign":[]})
+                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": [], "likes": [], "sign": []})
 
             return render_template('question.html', envoi="Envoi réussi")
         else:
@@ -393,7 +401,7 @@ def recherche():
                     a_like = False
 
                 if session['id'] in a['sign']:
-                     a_sign = True
+                    a_sign = True
                 else:
                     a_sign = False
 
@@ -492,7 +500,8 @@ def signPost():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(request.form['idSignalé'])})
+            demande = db_demande_aide.find_one(
+                {"_id": ObjectId(request.form['idSignalé'])})
             sign = demande['sign']
             newSign = list(sign)
 
@@ -501,10 +510,10 @@ def signPost():
                 newSign.remove(session['id'])  # on supprime son signalement
                 db_demande_aide.update_one(
                     {'_id': ObjectId(request.form['idSignalé'])},
-                    {'$pull':{
+                    {'$pull': {
                         'sign': session['id'],
-                        'motif':{'id': ObjectId(session['id'])}}
-                        },
+                        'motif': {'id': ObjectId(session['id'])}}
+                     },
                 )
 
             else:
@@ -514,7 +523,7 @@ def signPost():
                     {'_id': ObjectId(request.form['idSignalé'])},
                     {'$push':
                         {'sign': session['id'],
-                        'motif':{'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
                      }
                 )
 
@@ -526,7 +535,6 @@ def signPost():
             #      }
             # )
             return 'sent'
-
 
         else:
             abort(400)  # il manque l'id du message
@@ -617,7 +625,8 @@ def connexion():
                 classe = 'TG'
             else:
                 classe = data['level']
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
+            pseudo = (data['username'].lower()).replace(' ', '_')
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(),
                                         "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type']})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
@@ -626,7 +635,8 @@ def connexion():
             session['type'] = user['type']
             return redirect(url_for('profil'))
         elif data['type'] == 'ENSEIGNANT':
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
+            pseudo = (data['username'].lower()).replace(' ', '_')
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(),
                                         "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type']})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
