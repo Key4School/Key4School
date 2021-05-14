@@ -112,3 +112,114 @@ function enleverRep() {
   document.getElementById('reponse').value = "None";
   document.getElementById('buttonRep').style.display = "none";
 }
+
+
+let shouldStop = false;
+let stopped = false;
+const audioMsg = document.getElementById('audioMsg');
+const stopButton = document.getElementById('stop');
+
+
+
+// function stop(){
+//   shouldStop = true;
+// }
+
+// stopButton.addEventListener('click', function() {
+//   shouldStop = true;
+// });
+
+// const handleSuccess = function(stream) {
+//   const options = {mimeType: 'audio/webm'};
+//   const recordedChunks = [];
+//   const mediaRecorder = new MediaRecorder(stream, options);
+//   alert('ca tourne');
+//
+//   mediaRecorder.addEventListener('dataavailable', function(e) {
+//     if (e.data.size > 0) {
+//       recordedChunks.push(e.data);
+//     }
+//
+//     if(shouldStop === true && stopped === false) {
+//       mediaRecorder.stop();
+//       stopped = true;
+//     }
+//   });
+//
+//   mediaRecorder.addEventListener('stop', function() {
+//     audioMsg.value = new Blob(recordedChunks);
+//   });
+//
+//     mediaRecorder.start();
+// };
+//
+// function enregistrer(){
+//   navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+//     .then(handleSuccess);
+// }
+//
+function testcomp(){
+  console.log (document.getElementById('audioMsg').value);
+}
+
+var mediaRecorder = "";
+
+function enregistrer(){
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+     console.log('getUserMedia supported.');
+     navigator.mediaDevices.getUserMedia (
+        // constraints - only audio needed for this app
+        {
+           audio: true
+        })
+
+        // Success callback
+        .then(function(stream) {
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start();
+          console.log(mediaRecorder.state);
+          console.log("recorder started");
+          let chunks = [];
+          mediaRecorder.ondataavailable = function(e) {
+            chunks.push(e.data);
+          }
+          mediaRecorder.onstop = function(e) {
+            console.log(chunks);
+
+
+            const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+            chunks = [];
+            const audioURL = window.URL.createObjectURL(blob);
+            document.getElementById('audioMsg').value = audioURL;
+            console.log(blob);
+            // // deleteButton.onclick = function(e) {
+            // //   let evtTgt = e.target;
+            // //   evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
+            // }
+          }
+        })
+
+        // Error callback
+        .catch(function(err) {
+           console.log('The following getUserMedia error occurred: ' + err);
+        }
+     );
+  } else {
+     console.log('getUserMedia not supported on your browser!');
+  }
+}
+
+
+
+
+// function enregistrer(){
+//   mediaRecorder.start();
+//   console.log(mediaRecorder.state);
+//   console.log("recorder started");
+// }
+//
+function stop(){
+  mediaRecorder.stop();
+  console.log(mediaRecorder.state);
+  console.log("recorder stopped");
+}
