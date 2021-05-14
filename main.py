@@ -148,7 +148,7 @@ def messages(idGroupe):
             else:
                 reponse = "None"
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": reponse})
+                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": reponse, 'son': request.files['audioMsg']})
             return 'sent'
     else:
         return redirect(url_for('login'))

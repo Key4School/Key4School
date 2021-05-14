@@ -219,13 +219,18 @@
         <form method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;min-width: 75%;max-width: 75%;" id="messageForm" onsubmit="envoi(event); return false;">
           <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
           <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+          <input type="hidden" type="file" accept='audio/*' name="audioMsg" id='audioMsg' />
           <input type='hidden' name="group" value="{{idgroupe}}" />
           <input type='hidden' id='reponse' name='reponse' value="None" />
           <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
         </form>
+        <button onclick="enregistrer()">start</button>
+    <button id='stop' onclick="stop()">Stop</button>
+    <button onclick="testcomp()">test</button>
         <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
       </div>
     </div>
+
 </body>
 
 </html>
