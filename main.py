@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, abort
 # import pronotepy  # api Pronote
 # from pronotepy.ent import ile_de_france
 from flask_pymongo import PyMongo
@@ -55,23 +55,7 @@ def accueil():
         for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
             # on convertit en nombre de secondes la durée depuis le post
             diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
-            tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-            if diffTemps // (60 * 60 * 24 * 7):  # semaines
-                tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-                if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
-                    tempsStr += '{}j '.format((diffTemps %
-                                               (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-            elif diffTemps // (60 * 60 * 24):  # jours
-                tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-                if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
-                    tempsStr += '{}h '.format((diffTemps %
-                                               (60 * 60 * 24)) // (60 * 60))
-            elif diffTemps // (60 * 60):  # heures
-                tempsStr += '{}h '.format(diffTemps // (60 * 60))
-                if (diffTemps % (60 * 60)) // 60:  # minutes
-                    tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
-            else:
-                tempsStr = '{}min'.format(diffTemps // 60)
+            tempsStr = convertTime(diffTemps)  
 
             # on check si l'utilisateur a déjà liké le post
             if session['id'] in a['likes']:
@@ -337,10 +321,60 @@ def updateImg():
         return redirect(url_for('login'))
 
 
-@app.route('/comments/')
-def comments():
+@app.route('/comments/<idMsg>')
+def comments(idMsg):
     if 'id' in session:
-        return render_template("comments.html")
+        msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
+
+        diffTemps = int((datetime.now() - msg['date-envoi']).total_seconds())
+        tempsStr = convertTime(diffTemps)
+
+        # on check si l'utilisateur a déjà liké le post
+        if session['id'] in msg['likes']:
+            a_like = True
+        else:
+            a_like = False
+
+        if session['id'] in msg['sign']:
+            a_sign = True
+        else:
+            a_sign = False
+
+        reponses = []
+        for r in msg['réponses associées']:
+            diffTemps2 = int((datetime.now() - r['date-envoi']).total_seconds())
+            tempsStr2 = convertTime(diffTemps2)
+
+            # on check si l'utilisateur a déjà liké le post
+            if session['id'] in r['likes']:
+                a_like2 = True
+            else:
+                a_like2 = False
+
+            reponses.append({
+                'idRep': r['_id'],
+                'contenu': r['contenu'],
+                'temps': tempsStr2,
+                'nb-likes': len(r['likes']),
+                'a_like': a_like2,
+                'user': db_utilisateurs.find_one({'_id': ObjectId(r['id-utilisateur'])})
+            })
+
+        result = {  # on ajoute à la liste ce qui nous interesse
+            'idMsg': msg['_id'],
+            'titre': msg['titre'],
+            'contenu': msg['contenu'],
+            'temps': tempsStr,
+            'matière': msg['matière'],
+            'nb-likes': len(msg['likes']),
+            'a_like': a_like,
+            'a_sign': a_sign,
+            'reponses': reponses,
+            # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+            'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
+        }
+
+        return render_template("comments.html", d=result)
     else:
         return redirect(url_for('login'))
 
@@ -369,27 +403,8 @@ def recherche():
             result = []
             for a in firstResult:  # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int(
-                    (datetime.now() - a['date-envoi']).total_seconds())
-                tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-                if diffTemps // (60 * 60 * 24 * 7):  # semaines
-                    tempsStr += '{}sem '.format(diffTemps //
-                                                (60 * 60 * 24 * 7))
-                    if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
-                        tempsStr += '{}j '.format((diffTemps %
-                                                   (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-                elif diffTemps // (60 * 60 * 24):  # jours
-                    tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-                    if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
-                        tempsStr += '{}h '.format((diffTemps %
-                                                   (60 * 60 * 24)) // (60 * 60))
-                elif diffTemps // (60 * 60):  # heures
-                    tempsStr += '{}h '.format(diffTemps // (60 * 60))
-                    if (diffTemps % (60 * 60)) // 60:  # minutes
-                        tempsStr += '{}min '.format(diffTemps %
-                                                    (60 * 60) // 60)
-                else:
-                    tempsStr = '{}min'.format(diffTemps // 60)
+                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+                tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
                 if session['id'] in a['likes']:
@@ -545,6 +560,26 @@ def amis():
         return render_template("amis.html")
     else:
         return redirect(url_for('login'))
+
+
+def convertTime(diffTemps):
+    tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+    if diffTemps // (60 * 60 * 24 * 7):  # semaines
+        tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
+        if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
+            tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+    elif diffTemps // (60 * 60 * 24):  # jours
+        tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
+        if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
+            tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+    elif diffTemps // (60 * 60):  # heures
+        tempsStr += '{}h '.format(diffTemps // (60 * 60))
+        if (diffTemps % (60 * 60)) // 60:  # minutes
+            tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+    else:
+        tempsStr = '{}min'.format(diffTemps // 60)
+
+    return tempsStr
 
 
 @app.route('/deconnexion/')

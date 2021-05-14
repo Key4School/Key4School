@@ -25,6 +25,7 @@
 
 <body>
   {% include "bandeau.html" %}
+
   <!-- debut de la div pour tt les publications -->
   <div class="columns" style="margin-top:5%;">
     <div class="column"></div>
@@ -43,19 +44,23 @@
             <div class="content">
               <p style="margin-bottom: 5px;">
                 <!-- Nom utilisateur ; pseudo ; temps -->
-                <strong>NOM Prenom</strong> <small><em>@pseudo</em></small> <small>3j 2h</small>
+                <strong>{{d['user']['nom']}} {{d['user']['prenom']}}</strong> <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
               </p>
               <!-- Titre -->
-              <h3 style="margin-top: 0;">Titre</h3>
+              <h3 style="margin-top: 0;">{{d['titre']}}</h3>
               <!-- Texte publication -->
-              <p>Contenu</p>
+              <p>{{d['contenu']}}</p>
             </div>
             <!-- Icons like et commentaire -->
             <nav class="level is-mobile">
               <div class="level-left">
-                <a class="level-item" aria-label="like" onClick="like()">
+                <a class="level-item" aria-label="like" onClick="like('{{d['idMsg']}}')">
                   <span class="icon is-small">
-                    <i id="like" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">5</i>
+                    {% if d['a_like'] %}
+                      <i id="like_{{d['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{d['nb-likes']}}</i>
+                    {% else %}
+                      <i id="like_{{d['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{d['nb-likes']}}</i>
+                    {% endif %}
                   </span>
                 </a>
                 <a class="level-item" aria-label="comment">
@@ -76,38 +81,37 @@
 
   <div class="columns" style="margin-left:2%;">
     <div class="column">
-      <div class="box">
-        <article class="media">
-          <!-- Contenu publication -->
-          <div class="media-content">
-            <div class="content">
-              <p style="margin-bottom: 5px;">
-                <!-- Nom utilisateur ; pseudo ; temps -->
-                <strong>NOM Prenom</strong> <small><em>@pseudo</em></small> <small>3j 2h</small>
-              </p>
-              <br />
-              <!-- Texte publication -->
-              <p>Reponse</p>
-              <br />
-            </div>
-            <!-- Icons like et commentaire -->
-            <nav class="level is-mobile">
-              <div class="level-left">
-                <a class="level-item" aria-label="like" onClick="like()">
-                  <span class="icon is-small">
-                    <i id="like" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">5</i>
-                  </span>
-                </a>
-                <a class="level-item" aria-label="comment">
-                  <span class="icon is-small">
-                    <i id="like" class="fas fa-thumbs-down" aria-hidden="true" style="padding-left: 5px;">5</i>
-                  </span>
-                </a>
+      {% for r in d['reponses'] %}
+        <div class="box">
+          <article class="media">
+            <!-- Contenu publication -->
+            <div class="media-content">
+              <div class="content">
+                <p style="margin-bottom: 5px;">
+                  <!-- Nom utilisateur ; pseudo ; temps -->
+                  <strong>{{r['user']['nom']}} {{r['user']['prenom']}}</strong> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
+                </p>
+                <!-- Texte publication -->
+                <p>{{r['contenu']}}</p>
               </div>
-            </nav>
-          </div>
-        </article>
-      </div>
+              <!-- Icons like et commentaire -->
+              <nav class="level is-mobile">
+                <div class="level-left">
+                  <a class="level-item" aria-label="like" onClick="like('{{r['idMsg']}}')">
+                    <span class="icon is-small">
+                      {% if d['a_like'] %}
+                        <i id="like_{{r['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
+                      {% else %}
+                        <i id="like_{{r['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
+                      {% endif %}
+                    </span>
+                  </a>
+                </div>
+              </nav>
+            </div>
+          </article>
+        </div>
+      {% endfor %}
     </div>
     <div class="column"></div>
     <div class="column"></div>
