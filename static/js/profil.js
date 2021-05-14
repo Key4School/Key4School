@@ -8,3 +8,11 @@ function input(type){
     }
   }
 }
+
+function updateImgOpen() {
+  $("#replaceImg").addClass("is-active");
+}
+
+function updateImgClose() {
+  $("#replaceImg").removeClass("is-active");
+}
