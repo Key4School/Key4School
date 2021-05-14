@@ -328,6 +328,10 @@ def updateImg():
         return redirect(url_for('login'))
 
 
+@app.route('/comments/')
+def redirect_comments():
+    return redirect('/')
+
 @app.route('/comments/<idMsg>')
 def comments(idMsg):
     if 'id' in session:
@@ -391,9 +395,16 @@ def question():
     if 'id' in session:
         if request.method == 'POST':
             db_demande_aide.insert_one(
-                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": [], "likes": [], "sign": []})
+                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": []})
 
-            return render_template('question.html', envoi="Envoi réussi")
+            demandes = db_demande_aide.aggregate([
+                {'$sort': {'date-envoi': -1}},
+                {'$limit': 1}
+            ])
+            for demande in demandes:
+                return redirect('/comments/' + str(demande['_id']))
+
+            # return render_template('question.html', envoi="Envoi réussi")
         else:
             return render_template('question.html')
     else:
