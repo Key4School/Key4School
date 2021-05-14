@@ -341,7 +341,7 @@ def comments(idMsg):
             a_sign = False
 
         reponses = []
-        for r in msg['réponses associées']:
+        for r in msg['réponses associées'].values():
             diffTemps2 = int((datetime.now() - r['date-envoi']).total_seconds())
             tempsStr2 = convertTime(diffTemps2)
 
@@ -495,6 +495,50 @@ def likePost(idPost):
                 {'_id': ObjectId(idPost)},
                 {'$set':
                     {'likes': newLikes}
+                 }
+            )
+
+            # on retourne enfin le nouveau nb de likes
+            return {'newNbLikes': len(newLikes)}, 200
+
+        else:
+            abort(400)  # il manque l'id du message
+    else:
+        abort(401)  # non autorisé
+
+@app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
+def likeRep(idPost, idRep):
+    if 'id' in session:
+        if 'idPost' != None and 'idRep' != None:
+            # on récupère les likes de la demande d'aide
+            reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})['réponses associées']
+            if not idRep in reponses:
+                return abort(400)
+
+            reponse = reponses[idRep]
+            likes = reponse['likes']
+            newLikes = list(likes)
+
+            # on check mtn si l'utilisateur a déjà liké la demande
+            if session['id'] in likes:
+                newLikes.remove(session['id'])  # on supprime son like
+            else:
+                newLikes.append(session['id'])  # on ajoute son like
+
+            reponse = {
+                '_id': ObjectId(reponse['_id']),
+                'id-utilisateur': ObjectId(reponse['id-utilisateur']),
+                'contenu': reponse['contenu'],
+                'date-envoi': reponse['date-envoi'],
+                'likes': newLikes
+            }
+            reponses[idRep] = reponse
+
+            # on update dans la DB
+            db_demande_aide.update(
+                {'_id': ObjectId(idPost)},
+                {'$set':
+                    {'réponses associées': reponses}
                  }
             )
 

@@ -1,4 +1,5 @@
 var id;
+
 function like(id){
   selectionlike = document.getElementById("like_"+id).className
   if (selectionlike == "far fa-thumbs-up") {
@@ -12,6 +13,27 @@ function like(id){
   }
 
   fetch(`/likePost/${id}`, {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  });
+}
+
+function like_rep(idMsg, idRep){
+  selectionlike = document.getElementById("like_"+idRep).className
+  if (selectionlike == "far fa-thumbs-up") {
+    document.getElementById("like_"+idRep).className = "fas fa-thumbs-up";
+    document.getElementById("like_"+idRep).innerHTML = parseInt(document.getElementById("like_"+idRep).innerHTML) + 1; // on ajoute 1 au nb de likes
+
+  }
+  if (selectionlike == "fas fa-thumbs-up"){
+    document.getElementById("like_"+idRep).className = "far fa-thumbs-up";
+    document.getElementById("like_"+idRep).innerHTML = parseInt(document.getElementById("like_"+idRep).innerHTML) - 1; // on enlève 1 au nb de likes
+  }
+
+  fetch(`/likeRep/${idMsg}/${idRep}`, {
     method: 'post',
     headers: {
       'Accept': 'application/json',

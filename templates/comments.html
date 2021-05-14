@@ -97,12 +97,12 @@
               <!-- Icons like et commentaire -->
               <nav class="level is-mobile">
                 <div class="level-left">
-                  <a class="level-item" aria-label="like" onClick="like('{{r['idMsg']}}')">
+                  <a class="level-item" aria-label="like" onClick="like_rep('{{d['idMsg']}}', '{{r['idRep']}}')">
                     <span class="icon is-small">
-                      {% if d['a_like'] %}
-                        <i id="like_{{r['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
+                      {% if r['a_like'] %}
+                        <i id="like_{{r['idRep']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
                       {% else %}
-                        <i id="like_{{r['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
+                        <i id="like_{{r['idRep']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
                       {% endif %}
                     </span>
                   </a>
