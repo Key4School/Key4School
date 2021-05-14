@@ -60,9 +60,9 @@
   <div class="columns">
     <div class="column"></div>
     <div class="column">
-      <img alt="user" src="{%if profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
+      <img alt="user" src="{%if nomImg in profilUtilisateur and ['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
       <i class="fas fa-camera" onclick="updateImgOpen();" style="margin-left:8%;font-size:40px;"></i>
-      
+
     </div>
     <div class="column"></div>
     <div class="columns">
