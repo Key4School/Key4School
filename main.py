@@ -321,6 +321,10 @@ def updateImg():
         return redirect(url_for('login'))
 
 
+@app.route('/comments/')
+def redirect_comments():
+    return redirect('/')
+
 @app.route('/comments/<idMsg>')
 def comments(idMsg):
     if 'id' in session:
