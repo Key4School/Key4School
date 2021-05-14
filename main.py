@@ -161,6 +161,17 @@ def uploadAudio():
     else:
         return redirect(url_for('login'))
 
+@app.route('/test/')
+def test():
+    return render_template("test.html")
+
+@app.route('/audio/<audioName>')
+def audio(audioName):
+    if 'id' in session:
+        return cluster.send_file(audioName)
+    else:
+        return redirect(url_for('login'))
+
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
