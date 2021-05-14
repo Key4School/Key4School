@@ -313,14 +313,14 @@ def updateprofile():
 @app.route('/updateImg/', methods=['POST'])
 def updateImg():
     if 'id' in session:
-        test = request.files['Newpicture'].filename+session['id']
-        MyImage = db_files.find({'filename': session['id']})
+        ImgNom = request.files['Newpicture'].filename+'imgProfile'+session['id']
+        MyImage = db_files.find({'filename': {'$regex':'imgProfile'+session['id']}})
         for a in MyImage:
             db_files.delete_one({'_id': a['_id']})
             db_chunks.delete_many({'files_id': a['_id']})
-        cluster.save_file(test, request.files['Newpicture'])
-        image = db_files.find_one({'filename': test})
-        db_utilisateurs.update_one({'_id': ObjectId(session['id'])},{'$set': {'imgProfile': image['_id'], 'nomImg':test}})
+        cluster.save_file(ImgNom, request.files['Newpicture'])
+        image = db_files.find_one({'filename': ImgNom})
+        db_utilisateurs.update_one({'_id': ObjectId(session['id'])},{'$set': {'imgProfile': image['_id'], 'nomImg':ImgNom}})
         # img = request.files['Newpicture'].read()
         # db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {'$set':{'imgProfile': Binary(img)}})
         return redirect(url_for('profil'))
