@@ -105,7 +105,7 @@
                       <i class="far fa-comment" aria-hidden="true"></i>
                     </span>
                   </a>
-                  <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
+                  <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
                     <span class="icon is-small">
                       {% if d['a_sign'] %}
                         <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
@@ -113,9 +113,31 @@
                         <i id="sign_{{d['idMsg']}}" class="far fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
                       {% endif %}
                     </span>
-                  </a>
+                  </a> -->
                 </div>
               </nav>
+            </div>
+            <div class="media-right">
+              <div class="navbar-item has-dropdown is-hoverable">
+                <div class="navbar-link">
+                </div>
+                <div class="navbar-dropdown">
+                  <div class="navbar-item">
+                    <button  class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
+                      <span class="icon is-small">
+                        {% if d['a_sign'] %}
+                        <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true"></i>
+                        {% else %}
+                          <i id="sign_{{d['idMsg']}}" class="far fa-flag" aria-hidden="true"></i>
+                        {% endif %}
+                      </span>
+                      <span>Signaler</span>
+                    </button>
+                    <input type="hidden" />
+                  </div>
+                </div>
+              </div>
+
             </div>
           </article>
         </div>
