@@ -7,7 +7,9 @@ from requests_oauthlib import OAuth2Session
 from flask_session import Session
 from flask.json import jsonify
 from bson.objectid import ObjectId
+from bson import Binary
 import os
+import gridfs
 
 # Création de l'application
 app = Flask(__name__)
@@ -28,6 +30,8 @@ db_utilisateurs = cluster.db.utilisateurs
 db_demande_aide = cluster.db.demande_aide
 db_messages = cluster.db.messages
 db_groupes = cluster.db.groupes
+db_files = cluster.db.fs.files
+db_chunks = cluster.db.fs.chunks
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
@@ -43,26 +47,28 @@ db_groupes = cluster.db.groupes
 def accueil():
     if 'id' in session:
         toutesDemandes = db_demande_aide.aggregate([
-            { '$sort': { 'date-envoi': -1 } },
-            { '$limit': 5 }
+            {'$sort': {'date-envoi': -1}},
+            {'$limit': 5}
         ])  # ici on récupère les 5 dernières demandes les plus récentes
 
         demandes = []
         for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
-            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
-            tempsStr = ''  
-            # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-            if diffTemps // (60 * 60 * 24 * 7): # semaines
+            # on convertit en nombre de secondes la durée depuis le post
+            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+            tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+            if diffTemps // (60 * 60 * 24 * 7):  # semaines
                 tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-                if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
-                    tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-            elif diffTemps // (60 * 60 * 24): # jours
+                if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
+                    tempsStr += '{}j '.format((diffTemps %
+                                               (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+            elif diffTemps // (60 * 60 * 24):  # jours
                 tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-                if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
-                    tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
-            elif diffTemps // (60 * 60): # heures
+                if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
+                    tempsStr += '{}h '.format((diffTemps %
+                                               (60 * 60 * 24)) // (60 * 60))
+            elif diffTemps // (60 * 60):  # heures
                 tempsStr += '{}h '.format(diffTemps // (60 * 60))
-                if (diffTemps % (60 * 60)) // 60: # minutes
+                if (diffTemps % (60 * 60)) // 60:  # minutes
                     tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
             else:
                 tempsStr = '{}min'.format(diffTemps // 60)
@@ -73,7 +79,12 @@ def accueil():
             else:
                 a_like = False
 
-            demandes.append({ # on ajoute à la liste ce qui nous interesse
+            if session['id'] in a['sign']:
+                a_sign = True
+            else:
+                a_sign = False
+
+            demandes.append({  # on ajoute à la liste ce qui nous interesse
                 'idMsg': a['_id'],
                 'titre': a['titre'],
                 'contenu': a['contenu'],
@@ -81,10 +92,12 @@ def accueil():
                 'matière': a['matière'],
                 'nb-likes': len(a['likes']),
                 'a_like': a_like,
-                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                'a_sign': a_sign,
+                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
 
-        return render_template("index.html", demandes = demandes)
+        return render_template("index.html", demandes=demandes)
     else:
         return redirect(url_for('login'))
 
@@ -170,20 +183,20 @@ def supprimerMsg():
 @app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
-        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': '^' + request.form['search'], '$options': 'i'}},
+        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': request.form['search'], '$options': 'i'}},
                                               {'nom': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                                  '$regex': request.form['search'], '$options': 'i'}},
                                               {'prenom': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                                  '$regex': request.form['search'], '$options': 'i'}},
                                               {'lycee': {
                                                   '$regex': request.form['search'], '$options': 'i'}},
                                               {'email': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                                  '$regex': request.form['search'], '$options': 'i'}},
                                               {'insta': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
+                                                  '$regex': request.form['search'], '$options': 'i'}},
                                               {'snap': {
-                                                  '$regex': '^' + request.form['search'], '$options': 'i'}},
-                                              {'telephone': {'$regex': '^' + request.form['search'], '$options': 'i'}}]}).limit(30)
+                                                  '$regex': request.form['search'], '$options': 'i'}},
+                                              {'telephone': {'$regex': request.form['search'], '$options': 'i'}}]}).limit(30)
         return render_template("searchUser_newgroup.html", users=users)
     else:
         return redirect(url_for('login'))
@@ -266,13 +279,21 @@ def profil():
         return redirect(url_for('login'))
 
 
+@app.route('/userImg/<profilImg>')
+def userImg(profilImg):
+    if 'id' in session:
+        return cluster.send_file(profilImg)
+    else:
+        return redirect(url_for('login'))
+
+
 @app.route("/updateprofile/", methods=["POST"])
 def updateprofile():
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
-        elementPrive=[]
-        elementPublic=[]
-        for content in request.form :
+        elementPrive = []
+        elementPublic = []
+        for content in request.form:
             if request.form[content] == "pv":
                 elementPrive.append(content.replace('Visibilite', ''))
             elif request.form[content] == "pb":
@@ -282,42 +303,44 @@ def updateprofile():
         #     elementPrive.append("pseudo")
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {"$set": {
-                                   'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'langues': request.form['langues'], 'caractere': request.form['caractere'], 'options': request.form['options'], 'spe': request.form['spe'], 'elementPrive':elementPrive,'elementPublic':elementPublic}})
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {
+                                   'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'langues': request.form['langues'], 'caractere': request.form['caractere'], 'options': request.form['options'], 'spe': request.form['spe'], 'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/archives/')
-def archives():
+@app.route('/updateImg/', methods=['POST'])
+def updateImg():
     if 'id' in session:
-        return render_template("archives.html")
+        if request.form['but'] == "remove":
+            MyImage = db_files.find(
+                {'filename': {'$regex': 'imgProfile' + session['id']}})
+            for a in MyImage:
+                db_files.delete_one({'_id': a['_id']})
+                db_chunks.delete_many({'files_id': a['_id']})
+            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
+                                       '$set': {'imgProfile': "", 'nomImg': ""}})
+        elif request.form['but'] == "replace":
+            ImgNom = request.files['Newpicture'].filename + 'imgProfile' + session['id']
+            MyImage = db_files.find(
+                {'filename': {'$regex': 'imgProfile' + session['id']}})
+            for a in MyImage:
+                db_files.delete_one({'_id': a['_id']})
+                db_chunks.delete_many({'files_id': a['_id']})
+            cluster.save_file(ImgNom, request.files['Newpicture'])
+            image = db_files.find_one({'filename': ImgNom})
+            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {'$set': {'imgProfile': image['_id'], 'nomImg': ImgNom}})
+        return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/classe/')
-def classe():
+@app.route('/comments/')
+def comments():
     if 'id' in session:
-        return render_template("classe.html")
-    else:
-        return redirect(url_for('login'))
-
-
-@app.route('/monlycee/')
-def monlycee():
-    if 'id' in session:
-        return render_template("monlycee.html")
-    else:
-        return redirect(url_for('login'))
-
-
-@app.route('/professeur/')
-def professeur():
-    if 'id' in session:
-        return render_template("professeur.html")
+        return render_template("comments.html")
     else:
         return redirect(url_for('login'))
 
@@ -327,7 +350,7 @@ def question():
     if 'id' in session:
         if request.method == 'POST':
             db_demande_aide.insert_one(
-                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": [], "likes": []})
+                {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": [], "likes": [], "sign": []})
 
             return render_template('question.html', envoi="Envoi réussi")
         else:
@@ -345,21 +368,26 @@ def recherche():
 
             result = []
             for a in firstResult:  # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
-                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds()) # on convertit en nombre de secondes la durée depuis le post
-                tempsStr = '' 
-                # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-                if diffTemps // (60 * 60 * 24 * 7): # semaines
-                    tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-                    if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
-                        tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+                # on convertit en nombre de secondes la durée depuis le post
+                diffTemps = int(
+                    (datetime.now() - a['date-envoi']).total_seconds())
+                tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+                if diffTemps // (60 * 60 * 24 * 7):  # semaines
+                    tempsStr += '{}sem '.format(diffTemps //
+                                                (60 * 60 * 24 * 7))
+                    if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
+                        tempsStr += '{}j '.format((diffTemps %
+                                                   (60 * 60 * 24 * 7)) // (60 * 60 * 24))
                 elif diffTemps // (60 * 60 * 24):  # jours
                     tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-                    if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
-                        tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
-                elif diffTemps // (60 * 60): # heures
+                    if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
+                        tempsStr += '{}h '.format((diffTemps %
+                                                   (60 * 60 * 24)) // (60 * 60))
+                elif diffTemps // (60 * 60):  # heures
                     tempsStr += '{}h '.format(diffTemps // (60 * 60))
                     if (diffTemps % (60 * 60)) // 60:  # minutes
-                        tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+                        tempsStr += '{}min '.format(diffTemps %
+                                                    (60 * 60) // 60)
                 else:
                     tempsStr = '{}min'.format(diffTemps // 60)
 
@@ -369,6 +397,11 @@ def recherche():
                 else:
                     a_like = False
 
+                if session['id'] in a['sign']:
+                    a_sign = True
+                else:
+                    a_sign = False
+
                 result.append({  # on ajoute à la liste ce qui nous interesse
                     'idMsg': a['_id'],
                     'titre': a['titre'],
@@ -377,10 +410,27 @@ def recherche():
                     'matière': a['matière'],
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
-                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])}) # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                    'a_sign': a_sign,
+                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
 
-            return render_template('recherche.html', results = result)
+            users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': request.args['search'], '$options': 'i'}},
+                                                  {'nom': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'prenom': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'lycee': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'email': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'insta': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'snap': {
+                                                      '$regex': request.args['search'], '$options': 'i'}},
+                                                  {'telephone': {'$regex': request.args['search'], '$options': 'i'}}]}).limit(3)
+
+            return render_template('recherche.html', results=result, users=users, search=request.args['search'])
 
         else:
             return redirect(url_for('accueil'))
@@ -388,36 +438,105 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@app.route('/likePost/<idPost>', methods = ['POST'])
+@app.route('/rechercheUser')
+def recherche_user():
+    if 'id' in session:
+        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': request.args['search'], '$options': 'i'}},
+                                              {'nom': {
+                                                  '$regex': request.args['search'], '$options': 'i'}},
+                                              {'prenom': {
+                                                  '$regex': request.args['search'], '$options': 'i'}},
+                                              {'lycee': {
+                                                  '$regex': request.args['search'], '$options': 'i'}},
+                                              {'email': {
+                                                  '$regex': request.args['search'], '$options': 'i'}},
+                                              {'insta': {
+                                                  '$regex': request.args['search'], '$options': 'i'}},
+                                              {'snap': {
+                                                  '$regex': request.args['search'], '$options': 'i'}},
+                                              {'telephone': {'$regex': request.args['search'], '$options': 'i'}}]}).limit(30)
+        return render_template('rechercheUser.html', users=users)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/likePost/<idPost>', methods=['POST'])
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
             # on récupère les likes de la demande d'aide
-            demande = db_demande_aide.find_one({ "_id": ObjectId(idPost) })
+            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
             likes = demande['likes']
             newLikes = list(likes)
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
-                newLikes.remove(session['id']) # on supprime son like
+                newLikes.remove(session['id'])  # on supprime son like
             else:
-                newLikes.append(session['id']) # on ajoute son like
+                newLikes.append(session['id'])  # on ajoute son like
 
             # on update dans la DB
             db_demande_aide.update(
-                { '_id': ObjectId(idPost) },
-                { '$set':
-                    { 'likes': newLikes }
-                }
+                {'_id': ObjectId(idPost)},
+                {'$set':
+                    {'likes': newLikes}
+                 }
             )
 
             # on retourne enfin le nouveau nb de likes
-            return { 'newNbLikes': len(newLikes) }, 200
+            return {'newNbLikes': len(newLikes)}, 200
 
         else:
-            abort(400) # il manque l'id du message
+            abort(400)  # il manque l'id du message
     else:
-        abort(401) # non autorisé
+        abort(401)  # non autorisé
+
+
+@app.route('/signPost/', methods=['POST'])
+def signPost():
+    if 'id' in session:
+        if request.form['idSignalé'] != None:
+            # on récupère les signalements de la demande d'aide
+            demande = db_demande_aide.find_one(
+                {"_id": ObjectId(request.form['idSignalé'])})
+            sign = demande['sign']
+            newSign = list(sign)
+
+            # on check mtn si l'utilisateur a déjà signalé la demande
+            if session['id'] in sign:
+                newSign.remove(session['id'])  # on supprime son signalement
+                db_demande_aide.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$pull': {
+                        'sign': session['id'],
+                        'motif': {'id': ObjectId(session['id'])}}
+                     },
+                )
+
+            else:
+                newSign.append(session['id'])  # on ajoute son signalement
+                raison = {request.form['Raison']}
+                db_demande_aide.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$push':
+                        {'sign': session['id'],
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
+                     }
+                )
+
+            # on update dans la DB
+            # db_demande_aide.update_one(
+            #     {'_id': ObjectId(request.form['idSignalé'])},
+            #     {'$set':
+            #         {'sign': newSign}
+            #      }
+            # )
+            return 'sent'
+
+        else:
+            abort(400)  # il manque l'id du message
+    else:
+        abort(401)  # non autorisé
 
 
 @app.route('/amis/')
@@ -503,7 +622,8 @@ def connexion():
                 classe = 'TG'
             else:
                 classe = data['level']
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
+            pseudo = (data['username'].lower()).replace(' ', '_')
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(),
                                         "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type']})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
@@ -512,7 +632,8 @@ def connexion():
             session['type'] = user['type']
             return redirect(url_for('profil'))
         elif data['type'] == 'ENSEIGNANT':
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": data['username'], "dateInscription": datetime.now(),
+            pseudo = (data['username'].lower()).replace(' ', '_')
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(),
                                         "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type']})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
@@ -529,6 +650,9 @@ if __name__ == "__main__":
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
 
     app.secret_key = os.urandom(24)
-    # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-    app.run(host="127.0.0.1", port=3000, debug=True)
-    # app.run(debug=True)
+    if 'HEROKU' in os.environ:
+        # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
+        app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
+    else:
+        # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
+        app.run(host="127.0.0.1", port=3000, debug=True)
