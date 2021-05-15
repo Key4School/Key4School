@@ -161,6 +161,7 @@ function enregistrer(e){
               form.append('audio', blob);
               form.append('group',idGroupe)
               estEnregistre = true;
+              boutonAudioOpen();
             }
           })
 
@@ -220,6 +221,7 @@ function enregistrerTel(){
               form.append('audio', blob);
               form.append('group',idGroupe)
               estEnregistre=true;
+              boutonAudioOpen();
             }
           })
 
@@ -252,7 +254,7 @@ function sendAudio(){
       processData: false,
       contentType: false,
       cache: false,
-      success: function(){form = new FormData();estEnregistre =false;}
+      success: function(){form = new FormData();estEnregistre =false;boutonAudioClose();}
     });
   }
 }
@@ -264,11 +266,9 @@ function deleteAudio(){
 }
 
 function boutonAudioOpen(){
-  $("#sendAudio").addClass("is-active");
-  $("#deleteAudio").addClass("is-active");
+  document.getElementById('buttonAudio').style.display = "block";
 }
 
-function boutonAudioClose(e) {
-  $("#deleteAudio").removeClass("is-active");
-  $("#sendAudio").removeClass("is-active");
+function boutonAudioClose() {
+  document.getElementById('buttonAudio').style.display = "none";
 }

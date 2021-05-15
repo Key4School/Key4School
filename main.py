@@ -42,6 +42,16 @@ db_chunks = cluster.db.fs.chunks
 #                           ent=ile_de_france)
 
 
+def htmlspecialchars(text):
+    return (
+        text.replace("&", "&amp;").
+        replace('"', "&quot;").
+        replace("<", "&lt;").
+        replace(">", "&gt;").
+        replace("'", "&apos;")
+    )
+
+
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
 @app.route('/')
 def accueil():
