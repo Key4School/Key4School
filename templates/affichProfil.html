@@ -140,7 +140,7 @@
               {%if profilUtilisateur['caractere']=="det"%}Déterminé.e{%endif%}
               {%if profilUtilisateur['caractere']=="fat"%}Fatigué.e{%endif%}
               {%if profilUtilisateur['caractere']=="dro"%}Drôle{%endif%}
-              {%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}
+              {%if profilUtilisateur['caractere']=="ti"%}Timide{%endif%}
               {%if profilUtilisateur['caractere']=="crea"%}Créatif.ve{%endif%}
               {%if profilUtilisateur['caractere']=="ser"%}Sérieux.se{%endif%}
               {%if profilUtilisateur['caractere']=="op"%}Optimiste{%endif%}
@@ -156,14 +156,6 @@
             </td>
             <td>
               {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
-            </td>
-            <td>
-              <div class="select">
-                <select name="birth_dateVisibilite">
-                  <option value="pv">privé</option>
-                  <option value="pb" selected>public</option>
-                </select>
-              </div>
             </td>
           </tr>
           {%else%}
