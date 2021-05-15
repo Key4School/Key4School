@@ -52,7 +52,7 @@
     </div>
     <br>
     <p style="margin:0px">
-    {%if 'audio' in content and content['audio'] == true %} <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>{%else%}{{content['contenu']}}{%endif%}{%if "rep"in content%} en réponse à : {{content['rep']['contenu']}}{%endif%}
+    {%if 'audio' in content and content['audio'] == true %}<audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>{%else%}{{content['contenu']}}{%endif%}{%if "rep"in content%} en réponse à : {{content['rep']['contenu']}}{%endif%}
       <!--On affiche le contenu du message -->
     </p>
     <br>
