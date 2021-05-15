@@ -166,9 +166,6 @@ def uploadAudio():
     else:
         return redirect(url_for('login'))
 
-@app.route('/test/')
-def test():
-    return render_template("test.html")
 
 @app.route('/audio/<audioName>')
 def audio(audioName):
