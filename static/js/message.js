@@ -121,6 +121,7 @@ const stopButton = document.getElementById('stop');
 var mediaRecorder = "";
 var form = new FormData();
 var accessMicro = false;
+var estEnregistre = "";
 
 function micro(){
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -159,15 +160,7 @@ function enregistrer(e){
               var idGroupe = $('[name="group"]').attr("value");
               form.append('audio', blob);
               form.append('group',idGroupe)
-              $.ajax({
-                url: "/uploadAudio/",
-                type: "POST",
-                data: form,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function(){form = new FormData();}
-              });
+              estEnregistre = true;
             }
           })
 
@@ -226,15 +219,7 @@ function enregistrerTel(){
               var idGroupe = $('[name="group"]').attr("value");
               form.append('audio', blob);
               form.append('group',idGroupe)
-              $.ajax({
-                url: "/uploadAudio/",
-                type: "POST",
-                data: form,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function(){form = new FormData();}
-              });
+              estEnregistre=true;
             }
           })
 
@@ -256,4 +241,34 @@ function stopTel(){
     console.log("recorder stopped");
     stopped = true;
   }
+}
+
+function sendAudio(){
+  if (estEnregistre = true){
+    $.ajax({
+      url: "/uploadAudio/",
+      type: "POST",
+      data: form,
+      processData: false,
+      contentType: false,
+      cache: false,
+      success: function(){form = new FormData();estEnregistre =false;}
+    });
+  }
+}
+
+function deleteAudio(){
+  form = new FormData();
+  estEnregistre = false;
+  boutonAudioClose();
+}
+
+function boutonAudioOpen(){
+  $("#sendAudio").addClass("is-active");
+  $("#deleteAudio").addClass("is-active");
+}
+
+function boutonAudioClose(e) {
+  $("#deleteAudio").removeClass("is-active");
+  $("#sendAudio").removeClass("is-active");
 }

@@ -1,4 +1,24 @@
 {
+  "name": "codetonlycee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sass/mystyles.scss",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "css-build": "node-sass --omit-source-map-url sass/mystyles.scss css/mystyles.css",
+    "css-watch": "npm run css-build -- --watch",
+    "start": "npm run css-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pikselle/CodeTonLycee.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pikselle/CodeTonLycee/issues"
+  },
+  "homepage": "https://github.com/Pikselle/CodeTonLycee#readme",
   "devDependencies": {
     "bulma": "^0.9.2",
     "node-sass": "^6.0.0"
