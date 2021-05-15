@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top" lang="fr">
+
+<head>
+  <!-- language utf8 pour indiquer l'encodage -->
+  <meta charset="UTF-8">
+  <!-- pour l'adapter plus ou moins bien sur telephone -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- titre en haut dans le navigateur -->
+  <title>Profil</title>
+  <!-- page de style -->
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+  <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
+  <!-- importation du JS pour afficher et enlever les div -->
+  <style>
+    .logoBouton:hover {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Bandeau -->
+  {% include "bandeau.html" %}
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <!-- Espace photo de profil -->
+  <div class="columns">
+    <div class="column">
+      <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        style="width:80px; height:auto;" />
+    </div>
+    <div class="column"></div>
+    <div class="columns">
+      <!-- Barre de progression -->
+      <div class="column">
+        <progress value="70" max="100">70%</progress>
+      </div>
+      <div class="column">
+        <p>
+          70XP
+        </p>
+      </div>
+    </div>
+  </div>
+  <div style="display: flex;align-items: center;justify-content:space-evenly;">
+    <!-- Début informations -->
+    <div>
+      <!-- Informations puliques -->
+      <!-- Début tableau informations publiques -->
+      <table class="table is-narrow">
+        <tbody>
+          <!-- Nom et prénom -->
+          <tr>
+            <td>
+              <i class="fas fa-user-alt" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Nom et Prenom
+            </td>
+            <td>
+              {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
+            </td>
+          </tr>
+          <!-- Pseudo -->
+          <tr>
+            <td>
+              <i class="far fa-smile-wink" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Pseudo
+            </td>
+            <td>
+              <div id="contentpseudo">
+                <p id="pseudo">{{profilUtilisateur['pseudo']}}</p>
+              </div>
+            </td>
+          </tr>
+          <!-- Lycée et classe -->
+          <tr>
+            <td>
+              <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Lycée/Classe
+            </td>
+            <td>
+              {{profilUtilisateur['lycee']}}/{{profilUtilisateur['classe']}}
+            </td>
+          </tr>
+          <!-- Langues -->
+          <tr>
+            <td>
+              <i class="fas fa-globe" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Langue(s) vivante(s)
+            <td>
+              <div id="contentlangues">
+                <p id="langues">{{profilUtilisateur['langues']}}{%if profilUtilisateur['langues']==""%}Non-renseigné{%endif%}</p>
+              </div>
+            </td>
+          </tr>
+          <!-- Options -->
+          <tr>
+            <td>
+              <i class="fas fa-book" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Option(s)
+            </td>
+            <td>
+              <div id="contentoptions">
+                <p id="options">
+                  {{profilUtilisateur['options']}}{%if profilUtilisateur['options']==""%}Non-renseigné{%endif%}
+                </p>
+              </div>
+            </td>
+          </tr>
+          <!-- Spécialités -->
+          <tr>
+            <td>
+              <i class="fas fa-book-open" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Spécialités
+            </td>
+            <td>
+              <div id="contentspe">
+                <p id="spe">
+                  {{profilUtilisateur['spe']}}{%if profilUtilisateur['spe']==""%}Non-renseigné{%endif%}
+                </p>
+              </div>
+            </td>
+          </tr>
+          {%for element in profilUtilisateur['elementPublic']%}
+          {%if element=="caractere"%}
+          <tr>
+            <td>
+              <i class="fas fa-user" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Caractère
+            </td>
+            <td>
+              {%if profilUtilisateur['caractere']=="joy"%}Joyeux.se{%endif%}
+              {%if profilUtilisateur['caractere']=="tr"%}Triste{%endif%}
+              {%if profilUtilisateur['caractere']=="det"%}Déterminé.e{%endif%}
+              {%if profilUtilisateur['caractere']=="fat"%}Fatigué.e{%endif%}
+              {%if profilUtilisateur['caractere']=="dro"%}Drôle{%endif%}
+              {%if profilUtilisateur['caractere']=="ti"%}Timide{%endif%}
+              {%if profilUtilisateur['caractere']=="crea"%}Créatif.ve{%endif%}
+              {%if profilUtilisateur['caractere']=="ser"%}Sérieux.se{%endif%}
+              {%if profilUtilisateur['caractere']=="op"%}Optimiste{%endif%}
+              {%if profilUtilisateur['caractere']=="pe"%}Pessimiste{%endif%}
+              {%if profilUtilisateur['caractere']=="ro"%}Romantique{%endif%}
+            </td>
+          </tr>
+          {%elif element=="birth_date"%}
+          <tr>
+            <td>
+              <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Date de naissance
+            </td>
+            <td>
+              {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
+            </td>
+          </tr>
+          {%else%}
+          <tr>
+            <td>
+              <i {%if element=="email"%}class="fas fa-at" {%endif%}{%if element=="telephone"%}class="fas fa-phone-alt" {%endif%}{%if element=="interets"%}class="far fa-smile-beam" {%endif%} style="font-size:25px;"></i>
+              &nbsp;&nbsp;{%if element=="email"%}adresse mail{%endif%}{%if element=="telephone"%}Téléphone{%endif%}{%if element=="interets"%}Centres d'intérêts{%endif%}
+            </td>
+            <td>
+              <div id="content{{element}}">
+                <p id="{{element}}">{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
+              </div>
+            </td>
+          </tr>
+          {%endif%}
+          {%endfor%}
+        </tbody>
+      </table>
+      <!-- Fin tableau informations publiques -->
+    </div>
+    <!-- Fin informations -->
+
+  </div>
+  <!-- fin de la page -->
+</body>
+
+</html>
