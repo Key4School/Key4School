@@ -90,7 +90,7 @@ def accueil():
 @app.route('/accueil/')
 def accueil2():
     if 'id' in session:
-        return render_template("index.html")
+        return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
 
