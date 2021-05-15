@@ -260,4 +260,15 @@ function sendAudio(){
 function deleteAudio(){
   form = new FormData();
   estEnregistre = false;
+  boutonAudioClose();
+}
+
+function boutonAudioOpen(){
+  $("#sendAudio").addClass("is-active");
+  $("#deleteAudio").addClass("is-active");
+}
+
+function boutonAudioClose(e) {
+  $("#deleteAudio").removeClass("is-active");
+  $("#sendAudio").removeClass("is-active");
 }

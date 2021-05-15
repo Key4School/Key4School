@@ -90,7 +90,7 @@ def accueil():
 @app.route('/accueil/')
 def accueil2():
     if 'id' in session:
-        return render_template("index.html")
+        return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
 
@@ -121,7 +121,7 @@ def messages(idGroupe):
                         'contenu': 1,
                         'date-envoi': 1,
                         'rep': 1,
-                        'audio':1
+                        'audio': 1
                     }},
                 ])
                 infogroupes = db_groupes.find_one(
@@ -154,21 +154,19 @@ def messages(idGroupe):
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/uploadAudio/', methods=['POST'])
 def uploadAudio():
     if 'id' in session:
         heure = str(datetime.now())
-        nom = "MsgVocal"+request.form['group']+session['id']+heure
+        nom = "MsgVocal" + request.form['group'] + session['id'] + heure
         cluster.save_file(nom, request.files['audio'])
         db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse":""})
+                                "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": ""})
         return('yes')
     else:
         return redirect(url_for('login'))
 
-@app.route('/test/')
-def test():
-    return render_template("test.html")
 
 @app.route('/audio/<audioName>')
 def audio(audioName):
@@ -176,6 +174,7 @@ def audio(audioName):
         return cluster.send_file(audioName)
     else:
         return redirect(url_for('login'))
+
 
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
@@ -256,7 +255,7 @@ def refreshMsg():
                     'contenu': 1,
                     'date-envoi': 1,
                     'rep': 1,
-                    'audio':1
+                    'audio': 1
                 }},
             ])
             return render_template("refreshMessages.html", msgDb=msgDb, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=idGroupe)
@@ -277,46 +276,18 @@ def changeTheme():
         return redirect(url_for('login'))
 
 
-@app.route('/profil/')
-def profil():
+@app.route('/profil/', defaults={'idUser': None}, methods=['POST', 'GET'])
+@app.route('/profil/<idUser>', methods=['POST', 'GET'])
+def profil(idUser):
     if 'id' in session:
-        toutesDemandes = db_demande_aide.aggregate([
-            {'$match': {'id-utilisateur':ObjectId(session['id'])}},
-            {'$sort': {'date-envoi': -1}}
-        ])  # ici on récupère les 5 dernières demandes les plus récentes
-
-        demandes = []
-        for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
-            # on convertit en nombre de secondes la durée depuis le post
-            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
-            tempsStr = convertTime(diffTemps)
-
-            # on check si l'utilisateur a déjà liké le post
-            if session['id'] in a['likes']:
-                a_like = True
-            else:
-                a_like = False
-
-            if session['id'] in a['sign']:
-                a_sign = True
-            else:
-                a_sign = False
-
-            demandes.append({  # on ajoute à la liste ce qui nous interesse
-                'idMsg': a['_id'],
-                'titre': a['titre'],
-                'contenu': a['contenu'],
-                'temps': tempsStr,
-                'matière': a['matière'],
-                'nb-likes': len(a['likes']),
-                'a_like': a_like,
-                'a_sign': a_sign,
-                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
-            })
-        profilUtilisateur = db_utilisateurs.find_one(
-            {'_id': ObjectId(session['id'])})
-        return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes)
+        if idUser == None:
+            profilUtilisateur = db_utilisateurs.find_one(
+                {'_id': ObjectId(session['id'])})
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur)
+        else:
+            profilUtilisateur = db_utilisateurs.find_one(
+                {'_id': ObjectId(idUser)})
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur)
     else:
         return redirect(url_for('login'))
 
@@ -365,7 +336,8 @@ def updateImg():
             db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
                                        '$set': {'imgProfile': "", 'nomImg': ""}})
         elif request.form['but'] == "replace":
-            ImgNom = request.files['Newpicture'].filename + 'imgProfile' + session['id']
+            ImgNom = request.files['Newpicture'].filename + \
+                'imgProfile' + session['id']
             MyImage = db_files.find(
                 {'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
@@ -373,7 +345,8 @@ def updateImg():
                 db_chunks.delete_many({'files_id': a['_id']})
             cluster.save_file(ImgNom, request.files['Newpicture'])
             image = db_files.find_one({'filename': ImgNom})
-            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {'$set': {'imgProfile': image['_id'], 'nomImg': ImgNom}})
+            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
+                                       '$set': {'imgProfile': image['_id'], 'nomImg': ImgNom}})
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
@@ -383,13 +356,15 @@ def updateImg():
 def redirect_comments():
     return redirect('/')
 
+
 @app.route('/comments/<idMsg>', methods=['GET', 'POST'])
 def comments(idMsg):
     if 'id' in session:
         if request.method == 'GET':
             msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
 
-            diffTemps = int((datetime.now() - msg['date-envoi']).total_seconds())
+            diffTemps = int(
+                (datetime.now() - msg['date-envoi']).total_seconds())
             tempsStr = convertTime(diffTemps)
 
             # on check si l'utilisateur a déjà liké le post
@@ -405,7 +380,8 @@ def comments(idMsg):
 
             reponses = []
             for r in msg['réponses associées'].values():
-                diffTemps2 = int((datetime.now() - r['date-envoi']).total_seconds())
+                diffTemps2 = int(
+                    (datetime.now() - r['date-envoi']).total_seconds())
                 tempsStr2 = convertTime(diffTemps2)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -456,7 +432,7 @@ def comments(idMsg):
                     {'_id': ObjectId(idMsg)},
                     {'$set':
                         {'réponses associées': reponses}
-                    }
+                     }
                 )
 
             return redirect('/comments/' + idMsg)
@@ -495,7 +471,8 @@ def recherche():
             result = []
             for a in firstResult:  # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+                diffTemps = int(
+                    (datetime.now() - a['date-envoi']).total_seconds())
                 tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -598,12 +575,14 @@ def likePost(idPost):
     else:
         abort(401)  # non autorisé
 
+
 @app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
 def likeRep(idPost, idRep):
     if 'id' in session:
         if 'idPost' != None and 'idRep' != None:
             # on récupère les likes de la demande d'aide
-            reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})['réponses associées']
+            reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})[
+                'réponses associées']
             if not idRep in reponses:
                 return abort(400)
 
@@ -703,11 +682,13 @@ def convertTime(diffTemps):
     if diffTemps // (60 * 60 * 24 * 7):  # semaines
         tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
         if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
-            tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+            tempsStr += '{}j '.format((diffTemps %
+                                       (60 * 60 * 24 * 7)) // (60 * 60 * 24))
     elif diffTemps // (60 * 60 * 24):  # jours
         tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
         if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
-            tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+            tempsStr += '{}h '.format((diffTemps %
+                                       (60 * 60 * 24)) // (60 * 60))
     elif diffTemps // (60 * 60):  # heures
         tempsStr += '{}h '.format(diffTemps // (60 * 60))
         if (diffTemps % (60 * 60)) // 60:  # minutes
