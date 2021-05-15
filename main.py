@@ -329,7 +329,7 @@ def profil(idUser):
         if idUser == None:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur, , demandes=demandes)
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes)
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(idUser)})
