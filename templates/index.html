@@ -80,10 +80,10 @@
               <div class="content">
                 <p style="margin-bottom: 5px;">
                   <!-- Nom utilisateur ; pseudo ; temps -->
-                  <strong>{{d['user']['nom']}} {{d['user']['prenom']}}</strong> <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
+                  <div style="font-variant: small-caps;">{{d['user']['nom']}} {{d['user']['prenom']}}</div> <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
                 </p>
                 <!-- Titre -->
-                <h3 style="margin-top: 0;">{{d['titre']}}</h3>
+                <h4 style="margin-top: 0;">{{d['titre']}}</h4>
                 <!-- Texte publication -->
                 <p>{{d['contenu']}}</p>
                 </p>
@@ -117,6 +117,7 @@
                 </div>
               </nav>
             </div>
+            <!-- Signaler -->
             <div class="media-right">
               <div class="navbar-item has-dropdown is-hoverable">
                 <div class="navbar-link">
