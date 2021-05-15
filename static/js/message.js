@@ -115,64 +115,70 @@ function enleverRep() {
 
 
 let shouldStop = false;
-let stopped = false;
+let stopped = true;
 const audioMsg = document.getElementById('audioMsg');
 const stopButton = document.getElementById('stop');
-
-
-
-
-
 var mediaRecorder = "";
-var formData = new FormData();
+var form = new FormData();
+var accessMicro = false;
 
-function enregistrer(){
+function micro(){
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-     console.log('getUserMedia supported.');
-     navigator.mediaDevices.getUserMedia (
-        // constraints - only audio needed for this app
-        {
-           audio: true
-        })
+    navigator.mediaDevices.getUserMedia ({  audio: true });
+    accessMicro = true;
+  }
+}
 
-        // Success callback
-        .then(function(stream) {
-          mediaRecorder = new MediaRecorder(stream);
-          mediaRecorder.start();
-          console.log(mediaRecorder.state);
-          console.log("recorder started");
-          let chunks = [];
-          mediaRecorder.ondataavailable = function(e) {
-            chunks.push(e.data);
-          }
-          mediaRecorder.onstop = function(e) {
-            console.log(chunks);
-            const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-            chunks = [];
-            console.log(blob);
-            var idGroupe = $('[name="group"]').attr("value");
-            var form = new FormData();
-            form.append('audio', blob);
-            form.append('group',idGroupe)
-            $.ajax({
-              url: "/uploadAudio/",
-              type: "POST",
-              data: form,
-              processData: false,
-              contentType: false,
-              cache: false,
-              success: function(){console.log('réussi');}
-            });
-          }
-        })
+function enregistrer(e){
+  var touche = event.keyCode;
+  console.log(touche);
+  if (touche==80 && stopped == true){
+    if (accessMicro== true) {
+       navigator.mediaDevices.getUserMedia (
+          // constraints - only audio needed for this app
+          {
+             audio: true
+          })
 
-        // Error callback
-        .catch(function(err) {
-           console.log('The following getUserMedia error occurred: ' + err);
-        }
-     );
-  } else {
-     console.log('getUserMedia not supported on your browser!');
+          // Success callback
+          .then(function(stream) {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            stopped=false;
+            console.log(mediaRecorder.state);
+            console.log("recorder started");
+            let chunks = [];
+            mediaRecorder.ondataavailable = function(e) {
+              chunks.push(e.data);
+            }
+            mediaRecorder.onstop = function(e) {
+              console.log(chunks);
+              const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+              chunks = [];
+              console.log(blob);
+              var idGroupe = $('[name="group"]').attr("value");
+              form.append('audio', blob);
+              form.append('group',idGroupe)
+              $.ajax({
+                url: "/uploadAudio/",
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(){form = new FormData();}
+              });
+            }
+          })
+
+          // Error callback
+          .catch(function(err) {
+             console.log('The following getUserMedia error occurred: ' + err);
+          }
+       );
+    } else {
+      micro();
+    }
   }
 }
 
@@ -180,8 +186,74 @@ function enregistrer(){
 
 
 
-function stop(){
-  mediaRecorder.stop();
-  console.log(mediaRecorder.state);
-  console.log("recorder stopped");
+function stop(e){
+  var touche = event.keyCode;
+  if (touche==80){
+    if ( stopped == false ){
+      mediaRecorder.stop();
+      console.log(mediaRecorder.state);
+      console.log("recorder stopped");
+      stopped = true;
+    }
+  }
+}
+
+function enregistrerTel(){
+  if (stopped == true){
+    if ( accessMicro== true) {
+       navigator.mediaDevices.getUserMedia (
+          // constraints - only audio needed for this app
+          {
+             audio: true
+          })
+
+          // Success callback
+          .then(function(stream) {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            stopped=false;
+            console.log(mediaRecorder.state);
+            console.log("recorder started");
+            let chunks = [];
+            mediaRecorder.ondataavailable = function(e) {
+              chunks.push(e.data);
+            }
+            mediaRecorder.onstop = function(e) {
+              console.log(chunks);
+              const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+              chunks = [];
+              console.log(blob);
+              var idGroupe = $('[name="group"]').attr("value");
+              form.append('audio', blob);
+              form.append('group',idGroupe)
+              $.ajax({
+                url: "/uploadAudio/",
+                type: "POST",
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(){form = new FormData();}
+              });
+            }
+          })
+
+          // Error callback
+          .catch(function(err) {
+             console.log('The following getUserMedia error occurred: ' + err);
+          }
+       );
+    } else {
+      micro();
+    }
+  }
+}
+
+function stopTel(){
+  if ( stopped == false ){
+    mediaRecorder.stop();
+    console.log(mediaRecorder.state);
+    console.log("recorder stopped");
+    stopped = true;
+  }
 }
