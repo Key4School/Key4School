@@ -193,7 +193,7 @@
             </div>
             <br>
             <p style="margin:0px">
-              {{content['contenu']}}{%if "rep"in content%} en réponse à : {{content['rep']['contenu']}}{%endif%}
+              {%if 'audio' in content and content['audio'] == true %} test <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>{%else%}{{content['contenu']}}{%endif%}{%if "rep"in content%} en réponse à : {{content['rep']['contenu']}}{%endif%}
               <!--On affiche le contenu du message -->
             </p>
             <br>
@@ -225,7 +225,6 @@
         </form>
         <button onclick="enregistrer()">start</button>
     <button id='stop' onclick="stop()">Stop</button>
-    <button onclick="sendAudio()">test</button>
         <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
       </div>
     </div>

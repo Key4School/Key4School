@@ -121,6 +121,7 @@ def messages(idGroupe):
                         'contenu': 1,
                         'date-envoi': 1,
                         'rep': 1,
+                        'audio':1
                     }},
                 ])
                 infogroupes = db_groupes.find_one(
@@ -148,7 +149,7 @@ def messages(idGroupe):
             else:
                 reponse = "None"
             db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "img": "", "reponse": reponse})
+                                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse})
             return 'sent'
     else:
         return redirect(url_for('login'))
@@ -156,7 +157,11 @@ def messages(idGroupe):
 @app.route('/uploadAudio/', methods=['POST'])
 def uploadAudio():
     if 'id' in session:
-        cluster.save_file("test", request.files['audio'])
+        heure = str(datetime.now())
+        nom = "MsgVocal"+request.form['group']+session['id']+heure
+        cluster.save_file(nom, request.files['audio'])
+        db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                                "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse":""})
         return('yes')
     else:
         return redirect(url_for('login'))
@@ -251,6 +256,7 @@ def refreshMsg():
                     'contenu': 1,
                     'date-envoi': 1,
                     'rep': 1,
+                    'audio':1
                 }},
             ])
             return render_template("refreshMessages.html", msgDb=msgDb, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=idGroupe)

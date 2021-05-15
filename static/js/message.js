@@ -95,7 +95,7 @@ function refresh() {
   });
 }
 
-setInterval(refresh, 100000);
+setInterval(refresh, 1000);
 
 function reponseMsg(nb) {
   var contentMsg = document.getElementById('contenu' + nb).value;
@@ -121,46 +121,7 @@ const stopButton = document.getElementById('stop');
 
 
 
-// function stop(){
-//   shouldStop = true;
-// }
 
-// stopButton.addEventListener('click', function() {
-//   shouldStop = true;
-// });
-
-// const handleSuccess = function(stream) {
-//   const options = {mimeType: 'audio/webm'};
-//   const recordedChunks = [];
-//   const mediaRecorder = new MediaRecorder(stream, options);
-//   alert('ca tourne');
-//
-//   mediaRecorder.addEventListener('dataavailable', function(e) {
-//     if (e.data.size > 0) {
-//       recordedChunks.push(e.data);
-//     }
-//
-//     if(shouldStop === true && stopped === false) {
-//       mediaRecorder.stop();
-//       stopped = true;
-//     }
-//   });
-//
-//   mediaRecorder.addEventListener('stop', function() {
-//     audioMsg.value = new Blob(recordedChunks);
-//   });
-//
-//     mediaRecorder.start();
-// };
-//
-// function enregistrer(){
-//   navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-//     .then(handleSuccess);
-// }
-//
-function testcomp(){
-  console.log (document.getElementById('audioMsg').value);
-}
 
 var mediaRecorder = "";
 var formData = new FormData();
@@ -189,8 +150,10 @@ function enregistrer(){
             const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
             chunks = [];
             console.log(blob);
+            var idGroupe = $('[name="group"]').attr("value");
             var form = new FormData();
             form.append('audio', blob);
+            form.append('group',idGroupe)
             $.ajax({
               url: "/uploadAudio/",
               type: "POST",
@@ -200,11 +163,6 @@ function enregistrer(){
               cache: false,
               success: function(){console.log('réussi');}
             });
-
-            // // deleteButton.onclick = function(e) {
-            // //   let evtTgt = e.target;
-            // //   evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
-            // }
           }
         })
 
