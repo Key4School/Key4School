@@ -72,7 +72,7 @@
     {%endif%}
     {%for user in users%}
       <img src="{{url_for('static',filename='image/sans_profil.png')}}" style="width:80px; height:auto;"/>
-      {{user['pseudo']}}
+      <strong><a href="{{url_for('profil' ,idUser=user['_id'])}}">{{user['nom']}} {{user['prenom']}}</a></strong> {{user['pseudo']}}
     {%endfor%}
 
     {%for r in results %}
@@ -90,7 +90,7 @@
             <div class="content">
               <p style="margin-bottom: 5px;">
                 <!-- Nom utilisateur ; pseudo ; temps -->
-                <strong>{{r['user']['nom']}} {{r['user']['prenom']}}</strong> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
+                <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}">{{r['user']['nom']}} {{r['user']['prenom']}}</a></strong> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
               </p>
               <!-- Titre -->
               <h3 style="margin-top: 0;">{{r['titre']}}</h3>

@@ -45,7 +45,7 @@
             <div class="content">
               <p style="margin-bottom: 5px;">
                 <!-- Nom utilisateur ; pseudo ; temps -->
-                <strong>{{d['user']['nom']}} {{d['user']['prenom']}}</strong> <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
+                <strong><a href="{{url_for('profil' ,idUser=d['user']['_id'])}}">{{d['user']['nom']}} {{d['user']['prenom']}}</a></strong> <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
               </p>
               <!-- Titre -->
               <h3 style="margin-top: 0;">{{d['titre']}}</h3>
@@ -99,7 +99,7 @@
               <div class="content">
                 <p style="margin-bottom: 5px;">
                   <!-- Nom utilisateur ; pseudo ; temps -->
-                  <strong>{{r['user']['nom']}} {{r['user']['prenom']}}</strong> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
+                  <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}">{{r['user']['nom']}} {{r['user']['prenom']}}</a></strong> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
                 </p>
                 <!-- Texte publication -->
                 <p>{{r['contenu']}}</p>

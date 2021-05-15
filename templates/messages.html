@@ -104,7 +104,7 @@
           <p style="font-weight:bold;">{{infogroupe['nom']}}</p>
           <!-- liste des paricipant -->
           <p>
-            {%for content in infoUtilisateurs%} {{content['pseudo']}}, {%endfor%}
+            {%for content in infoUtilisateurs%} <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>, {%endfor%}
           </p>
         </div>
         <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:black;font-size: 20px;margin-bottom:5px;"></i>
@@ -150,7 +150,7 @@
             style="  margin-left: 5%;margin-right: 55%;margin-bottom: 2%;border-radius: 20px;padding: 2%;padding-left: 3%;padding-right: 3%;background-color:#8dd7cf;">
             {%endif%}
             <div style="display: flex;align-items: center;justify-content:space-between;">
-              <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}</p>
+              <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
               <div class="navbar-item has-dropdown is-hoverable">
                 <div class="navbar-link">
                 </div>
