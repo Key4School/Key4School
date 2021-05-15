@@ -327,8 +327,6 @@ def profil(idUser):
         profilUtilisateur = db_utilisateurs.find_one(
             {'_id': ObjectId(session['id'])})
         return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes)
-    else:
-        return redirect(url_for('login'))
         if idUser == None:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
