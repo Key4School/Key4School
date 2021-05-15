@@ -291,7 +291,7 @@ def changeTheme():
 def profil(idUser):
     if 'id' in session:
         toutesDemandes = db_demande_aide.aggregate([
-            {'$match': {'id-utilisateur':ObjectId(session['id'])}},
+            {'$match': {'id-utilisateur': ObjectId(session['id'])}},
             {'$sort': {'date-envoi': -1}}
         ])  # ici on récupère les 5 dernières demandes les plus récentes
 
@@ -326,11 +326,10 @@ def profil(idUser):
             })
         profilUtilisateur = db_utilisateurs.find_one(
             {'_id': ObjectId(session['id'])})
-        return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes)
         if idUser == None:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur)
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur, , demandes=demandes)
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(idUser)})
