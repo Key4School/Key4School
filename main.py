@@ -290,6 +290,43 @@ def changeTheme():
 @app.route('/profil/<idUser>', methods=['POST', 'GET'])
 def profil(idUser):
     if 'id' in session:
+        toutesDemandes = db_demande_aide.aggregate([
+            {'$match': {'id-utilisateur':ObjectId(session['id'])}},
+            {'$sort': {'date-envoi': -1}}
+        ])  # ici on récupère les 5 dernières demandes les plus récentes
+
+        demandes = []
+        for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
+            # on convertit en nombre de secondes la durée depuis le post
+            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+            tempsStr = convertTime(diffTemps)
+
+            # on check si l'utilisateur a déjà liké le post
+            if session['id'] in a['likes']:
+                a_like = True
+            else:
+                a_like = False
+
+            if session['id'] in a['sign']:
+                a_sign = True
+            else:
+                a_sign = False
+
+            demandes.append({  # on ajoute à la liste ce qui nous interesse
+                'idMsg': a['_id'],
+                'titre': a['titre'],
+                'contenu': a['contenu'],
+                'temps': tempsStr,
+                'matière': a['matière'],
+                'nb-likes': len(a['likes']),
+                'a_like': a_like,
+                'a_sign': a_sign,
+                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
+            })
+        profilUtilisateur = db_utilisateurs.find_one(
+            {'_id': ObjectId(session['id'])})
+        return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes)
         if idUser == None:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
