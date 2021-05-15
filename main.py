@@ -290,8 +290,6 @@ def changeTheme():
 @app.route('/profil/<idUser>', methods=['POST', 'GET'])
 def profil(idUser):
     if 'id' in session:
-        def profil():
-    if 'id' in session:
         toutesDemandes = db_demande_aide.aggregate([
             {'$match': {'id-utilisateur':ObjectId(session['id'])}},
             {'$sort': {'date-envoi': -1}}
