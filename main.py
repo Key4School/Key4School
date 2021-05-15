@@ -349,60 +349,83 @@ def updateImg():
 def redirect_comments():
     return redirect('/')
 
-@app.route('/comments/<idMsg>')
+@app.route('/comments/<idMsg>', methods=['GET', 'POST'])
 def comments(idMsg):
     if 'id' in session:
-        msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
+        if request.method == 'GET':
+            msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
 
-        diffTemps = int((datetime.now() - msg['date-envoi']).total_seconds())
-        tempsStr = convertTime(diffTemps)
-
-        # on check si l'utilisateur a déjà liké le post
-        if session['id'] in msg['likes']:
-            a_like = True
-        else:
-            a_like = False
-
-        if session['id'] in msg['sign']:
-            a_sign = True
-        else:
-            a_sign = False
-
-        reponses = []
-        for r in msg['réponses associées'].values():
-            diffTemps2 = int((datetime.now() - r['date-envoi']).total_seconds())
-            tempsStr2 = convertTime(diffTemps2)
+            diffTemps = int((datetime.now() - msg['date-envoi']).total_seconds())
+            tempsStr = convertTime(diffTemps)
 
             # on check si l'utilisateur a déjà liké le post
-            if session['id'] in r['likes']:
-                a_like2 = True
+            if session['id'] in msg['likes']:
+                a_like = True
             else:
-                a_like2 = False
+                a_like = False
 
-            reponses.append({
-                'idRep': r['_id'],
-                'contenu': r['contenu'],
-                'temps': tempsStr2,
-                'nb-likes': len(r['likes']),
-                'a_like': a_like2,
-                'user': db_utilisateurs.find_one({'_id': ObjectId(r['id-utilisateur'])})
-            })
+            if session['id'] in msg['sign']:
+                a_sign = True
+            else:
+                a_sign = False
 
-        result = {  # on ajoute à la liste ce qui nous interesse
-            'idMsg': msg['_id'],
-            'titre': msg['titre'],
-            'contenu': msg['contenu'],
-            'temps': tempsStr,
-            'matière': msg['matière'],
-            'nb-likes': len(msg['likes']),
-            'a_like': a_like,
-            'a_sign': a_sign,
-            'reponses': reponses,
-            # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-            'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
-        }
+            reponses = []
+            for r in msg['réponses associées'].values():
+                diffTemps2 = int((datetime.now() - r['date-envoi']).total_seconds())
+                tempsStr2 = convertTime(diffTemps2)
 
-        return render_template("comments.html", d=result)
+                # on check si l'utilisateur a déjà liké le post
+                if session['id'] in r['likes']:
+                    a_like2 = True
+                else:
+                    a_like2 = False
+
+                reponses.append({
+                    'idRep': r['_id'],
+                    'contenu': r['contenu'],
+                    'temps': tempsStr2,
+                    'nb-likes': len(r['likes']),
+                    'a_like': a_like2,
+                    'user': db_utilisateurs.find_one({'_id': ObjectId(r['id-utilisateur'])})
+                })
+
+            result = {  # on ajoute à la liste ce qui nous interesse
+                'idMsg': msg['_id'],
+                'titre': msg['titre'],
+                'contenu': msg['contenu'],
+                'temps': tempsStr,
+                'matière': msg['matière'],
+                'nb-likes': len(msg['likes']),
+                'a_like': a_like,
+                'a_sign': a_sign,
+                'reponses': reponses,
+                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
+            }
+
+            return render_template("comments.html", d=result)
+
+        else:
+            if 'rep' in request.form:
+                msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
+                reponses = msg['réponses associées']
+                _id = ObjectId()
+                reponses[str(_id)] = {
+                    '_id': ObjectId(_id),
+                    'id-utilisateur': ObjectId(session['id']),
+                    'contenu': request.form.get('rep'),
+                    'date-envoi': datetime.now(),
+                    'likes': []
+                }
+
+                db_demande_aide.update(
+                    {'_id': ObjectId(idMsg)},
+                    {'$set':
+                        {'réponses associées': reponses}
+                    }
+                )
+
+            return redirect('/comments/' + idMsg)
     else:
         return redirect(url_for('login'))
 

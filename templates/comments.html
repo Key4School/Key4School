@@ -64,7 +64,7 @@
                     {% endif %}
                   </span>
                 </a>
-                <a class="level-item" aria-label="comment">
+                <a class="level-item" aria-label="comment" onclick="afficheArea()">
                   <span class="icon is-small">
                     <i class="far fa-comment" aria-hidden="true"></i>
                   </span>
@@ -79,11 +79,11 @@
     <div class="column"></div>
   </div>
 
-  <button class="button" style="display: none;" onclick="afficheArea()" id="showbutton">Répondre à cette question</button>
+  <button class="button" style="display: none; margin-bottom: 20px;" onclick="afficheArea()" id="showbutton">Répondre à cette question</button>
 
   <div style="position: relative; width: 70%; left: 50%; transform: translateX(-50%); margin-bottom: 20px;" id="rep-form">
     <form method="POST">
-      <textarea placeholder="Votre réponse..." class="textarea" style="resize: vertical; min-height: 100px; max-height: 250px;" required></textarea>
+      <textarea name="rep" placeholder="Votre réponse..." class="textarea" style="resize: vertical; min-height: 100px; max-height: 250px;" required></textarea>
       <input class="button" type="submit" value="Envoyer ma réponse !" style="margin-top: 5px;" />
     </form>
     <button class="button" style="margin-top: 5px;" onclick="enleveArea()"><em>Masquer</em></button>
