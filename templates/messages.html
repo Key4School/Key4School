@@ -143,69 +143,68 @@
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
-        <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
+        <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;"
           id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z">
+          <div style="margin-left: 90%;">
           {%else%}
           <div class="participantmsg"
             id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z"
-            style="  margin-left: 5%;margin-right: 55%;margin-bottom: 2%;border-radius: 20px;padding: 2%;padding-left: 3%;padding-right: 3%;background-color:#8dd7cf;">
+            style="margin-left: 5%;margin-right: 55%;margin-bottom: 2%;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:#8dd7cf;">
+            <div style="display: flex;align-items: center;justify-content:space-between;">
           {%endif%}
+            {%if content['id-utilisateur']!=sessionId%}
+            <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
+            {%endif%}
+            <div class="navbar-item has-dropdown is-hoverable">
+              <div class="navbar-link">
+              </div>
+              <div class="navbar-dropdown">
+                {%if content['id-utilisateur']==sessionId%}
+                <div class="navbar-item">
+                  <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+                    <span class="icon is-small">
+                      <i class="fas fa-reply"></i>
+                    </span>
+                    <span>répondre</span>
+                  </button>
+                  <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
+                  <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+                </div>
+                <div class="navbar-item">
+                  <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg">
+                    <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
+                    <input type='hidden' name="grp" value="{{idgroupe}}" />
+                    <input type='hidden' name="audio" value="{{content['audio']}}" />
+                    {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
+                    <button type="submit" class="button is-danger is-outlined is-small">
+                      <span class="icon is-small">
+                        <i class="fas fa-times"></i>
+                      </span>
+                      <span>Supprimer</span>
+                    </button>
+                  </form>
+                </div>
+                {%else%}
+                <div class="navbar-item">
+                  <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+                    <span class="icon is-small">
+                      <i class="fas fa-reply"></i>
+                    </span>
+                    <span>répondre</span>
+                  </button>
+                  <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
+                  <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+                </div>
+                {%endif%}
+              </div>
+            </div>
+          </div>
           {%if "rep" in content%}
-          <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid blue;border-radius:7px;">
+          <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid blue;border-radius:7px;margin-top:1%;margin-bottom:2%;">
             {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}<br />
             {{content['rep']['contenu']}}
           </div>
-          <br />
           {%endif%}
-            <div style="display: flex;align-items: center;justify-content:space-between;">
-              {%if content['id-utilisateur']!=sessionId%}
-              <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
-              {%endif%}
-              <div class="navbar-item has-dropdown is-hoverable">
-                <div class="navbar-link">
-                </div>
-                <div class="navbar-dropdown">
-                  {%if content['id-utilisateur']==sessionId%}
-                  <div class="navbar-item">
-                    <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
-                      <span class="icon is-small">
-                        <i class="fas fa-reply"></i>
-                      </span>
-                      <span>répondre</span>
-                    </button>
-                    <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
-                    <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
-                  </div>
-                  <div class="navbar-item">
-                    <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg">
-                      <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
-                      <input type='hidden' name="grp" value="{{idgroupe}}" />
-                      <input type='hidden' name="audio" value="{{content['audio']}}" />
-                      {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
-                      <button type="submit" class="button is-danger is-outlined is-small">
-                        <span class="icon is-small">
-                          <i class="fas fa-times"></i>
-                        </span>
-                        <span>Supprimer</span>
-                      </button>
-                    </form>
-                  </div>
-                  {%else%}
-                  <div class="navbar-item">
-                    <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
-                      <span class="icon is-small">
-                        <i class="fas fa-reply"></i>
-                      </span>
-                      <span>répondre</span>
-                    </button>
-                    <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
-                    <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
-                  </div>
-                  {%endif%}
-                </div>
-              </div>
-            </div>
-            <br>
             <p style="margin:0px">
               {%if 'audio' in content and content['audio'] == true %}
               <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>
@@ -214,8 +213,7 @@
               {%endif%}
               <!--On affiche le contenu du message -->
             </p>
-            <br>
-            <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+            <p class="date" style="margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
 
 
           </div>
@@ -248,9 +246,6 @@
             <button class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
               <i class="fas fa-microphone" style="font-size: 20px;"></i>
             </button>
-            <div id="txtAudio">
-              pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer
-            </div>
           </div>
         </div>
 
