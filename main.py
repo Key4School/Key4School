@@ -191,7 +191,13 @@ def supprimerMsg():
     if 'id' in session:
         idGroupe = request.form['grp']
         db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
+        if request.form['audio'] == 'True':
+            MyAudio = db_files.find_one(
+                {'filename': request.form['audioName']})
+            db_files.delete_one({'_id': MyAudio['_id']})
+            db_chunks.delete_many({'files_id': MyAudio['_id']})
         return redirect(url_for('messages', idGroupe=idGroupe))
+
     else:
         return redirect(url_for('login'))
 
