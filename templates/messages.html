@@ -154,6 +154,8 @@
           {%endif%}
             {%if content['id-utilisateur']!=sessionId%}
             <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
+            {%else%}
+              <p style="font-weight: bold;margin:0px"></p>
             {%endif%}
             <div class="navbar-item has-dropdown is-hoverable">
               <div class="navbar-link">
