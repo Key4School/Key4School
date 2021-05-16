@@ -146,6 +146,7 @@ function enregistrer(e){
             mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
             stopped=false;
+            document.getElementById('txtAudio').innerHTML = "enregistrement en cours";
             console.log(mediaRecorder.state);
             console.log("recorder started");
             let chunks = [];
@@ -162,6 +163,7 @@ function enregistrer(e){
               form.append('group',idGroupe)
               estEnregistre = true;
               boutonAudioOpen();
+              document.getElementById('txtAudio').innerHTML = "audio enregistré";
             }
           })
 
@@ -206,6 +208,7 @@ function enregistrerTel(){
             mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
             stopped=false;
+            document.getElementById('txtAudio').innerHTML = "enregistrement en cours";
             console.log(mediaRecorder.state);
             console.log("recorder started");
             let chunks = [];
@@ -222,6 +225,7 @@ function enregistrerTel(){
               form.append('group',idGroupe)
               estEnregistre=true;
               boutonAudioOpen();
+              document.getElementById('txtAudio').innerHTML = "audio enregistré";
             }
           })
 
@@ -254,7 +258,7 @@ function sendAudio(){
       processData: false,
       contentType: false,
       cache: false,
-      success: function(){form = new FormData();estEnregistre =false;boutonAudioClose();}
+      success: function(){form = new FormData();estEnregistre =false;boutonAudioClose();document.getElementById('txtAudio').innerHTML = "pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer";}
     });
   }
 }
@@ -263,6 +267,7 @@ function deleteAudio(){
   form = new FormData();
   estEnregistre = false;
   boutonAudioClose();
+  document.getElementById('txtAudio').innerHTML = "pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer";
 }
 
 function boutonAudioOpen(){
