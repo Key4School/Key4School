@@ -99,8 +99,9 @@ setInterval(refresh, 1000);
 
 function reponseMsg(nb) {
   var contentMsg = document.getElementById('contenu' + nb).value;
+  var pseudo = document.getElementById('user' + nb).value;
   repmsg = document.getElementById('messageForm');
-  document.getElementById('champReponse').innerHTML = contentMsg;
+  document.getElementById('champReponse').innerHTML = pseudo + '<br>' + contentMsg;
   document.getElementById('reponse').value = nb;
   idMsg = "None";
   contentMsg = "";
@@ -123,55 +124,58 @@ var form = new FormData();
 var accessMicro = false;
 var estEnregistre = "";
 
-function micro(){
+function micro() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia ({  audio: true });
+    navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
     accessMicro = true;
   }
 }
 
-function enregistrer(e){
+function enregistrer(e) {
   var touche = event.keyCode;
   console.log(touche);
-  if (touche==80 && stopped == true){
-    if (accessMicro== true) {
-       navigator.mediaDevices.getUserMedia (
+  if (touche == 80 && stopped == true) {
+    if (accessMicro == true) {
+      navigator.mediaDevices.getUserMedia(
           // constraints - only audio needed for this app
           {
-             audio: true
+            audio: true
           })
 
-          // Success callback
-          .then(function(stream) {
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start();
-            stopped=false;
-            document.getElementById('txtAudio').innerHTML = "enregistrement en cours";
-            console.log(mediaRecorder.state);
-            console.log("recorder started");
-            let chunks = [];
-            mediaRecorder.ondataavailable = function(e) {
-              chunks.push(e.data);
-            }
-            mediaRecorder.onstop = function(e) {
-              console.log(chunks);
-              const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-              chunks = [];
-              console.log(blob);
-              var idGroupe = $('[name="group"]').attr("value");
-              form.append('audio', blob);
-              form.append('group',idGroupe)
-              estEnregistre = true;
-              boutonAudioOpen();
-              document.getElementById('txtAudio').innerHTML = "audio enregistré";
-            }
-          })
-
-          // Error callback
-          .catch(function(err) {
-             console.log('The following getUserMedia error occurred: ' + err);
+        // Success callback
+        .then(function(stream) {
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start();
+          stopped = false;
+          document.getElementById('txtAudio').innerHTML = "enregistrement en cours";
+          console.log(mediaRecorder.state);
+          console.log("recorder started");
+          let chunks = [];
+          mediaRecorder.ondataavailable = function(e) {
+            chunks.push(e.data);
           }
-       );
+          mediaRecorder.onstop = function(e) {
+            console.log(chunks);
+            const blob = new Blob(chunks, {
+              'type': 'audio/ogg; codecs=opus'
+            });
+            chunks = [];
+            console.log(blob);
+            var idGroupe = $('[name="group"]').attr("value");
+            form.append('audio', blob);
+            form.append('group', idGroupe)
+            estEnregistre = true;
+            boutonAudioOpen();
+            document.getElementById('txtAudio').innerHTML = "audio enregistré";
+          }
+        })
+
+        // Error callback
+        .catch(function(err) {
+          console.log('The following getUserMedia error occurred: ' + err);
+        });
     } else {
       micro();
     }
@@ -182,10 +186,10 @@ function enregistrer(e){
 
 
 
-function stop(e){
+function stop(e) {
   var touche = event.keyCode;
-  if (touche==80){
-    if ( stopped == false ){
+  if (touche == 80) {
+    if (stopped == false) {
       mediaRecorder.stop();
       console.log(mediaRecorder.state);
       console.log("recorder stopped");
@@ -194,54 +198,55 @@ function stop(e){
   }
 }
 
-function enregistrerTel(){
-  if (stopped == true){
-    if ( accessMicro== true) {
-       navigator.mediaDevices.getUserMedia (
+function enregistrerTel() {
+  if (stopped == true) {
+    if (accessMicro == true) {
+      navigator.mediaDevices.getUserMedia(
           // constraints - only audio needed for this app
           {
-             audio: true
+            audio: true
           })
 
-          // Success callback
-          .then(function(stream) {
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start();
-            stopped=false;
-            document.getElementById('txtAudio').innerHTML = "enregistrement en cours";
-            console.log(mediaRecorder.state);
-            console.log("recorder started");
-            let chunks = [];
-            mediaRecorder.ondataavailable = function(e) {
-              chunks.push(e.data);
-            }
-            mediaRecorder.onstop = function(e) {
-              console.log(chunks);
-              const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-              chunks = [];
-              console.log(blob);
-              var idGroupe = $('[name="group"]').attr("value");
-              form.append('audio', blob);
-              form.append('group',idGroupe)
-              estEnregistre=true;
-              boutonAudioOpen();
-              document.getElementById('txtAudio').innerHTML = "audio enregistré";
-            }
-          })
-
-          // Error callback
-          .catch(function(err) {
-             console.log('The following getUserMedia error occurred: ' + err);
+        // Success callback
+        .then(function(stream) {
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.start();
+          stopped = false;
+          document.getElementById('txtAudio').innerHTML = "enregistrement en cours";
+          console.log(mediaRecorder.state);
+          console.log("recorder started");
+          let chunks = [];
+          mediaRecorder.ondataavailable = function(e) {
+            chunks.push(e.data);
           }
-       );
+          mediaRecorder.onstop = function(e) {
+            console.log(chunks);
+            const blob = new Blob(chunks, {
+              'type': 'audio/ogg; codecs=opus'
+            });
+            chunks = [];
+            console.log(blob);
+            var idGroupe = $('[name="group"]').attr("value");
+            form.append('audio', blob);
+            form.append('group', idGroupe)
+            estEnregistre = true;
+            boutonAudioOpen();
+            document.getElementById('txtAudio').innerHTML = "audio enregistré";
+          }
+        })
+
+        // Error callback
+        .catch(function(err) {
+          console.log('The following getUserMedia error occurred: ' + err);
+        });
     } else {
       micro();
     }
   }
 }
 
-function stopTel(){
-  if ( stopped == false ){
+function stopTel() {
+  if (stopped == false) {
     mediaRecorder.stop();
     console.log(mediaRecorder.state);
     console.log("recorder stopped");
@@ -249,8 +254,8 @@ function stopTel(){
   }
 }
 
-function sendAudio(){
-  if (estEnregistre = true){
+function sendAudio() {
+  if (estEnregistre = true) {
     $.ajax({
       url: "/uploadAudio/",
       type: "POST",
@@ -258,19 +263,24 @@ function sendAudio(){
       processData: false,
       contentType: false,
       cache: false,
-      success: function(){form = new FormData();estEnregistre =false;boutonAudioClose();document.getElementById('txtAudio').innerHTML = "pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer";}
+      success: function() {
+        form = new FormData();
+        estEnregistre = false;
+        boutonAudioClose();
+        document.getElementById('txtAudio').innerHTML = "pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer";
+      }
     });
   }
 }
 
-function deleteAudio(){
+function deleteAudio() {
   form = new FormData();
   estEnregistre = false;
   boutonAudioClose();
   document.getElementById('txtAudio').innerHTML = "pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer";
 }
 
-function boutonAudioOpen(){
+function boutonAudioOpen() {
   document.getElementById('buttonAudio').style.display = "block";
 }
 

@@ -8,6 +8,10 @@
     id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z"
     style="  margin-left: 5%;margin-right: 55%;margin-bottom: 2%;border-radius: 20px;padding: 2%;padding-left: 3%;padding-right: 3%;background-color:#8dd7cf;">
     {%endif%}
+    {%if "rep" in content%}
+      {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}<br />
+      {{content['rep']['contenu']}}
+    {%endif%}
     <div style="display: flex;align-items: center;justify-content:space-between;">
       <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
       <div class="navbar-item has-dropdown is-hoverable">
@@ -22,6 +26,7 @@
               </span>
               <span>répondre</span>
             </button>
+            <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
             <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
           </div>
           <div class="navbar-item">
@@ -46,6 +51,7 @@
               </span>
               <span>répondre</span>
             </button>
+            <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
             <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
           </div>
           {%endif%}
@@ -54,8 +60,12 @@
     </div>
     <br>
     <p style="margin:0px">
-    {%if 'audio' in content and content['audio'] == true %}<audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>{%else%}{{content['contenu']}}{%endif%}{%if "rep"in content%} en réponse à : {{content['rep']['contenu']}}{%endif%}
-      <!--On affiche le contenu du message -->
+      {%if 'audio' in content and content['audio'] == true %}
+        <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>
+      {%else%}
+        {{content['contenu']}}
+      {%endif%}
+        <!--On affiche le contenu du message -->
     </p>
     <br>
     <p class="date" style="margin:0px;text-align:right;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>

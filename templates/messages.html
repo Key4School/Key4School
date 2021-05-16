@@ -29,10 +29,10 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     .logoBouton:hover {
       cursor: pointer;
     }
-
   </style>
 </head>
 
@@ -58,7 +58,7 @@
           </header>
           <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
             <section class="modal-card-body">
-              <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' required/><br><br>
+              <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' required /><br><br>
               <input class="input" type="text" id="searchUser" placeholder="Recherche une personne" style="margin-top:1%;width: 50%;" />
               <br /><br />
               <div id="listeuser" style="overflow:auto;"></div>
@@ -143,20 +143,20 @@
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
-          <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
-            id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z">
-        {%else%}
+        <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 5%;margin-bottom: 2%;border-radius: 10px;padding-top: 3%;padding-left: 3%;padding-right: 3%;padding-bottom: 2%;"
+          id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z">
+          {%else%}
           <div class="participantmsg"
             id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z"
             style="  margin-left: 5%;margin-right: 55%;margin-bottom: 2%;border-radius: 20px;padding: 2%;padding-left: 3%;padding-right: 3%;background-color:#8dd7cf;">
-        {%endif%}
-        {%if "rep" in content%}
-          {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}<br />
-          {{content['rep']['contenu']}}
-        {%endif%}
+            {%endif%}
+            {%if "rep" in content%}
+            {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}<br />
+            {{content['rep']['contenu']}}
+            {%endif%}
             <div style="display: flex;align-items: center;justify-content:space-between;">
               {%if content['id-utilisateur']!=sessionId%}
-                <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
+              <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
               {%endif%}
               <div class="navbar-item has-dropdown is-hoverable">
                 <div class="navbar-link">
@@ -170,6 +170,7 @@
                       </span>
                       <span>répondre</span>
                     </button>
+                    <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
                     <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
                   </div>
                   <div class="navbar-item">
@@ -194,6 +195,7 @@
                       </span>
                       <span>répondre</span>
                     </button>
+                    <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
                     <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
                   </div>
                   {%endif%}
@@ -203,9 +205,9 @@
             <br>
             <p style="margin:0px">
               {%if 'audio' in content and content['audio'] == true %}
-                <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>
+              <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>
               {%else%}
-                {{content['contenu']}}
+              {{content['contenu']}}
               {%endif%}
               <!--On affiche le contenu du message -->
             </p>
@@ -220,7 +222,7 @@
         </div>
         <div style="display: flex;align-items: center;">
           <div id='champReponse'></div>&nbsp;&nbsp;
-          <button onclick="enleverRep()" id="buttonRep"style="display:none;" class="button is-danger is-outlined is-small">
+          <button onclick="enleverRep()" id="buttonRep" style="display:none;" class="button is-danger is-outlined is-small">
             <span>Ne plus répondre</span>
             <span class="icon is-small">
               <i class="fas fa-times"></i>
@@ -228,29 +230,29 @@
           </button>
         </div>
         <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
-        <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button>
+        <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
         <div class="columns">
-        <div class="column" style="padding-right:0px;">
-          <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
-            <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
-            <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
-            <input type='hidden' name="group" value="{{idgroupe}}" />
-            <input type='hidden' id='reponse' name='reponse' value="None" />
-            <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
-          </form>
-        </div>
-        <div class="column" style="padding-left:0px;">
-          <button class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
-            <i class="fas fa-microphone" style="font-size: 20px;"></i>
-          </button>
-          <div id="txtAudio">
-            pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer
+          <div class="column" style="padding-right:0px;">
+            <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
+              <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
+              <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+              <input type='hidden' name="group" value="{{idgroupe}}" />
+              <input type='hidden' id='reponse' name='reponse' value="None" />
+              <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
+            </form>
+          </div>
+          <div class="column" style="padding-left:0px;">
+            <button class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
+              <i class="fas fa-microphone" style="font-size: 20px;"></i>
+            </button>
+            <div id="txtAudio">
+              pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer
+            </div>
           </div>
         </div>
-      </div>
 
-        <div id="buttonAudio"style="display:none;">
-          <button  id="sendAudio" onclick="sendAudio()">envoyer</button><button  id="deleteAudio" onclick="deleteAudio()">supprimer</button>
+        <div id="buttonAudio" style="display:none;">
+          <button id="sendAudio" onclick="sendAudio()">envoyer</button><button id="deleteAudio" onclick="deleteAudio()">supprimer</button>
         </div>
         <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
       </div>
