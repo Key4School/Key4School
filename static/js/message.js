@@ -101,17 +101,25 @@ function reponseMsg(nb) {
   var contentMsg = document.getElementById('contenu' + nb).value;
   var pseudo = document.getElementById('user' + nb).value;
   repmsg = document.getElementById('messageForm');
-  document.getElementById('champReponse').innerHTML = pseudo + '<br>' + contentMsg;
+  document.getElementById('divrepmsg').style.backgroundColor = "rgb(218 255 250)";
+  document.getElementById('champReponse').innerHTML =
+  "<div style='background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid blue;border-radius:7px;'>"
+   + pseudo +
+   '<br>' +
+   contentMsg +
+   "</div>";
   document.getElementById('reponse').value = nb;
   idMsg = "None";
   contentMsg = "";
   document.getElementById('buttonRep').style.display = "block";
+
 }
 
 function enleverRep() {
   document.getElementById('champReponse').innerHTML = "";
   document.getElementById('reponse').value = "None";
   document.getElementById('buttonRep').style.display = "none";
+  document.getElementById('divrepmsg').style.backgroundColor = "";
 }
 
 
