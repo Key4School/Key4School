@@ -200,7 +200,7 @@
             </div>
           </div>
           {%if "rep" in content%}
-          <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid blue;border-radius:7px;margin-top:1%;margin-bottom:2%;">
+          <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid blue;border-radius:7px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
             {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}<br />
             {{content['rep']['contenu']}}
           </div>
