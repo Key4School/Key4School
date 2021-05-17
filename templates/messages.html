@@ -158,7 +158,11 @@
             <div class="navbar-item has-dropdown is-hoverable">
               <div class="navbar-link">
               </div>
+              {%if content['id-utilisateur']==sessionId%}
+              <div class="navbar-dropdown is-right">
+              {%else%}
               <div class="navbar-dropdown">
+              {%endif%}
                 {%if content['id-utilisateur']==sessionId%}
                 <div class="navbar-item">
                   <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
