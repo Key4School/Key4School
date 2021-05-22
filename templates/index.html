@@ -136,6 +136,19 @@
                     </button>
                     <input type="hidden" />
                   </div>
+                  <div class="navbar-item">
+                    <button  class="button is-success is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
+                      <span class="icon is-small">
+                        {% if d['a_sign'] %}
+                        <i id="sign_{{d['idMsg']}}" class="fas fa-check-square" aria-hidden="true"></i>
+                        {% else %}
+                          <i id="sign_{{d['idMsg']}}" class="far fa-check-square" aria-hidden="true"></i>
+                        {% endif %}
+                      </span>
+                      <span>Résolu</span>
+                    </button>
+                    <input type="hidden" />
+                  </div>
                 </div>
               </div>
 
