@@ -159,10 +159,78 @@
             </td>
             <td>
               <div id="contentspe">
-                <input type="hidden" value="{{profilUtilisateur['spe']}}" name="spe"/>
-                <p onClick="input('spe')" id="spe">
-                  {{profilUtilisateur['spe']}}{%if profilUtilisateur['spe']==""%}Non-renseigné{%endif%}
-                </p>
+                <!-- Spé 1 -->
+                <div class="select" >
+                  <select name="spe1">
+                    <option value="none" {%if profilUtilisateur['spe'][0]=="none"%}selected{%endif%}>Non renseigné...</option>
+                    <option value="art" {%if profilUtilisateur['spe'][0]=="art"%}selected{%endif%}>Spé Arts/Théâtre</option>
+                    <option value="hggsp" {%if profilUtilisateur['spe'][0]=="hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                    <option value="hlp" {%if profilUtilisateur['spe'][0]=="hlp"%}selected{%endif%}>Spé HLP</option>
+                    <option value="ses" {%if profilUtilisateur['spe'][0]=="ses"%}selected{%endif%}>Spé SES</option>
+                    <option value="maths" {%if profilUtilisateur['spe'][0]=="maths"%}selected{%endif%}>Spé Mathématiques</option>
+                    <option value="pc" {%if profilUtilisateur['spe'][0]=="pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                    <option value="svt" {%if profilUtilisateur['spe'][0]=="svt"%}selected{%endif%}>Spé SVT</option>
+                    <option value="nsi" {%if profilUtilisateur['spe'][0]=="nsi"%}selected{%endif%}>Spé NSI</option>
+                    <option value="si" {%if profilUtilisateur['spe'][0]=="si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                    <option value="lca" {%if profilUtilisateur['spe'][0]=="lca"%}selected{%endif%}>Spé LCA</option>
+                    <option value="llcer-ang" {%if profilUtilisateur['spe'][0]=="llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                    <option value="llcer-esp" {%if profilUtilisateur['spe'][0]=="llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                    <option value="llcer-all" {%if profilUtilisateur['spe'][0]=="llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                    <option value="llcer-chi" {%if profilUtilisateur['spe'][0]=="llcer-chi"%}selected{%endif%}>Spé LLCER Chinois</option>
+                    <option value="llcer-por" {%if profilUtilisateur['spe'][0]=="llcer-por"%}selected{%endif%}>Spé LLCER Portugais</option>
+                    <option value="llcer-ara" {%if profilUtilisateur['spe'][0]=="llcer-ara"%}selected{%endif%}>Spé LLCER Arabe</option>
+                    <option value="llcer-ru" {%if profilUtilisateur['spe'][0]=="llcer-ru"%}selected{%endif%}>Spé LLCER Russe</option>
+                    <option value="bio-eco" {%if profilUtilisateur['spe'][0]=="bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                  </select>
+                </div>
+                <!-- Spé 2 -->
+                <div class="select" >
+                  <select name="spe2">
+                    <option value="none" {%if profilUtilisateur['spe'][1]=="none"%}selected{%endif%}>Non renseigné...</option>
+                    <option value="art" {%if profilUtilisateur['spe'][1]=="art"%}selected{%endif%}>Spé Arts/Théâtre</option>
+                    <option value="hggsp" {%if profilUtilisateur['spe'][1]=="hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                    <option value="hlp" {%if profilUtilisateur['spe'][1]=="hlp"%}selected{%endif%}>Spé HLP</option>
+                    <option value="ses" {%if profilUtilisateur['spe'][1]=="ses"%}selected{%endif%}>Spé SES</option>
+                    <option value="maths" {%if profilUtilisateur['spe'][1]=="maths"%}selected{%endif%}>Spé Mathématiques</option>
+                    <option value="pc" {%if profilUtilisateur['spe'][1]=="pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                    <option value="svt" {%if profilUtilisateur['spe'][1]=="svt"%}selected{%endif%}>Spé SVT</option>
+                    <option value="nsi" {%if profilUtilisateur['spe'][1]=="nsi"%}selected{%endif%}>Spé NSI</option>
+                    <option value="si" {%if profilUtilisateur['spe'][1]=="si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                    <option value="lca" {%if profilUtilisateur['spe'][1]=="lca"%}selected{%endif%}>Spé LCA</option>
+                    <option value="llcer-ang" {%if profilUtilisateur['spe'][1]=="llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                    <option value="llcer-esp" {%if profilUtilisateur['spe'][1]=="llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                    <option value="llcer-all" {%if profilUtilisateur['spe'][1]=="llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                    <option value="llcer-chi" {%if profilUtilisateur['spe'][1]=="llcer-chi"%}selected{%endif%}>Spé LLCER Chinois</option>
+                    <option value="llcer-por" {%if profilUtilisateur['spe'][1]=="llcer-por"%}selected{%endif%}>Spé LLCER Portugais</option>
+                    <option value="llcer-ara" {%if profilUtilisateur['spe'][1]=="llcer-ara"%}selected{%endif%}>Spé LLCER Arabe</option>
+                    <option value="llcer-ru" {%if profilUtilisateur['spe'][1]=="llcer-ru"%}selected{%endif%}>Spé LLCER Russe</option>
+                    <option value="bio-eco" {%if profilUtilisateur['spe'][1]=="bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                  </select>
+                </div>
+                <!-- Spé 2 -->
+                <div class="select" >
+                  <select name="spe3">
+                    <option value="none" {%if profilUtilisateur['spe'][2]=="none"%}selected{%endif%}>Non renseigné...</option>
+                    <option value="art" {%if profilUtilisateur['spe'][2]=="art"%}selected{%endif%}>Spé Arts/Théâtre</option>
+                    <option value="hggsp" {%if profilUtilisateur['spe'][2]=="hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                    <option value="hlp" {%if profilUtilisateur['spe'][2]=="hlp"%}selected{%endif%}>Spé HLP</option>
+                    <option value="ses" {%if profilUtilisateur['spe'][2]=="ses"%}selected{%endif%}>Spé SES</option>
+                    <option value="maths" {%if profilUtilisateur['spe'][2]=="maths"%}selected{%endif%}>Spé Mathématiques</option>
+                    <option value="pc" {%if profilUtilisateur['spe'][2]=="pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                    <option value="svt" {%if profilUtilisateur['spe'][2]=="svt"%}selected{%endif%}>Spé SVT</option>
+                    <option value="nsi" {%if profilUtilisateur['spe'][2]=="nsi"%}selected{%endif%}>Spé NSI</option>
+                    <option value="si" {%if profilUtilisateur['spe'][2]=="si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                    <option value="lca" {%if profilUtilisateur['spe'][2]=="lca"%}selected{%endif%}>Spé LCA</option>
+                    <option value="llcer-ang" {%if profilUtilisateur['spe'][2]=="llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                    <option value="llcer-esp" {%if profilUtilisateur['spe'][2]=="llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                    <option value="llcer-all" {%if profilUtilisateur['spe'][2]=="llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                    <option value="llcer-chi" {%if profilUtilisateur['spe'][2]=="llcer-chi"%}selected{%endif%}>Spé LLCER Chinois</option>
+                    <option value="llcer-por" {%if profilUtilisateur['spe'][2]=="llcer-por"%}selected{%endif%}>Spé LLCER Portugais</option>
+                    <option value="llcer-ara" {%if profilUtilisateur['spe'][2]=="llcer-ara"%}selected{%endif%}>Spé LLCER Arabe</option>
+                    <option value="llcer-ru" {%if profilUtilisateur['spe'][2]=="llcer-ru"%}selected{%endif%}>Spé LLCER Russe</option>
+                    <option value="bio-eco" {%if profilUtilisateur['spe'][2]=="bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                  </select>
+                </div>
               </div>
             </td>
           </tr>
