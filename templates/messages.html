@@ -39,7 +39,7 @@
 
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
 
-<body style="overflow:hidden;" onkeydown="enregistrer(event)" onkeyup="stop(event)">
+<body style="overflow:auto;" onkeydown="enregistrer(event)" onkeyup="stop(event)">
   {% include "bandeau.html" %}
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
   <div style="display: flex;justify-content:space-between;height:95%;margin-top:6%;">
@@ -49,7 +49,7 @@
         <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
 
-      <div class="modal" id="newgrou" style="overflow:hidden;">
+      <div class="modal" id="newgrou" style="overflow:auto;">
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
@@ -98,17 +98,18 @@
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
     <div id="titreetmsg" style="margin-right: 2%;margin-bottom:2%;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex;align-items: center;justify-content:space-between;border: 1px solid {{session['couleur']}};padding:2%;height:10%;">
-        <!-- div avec le nom du groupe et les paticipant -->
-        <div class="nomgroupeparticipents">
+      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur']}};padding:1%;height:auto;">
+        <!-- div avec le nom du groupe et les paticipants -->
+        <div style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
           <!-- nom du groupe -->
           <p style="font-weight:bold;">{{infogroupe['nom']}}</p>
-          <!-- liste des paricipant -->
-          <p>
+          <!-- liste des paricipants -->
+          <p style="font-variant: small-caps; text-align: justify;">
             {%for content in infoUtilisateurs%} <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>, {%endfor%}
           </p>
         </div>
-        <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:black;font-size: 20px;margin-bottom:5px;"></i>
+          <!-- Bouton trois petits points -->
+        <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:{{session['couleur']}};font-size: 20px;"></i>
         <div class="modal" id="option">
           <div class="modal-background"></div>
           <div class="modal-card">
@@ -138,8 +139,8 @@
           </div>
         </div>
       </div>
-      <!-- div avec les message, le overflow est activer pour pouvoir defiler tt les msg -->
-      <div id="messages" style="box-sizing: border-box;overflow-y: auto;height:80%;border: 1px solid {{session['couleur']}};padding-top:2%;">
+      <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
+      <div id="messages" style="box-sizing: border-box;overflow-y: auto;height:80%;border: 3px solid {{session['couleur']}};padding-top:2%;">
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
@@ -153,7 +154,7 @@
             <div style="display: flex;align-items: center;justify-content:space-between;">
           {%endif%}
             {%if content['id-utilisateur']!=sessionId%}
-            <p style="font-weight: bold;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
+            <p style="font-weight: bold; font-variant:small-caps;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
             {%endif%}
             <div class="navbar-item has-dropdown is-hoverable">
               <div class="navbar-link">
@@ -169,7 +170,7 @@
                     <span class="icon is-small">
                       <i class="fas fa-reply"></i>
                     </span>
-                    <span>répondre</span>
+                    <span>Répondre</span>
                   </button>
                   <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
                   <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
@@ -194,7 +195,7 @@
                     <span class="icon is-small">
                       <i class="fas fa-reply"></i>
                     </span>
-                    <span>répondre</span>
+                    <span>Répondre</span>
                   </button>
                   <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
                   <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
@@ -206,7 +207,7 @@
           {%if "rep" in content%}
           <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid blue;border-radius:7px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
             {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}
-            <a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>
+            <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a></div>
             {%endif%}{%endfor%}
             <br />
             {{content['rep']['contenu']}}
