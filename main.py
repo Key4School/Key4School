@@ -375,7 +375,7 @@ def updateprofile():
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': htmlspecialchars(request.form['pseudo']), 'email': htmlspecialchars(request.form['email']), 'telephone': htmlspecialchars(request.form['telephone']), 'interets': htmlspecialchars(request.form['interets']), 'caractere': htmlspecialchars(request.form['caractere']),
-            'langues': [htmlspecialchars(request.form['lv1']), htmlspecialchars(request.form['lv2'])], 'options': [htmlspecialchars(request.form['option1']), htmlspecialchars(request.form['option2'])], 'spes': [htmlspecialchars(request.form['spe1']), htmlspecialchars(request.form['spe2']), htmlspecialchars(request.form['spe3'])], 
+            'langues': [htmlspecialchars(request.form['lv1']), htmlspecialchars(request.form['lv2'])], 'options': [htmlspecialchars(request.form['option1']), htmlspecialchars(request.form['option2'])], 'spes': [htmlspecialchars(request.form['spe1']), htmlspecialchars(request.form['spe2']), htmlspecialchars(request.form['spe3'])],
             'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))

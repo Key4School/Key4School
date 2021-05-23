@@ -229,12 +229,13 @@
           {%endfor%}
 
           {% endif %}
-          <div id="divrepmsg" style="padding:1%;width:100%;display: flex;align-items: center;width: 100%;">
-            <div style="width: 95%;" id='champReponse'></div>&nbsp;&nbsp;
-            <button onclick="enleverRep()" id="buttonRep" style="display:none;background-color:rgb(218 255 250);border: 0px solid rgb(218 255 250);" class="icon is-medium logoBouton">
-                <i class="fas fa-times"></i>
-            </button>
-          </div>
+
+        </div>
+        <div id="divrepmsg" style="padding:1%;width:100%;display: flex;align-items: center;width: 100%;">
+          <div style="width: 95%;" id='champReponse'></div>&nbsp;&nbsp;
+          <button onclick="enleverRep()" id="buttonRep" style="display:none;background-color:rgb(218 255 250);border: 0px solid rgb(218 255 250);" class="icon is-medium logoBouton">
+              <i class="fas fa-times"></i>
+          </button>
         </div>
 
         <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
@@ -249,7 +250,10 @@
             <button class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
               <i class="fas fa-microphone" style="font-size: 20px;"></i>
             </button>
-
+            <div id="txtAudio">
+              pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer
+            </div>
+              <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
         <div id="buttonAudio" style="display:none;">
           <button id="sendAudio" onclick="sendAudio()">envoyer</button><button id="deleteAudio" onclick="deleteAudio()">supprimer</button>
         </div>
