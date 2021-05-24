@@ -35,15 +35,12 @@
     }
   </style>
 </head>
-
-
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
-
 <body style="overflow:auto;" onkeydown="enregistrer(event)" onkeyup="stop(event)">
   {% include "bandeau.html" %}
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
   <div style="display: flex;justify-content:space-between;height:95%;margin-top:6%;">
-    <!-- div pour afficher tout les groupes -->
+    <!-- div pour afficher tous les groupes -->
     <div id="nomgroupe" style="  width: 15%;margin-left: 5%;overflow-y:auto;margin-bottom:5%;">
       <div class="liengroupe">
         <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
@@ -70,8 +67,6 @@
           </form>
         </div>
       </div>
-
-
       <table class="table is-narrow">
         <tbody>
           <!-- div pour le groupe -->
@@ -205,11 +200,10 @@
             </div>
           </div>
           {%if "rep" in content%}
-          <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid blue;border-radius:7px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
+          <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid {{session['couleur']}};border-radius:5px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
             {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}
             <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a></div>
             {%endif%}{%endfor%}
-            <br />
             {{content['rep']['contenu']}}
           </div>
           {%endif%}
@@ -240,23 +234,25 @@
 
         <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
         <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
-            <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
+            <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;flex-direction:row;margin-top:-3%;" id="messageForm" onsubmit="envoi(event); return false;">
               <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
-              <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+              <button class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
+                <i class="fas fa-microphone" style="font-size: 20px;"></i>
+              </button>
+              <div id="txtAudio">
+                <p style="text-align:justify; font-size:10px;">ou pressez P pour envoyer un vocal</p>
+              </div>
+                <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
+          <div id="buttonAudio" style="display:none;">
+            <button id="sendAudio" onclick="sendAudio()">envoyer</button><button id="deleteAudio" onclick="deleteAudio()">supprimer</button>
+          </div>
+          &nbsp;
+              <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;padding:5px;">
               <input type='hidden' name="group" value="{{idgroupe}}" />
               <input type='hidden' id='reponse' name='reponse' value="None" />
               <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
             </form>
-            <button class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
-              <i class="fas fa-microphone" style="font-size: 20px;"></i>
-            </button>
-            <div id="txtAudio">
-              pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer
-            </div>
-              <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
-        <div id="buttonAudio" style="display:none;">
-          <button id="sendAudio" onclick="sendAudio()">envoyer</button><button id="deleteAudio" onclick="deleteAudio()">supprimer</button>
-        </div>
+            
         <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
       </div>
     </div>
