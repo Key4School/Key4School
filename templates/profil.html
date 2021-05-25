@@ -61,7 +61,7 @@
     <div class="column"></div>
     <div class="column">
       <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
-      <i class="fas fa-camera" onclick="updateImgOpen();" style="margin-left:8%;font-size:40px;"></i>
+      <i class="fas fa-camera" onclick="updateImgOpen();" style="margin-left:8%; font-size:40px; cursor: pointer;"></i>
 
     </div>
     <div class="column"></div>
@@ -134,28 +134,34 @@
                 <!-- LV1 -->
                 <div class="select" >
                   <select name="lv1">
-                    <option value="none" {%if profilUtilisateur['langues'][0]=="none"%}selected{%endif%}>Non renseigné...</option>
-                    <option value="ang" {%if profilUtilisateur['langues'][0]=="ang"%}selected{%endif%}>LV1 Anglais</option>
-                    <option value="ang-euro" {%if profilUtilisateur['langues'][0]=="ang-euro"%}selected{%endif%}>LV1 Anglais Euro</option>
-                    <option value="esp" {%if profilUtilisateur['langues'][0]=="esp"%}selected{%endif%}>LV1 Espagnol</option>
-                    <option value="esp-euro" {%if profilUtilisateur['langues'][0]=="esp-euro"%}selected{%endif%}>LV1 Espagnol Euro</option>
-                    <option value="all" {%if profilUtilisateur['langues'][0]=="all"%}selected{%endif%}>LV1 Allemand</option>
-                    <option value="all-euro" {%if profilUtilisateur['langues'][0]=="all-euro"%}selected{%endif%}>LV1 Allemand Euro</option>
-                    <option value="chi" {%if profilUtilisateur['langues'][0]=="chi"%}selected{%endif%}>LV1 Chinois</option>
-                    <option value="ru" {%if profilUtilisateur['langues'][0]=="ru"%}selected{%endif%}>LV1 Russe</option>
-                    <option value="ara" {%if profilUtilisateur['langues'][0]=="ara"%}selected{%endif%}>LV1 Arabe</option>
+                    <option value="none" {%if profilUtilisateur['langues'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
+                    <option value="lv1-ang" {%if profilUtilisateur['langues'][0]=="lv1-ang"%}selected{%endif%}>LV1 Anglais</option>
+                    <option value="lv1-ang-euro" {%if profilUtilisateur['langues'][0]=="lv1-ang-euro"%}selected{%endif%}>LV1 Anglais Euro</option>
+                    <option value="lv1-esp" {%if profilUtilisateur['langues'][0]=="lv1-esp"%}selected{%endif%}>LV1 Espagnol</option>
+                    <option value="lv1-esp-euro" {%if profilUtilisateur['langues'][0]=="lv1-esp-euro"%}selected{%endif%}>LV1 Espagnol Euro</option>
+                    <option value="lv1-all" {%if profilUtilisateur['langues'][0]=="lv1-all"%}selected{%endif%}>LV1 Allemand</option>
+                    <option value="lv1-all-euro" {%if profilUtilisateur['langues'][0]=="lv1-all-euro"%}selected{%endif%}>LV1 Allemand Euro</option>
+                    <option value="lv1-por" {%if profilUtilisateur['langues'][0]=="lv1-por"%}selected{%endif%}>LV1 Portugais</option>
+                    <option value="lv1-por-euro" {%if profilUtilisateur['langues'][0]=="lv1-por-euro"%}selected{%endif%}>LV1 Portugais Euro</option>
+                    <option value="lv1-it" {%if profilUtilisateur['langues'][0]=="lv1-it"%}selected{%endif%}>LV1 Italien</option>
+                    <option value="lv1-it-euro" {%if profilUtilisateur['langues'][0]=="lv1-it-euro"%}selected{%endif%}>LV1 Italien Euro</option>
+                    <option value="lv1-chi" {%if profilUtilisateur['langues'][0]=="lv1-chi"%}selected{%endif%}>LV1 Chinois</option>
+                    <option value="lv1-ru" {%if profilUtilisateur['langues'][0]=="lv1-ru"%}selected{%endif%}>LV1 Russe</option>
+                    <option value="lv1-ara" {%if profilUtilisateur['langues'][0]=="lv1-ara"%}selected{%endif%}>LV1 Arabe</option>
                   </select>
                 </div>
                 <!-- LV2 -->
                 <div class="select" >
                   <select name="lv2">
-                    <option value="none" {%if profilUtilisateur['langues'][1]=="none"%}selected{%endif%}>Non renseigné...</option>
-                    <option value="ang" {%if profilUtilisateur['langues'][1]=="ang"%}selected{%endif%}>LV2 Anglais</option>
-                    <option value="esp" {%if profilUtilisateur['langues'][1]=="esp"%}selected{%endif%}>LV2 Espagnol</option>
-                    <option value="all" {%if profilUtilisateur['langues'][1]=="all"%}selected{%endif%}>LV2 Allemand</option>
-                    <option value="chi" {%if profilUtilisateur['langues'][1]=="chi"%}selected{%endif%}>LV2 Chinois</option>
-                    <option value="ru" {%if profilUtilisateur['langues'][1]=="ru"%}selected{%endif%}>LV2 Russe</option>
-                    <option value="ara" {%if profilUtilisateur['langues'][1]=="ara"%}selected{%endif%}>LV2 Arabe</option>
+                    <option value="none" {%if profilUtilisateur['langues'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
+                    <option value="lv2-ang" {%if profilUtilisateur['langues'][1]=="lv2-ang"%}selected{%endif%}>LV2 Anglais</option>
+                    <option value="lv2-esp" {%if profilUtilisateur['langues'][1]=="lv2-esp"%}selected{%endif%}>LV2 Espagnol</option>
+                    <option value="lv2-all" {%if profilUtilisateur['langues'][1]=="lv2-all"%}selected{%endif%}>LV2 Allemand</option>
+                    <option value="lv2-por" {%if profilUtilisateur['langues'][1]=="lv2-por"%}selected{%endif%}>LV2 Portugais</option>
+                    <option value="lv2-it" {%if profilUtilisateur['langues'][1]=="lv2-it"%}selected{%endif%}>LV2 Italien</option>
+                    <option value="lv2-chi" {%if profilUtilisateur['langues'][1]=="lv2-chi"%}selected{%endif%}>LV2 Chinois</option>
+                    <option value="lv2-ru" {%if profilUtilisateur['langues'][1]=="lv2-ru"%}selected{%endif%}>LV2 Russe</option>
+                    <option value="lv2-ara" {%if profilUtilisateur['langues'][1]=="lv2-ara"%}selected{%endif%}>LV2 Arabe</option>
                   </select>
                 </div>
               </div>
@@ -172,46 +178,78 @@
                 <!-- Option 1 -->
                 <div class="select" >
                   <select name="option1">
-                    <option value="none" {%if profilUtilisateur['options'][0]=="none"%}selected{%endif%}>Non renseigné...</option>
-                    <option value="lca-latin" {%if profilUtilisateur['options'][0]=="lca-latin"%}selected{%endif%}>LCA Latin</option>
-                    <option value="lca-grec" {%if profilUtilisateur['options'][0]=="lca-grec"%}selected{%endif%}>LCA Grec</option>
-                    <option value="lv3-ang" {%if profilUtilisateur['options'][0]=="lv3-ang"%}selected{%endif%}>LV3 Anglais</option>
-                    <option value="lv3-esp" {%if profilUtilisateur['options'][0]=="lv3-esp"%}selected{%endif%}>LV3 Espagnol</option>
-                    <option value="lv3-all" {%if profilUtilisateur['options'][0]=="lv3-all"%}selected{%endif%}>LV3 Allemand</option>
-                    <option value="lv3-ru" {%if profilUtilisateur['options'][0]=="lv3-ru"%}selected{%endif%}>LV3 Russe</option>
-                    <option value="lv3-ara" {%if profilUtilisateur['options'][0]=="lv3-ara"%}selected{%endif%}>LV3 Arabe</option>
-                    <option value="lv3-chi" {%if profilUtilisateur['options'][0]=="lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
-                    <option value="lv3-eps" {%if profilUtilisateur['options'][0]=="lv3-eps"%}selected{%endif%}>LV3 EPS</option>
-                    <option value="arts" {%if profilUtilisateur['options'][0]=="arts"%}selected{%endif%}>Arts</option>
-                    <option value="equit" {%if profilUtilisateur['options'][0]=="equit"%}selected{%endif%}>Hippologie et équitation</option>
-                    <option value="aet" {%if profilUtilisateur['options'][0]=="aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
-                    <option value="psc" {%if profilUtilisateur['options'][0]=="psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
+                    <option value="none" {%if profilUtilisateur['options'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
+                    <option value="opt-lca-latin" {%if profilUtilisateur['options'][0]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
+                    <option value="opt-lca-grec" {%if profilUtilisateur['options'][0]=="opt-lca-grec"%}selected{%endif%}>LCA Grec</option>
+                    <option value="opt-lv3-ang" {%if profilUtilisateur['options'][0]=="opt-lv3-ang"%}selected{%endif%}>LV3 Anglais</option>
+                    <option value="opt-lv3-esp" {%if profilUtilisateur['options'][0]=="opt-lv3-esp"%}selected{%endif%}>LV3 Espagnol</option>
+                    <option value="opt-lv3-all" {%if profilUtilisateur['options'][0]=="opt-lv3-all"%}selected{%endif%}>LV3 Allemand</option>
+                    <option value="opt-lv3-por" {%if profilUtilisateur['options'][0]=="opt-lv3-por"%}selected{%endif%}>LV3 Portugais</option>
+                    <option value="opt-lv3-it" {%if profilUtilisateur['options'][0]=="opt-lv3-it"%}selected{%endif%}>LV3 Italien</option>
+                    <option value="opt-lv3-ru" {%if profilUtilisateur['options'][0]=="opt-lv3-ru"%}selected{%endif%}>LV3 Russe</option>
+                    <option value="opt-lv3-ara" {%if profilUtilisateur['options'][0]=="opt-lv3-ara"%}selected{%endif%}>LV3 Arabe</option>
+                    <option value="opt-lv3-chi" {%if profilUtilisateur['options'][0]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
+                    <option value="opt-eps" {%if profilUtilisateur['options'][0]=="opt-eps"%}selected{%endif%}>EPS</option>
+                    <option value="opt-arts" {%if profilUtilisateur['options'][0]=="opt-arts"%}selected{%endif%}>Arts</option>
+                    {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
+                      <option value="opt-mg" {%if profilUtilisateur['options'][0]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
+                      <option value="opt-ss" {%if profilUtilisateur['options'][0]=="opt-ss"%}selected{%endif%}>Santé et social</option>
+                      <option value="opt-biotech" {%if profilUtilisateur['options'][0]=="opt-biotech"%}selected{%endif%}>Biotechnologies</option>
+                      <option value="opt-sl" {%if profilUtilisateur['options'][0]=="opt-sl"%}selected{%endif%}>Sciences et laboratoire</option>
+                      <option value="opt-si" {%if profilUtilisateur['options'][0]=="opt-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
+                      <option value="opt-cit" {%if profilUtilisateur['options'][0]=="opt-cit"%}selected{%endif%}>Création et innovation technologiques</option>
+                      <option value="opt-ccd" {%if profilUtilisateur['options'][0]=="opt-ccd"%}selected{%endif%}>Création et culture - design</option>
+                    {% endif %}
+                    {% if profilUtilisateur['classe']=='TG' %}
+                      <option value="opt-maths-comp" {%if profilUtilisateur['options'][0]=="opt-maths-comp"%}selected{%endif%}>Maths complémentaires</option>
+                      <option value="opt-maths-exp" {%if profilUtilisateur['options'][0]=="opt-maths-exp"%}selected{%endif%}>Maths expertes</option>
+                      <option value="opt-dgemc" {%if profilUtilisateur['options'][0]=="opt-dgemc"%}selected{%endif%}>Droits et grand enjeux du monde contemporain</option>
+                    {% endif %}
+                    <option value="opt-equit" {%if profilUtilisateur['options'][0]=="opt-equit"%}selected{%endif%}>Hippologie et équitation</option>
+                    <option value="opt-aet" {%if profilUtilisateur['options'][0]=="opt-aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
+                    <option value="opt-psc" {%if profilUtilisateur['options'][0]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
                   </select>
                 </div>
                 <!-- Option 2 -->
                 <div class="select" >
                   <select name="option2">
-                    <option value="none" {%if profilUtilisateur['options'][1]=="none"%}selected{%endif%}>Non renseigné...</option>
-                    <option value="lca-latin" {%if profilUtilisateur['options'][1]=="lca-latin"%}selected{%endif%}>LCA Latin</option>
-                    <option value="lca-grec" {%if profilUtilisateur['options'][1]=="lca-grec"%}selected{%endif%}>LCA Grec</option>
-                    <option value="lv3-ang" {%if profilUtilisateur['options'][1]=="lv3-ang"%}selected{%endif%}>LV3 Anglais</option>
-                    <option value="lv3-esp" {%if profilUtilisateur['options'][1]=="lv3-esp"%}selected{%endif%}>LV3 Espagnol</option>
-                    <option value="lv3-all" {%if profilUtilisateur['options'][1]=="lv3-all"%}selected{%endif%}>LV3 Allemand</option>
-                    <option value="lv3-ru" {%if profilUtilisateur['options'][1]=="lv3-ru"%}selected{%endif%}>LV3 Russe</option>
-                    <option value="lv3-ara" {%if profilUtilisateur['options'][1]=="lv3-ara"%}selected{%endif%}>LV3 Arabe</option>
-                    <option value="lv3-chi" {%if profilUtilisateur['options'][1]=="lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
-                    <option value="lv3-eps" {%if profilUtilisateur['options'][1]=="lv3-eps"%}selected{%endif%}>LV3 EPS</option>
-                    <option value="arts" {%if profilUtilisateur['options'][1]=="arts"%}selected{%endif%}>Arts</option>
-                    <option value="equit" {%if profilUtilisateur['options'][1]=="equit"%}selected{%endif%}>Hippologie et équitation</option>
-                    <option value="aet" {%if profilUtilisateur['options'][1]=="aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
-                    <option value="psc" {%if profilUtilisateur['options'][1]=="psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
+                    <option value="none" {%if profilUtilisateur['options'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
+                    <option value="opt-lca-latin" {%if profilUtilisateur['options'][1]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
+                    <option value="opt-lca-grec" {%if profilUtilisateur['options'][1]=="opt-lca-grec"%}selected{%endif%}>LCA Grec</option>
+                    <option value="opt-lv3-ang" {%if profilUtilisateur['options'][1]=="opt-lv3-ang"%}selected{%endif%}>LV3 Anglais</option>
+                    <option value="opt-lv3-esp" {%if profilUtilisateur['options'][1]=="opt-lv3-esp"%}selected{%endif%}>LV3 Espagnol</option>
+                    <option value="opt-lv3-all" {%if profilUtilisateur['options'][1]=="opt-lv3-all"%}selected{%endif%}>LV3 Allemand</option>
+                    <option value="opt-lv3-por" {%if profilUtilisateur['options'][1]=="opt-lv3-por"%}selected{%endif%}>LV3 Portugais</option>
+                    <option value="opt-lv3-it" {%if profilUtilisateur['options'][1]=="opt-lv3-it"%}selected{%endif%}>LV3 Italien</option>
+                    <option value="opt-lv3-ru" {%if profilUtilisateur['options'][1]=="opt-lv3-ru"%}selected{%endif%}>LV3 Russe</option>
+                    <option value="opt-lv3-ara" {%if profilUtilisateur['options'][1]=="opt-lv3-ara"%}selected{%endif%}>LV3 Arabe</option>
+                    <option value="opt-lv3-chi" {%if profilUtilisateur['options'][1]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
+                    <option value="opt-eps" {%if profilUtilisateur['options'][1]=="opt-eps"%}selected{%endif%}>EPS</option>
+                    <option value="opt-arts" {%if profilUtilisateur['options'][1]=="opt-arts"%}selected{%endif%}>Arts</option>
+                    {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
+                      <option value="opt-mg" {%if profilUtilisateur['options'][1]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
+                      <option value="opt-ss" {%if profilUtilisateur['options'][1]=="opt-ss"%}selected{%endif%}>Santé et social</option>
+                      <option value="opt-biotech" {%if profilUtilisateur['options'][1]=="opt-biotech"%}selected{%endif%}>Biotechnologies</option>
+                      <option value="opt-sl" {%if profilUtilisateur['options'][1]=="opt-sl"%}selected{%endif%}>Sciences et laboratoire</option>
+                      <option value="opt-si" {%if profilUtilisateur['options'][1]=="opt-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
+                      <option value="opt-cit" {%if profilUtilisateur['options'][1]=="opt-cit"%}selected{%endif%}>Création et innovation technologiques</option>
+                      <option value="opt-ccd" {%if profilUtilisateur['options'][1]=="opt-ccd"%}selected{%endif%}>Création et culture - design</option>
+                    {% endif %}
+                    {% if profilUtilisateur['classe']=='TG' %}
+                      <option value="opt-maths-comp" {%if profilUtilisateur['options'][1]=="opt-maths-comp"%}selected{%endif%}>Maths complémentaires</option>
+                      <option value="opt-maths-exp" {%if profilUtilisateur['options'][1]=="opt-maths-exp"%}selected{%endif%}>Maths expertes</option>
+                      <option value="opt-dgemc" {%if profilUtilisateur['options'][1]=="opt-dgemc"%}selected{%endif%}>Droits et grand enjeux du monde contemporain</option>
+                    {% endif %}
+                    <option value="opt-equit" {%if profilUtilisateur['options'][1]=="opt-equit"%}selected{%endif%}>Hippologie et équitation</option>
+                    <option value="opt-aet" {%if profilUtilisateur['options'][1]=="opt-aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
+                    <option value="opt-psc" {%if profilUtilisateur['options'][1]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
                   </select>
                 </div>
               </div>
             </td>
           </tr>
           <!-- Spécialités -->
-          <tr>
+          <tr {% if profilUtilisateur['classe']=='2GT' %} style="display: none;" {% endif %}>
             <td>
               <i class="fas fa-book-open" style="font-size:25px;"></i>
                   &nbsp;&nbsp;Spécialités
@@ -221,73 +259,64 @@
                 <!-- Spé 1 -->
                 <div class="select" >
                   <select name="spe1">
-                    <option value="none" {%if profilUtilisateur['spes'][0]=="none"%}selected{%endif%}>Non renseigné...</option>
-                    <option value="art" {%if profilUtilisateur['spes'][0]=="art"%}selected{%endif%}>Spé Arts/Théâtre</option>
-                    <option value="hggsp" {%if profilUtilisateur['spes'][0]=="hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                    <option value="hlp" {%if profilUtilisateur['spes'][0]=="hlp"%}selected{%endif%}>Spé HLP</option>
-                    <option value="ses" {%if profilUtilisateur['spes'][0]=="ses"%}selected{%endif%}>Spé SES</option>
-                    <option value="maths" {%if profilUtilisateur['spes'][0]=="maths"%}selected{%endif%}>Spé Mathématiques</option>
-                    <option value="pc" {%if profilUtilisateur['spes'][0]=="pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                    <option value="svt" {%if profilUtilisateur['spes'][0]=="svt"%}selected{%endif%}>Spé SVT</option>
-                    <option value="nsi" {%if profilUtilisateur['spes'][0]=="nsi"%}selected{%endif%}>Spé NSI</option>
-                    <option value="si" {%if profilUtilisateur['spes'][0]=="si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                    <option value="lca" {%if profilUtilisateur['spes'][0]=="lca"%}selected{%endif%}>Spé LCA</option>
-                    <option value="llcer-ang" {%if profilUtilisateur['spes'][0]=="llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                    <option value="llcer-esp" {%if profilUtilisateur['spes'][0]=="llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                    <option value="llcer-all" {%if profilUtilisateur['spes'][0]=="llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                    <option value="llcer-chi" {%if profilUtilisateur['spes'][0]=="llcer-chi"%}selected{%endif%}>Spé LLCER Chinois</option>
-                    <option value="llcer-por" {%if profilUtilisateur['spes'][0]=="llcer-por"%}selected{%endif%}>Spé LLCER Portugais</option>
-                    <option value="llcer-ara" {%if profilUtilisateur['spes'][0]=="llcer-ara"%}selected{%endif%}>Spé LLCER Arabe</option>
-                    <option value="llcer-ru" {%if profilUtilisateur['spes'][0]=="llcer-ru"%}selected{%endif%}>Spé LLCER Russe</option>
-                    <option value="bio-eco" {%if profilUtilisateur['spes'][0]=="bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                    <option value="none" {%if profilUtilisateur['spes'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
+                    <option value="spe-art" {%if profilUtilisateur['spes'][0]=="spe-art"%}selected{%endif%}>Spé Arts/Théâtre</option>
+                    <option value="spe-hggsp" {%if profilUtilisateur['spes'][0]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                    <option value="spe-hlp" {%if profilUtilisateur['spes'][0]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
+                    <option value="spe-ses" {%if profilUtilisateur['spes'][0]=="spe-ses"%}selected{%endif%}>Spé SES</option>
+                    <option value="spe-maths" {%if profilUtilisateur['spes'][0]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
+                    <option value="spe-pc" {%if profilUtilisateur['spes'][0]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                    <option value="spe-svt" {%if profilUtilisateur['spes'][0]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
+                    <option value="spe-nsi" {%if profilUtilisateur['spes'][0]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
+                    <option value="spe-si" {%if profilUtilisateur['spes'][0]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                    <option value="spe-lca" {%if profilUtilisateur['spes'][0]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
+                    <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][0]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                    <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][0]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                    <option value="spe-llcer-all" {%if profilUtilisateur['spes'][0]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                    <option value="spe-llcer-it" {%if profilUtilisateur['spes'][0]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
+                    <option value="spe-bio-eco" {%if profilUtilisateur['spes'][0]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
                   </select>
                 </div>
                 <!-- Spé 2 -->
                 <div class="select" >
                   <select name="spe2">
-                    <option value="none" {%if profilUtilisateur['spes'][1]=="none"%}selected{%endif%}>Non renseigné...</option>
-                    <option value="art" {%if profilUtilisateur['spes'][1]=="art"%}selected{%endif%}>Spé Arts/Théâtre</option>
-                    <option value="hggsp" {%if profilUtilisateur['spes'][1]=="hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                    <option value="hlp" {%if profilUtilisateur['spes'][1]=="hlp"%}selected{%endif%}>Spé HLP</option>
-                    <option value="ses" {%if profilUtilisateur['spes'][1]=="ses"%}selected{%endif%}>Spé SES</option>
-                    <option value="maths" {%if profilUtilisateur['spes'][1]=="maths"%}selected{%endif%}>Spé Mathématiques</option>
-                    <option value="pc" {%if profilUtilisateur['spes'][1]=="pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                    <option value="svt" {%if profilUtilisateur['spes'][1]=="svt"%}selected{%endif%}>Spé SVT</option>
-                    <option value="nsi" {%if profilUtilisateur['spes'][1]=="nsi"%}selected{%endif%}>Spé NSI</option>
-                    <option value="si" {%if profilUtilisateur['spes'][1]=="si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                    <option value="lca" {%if profilUtilisateur['spes'][1]=="lca"%}selected{%endif%}>Spé LCA</option>
-                    <option value="llcer-ang" {%if profilUtilisateur['spes'][1]=="llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                    <option value="llcer-esp" {%if profilUtilisateur['spes'][1]=="llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                    <option value="llcer-all" {%if profilUtilisateur['spes'][1]=="llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                    <option value="llcer-chi" {%if profilUtilisateur['spes'][1]=="llcer-chi"%}selected{%endif%}>Spé LLCER Chinois</option>
-                    <option value="llcer-por" {%if profilUtilisateur['spes'][1]=="llcer-por"%}selected{%endif%}>Spé LLCER Portugais</option>
-                    <option value="llcer-ara" {%if profilUtilisateur['spes'][1]=="llcer-ara"%}selected{%endif%}>Spé LLCER Arabe</option>
-                    <option value="llcer-ru" {%if profilUtilisateur['spes'][1]=="llcer-ru"%}selected{%endif%}>Spé LLCER Russe</option>
-                    <option value="bio-eco" {%if profilUtilisateur['spes'][1]=="bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                    <option value="none" {%if profilUtilisateur['spes'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
+                    <option value="spe-art" {%if profilUtilisateur['spes'][1]=="spe-art"%}selected{%endif%}>Spé Arts/Théâtre</option>
+                    <option value="spe-hggsp" {%if profilUtilisateur['spes'][1]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                    <option value="spe-hlp" {%if profilUtilisateur['spes'][1]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
+                    <option value="spe-ses" {%if profilUtilisateur['spes'][1]=="spe-ses"%}selected{%endif%}>Spé SES</option>
+                    <option value="spe-maths" {%if profilUtilisateur['spes'][1]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
+                    <option value="spe-pc" {%if profilUtilisateur['spes'][1]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                    <option value="spe-svt" {%if profilUtilisateur['spes'][1]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
+                    <option value="spe-nsi" {%if profilUtilisateur['spes'][1]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
+                    <option value="spe-si" {%if profilUtilisateur['spes'][1]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                    <option value="spe-lca" {%if profilUtilisateur['spes'][1]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
+                    <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][1]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                    <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][1]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                    <option value="spe-llcer-all" {%if profilUtilisateur['spes'][1]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                    <option value="spe-llcer-it" {%if profilUtilisateur['spes'][1]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
+                    <option value="spe-bio-eco" {%if profilUtilisateur['spes'][1]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
                   </select>
                 </div>
-                <!-- Spé 2 -->
-                <div class="select" >
+                <!-- Spé 3 -->
+                <div class="select" {% if profilUtilisateur['classe']=='TG' %} style="display: none;" {% endif %} >
                   <select name="spe3">
-                    <option value="none" {%if profilUtilisateur['spes'][2]=="none"%}selected{%endif%}>Non renseigné...</option>
-                    <option value="art" {%if profilUtilisateur['spes'][2]=="art"%}selected{%endif%}>Spé Arts/Théâtre</option>
-                    <option value="hggsp" {%if profilUtilisateur['spes'][2]=="hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                    <option value="hlp" {%if profilUtilisateur['spes'][2]=="hlp"%}selected{%endif%}>Spé HLP</option>
-                    <option value="ses" {%if profilUtilisateur['spes'][2]=="ses"%}selected{%endif%}>Spé SES</option>
-                    <option value="maths" {%if profilUtilisateur['spes'][2]=="maths"%}selected{%endif%}>Spé Mathématiques</option>
-                    <option value="pc" {%if profilUtilisateur['spes'][2]=="pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                    <option value="svt" {%if profilUtilisateur['spes'][2]=="svt"%}selected{%endif%}>Spé SVT</option>
-                    <option value="nsi" {%if profilUtilisateur['spes'][2]=="nsi"%}selected{%endif%}>Spé NSI</option>
-                    <option value="si" {%if profilUtilisateur['spes'][2]=="si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                    <option value="lca" {%if profilUtilisateur['spes'][2]=="lca"%}selected{%endif%}>Spé LCA</option>
-                    <option value="llcer-ang" {%if profilUtilisateur['spes'][2]=="llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                    <option value="llcer-esp" {%if profilUtilisateur['spes'][2]=="llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                    <option value="llcer-all" {%if profilUtilisateur['spes'][2]=="llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                    <option value="llcer-chi" {%if profilUtilisateur['spes'][2]=="llcer-chi"%}selected{%endif%}>Spé LLCER Chinois</option>
-                    <option value="llcer-por" {%if profilUtilisateur['spes'][2]=="llcer-por"%}selected{%endif%}>Spé LLCER Portugais</option>
-                    <option value="llcer-ara" {%if profilUtilisateur['spes'][2]=="llcer-ara"%}selected{%endif%}>Spé LLCER Arabe</option>
-                    <option value="llcer-ru" {%if profilUtilisateur['spes'][2]=="llcer-ru"%}selected{%endif%}>Spé LLCER Russe</option>
-                    <option value="bio-eco" {%if profilUtilisateur['spes'][2]=="bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                    <option value="none" {%if profilUtilisateur['spes'][2]=="none"%}selected{%endif%}>Non renseignée...</option>
+                    <option value="spe-art" {%if profilUtilisateur['spes'][2]=="spe-art"%}selected{%endif%}>Spé Arts/Théâtre</option>
+                    <option value="spe-hggsp" {%if profilUtilisateur['spes'][2]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                    <option value="spe-hlp" {%if profilUtilisateur['spes'][2]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
+                    <option value="spe-ses" {%if profilUtilisateur['spes'][2]=="spe-ses"%}selected{%endif%}>Spé SES</option>
+                    <option value="spe-maths" {%if profilUtilisateur['spes'][2]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
+                    <option value="spe-pc" {%if profilUtilisateur['spes'][2]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                    <option value="spe-svt" {%if profilUtilisateur['spes'][2]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
+                    <option value="spe-nsi" {%if profilUtilisateur['spes'][2]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
+                    <option value="spe-si" {%if profilUtilisateur['spes'][2]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                    <option value="spe-lca" {%if profilUtilisateur['spes'][2]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
+                    <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][2]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                    <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][2]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                    <option value="spe-llcer-all" {%if profilUtilisateur['spes'][2]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                    <option value="spe-llcer-it" {%if profilUtilisateur['spes'][2]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
+                    <option value="spe-bio-eco" {%if profilUtilisateur['spes'][2]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
                   </select>
                 </div>
               </div>
@@ -371,7 +400,9 @@
       </table>
       <!-- Fin tableau informations publiques -->
       <!-- Informations privées -->
-      <div style="font-weight: bold; font-size:large;">Informations privées :</div>
+      {% if profilUtilisateur['elementPrive'] != [] %}
+        <div style="font-weight: bold; font-size:large;">Informations privées :</div>
+      {% endif %}
       <!-- Début tableau informations privées -->
       <table class="table is-narrow">
         <tbody>
@@ -453,7 +484,7 @@
             <tr>
               <td>
                 <br />
-                <input class="button" type="submit" />
+                <input class="button" type="submit" value="Modifier mes informations !" style="margin-bottom: 20px;" />
               </td>
             </tr>
         </tbody>
@@ -517,12 +548,14 @@
         <br />
         <br />
         <!-- Bouton pour valider le choix de la couleur -->
-        <input class="button" type="submit" value="Valider" />
+        <input class="button" type="submit" value="Modifier ma couleur !" />
       </form>
     </div>
     <!-- Fin choix couleurs -->
   </div>
-  <h3>Mes demandes d'aide :</h3>
+  {% if demandes != [] %}
+    <h3>Mes demandes d'aide :</h3>
+  {% endif %}
   {%for d in demandes %}
         <!-- Début publi -->
         <div class="box" style="border-radius: 20px;margin-bottom: 0.8rem;">

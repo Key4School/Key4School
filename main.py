@@ -300,49 +300,55 @@ def changeTheme():
 @app.route('/profil/<idUser>', methods=['POST', 'GET'])
 def profil(idUser):
     if 'id' in session:
-        toutesDemandes = db_demande_aide.aggregate([
-            {'$match': {'id-utilisateur': ObjectId(session['id'])}},
-            {'$sort': {'date-envoi': -1}}
-        ])  # ici on récupère les 5 dernières demandes les plus récentes
-
-        demandes = []
-        for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
-            # on convertit en nombre de secondes la durée depuis le post
-            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
-            tempsStr = convertTime(diffTemps)
-
-            # on check si l'utilisateur a déjà liké le post
-            if session['id'] in a['likes']:
-                a_like = True
-            else:
-                a_like = False
-
-            if session['id'] in a['sign']:
-                a_sign = True
-            else:
-                a_sign = False
-
-            demandes.append({  # on ajoute à la liste ce qui nous interesse
-                'idMsg': a['_id'],
-                'titre': a['titre'],
-                'contenu': a['contenu'],
-                'temps': tempsStr,
-                'matière': a['matière'],
-                'nb-likes': len(a['likes']),
-                'a_like': a_like,
-                'a_sign': a_sign,
-                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
-            })
-        profilUtilisateur = db_utilisateurs.find_one(
-            {'_id': ObjectId(session['id'])})
         if idUser == None or idUser == session['id']:
+            toutesDemandes = db_demande_aide.aggregate([
+                {'$match': {'id-utilisateur': ObjectId(session['id'])}},
+                {'$sort': {'date-envoi': -1}}
+            ])  # ici on récupère les 5 dernières demandes les plus récentes
+
+            demandes = []
+            for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
+                # on convertit en nombre de secondes la durée depuis le post
+                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+                tempsStr = convertTime(diffTemps)
+
+                # on check si l'utilisateur a déjà liké le post
+                if session['id'] in a['likes']:
+                    a_like = True
+                else:
+                    a_like = False
+
+                if session['id'] in a['sign']:
+                    a_sign = True
+                else:
+                    a_sign = False
+
+                demandes.append({  # on ajoute à la liste ce qui nous interesse
+                    'idMsg': a['_id'],
+                    'titre': a['titre'],
+                    'contenu': a['contenu'],
+                    'temps': tempsStr,
+                    'matière': a['matière'],
+                    'nb-likes': len(a['likes']),
+                    'a_like': a_like,
+                    'a_sign': a_sign,
+                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
+                })
+
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
+
             return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes)
+
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(idUser)})
+            # translate spes/options/lv
+            profilUtilisateur['langues'] = translate_matiere_spes_options_lv(profilUtilisateur['langues'])            
+            profilUtilisateur['spes'] = translate_matiere_spes_options_lv(profilUtilisateur['spes'])            
+            profilUtilisateur['options'] = translate_matiere_spes_options_lv(profilUtilisateur['options'])      
+
             return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur)
     else:
         return redirect(url_for('login'))
@@ -516,7 +522,10 @@ def question():
 
             # return render_template('question.html', envoi="Envoi réussi")
         else:
-            return render_template('question.html')
+            profilUtilisateur = db_utilisateurs.find_one(
+                {'_id': ObjectId(session['id'])})
+
+            return render_template('question.html', profilUtilisateur=profilUtilisateur)
     else:
         return redirect(url_for('login'))
 
@@ -626,7 +635,7 @@ def likePost(idPost):
                 {'_id': ObjectId(idPost)},
                 {'$set':
                     {'likes': newLikes}
-                 }
+                }
             )
 
             # on retourne enfin le nouveau nb de likes
@@ -736,25 +745,179 @@ def signPost():
 
 
 def convertTime(diffTemps):
-    tempsStr = ''  # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-    if diffTemps // (60 * 60 * 24 * 7):  # semaines
+    tempsStr = '' 
+    # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+    if diffTemps // (60 * 60 * 24 * 7): # semaines
         tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-        if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
-            tempsStr += '{}j '.format((diffTemps %
-                                       (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-    elif diffTemps // (60 * 60 * 24):  # jours
+        if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
+            tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+    elif diffTemps // (60 * 60 * 24): # jours
         tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-        if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
-            tempsStr += '{}h '.format((diffTemps %
-                                       (60 * 60 * 24)) // (60 * 60))
-    elif diffTemps // (60 * 60):  # heures
+        if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
+            tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+    elif diffTemps // (60 * 60): # heures
         tempsStr += '{}h '.format(diffTemps // (60 * 60))
-        if (diffTemps % (60 * 60)) // 60:  # minutes
+        if (diffTemps % (60 * 60)) // 60: # minutes
             tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
     else:
         tempsStr = '{}min'.format(diffTemps // 60)
 
     return tempsStr
+
+def translate_matiere_spes_options_lv(toTranslate: list) -> str:
+    translated = ''
+
+    for a in toTranslate:
+        if translated != '' and a != 'none':
+            translated += ' / '
+
+        # Matières tronc commun
+        if a == 'fr':
+            translated += 'Français'
+        elif a == 'maths':
+            translated += 'Mathématiques'
+        elif a == 'hg':
+            translated += 'Histoire-Géographie'
+        elif a == 'snt':
+            translated += 'SNT'
+        elif a == 'emc':
+            translated += 'EMC'
+        elif a == 'ses':
+            translated += 'SES'
+        elif a == 'philo':
+            translated += 'Philosophie'
+
+        # LV1 
+        elif a == 'lv1-ang':
+            translated += 'LV1 Anglais'
+        elif a == 'lv1-ang-euro':
+            translated += 'LV1 Anglais Euro'
+        elif a == 'lv1-esp':
+            translated += 'LV1 Espagnol'
+        elif a == 'lV1-esp-euro':
+            translated += 'LV1 Espagnol Euro'
+        elif a == 'lv1-all':
+            translated += 'LV1 Allemand'
+        elif a == 'lv1-all-euro':
+            translated += 'LV1 Allemand Euro'
+        elif a == 'lv1-por':
+            translated += 'LV1 Portugais'
+        elif a == 'lv1-por-euro':
+            translated += 'LV1 Portugais Euro'
+        elif a == 'lv1-it':
+            translated += 'LV1 Italien'
+        elif a == 'lv1-it-euro':
+            translated += 'LV1 Italien Euro'
+        elif a == 'lv1-chi':
+            translated += 'LV1 Chinois'
+        elif a == 'lV1-ru':
+            translated += 'LV1 Russe'
+        elif a == 'lv1-ara':
+            translated += 'LV1 Arabe'
+
+        # LV2
+        elif a == 'lv2-ang':
+            translated += 'LV2 Anglais'
+        elif a == 'lv2-esp':
+            translated += 'LV2 Espagnol'
+        elif a == 'lv2-all':
+            translated += 'LV2 Allemand'
+        elif a == 'lv2-por':
+            translated += 'LV2 Portugais'
+        elif a == 'lv2-it':
+            translated += 'LV2 Italien'
+        elif a == 'lv2-chi':
+            translated += 'LV2 Chinois'
+        elif a == 'lV2-ru':
+            translated += 'LV2 Russe'
+        elif a == 'lv2-ara':
+            translated += 'LV2 Arabe'
+
+        # Spés
+        elif a == 'spe-art':
+            translated += 'Spé Arts/Théâtre'
+        elif a == 'spe-hggsp':
+            translated += 'Spé HGGSP'
+        elif a == 'spe-hlp':
+            translated += 'Spé HLP'
+        elif a == 'spe-ses':
+            translated += 'Spé SES'
+        elif a == 'spe-maths':
+            translated += 'Spé Mathématiques'
+        elif a == 'spe-pc':
+            translated += 'Spé Physique-Chimie'
+        elif a == 'spe-svt':
+            translated += 'Spé SVT'
+        elif a == 'spe-nsi':
+            translated += 'Spé NSI'
+        elif a == 'spe-si':
+            translated += 'Spé Sciences de l\'Ingénieur'
+        elif a == 'spe-lca':
+            translated += 'Spé LCA'
+        elif a == 'spe-llcer-ang':
+            translated += 'Spé LLCER Anglais'
+        elif a == 'spe-llcer-esp':
+            translated += 'Spé LLCER Espagnol'
+        elif a == 'spe-llcer-all':
+            translated += 'Spé LLCER Allemand'
+        elif a == 'spe-llcer-it':
+            translated += 'Spé LLCER Italien'
+        elif a == 'spe-bio-eco':
+            translated += 'Spé Biologie-écologie'
+
+        # Options
+        elif a == 'opt-lca-latin':
+            translated += 'LCA Latin'
+        elif a == 'opt-lca-grec':
+            translated += 'LCA Grec'
+        elif a == 'opt-lv3-ang':
+            translated += 'LV3 Anglais'
+        elif a == 'opt-lv3-esp':
+            translated += 'LV3 Espagnol'
+        elif a == 'opt-lv3-all':
+            translated += 'LV3 Allemand'
+        elif a == 'opt-lv3-por':
+            translated += 'LV3 Portugais'
+        elif a == 'opt-lv3-it':
+            translated += 'LV3 Italien'
+        elif a == 'opt-lv3-ru':
+            translated += 'LV3 Russe'
+        elif a == 'opt-lv3-ara':
+            translated += 'LV3 Arabe'
+        elif a == 'opt-lv3-chi':
+            translated += 'LV3 Chinois'
+        elif a == 'opt-eps':
+            translated += 'Option EPS'
+        elif a == 'opt-arts':
+            translated += 'Option Arts'
+        elif a == 'opt-mg':
+            translated += 'Option Management et Gestion'
+        elif a == 'opt-ss':
+            translated += 'Option Santé et Social'
+        elif a == 'opt-biotech':
+            translated += 'Option Biotechnologies'
+        elif a == 'opt-sl':
+            translated += 'Option Sciences et laboratoire'
+        elif a == 'opt-si':
+            translated += 'Option Sciences de l\'Ingénieur'
+        elif a == 'opt-cit':
+            translated += 'Option Création et culture technologiques'
+        elif a == 'opt-ccd':
+            translated += 'Option Création et culture - design'
+        elif a == 'opt-equit':
+            translated += 'Option Hippologie et équitation'
+        elif a == 'opt-aet':
+            translated += 'Option Agranomie-économie-territoires'
+        elif a == 'opt-psc':
+            translated += 'Pratiques sociales et culturelles'
+        elif a == 'opt-maths-comp':
+            translated += 'Option Maths Complémentaires'
+        elif a == 'opt-maths-exp':
+            translated += 'Option Maths Expertes'
+        elif a == 'opt-dgemc':
+            translated += 'Option Droits et grand enjeux du monde contemporain'
+
+    return translated
 
 
 @app.route('/deconnexion/')
