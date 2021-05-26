@@ -25,6 +25,7 @@
 <body>
   <!-- Bandeau -->
   {% include "bandeau.html" %}
+  <!-- Photo de profil -->
   <div class="modal" id="replaceImg" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -41,7 +42,7 @@
           <form method="post" action="{{url_for('updateImg')}}" autocomplete="off" id="deletePhoto">
             <input type="hidden" name="but" value="remove" required />
           <button type="submit" class="button">
-              supprimer photo profil
+            Supprimer photo profil
           </button>
           </form>
           <button onclick="updateImgClose(); return false;" class="button">Annuler</button>
@@ -553,12 +554,14 @@
     </div>
     <!-- Fin choix couleurs -->
   </div>
+  <!-- Mes demandes d'aide -->
   {% if demandes != [] %}
-    <h3>Mes demandes d'aide :</h3>
+  <div style="display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly; margin-left:5%;">
+  <div style="font-weight: bold; font-size:large;">Mes demandes d'aide :</div>
   {% endif %}
   {%for d in demandes %}
         <!-- Début publi -->
-        <div class="box" style="border-radius: 20px;margin-bottom: 0.8rem;">
+        <div class="box" style="border-radius: 20px;margin-bottom: 0.8rem; margin-top: 1%;">
           <article class="media">
             <div class="media-left">
               <!-- Image photo de profil-->
@@ -628,10 +631,10 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </article>
         </div>
+  </div>
         <!-- Fin publi -->
       {%endfor%}
 <!-- fin de la page -->
