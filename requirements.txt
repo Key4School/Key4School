@@ -1,8 +1,8 @@
+bson
 flask
 Flask-PyMongo
 Flask-Session
 requests-oauthlib
-bson
 dnspython
 pymongo
 python-oauth2
