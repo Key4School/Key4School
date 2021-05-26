@@ -52,11 +52,11 @@
       <form onsubmit="designaler(event); return false;" id="designalement" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <input type='hidden' id="idDesignalé" name='idSignalé' value="" />
-          Etes vous sur de vouloir enlever ce signalement
+          Etes-vous sûr de vouloir enlever ce signalement
         </section>
         <footer class="modal-card-foot">
-          <button type="submit" class="button is-success">oui</button>
-          <button onclick="signalisationClose(); return false;" class="button">annuler</button>
+          <button type="submit" class="button is-success">Oui</button>
+          <button onclick="signalisationClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>
     </div>
@@ -118,11 +118,7 @@
               </nav>
             </div>
             <!-- Signaler -->
-            <div class="media-right">
-              <div class="navbar-item has-dropdown is-hoverable">
-                <div class="navbar-link">
-                </div>
-                <div class="navbar-dropdown">
+            <div style="display: flex; flex-direction: column;">
                   <div class="navbar-item">
                     <button  class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
                       <span class="icon is-small">
@@ -136,6 +132,7 @@
                     </button>
                     <input type="hidden" />
                   </div>
+                  <!-- Résolu -->
                   <div class="navbar-item">
                     <button  class="button is-success is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
                       <span class="icon is-small">
@@ -145,14 +142,11 @@
                           <i id="sign_{{d['idMsg']}}" class="far fa-check-square" aria-hidden="true"></i>
                         {% endif %}
                       </span>
-                      <span>Résolu</span>
+                      <span>Résolu &nbsp;</span>
                     </button>
                     <input type="hidden" />
                   </div>
                 </div>
-              </div>
-
-            </div>
           </article>
         </div>
         <!-- Fin publi -->

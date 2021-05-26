@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" style="overflow-x:hidden;">
+<html lang="fr" style="overflow:hidden;">
 
 <head>
   <!-- language utf8 pour indiquer l'encodage -->
@@ -143,10 +143,12 @@
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
+        <!-- Mes messages -->
         <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 1%;margin-bottom: 2%;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;"
           id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z">
           <div style="margin-left: 90%;">
           {%else%}
+          <!-- Messages des autres -->
           <div class="participantmsg"
             id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z"
             style="margin-left: 1%; display: inline-block;max-width: 55%;margin-bottom: 2%;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:#8dd7cf;">
@@ -235,7 +237,6 @@
               <i class="fas fa-times"></i>
           </button>
         </div>
-
         <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
         <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
             <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
