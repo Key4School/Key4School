@@ -7,6 +7,7 @@ from requests_oauthlib import OAuth2Session
 from flask_session import Session
 from flask.json import jsonify
 from bson.objectid import ObjectId
+from flask import escape
 from bson import Binary
 import os
 import gridfs
@@ -40,16 +41,6 @@ db_chunks = cluster.db.fs.chunks
 #                           username=username,
 #                           password=mdpENT,
 #                           ent=ile_de_france)
-
-
-def htmlspecialchars(text):
-    return (
-        text.replace("&", "&amp;").
-        replace('"', "&quot;").
-        replace("<", "&lt;").
-        replace(">", "&gt;").
-        replace("'", "&apos;")
-    )
 
 
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
@@ -114,7 +105,7 @@ def messages(idGroupe):
             grp = db_groupes.find(
                 {"id-utilisateurs": ObjectId(session['id'])})
             if idGroupe != None:
-                idGroupe = htmlspecialchars(idGroupe)
+                idGroupe = escape(idGroupe)
                 msgDb = db_messages.aggregate([
                     {'$match': {'id-groupe': ObjectId(idGroupe)}},
                     {'$lookup':
@@ -156,11 +147,11 @@ def messages(idGroupe):
 
         elif request.method == 'POST':
             if request.form['reponse'] != "None":
-                reponse = ObjectId(htmlspecialchars(request.form['reponse']))
+                reponse = ObjectId(escape(request.form['reponse']))
             else:
                 reponse = "None"
-            db_messages.insert_one({"id-groupe": ObjectId(htmlspecialchars(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": htmlspecialchars(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
+            db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
+                                    "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
             return 'sent'
     else:
         return redirect(url_for('login'))
@@ -171,9 +162,9 @@ def uploadAudio():
     if 'id' in session:
         heure = str(datetime.now())
         nom = "MsgVocal" + \
-            htmlspecialchars(request.form['group']) + session['id'] + heure
+            escape(request.form['group']) + session['id'] + heure
         cluster.save_file(nom, request.files['audio'])
-        db_messages.insert_one({"id-groupe": ObjectId(htmlspecialchars(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
+        db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
                                 "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": ""})
         return 'yes'
     else:
@@ -183,7 +174,7 @@ def uploadAudio():
 @app.route('/audio/<audioName>')
 def audio(audioName):
     if 'id' in session:
-        return cluster.send_file(htmlspecialchars(audioName))
+        return cluster.send_file(escape(audioName))
     else:
         return redirect(url_for('login'))
 
@@ -191,12 +182,12 @@ def audio(audioName):
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
-        idGroupe = htmlspecialchars(request.form['grp'])
+        idGroupe = escape(request.form['grp'])
         db_messages.delete_one(
-            {"_id": ObjectId(htmlspecialchars(request.form['msgSuppr']))})
+            {"_id": ObjectId(escape(request.form['msgSuppr']))})
         if request.form['audio'] == 'True':
             MyAudio = db_files.find_one(
-                {'filename': htmlspecialchars(request.form['audioName'])})
+                {'filename': escape(request.form['audioName'])})
             db_files.delete_one({'_id': MyAudio['_id']})
             db_chunks.delete_many({'files_id': MyAudio['_id']})
         return redirect(url_for('messages', idGroupe=idGroupe))
@@ -208,7 +199,7 @@ def supprimerMsg():
 @app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
-        search = htmlspecialchars(request.form['search'])
+        search = escape(request.form['search'])
         users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {
                                                   '$regex': search, '$options': 'i'}},
@@ -236,9 +227,9 @@ def createGroupe():
             if name == 'nomnewgroupe':
                 pass
             else:
-                participants.append(ObjectId(htmlspecialchars(name)))
+                participants.append(ObjectId(escape(name)))
         newGroupe = db_groupes.insert_one(
-            {'nom': htmlspecialchars(request.form['nomnewgroupe']), 'id-utilisateurs': participants})
+            {'nom': escape(request.form['nomnewgroupe']), 'id-utilisateurs': participants})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
@@ -247,8 +238,8 @@ def createGroupe():
 @app.route('/refreshMsg/')
 def refreshMsg():
     if 'id' in session:
-        idGroupe = htmlspecialchars(request.args['idgroupe'])
-        if htmlspecialchars(request.args['idMsg']) != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
+        idGroupe = escape(request.args['idgroupe'])
+        if escape(request.args['idMsg']) != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
             dateLast = datetime.strptime(
                 request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
             infogroupes = db_groupes.find_one(
@@ -289,7 +280,7 @@ def refreshMsg():
 def changeTheme():
     if 'id' in session:
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
-                                   "$set": {"couleur": htmlspecialchars(request.form['couleur'])}})
+                                   "$set": {"couleur": escape(request.form['couleur'])}})
         session['couleur'] = request.form['couleur']
         return redirect(url_for('profil'))
     else:
@@ -361,7 +352,7 @@ def profil(idUser):
 @app.route('/userImg/<profilImg>')
 def userImg(profilImg):
     if 'id' in session:
-        return cluster.send_file(htmlspecialchars(profilImg))
+        return cluster.send_file(escape(profilImg))
     else:
         return redirect(url_for('login'))
 
@@ -374,18 +365,18 @@ def updateprofile():
         elementPublic = []
         for content in request.form:
             if request.form[content] == "pv":
-                elementPrive.append(htmlspecialchars(
+                elementPrive.append(escape(
                     content.replace('Visibilite', '')))
             elif request.form[content] == "pb":
-                elementPublic.append(htmlspecialchars(
+                elementPublic.append(escape(
                     content.replace('Visibilite', '')))
 
         # if request.form['pseudoVisibilite'] == "pv":
         #     elementPrive.append("pseudo")
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': htmlspecialchars(request.form['pseudo']), 'email': htmlspecialchars(request.form['email']), 'telephone': htmlspecialchars(request.form['telephone']), 'interets': htmlspecialchars(request.form['interets']), 'caractere': htmlspecialchars(request.form['caractere']),
-                                                                               'langues': [htmlspecialchars(request.form['lv1']), htmlspecialchars(request.form['lv2'])], 'options': [htmlspecialchars(request.form['option1']), htmlspecialchars(request.form['option2'])], 'spes': [htmlspecialchars(request.form['spe1']), htmlspecialchars(request.form['spe2']), htmlspecialchars(request.form['spe3'])],
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': escape(request.form['pseudo']), 'email': escape(request.form['email']), 'telephone': escape(request.form['telephone']), 'interets': escape(request.form['interets']), 'caractere': escape(request.form['caractere']),
+                                                                               'langues': [escape(request.form['lv1']), escape(request.form['lv2'])], 'options': [escape(request.form['option1']), escape(request.form['option2'])], 'spes': [escape(request.form['spe1']), escape(request.form['spe2']), escape(request.form['spe3'])],
                                                                                'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
@@ -429,7 +420,7 @@ def redirect_comments():
 @app.route('/comments/<idMsg>', methods=['GET', 'POST'])
 def comments(idMsg):
     if 'id' in session:
-        idMsg = htmlspecialchars(idMsg)
+        idMsg = escape(idMsg)
         if request.method == 'GET':
             msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
 
@@ -493,7 +484,7 @@ def comments(idMsg):
                 reponses[str(_id)] = {
                     '_id': ObjectId(_id),
                     'id-utilisateur': ObjectId(session['id']),
-                    'contenu': htmlspecialchars(request.form.get('rep')),
+                    'contenu': escape(request.form.get('rep')),
                     'date-envoi': datetime.now(),
                     'likes': []
                 }
@@ -515,7 +506,7 @@ def question():
     if 'id' in session:
         if request.method == 'POST':
             db_demande_aide.insert_one(
-                {"id-utilisateur": ObjectId(session['id']), "titre": htmlspecialchars(request.form['titre']), "contenu": htmlspecialchars(request.form['demande']), "date-envoi": datetime.now(), "matière": htmlspecialchars(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
+                {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
 
             demandes = db_demande_aide.aggregate([
                 {'$sort': {'date-envoi': -1}},
@@ -538,7 +529,7 @@ def question():
 def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
-            search = htmlspecialchars(request.args['search'])
+            search = escape(request.args['search'])
             firstResult = db_demande_aide.find(
                 {'$text': {'$search': search}})
 
@@ -598,7 +589,7 @@ def recherche():
 @app.route('/rechercheUser')
 def recherche_user():
     if 'id' in session:
-        search = htmlspecialchars(request.args['search'])
+        search = escape(request.args['search'])
         users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {
                                                   '$regex': search, '$options': 'i'}},
@@ -622,7 +613,7 @@ def recherche_user():
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
-            idPost = htmlspecialchars(idPost)
+            idPost = escape(idPost)
             # on récupère les likes de la demande d'aide
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
             likes = demande['likes']
@@ -655,8 +646,8 @@ def likePost(idPost):
 def likeRep(idPost, idRep):
     if 'id' in session:
         if 'idPost' != None and 'idRep' != None:
-            idPost = htmlspecialchars(idPost)
-            idRep = htmlspecialchars(idRep)
+            idPost = escape(idPost)
+            idRep = escape(idRep)
             # on récupère les likes de la demande d'aide
             reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})[
                 'réponses associées']
@@ -705,7 +696,7 @@ def signPost():
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
             demande = db_demande_aide.find_one(
-                {"_id": ObjectId(htmlspecialchars(request.form['idSignalé']))})
+                {"_id": ObjectId(escape(request.form['idSignalé']))})
             sign = demande['sign']
             newSign = list(sign)
 
@@ -713,7 +704,7 @@ def signPost():
             if session['id'] in sign:
                 newSign.remove(session['id'])  # on supprime son signalement
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(htmlspecialchars(
+                    {'_id': ObjectId(escape(
                         request.form['idSignalé']))},
                     {'$pull': {
                         'sign': session['id'],
@@ -723,13 +714,13 @@ def signPost():
 
             else:
                 newSign.append(session['id'])  # on ajoute son signalement
-                raison = {htmlspecialchars(request.form['Raison'])}
+                raison = {escape(request.form['Raison'])}
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(htmlspecialchars(
+                    {'_id': ObjectId(escape(
                         request.form['idSignalé']))},
                     {'$push':
                         {'sign': session['id'],
-                         'motif': {'id': ObjectId(session['id']), 'txt': htmlspecialchars(request.form['Raison'])}}
+                         'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
                      }
                 )
 
