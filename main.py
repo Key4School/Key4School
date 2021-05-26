@@ -223,7 +223,7 @@ def searchUser_newgroup():
                                               {'snap': {
                                                   '$regex': search, '$options': 'i'}},
                                               {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
-        return render_template("searchUser_newgroup.html", users=users)
+        return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
     else:
         return redirect(url_for('login'))
 
@@ -309,7 +309,8 @@ def profil(idUser):
             demandes = []
             for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+                diffTemps = int(
+                    (datetime.now() - a['date-envoi']).total_seconds())
                 tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -345,9 +346,12 @@ def profil(idUser):
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(idUser)})
             # translate spes/options/lv
-            profilUtilisateur['langues'] = translate_matiere_spes_options_lv(profilUtilisateur['langues'])            
-            profilUtilisateur['spes'] = translate_matiere_spes_options_lv(profilUtilisateur['spes'])            
-            profilUtilisateur['options'] = translate_matiere_spes_options_lv(profilUtilisateur['options'])      
+            profilUtilisateur['langues'] = translate_matiere_spes_options_lv(
+                profilUtilisateur['langues'])
+            profilUtilisateur['spes'] = translate_matiere_spes_options_lv(
+                profilUtilisateur['spes'])
+            profilUtilisateur['options'] = translate_matiere_spes_options_lv(
+                profilUtilisateur['options'])
 
             return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur)
     else:
@@ -381,8 +385,8 @@ def updateprofile():
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': htmlspecialchars(request.form['pseudo']), 'email': htmlspecialchars(request.form['email']), 'telephone': htmlspecialchars(request.form['telephone']), 'interets': htmlspecialchars(request.form['interets']), 'caractere': htmlspecialchars(request.form['caractere']),
-            'langues': [htmlspecialchars(request.form['lv1']), htmlspecialchars(request.form['lv2'])], 'options': [htmlspecialchars(request.form['option1']), htmlspecialchars(request.form['option2'])], 'spes': [htmlspecialchars(request.form['spe1']), htmlspecialchars(request.form['spe2']), htmlspecialchars(request.form['spe3'])],
-            'elementPrive': elementPrive, 'elementPublic': elementPublic}})
+                                                                               'langues': [htmlspecialchars(request.form['lv1']), htmlspecialchars(request.form['lv2'])], 'options': [htmlspecialchars(request.form['option1']), htmlspecialchars(request.form['option2'])], 'spes': [htmlspecialchars(request.form['spe1']), htmlspecialchars(request.form['spe2']), htmlspecialchars(request.form['spe3'])],
+                                                                               'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
     else:
@@ -635,7 +639,7 @@ def likePost(idPost):
                 {'_id': ObjectId(idPost)},
                 {'$set':
                     {'likes': newLikes}
-                }
+                 }
             )
 
             # on retourne enfin le nouveau nb de likes
@@ -745,24 +749,27 @@ def signPost():
 
 
 def convertTime(diffTemps):
-    tempsStr = '' 
+    tempsStr = ''
     # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-    if diffTemps // (60 * 60 * 24 * 7): # semaines
+    if diffTemps // (60 * 60 * 24 * 7):  # semaines
         tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-        if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
-            tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-    elif diffTemps // (60 * 60 * 24): # jours
+        if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
+            tempsStr += '{}j '.format((diffTemps %
+                                       (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+    elif diffTemps // (60 * 60 * 24):  # jours
         tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-        if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
-            tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
-    elif diffTemps // (60 * 60): # heures
+        if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
+            tempsStr += '{}h '.format((diffTemps %
+                                       (60 * 60 * 24)) // (60 * 60))
+    elif diffTemps // (60 * 60):  # heures
         tempsStr += '{}h '.format(diffTemps // (60 * 60))
-        if (diffTemps % (60 * 60)) // 60: # minutes
+        if (diffTemps % (60 * 60)) // 60:  # minutes
             tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
     else:
         tempsStr = '{}min'.format(diffTemps // 60)
 
     return tempsStr
+
 
 def translate_matiere_spes_options_lv(toTranslate: list) -> str:
     translated = ''
@@ -787,7 +794,7 @@ def translate_matiere_spes_options_lv(toTranslate: list) -> str:
         elif a == 'philo':
             translated += 'Philosophie'
 
-        # LV1 
+        # LV1
         elif a == 'lv1-ang':
             translated += 'LV1 Anglais'
         elif a == 'lv1-ang-euro':
