@@ -5,6 +5,14 @@
 <body>
   yo
   {%for content in demandeSignale%}
-  {{content['contenu']}}
+    <div>{{content['contenu']}}
+      <form  method="post"  id="" onsubmit="supprimer(event); return false;">
+        <!-- <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
+        <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
+        <input type='hidden' name="group" value="{{idgroupe}}" />
+        <input type='hidden' id='reponse' name='reponse' value="None" />
+        <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button> -->
+      </form>
+    </div>
   {%endfor%}
-  </body>
+</body>
