@@ -1,23 +1,81 @@
 <!DOCTYPE html>
 <head>
-<script src="{{url_for('static',filename='js/administration.js')}}" type="text/javascript"></script>
+  <!-- language utf8 pour indiquer l'encodage -->
+  <meta charset="UTF-8">
+  <!-- pour l'adapter plus ou moins bien sur telephone -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- titre en haut dans le navigateur -->
+  <title>Mon lycée</title>
+  <!-- page de style -->
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+  <!-- importation de la bibliotheque j query qui est requise pour faire marcher le js-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+  <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
+  <!-- importation du JS pour afficher et enlever les div -->
+  <script src="{{url_for('static',filename='js/administration.js')}}" type="text/javascript"></script><script src="{{url_for('static',filename='js/main.js')}}" type="text/javascript"></script>
+  <style>
+    .logoBouton:hover {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  yo
+  <div class="modal" id="suppression" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Supression</p>
+      </header>
+      <form onsubmit="supprimer(event); return false;" id="supprForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type='hidden' id="idSupprimé" name='idSuppr' value="" />
+          <input type='hidden' name="demandeBut" value="Suppr" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">supprimer</button>
+          <button onclick="supprimerClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  <div class="modal" id="validation" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Validation</p>
+      </header>
+      <form onsubmit="valider(event); return false;" id="valForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type='hidden' id="idValidé" name='idVal' value="" />
+          <input type='hidden' name="demandeBut" value="Val" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Valider</button>
+          <button onclick="validerClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   {%for content in demandeSignale%}
     <div id='divDemande{{content['_id']}}'>{{content['contenu']}}
-      <form  method="post"  id="demandeSuppr{{content['_id']}}" onsubmit="supprimer(event, {{content['_id']}}); return false;">
-        <input type='hidden' name="idSuppr" value="{{content['_id']}}" />
-        <input type='hidden' name="demandeBut" value="Suppr" />
-        <button  type="submit">supprimer</button>
-      </form>
-      <form  method="post"  id="demandeValider{{content['_id']}}" onsubmit="valider(event, {{content['_id']}}); return false;">
-        <input type='hidden' name="idVal" value="{{content['_id']}}" />
-        <input type='hidden' name="demandeBut" value="Val" />
-        <button  type="submit">valider</button>
-      </form>
+      <button  onclick="validation('{{content['_id']}}')">valider</button>
+      <button  onclick="suppression('{{content['_id']}}')">supprimer</button>
     </div>
   {%endfor%}
   <div id="divTest">
       </div>
 </body>
+
+<!-- <div id='divDemande'>
+  <form  method="post"  id="demandeSuppr" onsubmit="supprimer(event, ); return false;">
+    <input type='hidden' name="idSuppr" value="" />
+    <input type='hidden' name="demandeBut" value="Suppr" />
+    <button  type="submit">supprimer</button>
+  </form>
+  <form  method="post"  id="demandeValider" onsubmit="valider(event, ); return false;">
+    <input type='hidden' name="idVal" value="" />
+    <input type='hidden' name="demandeBut" value="Val" />
+    <button  type="submit">valider</button>
+  </form>
+</div> -->
