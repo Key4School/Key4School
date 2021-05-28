@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <head>
-
+<script src="{{url_for('static',filename='js/administration.js')}}" type="text/javascript"></script>
 </head>
 <body>
   yo
   {%for content in demandeSignale%}
-    <div>{{content['contenu']}}
-      <form  method="post"  id="" onsubmit="supprimer(event); return false;">
-        <!-- <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
-        <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;">
-        <input type='hidden' name="group" value="{{idgroupe}}" />
-        <input type='hidden' id='reponse' name='reponse' value="None" />
-        <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button> -->
+    <div id='divDemande{{content['_id']}}'>{{content['contenu']}}
+      <form  method="post"  id="demandeSuppr{{content['_id']}}" onsubmit="supprimer(event, {{content['_id']}}); return false;">
+        <input type='hidden' name="idSuppr" value="{{content['_id']}}" />
+        <input type='hidden' name="demandeBut" value="Suppr" />
+        <button  type="submit">supprimer</button>
+      </form>
+      <form  method="post"  id="demandeValider{{content['_id']}}" onsubmit="valider(event, {{content['_id']}}); return false;">
+        <input type='hidden' name="idVal" value="{{content['_id']}}" />
+        <input type='hidden' name="demandeBut" value="Val" />
+        <button  type="submit">valider</button>
       </form>
     </div>
   {%endfor%}
+  <div id="divTest">
+      </div>
 </body>
