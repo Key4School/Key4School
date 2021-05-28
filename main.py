@@ -689,6 +689,18 @@ def likeRep(idPost, idRep):
     else:
         abort(401)  # non autorisé
 
+@app.route('/administration/')
+def administration():
+    if 'id' in session:
+        utilisateur=db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+        if utilisateur['admin'] == True:
+            demandeSignale = db_demande_aide.find({"admin":{ "$exists": true, "$ne": [] }})
+            return render_template('administration.html', users=utilisateur, demandeSignale=demandeSignale)
+        else:
+            return redirect(url_for('accueil'))
+    else:
+        return redirect(url_for('login'))
+
 
 @app.route('/signPost/', methods=['POST'])
 def signPost():
