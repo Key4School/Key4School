@@ -547,7 +547,7 @@ def recherche():
                 tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
-                if objectId(session['id']) in a['likes']:
+                if session['id'] in a['likes']:
                     a_like = True
                 else:
                     a_like = False
