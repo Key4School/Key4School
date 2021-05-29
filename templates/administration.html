@@ -66,7 +66,7 @@
 
   {%for content in demandeSignale%}
     <div id='divDemande{{content['_id']}}'><div>
-      <a href="{{url_for('profil' ,idUser=user['_id'])}}">{{user['nom']}} {{user['prenom']}}</a> {{content['contenu']}} {{content['date-envoi']}} {{content['matière']}}
+      <a href="{{url_for('profil' ,idUser=content['rep']['_id'])}}">{{content['rep']['nom']}} {{content['rep']['prenom']}}</a> {{content['contenu']}} {{content['date-envoi']}} {{content['matière']}}
       <button  onclick="validation('{{content['_id']}}')">valider</button>
       <button  onclick="suppression('{{content['_id']}}')">supprimer</button>
     </div>
