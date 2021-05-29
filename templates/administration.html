@@ -21,6 +21,8 @@
   </style>
 </head>
 <body>
+  {% include "bandeau.html" %}
+  <br /><br /><br />
 
   <div class="modal" id="suppression" style="overflow:hidden;">
     <div class="modal-background"></div>
@@ -63,19 +65,45 @@
       </form>
     </div>
   </div>
-
+  <br />
+<h1 class="title" style="text-align:center;">Administration</h1>
+<br /><br />
   {%for content in demandeSignale%}
-    <div id='divDemande{{content['_id']}}'><div>
+    <div style="border:2px solid {{session['couleur']}};padding:1%;margin-left:20%;margin-right:20%;" id='divDemande{{content['_id']}}'><div>
       {{content['rep']['prenom']}} {{content['rep']['nom']}} {{content['contenu']}} {{content['date-envoi']}} {{content['matière']}}
-      <button  onclick="validation('{{content['_id']}}')">valider</button>
-      <button  onclick="suppression('{{content['_id']}}')">supprimer</button>
+      <br />
     </div>
-    {%for element in content['motif']%}
-    <div>
-        motif: {{element['txt']}}
-    </div>
-    {%endfor%}
+    <br />
+
+    <ul class="menu-list">
+    <li><u>Motif :</u></li>
+    <li>
+      <ul>
+        {%for element in content['motif']%}
+          <li>
+            {{element['txt']}}
+          </li>
+        {%endfor%}
+      </ul>
+    </li>
+  </ul>
+
+
+    <br />
+    <button onclick="validation('{{content['_id']}}')" class="button is-success is-outlined">
+     <span>Valider</span>
+     <span class="icon is-small">
+       <i class="fas fa-check"></i>
+     </span>
+   </button>
+    <button onclick="suppression('{{content['_id']}}')" class="button is-danger is-outlined">
+     <span>Supprimer</span>
+     <span class="icon is-small">
+       <i class="fas fa-times"></i>
+     </span>
+   </button>
   </div>
+  <br /><br />
   {%endfor%}
   {%for content in profilSignale%}
   <div><a href="{{url_for('profil' ,idUser=content['_id'])}}">
