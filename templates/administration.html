@@ -79,12 +79,8 @@
   {%endfor%}
   {%for content in profilSignale%}
   <div><a href="{{url_for('profil' ,idUser=content['_id'])}}">
-<<<<<<< HEAD
     {{content['nom']}}
   </a>
-=======
-    {{content['nom']}}</a>
->>>>>>> 33f16c6c869565cee79ed90dfd5265008f9a657d
   </div>
   {%for element in content['motif']%}
   <div>
