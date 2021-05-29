@@ -210,7 +210,7 @@
             {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}
             <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a></div>
             {%endif%}{%endfor%}
-            {%if content['rep']['audio']==true%}msg audio{%else%}{{content['rep']['contenu']}}{%endif%}
+            {%if content['rep']['audio']==true%}msg-audio{%else%}{{content['rep']['contenu']}}{%endif%}
           </div>
           {%endif%}
             <p style="margin:0px">
