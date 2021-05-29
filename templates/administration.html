@@ -106,7 +106,9 @@
   <br /><br />
   {%endfor%}
   {%for content in profilSignale%}
-  <div><a href="{{url_for('profil' ,idUser=content['_id'])}}">
+  <div style="border:2px solid {{session['couleur']}};padding:1%;margin-left:20%;margin-right:20%;">
+    <div>
+    <a href="{{url_for('profil' ,idUser=content['_id'])}}">
     {{content['nom']}}
   </a>
   </div>
@@ -116,6 +118,7 @@
   </div>
   {%endfor%}
   {%endfor%}
+</div>
 </body>
 
 <!-- <div id='divDemande'>
