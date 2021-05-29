@@ -152,8 +152,11 @@ def messages(idGroupe):
                 reponse = ObjectId(escape(request.form['reponse']))
             else:
                 reponse = "None"
-            db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
+            message = db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
                                     "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
+            infogroupes = db_groupes.find_one(
+                {"_id": ObjectId(escape(request.form['group']))})
+            db_notif.insert_one({"type" : "msg", "id_groupe" : ObjectId(escape(request.form['group'])), "id_msg" : ObjectId(message.inserted_id), "date" : datetime.now(), "destinataires": infogroupes['id-utilisateurs']})
             return 'sent'
     else:
         return redirect(url_for('login'))
