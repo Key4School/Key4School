@@ -47,6 +47,7 @@ db_chunks = cluster.db.fs.chunks
 @app.route('/')
 def accueil():
     if 'id' in session:
+        useur= db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
         toutesDemandes = db_demande_aide.aggregate([
             {'$sort': {'date-envoi': -1}},
             {'$limit': 5}
@@ -82,7 +83,7 @@ def accueil():
                 'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
 
-        return render_template("index.html", demandes=demandes)
+        return render_template("index.html", demandes=demandes, useur = useur)
     else:
         return redirect(url_for('login'))
 
@@ -706,7 +707,6 @@ def administration():
                         db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},{"$set": {"sign": [], "motif": []}})
                     return'sent'
             else:
-                # demandeSignale = db_demande_aide.find({"sign":{ "$exists": "true", "$ne": [] }})
                 demandeSignale =  db_demande_aide.aggregate([
                     {'$match': {"sign":{ "$exists": "true", "$ne": [] }}},
                     {'$lookup':
@@ -728,7 +728,8 @@ def administration():
                         'motif':1,
                     }},
                 ])
-                return render_template('administration.html', users=utilisateur, demandeSignale=demandeSignale)
+                profilSignale = db_utilisateurs.find({"sign":{ "$exists": "true", "$ne": [] }})
+                return render_template('administration.html', users=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
         else:
             return redirect(url_for('accueil'))
     else:

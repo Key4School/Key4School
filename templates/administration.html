@@ -77,8 +77,16 @@
     {%endfor%}
   </div>
   {%endfor%}
-  <div id="divTest">
-      </div>
+  {%for content in profilSignale%}
+  <div><a href="{{url_for('profil' ,idUser=content['_id'])}}">
+    {{content['nom']}}
+  </div>
+  {%for element in content['motif']%}
+  <div>
+      motif: {{element['txt']}}
+  </div>
+  {%endfor%}
+  {%endfor%}
 </body>
 
 <!-- <div id='divDemande'>
