@@ -10,7 +10,7 @@
     {%endif%}
     {%if "rep" in content%}
       {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}<br />
-      {{content['rep']['contenu']}}
+      {%if content['rep']['audio']==true%}msg audio{%else%}{{content['rep']['contenu']}}{%endif%}
     {%endif%}
     <div style="display: flex;align-items: center;justify-content:space-between;">
       {%if content['id-utilisateur']!=sessionId%}
