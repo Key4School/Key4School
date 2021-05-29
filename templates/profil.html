@@ -611,20 +611,6 @@
               </div>
             </nav>
           </div>
-          <!-- Signaler -->
-          <div class="navbar-item">
-            <button  class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
-              <span class="icon is-small">
-                {% if d['a_sign'] %}
-                  <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true"></i>
-                {% else %}
-                  <i id="sign_{{d['idMsg']}}" class="far fa-flag" aria-hidden="true"></i>
-                {% endif %}
-              </span>
-              <span>Signaler</span>
-            </button>
-            <input type="hidden" />
-          </div>
         </article>
       </div>
   </div>

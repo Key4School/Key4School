@@ -16,3 +16,38 @@ function updateImgOpen() {
 function updateImgClose() {
   $("#replaceImg").removeClass("is-active");
 }
+
+function signalisation(){
+  selectionSign = document.getElementById("sign").className
+  if (selectionSign == "far fa-flag") {
+    signalisationOpen();
+
+
+  }
+  if (selectionSign == "fas fa-flag"){
+    designalisationOpen();
+  }
+}
+
+function signalisationOpen() {
+  $("#signalisation").addClass("is-active");
+}
+
+function signalisationClose() {
+  $("#signalisation").removeClass("is-active");
+}
+
+function signaler(e) {
+  e.preventDefault();
+  var donnees = $('#signalement').serialize();
+  $.ajax({
+    url: '/signPostProfil/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $('#signalement').trigger("reset");
+      signalisationClose();
+      document.getElementById("sign").className = "fas fa-flag";
+    },
+  });
+}

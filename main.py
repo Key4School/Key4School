@@ -336,6 +336,10 @@ def profil(idUser):
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(idUser)})
+            if ObjectId(session['id']) in profilUtilisateur['sign']:
+                a_sign = True
+            else:
+                a_sign = False
             # translate spes/options/lv
             profilUtilisateur['langues'] = translate_matiere_spes_options_lv(
                 profilUtilisateur['langues'])
@@ -344,7 +348,7 @@ def profil(idUser):
             profilUtilisateur['options'] = translate_matiere_spes_options_lv(
                 profilUtilisateur['options'])
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur)
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign)
     else:
         return redirect(url_for('login'))
 
@@ -757,6 +761,51 @@ def signPost():
                 newSign.append(session['id'])  # on ajoute son signalement
                 raison = {escape(request.form['Raison'])}
                 db_demande_aide.update_one(
+                    {'_id': ObjectId(escape(
+                        request.form['idSignalé']))},
+                    {'$push':
+                        {'sign': ObjectId(session['id']),
+                         'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
+                     }
+                )
+
+            # on update dans la DB
+            # db_demande_aide.update_one(
+            #     {'_id': ObjectId(request.form['idSignalé'])},
+            #     {'$set':
+            #         {'sign': newSign}
+            #      }
+            # )
+            return 'sent'
+
+        else:
+            abort(403)  # il manque l'id du message
+    else:
+        abort(401)  # non autorisé
+
+@app.route('/signPostProfil/', methods=['POST'])
+def signPostProfil():
+    if 'id' in session:
+        if request.form['idSignalé'] != None:
+            # on récupère les signalements de la demande d'aide
+            useur = db_utilisateurs.find_one(
+                {"_id": ObjectId(escape(request.form['idSignalé']))})
+            sign = useur['sign']
+
+            # on check mtn si l'utilisateur a déjà signalé la demande
+            if ObjectId(session['id']) in sign:
+                db_utilisateurs.update_one(
+                    {'_id': ObjectId(escape(
+                        request.form['idSignalé']))},
+                    {'$pull': {
+                        'sign': ObjectId(session['id']),
+                        'motif': {'id': ObjectId(session['id'])}}
+                     },
+                )
+
+            else:
+                raison = {escape(request.form['Raison'])}
+                db_utilisateurs.update_one(
                     {'_id': ObjectId(escape(
                         request.form['idSignalé']))},
                     {'$push':
