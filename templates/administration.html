@@ -79,7 +79,7 @@
   {%endfor%}
   {%for content in profilSignale%}
   <div><a href="{{url_for('profil' ,idUser=content['_id'])}}">
-    {{content['nom']}}
+    {{content['nom']}}</a>
   </div>
   {%for element in content['motif']%}
   <div>
