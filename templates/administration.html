@@ -21,6 +21,7 @@
   </style>
 </head>
 <body>
+
   <div class="modal" id="suppression" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -29,6 +30,7 @@
       </header>
       <form onsubmit="supprimer(event); return false;" id="supprForm" method="POST" autocomplete="off">
         <section class="modal-card-body">
+          <input type="text" name="motif" placeholder="motif"required/>
           <input type='hidden' id="idSupprimé" name='idSuppr' value="" />
           <input type='hidden' name="demandeBut" value="Suppr" />
         </section>
@@ -47,6 +49,10 @@
       </header>
       <form onsubmit="valider(event); return false;" id="valForm" method="POST" autocomplete="off">
         <section class="modal-card-body">
+          <select name="motif">
+            <option value="abusif">Signalement abusif</option>
+            <option value="justifie">Justifiée</option>
+          </select>
           <input type='hidden' id="idValidé" name='idVal' value="" />
           <input type='hidden' name="demandeBut" value="Val" />
         </section>
@@ -57,11 +63,19 @@
       </form>
     </div>
   </div>
+
   {%for content in demandeSignale%}
-    <div id='divDemande{{content['_id']}}'>{{content['contenu']}}
+    <div id='divDemande{{content['_id']}}'><div>
+      {{content['rep']['prenom']}} {{content['rep']['nom']}} {{content['contenu']}} {{content['date-envoi']}} {{content['matière']}}
       <button  onclick="validation('{{content['_id']}}')">valider</button>
       <button  onclick="suppression('{{content['_id']}}')">supprimer</button>
     </div>
+    {%for element in content['motif']%}
+    <div>
+        motif: {{element['txt']}}
+    </div>
+    {%endfor%}
+  </div>
   {%endfor%}
   <div id="divTest">
       </div>

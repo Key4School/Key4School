@@ -64,7 +64,7 @@ def accueil():
             else:
                 a_like = False
 
-            if session['id'] in a['sign']:
+            if ObjectId(session['id']) in a['sign']:
                 a_sign = True
             else:
                 a_sign = False
@@ -541,7 +541,7 @@ def recherche():
                 tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
-                if session['id'] in a['likes']:
+                if objectId(session['id']) in a['likes']:
                     a_like = True
                 else:
                     a_like = False
@@ -692,20 +692,41 @@ def likeRep(idPost, idRep):
 @app.route('/administration/', methods=['POST', 'GET'])
 def administration():
     if 'id' in session:
-        if request.method=='POST':
-            if request.form['demandeBut']=='Suppr':
-                db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
+        utilisateur=db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+        if utilisateur['admin'] == True:
+            if request.method=='POST':
+                    if request.form['demandeBut']=='Suppr':
+                        db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
 
-            elif request.form['demandeBut']=='Val':
-                db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},{"$set": {"sign": [], "motif": []}})
-            return'sent'
-        else:
-            utilisateur=db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
-            if utilisateur['admin'] == True:
-                demandeSignale = db_demande_aide.find({"sign":{ "$exists": "true", "$ne": [] }})
-                return render_template('administration.html', users=utilisateur, demandeSignale=demandeSignale)
+                    elif request.form['demandeBut']=='Val':
+                        db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},{"$set": {"sign": [], "motif": []}})
+                    return'sent'
             else:
-                return redirect(url_for('accueil'))
+                # demandeSignale = db_demande_aide.find({"sign":{ "$exists": "true", "$ne": [] }})
+                demandeSignale =  db_demande_aide.aggregate([
+                    {'$match': {"sign":{ "$exists": "true", "$ne": [] }}},
+                    {'$lookup':
+                        {
+                            'from': 'utilisateurs',
+                            'localField': 'id-utilisateur',
+                            'foreignField': '_id',
+                            'as': 'rep',
+                        }
+                     }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                    {'$project': {
+                        '_id': 1,
+                        'titre': 1,
+                        'id-utilisateur': 1,
+                        'contenu': 1,
+                        'date-envoi': 1,
+                        'rep': 1,
+                        'matière': 1,
+                        'motif':1,
+                    }},
+                ])
+                return render_template('administration.html', users=utilisateur, demandeSignale=demandeSignale)
+        else:
+            return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
 
@@ -721,13 +742,13 @@ def signPost():
             newSign = list(sign)
 
             # on check mtn si l'utilisateur a déjà signalé la demande
-            if session['id'] in sign:
-                newSign.remove(session['id'])  # on supprime son signalement
+            if ObjectId(session['id']) in sign:
+                newSign.remove(ObjectId(session['id']))  # on supprime son signalement
                 db_demande_aide.update_one(
                     {'_id': ObjectId(escape(
                         request.form['idSignalé']))},
                     {'$pull': {
-                        'sign': session['id'],
+                        'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
                      },
                 )
@@ -739,7 +760,7 @@ def signPost():
                     {'_id': ObjectId(escape(
                         request.form['idSignalé']))},
                     {'$push':
-                        {'sign': session['id'],
+                        {'sign': ObjectId(session['id']),
                          'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
                      }
                 )
