@@ -86,46 +86,20 @@
   <br />
   <br />
   <br />
-  <br />
-  <br />
   <!-- Espace photo de profil -->
-  <div class="columns">
-    <div class="column">
-      <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-        style="width:80px; height:auto;" />
-    </div>
-    <div class="column"></div>
-    <div class="columns">
-      <!-- Barre de progression -->
-      <div class="column">
-        <progress value="70" max="100">70%</progress>
-      </div>
-      <div class="column">
-        <p>
-          70XP
-        </p>
-      </div>
+    <div style="display: flex;align-items: center;justify-content:space-evenly;">
+        <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
+      <div style="display: flex;align-items: center;justify-content:center;">
+        <!-- Barre de progression -->
+          <progress class="progress is-info" value="70" max="100" style="width:250px;">70%</progress>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <p>
+            70XP
+          </p>
     </div>
   </div>
-  <div style="display: flex;align-items: center;justify-content:space-evenly;">
-    <div class="navbar-item">
-      <button  class="button is-warning is-outlined is-small" onClick="signalisation();">
-        <span class="icon is-small">
-          {% if a_sign %}
-          <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
-          {% else %}
-            <i id="sign" class="far fa-flag" aria-hidden="true"></i>
-          {% endif %}
-        </span>
-        <span>Signaler</span>
-      </button>
-      {%if useur['admin']==true%}
-      <button  class="button is-warning is-outlined is-small" onClick="sanction();">
-        <span>Sanctionner</span>
-      </button>
-      {%endif%}
-      <input type="hidden" />
-    </div>
+  <br /><br /><br />
+  <div align="center">
     <!-- Début informations -->
     <div>
       <!-- Informations puliques -->
@@ -253,6 +227,26 @@
       <!-- Fin tableau informations publiques -->
     </div>
     <!-- Fin informations -->
+    <br />
+    <div class="navbar-item" style="display:block;">
+      <button  class="button is-warning is-outlined is-small" onClick="signalisation();">
+        <span class="icon is-small">
+          {% if a_sign %}
+          <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+          {% else %}
+            <i id="sign" class="far fa-flag" aria-hidden="true"></i>
+          {% endif %}
+        </span>
+        <span>Signaler</span>
+      </button>
+      {%if useur['admin']==true%}
+      <button  class="button is-warning is-outlined is-small" onClick="sanction();">
+        <span>Sanctionner</span>
+      </button>
+      {%endif%}
+      <input type="hidden" />
+    </div>
+  </div>
 
   </div>
   <!-- fin de la page -->
