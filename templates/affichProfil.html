@@ -51,7 +51,7 @@
       </header>
       <form onsubmit="designaler(event); return false;" id="designalement" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type='hidden' id="idDesignalé" name='idSignalé' value="" />
+          <input type='hidden' id="idDesignalé" name='idSignalé' value="{{profilUtilisateur['_id']}}" />
           Etes-vous sûr de vouloir enlever ce signalement
         </section>
         <footer class="modal-card-foot">

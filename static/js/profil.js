@@ -37,6 +37,14 @@ function signalisationClose() {
   $("#signalisation").removeClass("is-active");
 }
 
+function designalisationOpen() {
+  $("#designalisation").addClass("is-active");
+}
+
+function designalisationClose() {
+  $("#designalisation").removeClass("is-active");
+}
+
 function signaler(e) {
   e.preventDefault();
   var donnees = $('#signalement').serialize();
@@ -48,6 +56,20 @@ function signaler(e) {
       $('#signalement').trigger("reset");
       signalisationClose();
       document.getElementById("sign").className = "fas fa-flag";
+    },
+  });
+}
+
+function designaler(e) {
+  e.preventDefault();
+  var donnees = $('#signalement').serialize();
+  $.ajax({
+    url: '/signPostProfil/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      designalisationClose();
+      document.getElementById("sign").className = "far fa-flag";
     },
   });
 }
