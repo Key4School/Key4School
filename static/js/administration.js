@@ -53,3 +53,29 @@ function validerOpen(){
 function validerClose(){
   $("#validation").removeClass("is-active");
 }
+
+function sanctionner(e) {
+  e.preventDefault();
+  var id = document.getElementById('idSanctionné').value;
+  var donnees = $('#SancForm').serialize();
+  $.ajax({
+    url: '/sanction/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      sanctionnerClose();
+    },
+  });
+}
+
+function sanction(){
+  sanctionnerOpen();
+}
+
+function sanctionnerOpen(){
+  $("#sanction").addClass("is-active");
+}
+
+function sanctionnerClose(){
+  $("#sanction").removeClass("is-active");
+}

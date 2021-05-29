@@ -337,6 +337,7 @@ def profil(idUser):
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(idUser)})
+            useur=db_utilisateurs.find_one({'_id':ObjectId(session['id'])})
             if ObjectId(session['id']) in profilUtilisateur['sign']:
                 a_sign = True
             else:
@@ -349,7 +350,7 @@ def profil(idUser):
             profilUtilisateur['options'] = translate_matiere_spes_options_lv(
                 profilUtilisateur['options'])
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign)
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, useur=useur)
     else:
         return redirect(url_for('login'))
 
@@ -735,6 +736,17 @@ def administration():
     else:
         return redirect(url_for('login'))
 
+@app.route('/sanction/', methods=['POST'])
+def sanction():
+    if 'id' in session:
+        utilisateur=db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+        if utilisateur['admin'] == True:
+            return 'sanction'
+        else:
+            return redirect(url_for('accueil'))
+    else:
+        return redirect(url_for('login'))
+
 
 @app.route('/signPost/', methods=['POST'])
 def signPost():
@@ -814,20 +826,13 @@ def signPostProfil():
                          'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
                      }
                 )
-
-            # on update dans la DB
-            # db_demande_aide.update_one(
-            #     {'_id': ObjectId(request.form['idSignalé'])},
-            #     {'$set':
-            #         {'sign': newSign}
-            #      }
-            # )
             return 'sent'
 
         else:
             abort(403)  # il manque l'id du message
     else:
         abort(401)  # non autorisé
+
 
 
 def convertTime(diffTemps):
