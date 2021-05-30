@@ -13,7 +13,7 @@
       <div style="display: flex;align-items: center;justify-content:space-between;">
     {%endif%}
       {%if content['id-utilisateur']!=sessionId%}
-      <p style="font-weight: bold; font-variant:small-caps;margin:0px">{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a>{%endif%}{%endfor%}</p>
+      <p style="font-weight: bold; font-variant:small-caps;margin:0px">{%for users in infoUtilisateurs %}{%if users['_id']==content['id-utilisateur']%}<a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['pseudo']}}</a>{%endif%}{%endfor%}</p>
       {%endif%}
       <div class="navbar-item has-dropdown is-hoverable">
         <div class="navbar-link">
@@ -31,7 +31,7 @@
               </span>
               <span>Répondre</span>
             </button>
-            <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
+            <input type="hidden" id="user{{content['_id']}}" value="{%for users in infoUtilisateurs %}{%if users['_id']==content['id-utilisateur']%}{{users['pseudo']}}{%endif%}{%endfor%}" />
             <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
           </div>
           <div class="navbar-item">
@@ -56,7 +56,7 @@
               </span>
               <span>Répondre</span>
             </button>
-            <input type="hidden" id="user{{content['_id']}}" value="{%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['id-utilisateur']%}{{useurs['pseudo']}}{%endif%}{%endfor%}" />
+            <input type="hidden" id="user{{content['_id']}}" value="{%for users in infoUtilisateurs %}{%if users['_id']==content['id-utilisateur']%}{{users['pseudo']}}{%endif%}{%endfor%}" />
             <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
           </div>
           {%endif%}
@@ -65,8 +65,8 @@
     </div>
     {%if "rep" in content%}
     <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid {{session['couleur']}};border-radius:5px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
-      {%for useurs in infoUtilisateurs %}{%if useurs['_id']==content['rep']['id-utilisateur']%}
-      <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=useurs['_id'])}}">{{useurs['pseudo']}}</a></div>
+      {%for users in infoUtilisateurs %}{%if users['_id']==content['rep']['id-utilisateur']%}
+      <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['pseudo']}}</a></div>
       {%endif%}{%endfor%}
       {%if content['rep']['audio']==true%}msg-audio{%else%}{{content['rep']['contenu']}}{%endif%}
     </div>

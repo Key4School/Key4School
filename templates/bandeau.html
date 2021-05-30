@@ -16,10 +16,12 @@
             &nbsp;&nbsp;Accueil
           </a>
           <!-- Question -->
+          {%if user['SanctionEnCour'] != "Spec"%}
           <a class="navbar-item" href="{{url_for('question')}}">
             <i style="color: black; font-size:20px;" class="fas fa-question"></i>
             &nbsp;&nbsp;Poser une question
           </a>
+          {%endif%}
           <!-- Messages privés -->
           <a class="navbar-item" href="{{url_for('messages')}}">
             <i style="color: black; font-size:20px;" class="fas fa-envelope"></i>

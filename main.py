@@ -48,7 +48,6 @@ db_notif = cluster.db.fs.notifications
 @app.route('/')
 def accueil():
     if 'id' in session:
-        useur= db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
         toutesDemandes = db_demande_aide.aggregate([
             {'$sort': {'date-envoi': -1}},
             {'$limit': 5}
@@ -84,7 +83,7 @@ def accueil():
                 'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
 
-        return render_template("index.html", demandes=demandes, useur = useur)
+        return render_template("index.html", demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
     else:
         return redirect(url_for('login'))
 
@@ -145,7 +144,7 @@ def messages(idGroupe):
                 msgDb = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']), user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
 
         elif request.method == 'POST':
             if request.form['reponse'] != "None":
@@ -336,7 +335,7 @@ def profil(idUser):
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
 
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes)
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
 
         else:
             profilUtilisateur = db_utilisateurs.find_one(
@@ -354,7 +353,7 @@ def profil(idUser):
             profilUtilisateur['options'] = translate_matiere_spes_options_lv(
                 profilUtilisateur['options'])
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, useur=useur)
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
     else:
         return redirect(url_for('login'))
 
@@ -484,7 +483,7 @@ def comments(idMsg):
                 'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
             }
 
-            return render_template("comments.html", d=result)
+            return render_template("comments.html", d=result, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
 
         else:
             if 'rep' in request.form:
@@ -515,22 +514,28 @@ def comments(idMsg):
 def question():
     if 'id' in session:
         if request.method == 'POST':
-            db_demande_aide.insert_one(
-                {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
+            useur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+            if useur['SanctionEnCour'] != "Spec":
+                db_demande_aide.insert_one(
+                    {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
 
-            demandes = db_demande_aide.aggregate([
-                {'$sort': {'date-envoi': -1}},
-                {'$limit': 1}
-            ])
-            for demande in demandes:
-                return redirect('/comments/' + str(demande['_id']))
+                demandes = db_demande_aide.aggregate([
+                    {'$sort': {'date-envoi': -1}},
+                    {'$limit': 1}
+                ])
+                for demande in demandes:
+                    return redirect('/comments/' + str(demande['_id']))
+            else :
+                return redirect(url_for('accueil'))
 
             # return render_template('question.html', envoi="Envoi réussi")
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
-
-            return render_template('question.html', profilUtilisateur=profilUtilisateur)
+            if profilUtilisateur["SanctionEnCour"] != "Spec":
+                return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            else:
+                return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
 
@@ -588,7 +593,7 @@ def recherche():
                                                       '$regex': search, '$options': 'i'}},
                                                   {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(3)
 
-            return render_template('recherche.html', results=result, users=users, search=search)
+            return render_template('recherche.html', results=result, users=users, search=search, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
 
         else:
             return redirect(url_for('accueil'))
@@ -734,7 +739,7 @@ def administration():
                     }},
                 ])
                 profilSignale = db_utilisateurs.find({"sign":{ "$exists": "true", "$ne": [] }})
-                return render_template('administration.html', users=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
+                return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
         else:
             return redirect(url_for('accueil'))
     else:
