@@ -1104,7 +1104,7 @@ def connexion():
                 classe = data['level']
             pseudo = (data['username'].lower()).replace(' ', '_')
             db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere']})
+                data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'],"sign": [],"SanctionEnCour": ""})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
@@ -1114,7 +1114,7 @@ def connexion():
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
             db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(),
-                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere']})
+                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'],"sign": [],"SanctionEnCour": ""})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
