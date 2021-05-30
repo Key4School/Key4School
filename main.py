@@ -745,7 +745,11 @@ def sanction():
     if 'id' in session:
         utilisateur=db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
         if utilisateur['admin'] == True:
-            return 'sanction'
+            db_utilisateurs.update_one({"_id":ObjectId(request.form['idSanctionné'])}, {"$push": {"Sanction":{"SanctionType": request.form['Sanction'],"SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next']}}})
+            if request.form['SanctionType'] == 'Spec':
+                time = datetime.now() + timedelta(hours=24*7)
+                db_utilisateurs.update_one({"_id":ObjectId(request.form['idSanctionné'])}, {"$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree":time}})
+            return 'sent'
         else:
             return redirect(url_for('accueil'))
     else:

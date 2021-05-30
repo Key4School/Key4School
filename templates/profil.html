@@ -618,6 +618,9 @@
   </div>
   <!-- Fin publi -->
   {%endfor%}
+  {%for element in profilUtilisateur['Sanction']%}
+  Sanction : {{element['SanctionType']}} Motif : {{element['SanctionMotif']}} Prochaine Sanction : {{element['SanctionNext']}}
+  {%endfor%}
 <!-- fin de la page -->
 </body>
 

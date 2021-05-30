@@ -72,7 +72,17 @@
         <form onsubmit="sanctionner(event); return false;" id="SancForm" method="POST" autocomplete="off">
           <section class="modal-card-body">
             <input type='hidden' id="idSanctionné" name='idSanctionné' value="{{profilUtilisateur['_id']}}" />
-
+            <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Sanctionnez vous ce profil." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
+            <input id='inputSanction' class="input" type="text" placeholder="Quellle sanction mettez vous." autocomplete='off' name="Sanction" style="width: 75%;margin-left: 2%;padding:5px;"required/>
+            <select name="SanctionType">
+              <option value="Spec">Spectateur</option>
+              <option value="Aucune" selected>Aucune</option>
+            </select>
+            <select name="SanctionDuree">
+              <option value="month">1 mois</option>
+              <option value="Aucune">1 semaine</option>
+            </select>
+            <input id='inputNext' class="input" type="text" placeholder="Prochaine Sanction" autocomplete='off' name="Next" style="width: 75%;margin-left: 2%;padding:5px;"required/>
           </section>
           <footer class="modal-card-foot">
             <button type="submit" class="button is-success">Sanctionner</button>
