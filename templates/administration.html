@@ -113,7 +113,7 @@
   <div style="border:2px solid {{session['couleur']}};padding:1%;margin-left:20%;margin-right:20%;">
     <div>
       <a href="{{url_for('profil' ,idUser=content['_id'])}}">
-        {{content['nom']}}
+        {{content['pseudo']}}
       </a>
     </div>
     {%for element in content['motif']%}
