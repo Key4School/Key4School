@@ -47,6 +47,12 @@ db_notif = cluster.db.notifications
 def notif(type, id_groupe, id_msg, destinataires):
     db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
                         "date": datetime.now(), "destinataires": destinataires})
+    for destinataire in destinataires:
+        if str(destinataire)==session['id']:
+            user = db_utilisateurs.find_one({"_id": destinataire})
+            if user['email'] != "":
+                print(user['email'])
+
 
 
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
