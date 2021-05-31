@@ -78,10 +78,11 @@
               <option value="Spec">Spectateur</option>
               <option value="Aucune" selected>Aucune</option>
             </select>
-            <select name="SanctionDuree">
-              <option value="month">1 mois</option>
-              <option value="Aucune">1 semaine</option>
-            </select>
+            <input id='SanctionDuree' class="input" type="number" placeholder="Durée de la sanction." autocomplete='off' name="SanctionDuree" value="1" style="width: 75%;margin-left: 2%;padding:5px;"required/>
+            <!-- <select name="SanctionDuree">
+              <option value="30">1 mois</option>
+              <option value="7">1 semaine</option>
+            </select> -->
             <input id='inputNext' class="input" type="text" placeholder="Prochaine Sanction" autocomplete='off' name="Next" style="width: 75%;margin-left: 2%;padding:5px;"required/>
           </section>
           <footer class="modal-card-foot">

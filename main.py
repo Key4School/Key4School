@@ -772,7 +772,7 @@ def sanction():
             db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$push": {"Sanction": {
                                        "SanctionType": request.form['Sanction'], "SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next']}}})
             if request.form['SanctionType'] == 'Spec':
-                time = datetime.now() + timedelta(hours=24 * 7)
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
                 db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
             return 'sent'
