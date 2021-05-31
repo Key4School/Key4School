@@ -510,7 +510,7 @@ def comments(idMsg):
                         {'réponses associées': reponses}
                      }
                 )
-                notif("demande", ObjectId(idMsg), _id, msg['id-utilisateurs'])
+                notif("demande", ObjectId(idMsg), _id, msg['id-utilisateur'])
             return redirect('/comments/' + idMsg)
     else:
         return redirect(url_for('login'))
