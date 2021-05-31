@@ -33,7 +33,7 @@ db_messages = cluster.db.messages
 db_groupes = cluster.db.groupes
 db_files = cluster.db.fs.files
 db_chunks = cluster.db.fs.chunks
-db_notif = cluster.db.fs.notifications
+db_notif = cluster.db.notifications
 # Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 
 '''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
