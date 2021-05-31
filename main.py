@@ -152,10 +152,11 @@ def messages(idGroupe):
             else:
                 reponse = "None"
             message = db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
+                                              "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
             infogroupes = db_groupes.find_one(
                 {"_id": ObjectId(escape(request.form['group']))})
-            db_notif.insert_one({"type" : "msg", "id_groupe" : ObjectId(escape(request.form['group'])), "id_msg" : ObjectId(message.inserted_id), "date" : datetime.now(), "destinataires": infogroupes['id-utilisateurs']})
+            notif("msg", ObjectId(escape(request.form['group'])), ObjectId(
+                message.inserted_id), infogroupes['id-utilisateurs'])
             return 'sent'
     else:
         return redirect(url_for('login'))
@@ -335,12 +336,12 @@ def profil(idUser):
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
 
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(idUser)})
-            useur=db_utilisateurs.find_one({'_id':ObjectId(session['id'])})
+            useur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
             if ObjectId(session['id']) in profilUtilisateur['sign']:
                 a_sign = True
             else:
@@ -353,7 +354,7 @@ def profil(idUser):
             profilUtilisateur['options'] = translate_matiere_spes_options_lv(
                 profilUtilisateur['options'])
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
     else:
         return redirect(url_for('login'))
 
@@ -483,7 +484,7 @@ def comments(idMsg):
                 'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
             }
 
-            return render_template("comments.html", d=result, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("comments.html", d=result, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
             if 'rep' in request.form:
@@ -504,13 +505,13 @@ def comments(idMsg):
                         {'réponses associées': reponses}
                      }
                 )
-
+                notif("demande", ObjectId(idMsg), _id, msg['id-utilisateurs'])
             return redirect('/comments/' + idMsg)
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/question/', methods=['POST', 'GET'])
+@ app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
@@ -525,7 +526,7 @@ def question():
                 ])
                 for demande in demandes:
                     return redirect('/comments/' + str(demande['_id']))
-            else :
+            else:
                 return redirect(url_for('accueil'))
 
             # return render_template('question.html', envoi="Envoi réussi")
@@ -533,14 +534,14 @@ def question():
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
             if profilUtilisateur["SanctionEnCour"] != "Spec":
-                return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+                return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
             else:
                 return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/recherche')
+@ app.route('/recherche')
 def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
@@ -593,7 +594,7 @@ def recherche():
                                                       '$regex': search, '$options': 'i'}},
                                                   {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(3)
 
-            return render_template('recherche.html', results=result, users=users, search=search, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template('recherche.html', results=result, users=users, search=search, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
             return redirect(url_for('accueil'))
@@ -601,7 +602,7 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@app.route('/rechercheUser')
+@ app.route('/rechercheUser')
 def recherche_user():
     if 'id' in session:
         search = escape(request.args['search'])
@@ -624,7 +625,7 @@ def recherche_user():
         return redirect(url_for('login'))
 
 
-@app.route('/likePost/<idPost>', methods=['POST'])
+@ app.route('/likePost/<idPost>', methods=['POST'])
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
@@ -704,21 +705,25 @@ def likeRep(idPost, idRep):
     else:
         abort(401)  # non autorisé
 
+
 @app.route('/administration/', methods=['POST', 'GET'])
 def administration():
     if 'id' in session:
-        utilisateur=db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+        utilisateur = db_utilisateurs.find_one(
+            {"_id": ObjectId(session['id'])})
         if utilisateur['admin'] == True:
-            if request.method=='POST':
-                    if request.form['demandeBut']=='Suppr':
-                        db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
+            if request.method == 'POST':
+                if request.form['demandeBut'] == 'Suppr':
+                    db_demande_aide.delete_one(
+                        {"_id": ObjectId(request.form['idSuppr'])})
 
-                    elif request.form['demandeBut']=='Val':
-                        db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},{"$set": {"sign": [], "motif": []}})
-                    return'sent'
+                elif request.form['demandeBut'] == 'Val':
+                    db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])}, {
+                                               "$set": {"sign": [], "motif": []}})
+                return'sent'
             else:
-                demandeSignale =  db_demande_aide.aggregate([
-                    {'$match': {"sign":{ "$exists": "true", "$ne": [] }}},
+                demandeSignale = db_demande_aide.aggregate([
+                    {'$match': {"sign": {"$exists": "true", "$ne": []}}},
                     {'$lookup':
                         {
                             'from': 'utilisateurs',
@@ -735,25 +740,30 @@ def administration():
                         'date-envoi': 1,
                         'rep': 1,
                         'matière': 1,
-                        'motif':1,
+                        'motif': 1,
                     }},
                 ])
-                profilSignale = db_utilisateurs.find({"sign":{ "$exists": "true", "$ne": [] }})
+                profilSignale = db_utilisateurs.find(
+                    {"sign": {"$exists": "true", "$ne": []}})
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
         else:
             return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
 
+
 @app.route('/sanction/', methods=['POST'])
 def sanction():
     if 'id' in session:
-        utilisateur=db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+        utilisateur = db_utilisateurs.find_one(
+            {"_id": ObjectId(session['id'])})
         if utilisateur['admin'] == True:
-            db_utilisateurs.update_one({"_id":ObjectId(request.form['idSanctionné'])}, {"$push": {"Sanction":{"SanctionType": request.form['Sanction'],"SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next']}}})
+            db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$push": {"Sanction": {
+                                       "SanctionType": request.form['Sanction'], "SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next']}}})
             if request.form['SanctionType'] == 'Spec':
-                time = datetime.now() + timedelta(hours=24*7)
-                db_utilisateurs.update_one({"_id":ObjectId(request.form['idSanctionné'])}, {"$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree":time}})
+                time = datetime.now() + timedelta(hours=24 * 7)
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
             return 'sent'
         else:
             return redirect(url_for('accueil'))
@@ -773,7 +783,8 @@ def signPost():
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
-                newSign.remove(ObjectId(session['id']))  # on supprime son signalement
+                # on supprime son signalement
+                newSign.remove(ObjectId(session['id']))
                 db_demande_aide.update_one(
                     {'_id': ObjectId(escape(
                         request.form['idSignalé']))},
@@ -808,6 +819,7 @@ def signPost():
             abort(403)  # il manque l'id du message
     else:
         abort(401)  # non autorisé
+
 
 @app.route('/signPostProfil/', methods=['POST'])
 def signPostProfil():
@@ -845,7 +857,6 @@ def signPostProfil():
             abort(403)  # il manque l'id du message
     else:
         abort(401)  # non autorisé
-
 
 
 def convertTime(diffTemps):
@@ -1107,7 +1118,7 @@ def connexion():
                 classe = data['level']
             pseudo = (data['username'].lower()).replace(' ', '_')
             db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'],"sign": [],"SanctionEnCour": ""})
+                data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": ""})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
@@ -1117,7 +1128,7 @@ def connexion():
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
             db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(),
-                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'],"sign": [],"SanctionEnCour": ""})
+                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": ""})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
