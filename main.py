@@ -44,6 +44,11 @@ db_notif = cluster.db.notifications
 #                           ent=ile_de_france)
 
 
+def notif(type, id_groupe, id_msg, destinataires):
+    db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
+                        "date": datetime.now(), "destinataires": destinataires})
+
+
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
 @app.route('/')
 def accueil():
