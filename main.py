@@ -160,17 +160,18 @@ def messages(idGroupe):
                                     "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
             infogroupes = db_groupes.find_one(
                 {"_id": ObjectId(escape(request.form['group']))})
-            notif("msg", ObjectId(escape(request.form['group'])), ObjectId(message.inserted_id), infogroupes['id-utilisateurs']}))
+            notif("msg", ObjectId(escape(request.form['group'])), ObjectId(
+                message.inserted_id), infogroupes['id-utilisateurs'])
             return 'sent'
     else:
         return redirect(url_for('login'))
 
 
-@ app.route('/uploadAudio/', methods = ['POST'])
+@ app.route('/uploadAudio/', methods=['POST'])
 def uploadAudio():
     if 'id' in session:
-        heure=str(datetime.now())
-        nom="MsgVocal" +
+        heure = str(datetime.now())
+        nom = "MsgVocal" +
             escape(request.form['group']) + session['id'] + heure
         cluster.save_file(nom, request.files['audio'])
         db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
@@ -188,14 +189,14 @@ def audio(audioName):
         return redirect(url_for('login'))
 
 
-@ app.route('/suppressionMsg/', methods = ['POST'])
+@ app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
-        idGroupe=escape(request.form['grp'])
+        idGroupe = escape(request.form['grp'])
         db_messages.delete_one(
             {"_id": ObjectId(escape(request.form['msgSuppr']))})
         if request.form['audio'] == 'True':
-            MyAudio=db_files.find_one(
+            MyAudio = db_files.find_one(
                 {'filename': escape(request.form['audioName'])})
             db_files.delete_one({'_id': MyAudio['_id']})
             db_chunks.delete_many({'files_id': MyAudio['_id']})
@@ -205,11 +206,11 @@ def supprimerMsg():
         return redirect(url_for('login'))
 
 
-@ app.route('/searchUser_newgroup/', methods = ['POST'])
+@ app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
-        search=escape(request.form['search'])
-        users=db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
+        search = escape(request.form['search'])
+        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {
                                                   '$regex': search, '$options': 'i'}},
                                               {'prenom': {
@@ -223,21 +224,21 @@ def searchUser_newgroup():
                                               {'snap': {
                                                   '$regex': search, '$options': 'i'}},
                                               {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
-        return render_template("searchUser_newgroup.html", users = users, sessionId = session['id'])
+        return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
     else:
         return redirect(url_for('login'))
 
 
-@ app.route('/createGroupe/', methods = ['POST'])
+@ app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
     if 'id' in session:
-        participants=[ObjectId(session['id'])]
+        participants = [ObjectId(session['id'])]
         for name, value in request.form.items():
             if name == 'nomnewgroupe':
                 pass
             else:
                 participants.append(ObjectId(escape(name)))
-        newGroupe=db_groupes.insert_one(
+        newGroupe = db_groupes.insert_one(
             {'nom': escape(request.form['nomnewgroupe']), 'id-utilisateurs': participants})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
@@ -247,17 +248,17 @@ def createGroupe():
 @ app.route('/refreshMsg/')
 def refreshMsg():
     if 'id' in session:
-        idGroupe=escape(request.args['idgroupe'])
+        idGroupe = escape(request.args['idgroupe'])
         if escape(request.args['idMsg']) != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
-            dateLast=datetime.strptime(
+            dateLast = datetime.strptime(
                 request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            infogroupes=db_groupes.find_one(
+            infogroupes = db_groupes.find_one(
                 {"_id": ObjectId(idGroupe)})
-            infoUtilisateurs=[]
+            infoUtilisateurs = []
             for content in infogroupes['id-utilisateurs']:
                 infoUtilisateurs += db_utilisateurs.find(
                     {"_id": ObjectId(content)})
-            msgDb=db_messages.aggregate([
+            msgDb = db_messages.aggregate([
                 {'$match': {'$and': [
                     {'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]}},
                 {'$lookup':
@@ -340,12 +341,12 @@ def profil(idUser):
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
 
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(idUser)})
-            useur=db_utilisateurs.find_one({'_id':ObjectId(session['id'])})
+            useur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
             if ObjectId(session['id']) in profilUtilisateur['sign']:
                 a_sign = True
             else:
@@ -358,7 +359,7 @@ def profil(idUser):
             profilUtilisateur['options'] = translate_matiere_spes_options_lv(
                 profilUtilisateur['options'])
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
     else:
         return redirect(url_for('login'))
 
@@ -488,7 +489,7 @@ def comments(idMsg):
                 'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
             }
 
-            return render_template("comments.html", d=result, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("comments.html", d=result, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
             if 'rep' in request.form:
@@ -515,61 +516,61 @@ def comments(idMsg):
         return redirect(url_for('login'))
 
 
-@app.route('/question/', methods=['POST', 'GET'])
+@ app.route('/question/', methods = ['POST', 'GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
-            useur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+            useur=db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
             if useur['SanctionEnCour'] != "Spec":
                 db_demande_aide.insert_one(
                     {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
 
-                demandes = db_demande_aide.aggregate([
+                demandes=db_demande_aide.aggregate([
                     {'$sort': {'date-envoi': -1}},
                     {'$limit': 1}
                 ])
                 for demande in demandes:
                     return redirect('/comments/' + str(demande['_id']))
-            else :
+            else:
                 return redirect(url_for('accueil'))
 
             # return render_template('question.html', envoi="Envoi réussi")
         else:
-            profilUtilisateur = db_utilisateurs.find_one(
+            profilUtilisateur=db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
             if profilUtilisateur["SanctionEnCour"] != "Spec":
-                return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+                return render_template('question.html', profilUtilisateur = profilUtilisateur, user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
             else:
                 return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/recherche')
+@ app.route('/recherche')
 def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
-            search = escape(request.args['search'])
-            firstResult = db_demande_aide.find(
+            search=escape(request.args['search'])
+            firstResult=db_demande_aide.find(
                 {'$text': {'$search': search}})
 
-            result = []
+            result=[]
             for a in firstResult:  # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int(
+                diffTemps=int(
                     (datetime.now() - a['date-envoi']).total_seconds())
-                tempsStr = convertTime(diffTemps)
+                tempsStr=convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
                 if session['id'] in a['likes']:
-                    a_like = True
+                    a_like=True
                 else:
-                    a_like = False
+                    a_like=False
 
                 if session['id'] in a['sign']:
-                    a_sign = True
+                    a_sign=True
                 else:
-                    a_sign = False
+                    a_sign=False
 
                 result.append({  # on ajoute à la liste ce qui nous interesse
                     'idMsg': a['_id'],
@@ -583,7 +584,7 @@ def recherche():
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
-            users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
+            users=db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                                   {'nom': {
                                                       '$regex': search, '$options': 'i'}},
                                                   {'prenom': {
@@ -598,7 +599,7 @@ def recherche():
                                                       '$regex': search, '$options': 'i'}},
                                                   {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(3)
 
-            return render_template('recherche.html', results=result, users=users, search=search, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template('recherche.html', results = result, users = users, search = search, user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
             return redirect(url_for('accueil'))
@@ -606,11 +607,11 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@app.route('/rechercheUser')
+@ app.route('/rechercheUser')
 def recherche_user():
     if 'id' in session:
-        search = escape(request.args['search'])
-        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
+        search=escape(request.args['search'])
+        users=db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {
                                                   '$regex': search, '$options': 'i'}},
                                               {'prenom': {
@@ -624,20 +625,20 @@ def recherche_user():
                                               {'snap': {
                                                   '$regex': search, '$options': 'i'}},
                                               {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
-        return render_template('rechercheUser.html', users=users)
+        return render_template('rechercheUser.html', users = users)
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/likePost/<idPost>', methods=['POST'])
+@ app.route('/likePost/<idPost>', methods = ['POST'])
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
-            idPost = escape(idPost)
+            idPost=escape(idPost)
             # on récupère les likes de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
-            likes = demande['likes']
-            newLikes = list(likes)
+            demande=db_demande_aide.find_one({"_id": ObjectId(idPost)})
+            likes=demande['likes']
+            newLikes=list(likes)
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
