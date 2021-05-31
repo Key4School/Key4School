@@ -44,6 +44,11 @@ db_notif = cluster.db.notifications
 #                           ent=ile_de_france)
 
 
+def notif(type, id_groupe, id_msg, destinataires):
+    db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
+                        "date": datetime.now(), "destinataires": destinataires})
+
+
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
 @app.route('/')
 def accueil():
@@ -83,7 +88,7 @@ def accueil():
                 'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
 
-        return render_template("index.html", demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+        return render_template("index.html", demandes=demandes, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
     else:
         return redirect(url_for('login'))
 
@@ -144,7 +149,7 @@ def messages(idGroupe):
                 msgDb = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']), user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']), user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         elif request.method == 'POST':
             if request.form['reponse'] != "None":
@@ -155,17 +160,17 @@ def messages(idGroupe):
                                     "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
             infogroupes = db_groupes.find_one(
                 {"_id": ObjectId(escape(request.form['group']))})
-            db_notif.insert_one({"type" : "msg", "id_groupe" : ObjectId(escape(request.form['group'])), "id_msg" : ObjectId(message.inserted_id), "date" : datetime.now(), "destinataires": infogroupes['id-utilisateurs']})
+            notif("msg", ObjectId(escape(request.form['group'])), ObjectId(message.inserted_id), infogroupes['id-utilisateurs']}))
             return 'sent'
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/uploadAudio/', methods=['POST'])
+@ app.route('/uploadAudio/', methods = ['POST'])
 def uploadAudio():
     if 'id' in session:
-        heure = str(datetime.now())
-        nom = "MsgVocal" + \
+        heure=str(datetime.now())
+        nom="MsgVocal" +
             escape(request.form['group']) + session['id'] + heure
         cluster.save_file(nom, request.files['audio'])
         db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
@@ -175,7 +180,7 @@ def uploadAudio():
         return redirect(url_for('login'))
 
 
-@app.route('/audio/<audioName>')
+@ app.route('/audio/<audioName>')
 def audio(audioName):
     if 'id' in session:
         return cluster.send_file(escape(audioName))
@@ -183,14 +188,14 @@ def audio(audioName):
         return redirect(url_for('login'))
 
 
-@app.route('/suppressionMsg/', methods=['POST'])
+@ app.route('/suppressionMsg/', methods = ['POST'])
 def supprimerMsg():
     if 'id' in session:
-        idGroupe = escape(request.form['grp'])
+        idGroupe=escape(request.form['grp'])
         db_messages.delete_one(
             {"_id": ObjectId(escape(request.form['msgSuppr']))})
         if request.form['audio'] == 'True':
-            MyAudio = db_files.find_one(
+            MyAudio=db_files.find_one(
                 {'filename': escape(request.form['audioName'])})
             db_files.delete_one({'_id': MyAudio['_id']})
             db_chunks.delete_many({'files_id': MyAudio['_id']})
@@ -200,11 +205,11 @@ def supprimerMsg():
         return redirect(url_for('login'))
 
 
-@app.route('/searchUser_newgroup/', methods=['POST'])
+@ app.route('/searchUser_newgroup/', methods = ['POST'])
 def searchUser_newgroup():
     if 'id' in session:
-        search = escape(request.form['search'])
-        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
+        search=escape(request.form['search'])
+        users=db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {
                                                   '$regex': search, '$options': 'i'}},
                                               {'prenom': {
@@ -218,41 +223,41 @@ def searchUser_newgroup():
                                               {'snap': {
                                                   '$regex': search, '$options': 'i'}},
                                               {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
-        return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
+        return render_template("searchUser_newgroup.html", users = users, sessionId = session['id'])
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/createGroupe/', methods=['POST'])
+@ app.route('/createGroupe/', methods = ['POST'])
 def createGroupe():
     if 'id' in session:
-        participants = [ObjectId(session['id'])]
+        participants=[ObjectId(session['id'])]
         for name, value in request.form.items():
             if name == 'nomnewgroupe':
                 pass
             else:
                 participants.append(ObjectId(escape(name)))
-        newGroupe = db_groupes.insert_one(
+        newGroupe=db_groupes.insert_one(
             {'nom': escape(request.form['nomnewgroupe']), 'id-utilisateurs': participants})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
 
 
-@app.route('/refreshMsg/')
+@ app.route('/refreshMsg/')
 def refreshMsg():
     if 'id' in session:
-        idGroupe = escape(request.args['idgroupe'])
+        idGroupe=escape(request.args['idgroupe'])
         if escape(request.args['idMsg']) != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
-            dateLast = datetime.strptime(
+            dateLast=datetime.strptime(
                 request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            infogroupes = db_groupes.find_one(
+            infogroupes=db_groupes.find_one(
                 {"_id": ObjectId(idGroupe)})
-            infoUtilisateurs = []
+            infoUtilisateurs=[]
             for content in infogroupes['id-utilisateurs']:
                 infoUtilisateurs += db_utilisateurs.find(
                     {"_id": ObjectId(content)})
-            msgDb = db_messages.aggregate([
+            msgDb=db_messages.aggregate([
                 {'$match': {'$and': [
                     {'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]}},
                 {'$lookup':
