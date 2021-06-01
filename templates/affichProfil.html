@@ -251,7 +251,10 @@
         <span>Signaler</span>
       </button>
       {%if user['admin']==true%}
-      <button  class="button is-warning is-outlined is-small" onClick="sanction();">
+      <button  class="button  is-danger is-outlined is-small" onClick="sanction();">
+        <span class="icon is-small">
+          <i id="sign" class="fas fa-ban" aria-hidden="true"></i>
+        </span>
         <span>Sanctionner</span>
       </button>
       {%endif%}
