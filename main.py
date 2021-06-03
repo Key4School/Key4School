@@ -11,6 +11,7 @@ from flask import escape
 from bson import Binary
 import os
 import gridfs
+import smtplib, ssl
 
 # Création de l'application
 app = Flask(__name__)
@@ -47,11 +48,23 @@ db_notif = cluster.db.notifications
 def notif(type, id_groupe, id_msg, destinataires):
     db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
                         "date": datetime.now(), "destinataires": destinataires})
-    for destinataire in destinataires:
-        if str(destinataire)==session['id']:
-            user = db_utilisateurs.find_one({"_id": destinataire})
-            if user['email'] != "":
-                print(user['email'])
+    # # on rentre les renseignements pris sur le site du fournisseur
+    # smtp_adress = 'smtp.gmail.com'
+    # smtp_port = 465
+    # # on rentre les informations sur notre adresse e-mail
+    # email_adress = 'example@gmail.com'
+    # email_password = 'my_password'
+    # # on crée la connexion
+    # context = ssl.create_default_context()
+    # with smtplib.SMTP_SSL(smtp_address, smtp_port, context=context) as server:
+    #     # connexion au compte
+    #     server.login(email_adress, email_password)
+    #     for destinataire in destinataires:
+    #         if str(destinataire)==session['id']:
+    #             user = db_utilisateurs.find_one({"_id": destinataire})
+    #             if user['email'] != "":
+    #                 # envoi du mail
+    #                 server.sendmail(email_address, user['email'], 'le contenu de l\'e-mail')
 
 
 
