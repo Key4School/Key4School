@@ -1100,16 +1100,15 @@ def callback():
     """
 
     ENT_reply = OAuth2Session(
-        client_id, state=session.get('oauth_state'),  redirect_uri="http://127.0.0.1:3000/callback")
-    ENT_token = ENT_reply.fetch_token(token_url, client_id=client_id, client_secret=client_secret,
-                                      code=request.args.get('code'))
+        client_id, state=session.get('oauth_state'), redirect_uri="http://127.0.0.1:3000/callback")
+    ENT_token = ENT_reply.fetch_token(token_url, client_id=client_id, client_secret=client_secret, code=request.args.get('code'))
 
     # At this point you can fetch protected resources but lets save
     # the token and show how this is done from a persisted token
     # in /profil.
     session['oauth_token'] = ENT_token
 
-    return redirect(url_for('.connexion'))
+    return redirect(url_for('connexion'))
 
 
 # Fonction de test pour afficher ce que l'on récupère
