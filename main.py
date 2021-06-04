@@ -1071,7 +1071,7 @@ def login():
     using an URL with a few key OAuth parameters.
     """
     ENT_reply = OAuth2Session(
-        client_id, scope="userinfo", redirect_uri="http://127.0.0.1:3000/callback")
+        client_id, scope="userinfo", redirect_uri=redirect_uri)
     authorization_url, state = ENT_reply.authorization_url(
         authorization_base_url)
 
@@ -1093,7 +1093,7 @@ def callback():
     """
 
     ENT_reply = OAuth2Session(
-        client_id, state=session.get('oauth_state'), redirect_uri="http://127.0.0.1:3000/callback")
+        client_id, state=session.get('oauth_state'), redirect_uri=redirect_uri)
     ENT_token = ENT_reply.fetch_token(token_url, client_id=client_id, client_secret=client_secret, code=request.args.get('code'))
 
     # At this point you can fetch protected resources but lets save
@@ -1163,11 +1163,12 @@ if __name__ == "__main__":
     authorization_base_url = 'https://ent.iledefrance.fr/auth/oauth2/auth'
     token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
 
-    if 'HEROKU' in os.environ:
+    if 'redirect_uri' in os.environ:
         # Le client secret est le code secret de l'application
-        # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
+        # NE PAS TOUCHER AUX 3 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
         client_id = 'code-ton-lycee'
         client_secret = 'JR7XcyGWBHt2VA9W'
+        redirect_uri = os.environ['redirect_uri']
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
     else:
@@ -1175,5 +1176,6 @@ if __name__ == "__main__":
         # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
         client_id = 'code-ton-lycee-localhost'
         client_secret = 'JR7XcyGWBHt2VA9W'
+        redirect_uri = "http://127.0.0.1:3000/callback"
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         app.run(host="127.0.0.1", port=3000, debug=True)
