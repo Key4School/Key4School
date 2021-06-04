@@ -533,7 +533,7 @@ def question():
     if 'id' in session:
         if request.method == 'POST':
             useur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
-            if useur['SanctionEnCour'] != "Spec":
+            if useur['SanctionEnCour'] != "Spec" and useur['SanctionEnCour'] != "SpecForum":
                 db_demande_aide.insert_one(
                     {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
 
@@ -550,7 +550,7 @@ def question():
         else:
             profilUtilisateur = db_utilisateurs.find_one(
                 {'_id': ObjectId(session['id'])})
-            if profilUtilisateur["SanctionEnCour"] != "Spec":
+            if profilUtilisateur["SanctionEnCour"] != "Spec" and useur['SanctionEnCour'] != "SpecForum":
                 return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
             else:
                 return redirect(url_for('accueil'))
