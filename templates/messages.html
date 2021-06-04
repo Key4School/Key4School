@@ -237,7 +237,7 @@ user<!DOCTYPE html>
               <i class="fas fa-times"></i>
           </button>
         </div>
-        {%if user['SanctionEnCour']!="Spec"%}
+        {%if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecMsg" %}
         <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
         <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
             <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">

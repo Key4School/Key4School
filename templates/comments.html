@@ -78,7 +78,7 @@
     </div>
     <div class="column"></div>
   </div>
-  {%if user['SanctionEnCour'] != "Spec"%}
+  {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum"%}
   <button class="button" style="display: none; margin-bottom: 20px;" onclick="afficheArea()" id="showbutton">Répondre à cette question</button>
 
   <div style="position: relative; width: 70%; left: 50%; transform: translateX(-50%); margin-bottom: 20px;" id="rep-form">
