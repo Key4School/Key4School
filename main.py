@@ -783,8 +783,26 @@ def sanction():
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
             if request.form['SanctionType']== 'ResetProfil':
                 Sanctionné = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSanctionné'])})
-                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$set":{"pseudo":  Sanctionné['nom']+"_"+Sanctionné['prenom'], "telephone": "", "interets": "" }})
-
+                MyImage = db_files.find(
+                    {'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
+                for a in MyImage:
+                    db_files.delete_one({'_id': a['_id']})
+                    db_chunks.delete_many({'files_id': a['_id']})
+                db_utilisateurs.update_one({'_id': ObjectId(request.form['idSanctionné'])}, {
+                                           '$set': {'imgProfile': "", 'nomImg': ""}})
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$set":{"pseudo":  Sanctionné['nom']+"_"+Sanctionné['prenom'], "telephone": "", "interets": "", "email" : "" }})
+            if request.form['SanctionType'] == 'SpecProfil':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+            if request.form['SanctionType'] == 'SpecForum':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+            if request.form['SanctionType'] == 'SpecMsg':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
             return 'sent'
         else:
             return redirect(url_for('accueil'))
