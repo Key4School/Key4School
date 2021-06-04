@@ -781,6 +781,10 @@ def sanction():
                 time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
                 db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+            if request.form['SanctionType']== 'ResetProfil':
+                Sanctionné = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSanctionné'])})
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$set":{"pseudo":  Sanctionné['nom']+"_"+Sanctionné['prenom'], "telephone": "", "interets": "" }})
+
             return 'sent'
         else:
             return redirect(url_for('accueil'))
