@@ -16,14 +16,6 @@ import smtplib, ssl
 # Création de l'application
 app = Flask(__name__)
 
-
-# Le client secret est le code secret de l'application
-# NE PAS TOUCHER AUX 4 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
-client_id = 'code-ton-lycee'
-client_secret = 'JR7XcyGWBHt2VA9W'
-authorization_base_url = 'https://ent.iledefrance.fr/auth/oauth2/auth'
-token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
-
 # Récupération d'une base de données
 cluster = PyMongo(
     app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
@@ -1165,11 +1157,22 @@ def connexion():
 if __name__ == "__main__":
     # This allows us to use a plain HTTP callback
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
-
     app.secret_key = os.urandom(24)
+    # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
+    authorization_base_url = 'https://ent.iledefrance.fr/auth/oauth2/auth'
+    token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
+
     if 'HEROKU' in os.environ:
+        # Le client secret est le code secret de l'application
+        # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
+        client_id = 'code-ton-lycee'
+        client_secret = 'JR7XcyGWBHt2VA9W'
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
     else:
+        # Le client secret est le code secret de l'application
+        # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
+        client_id = 'code-ton-lycee-localhost'
+        client_secret = 'JR7XcyGWBHt2VA9W'
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         app.run(host="127.0.0.1", port=3000, debug=True)
