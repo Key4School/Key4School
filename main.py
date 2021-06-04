@@ -1168,7 +1168,7 @@ if __name__ == "__main__":
         # NE PAS TOUCHER AUX 3 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
         client_id = 'code-ton-lycee'
         client_secret = 'JR7XcyGWBHt2VA9W'
-        redirect_uri = 'https://skyloo-app.herokuapp.com/callback' # os.environ['redirect_uri']
+        redirect_uri = os.environ['redirect_uri']
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
     else:
