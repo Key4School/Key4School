@@ -1166,7 +1166,7 @@ if __name__ == "__main__":
     if 'HEROKU' in os.environ:
         # Le client secret est le code secret de l'application
         # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
-        client_id = 'code-ton-lycee'
+        client_id = 'code-ton-lycee-localhost'
         client_secret = 'JR7XcyGWBHt2VA9W'
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
