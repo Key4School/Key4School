@@ -19,7 +19,7 @@ app = Flask(__name__)
 
 # Le client secret est le code secret de l'application
 # NE PAS TOUCHER AUX 4 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
-client_id = 'code-ton-lycee'
+client_id = 'code-ton-lycee-localhost'
 client_secret = 'JR7XcyGWBHt2VA9W'
 authorization_base_url = 'https://ent.iledefrance.fr/auth/oauth2/auth'
 token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
