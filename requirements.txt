@@ -6,4 +6,3 @@ requests-oauthlib
 dnspython
 pymongo
 python-oauth2
-ssl
