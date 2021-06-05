@@ -356,9 +356,7 @@ def profil(idUser):
             return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
-            profilUtilisateur = db_utilisateurs.find_one(
-                {'_id': ObjectId(idUser)})
-            useur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(idUser)})
             if ObjectId(session['id']) in profilUtilisateur['sign']:
                 a_sign = True
             else:
@@ -532,8 +530,8 @@ def comments(idMsg):
 def question():
     if 'id' in session:
         if request.method == 'POST':
-            useur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
-            if useur['SanctionEnCour'] != "Spec" and useur['SanctionEnCour'] != "SpecForum":
+            user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+            if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
                 db_demande_aide.insert_one(
                     {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
 
@@ -548,9 +546,9 @@ def question():
 
             # return render_template('question.html', envoi="Envoi réussi")
         else:
-            profilUtilisateur = db_utilisateurs.find_one(
-                {'_id': ObjectId(session['id'])})
-            if profilUtilisateur["SanctionEnCour"] != "Spec" and useur['SanctionEnCour'] != "SpecForum":
+            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+
+            if profilUtilisateur["SanctionEnCour"] != "Spec" and profilUtilisateur['SanctionEnCour'] != "SpecForum":
                 return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
             else:
                 return redirect(url_for('accueil'))
@@ -865,30 +863,27 @@ def signPostProfil():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            useur = db_utilisateurs.find_one(
-                {"_id": ObjectId(escape(request.form['idSignalé']))})
-            sign = useur['sign']
+            user = db_utilisateurs.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
+            sign = user['sign']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(
-                        request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(request.form['idSignalé']))},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
-                     },
+                    },
                 )
 
             else:
                 raison = {escape(request.form['Raison'])}
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(
-                        request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(request.form['idSignalé']))},
                     {'$push':
                         {'sign': ObjectId(session['id']),
                          'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
-                     }
+                    }
                 )
             return 'sent'
 
