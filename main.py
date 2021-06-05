@@ -67,7 +67,7 @@ def accueil():
     if 'id' in session:
         toutesDemandes = db_demande_aide.aggregate([
             {'$sort': {'date-envoi': -1}},
-            {'$limit': 5}
+            {'$limit': 10}
         ])  # ici on récupère les 5 dernières demandes les plus récentes
 
         demandes = []
@@ -86,20 +86,21 @@ def accueil():
                 a_sign = True
             else:
                 a_sign = False
-            demandes.append({  # on ajoute à la liste ce qui nous interesse
-                'idMsg': a['_id'],
-                'idAuteur': a['id-utilisateur'],
-                'titre': a['titre'],
-                'contenu': a['contenu'],
-                'temps': tempsStr,
-                'matière': a['matière'],
-                'nb-likes': len(a['likes']),
-                'a_like': a_like,
-                'a_sign': a_sign,
-                'resolu': a['resolu'],
-                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
-            })
+            if a['resolu'] == False :
+                demandes.append({  # on ajoute à la liste ce qui nous interesse
+                    'idMsg': a['_id'],
+                    'idAuteur': a['id-utilisateur'],
+                    'titre': a['titre'],
+                    'contenu': a['contenu'],
+                    'temps': tempsStr,
+                    'matière': a['matière'],
+                    'nb-likes': len(a['likes']),
+                    'a_like': a_like,
+                    'a_sign': a_sign,
+                    'resolu': a['resolu'],
+                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
+                })
 
         return render_template("index.html", demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
     else:
@@ -347,6 +348,7 @@ def profil(idUser):
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
                     'a_sign': a_sign,
+                    'resolu': a['resolu'],
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
@@ -585,6 +587,7 @@ def recherche():
 
                 result.append({  # on ajoute à la liste ce qui nous interesse
                     'idMsg': a['_id'],
+                    'idAuteur': a['id-utilisateur'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
                     'temps': tempsStr,
@@ -592,6 +595,7 @@ def recherche():
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
                     'a_sign': a_sign,
+                    'resolu': a['resolu'],
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })

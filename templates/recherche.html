@@ -124,6 +124,21 @@
                     {% endif %}
                   </span>
                 </a>
+                {% if r['idAuteur'] == user['_id'] %}
+                  <div class="navbar-item">
+                    <button  class="button is-success is-outlined is-small" onClick="resoudre('{{r['idMsg']}}')">
+                      <span class="icon is-small">
+                        {% if r['resolu'] %}
+                          <i class="fas fa-check-square" aria-hidden="true"></i>
+                        {% else %}
+                          <i class="far fa-check-square" aria-hidden="true"></i>
+                        {% endif %}
+                      </span>
+                      <span>Résolu &nbsp;</span>
+                    </button>
+                    <input type="hidden" />
+                  </div>
+                {% endif %}
               </div>
             </nav>
           </div>
