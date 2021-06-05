@@ -86,9 +86,9 @@ def accueil():
                 a_sign = True
             else:
                 a_sign = False
-
             demandes.append({  # on ajoute à la liste ce qui nous interesse
                 'idMsg': a['_id'],
+                'idAuteur': a['id-utilisateur'],
                 'titre': a['titre'],
                 'contenu': a['contenu'],
                 'temps': tempsStr,
@@ -96,6 +96,7 @@ def accueil():
                 'nb-likes': len(a['likes']),
                 'a_like': a_like,
                 'a_sign': a_sign,
+                'resolu': a['resolu'],
                 # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })

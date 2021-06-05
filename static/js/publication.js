@@ -111,5 +111,8 @@ function resoudre(idMsg) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-  });
+  })
+    .then((res) => {
+      window.location.reload(true);
+    });
 }
