@@ -7,7 +7,7 @@ function supprimer(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      document.getElementById('divDemande'+id).style.display='None';
+      document.getElementById('divDemande_'+id).style.display='None';
       supprimerClose();
     },
   });
@@ -35,7 +35,7 @@ function valider(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      document.getElementById('divDemande'+id).style.display='None';
+      document.getElementById('divDemande_'+id).style.display='None';
       validerClose();
     },
   });

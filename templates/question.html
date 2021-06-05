@@ -37,13 +37,18 @@
           <div class="select" >
             <select name="matiere">
               <!-- Tronc commun -->
-              <option value="fr">Français</option>
+              {% if profilUtilisateur['classe']=='2GT' or profilUtilisateur['classe']=='1G' %}
+                <option value="fr">Français</option>
+              {% endif %}
               <option value="hg">Histoire-Géographie</option>
               <option value="emc">EMC</option>
               {% if profilUtilisateur['classe']=='2GT' %}
                 <option value="maths">Mathématiques</option>
                 <option value="pc">Physiques-chimie</option>
                 <option value="ses">SES</option>
+              {% endif %}
+              {% if profilUtilisateur['classe']=='TG' %}
+                <option value="philo">Philosophie</option>
               {% endif %}
               <!-- Langues -->
               {% if 'lv1-ang' in profilUtilisateur['langues'] or 'lv1-ang-euro' in profilUtilisateur['langues'] or 'lv2-ang' in profilUtilisateur['langues'] or 'opt-lv3-ang' in profilUtilisateur['options'] %}
