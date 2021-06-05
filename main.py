@@ -67,7 +67,7 @@ def accueil():
     if 'id' in session:
         toutesDemandes = db_demande_aide.aggregate([
             {'$sort': {'date-envoi': -1}},
-            {'$limit': 5}
+            {'$limit': 10}
         ])  # ici on récupère les 5 dernières demandes les plus récentes
 
         demandes = []
@@ -86,21 +86,21 @@ def accueil():
                 a_sign = True
             else:
                 a_sign = False
-            demandes.append({  # on ajoute à la liste ce qui nous interesse
-                'idMsg': a['_id'],
-                'idAuteur': a['id-utilisateur'],
-                'titre': a['titre'],
-                'contenu': a['contenu'],
-                'temps': tempsStr,
-                'tag-matière': a['matière'],
-                'matière': translate_matiere_spes_options_lv([a['matière']]),
-                'nb-likes': len(a['likes']),
-                'a_like': a_like,
-                'a_sign': a_sign,
-                'resolu': a['resolu'],
-                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
-            })
+            if a['resolu'] == False :
+                demandes.append({  # on ajoute à la liste ce qui nous interesse
+                    'idMsg': a['_id'],
+                    'idAuteur': a['id-utilisateur'],
+                    'titre': a['titre'],
+                    'contenu': a['contenu'],
+                    'temps': tempsStr,
+                    'matière': a['matière'],
+                    'nb-likes': len(a['likes']),
+                    'a_like': a_like,
+                    'a_sign': a_sign,
+                    'resolu': a['resolu'],
+                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
+                })
 
         return render_template("index.html", demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
     else:
@@ -324,7 +324,8 @@ def profil(idUser):
             demandes = []
             for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+                diffTemps = int(
+                    (datetime.now() - a['date-envoi']).total_seconds())
                 tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -347,6 +348,7 @@ def profil(idUser):
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
                     'a_sign': a_sign,
+                    'resolu': a['resolu'],
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
@@ -450,7 +452,8 @@ def comments(idMsg):
         if request.method == 'GET':
             msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
 
-            diffTemps = int((datetime.now() - msg['date-envoi']).total_seconds())
+            diffTemps = int(
+                (datetime.now() - msg['date-envoi']).total_seconds())
             tempsStr = convertTime(diffTemps)
 
             # on check si l'utilisateur a déjà liké le post
@@ -466,7 +469,8 @@ def comments(idMsg):
 
             reponses = []
             for r in msg['réponses associées'].values():
-                diffTemps2 = int((datetime.now() - r['date-envoi']).total_seconds())
+                diffTemps2 = int(
+                    (datetime.now() - r['date-envoi']).total_seconds())
                 tempsStr2 = convertTime(diffTemps2)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -560,12 +564,14 @@ def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
             search = escape(request.args['search'])
-            firstResult = db_demande_aide.find({'$text': {'$search': search}})
+            firstResult = db_demande_aide.find(
+                {'$text': {'$search': search}})
 
             result = []
             for a in firstResult:  # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
+                diffTemps = int(
+                    (datetime.now() - a['date-envoi']).total_seconds())
                 tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -581,18 +587,18 @@ def recherche():
 
                 result.append({  # on ajoute à la liste ce qui nous interesse
                     'idMsg': a['_id'],
+                    'idAuteur': a['id-utilisateur'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
                     'temps': tempsStr,
-                    'tag-matière': a['matière'],
-                    'matière': translate_matiere_spes_options_lv([a['matière']]),
+                    'matière': a['matière'],
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
                     'a_sign': a_sign,
+                    'resolu': a['resolu'],
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
-
             users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                                   {'nom': {
                                                       '$regex': search, '$options': 'i'}},
@@ -660,7 +666,7 @@ def likePost(idPost):
                 {'_id': ObjectId(idPost)},
                 {'$set':
                     {'likes': newLikes}
-                }
+                 }
             )
 
             # on retourne enfin le nouveau nb de likes
@@ -679,7 +685,8 @@ def likeRep(idPost, idRep):
             idPost = escape(idPost)
             idRep = escape(idRep)
             # on récupère les likes de la demande d'aide
-            reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})['réponses associées']
+            reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})[
+                'réponses associées']
             if not idRep in reponses:
                 return abort(400)
 
@@ -756,9 +763,8 @@ def administration():
                         'motif': 1,
                     }},
                 ])
-
-                profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
-
+                profilSignale = db_utilisateurs.find(
+                    {"sign": {"$exists": "true", "$ne": []}})
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
         else:
             return redirect(url_for('accueil'))
@@ -812,7 +818,8 @@ def signPost():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
+            demande = db_demande_aide.find_one(
+                {"_id": ObjectId(escape(request.form['idSignalé']))})
             sign = demande['sign']
             newSign = list(sign)
 
@@ -821,11 +828,12 @@ def signPost():
                 # on supprime son signalement
                 newSign.remove(ObjectId(session['id']))
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(
+                        request.form['idSignalé']))},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
-                    },
+                     },
                 )
 
             else:
@@ -837,7 +845,7 @@ def signPost():
                     {'$push':
                         {'sign': ObjectId(session['id']),
                          'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
-                    }
+                     }
                 )
 
             # on update dans la DB
@@ -845,7 +853,7 @@ def signPost():
             #     {'_id': ObjectId(request.form['idSignalé'])},
             #     {'$set':
             #         {'sign': newSign}
-            #     }
+            #      }
             # )
             return 'sent'
 
@@ -922,11 +930,13 @@ def convertTime(diffTemps):
     if diffTemps // (60 * 60 * 24 * 7):  # semaines
         tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
         if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
-            tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+            tempsStr += '{}j '.format((diffTemps %
+                                       (60 * 60 * 24 * 7)) // (60 * 60 * 24))
     elif diffTemps // (60 * 60 * 24):  # jours
         tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
         if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
-            tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+            tempsStr += '{}h '.format((diffTemps %
+                                       (60 * 60 * 24)) // (60 * 60))
     elif diffTemps // (60 * 60):  # heures
         tempsStr += '{}h '.format(diffTemps // (60 * 60))
         if (diffTemps % (60 * 60)) // 60:  # minutes
@@ -944,85 +954,151 @@ def translate_matiere_spes_options_lv(toTranslate: list) -> str:
         if translated != '' and a != 'none':
             translated += ' / '
 
-        translations = {
-            # Matières tronc commun
-            'fr': 'Français',
-            'maths': 'Mathématiques',
-            'hg': 'Histoire-Géographie',
-            'snt': 'SNT',
-            'emc': 'EMC',
-            'ses': 'SES',
-            'philo': 'Philosophie',
-            # LV1
-            'lv1-ang': 'LV1 Anglais',
-            'lv1-ang-euro': 'LV1 Anglais Euro',
-            'lv1-esp': 'LV1 Espagnol',
-            'lv1-esp-euro': 'LV1 Espagnol Euro',
-            'lv1-all': 'LV1 Allemand',
-            'lv1-all-euro': 'LV1 Allemand Euro',
-            'lv1-por': 'LV1 Portugais',
-            'lv1-por-euro': 'LV1 Portugais Euro',
-            'lv1-it': 'LV1 Itlien',
-            'lv1-it-euro': 'LV1 Itlien Euro',
-            'lv1-chi': 'LV1 Chinois',
-            'lv1-ru': 'LV1 Russe',
-            'lv1-ara': 'LV1 Arabe',
-            # LV2
-            'lv2-ang': 'LV2 Anglais',
-            'lv2-esp': 'LV2 Espagnol',
-            'lv2-all': 'LV2 Allemand',
-            'lv2-por': 'LV2 Portugais',
-            'lv2-it': 'LV2 Italien',
-            'lv2-chi': 'LV2 Chinois',
-            'lv2-ru': 'LV2 Russe',
-            'lv2-ara': 'LV2 Arabe',
-            # Spés
-            'spe-art': 'Spé Arts',
-            'spe-hggsp': 'Spé HGGSP',
-            'spe-hlp': 'Spé HLP',
-            'spe-ses': 'Spé SES',
-            'spe-maths': 'Spé Mathématiques',
-            'spe-pc': 'Spé Physique-Chimie',
-            'spe-svt': 'Spé SVT',
-            'spe-nsi': 'Spé NSI',
-            'spe-si': 'Spé Sciences de l\'Ingénieur',
-            'spe-lca': 'Spé LCA',
-            'spe-llcer-ang': 'Spé LLCER Anglais',
-            'spe-llcer-esp': 'Spé LLCER Espagnol',
-            'spe-llcer-all': 'Spé LLCER Allemand',
-            'spe-llcer-it': 'Spé LLCER Italien',
-            'spe-bio-eco': 'Spé Biologie-écologie',
-            # Options
-            'opt-lca-latin': 'LCA Latin',
-            'opt-lca-grec': 'LCA Grec',
-            'opt-lv3-ang': 'LV3 Anglais',
-            'opt-lv3-esp': 'LV3 Espagnol',
-            'opt-lv3-all': 'LV3 Allemand',
-            'opt-lv3-por': 'LV3 Portugais',
-            'opt-lv3-it': 'LV3 Italien',
-            'opt-lv3-ru': 'LV3 Russe',
-            'opt-lv3-ara': 'LV3 Arabe',
-            'opt-lv3-chi': 'LV3 Chinois',
-            'opt-eps': 'Option EPS',
-            'opt-arts': 'Option Arts',
-            'opt-mg': 'Option Management et Gestion',
-            'opt-ss': 'Option Santé et Social',
-            'opt-biotech': 'Option Biotechnologies',
-            'opt-sl': 'Option Sciences et laboratoire',
-            'opt-si': 'Option Sciences de l\'Ingénieur',
-            'opt-cit': 'Option Création et culture technologiques',      
-            'opt-ccd': 'Option Création et culture - design',
-            'opt-equit': 'Option Hippologie et équitation',
-            'opt-aet': 'Option Agranomie-économie-territoires',
-            'opt-psc': 'Option Pratiques sociales et culturelles',
-            'opt-maths-comp': 'Option Maths Complémentaires',
-            'opt-maths-exp': 'Option Maths Expertes',
-            'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
-            #
-            'none': ''
-        }
+        # Matières tronc commun
+        if a == 'fr':
+            translated += 'Français'
+        elif a == 'maths':
+            translated += 'Mathématiques'
+        elif a == 'hg':
+            translated += 'Histoire-Géographie'
+        elif a == 'snt':
+            translated += 'SNT'
+        elif a == 'emc':
+            translated += 'EMC'
+        elif a == 'ses':
+            translated += 'SES'
+        elif a == 'philo':
+            translated += 'Philosophie'
 
-        translated += translations.get(a)
+        # LV1
+        elif a == 'lv1-ang':
+            translated += 'LV1 Anglais'
+        elif a == 'lv1-ang-euro':
+            translated += 'LV1 Anglais Euro'
+        elif a == 'lv1-esp':
+            translated += 'LV1 Espagnol'
+        elif a == 'lV1-esp-euro':
+            translated += 'LV1 Espagnol Euro'
+        elif a == 'lv1-all':
+            translated += 'LV1 Allemand'
+        elif a == 'lv1-all-euro':
+            translated += 'LV1 Allemand Euro'
+        elif a == 'lv1-por':
+            translated += 'LV1 Portugais'
+        elif a == 'lv1-por-euro':
+            translated += 'LV1 Portugais Euro'
+        elif a == 'lv1-it':
+            translated += 'LV1 Italien'
+        elif a == 'lv1-it-euro':
+            translated += 'LV1 Italien Euro'
+        elif a == 'lv1-chi':
+            translated += 'LV1 Chinois'
+        elif a == 'lV1-ru':
+            translated += 'LV1 Russe'
+        elif a == 'lv1-ara':
+            translated += 'LV1 Arabe'
+
+        # LV2
+        elif a == 'lv2-ang':
+            translated += 'LV2 Anglais'
+        elif a == 'lv2-esp':
+            translated += 'LV2 Espagnol'
+        elif a == 'lv2-all':
+            translated += 'LV2 Allemand'
+        elif a == 'lv2-por':
+            translated += 'LV2 Portugais'
+        elif a == 'lv2-it':
+            translated += 'LV2 Italien'
+        elif a == 'lv2-chi':
+            translated += 'LV2 Chinois'
+        elif a == 'lV2-ru':
+            translated += 'LV2 Russe'
+        elif a == 'lv2-ara':
+            translated += 'LV2 Arabe'
+
+        # Spés
+        elif a == 'spe-art':
+            translated += 'Spé Arts/Théâtre'
+        elif a == 'spe-hggsp':
+            translated += 'Spé HGGSP'
+        elif a == 'spe-hlp':
+            translated += 'Spé HLP'
+        elif a == 'spe-ses':
+            translated += 'Spé SES'
+        elif a == 'spe-maths':
+            translated += 'Spé Mathématiques'
+        elif a == 'spe-pc':
+            translated += 'Spé Physique-Chimie'
+        elif a == 'spe-svt':
+            translated += 'Spé SVT'
+        elif a == 'spe-nsi':
+            translated += 'Spé NSI'
+        elif a == 'spe-si':
+            translated += 'Spé Sciences de l\'Ingénieur'
+        elif a == 'spe-lca':
+            translated += 'Spé LCA'
+        elif a == 'spe-llcer-ang':
+            translated += 'Spé LLCER Anglais'
+        elif a == 'spe-llcer-esp':
+            translated += 'Spé LLCER Espagnol'
+        elif a == 'spe-llcer-all':
+            translated += 'Spé LLCER Allemand'
+        elif a == 'spe-llcer-it':
+            translated += 'Spé LLCER Italien'
+        elif a == 'spe-bio-eco':
+            translated += 'Spé Biologie-écologie'
+
+        # Options
+        elif a == 'opt-lca-latin':
+            translated += 'LCA Latin'
+        elif a == 'opt-lca-grec':
+            translated += 'LCA Grec'
+        elif a == 'opt-lv3-ang':
+            translated += 'LV3 Anglais'
+        elif a == 'opt-lv3-esp':
+            translated += 'LV3 Espagnol'
+        elif a == 'opt-lv3-all':
+            translated += 'LV3 Allemand'
+        elif a == 'opt-lv3-por':
+            translated += 'LV3 Portugais'
+        elif a == 'opt-lv3-it':
+            translated += 'LV3 Italien'
+        elif a == 'opt-lv3-ru':
+            translated += 'LV3 Russe'
+        elif a == 'opt-lv3-ara':
+            translated += 'LV3 Arabe'
+        elif a == 'opt-lv3-chi':
+            translated += 'LV3 Chinois'
+        elif a == 'opt-eps':
+            translated += 'Option EPS'
+        elif a == 'opt-arts':
+            translated += 'Option Arts'
+        elif a == 'opt-mg':
+            translated += 'Option Management et Gestion'
+        elif a == 'opt-ss':
+            translated += 'Option Santé et Social'
+        elif a == 'opt-biotech':
+            translated += 'Option Biotechnologies'
+        elif a == 'opt-sl':
+            translated += 'Option Sciences et laboratoire'
+        elif a == 'opt-si':
+            translated += 'Option Sciences de l\'Ingénieur'
+        elif a == 'opt-cit':
+            translated += 'Option Création et culture technologiques'
+        elif a == 'opt-ccd':
+            translated += 'Option Création et culture - design'
+        elif a == 'opt-equit':
+            translated += 'Option Hippologie et équitation'
+        elif a == 'opt-aet':
+            translated += 'Option Agranomie-économie-territoires'
+        elif a == 'opt-psc':
+            translated += 'Pratiques sociales et culturelles'
+        elif a == 'opt-maths-comp':
+            translated += 'Option Maths Complémentaires'
+        elif a == 'opt-maths-exp':
+            translated += 'Option Maths Expertes'
+        elif a == 'opt-dgemc':
+            translated += 'Option Droits et grand enjeux du monde contemporain'
 
     return translated
 
