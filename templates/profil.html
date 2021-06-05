@@ -101,7 +101,7 @@
               <td>
                 <div id="contentpseudo">
                   <input type="hidden" value="{{profilUtilisateur['pseudo']}}" name="pseudo"/>
-                  <p onClick='input("pseudo")' id="pseudo">{{profilUtilisateur['pseudo']}}</p>
+                  <p {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')"{%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}</p>
                 </div>
               </td>
             </tr>
@@ -373,7 +373,7 @@
             <td>
               <div id="content{{element}}">
                 <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
-                <p id="{{element}}" onClick="input('{{element}}')">{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
+                <p id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')"{%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
               </div>
             </td>
             <td>
@@ -458,7 +458,7 @@
           <td>
             <div id="content{{element}}">
               <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
-              <p id="{{element}}" onClick="input('{{element}}')">{%if element=="birth_date"%}{{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}{%else%}{{profilUtilisateur[element]}}{%endif%}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
+              <p id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')"{%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
             </div>
           </td>
           <td>

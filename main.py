@@ -356,9 +356,7 @@ def profil(idUser):
             return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
-            profilUtilisateur = db_utilisateurs.find_one(
-                {'_id': ObjectId(idUser)})
-            useur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(idUser)})
             if ObjectId(session['id']) in profilUtilisateur['sign']:
                 a_sign = True
             else:
@@ -532,8 +530,8 @@ def comments(idMsg):
 def question():
     if 'id' in session:
         if request.method == 'POST':
-            useur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
-            if useur['SanctionEnCour'] != "Spec":
+            user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+            if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
                 db_demande_aide.insert_one(
                     {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": [], "resolu": False})
 
@@ -548,9 +546,9 @@ def question():
 
             # return render_template('question.html', envoi="Envoi réussi")
         else:
-            profilUtilisateur = db_utilisateurs.find_one(
-                {'_id': ObjectId(session['id'])})
-            if profilUtilisateur["SanctionEnCour"] != "Spec":
+            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+
+            if profilUtilisateur["SanctionEnCour"] != "Spec" and profilUtilisateur['SanctionEnCour'] != "SpecForum":
                 return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
             else:
                 return redirect(url_for('accueil'))
@@ -783,8 +781,26 @@ def sanction():
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
             if request.form['SanctionType']== 'ResetProfil':
                 Sanctionné = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSanctionné'])})
-                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$set":{"pseudo":  Sanctionné['nom']+"_"+Sanctionné['prenom'], "telephone": "", "interets": "" }})
-
+                MyImage = db_files.find(
+                    {'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
+                for a in MyImage:
+                    db_files.delete_one({'_id': a['_id']})
+                    db_chunks.delete_many({'files_id': a['_id']})
+                db_utilisateurs.update_one({'_id': ObjectId(request.form['idSanctionné'])}, {
+                                           '$set': {'imgProfile': "", 'nomImg': ""}})
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$set":{"pseudo":  Sanctionné['nom']+"_"+Sanctionné['prenom'], "telephone": "", "interets": "", "email" : "" }})
+            if request.form['SanctionType'] == 'SpecProfil':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+            if request.form['SanctionType'] == 'SpecForum':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+            if request.form['SanctionType'] == 'SpecMsg':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
             return 'sent'
         else:
             return redirect(url_for('accueil'))
@@ -847,30 +863,27 @@ def signPostProfil():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            useur = db_utilisateurs.find_one(
-                {"_id": ObjectId(escape(request.form['idSignalé']))})
-            sign = useur['sign']
+            user = db_utilisateurs.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
+            sign = user['sign']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(
-                        request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(request.form['idSignalé']))},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
-                     },
+                    },
                 )
 
             else:
                 raison = {escape(request.form['Raison'])}
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(
-                        request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(request.form['idSignalé']))},
                     {'$push':
                         {'sign': ObjectId(session['id']),
                          'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
-                     }
+                    }
                 )
             return 'sent'
 
