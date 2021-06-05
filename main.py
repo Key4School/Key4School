@@ -66,9 +66,10 @@ def notif(type, id_groupe, id_msg, destinataires):
 def accueil():
     if 'id' in session:
         toutesDemandes = db_demande_aide.aggregate([
+            {'$match': {'resolu': False}},
             {'$sort': {'date-envoi': -1}},
             {'$limit': 10}
-        ])  # ici on récupère les 5 dernières demandes les plus récentes
+        ])  # ici on récupère les 10 dernières demandes les plus récentes non résolues
 
         demandes = []
         for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
@@ -86,21 +87,22 @@ def accueil():
                 a_sign = True
             else:
                 a_sign = False
-            if a['resolu'] == False :
-                demandes.append({  # on ajoute à la liste ce qui nous interesse
-                    'idMsg': a['_id'],
-                    'idAuteur': a['id-utilisateur'],
-                    'titre': a['titre'],
-                    'contenu': a['contenu'],
-                    'temps': tempsStr,
-                    'matière': a['matière'],
-                    'nb-likes': len(a['likes']),
-                    'a_like': a_like,
-                    'a_sign': a_sign,
-                    'resolu': a['resolu'],
-                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
-                })
+
+            demandes.append({  # on ajoute à la liste ce qui nous interesse
+                'idMsg': a['_id'],
+                'idAuteur': a['id-utilisateur'],
+                'titre': a['titre'],
+                'contenu': a['contenu'],
+                'temps': tempsStr,
+                'tag-matière': a['matière'],
+                'matière': translate_matiere_spes_options_lv([a['matière']]),
+                'nb-likes': len(a['likes']),
+                'a_like': a_like,
+                'a_sign': a_sign,
+                'resolu': a['resolu'],
+                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
+            })
 
         return render_template("index.html", demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
     else:
@@ -172,8 +174,7 @@ def messages(idGroupe):
                 reponse = "None"
             message = db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
                                               "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
-            infogroupes = db_groupes.find_one(
-                {"_id": ObjectId(escape(request.form['group']))})
+            infogroupes = db_groupes.find_one({"_id": ObjectId(escape(request.form['group']))})
             notif("msg", ObjectId(escape(request.form['group'])), ObjectId(
                 message.inserted_id), infogroupes['id-utilisateurs'])
             return 'sent'
@@ -210,8 +211,7 @@ def supprimerMsg():
         db_messages.delete_one(
             {"_id": ObjectId(escape(request.form['msgSuppr']))})
         if request.form['audio'] == 'True':
-            MyAudio = db_files.find_one(
-                {'filename': escape(request.form['audioName'])})
+            MyAudio = db_files.find_one({'filename': escape(request.form['audioName'])})
             db_files.delete_one({'_id': MyAudio['_id']})
             db_chunks.delete_many({'files_id': MyAudio['_id']})
         return redirect(url_for('messages', idGroupe=idGroupe))
@@ -591,6 +591,7 @@ def recherche():
                     'titre': a['titre'],
                     'contenu': a['contenu'],
                     'temps': tempsStr,
+                    'tag-matière': translate_matiere_spes_options_lv([a['matière']]),
                     'matière': a['matière'],
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
@@ -599,20 +600,14 @@ def recherche():
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
+
             users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
-                                                  {'nom': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'prenom': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'lycee': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'email': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'insta': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'snap': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(3)
+                                                  {'nom': {'$regex': search, '$options': 'i'}},
+                                                  {'prenom': {'$regex': search, '$options': 'i'}},
+                                                  {'lycee': {'$regex': search, '$options': 'i'}},
+                                                  {'email': {'$regex': search, '$options': 'i'}},
+                                                  {'telephone': {'$regex': search, '$options': 'i'}}]
+                                            }).limit(3)
 
             return render_template('recherche.html', results=result, users=users, search=search, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
@@ -627,19 +622,12 @@ def recherche_user():
     if 'id' in session:
         search = escape(request.args['search'])
         users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
-                                              {'nom': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'prenom': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'lycee': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'email': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'insta': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'snap': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
+                                              {'nom': {'$regex': search, '$options': 'i'}},
+                                              {'prenom': {'$regex': search, '$options': 'i'}},
+                                              {'lycee': {'$regex': search, '$options': 'i'}},
+                                              {'email': {'$regex': search, '$options': 'i'}},
+                                              {'telephone': {'$regex': search, '$options': 'i'}}]
+                                        }).limit(30)
         return render_template('rechercheUser.html', users=users)
     else:
         return redirect(url_for('login'))
@@ -666,7 +654,7 @@ def likePost(idPost):
                 {'_id': ObjectId(idPost)},
                 {'$set':
                     {'likes': newLikes}
-                 }
+                }
             )
 
             # on retourne enfin le nouveau nb de likes
@@ -714,7 +702,7 @@ def likeRep(idPost, idRep):
                 {'_id': ObjectId(idPost)},
                 {'$set':
                     {'réponses associées': reponses}
-                 }
+                }
             )
 
             # on retourne enfin le nouveau nb de likes
@@ -751,7 +739,7 @@ def administration():
                             'foreignField': '_id',
                             'as': 'rep',
                         }
-                     }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                    }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
                     {'$project': {
                         '_id': 1,
                         'titre': 1,
