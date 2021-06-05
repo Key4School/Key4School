@@ -103,3 +103,13 @@ function designaler(e) {
     },
   });
 }
+
+function resoudre(idMsg) {
+  fetch(`/resoudre/${idMsg}`, {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+}

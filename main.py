@@ -535,7 +535,7 @@ def question():
             useur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
             if useur['SanctionEnCour'] != "Spec":
                 db_demande_aide.insert_one(
-                    {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
+                    {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": [], "resolu": False})
 
                 demandes = db_demande_aide.aggregate([
                     {'$sort': {'date-envoi': -1}},
@@ -873,6 +873,32 @@ def signPostProfil():
                      }
                 )
             return 'sent'
+
+        else:
+            abort(403)  # il manque l'id du message
+    else:
+        abort(401)  # non autorisé
+
+@app.route('/resoudre/<idPost>', methods=['POST'])
+def resoudre(idPost):
+    if 'id' in session:
+        if 'idPost' != None:
+            idPost = escape(idPost)
+            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
+
+            # on check mtn si l'utilisateur a déjà liké la demande
+            if demande['id-utilisateur'] == ObjectId(session['id']):               
+                # on update dans la DB
+                db_demande_aide.update(
+                    {'_id': ObjectId(idPost)},
+                    {'$set':
+                        {'resolu': True}
+                    }
+                )
+                return "ok", 200
+            else:
+                abort(401)  # non autorisé
+            
 
         else:
             abort(403)  # il manque l'id du message
