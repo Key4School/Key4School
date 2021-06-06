@@ -65,10 +65,15 @@ def notif(type, id_groupe, id_msg, destinataires):
 @app.route('/')
 def accueil():
     if 'id' in session:
+        user = db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
+        subjects = getUserSubjects(user)
+
         toutesDemandes = db_demande_aide.aggregate([
+            {'$match': {'matière': {'$in': subjects}}},
+            {'$match': {'resolu': False}},
             {'$sort': {'date-envoi': -1}},
-            {'$limit': 5}
-        ])  # ici on récupère les 5 dernières demandes les plus récentes
+            {'$limit': 10}
+        ])  # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
 
         demandes = []
         for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
@@ -89,18 +94,21 @@ def accueil():
 
             demandes.append({  # on ajoute à la liste ce qui nous interesse
                 'idMsg': a['_id'],
+                'idAuteur': a['id-utilisateur'],
                 'titre': a['titre'],
                 'contenu': a['contenu'],
                 'temps': tempsStr,
-                'matière': a['matière'],
+                'tag-matière': a['matière'],
+                'matière': translate_matiere_spes_options_lv([a['matière']]),
                 'nb-likes': len(a['likes']),
                 'a_like': a_like,
                 'a_sign': a_sign,
+                'resolu': a['resolu'],
                 # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
 
-        return render_template("index.html", demandes=demandes, user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+        return render_template("index.html", demandes=demandes, user=user)
     else:
         return redirect(url_for('login'))
 
@@ -170,10 +178,8 @@ def messages(idGroupe):
                 reponse = "None"
             message = db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
                                               "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
-            infogroupes = db_groupes.find_one(
-                {"_id": ObjectId(escape(request.form['group']))})
-            notif("msg", ObjectId(escape(request.form['group'])), ObjectId(
-                message.inserted_id), infogroupes['id-utilisateurs'])
+            infogroupes = db_groupes.find_one({"_id": ObjectId(escape(request.form['group']))})
+            notif("msg", ObjectId(escape(request.form['group'])), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
             return 'sent'
     else:
         return redirect(url_for('login'))
@@ -205,11 +211,9 @@ def audio(audioName):
 def supprimerMsg():
     if 'id' in session:
         idGroupe = escape(request.form['grp'])
-        db_messages.delete_one(
-            {"_id": ObjectId(escape(request.form['msgSuppr']))})
+        db_messages.delete_one({"_id": ObjectId(escape(request.form['msgSuppr']))})
         if request.form['audio'] == 'True':
-            MyAudio = db_files.find_one(
-                {'filename': escape(request.form['audioName'])})
+            MyAudio = db_files.find_one({'filename': escape(request.form['audioName'])})
             db_files.delete_one({'_id': MyAudio['_id']})
             db_chunks.delete_many({'files_id': MyAudio['_id']})
         return redirect(url_for('messages', idGroupe=idGroupe))
@@ -346,30 +350,25 @@ def profil(idUser):
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
                     'a_sign': a_sign,
+                    'resolu': a['resolu'],
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
 
-            profilUtilisateur = db_utilisateurs.find_one(
-                {'_id': ObjectId(session['id'])})
+            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
 
             return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
-            profilUtilisateur = db_utilisateurs.find_one(
-                {'_id': ObjectId(idUser)})
-            useur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(idUser)})
             if ObjectId(session['id']) in profilUtilisateur['sign']:
                 a_sign = True
             else:
                 a_sign = False
             # translate spes/options/lv
-            profilUtilisateur['langues'] = translate_matiere_spes_options_lv(
-                profilUtilisateur['langues'])
-            profilUtilisateur['spes'] = translate_matiere_spes_options_lv(
-                profilUtilisateur['spes'])
-            profilUtilisateur['options'] = translate_matiere_spes_options_lv(
-                profilUtilisateur['options'])
+            profilUtilisateur['langues'] = translate_matiere_spes_options_lv(profilUtilisateur['langues'])
+            profilUtilisateur['spes'] = translate_matiere_spes_options_lv(profilUtilisateur['spes'])
+            profilUtilisateur['options'] = translate_matiere_spes_options_lv(profilUtilisateur['options'])
 
             return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
     else:
@@ -415,18 +414,17 @@ def updateprofile():
 def updateImg():
     if 'id' in session:
         if request.form['but'] == "remove":
-            MyImage = db_files.find(
-                {'filename': {'$regex': 'imgProfile' + session['id']}})
+            MyImage = db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
                 db_files.delete_one({'_id': a['_id']})
                 db_chunks.delete_many({'files_id': a['_id']})
-            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
-                                       '$set': {'imgProfile': "", 'nomImg': ""}})
+            db_utilisateurs.update_one(
+                {'_id': ObjectId(session['id'])},
+                {'$set': {'imgProfile': "", 'nomImg': ""}})
         elif request.form['but'] == "replace":
             ImgNom = request.files['Newpicture'].filename + \
                 'imgProfile' + session['id']
-            MyImage = db_files.find(
-                {'filename': {'$regex': 'imgProfile' + session['id']}})
+            MyImage = db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
                 db_files.delete_one({'_id': a['_id']})
                 db_chunks.delete_many({'files_id': a['_id']})
@@ -451,8 +449,7 @@ def comments(idMsg):
         if request.method == 'GET':
             msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
 
-            diffTemps = int(
-                (datetime.now() - msg['date-envoi']).total_seconds())
+            diffTemps = int((datetime.now() - msg['date-envoi']).total_seconds())
             tempsStr = convertTime(diffTemps)
 
             # on check si l'utilisateur a déjà liké le post
@@ -468,8 +465,7 @@ def comments(idMsg):
 
             reponses = []
             for r in msg['réponses associées'].values():
-                diffTemps2 = int(
-                    (datetime.now() - r['date-envoi']).total_seconds())
+                diffTemps2 = int((datetime.now() - r['date-envoi']).total_seconds())
                 tempsStr2 = convertTime(diffTemps2)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -487,12 +483,13 @@ def comments(idMsg):
                     'user': db_utilisateurs.find_one({'_id': ObjectId(r['id-utilisateur'])})
                 })
 
-            result = {  # on ajoute à la liste ce qui nous interesse
+            result = { # on ajoute à la liste ce qui nous interesse
                 'idMsg': msg['_id'],
                 'titre': msg['titre'],
                 'contenu': msg['contenu'],
                 'temps': tempsStr,
-                'matière': msg['matière'],
+                'tag-matière': msg['matière'],
+                'matière': translate_matiere_spes_options_lv([msg['matière']]),
                 'nb-likes': len(msg['likes']),
                 'a_like': a_like,
                 'a_sign': a_sign,
@@ -518,9 +515,7 @@ def comments(idMsg):
 
                 db_demande_aide.update(
                     {'_id': ObjectId(idMsg)},
-                    {'$set':
-                        {'réponses associées': reponses}
-                     }
+                    {'$set':{'réponses associées': reponses}}
                 )
                 notif("demande", ObjectId(idMsg), _id, msg['id-utilisateur'])
             return redirect('/comments/' + idMsg)
@@ -532,10 +527,10 @@ def comments(idMsg):
 def question():
     if 'id' in session:
         if request.method == 'POST':
-            useur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
-            if useur['SanctionEnCour'] != "Spec":
+            user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+            if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
                 db_demande_aide.insert_one(
-                    {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": []})
+                    {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": [], "resolu": False})
 
                 demandes = db_demande_aide.aggregate([
                     {'$sort': {'date-envoi': -1}},
@@ -548,9 +543,9 @@ def question():
 
             # return render_template('question.html', envoi="Envoi réussi")
         else:
-            profilUtilisateur = db_utilisateurs.find_one(
-                {'_id': ObjectId(session['id'])})
-            if profilUtilisateur["SanctionEnCour"] != "Spec":
+            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+
+            if profilUtilisateur["SanctionEnCour"] != "Spec" and profilUtilisateur['SanctionEnCour'] != "SpecForum":
                 return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
             else:
                 return redirect(url_for('accueil'))
@@ -563,14 +558,20 @@ def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
             search = escape(request.args['search'])
-            firstResult = db_demande_aide.find(
-                {'$text': {'$search': search}})
+
+            user = db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
+            subjects = getUserSubjects(user)
+
+            firstResult = db_demande_aide.aggregate([
+                {'$match': {'$text': {'$search': search}}}, # doit resté en premier !
+                {'$match': {'matière': {'$in': subjects}}},
+                {'$sort': {'date-envoi': -1}}
+            ]) # ici on récupère les demandes d'aide correspondant à la recherche et aux matières de l'utilisateur
 
             result = []
-            for a in firstResult:  # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
+            for a in firstResult: # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int(
-                    (datetime.now() - a['date-envoi']).total_seconds())
+                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
                 tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -584,34 +585,31 @@ def recherche():
                 else:
                     a_sign = False
 
-                result.append({  # on ajoute à la liste ce qui nous interesse
+                result.append({ # on ajoute à la liste ce qui nous interesse
                     'idMsg': a['_id'],
+                    'idAuteur': a['id-utilisateur'],
                     'titre': a['titre'],
                     'contenu': a['contenu'],
                     'temps': tempsStr,
-                    'matière': a['matière'],
+                    'tag-matière': a['matière'],
+                    'matière': translate_matiere_spes_options_lv([a['matière']]),
                     'nb-likes': len(a['likes']),
                     'a_like': a_like,
                     'a_sign': a_sign,
+                    'resolu': a['resolu'],
                     # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                     'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
                 })
-            users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
-                                                  {'nom': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'prenom': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'lycee': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'email': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'insta': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'snap': {
-                                                      '$regex': search, '$options': 'i'}},
-                                                  {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(3)
 
-            return render_template('recherche.html', results=result, users=users, search=search, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
+            users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
+                                                  {'nom': {'$regex': search, '$options': 'i'}},
+                                                  {'prenom': {'$regex': search, '$options': 'i'}},
+                                                  {'lycee': {'$regex': search, '$options': 'i'}},
+                                                  {'email': {'$regex': search, '$options': 'i'}},
+                                                  {'telephone': {'$regex': search, '$options': 'i'}}]
+                                            }).limit(3)
+
+            return render_template('recherche.html', results=result, users=users, search=search, user=user)
 
         else:
             return redirect(url_for('accueil'))
@@ -624,19 +622,12 @@ def recherche_user():
     if 'id' in session:
         search = escape(request.args['search'])
         users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
-                                              {'nom': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'prenom': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'lycee': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'email': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'insta': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'snap': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
+                                              {'nom': {'$regex': search, '$options': 'i'}},
+                                              {'prenom': {'$regex': search, '$options': 'i'}},
+                                              {'lycee': {'$regex': search, '$options': 'i'}},
+                                              {'email': {'$regex': search, '$options': 'i'}},
+                                              {'telephone': {'$regex': search, '$options': 'i'}}]
+                                        }).limit(30)
         return render_template('rechercheUser.html', users=users)
     else:
         return redirect(url_for('login'))
@@ -661,9 +652,7 @@ def likePost(idPost):
             # on update dans la DB
             db_demande_aide.update(
                 {'_id': ObjectId(idPost)},
-                {'$set':
-                    {'likes': newLikes}
-                 }
+                {'$set':{'likes': newLikes}}
             )
 
             # on retourne enfin le nouveau nb de likes
@@ -682,8 +671,7 @@ def likeRep(idPost, idRep):
             idPost = escape(idPost)
             idRep = escape(idRep)
             # on récupère les likes de la demande d'aide
-            reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})[
-                'réponses associées']
+            reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})['réponses associées']
             if not idRep in reponses:
                 return abort(400)
 
@@ -711,7 +699,7 @@ def likeRep(idPost, idRep):
                 {'_id': ObjectId(idPost)},
                 {'$set':
                     {'réponses associées': reponses}
-                 }
+                }
             )
 
             # on retourne enfin le nouveau nb de likes
@@ -748,7 +736,7 @@ def administration():
                             'foreignField': '_id',
                             'as': 'rep',
                         }
-                     }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                    }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
                     {'$project': {
                         '_id': 1,
                         'titre': 1,
@@ -760,8 +748,8 @@ def administration():
                         'motif': 1,
                     }},
                 ])
-                profilSignale = db_utilisateurs.find(
-                    {"sign": {"$exists": "true", "$ne": []}})
+                profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
+
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
         else:
             return redirect(url_for('accueil'))
@@ -781,6 +769,28 @@ def sanction():
                 time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
                 db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+            if request.form['SanctionType']== 'ResetProfil':
+                Sanctionné = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSanctionné'])})
+                MyImage = db_files.find(
+                    {'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
+                for a in MyImage:
+                    db_files.delete_one({'_id': a['_id']})
+                    db_chunks.delete_many({'files_id': a['_id']})
+                db_utilisateurs.update_one({'_id': ObjectId(request.form['idSanctionné'])}, {
+                                           '$set': {'imgProfile': "", 'nomImg': ""}})
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$set":{"pseudo":  Sanctionné['nom']+"_"+Sanctionné['prenom'], "telephone": "", "interets": "", "email" : "" }})
+            if request.form['SanctionType'] == 'SpecProfil':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+            if request.form['SanctionType'] == 'SpecForum':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+            if request.form['SanctionType'] == 'SpecMsg':
+                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
+                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
             return 'sent'
         else:
             return redirect(url_for('accueil'))
@@ -793,8 +803,7 @@ def signPost():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            demande = db_demande_aide.find_one(
-                {"_id": ObjectId(escape(request.form['idSignalé']))})
+            demande = db_demande_aide.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
             sign = demande['sign']
             newSign = list(sign)
 
@@ -803,24 +812,22 @@ def signPost():
                 # on supprime son signalement
                 newSign.remove(ObjectId(session['id']))
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(escape(
-                        request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(request.form['idSignalé']))},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
-                     },
+                    },
                 )
 
             else:
-                newSign.append(session['id'])  # on ajoute son signalement
+                newSign.append(session['id']) # on ajoute son signalement
                 raison = {escape(request.form['Raison'])}
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(escape(
-                        request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(request.form['idSignalé']))},
                     {'$push':
                         {'sign': ObjectId(session['id']),
                          'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
-                     }
+                    }
                 )
 
             # on update dans la DB
@@ -833,9 +840,9 @@ def signPost():
             return 'sent'
 
         else:
-            abort(403)  # il manque l'id du message
+            abort(403) # il manque l'id du message
     else:
-        abort(401)  # non autorisé
+        abort(401) # non autorisé
 
 
 @app.route('/signPostProfil/', methods=['POST'])
@@ -843,61 +850,116 @@ def signPostProfil():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            useur = db_utilisateurs.find_one(
-                {"_id": ObjectId(escape(request.form['idSignalé']))})
-            sign = useur['sign']
+            user = db_utilisateurs.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
+            sign = user['sign']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(
-                        request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(request.form['idSignalé']))},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
-                     },
+                    },
                 )
 
             else:
                 raison = {escape(request.form['Raison'])}
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(
-                        request.form['idSignalé']))},
+                    {'_id': ObjectId(escape(request.form['idSignalé']))},
                     {'$push':
                         {'sign': ObjectId(session['id']),
                          'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
-                     }
+                    }
                 )
             return 'sent'
 
         else:
-            abort(403)  # il manque l'id du message
+            abort(403) # il manque l'id du message
     else:
-        abort(401)  # non autorisé
+        abort(401) # non autorisé
+
+@app.route('/resoudre/<idPost>', methods=['POST'])
+def resoudre(idPost):
+    if 'id' in session:
+        if 'idPost' != None:
+            idPost = escape(idPost)
+            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
+
+            # on check mtn si l'utilisateur a déjà liké la demande
+            if demande['id-utilisateur'] == ObjectId(session['id']):
+                # on update dans la DB
+                db_demande_aide.update(
+                    {'_id': ObjectId(idPost)},
+                    {'$set':
+                        {'resolu': True}
+                    }
+                )
+                return "ok", 200
+            else:
+                abort(401) # non autorisé
+
+
+        else:
+            abort(403) # il manque l'id du message
+    else:
+        abort(401) # non autorisé
 
 
 def convertTime(diffTemps):
     tempsStr = ''
     # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-    if diffTemps // (60 * 60 * 24 * 7):  # semaines
+    if diffTemps // (60 * 60 * 24 * 7): # semaines
         tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-        if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
-            tempsStr += '{}j '.format((diffTemps %
-                                       (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-    elif diffTemps // (60 * 60 * 24):  # jours
+        if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
+            tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+    elif diffTemps // (60 * 60 * 24): # jours
         tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-        if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
-            tempsStr += '{}h '.format((diffTemps %
-                                       (60 * 60 * 24)) // (60 * 60))
+        if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
+            tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
     elif diffTemps // (60 * 60):  # heures
         tempsStr += '{}h '.format(diffTemps // (60 * 60))
-        if (diffTemps % (60 * 60)) // 60:  # minutes
+        if (diffTemps % (60 * 60)) // 60: # minutes
             tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
     else:
         tempsStr = '{}min'.format(diffTemps // 60)
 
     return tempsStr
 
+def getUserSubjects(user):
+    subjects = ['hg', 'emc', 'eps']
+
+    # Tronc commun
+    if user['classe']=='2GT' or user['classe']=='1G':
+        subjects.append('fr')
+    if user['classe']=='2GT':
+        subjects.append('maths')
+        subjects.append('pc')
+        subjects.append('ses')
+    if user['classe']=='TG':
+        subjects.append('philo')
+    # Langues
+    if 'lv1-ang' in user['langues'] or 'lv1-ang-euro' in user['langues'] or 'lv2-ang' in user['langues'] or 'opt-lv3-ang' in user['options']:
+        subjects.append('ang')
+    if 'lv1-esp' in user['langues'] or 'lv1-esp-euro' in user['langues'] or 'lv2-esp' in user['langues'] or 'opt-lv3-esp' in user['options']:
+        subjects.append('esp')
+    if 'lv1-all' in user['langues'] or 'lv1-all-euro' in user['langues'] or 'lv2-all' in user['langues'] or 'opt-lv3-all' in user['options']:
+        subjects.append('all')
+    if 'lv1-it' in user['langues'] or 'lv1-it-euro' in user['langues'] or 'lv2-it' in user['langues'] or 'opt-lv3-it' in user['options']:
+        subjects.append('it')
+    if 'lv1-chi' in user['langues'] or 'lv2-chi' in user['langues'] or 'opt-lv3-chi' in user['options']:
+        subjects.append('chi')
+    if 'lv1-ru' in user['langues'] or 'lv2-ru' in user['langues'] or 'opt-lv3-ru' in user['options']:
+        subjects.append('ru')
+    if 'lv1-por' in user['langues'] or 'lv2-por' in user['langues'] or 'opt-lv3-por' in user['options']:
+        subjects.append('por')
+    if 'lv1-ara' in user['langues'] or 'lv2-ara' in user['langues'] or 'opt-lv3-ara' in user['options']:
+        subjects.append('ara')
+    # Spés + options
+    subjects += user['spes']
+    subjects += user['options']
+
+    return subjects
 
 def translate_matiere_spes_options_lv(toTranslate: list) -> str:
     translated = ''
@@ -906,153 +968,86 @@ def translate_matiere_spes_options_lv(toTranslate: list) -> str:
         if translated != '' and a != 'none':
             translated += ' / '
 
-        # Matières tronc commun
-        if a == 'fr':
-            translated += 'Français'
-        elif a == 'maths':
-            translated += 'Mathématiques'
-        elif a == 'hg':
-            translated += 'Histoire-Géographie'
-        elif a == 'snt':
-            translated += 'SNT'
-        elif a == 'emc':
-            translated += 'EMC'
-        elif a == 'ses':
-            translated += 'SES'
-        elif a == 'philo':
-            translated += 'Philosophie'
+        translations = {
+            # Matières tronc commun
+            'fr': 'Français',
+            'maths': 'Mathématiques',
+            'hg': 'Histoire-Géographie',
+            'snt': 'SNT',
+            'emc': 'EMC',
+            'ses': 'SES',
+            'philo': 'Philosophie',
+            # LV1
+            'lv1-ang': 'LV1 Anglais',
+            'lv1-ang-euro': 'LV1 Anglais Euro',
+            'lv1-esp': 'LV1 Espagnol',
+            'lv1-esp-euro': 'LV1 Espagnol Euro',
+            'lv1-all': 'LV1 Allemand',
+            'lv1-all-euro': 'LV1 Allemand Euro',
+            'lv1-por': 'LV1 Portugais',
+            'lv1-por-euro': 'LV1 Portugais Euro',
+            'lv1-it': 'LV1 Itlien',
+            'lv1-it-euro': 'LV1 Itlien Euro',
+            'lv1-chi': 'LV1 Chinois',
+            'lv1-ru': 'LV1 Russe',
+            'lv1-ara': 'LV1 Arabe',
+            # LV2
+            'lv2-ang': 'LV2 Anglais',
+            'lv2-esp': 'LV2 Espagnol',
+            'lv2-all': 'LV2 Allemand',
+            'lv2-por': 'LV2 Portugais',
+            'lv2-it': 'LV2 Italien',
+            'lv2-chi': 'LV2 Chinois',
+            'lv2-ru': 'LV2 Russe',
+            'lv2-ara': 'LV2 Arabe',
+            # Spés
+            'spe-art': 'Spé Arts',
+            'spe-hggsp': 'Spé HGGSP',
+            'spe-hlp': 'Spé HLP',
+            'spe-ses': 'Spé SES',
+            'spe-maths': 'Spé Mathématiques',
+            'spe-pc': 'Spé Physique-Chimie',
+            'spe-svt': 'Spé SVT',
+            'spe-nsi': 'Spé NSI',
+            'spe-si': 'Spé Sciences de l\'Ingénieur',
+            'spe-lca': 'Spé LCA',
+            'spe-llcer-ang': 'Spé LLCER Anglais',
+            'spe-llcer-esp': 'Spé LLCER Espagnol',
+            'spe-llcer-all': 'Spé LLCER Allemand',
+            'spe-llcer-it': 'Spé LLCER Italien',
+            'spe-bio-eco': 'Spé Biologie-écologie',
+            # Options
+            'opt-lca-latin': 'LCA Latin',
+            'opt-lca-grec': 'LCA Grec',
+            'opt-lv3-ang': 'LV3 Anglais',
+            'opt-lv3-esp': 'LV3 Espagnol',
+            'opt-lv3-all': 'LV3 Allemand',
+            'opt-lv3-por': 'LV3 Portugais',
+            'opt-lv3-it': 'LV3 Italien',
+            'opt-lv3-ru': 'LV3 Russe',
+            'opt-lv3-ara': 'LV3 Arabe',
+            'opt-lv3-chi': 'LV3 Chinois',
+            'opt-eps': 'Option EPS',
+            'opt-arts': 'Option Arts',
+            'opt-musique': 'Option Musique',
+            'opt-mg': 'Option Management et Gestion',
+            'opt-ss': 'Option Santé et Social',
+            'opt-biotech': 'Option Biotechnologies',
+            'opt-sl': 'Option Sciences et laboratoire',
+            'opt-si': 'Option Sciences de l\'Ingénieur',
+            'opt-cit': 'Option Création et culture technologiques',
+            'opt-ccd': 'Option Création et culture - design',
+            'opt-equit': 'Option Hippologie et équitation',
+            'opt-aet': 'Option Agranomie-économie-territoires',
+            'opt-psc': 'Option Pratiques sociales et culturelles',
+            'opt-maths-comp': 'Option Maths Complémentaires',
+            'opt-maths-exp': 'Option Maths Expertes',
+            'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
+            #
+            'none': ''
+        }
 
-        # LV1
-        elif a == 'lv1-ang':
-            translated += 'LV1 Anglais'
-        elif a == 'lv1-ang-euro':
-            translated += 'LV1 Anglais Euro'
-        elif a == 'lv1-esp':
-            translated += 'LV1 Espagnol'
-        elif a == 'lV1-esp-euro':
-            translated += 'LV1 Espagnol Euro'
-        elif a == 'lv1-all':
-            translated += 'LV1 Allemand'
-        elif a == 'lv1-all-euro':
-            translated += 'LV1 Allemand Euro'
-        elif a == 'lv1-por':
-            translated += 'LV1 Portugais'
-        elif a == 'lv1-por-euro':
-            translated += 'LV1 Portugais Euro'
-        elif a == 'lv1-it':
-            translated += 'LV1 Italien'
-        elif a == 'lv1-it-euro':
-            translated += 'LV1 Italien Euro'
-        elif a == 'lv1-chi':
-            translated += 'LV1 Chinois'
-        elif a == 'lV1-ru':
-            translated += 'LV1 Russe'
-        elif a == 'lv1-ara':
-            translated += 'LV1 Arabe'
-
-        # LV2
-        elif a == 'lv2-ang':
-            translated += 'LV2 Anglais'
-        elif a == 'lv2-esp':
-            translated += 'LV2 Espagnol'
-        elif a == 'lv2-all':
-            translated += 'LV2 Allemand'
-        elif a == 'lv2-por':
-            translated += 'LV2 Portugais'
-        elif a == 'lv2-it':
-            translated += 'LV2 Italien'
-        elif a == 'lv2-chi':
-            translated += 'LV2 Chinois'
-        elif a == 'lV2-ru':
-            translated += 'LV2 Russe'
-        elif a == 'lv2-ara':
-            translated += 'LV2 Arabe'
-
-        # Spés
-        elif a == 'spe-art':
-            translated += 'Spé Arts/Théâtre'
-        elif a == 'spe-hggsp':
-            translated += 'Spé HGGSP'
-        elif a == 'spe-hlp':
-            translated += 'Spé HLP'
-        elif a == 'spe-ses':
-            translated += 'Spé SES'
-        elif a == 'spe-maths':
-            translated += 'Spé Mathématiques'
-        elif a == 'spe-pc':
-            translated += 'Spé Physique-Chimie'
-        elif a == 'spe-svt':
-            translated += 'Spé SVT'
-        elif a == 'spe-nsi':
-            translated += 'Spé NSI'
-        elif a == 'spe-si':
-            translated += 'Spé Sciences de l\'Ingénieur'
-        elif a == 'spe-lca':
-            translated += 'Spé LCA'
-        elif a == 'spe-llcer-ang':
-            translated += 'Spé LLCER Anglais'
-        elif a == 'spe-llcer-esp':
-            translated += 'Spé LLCER Espagnol'
-        elif a == 'spe-llcer-all':
-            translated += 'Spé LLCER Allemand'
-        elif a == 'spe-llcer-it':
-            translated += 'Spé LLCER Italien'
-        elif a == 'spe-bio-eco':
-            translated += 'Spé Biologie-écologie'
-
-        # Options
-        elif a == 'opt-lca-latin':
-            translated += 'LCA Latin'
-        elif a == 'opt-lca-grec':
-            translated += 'LCA Grec'
-        elif a == 'opt-lv3-ang':
-            translated += 'LV3 Anglais'
-        elif a == 'opt-lv3-esp':
-            translated += 'LV3 Espagnol'
-        elif a == 'opt-lv3-all':
-            translated += 'LV3 Allemand'
-        elif a == 'opt-lv3-por':
-            translated += 'LV3 Portugais'
-        elif a == 'opt-lv3-it':
-            translated += 'LV3 Italien'
-        elif a == 'opt-lv3-ru':
-            translated += 'LV3 Russe'
-        elif a == 'opt-lv3-ara':
-            translated += 'LV3 Arabe'
-        elif a == 'opt-lv3-chi':
-            translated += 'LV3 Chinois'
-        elif a == 'opt-eps':
-            translated += 'Option EPS'
-        elif a == 'opt-arts':
-            translated += 'Option Arts'
-        elif a == 'opt-musique':
-            translated += 'Option Musique'
-        elif a == 'opt-mg':
-            translated += 'Option Management et Gestion'
-        elif a == 'opt-ss':
-            translated += 'Option Santé et Social'
-        elif a == 'opt-biotech':
-            translated += 'Option Biotechnologies'
-        elif a == 'opt-sl':
-            translated += 'Option Sciences et laboratoire'
-        elif a == 'opt-si':
-            translated += 'Option Sciences de l\'Ingénieur'
-        elif a == 'opt-cit':
-            translated += 'Option Création et culture technologiques'
-        elif a == 'opt-ccd':
-            translated += 'Option Création et culture - design'
-        elif a == 'opt-equit':
-            translated += 'Option Hippologie et équitation'
-        elif a == 'opt-aet':
-            translated += 'Option Agranomie-économie-territoires'
-        elif a == 'opt-psc':
-            translated += 'Pratiques sociales et culturelles'
-        elif a == 'opt-maths-comp':
-            translated += 'Option Maths Complémentaires'
-        elif a == 'opt-maths-exp':
-            translated += 'Option Maths Expertes'
-        elif a == 'opt-dgemc':
-            translated += 'Option Droits et grand enjeux du monde contemporain'
+        translated += translations.get(a)
 
     return translated
 
@@ -1072,10 +1067,8 @@ def login():
     Redirect the user/resource owner to the OAuth provider (ENT)
     using an URL with a few key OAuth parameters.
     """
-    ENT_reply = OAuth2Session(
-        client_id, scope="userinfo", redirect_uri=redirect_uri)
-    authorization_url, state = ENT_reply.authorization_url(
-        authorization_base_url)
+    ENT_reply = OAuth2Session(client_id, scope="userinfo", redirect_uri=redirect_uri)
+    authorization_url, state = ENT_reply.authorization_url(authorization_base_url)
 
     # State is used to prevent CSRF, keep this for later.
     session['oauth_state'] = state
@@ -1094,8 +1087,7 @@ def callback():
     in the redirect URL. We will use that to obtain an access token.
     """
 
-    ENT_reply = OAuth2Session(
-        client_id, state=session.get('oauth_state'), redirect_uri=redirect_uri)
+    ENT_reply = OAuth2Session(client_id, state=session.get('oauth_state'), redirect_uri=redirect_uri)
     ENT_token = ENT_reply.fetch_token(token_url, client_id=client_id, client_secret=client_secret, code=request.args.get('code'))
 
     # At this point you can fetch protected resources but lets save
@@ -1170,7 +1162,7 @@ if __name__ == "__main__":
         # NE PAS TOUCHER AUX 3 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
         client_id = 'code-ton-lycee'
         client_secret = 'JR7XcyGWBHt2VA9W'
-        redirect_uri = 'https://skyloo-app.herokuapp.com/callback' # os.environ['redirect_uri']
+        redirect_uri = os.environ['redirect_uri']
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
     else:
