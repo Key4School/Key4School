@@ -1,0 +1,62 @@
+<nav class="navbar is-fixed-top" style="background-color:{{session['couleur']}}; height: 90px; border: 2px solid black;">
+
+    <a class="navbar-item" href="{{url_for('accueil')}}" style="width: 15%; font-size: 20px; color: black;">
+      <img src="/static/image/logo.png" style="width:40%;">
+      <span style="width:60%;">Key4School</span>
+    </a>
+
+    {%if user['admin']== true%}
+      <a class="navbar-item" href="{{url_for('administration')}}" style="width: 5%; border-radius: 5px; transition: background-color .5s">
+        <i style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);color: black; font-size:30px;" class="fas fa-user-shield"></i>
+      </a>
+      {%else%}
+      <div class="navbar-item" style="width: 5%;"></div>
+    {%endif%}
+
+    {%if user['SanctionEnCour'] == "Spec"%}
+      <div style="color: red; width: 10%;">mode spectateur</div>
+      {%else%}
+      <div class="navbar-item" style="width: 10%;"></div>
+    {%endif%}
+
+    <form class="navbar-item" action="{{url_for('recherche')}}" method="GET" style="margin-top: 2px; width: 50%;">
+      <input type="text" name="search" placeholder="Rechercher un sujet..." style="width: 60%; height: 60%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
+      <button type="submit" style="background-color:{{session['couleur']}}; border: 1px solid {{session['couleur']}}; font-size: 20px;margin-right:10%;"><i class="fas fa-search logoBouton"></i></button>
+    </form>
+
+    <div class="tabs is-centered is-boxed is-medium" style="width: 20%; border-left: 2px solid black;">
+      <ul>
+        <li class="">
+          <a>
+            <!-- lien vers les notifications -->
+            <span class="icon is-medium"><i class="fas fa-bell" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
+          </a>
+        </li>
+        <li>
+          <a href="{{url_for('messages')}}">
+            <!-- lien vers les messages privés -->
+            <span class="icon is-medium"><i class="fas fa-envelope" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
+          </a>
+        </li>
+        <li>
+          <a href="{{url_for('profil')}}">
+            <!-- lien vers le profil -->
+            <span class="icon is-medium"><i class="fas fa-user-circle" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+</nav>
+
+<div class="column" style="position: fixed; right: 0; top: 90px;width: 20%; height: 100%; background-color:{{session['couleur']}}; border-left: 2px solid black;">
+  <!-- Question -->
+  {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
+    <a class="navbar-item" href="{{url_for('question')}}" style="color: black; background-color: ghostwhite; border: 1px solid; border-radius: 10px;">
+    <i style="color: black; font-size:20px;" class="fas fa-question"></i>
+    &nbsp;&nbsp;Je me pose une question
+    </a>
+  {%endif%}
+
+    {{ variable_test }}
+</div>
