@@ -225,7 +225,7 @@ user<!DOCTYPE html>
 
 
           </div>
-          
+
           {%endfor%}
 
           {% endif %}
@@ -247,15 +247,12 @@ user<!DOCTYPE html>
               <input type='hidden' id='reponse' name='reponse' value="None" />
               <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
             </form>
-            <button class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
+            <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
               <i class="fas fa-microphone" style="font-size: 20px;"></i>
             </button>
-            <div id="txtAudio">
-              pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer
-            </div>
               <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
         <div id="buttonAudio" style="display:none;">
-          <button id="sendAudio" onclick="sendAudio()">envoyer</button><button id="deleteAudio" onclick="deleteAudio()">supprimer</button>
+          <button  id="sendAudio" onclick="sendAudio()">envoyer</button><button id="deleteAudio" onclick="deleteAudio()">supprimer</button>
         </div>
         {%endif%}
         <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
