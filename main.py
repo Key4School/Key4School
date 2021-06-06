@@ -410,7 +410,7 @@ def updateImg():
                 db_files.delete_one({'_id': a['_id']})
                 db_chunks.delete_many({'files_id': a['_id']})
             db_utilisateurs.update_one(
-                {'_id': ObjectId(session['id'])}, 
+                {'_id': ObjectId(session['id'])},
                 {'$set': {'imgProfile': "", 'nomImg': ""}})
         elif request.form['but'] == "replace":
             ImgNom = request.files['Newpicture'].filename + \
@@ -882,7 +882,7 @@ def resoudre(idPost):
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
 
             # on check mtn si l'utilisateur a déjà liké la demande
-            if demande['id-utilisateur'] == ObjectId(session['id']):               
+            if demande['id-utilisateur'] == ObjectId(session['id']):
                 # on update dans la DB
                 db_demande_aide.update(
                     {'_id': ObjectId(idPost)},
@@ -893,7 +893,7 @@ def resoudre(idPost):
                 return "ok", 200
             else:
                 abort(401) # non autorisé
-            
+
 
         else:
             abort(403) # il manque l'id du message
@@ -1024,12 +1024,13 @@ def translate_matiere_spes_options_lv(toTranslate: list) -> str:
             'opt-lv3-chi': 'LV3 Chinois',
             'opt-eps': 'Option EPS',
             'opt-arts': 'Option Arts',
+            'opt-musique': 'Option Musique',
             'opt-mg': 'Option Management et Gestion',
             'opt-ss': 'Option Santé et Social',
             'opt-biotech': 'Option Biotechnologies',
             'opt-sl': 'Option Sciences et laboratoire',
             'opt-si': 'Option Sciences de l\'Ingénieur',
-            'opt-cit': 'Option Création et culture technologiques',      
+            'opt-cit': 'Option Création et culture technologiques',
             'opt-ccd': 'Option Création et culture - design',
             'opt-equit': 'Option Hippologie et équitation',
             'opt-aet': 'Option Agranomie-économie-territoires',
