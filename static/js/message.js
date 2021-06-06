@@ -1,6 +1,7 @@
 var min=0;
 var sec=0;
 var tmp="";
+
 $(document).ready(function() {
   $('#titreetmsg').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
@@ -16,7 +17,17 @@ $(document).ready(function() {
   $('#searchUser').keyup(function() {
     searchUser();
   });
+
+  //scroll 
+  scroll();
 });
+
+const scroll = () => {
+  const messagesDiv = document.getElementById('messages');
+  const scrollHeight = messagesDiv.scrollHeight;
+  
+  return messagesDiv.scrollBy(0, scrollHeight);
+};
 
 function divnewgroupopen() {
   $("#newgrou").addClass("is-active");
@@ -46,6 +57,9 @@ function envoi(e) {
     },
   });
   enleverRep();
+
+  //scroll 
+  setTimeout(() => scroll(), 1000);
 }
 
 function searchUser() {
@@ -302,6 +316,9 @@ function sendAudio() {
         document.getElementById('txtAudio').innerHTML = "";
       }
     });
+
+    //scroll 
+    setTimeout(() => scroll(), 1000);
   }
 }
 
