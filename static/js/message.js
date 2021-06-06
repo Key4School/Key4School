@@ -1,5 +1,6 @@
 var min=0;
 var sec=0;
+var tmp="";
 $(document).ready(function() {
   $('#titreetmsg').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
@@ -161,13 +162,14 @@ function enregistrer(e) {
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
-          setInterval(function(){
+          chrono = setInterval(function(){
             sec+=1
             if (sec>=60){
               sec=0
               min+=1
             }
-            document.getElementById('txtAudio').innerHTML = min + ":" + sec;
+          tmp= min + ":" + sec
+          document.getElementById('txtAudio').innerHTML = tmp;
           }, 1000);
           console.log(mediaRecorder.state);
           console.log("recorder started");
@@ -187,7 +189,8 @@ function enregistrer(e) {
             form.append('group', idGroupe)
             estEnregistre = true;
             boutonAudioOpen();
-            document.getElementById('txtAudio').innerHTML = "audio enregistré";
+            document.getElementById('txtAudio').innerHTML = tmp;
+            clearTimeout(chrono);
           }
         })
 
@@ -228,23 +231,23 @@ function enregistrerTel() {
 
         // Success callback
         .then(function(stream) {
-          sec=0;
-          min=0;
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
-          setInterval(function(){
+          chrono = setInterval(function(){
             sec+=1
             if (sec>=60){
               sec=0
               min+=1
             }
-            document.getElementById('txtAudio').innerHTML = min + ":" + sec;
+          tmp= min + ":" + sec
+          document.getElementById('txtAudio').innerHTML = tmp;
           }, 1000);
           console.log(mediaRecorder.state);
           console.log("recorder started");
           let chunks = [];
           mediaRecorder.ondataavailable = function(e) {
+            console.log('ok');
             chunks.push(e.data);
           }
           mediaRecorder.onstop = function(e) {
@@ -259,7 +262,8 @@ function enregistrerTel() {
             form.append('group', idGroupe)
             estEnregistre = true;
             boutonAudioOpen();
-            document.getElementById('txtAudio').innerHTML = "audio enregistré";
+            document.getElementById('txtAudio').innerHTML = tmp;
+            clearTimeout(chrono);
           }
         })
 
@@ -309,9 +313,11 @@ function deleteAudio() {
 }
 
 function boutonAudioOpen() {
-  document.getElementById('buttonAudio').style.display = "flex";
+  document.getElementById('buttonAudio1').style.display = "block";
+  document.getElementById('buttonAudio2').style.display = "block";
 }
 
 function boutonAudioClose() {
-  document.getElementById('buttonAudio').style.display = "none";
+  document.getElementById('buttonAudio1').style.display = "none";
+  document.getElementById('buttonAudio2').style.display = "none";
 }
