@@ -1,3 +1,5 @@
+var min=0;
+var sec=0;
 $(document).ready(function() {
   $('#titreetmsg').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
@@ -157,7 +159,14 @@ function enregistrer(e) {
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
-          document.getElementById('txtAudio').innerHTML = "enregistrement en cours";
+          setInterval(function(){
+            sec+=1
+            if (sec>=60){
+              sec=0
+              min+=1
+            }
+            document.getElementById('txtAudio').innerHTML = min + ":" + sec;
+          }, 1000);
           console.log(mediaRecorder.state);
           console.log("recorder started");
           let chunks = [];
@@ -220,7 +229,14 @@ function enregistrerTel() {
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
-          document.getElementById('txtAudio').innerHTML = "enregistrement en cours";
+          setInterval(function(){
+            sec+=1
+            if (sec>=60){
+              sec=0
+              min+=1
+            }
+            document.getElementById('txtAudio').innerHTML = min + ":" + sec;
+          }, 1000);
           console.log(mediaRecorder.state);
           console.log("recorder started");
           let chunks = [];
@@ -275,7 +291,7 @@ function sendAudio() {
         form = new FormData();
         estEnregistre = false;
         boutonAudioClose();
-        document.getElementById('txtAudio').innerHTML = "pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer";
+        document.getElementById('txtAudio').innerHTML = "";
       }
     });
   }
@@ -285,11 +301,11 @@ function deleteAudio() {
   form = new FormData();
   estEnregistre = false;
   boutonAudioClose();
-  document.getElementById('txtAudio').innerHTML = "pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer";
+  document.getElementById('txtAudio').innerHTML = "";
 }
 
 function boutonAudioOpen() {
-  document.getElementById('buttonAudio').style.display = "block";
+  document.getElementById('buttonAudio').style.display = "flex";
 }
 
 function boutonAudioClose() {

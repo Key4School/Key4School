@@ -107,7 +107,7 @@
           <div class="media-left">
             <!-- Image photo de profil-->
             <figure class="image is-64x64">
-              <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+              <img alt="user"  src="{%if 'nomImg' in r['user'] and r['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = r['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
             </figure>
           </div>
           <!-- Contenu publication -->
@@ -118,7 +118,7 @@
                 <div style="font-variant: small-caps;">
                   <a href="{{url_for('profil' ,idUser=r['user']['_id'])}}">{{r['user']['nom']}} {{r['user']['prenom']}}</a>
                   <span style="display: inline-block; margin-right: 40px;"></span>{{r['matière']}}
-                </div> 
+                </div>
                 <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
               </p>
               <!-- Titre -->

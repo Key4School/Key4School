@@ -183,6 +183,7 @@
                     <option value="opt-lv3-chi" {%if profilUtilisateur['options'][0]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
                     <option value="opt-eps" {%if profilUtilisateur['options'][0]=="opt-eps"%}selected{%endif%}>EPS</option>
                     <option value="opt-arts" {%if profilUtilisateur['options'][0]=="opt-arts"%}selected{%endif%}>Arts</option>
+                    <option value="opt-musique" {%if profilUtilisateur['options'][0]=="opt-musique"%}selected{%endif%}>Musique</option>
                     {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
                       <option value="opt-mg" {%if profilUtilisateur['options'][0]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
                       <option value="opt-ss" {%if profilUtilisateur['options'][0]=="opt-ss"%}selected{%endif%}>Santé et social</option>
@@ -559,7 +560,7 @@
   </div>
   <!-- Mes demandes d'aide -->
   {% if demandes != [] %}
-  <div style="display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly;">
+  <div style="margin-left:2%;display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly;">
     <div style="font-weight: bold; font-size:large;">Mes demandes d'aide :</div>
     {% endif %}
     {%for d in demandes %}

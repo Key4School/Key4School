@@ -1,4 +1,4 @@
-user<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr" style="overflow:hidden;">
 
 <head>
@@ -97,7 +97,7 @@ user<!DOCTYPE html>
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
     <div id="titreetmsg" style="margin-right: 2%;margin-bottom:2%;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur']}}; border-radius:  8px;padding:1%;height:auto;">
+      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur']}};padding:1%;height:auto;">
         <!-- div avec le nom du groupe et les paticipants -->
         <div style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
           <!-- nom du groupe -->
@@ -139,19 +139,19 @@ user<!DOCTYPE html>
         </div>
       </div>
       <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
-      <div id="messages" style="box-sizing: border-box;overflow-y: auto; overflow-x:hidden;height:70%;border: 3px solid {{session['couleur']}}; border-radius: 8px; margin-top: 1%;padding-top:2%;">
+      <div id="messages" style="box-sizing: border-box;overflow-y: auto; overflow-x:hidden;height:80%;border: 3px solid {{session['couleur']}};padding-top:2%;">
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
         <!-- Mes messages -->
-        <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 1%;margin-bottom: 2%;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;"
+        <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;"
           id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z">
           <div style="margin-left: 90%;">
           {%else%}
           <!-- Messages des autres -->
           <div class="participantmsg"
             id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z"
-            style="margin-left: 1%; display: inline-block;max-width: 55%;margin-bottom: 2%;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:#8dd7cf;">
+            style="margin-left: 1%; margin-right: 45%; display: inline-block;max-width: 55%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:#8dd7cf;">
             <div style="display: flex;align-items: center;justify-content:space-between;">
           {%endif%}
             {%if content['id-utilisateur']!=sessionId%}
@@ -225,7 +225,7 @@ user<!DOCTYPE html>
 
 
           </div>
-          
+          <br />
           {%endfor%}
 
           {% endif %}
@@ -240,25 +240,36 @@ user<!DOCTYPE html>
         {%if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecMsg" %}
         <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
         <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
-            <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
-              <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
-              <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;"required>
-              <input type='hidden' name="group" value="{{idgroupe}}" />
-              <input type='hidden' id='reponse' name='reponse' value="None" />
-              <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
-            </form>
-            <button class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
-              <i class="fas fa-microphone" style="font-size: 20px;"></i>
-            </button>
-            <div id="txtAudio">
-              pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer
-            </div>
-              <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
-        <div id="buttonAudio" style="display:none;">
-          <button id="sendAudio" onclick="sendAudio()">envoyer</button><button id="deleteAudio" onclick="deleteAudio()">supprimer</button>
+        <div style="display:flex;align-items: center;"
+          <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
+            <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
+            <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;"required>
+            <input type='hidden' name="group" value="{{idgroupe}}" />
+            <input type='hidden' id='reponse' name='reponse' value="None" />
+            <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
+          </form>
+          <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
+            <i class="fas fa-microphone" style="font-size: 20px;"></i>
+          </button>
+
+            <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
+        <div id="buttonAudio" style="display:none;align-items:center;">
+          <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="deleteAudio()">
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+          </button>&nbsp;&nbsp;
+          <div id="txtAudio">
+          </div>&nbsp;&nbsp;
+          <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="sendAudio()">
+            <span class="icon is-small">
+              <i class="fas fa-check"></i>
+            </span>
+          </button>
         </div>
         {%endif%}
         <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+      </div>
       </div>
     </div>
 
