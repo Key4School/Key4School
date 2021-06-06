@@ -26,7 +26,7 @@
 </head>
 
 <body>
-  {% include 'bandeau.html'%}
+  {% include 'bandeau2.html' %}
   <div class="modal" id="signalisation" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -89,7 +89,7 @@
   {% include 'filtres.html' with context %}
 
   <!-- debut de la div pour tt les publications -->
-  <div class="columns" style="margin-top: 10px;">
+  <div class="columns" style="margin-top: 10px; width:80%;">
     <div class="column"></div>
     <div class="column is-three-fifths">
       {%for d in demandes %}
