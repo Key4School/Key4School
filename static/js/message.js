@@ -156,6 +156,8 @@ function enregistrer(e) {
 
         // Success callback
         .then(function(stream) {
+          sec=0;
+          min=0;
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
@@ -226,6 +228,8 @@ function enregistrerTel() {
 
         // Success callback
         .then(function(stream) {
+          sec=0;
+          min=0;
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
