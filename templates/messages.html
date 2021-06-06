@@ -1,4 +1,4 @@
-user<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr" style="overflow:hidden;">
 
 <head>
@@ -240,22 +240,36 @@ user<!DOCTYPE html>
         {%if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecMsg" %}
         <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
         <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
-            <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
-              <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
-              <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;"required>
-              <input type='hidden' name="group" value="{{idgroupe}}" />
-              <input type='hidden' id='reponse' name='reponse' value="None" />
-              <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
-            </form>
-            <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
-              <i class="fas fa-microphone" style="font-size: 20px;"></i>
-            </button>
-              <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
-        <div id="buttonAudio" style="display:none;">
-          <button  id="sendAudio" onclick="sendAudio()">envoyer</button><button id="deleteAudio" onclick="deleteAudio()">supprimer</button>
+        <div style="display:flex;align-items: center;"
+          <form enctype="multipart/form-data" method="post" style="height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
+            <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i>
+            <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message" autocomplete='off' name="contenuMessage" style="width: 75%;margin-left: 2%;padding:5px;"required>
+            <input type='hidden' name="group" value="{{idgroupe}}" />
+            <input type='hidden' id='reponse' name='reponse' value="None" />
+            <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
+          </form>
+          <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="background-color:white;border: 0px solid white;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
+            <i class="fas fa-microphone" style="font-size: 20px;"></i>
+          </button>
+
+            <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
+        <div id="buttonAudio" style="display:none;align-items:center;">
+          <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="deleteAudio()">
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+          </button>&nbsp;&nbsp;
+          <div id="txtAudio">
+          </div>&nbsp;&nbsp;
+          <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="sendAudio()">
+            <span class="icon is-small">
+              <i class="fas fa-check"></i>
+            </span>
+          </button>
         </div>
         {%endif%}
         <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+      </div>
       </div>
     </div>
 
