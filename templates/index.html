@@ -181,7 +181,7 @@
                   {% endif %}
                   {%if user['admin']==true%}
                   <div class="navbar-item">
-                    <button class="button is-danger is-outlined is-small">
+                    <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
                       <span class="icon is-small">
                         <i class="fas fa-times"></i>
                       </span>
