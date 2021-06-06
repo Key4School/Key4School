@@ -128,8 +128,7 @@ def messages(idGroupe):
     if 'id' in session:
         if request.method == 'GET':
             # il faudra récupérer l'id qui sera qans un cookie
-            grp = db_groupes.find(
-                {"id-utilisateurs": ObjectId(session['id'])})
+            grp = db_groupes.find({"id-utilisateurs": ObjectId(session['id'])})
             if idGroupe != None:
                 idGroupe = escape(idGroupe)
                 msgDb = db_messages.aggregate([
@@ -141,7 +140,7 @@ def messages(idGroupe):
                             'foreignField': '_id',
                             'as': 'rep',
                         }
-                     }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                    }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
                     {'$project': {
                         '_id': 1,
                         'id-groupes': 1,
@@ -152,12 +151,10 @@ def messages(idGroupe):
                         'audio': 1
                     }},
                 ])
-                infogroupes = db_groupes.find_one(
-                    {"_id": ObjectId(idGroupe)})
+                infogroupes = db_groupes.find_one({"_id": ObjectId(idGroupe)})
                 infoUtilisateurs = []
                 for content in infogroupes['id-utilisateurs']:
-                    infoUtilisateurs += db_utilisateurs.find(
-                        {"_id": ObjectId(content)})
+                    infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
                 if session['id'] in str(infoUtilisateurs) or '6075cae8fb56bf0654e5f4ab' in str(infoUtilisateurs):
                     danslegroupe = True
                 else:
@@ -176,6 +173,10 @@ def messages(idGroupe):
                 reponse = ObjectId(escape(request.form['reponse']))
             else:
                 reponse = "None"
+
+            if escape(request.form['contenuMessage']) == '':
+                return abort(500)
+
             message = db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
                                               "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
             infogroupes = db_groupes.find_one({"_id": ObjectId(escape(request.form['group']))})
@@ -235,11 +236,8 @@ def searchUser_newgroup():
                                                   '$regex': search, '$options': 'i'}},
                                               {'email': {
                                                   '$regex': search, '$options': 'i'}},
-                                              {'insta': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'snap': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'telephone': {'$regex': search, '$options': 'i'}}]}).limit(30)
+                                              {'telephone': {'$regex': search, '$options': 'i'}}]
+                                        }).limit(30)
         return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
     else:
         return redirect(url_for('login'))
@@ -254,8 +252,7 @@ def createGroupe():
                 pass
             else:
                 participants.append(ObjectId(escape(name)))
-        newGroupe = db_groupes.insert_one(
-            {'nom': escape(request.form['nomnewgroupe']), 'id-utilisateurs': participants})
+        newGroupe = db_groupes.insert_one({'nom': escape(request.form['nomnewgroupe']), 'id-utilisateurs': participants})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
@@ -266,14 +263,11 @@ def refreshMsg():
     if 'id' in session:
         idGroupe = escape(request.args['idgroupe'])
         if escape(request.args['idMsg']) != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
-            dateLast = datetime.strptime(
-                request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            infogroupes = db_groupes.find_one(
-                {"_id": ObjectId(idGroupe)})
+            dateLast = datetime.strptime(request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            infogroupes = db_groupes.find_one({"_id": ObjectId(idGroupe)})
             infoUtilisateurs = []
             for content in infogroupes['id-utilisateurs']:
-                infoUtilisateurs += db_utilisateurs.find(
-                    {"_id": ObjectId(content)})
+                infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
             msgDb = db_messages.aggregate([
                 {'$match': {'$and': [
                     {'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]}},
@@ -284,7 +278,7 @@ def refreshMsg():
                         'foreignField': '_id',
                         'as': 'rep',
                     }
-                 }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
                 {'$project': {
                     '_id': 1,
                     'id-groupes': 1,
@@ -326,8 +320,7 @@ def profil(idUser):
             demandes = []
             for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int(
-                    (datetime.now() - a['date-envoi']).total_seconds())
+                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
                 tempsStr = convertTime(diffTemps)
 
                 # on check si l'utilisateur a déjà liké le post
@@ -391,11 +384,9 @@ def updateprofile():
         elementPublic = []
         for content in request.form:
             if request.form[content] == "pv":
-                elementPrive.append(escape(
-                    content.replace('Visibilite', '')))
+                elementPrive.append(escape(content.replace('Visibilite', '')))
             elif request.form[content] == "pb":
-                elementPublic.append(escape(
-                    content.replace('Visibilite', '')))
+                elementPublic.append(escape(content.replace('Visibilite', '')))
 
         # if request.form['pseudoVisibilite'] == "pv":
         #     elementPrive.append("pseudo")
@@ -527,6 +518,10 @@ def comments(idMsg):
 def question():
     if 'id' in session:
         if request.method == 'POST':
+            # Impossibilité demande d'aide vide
+            if escape(request.form['titre']) == '':
+                return redirect('/question/')
+
             user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
             if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
                 db_demande_aide.insert_one(
