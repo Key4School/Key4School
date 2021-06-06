@@ -45,7 +45,11 @@
             <div class="content">
               <p style="margin-bottom: 5px;">
                 <!-- Nom utilisateur ; pseudo ; temps -->
-                <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=d['user']['_id'])}}">{{d['user']['nom']}} {{d['user']['prenom']}}</a></div> <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
+                <div style="font-variant: small-caps;">
+                  <a href="{{url_for('profil' ,idUser=d['user']['_id'])}}">{{d['user']['nom']}} {{d['user']['prenom']}}</a>
+                    <span style="display: inline-block; margin-right: 40px;"></span>{{d['matière']}}
+                </div> 
+                <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
               </p>
               <!-- Titre -->
               <h4 style="margin-top: 0;">{{d['titre']}}</h4>
