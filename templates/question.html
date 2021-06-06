@@ -30,12 +30,12 @@
         <!-- Titre question -->
         <label>Titre</label>
         <!-- Zone pour mettre le titre  -->
-        <input type="text" class="input" name="titre" /><br /><br />
+        <input type="text" class="input" name="titre" required /><br /><br />
         <!-- Choix matière -->
         <label>Matière</label>
         <div class="control has-icons-left">
           <div class="select" >
-            <select name="matiere">
+            <select name="matiere" required>
               <!-- Tronc commun -->
               {% if profilUtilisateur['classe']=='2GT' or profilUtilisateur['classe']=='1G' %}
                 <option value="fr">Français</option>
@@ -203,28 +203,6 @@
         <!-- Bouton pour envoyer la demande d'aide -->
         <input class="button" type="submit" value="Envoyer">
       </form>
-      <p>
-        {{ envoi|safe }}
-      </p>
-      <!-- <br>
-      <br>
-      <br>
-      <form action="{{url_for('question')}}" method="post">
-        <label>Recherche :</label><input class="input" type="text" name="research">
-        <br>
-        <input type="submit" value="Envoyer">
-      </form>
-      <p>
-        Voici le résultat de votre recherche :
-        <br>
-        {%for content in answer%}
-      <div>
-        <h3>{{content['titre']}}</h3>
-        <p>{{content['contenu']}}</p>
-        <p>Publié le {{content['date-envoi']}} par {{content['id-utilisateur']}}</p>
-      </div>
-      {%endfor%}
-      </p> -->
     </div>
     <div class="column"></div>
   </div>
