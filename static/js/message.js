@@ -179,6 +179,8 @@ function enregistrer(e) {
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
+          sec = 0;
+          min =0;
           chrono = setInterval(function(){
             sec+=1
             if (sec>=60){
@@ -251,6 +253,8 @@ function enregistrerTel() {
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
+          sec = 0;
+          min =0;
           chrono = setInterval(function(){
             sec+=1
             if (sec>=60){
@@ -327,8 +331,8 @@ function sendAudio() {
 function deleteAudio() {
   form = new FormData();
   estEnregistre = false;
-  boutonAudioClose();
   document.getElementById('txtAudio').innerHTML = "";
+  boutonAudioClose();
 }
 
 function boutonAudioOpen() {
