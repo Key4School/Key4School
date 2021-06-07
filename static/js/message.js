@@ -18,14 +18,14 @@ $(document).ready(function() {
     searchUser();
   });
 
-  //scroll 
+  //scroll
   scroll();
 });
 
 const scroll = () => {
   const messagesDiv = document.getElementById('messages');
   const scrollHeight = messagesDiv.scrollHeight;
-  
+
   return messagesDiv.scrollBy(0, scrollHeight);
 };
 
@@ -58,7 +58,7 @@ function envoi(e) {
   });
   enleverRep();
 
-  //scroll 
+  //scroll
   setTimeout(() => scroll(), 1000);
 }
 
@@ -106,8 +106,10 @@ function refresh() {
     type: "GET",
     data: "idMsg=" + dernierID + '&idgroupe=' + idGroupe, // et on envoie nos données
     success: function(html) {
-      $('#messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
-      // messages.scrollTop = messages.scrollHeight;
+      if (html!=''){
+        $('#messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
+        scroll();
+      }
     }
   });
 }
@@ -317,7 +319,7 @@ function sendAudio() {
       }
     });
 
-    //scroll 
+    //scroll
     setTimeout(() => scroll(), 1000);
   }
 }
