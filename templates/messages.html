@@ -39,7 +39,7 @@
 
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
 <body style="overflow:auto;" onkeydown="enregistrer(event)" onkeyup="stop(event)">
-  {% include "bandeau.html" %}
+  {% include "bandeau2.html" %}
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
   <div style="width:80%">
   <div style="display: flex;justify-content:space-between;height:95%;margin-top:120px;">
@@ -248,15 +248,14 @@
             <input type='hidden' name="group" value="{{idgroupe}}" />
             <input type='hidden' id='reponse' name='reponse' value="None" />
             <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
-            <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;" onmousedown="enregistrerTel()" onmouseup="stopTel()" ontouchstart="enregistrerTel()" ontouchend="stopTel()">
-              <i class="fas fa-microphone" style="font-size: 20px;"></i>
-            </button>
           </form>
-
+          <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;"  onClick="enregistrerTel()">
+            <i class="fas fa-microphone" style="font-size: 20px;"></i>
+          </button>
           <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
           <div style="display:flex;align-items:center;">
             <div id="buttonAudio1" style="display:none;">
-              <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="deleteAudio()">
+              <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="stopTel();deleteAudio();" >
                 <span class="icon is-small">
                   <i class="fas fa-times"></i>
                 </span>
@@ -267,7 +266,7 @@
               </div>
             &nbsp;&nbsp;
             <div id="buttonAudio2" style="display:none;">
-              <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="sendAudio()">
+              <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="stopTel();sendAudio();">
                 <span class="icon is-small">
                   <i class="fas fa-check"></i>
                 </span>
