@@ -1054,7 +1054,7 @@ def login():
     Redirect the user/resource owner to the OAuth provider (ENT)
     using an URL with a few key OAuth parameters.
     """
-    ENT_reply = OAuth2Session(client_id, scope="userinfo", redirect_uri=redirect_uri)
+    ENT_reply = OAuth2Session(client_id, scope=["userinfo", "myinfos", "userbook", "directory"], redirect_uri=redirect_uri)
     authorization_url, state = ENT_reply.authorization_url(authorization_base_url)
 
     # State is used to prevent CSRF, keep this for later.
