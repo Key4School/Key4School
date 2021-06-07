@@ -29,7 +29,7 @@
         <li class="">
           <a>
             <!-- lien vers les notifications -->
-            <span class="icon is-medium"><i class="fas fa-bell" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
+            <span onclick="remove();" class="icon is-medium"><i class="fas fa-bell" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
           </a>
         </li>
         <li>
@@ -49,7 +49,7 @@
 
 </nav>
 
-<div class="column" style="position: fixed; right: 0; top: 90px;width: 20%; height: 100%; background-color:{{session['couleur']}}; border-left: 2px solid black;">
+<div id="bandeauDroite" style="display:none;position: fixed; right: 0; top: 90px;width: 20%; height: 100%; background-color:{{session['couleur']}}; border-left: 2px solid black;">
   <!-- Question -->
   {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
     <a class="navbar-item" href="{{url_for('question')}}" style="color: black; background-color: ghostwhite; border: 1px solid; border-radius: 10px;">
