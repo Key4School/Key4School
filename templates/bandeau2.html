@@ -5,14 +5,6 @@
       <span style="width:60%;">Key4School</span>
     </a>
 
-    {%if user['admin']== true%}
-      <a class="navbar-item" href="{{url_for('administration')}}" style="width: 5%; border-radius: 5px; transition: background-color .5s">
-        <i style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);color: black; font-size:30px;" class="fas fa-user-shield"></i>
-      </a>
-      {%else%}
-      <div class="navbar-item" style="width: 5%;"></div>
-    {%endif%}
-
     {%if user['SanctionEnCour'] == "Spec"%}
       <div style="color: red; width: 10%;">mode spectateur</div>
       {%else%}
@@ -24,9 +16,9 @@
       <button type="submit" style="background-color:{{session['couleur']}}; border: 1px solid {{session['couleur']}}; font-size: 20px;margin-right:10%;"><i class="fas fa-search logoBouton"></i></button>
     </form>
 
-    <div class="tabs is-centered is-boxed is-medium" style="width: 20%;">
+    <div class="tabs is-centered is-boxed is-medium" style="width: 25%;">
       <ul>
-        <li class="">
+        <li>
           <a>
             <!-- lien vers les notifications -->
             <span onclick="remove();" class="icon is-medium"><i class="fas fa-bell" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
@@ -41,9 +33,20 @@
         <li>
           <a href="{{url_for('profil')}}">
             <!-- lien vers le profil -->
-            <span class="icon is-medium"><i class="fas fa-user-circle" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
+            <span class="icon is-medium">
+              <i class="fas fa-user-circle" aria-hidden="true" style="color: black; font-size:30px;"></i>
+            </span>
           </a>
         </li>
+        {%if user['admin']== true%}
+        <li>
+            <a href="{{url_for('administration')}}">
+              <span class="icon is-medium">
+                <i class="fas fa-user-shield" aria-hidden="true" style="color: black; font-size:30px;"></i>
+              </span>
+            </a>
+        </li>
+        {%endif%}
       </ul>
     </div>
 
