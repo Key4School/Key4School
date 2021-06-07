@@ -282,7 +282,6 @@ function enregistrerTel() {
             form.append('audio', blob);
             form.append('group', idGroupe)
             estEnregistre = true;
-            document.getElementById('txtAudio').innerHTML = tmp;
             clearTimeout(chrono);
           }
         })
@@ -331,7 +330,9 @@ function sendAudio() {
 function deleteAudio() {
   form = new FormData();
   estEnregistre = false;
-  document.getElementById('txtAudio').innerHTML = "";
+  while (document.getElementById('txtAudio').innerHTML != ""){
+    document.getElementById('txtAudio').innerHTML = "";
+  }
   boutonAudioClose();
 }
 
@@ -343,5 +344,7 @@ function boutonAudioOpen() {
 function boutonAudioClose() {
   document.getElementById('buttonAudio1').style.display = "none";
   document.getElementById('buttonAudio2').style.display = "none";
-  document.getElementById('txtAudio').innerHTML = "";
+  while (document.getElementById('txtAudio').innerHTML != ""){
+    document.getElementById('txtAudio').innerHTML = "";
+  }
 }
