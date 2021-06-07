@@ -709,10 +709,10 @@ def administration():
                     db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
 
                 elif request.form['demandeBut'] == 'Val':
-                    db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])}, 
+                    db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},
                                                {"$set": {"sign": [], "motif": []}})
                 elif request.form['demandeBut'] == 'ValUser':
-                    db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])}, 
+                    db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])},
                                                {"$set": {"sign": []}})
                 return 'sent'
 

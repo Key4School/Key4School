@@ -20,6 +20,7 @@ $(document).ready(function() {
 
   //scroll
   scroll();
+  $('#inputMsg').focus();
 });
 
 const scroll = () => {
@@ -87,9 +88,7 @@ function searchUser() {
 //   });
 // }
 
-$('#inputMsg').focus();
 const messages = document.getElementById('messages');
-// messages.scrollTop = messages.scrollHeight;
 
 var start = new Date();
 
@@ -104,9 +103,12 @@ function refresh() {
     type: "GET",
     data: "idMsg=" + dernierID + '&idgroupe=' + idGroupe, // et on envoie nos données
     success: function(html) {
+      var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
       if (html!='  '){
         $('#messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
-        scroll();
+        if ($('#messages').scrollTop() >= scrollHeight){
+          scroll();
+        }
       }
     }
   });
