@@ -54,12 +54,10 @@ function envoi(e) {
     data: donnees, // et on envoie nos données
     success: function(response) {
       $('#messageForm').trigger("reset");
+      scroll();
     },
   });
   enleverRep();
-
-  //scroll
-  setTimeout(() => scroll(), 1000);
 }
 
 function searchUser() {
@@ -106,7 +104,7 @@ function refresh() {
     type: "GET",
     data: "idMsg=" + dernierID + '&idgroupe=' + idGroupe, // et on envoie nos données
     success: function(html) {
-      if (html!=''){
+      if (html!='  '){
         $('#messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
         scroll();
       }
@@ -319,11 +317,9 @@ function sendAudio() {
         estEnregistre = false;
         boutonAudioClose();
         document.getElementById('txtAudio').innerHTML = "";
+        scroll();
       }
     });
-
-    //scroll
-    setTimeout(() => scroll(), 1000);
   }
 }
 
