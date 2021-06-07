@@ -80,3 +80,28 @@ function sanctionnerOpen(){
 function sanctionnerClose(){
   $("#sanction").removeClass("is-active");
 }
+
+function validerUser(e) {
+  e.preventDefault();
+  var donnees = $('#ValUserForm').serialize();
+  $.ajax({
+    url: '/administration/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      validerUserClose();
+    },
+  });
+}
+
+function validationUser(){
+  validerUserOpen();
+}
+
+function validerUserOpen(){
+  $("#validationUser").addClass("is-active");
+}
+
+function validerUserClose(){
+  $("#validationUser").removeClass("is-active");
+}

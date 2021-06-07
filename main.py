@@ -720,6 +720,9 @@ def administration():
                 elif request.form['demandeBut'] == 'Val':
                     db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])}, {
                                                "$set": {"sign": [], "motif": []}})
+                elif request.form['demandeBut'] == 'ValUser':
+                    db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])}, {
+                                                "$set": {"sign": []}})
                 return'sent'
             else:
                 demandeSignale = db_demande_aide.aggregate([
