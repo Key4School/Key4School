@@ -18,14 +18,14 @@ $(document).ready(function() {
     searchUser();
   });
 
-  //scroll 
+  //scroll
   scroll();
 });
 
 const scroll = () => {
   const messagesDiv = document.getElementById('messages');
   const scrollHeight = messagesDiv.scrollHeight;
-  
+
   return messagesDiv.scrollBy(0, scrollHeight);
 };
 
@@ -58,7 +58,7 @@ function envoi(e) {
   });
   enleverRep();
 
-  //scroll 
+  //scroll
   setTimeout(() => scroll(), 1000);
 }
 
@@ -171,6 +171,7 @@ function enregistrer(e) {
 
         // Success callback
         .then(function(stream) {
+          boutonAudioOpen();
           sec=0;
           min=0;
           mediaRecorder = new MediaRecorder(stream);
@@ -202,7 +203,6 @@ function enregistrer(e) {
             form.append('audio', blob);
             form.append('group', idGroupe)
             estEnregistre = true;
-            boutonAudioOpen();
             document.getElementById('txtAudio').innerHTML = tmp;
             clearTimeout(chrono);
           }
@@ -245,6 +245,7 @@ function enregistrerTel() {
 
         // Success callback
         .then(function(stream) {
+          boutonAudioOpen();
           mediaRecorder = new MediaRecorder(stream);
           mediaRecorder.start();
           stopped = false;
@@ -275,7 +276,6 @@ function enregistrerTel() {
             form.append('audio', blob);
             form.append('group', idGroupe)
             estEnregistre = true;
-            boutonAudioOpen();
             document.getElementById('txtAudio').innerHTML = tmp;
             clearTimeout(chrono);
           }
@@ -317,7 +317,7 @@ function sendAudio() {
       }
     });
 
-    //scroll 
+    //scroll
     setTimeout(() => scroll(), 1000);
   }
 }
@@ -337,4 +337,5 @@ function boutonAudioOpen() {
 function boutonAudioClose() {
   document.getElementById('buttonAudio1').style.display = "none";
   document.getElementById('buttonAudio2').style.display = "none";
+  document.getElementById('txtAudio').innerHTML = "";
 }
