@@ -34,6 +34,20 @@ def recupLevel():
     xplvl = int((0.473*xpgens**0.615-niv)*100)
     return niv, xplvl, xpgens
 
+def addXP(user: ObjectId, amount: int) -> None:
+    """
+        +10 pour une demande d’aide
+        +15 pour une réponse
+        +2 pour chaque like reçu
+    """
+
+    db_utilisateurs.update_one(
+        {'_id': user},
+        {'$inc': {'xp': amount}}
+    )
+
+    return
+
 def notif(type, id_groupe, id_msg, destinataires):
     db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
                         "date": datetime.now(), "destinataires": destinataires})
@@ -503,6 +517,11 @@ def comments(idMsg):
                     {'$set':{'réponses associées': reponses}}
                 )
                 notif("demande", ObjectId(idMsg), _id, msg['id-utilisateur'])
+
+                # add XP
+                if not ObjectId(session['id']) == msg['id-utilisateur']:
+                    addXP(ObjectId(session['id']), 15)
+
             return redirect('/comments/' + idMsg)
     else:
         return redirect(url_for('login'))
@@ -525,6 +544,10 @@ def question():
                     {'$sort': {'date-envoi': -1}},
                     {'$limit': 1}
                 ])
+
+                # add XP
+                addXP(ObjectId(session['id']), 10)
+
                 for demande in demandes:
                     return redirect('/comments/' + str(demande['_id']))
             else:
@@ -634,8 +657,16 @@ def likePost(idPost):
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
                 newLikes.remove(session['id'])  # on supprime son like
+
+                # remove XP
+                if not ObjectId(session['id']) == demande['id-utilisateur']:
+                    addXP(ObjectId(demande['id-utilisateur']), -2)
             else:
                 newLikes.append(session['id'])  # on ajoute son like
+
+                # add XP
+                if not ObjectId(session['id']) == demande['id-utilisateur']:
+                    addXP(ObjectId(demande['id-utilisateur']), 2)
 
             # on update dans la DB
             db_demande_aide.update(
@@ -668,8 +699,16 @@ def likeRep(idPost, idRep):
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
                 newLikes.remove(session['id'])  # on supprime son like
+
+                # remove XP
+                if not ObjectId(session['id']) == reponse['id-utilisateur']:
+                    addXP(ObjectId(reponse['id-utilisateur']), -2)
             else:
                 newLikes.append(session['id'])  # on ajoute son like
+
+                # add XP
+                if not ObjectId(session['id']) == reponse['id-utilisateur']:
+                    addXP(ObjectId(reponse['id-utilisateur']), 2)
 
             reponse = {
                 '_id': ObjectId(reponse['_id']),
