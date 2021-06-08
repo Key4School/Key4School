@@ -99,7 +99,7 @@
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
     <div id="titreetmsg" style="margin-right: 2%;margin-bottom:2%;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur']}};padding:1%;height:auto;">
+      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:1%;height:auto;">
         <!-- div avec le nom du groupe et les paticipants -->
         <div style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
           <!-- nom du groupe -->
@@ -110,7 +110,7 @@
           </p>
         </div>
           <!-- Bouton trois petits points -->
-        <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:{{session['couleur']}};font-size: 20px;"></i>
+        <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:{{session['couleur'][0]}};font-size: 20px;"></i>
         <div class="modal" id="option">
           <div class="modal-background"></div>
           <div class="modal-card">
@@ -176,19 +176,19 @@
         </div>
       </div>
       <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
-      <div id="messages" style="box-sizing: border-box;overflow-y: auto; overflow-x:hidden;height:80%;border: 3px solid {{session['couleur']}};padding-top:2%;">
+      <div id="messages" style="box-sizing: border-box;overflow-y: auto; overflow-x:hidden;height:80%;border: 3px solid {{session['couleur'][0]}};padding-top:2%;">
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
         <!-- Mes messages -->
-        <div class="moimsg" style="border: 2px solid {{session['couleur']}};margin-left: 55%;margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;"
+        <div class="moimsg" style="border: 2px solid {{session['couleur'][0]}};margin-left: 55%;margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;"
           id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z">
           <div style="margin-left: 90%;">
           {%else%}
           <!-- Messages des autres -->
           <div class="participantmsg"
             id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z"
-            style="margin-left: 1%; margin-right: 45%; display: inline-block;max-width: 55%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:#8dd7cf;">
+            style="margin-left: 1%; margin-right: 45%; display: inline-block;max-width: 55%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:{{session['couleur'][1]}};">
             <div style="display: flex;align-items: center;justify-content:space-between;">
           {%endif%}
             {%if content['id-utilisateur']!=sessionId%}
@@ -243,7 +243,7 @@
             </div>
           </div>
           {%if "rep" in content%}
-          <div style="background-color:rgb(198 235 231 / 1);padding:1%;padding-left:2%;border-left:4px solid {{session['couleur']}};border-radius:5px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
+          <div style="background-color:{{session['couleur'][3]}};padding:1%;padding-left:2%;border-left:4px solid {{session['couleur'][0]}};border-radius:5px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
             {%for users in infoUtilisateurs %}{%if users['_id']==content['rep']['id-utilisateur']%}
             <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['pseudo']}}</a></div>
             {%endif%}{%endfor%}

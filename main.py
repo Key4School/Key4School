@@ -1150,7 +1150,7 @@ def connexion():
     if user != None:
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
-        session['couleur'] = '#3f51b5'
+        session['couleur'] = user['couleur']
         session['type'] = user['type']
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
