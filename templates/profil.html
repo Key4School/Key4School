@@ -51,6 +51,28 @@
         </footer>
     </div>
   </div>
+  <div class="modal" id="validationUser" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Validation</p>
+      </header>
+      <form onsubmit="validerUser(event); return false;" id="ValUserForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type='hidden' id="idValidé" name='idValidé' value="{{profilUtilisateur['_id']}}" />
+          <input type='hidden' name="demandeBut" value="ValUser" />
+          <select name="motif">
+            <option value="abusif">Signalement abusif</option>
+            <option value="justifie">Justifié</option>
+          </select>
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Valider</button>
+          <button onclick="validerUserClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+</div>
   <!-- Début de la div pour la page avec les infos -->
   <div class="page"></div>
   <br />
@@ -582,6 +604,14 @@
     </div>
     <!-- Fin choix couleurs -->
   </div>
+  {%if user['admin']==true and profilUtilisateur['sign'] != []%}
+  <button  class="button  is-danger is-outlined is-small" onClick="validationUser();">
+    <span class="icon is-small">
+      <i id="sign" class="fas fa-ban" aria-hidden="true"></i>
+    </span>
+    <span>Valider</span>
+  </button>
+  {%endif%}
   <!-- Mes demandes d'aide -->
   {% if demandes != [] %}
   <div style="margin-left:2%;display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly;">
