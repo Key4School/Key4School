@@ -741,12 +741,25 @@ def administration():
                         'rep': 1,
                         'matière': 1,
                         'motif': 1,
+                         'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
                     }},
+                    {"$sort": {"sign_count": -1}}
                 ])
+            profilSignale = db_utilisateurs.aggregate([
+                {'$match': {"sign": {"$exists": "true", "$ne": []}}},
+                {'$project': {
+                    '_id': 1,
+                    'nom': 1,
+                    'prenom': 1,
+                    'pseudo' : 1,
+                    'motif': 1,
+                    'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
+                }},
+                {"$sort": {"sign_count": -1}}
+                ])
+            # profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
 
-                profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
-
-                return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
+            return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
         else:
             return redirect(url_for('accueil'))
     else:
