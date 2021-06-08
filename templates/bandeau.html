@@ -6,30 +6,30 @@
       <!-- Début menu déroulant -->
       <div class="navbar-item has-dropdown is-hoverable ">
         <a class="navbar-link">
-          <i style="color: {{session['couleur'][2]}}; font-size:30px;" class="fas fa-bars"></i>
+          <i style="color: black; font-size:30px;" class="fas fa-bars"></i>
         </a>
         <!-- Pages du menu -->
         <div class="navbar-dropdown is-boxed">
           <!-- Accueil -->
           <a class="navbar-item" href="{{url_for('accueil')}}">
-            <i style="color: {{session['couleur'][2]}}; font-size:20px;" class="fas fa-home"></i>
+            <i style="color: black; font-size:20px;" class="fas fa-home"></i>
             &nbsp;&nbsp;Accueil
           </a>
           <!-- Question -->
           {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
           <a class="navbar-item" href="{{url_for('question')}}">
-            <i style="color: {{session['couleur'][2]}}; font-size:20px;" class="fas fa-question"></i>
+            <i style="color: black; font-size:20px;" class="fas fa-question"></i>
             &nbsp;&nbsp;Poser une question
           </a>
           {%endif%}
           <!-- Messages privés -->
           <a class="navbar-item" href="{{url_for('messages')}}">
-            <i style="color: {{session['couleur'][2]}}; font-size:20px;" class="fas fa-envelope"></i>
+            <i style="color: black; font-size:20px;" class="fas fa-envelope"></i>
             &nbsp;&nbsp;Messages privés
           </a>
           {%if user['admin']== true%}
           <a class="navbar-item" href="{{url_for('administration')}}">
-            <i style="color: {{session['couleur'][2]}}; font-size:20px;" class="fas fa-user-shield"></i>
+            <i style="color: black; font-size:20px;" class="fas fa-user-shield"></i>
             &nbsp;&nbsp;Administration
           </a>
           {%endif%}
@@ -37,7 +37,7 @@
           <hr class="navbar-divider">
           <!-- Profil + Préférences -->
           <a class="navbar-item" href="{{url_for('profil')}}">
-            <i style="color: {{session['couleur'][2]}}; font-size:20px;" class="fas fa-user-circle"></i>
+            <i style="color: black; font-size:20px;" class="fas fa-user-circle"></i>
             &nbsp;&nbsp;Profil et préférences
           </a>
 
@@ -49,12 +49,12 @@
     <!-- Recherche -->
     <form action="{{url_for('recherche')}}" method="GET" style="margin-top: 2px; width: 40%;">
       <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
-      <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i  style="color: {{session['couleur'][2]}};" class="fas fa-search logoBouton"></i></button>
+      <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
     </form>
     {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;">mode spectateur</div>{%endif%}
     <!-- Profil -->
     <!-- <a href="{{url_for('profil')}}">
-      <i style="color:{{session['couleur'][2]}};font-size:30px;margin-top:40%;" class="fas fa-user-circle"></i>
+      <i style="color:black;font-size:30px;margin-top:40%;" class="fas fa-user-circle"></i>
     </a>
     <div style="width:20%; margin-top: 10px; padding:10px;">
     <progress class="progress is-link" value="70" max="100">70%</progress>
@@ -64,7 +64,7 @@
       <!-- Début notifications -->
       <div class="navbar-item has-dropdown is-hoverable ">
         <a class="navbar-link">
-          <i style="color: {{session['couleur'][2]}}; font-size:30px;" class="fas fa-bell"></i>
+          <i style="color: black; font-size:30px;" class="fas fa-bell"></i>
         </a>
         <!-- Notifications -->
         <div class="navbar-dropdown is-right" style="width: 400%;">
