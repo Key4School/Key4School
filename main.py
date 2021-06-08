@@ -256,7 +256,7 @@ def createGroupe():
                 pass
             else:
                 participants.append(ObjectId(name))
-        newGroupe = db_groupes.insert_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants})
+        newGroupe = db_groupes.insert_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])]})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
@@ -741,12 +741,25 @@ def administration():
                         'rep': 1,
                         'matière': 1,
                         'motif': 1,
+                         'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
                     }},
+                    {"$sort": {"sign_count": -1}}
                 ])
+            profilSignale = db_utilisateurs.aggregate([
+                {'$match': {"sign": {"$exists": "true", "$ne": []}}},
+                {'$project': {
+                    '_id': 1,
+                    'nom': 1,
+                    'prenom': 1,
+                    'pseudo' : 1,
+                    'motif': 1,
+                    'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
+                }},
+                {"$sort": {"sign_count": -1}}
+                ])
+            # profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
 
-                profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
-
-                return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
+            return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
         else:
             return redirect(url_for('accueil'))
     else:
