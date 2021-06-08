@@ -1153,8 +1153,8 @@ if __name__ == "__main__":
     if 'redirect_uri' in os.environ:
         # Le client secret est le code secret de l'application
         # NE PAS TOUCHER AUX 3 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
-        client_id = 'code-ton-lycee'
-        client_secret = 'JR7XcyGWBHt2VA9W'
+        client_id = 'code-ton-lycee-key4school'
+        client_secret = 'jHy6g8JG4FdP0a5VI2m'
         redirect_uri = os.environ['redirect_uri']
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
