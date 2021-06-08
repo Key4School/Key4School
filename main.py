@@ -1,6 +1,4 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort
-# import pronotepy  # api Pronote
-# from pronotepy.ent import ile_de_france
 from flask_pymongo import PyMongo
 from datetime import *
 from requests_oauthlib import OAuth2Session
@@ -28,14 +26,7 @@ db_groupes = cluster.db.groupes
 db_files = cluster.db.fs.files
 db_chunks = cluster.db.fs.chunks
 db_notif = cluster.db.notifications
-# Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
 
-'''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
-'''le lien de l'api pour plus d'info https://github.com/bain3/pronotepy'''
-# client = pronotepy.Client('https://0910626l.index-education.net/pronote/eleve.html',
-#                           username=username,
-#                           password=mdpENT,
-#                           ent=ile_de_france)
 
 def recupLevel():
     xpgens = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})['xp']
