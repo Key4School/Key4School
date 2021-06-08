@@ -121,11 +121,57 @@
               <section class="modal-card-body">
                 Info Utilisateur : <br />
                 {%for users in infoUtilisateurs%}{{users['prenom']}} {{users['nom']}} {{ users['pseudo']}}{%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}<br />{%endfor%}
+                <button  class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
+                  <span class="icon is-small">
+                    {% if a_sign %}
+                    <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+                    {% else %}
+                      <i id="sign" class="far fa-flag" aria-hidden="true"></i>
+                    {% endif %}
+                  </span>
+                  <span>Signaler</span>
+                </button>
               </section>
               <footer class="modal-card-foot">
                 <button  class="button is-success">Valider</button>
                 <button onclick="divoptionclose(); return false;" class="button">Annuler</button>
               </footer>
+          </div>
+        </div>
+        <div class="modal" id="signalisationDiscussion" style="overflow:hidden;">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Signalement de Discussion</p>
+            </header>
+            <form onsubmit="signalerDiscussion(event); return false;" id="signalementDiscussion" method="POST" autocomplete="off">
+              <section class="modal-card-body">
+                <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous cette Discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
+                <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+              </section>
+              <footer class="modal-card-foot">
+                <button type="submit" class="button is-success">Signaler</button>
+                <button onclick="signalisationDiscussionClose(); return false;" class="button">Annuler</button>
+              </footer>
+            </form>
+          </div>
+        </div>
+        <div class="modal" id="designalisationDiscussion" style="overflow:hidden;">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Retrait de signalement de la Discussion</p>
+            </header>
+            <form onsubmit="designalerDiscussion(event); return false;" id="designalementDiscussion" method="POST" autocomplete="off">
+              <section class="modal-card-body">
+                <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                Etes-vous sûr de vouloir enlever ce signalement
+              </section>
+              <footer class="modal-card-foot">
+                <button type="submit" class="button is-success">Oui</button>
+                <button onclick="designalisationDiscussionClose(); return false;" class="button">Annuler</button>
+              </footer>
+            </form>
           </div>
         </div>
       </div>

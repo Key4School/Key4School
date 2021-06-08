@@ -718,7 +718,7 @@ def administration():
                                                {"$set": {"sign": [], "motif": []}})
                 elif request.form['demandeBut'] == 'ValUser':
                     db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])},
-                                               {"$set": {"sign": []}})
+                                               {"$set": {"sign": [],"motif": []}})
                 return 'sent'
 
             else:
@@ -875,6 +875,40 @@ def signPostProfil():
             else:
                 raison = {request.form['Raison']}
                 db_utilisateurs.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$push':
+                        {'sign': ObjectId(session['id']),
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
+                    }
+                )
+            return 'sent'
+
+        else:
+            abort(403) # il manque l'id du message
+    else:
+        abort(401) # non autorisé
+
+@app.route('/signPostDiscussion/', methods=['POST'])
+def signPostDiscussion():
+    if 'id' in session:
+        if request.form['idSignalé'] != None:
+            # on récupère les signalements de la demande d'aide
+            sign = db_groupes.find_one({"_id": ObjectId(request.form['idSignalé'])})['sign']
+
+
+            # on check mtn si l'utilisateur a déjà signalé la demande
+            if ObjectId(session['id']) in sign:
+                db_groupes.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$pull': {
+                        'sign': ObjectId(session['id']),
+                        'motif': {'id': ObjectId(session['id'])}}
+                    },
+                )
+
+            else:
+                raison = {request.form['Raison']}
+                db_groupes.update_one(
                     {'_id': ObjectId(request.form['idSignalé'])},
                     {'$push':
                         {'sign': ObjectId(session['id']),

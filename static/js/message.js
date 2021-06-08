@@ -181,6 +181,7 @@ function enregistrer(e) {
           stopped = false;
           sec = 0;
           min =0;
+          document.getElementById('txtAudio').innerHTML = "0:0";
           chrono = setInterval(function(){
             sec+=1
             if (sec>=60){
@@ -255,6 +256,7 @@ function enregistrerTel() {
           stopped = false;
           sec = 0;
           min =0;
+          document.getElementById('txtAudio').innerHTML = "0:0";
           chrono = setInterval(function(){
             sec+=1
             if (sec>=60){
@@ -345,4 +347,61 @@ function boutonAudioClose() {
   while (document.getElementById('txtAudio').innerHTML != ""){
     document.getElementById('txtAudio').innerHTML = "";
   }
+}
+
+function signalisationDiscussion() {
+  selectionSign = document.getElementById("sign").className
+  if (selectionSign == "far fa-flag") {
+    signalisationDiscussionOpen();
+
+
+  }
+  if (selectionSign == "fas fa-flag"){
+    designalisationDiscussionOpen();
+  }
+}
+
+function signalisationDiscussionClose(){
+  $("#signalisationDiscussion").removeClass("is-active");
+}
+
+function signalisationDiscussionOpen(){
+  $("#signalisationDiscussion").addClass("is-active");
+}
+
+function designalisationDiscussionClose(){
+  $("#designalisationDiscussion").removeClass("is-active");
+}
+
+function designalisationDiscussionOpen(){
+  $("#designalisationDiscussion").addClass("is-active");
+}
+
+function signalerDiscussion(e) {
+  e.preventDefault();
+  var donnees = $('#signalementDiscussion').serialize();
+  $.ajax({
+    url: '/signPostDiscussion/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $('#signalement').trigger("reset");
+      signalisationDiscussionClose();
+      document.getElementById("sign").className = "fas fa-flag";
+    },
+  });
+}
+
+function designalerDiscussion(e) {
+  e.preventDefault();
+  var donnees = $('#designalementDiscussion').serialize();
+  $.ajax({
+    url: '/signPostDiscussion/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      designalisationDiscussionClose();
+      document.getElementById("sign").className = "far fa-flag";
+    },
+  });
 }
