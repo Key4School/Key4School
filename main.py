@@ -139,6 +139,21 @@ def messages(idGroupe):
         if request.method == 'GET':
             # il faudra récupérer l'id qui sera qans un cookie
             grp = db_groupes.find({"id-utilisateurs": ObjectId(session['id'])})
+
+            users = db_utilisateurs.aggregate([
+                {'$sort': {'pseudo': 1}},
+                {'$project': {
+                    '_id': 1,
+                    'nom': 1,
+                    'prenom': 1,
+                    'pseudo': 1,
+                    'lycee': 1,
+                    'email': 1,
+                    'telephone': 1,
+                    'elementPrive': 1
+                }}
+            ])
+
             if idGroupe != None:
                 msgDb = db_messages.aggregate([
                     {'$match': {'id-groupe': ObjectId(idGroupe)}},
@@ -164,7 +179,7 @@ def messages(idGroupe):
                 infoUtilisateurs = []
                 for content in infogroupes['id-utilisateurs']:
                     infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
-                if session['id'] in str(infoUtilisateurs) or '6075cae8fb56bf0654e5f4ab' in str(infoUtilisateurs):
+                if session['id'] in str(infoUtilisateurs):
                     danslegroupe = True
                 else:
                     danslegroupe = False
@@ -175,7 +190,7 @@ def messages(idGroupe):
                 msgDb = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']), user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=ObjectId(session['id']), user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
 
         elif request.method == 'POST':
             if request.form['reponse'] != "None":
@@ -232,7 +247,7 @@ def supprimerMsg():
         return redirect(url_for('login'))
 
 
-@app.route('/searchUser_newgroup/', methods=['POST'])
+"""@app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
         search = request.form['search']
@@ -249,7 +264,7 @@ def searchUser_newgroup():
                                         }).limit(30)
         return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('login'))"""
 
 
 @app.route('/createGroupe/', methods=['POST'])

@@ -13,10 +13,10 @@ $(document).ready(function() {
   $('#listeuser').css({
     height: (40 / 100 * ($(window).height())).toString() + 'px',
   });
-  searchUser();
+  /*searchUser();
   $('#searchUser').keyup(function() {
     searchUser();
-  });
+  });*/
 
   //scroll
   scroll();
