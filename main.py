@@ -1150,7 +1150,7 @@ def connexion():
     if user != None:
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
-        session['couleur'] = user['couleur']
+        session['couleur'] = '#3f51b5'
         session['type'] = user['type']
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
@@ -1169,7 +1169,7 @@ def connexion():
                 classe = data['level']
             pseudo = (data['username'].lower()).replace(' ', '_')
             db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe,
-                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
@@ -1179,7 +1179,7 @@ def connexion():
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
             db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
@@ -1197,7 +1197,6 @@ if __name__ == "__main__":
     # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
     authorization_base_url = 'https://ent.iledefrance.fr/auth/oauth2/auth'
     token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
-
     if 'redirect_uri' in os.environ:
         # Le client secret est le code secret de l'application
         # NE PAS TOUCHER AUX 3 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
