@@ -118,25 +118,14 @@
               <p class="modal-card-title">Options</p>
               <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
             </header>
-            <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <form>
-                  <colums>
-                    <column>
-                      <input class="input" type="text" placeholder="Rechercher..." style="margin-top:1%;width: 70%;" />
-                    </column>
-                    <column>
-                      <button type"submit" style="background-color:white; border: 1px solid white; margin-top:1%;font-size: 20px;margin-right:10%;"><i class="fas fa-search"></i></button>
-                    </column>
-                  </colums>
-                </form>
-
+                Info Utilisateur : <br />
+                {%for users in infoUtilisateurs%}{{users['prenom']}} {{users['nom']}} {{ users['pseudo']}}{%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}<br />{%endfor%}
               </section>
               <footer class="modal-card-foot">
-                <button type="submit" onclick="divnewgroupclose()" class="button is-success">Valider</button>
+                <button  class="button is-success">Valider</button>
                 <button onclick="divoptionclose(); return false;" class="button">Annuler</button>
               </footer>
-            </form>
           </div>
         </div>
       </div>
@@ -167,7 +156,7 @@
               {%else%}
               <div class="navbar-dropdown">
               {%endif%}
-                {%if content['id-utilisateur']==sessionId%}
+                {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT"%}
                 <div class="navbar-item">
                   <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
                     <span class="icon is-small">
