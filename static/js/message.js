@@ -24,10 +24,12 @@ $(document).ready(function() {
 });
 
 const scroll = () => {
-  const messagesDiv = document.getElementById('messages');
+  /*const messagesDiv = document.getElementById('messages');
   const scrollHeight = messagesDiv.scrollHeight;
 
-  return messagesDiv.scrollBy(0, scrollHeight);
+  return messagesDiv.scrollBy(0, scrollHeight);*/
+
+  return;
 };
 
 function divnewgroupopen() {
