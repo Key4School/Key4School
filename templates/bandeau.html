@@ -1,5 +1,5 @@
 <!-- Début barre de navigation -->
-<nav class="navbar is-fixed-top" role="navigation" aria-label="dropdown navigation" style="background-color:{{session['couleur']}}; padding-bottom:5px;">
+<nav class="navbar is-fixed-top" role="navigation" aria-label="dropdown navigation" style="background-color:{{session['couleur'][0]}}; padding-bottom:5px;">
   <div id="navbar" class="navbar-menu">
     <!-- Partie gauche de la barre de navigation -->
     <div class="navbar-start">
@@ -49,7 +49,7 @@
     <!-- Recherche -->
     <form action="{{url_for('recherche')}}" method="GET" style="margin-top: 2px; width: 40%;">
       <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
-      <button type="submit" style="background-color:{{session['couleur']}}; border: 1px solid {{session['couleur']}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i class="fas fa-search logoBouton"></i></button>
+      <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
     </form>
     {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;">mode spectateur</div>{%endif%}
     <!-- Profil -->

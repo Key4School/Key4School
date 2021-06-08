@@ -324,8 +324,8 @@ def refreshMsg():
 def changeTheme():
     if 'id' in session:
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
-                                   "$set": {"couleur": request.form['couleur']}})
-        session['couleur'] = request.form['couleur']
+                                   "$set": {"couleur": ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']}})
+        session['couleur'] = ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
@@ -1204,7 +1204,7 @@ def connexion():
     if user != None:
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
-        session['couleur'] = '#3f51b5'
+        session['couleur'] = user['couleur']
         session['type'] = user['type']
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
@@ -1223,7 +1223,7 @@ def connexion():
                 classe = data['level']
             pseudo = (data['username'].lower()).replace(' ', '_')
             db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe,
-                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
@@ -1233,7 +1233,7 @@ def connexion():
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
             db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
