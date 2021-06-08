@@ -1013,6 +1013,7 @@ def translate_matiere_spes_options_lv(toTranslate: list) -> str:
         'emc': 'EMC',
         'ses': 'SES',
         'philo': 'Philosophie',
+        'eps': 'EPS',
         # LV1
         'lv1-ang': 'LV1 Anglais',
         'lv1-ang-euro': 'LV1 Anglais Euro',
