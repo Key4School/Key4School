@@ -63,10 +63,13 @@
         <img alt="user" onclick="updateImgOpen();" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
       <div style="display: flex;align-items: center;justify-content:center;">
         <!-- Barre de progression -->
-          <progress class="progress is-info" value="70" max="100" style="width:250px;">70%</progress>
+          <progress class="progress is-info" value= {{xplvl}} max="100" style="width:250px;">70%</progress>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <p>
-            70XP
+            NIV:
+            {{niv}}
+            XP :
+            {{xp}}
           </p>
     </div>
   </div>
@@ -509,7 +512,11 @@
         <!-- Couleur 2 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
+            {%if niv < 2%}
+            <input type="radio" name="couleur" disbaled value="#039be5" {%if session['couleur']=='#039be5'%}checked{%endif%}>&nbsp;&nbsp;
+            {%else%}
             <input type="radio" name="couleur" value="#039be5" {%if session['couleur']=='#039be5'%}checked{%endif%}>&nbsp;&nbsp;
+            {%endif%}
             <p id="couleur" style="background-color:#039be5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
@@ -517,7 +524,11 @@
         <!-- Couleur 3 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
+            {%if niv < 3%}
+            <input type="radio" name="couleur" disabled value="#0b8043" {%if session['couleur']=='#0b8043'%}checked{%endif%}>&nbsp;&nbsp;
+            {%else%}
             <input type="radio" name="couleur" value="#0b8043" {%if session['couleur']=='#0b8043'%}checked{%endif%}>&nbsp;&nbsp;
+            {%endif%}
             <p id="couleur" style="background-color:#0b8043;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
@@ -525,7 +536,11 @@
         <!-- Couleur 4 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
+            {%if niv < 4%}
+            <input type="radio" name="couleur" disabled value="#3f51b5" {%if session['couleur']=='#3f51b5'%}checked{%endif%}>&nbsp;&nbsp;
+            {%else%}
             <input type="radio" name="couleur" value="#3f51b5" {%if session['couleur']=='#3f51b5'%}checked{%endif%}>&nbsp;&nbsp;
+            {%endif%}
             <p id="couleur" style="background-color:#3f51b5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
@@ -533,7 +548,11 @@
         <!-- Couleur 5 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
+            {%if niv < 5%}
+            <input type="radio" name="couleur" disabled value="#8e24aa" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
+            {%else%}
             <input type="radio" name="couleur" value="#8e24aa" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
+            {%endif%}
             <p id="couleur" style="background-color:#8e24aa;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
@@ -541,7 +560,11 @@
         <!-- Couleur 6 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
+            {%if niv < 6%}
+            <input type="radio" name="couleur" disabled value="#f5511d" {%if session['couleur']=='#f5511d'%}checked{%endif%}>&nbsp;&nbsp;
+            {%else%}
             <input type="radio" name="couleur" value="#f5511d" {%if session['couleur']=='#f5511d'%}checked{%endif%}>&nbsp;&nbsp;
+            {%endif%}
             <p id="couleur" style="background-color:#f5511d;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>

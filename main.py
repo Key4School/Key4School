@@ -37,6 +37,9 @@ db_notif = cluster.db.notifications
 #                           password=mdpENT,
 #                           ent=ile_de_france)
 
+xpgens = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})['xp']  
+niv = int(0.473*xpgens**0.615)
+xplvl = int((0.473*xpgens**0.615-niv)*100)
 
 def notif(type, id_groupe, id_msg, destinataires):
     db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
@@ -350,7 +353,7 @@ def profil(idUser):
 
             profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
 
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, xplvl=xplvl, xp=xpgens, niv=niv, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
             profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(idUser)})
