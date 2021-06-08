@@ -527,8 +527,10 @@
         <!-- Couleur 1 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
-            <input type="radio" name="couleur" value="#D50000" {%if session['couleur']=='#D50000'%}checked{%endif%}>&nbsp;&nbsp;
-            <p id="couleur" style="background-color:#D50000;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+            <input type="radio" name="couleur" value="0" {%if session['couleur']=='#D50000'%}checked{%endif%}>&nbsp;&nbsp;
+            <p id="couleur" style="background-color:#e6445f;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#f3a6b3;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#afe2e7;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
         <br />
@@ -536,11 +538,13 @@
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {%if niv < 2%}
-            <input type="radio" name="couleur" disbaled value="#039be5" {%if session['couleur']=='#039be5'%}checked{%endif%}>&nbsp;&nbsp;
+            <input type="radio" name="couleur" disbaled value="2" {%if session['couleur']=='#039be5'%}checked{%endif%}>&nbsp;&nbsp;
             {%else%}
-            <input type="radio" name="couleur" value="#039be5" {%if session['couleur']=='#039be5'%}checked{%endif%}>&nbsp;&nbsp;
+            <input type="radio" name="couleur" value="2" {%if session['couleur']=='#039be5'%}checked{%endif%}>&nbsp;&nbsp;
             {%endif%}
-            <p id="couleur" style="background-color:#039be5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+            <p id="couleur" style="background-color:#4c7450;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#a8d7ad;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#c3455a;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
         <br />
@@ -548,11 +552,13 @@
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {%if niv < 3%}
-            <input type="radio" name="couleur" disabled value="#0b8043" {%if session['couleur']=='#0b8043'%}checked{%endif%}>&nbsp;&nbsp;
+            <input type="radio" name="couleur" disabled value="3" {%if session['couleur']=='#0b8043'%}checked{%endif%}>&nbsp;&nbsp;
             {%else%}
-            <input type="radio" name="couleur" value="#0b8043" {%if session['couleur']=='#0b8043'%}checked{%endif%}>&nbsp;&nbsp;
+            <input type="radio" name="couleur" value="3" {%if session['couleur']=='#0b8043'%}checked{%endif%}>&nbsp;&nbsp;
             {%endif%}
-            <p id="couleur" style="background-color:#0b8043;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+            <p id="couleur" style="background-color:#3f51b5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#81c5e2;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#e6b2d9;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
         <br />
@@ -560,11 +566,13 @@
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {%if niv < 4%}
-            <input type="radio" name="couleur" disabled value="#3f51b5" {%if session['couleur']=='#3f51b5'%}checked{%endif%}>&nbsp;&nbsp;
+            <input type="radio" name="couleur" disabled value="4" {%if session['couleur']=='#3f51b5'%}checked{%endif%}>&nbsp;&nbsp;
             {%else%}
-            <input type="radio" name="couleur" value="#3f51b5" {%if session['couleur']=='#3f51b5'%}checked{%endif%}>&nbsp;&nbsp;
+            <input type="radio" name="couleur" value="4" {%if session['couleur']=='#3f51b5'%}checked{%endif%}>&nbsp;&nbsp;
             {%endif%}
-            <p id="couleur" style="background-color:#3f51b5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+            <p id="couleur" style="background-color:#3f51b5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#81c5e2;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#e6b2d9;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
         <br />
@@ -572,23 +580,13 @@
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {%if niv < 5%}
-            <input type="radio" name="couleur" disabled value="#8e24aa" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
+            <input type="radio" name="couleur" disabled value="5" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
             {%else%}
-            <input type="radio" name="couleur" value="#8e24aa" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
+            <input type="radio" name="couleur" value="5" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
             {%endif%}
-            <p id="couleur" style="background-color:#8e24aa;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
-          </div>
-        </label>
-        <br />
-        <!-- Couleur 6 -->
-        <label class="radio">
-          <div style="display: flex;align-items: center;justify-content:space-evenly;">
-            {%if niv < 6%}
-            <input type="radio" name="couleur" disabled value="#f5511d" {%if session['couleur']=='#f5511d'%}checked{%endif%}>&nbsp;&nbsp;
-            {%else%}
-            <input type="radio" name="couleur" value="#f5511d" {%if session['couleur']=='#f5511d'%}checked{%endif%}>&nbsp;&nbsp;
-            {%endif%}
-            <p id="couleur" style="background-color:#f5511d;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+            <p id="couleur" style="background-color:#deb72f;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#e6cf81;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+            <p id="couleur" style="background-color:#e68181;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
           </div>
         </label>
         <br />
