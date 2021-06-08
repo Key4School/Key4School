@@ -1005,6 +1005,15 @@ def translate_matiere_spes_options_lv(toTranslate: list) -> str:
         'ses': 'SES',
         'philo': 'Philosophie',
         'eps': 'EPS',
+        # Langues
+        'ang': 'Anglais',
+        'esp': 'Espagnol',
+        'all': 'Allemand',
+        'por': 'Portugais',
+        'it': 'Italien',
+        'chi': 'Chinois',
+        'ru': 'Russe',
+        'ara': 'Arabe',
         # LV1
         'lv1-ang': 'LV1 Anglais',
         'lv1-ang-euro': 'LV1 Anglais Euro',
