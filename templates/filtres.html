@@ -1,4 +1,4 @@
-<div id="filters" style="background-color: {{session['couleur']}}; width: 80%; height: 50px;  margin-top: 38px; padding-left: 20px; padding-right: 20px; display: flex; flex-direction: row; justify-content: space-between; border-bottom: 2px solid black;">
+<div id="filters" style="background-color: {{session['couleur']}}; width: 100%; height: 50px;  margin-top: 38px; padding-left: 20px; padding-right: 20px; display: flex; flex-direction: row; justify-content: space-between; border-bottom: 2px solid black;">
   <div class="filter-arrow" style="position: relative; height: 100%; width: 50px; color: black; cursor: pointer;" onclick="filters_slide('left');">
     <span class="chevron" style="font-size: 30px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"><i class="fas fa-chevron-left"></i></span>
   </div>
@@ -232,13 +232,13 @@
       {% if 'opt-psc' in user['options'] %}
         <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-psc">
           <button class="button is-info" onclick="filter(this);">Option Pratiques sociales et culturelles</button>
-        </div>  
+        </div>
       {% endif %}
       <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="eps">
         <button class="button is-info" onclick="filter(this);">EPS</button>
       </div>
 
-      
+
     </div>
   </div>
   <div class="filter-arrow" style="position: relative; height: 100%; width: 50px; color: black; cursor: pointer;" onclick="filters_slide('right');">

@@ -133,7 +133,6 @@ def messages(idGroupe):
             # il faudra récupérer l'id qui sera qans un cookie
             grp = db_groupes.find({"id-utilisateurs": ObjectId(session['id'])})
             if idGroupe != None:
-                idGroupe = escape(idGroupe)
                 msgDb = db_messages.aggregate([
                     {'$match': {'id-groupe': ObjectId(idGroupe)}},
                     {'$lookup':
@@ -173,17 +172,17 @@ def messages(idGroupe):
 
         elif request.method == 'POST':
             if request.form['reponse'] != "None":
-                reponse = ObjectId(escape(request.form['reponse']))
+                reponse = ObjectId(request.form['reponse'])
             else:
                 reponse = "None"
 
-            if escape(request.form['contenuMessage']) == '':
+            if request.form['contenuMessage'] == '':
                 return abort(500)
 
-            message = db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
-                                              "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
-            infogroupes = db_groupes.find_one({"_id": ObjectId(escape(request.form['group']))})
-            notif("msg", ObjectId(escape(request.form['group'])), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+            message = db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                                              "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse})
+            infogroupes = db_groupes.find_one({"_id": ObjectId(request.form['group'])})
+            notif("msg", ObjectId(request.form['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
             return 'sent'
     else:
         return redirect(url_for('login'))
@@ -194,9 +193,9 @@ def uploadAudio():
     if 'id' in session:
         heure = str(datetime.now())
         nom = "MsgVocal" + \
-            escape(request.form['group']) + session['id'] + heure
+            request.form['group'] + session['id'] + heure
         cluster.save_file(nom, request.files['audio'])
-        db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
+        db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
                                 "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": ""})
         return 'yes'
     else:
@@ -206,7 +205,7 @@ def uploadAudio():
 @app.route('/audio/<audioName>')
 def audio(audioName):
     if 'id' in session:
-        return cluster.send_file(escape(audioName))
+        return cluster.send_file(audioName)
     else:
         return redirect(url_for('login'))
 
@@ -214,10 +213,10 @@ def audio(audioName):
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
-        idGroupe = escape(request.form['grp'])
-        db_messages.delete_one({"_id": ObjectId(escape(request.form['msgSuppr']))})
+        idGroupe = request.form['grp']
+        db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
         if request.form['audio'] == 'True':
-            MyAudio = db_files.find_one({'filename': escape(request.form['audioName'])})
+            MyAudio = db_files.find_one({'filename': request.form['audioName']})
             db_files.delete_one({'_id': MyAudio['_id']})
             db_chunks.delete_many({'files_id': MyAudio['_id']})
         return redirect(url_for('messages', idGroupe=idGroupe))
@@ -229,7 +228,7 @@ def supprimerMsg():
 @app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
-        search = escape(request.form['search'])
+        search = request.form['search']
         users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {
                                                   '$regex': search, '$options': 'i'}},
@@ -254,8 +253,8 @@ def createGroupe():
             if name == 'nomnewgroupe':
                 pass
             else:
-                participants.append(ObjectId(escape(name)))
-        newGroupe = db_groupes.insert_one({'nom': escape(request.form['nomnewgroupe']), 'id-utilisateurs': participants})
+                participants.append(ObjectId(name))
+        newGroupe = db_groupes.insert_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
@@ -264,8 +263,8 @@ def createGroupe():
 @app.route('/refreshMsg/')
 def refreshMsg():
     if 'id' in session:
-        idGroupe = escape(request.args['idgroupe'])
-        if escape(request.args['idMsg']) != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
+        idGroupe = request.args['idgroupe']
+        if request.args['idMsg'] != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
             dateLast = datetime.strptime(request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
             infogroupes = db_groupes.find_one({"_id": ObjectId(idGroupe)})
             infoUtilisateurs = []
@@ -303,7 +302,7 @@ def refreshMsg():
 def changeTheme():
     if 'id' in session:
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
-                                   "$set": {"couleur": escape(request.form['couleur'])}})
+                                   "$set": {"couleur": request.form['couleur']}})
         session['couleur'] = request.form['couleur']
         return redirect(url_for('profil'))
     else:
@@ -374,7 +373,7 @@ def profil(idUser):
 @app.route('/userImg/<profilImg>')
 def userImg(profilImg):
     if 'id' in session:
-        return cluster.send_file(escape(profilImg))
+        return cluster.send_file(profilImg)
     else:
         return redirect(url_for('login'))
 
@@ -387,16 +386,16 @@ def updateprofile():
         elementPublic = []
         for content in request.form:
             if request.form[content] == "pv":
-                elementPrive.append(escape(content.replace('Visibilite', '')))
+                elementPrive.append(content.replace('Visibilite', ''))
             elif request.form[content] == "pb":
-                elementPublic.append(escape(content.replace('Visibilite', '')))
+                elementPublic.append(content.replace('Visibilite', ''))
 
         # if request.form['pseudoVisibilite'] == "pv":
         #     elementPrive.append("pseudo")
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': escape(request.form['pseudo']), 'email': escape(request.form['email']), 'telephone': escape(request.form['telephone']), 'interets': escape(request.form['interets']), 'caractere': escape(request.form['caractere']),
-                                                                               'langues': [escape(request.form['lv1']), escape(request.form['lv2'])], 'options': [escape(request.form['option1']), escape(request.form['option2'])], 'spes': [escape(request.form['spe1']), escape(request.form['spe2']), escape(request.form['spe3'])],
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'caractere': request.form['caractere'],
+                                                                               'langues': [request.form['lv1'], request.form['lv2']], 'options': [request.form['option1'], request.form['option2']], 'spes': [request.form['spe1'], request.form['spe2'], request.form['spe3']],
                                                                                'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
@@ -439,7 +438,6 @@ def redirect_comments():
 @app.route('/comments/<idMsg>', methods=['GET', 'POST'])
 def comments(idMsg):
     if 'id' in session:
-        idMsg = escape(idMsg)
         if request.method == 'GET':
             msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
 
@@ -502,7 +500,7 @@ def comments(idMsg):
                 reponses[str(_id)] = {
                     '_id': ObjectId(_id),
                     'id-utilisateur': ObjectId(session['id']),
-                    'contenu': escape(request.form.get('rep')),
+                    'contenu': request.form.get('rep'),
                     'date-envoi': datetime.now(),
                     'likes': []
                 }
@@ -522,13 +520,13 @@ def question():
     if 'id' in session:
         if request.method == 'POST':
             # Impossibilité demande d'aide vide
-            if escape(request.form['titre']) == '':
+            if request.form['titre'] == '':
                 return redirect('/question/')
 
             user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
             if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
                 db_demande_aide.insert_one(
-                    {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": [], "resolu": False})
+                    {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False})
 
                 demandes = db_demande_aide.aggregate([
                     {'$sort': {'date-envoi': -1}},
@@ -555,7 +553,7 @@ def question():
 def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
-            search = escape(request.args['search'])
+            search = request.args['search']
 
             user = db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
             subjects = getUserSubjects(user)
@@ -618,7 +616,7 @@ def recherche():
 @ app.route('/rechercheUser')
 def recherche_user():
     if 'id' in session:
-        search = escape(request.args['search'])
+        search = request.args['search']
         users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {'$regex': search, '$options': 'i'}},
                                               {'prenom': {'$regex': search, '$options': 'i'}},
@@ -635,7 +633,6 @@ def recherche_user():
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
-            idPost = escape(idPost)
             # on récupère les likes de la demande d'aide
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
             likes = demande['likes']
@@ -666,8 +663,6 @@ def likePost(idPost):
 def likeRep(idPost, idRep):
     if 'id' in session:
         if 'idPost' != None and 'idRep' != None:
-            idPost = escape(idPost)
-            idRep = escape(idRep)
             # on récupère les likes de la demande d'aide
             reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})['réponses associées']
             if not idRep in reponses:
@@ -695,9 +690,7 @@ def likeRep(idPost, idRep):
             # on update dans la DB
             db_demande_aide.update(
                 {'_id': ObjectId(idPost)},
-                {'$set':
-                    {'réponses associées': reponses}
-                }
+                {'$set':{'réponses associées': reponses}}
             )
 
             # on retourne enfin le nouveau nb de likes
@@ -712,21 +705,20 @@ def likeRep(idPost, idRep):
 @app.route('/administration/', methods=['POST', 'GET'])
 def administration():
     if 'id' in session:
-        utilisateur = db_utilisateurs.find_one(
-            {"_id": ObjectId(session['id'])})
+        utilisateur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
         if utilisateur['admin'] == True:
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
-                    db_demande_aide.delete_one(
-                        {"_id": ObjectId(request.form['idSuppr'])})
+                    db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
 
                 elif request.form['demandeBut'] == 'Val':
-                    db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])}, {
-                                               "$set": {"sign": [], "motif": []}})
+                    db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},
+                                               {"$set": {"sign": [], "motif": []}})
                 elif request.form['demandeBut'] == 'ValUser':
-                    db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])}, {
-                                                "$set": {"sign": []}})
-                return'sent'
+                    db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])},
+                                               {"$set": {"sign": []}})
+                return 'sent'
+
             else:
                 demandeSignale = db_demande_aide.aggregate([
                     {'$match': {"sign": {"$exists": "true", "$ne": []}}},
@@ -749,6 +741,7 @@ def administration():
                         'motif': 1,
                     }},
                 ])
+
                 profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
 
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
@@ -804,7 +797,7 @@ def signPost():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
+            demande = db_demande_aide.find_one({"_id": ObjectId(request.form['idSignalé'])})
             sign = demande['sign']
             newSign = list(sign)
 
@@ -813,7 +806,7 @@ def signPost():
                 # on supprime son signalement
                 newSign.remove(ObjectId(session['id']))
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(request.form['idSignalé'])},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
@@ -822,12 +815,12 @@ def signPost():
 
             else:
                 newSign.append(session['id']) # on ajoute son signalement
-                raison = {escape(request.form['Raison'])}
+                raison = {request.form['Raison']}
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(request.form['idSignalé'])},
                     {'$push':
                         {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
                     }
                 )
 
@@ -851,13 +844,13 @@ def signPostProfil():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            user = db_utilisateurs.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
+            user = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSignalé'])})
             sign = user['sign']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(request.form['idSignalé'])},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
@@ -865,12 +858,12 @@ def signPostProfil():
                 )
 
             else:
-                raison = {escape(request.form['Raison'])}
+                raison = {request.form['Raison']}
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(request.form['idSignalé'])},
                     {'$push':
                         {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
                     }
                 )
             return 'sent'
@@ -884,7 +877,6 @@ def signPostProfil():
 def resoudre(idPost):
     if 'id' in session:
         if 'idPost' != None:
-            idPost = escape(idPost)
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
 
             # on check mtn si l'utilisateur a déjà liké la demande
@@ -892,10 +884,9 @@ def resoudre(idPost):
                 # on update dans la DB
                 db_demande_aide.update(
                     {'_id': ObjectId(idPost)},
-                    {'$set':
-                        {'resolu': True}
-                    }
+                    {'$set':{'resolu': True}}
                 )
+
                 return "ok", 200
             else:
                 abort(401) # non autorisé
@@ -964,91 +955,89 @@ def getUserSubjects(user):
 
 def translate_matiere_spes_options_lv(toTranslate: list) -> str:
     translated = ''
+    translations = {
+        # Matières tronc commun
+        'fr': 'Français',
+        'maths': 'Mathématiques',
+        'hg': 'Histoire-Géographie',
+        'snt': 'SNT',
+        'emc': 'EMC',
+        'ses': 'SES',
+        'philo': 'Philosophie',
+        # LV1
+        'lv1-ang': 'LV1 Anglais',
+        'lv1-ang-euro': 'LV1 Anglais Euro',
+        'lv1-esp': 'LV1 Espagnol',
+        'lv1-esp-euro': 'LV1 Espagnol Euro',
+        'lv1-all': 'LV1 Allemand',
+        'lv1-all-euro': 'LV1 Allemand Euro',
+        'lv1-por': 'LV1 Portugais',
+        'lv1-por-euro': 'LV1 Portugais Euro',
+        'lv1-it': 'LV1 Itlien',
+        'lv1-it-euro': 'LV1 Itlien Euro',
+        'lv1-chi': 'LV1 Chinois',
+        'lv1-ru': 'LV1 Russe',
+        'lv1-ara': 'LV1 Arabe',
+        # LV2
+        'lv2-ang': 'LV2 Anglais',
+        'lv2-esp': 'LV2 Espagnol',
+        'lv2-all': 'LV2 Allemand',
+        'lv2-por': 'LV2 Portugais',
+        'lv2-it': 'LV2 Italien',
+        'lv2-chi': 'LV2 Chinois',
+        'lv2-ru': 'LV2 Russe',
+        'lv2-ara': 'LV2 Arabe',
+        # Spés
+        'spe-art': 'Spé Arts',
+        'spe-hggsp': 'Spé HGGSP',
+        'spe-hlp': 'Spé HLP',
+        'spe-ses': 'Spé SES',
+        'spe-maths': 'Spé Mathématiques',
+        'spe-pc': 'Spé Physique-Chimie',
+        'spe-svt': 'Spé SVT',
+        'spe-nsi': 'Spé NSI',
+        'spe-si': 'Spé Sciences de l\'Ingénieur',
+        'spe-lca': 'Spé LCA',
+        'spe-llcer-ang': 'Spé LLCER Anglais',
+        'spe-llcer-esp': 'Spé LLCER Espagnol',
+        'spe-llcer-all': 'Spé LLCER Allemand',
+        'spe-llcer-it': 'Spé LLCER Italien',
+        'spe-bio-eco': 'Spé Biologie-écologie',
+        # Options
+        'opt-lca-latin': 'LCA Latin',
+        'opt-lca-grec': 'LCA Grec',
+        'opt-lv3-ang': 'LV3 Anglais',
+        'opt-lv3-esp': 'LV3 Espagnol',
+        'opt-lv3-all': 'LV3 Allemand',
+        'opt-lv3-por': 'LV3 Portugais',
+        'opt-lv3-it': 'LV3 Italien',
+        'opt-lv3-ru': 'LV3 Russe',
+        'opt-lv3-ara': 'LV3 Arabe',
+        'opt-lv3-chi': 'LV3 Chinois',
+        'opt-eps': 'Option EPS',
+        'opt-arts': 'Option Arts',
+        'opt-musique': 'Option Musique',
+        'opt-mg': 'Option Management et Gestion',
+        'opt-ss': 'Option Santé et Social',
+        'opt-biotech': 'Option Biotechnologies',
+        'opt-sl': 'Option Sciences et laboratoire',
+        'opt-si': 'Option Sciences de l\'Ingénieur',
+        'opt-cit': 'Option Création et culture technologiques',
+        'opt-ccd': 'Option Création et culture - design',
+        'opt-equit': 'Option Hippologie et équitation',
+        'opt-aet': 'Option Agranomie-économie-territoires',
+        'opt-psc': 'Option Pratiques sociales et culturelles',
+        'opt-maths-comp': 'Option Maths Complémentaires',
+        'opt-maths-exp': 'Option Maths Expertes',
+        'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
+        #
+        'none': ''
+    }
 
     for a in toTranslate:
         if translated != '' and a != 'none':
             translated += ' / '
-
-        translations = {
-            # Matières tronc commun
-            'fr': 'Français',
-            'maths': 'Mathématiques',
-            'hg': 'Histoire-Géographie',
-            'snt': 'SNT',
-            'emc': 'EMC',
-            'ses': 'SES',
-            'philo': 'Philosophie',
-            # LV1
-            'lv1-ang': 'LV1 Anglais',
-            'lv1-ang-euro': 'LV1 Anglais Euro',
-            'lv1-esp': 'LV1 Espagnol',
-            'lv1-esp-euro': 'LV1 Espagnol Euro',
-            'lv1-all': 'LV1 Allemand',
-            'lv1-all-euro': 'LV1 Allemand Euro',
-            'lv1-por': 'LV1 Portugais',
-            'lv1-por-euro': 'LV1 Portugais Euro',
-            'lv1-it': 'LV1 Itlien',
-            'lv1-it-euro': 'LV1 Itlien Euro',
-            'lv1-chi': 'LV1 Chinois',
-            'lv1-ru': 'LV1 Russe',
-            'lv1-ara': 'LV1 Arabe',
-            # LV2
-            'lv2-ang': 'LV2 Anglais',
-            'lv2-esp': 'LV2 Espagnol',
-            'lv2-all': 'LV2 Allemand',
-            'lv2-por': 'LV2 Portugais',
-            'lv2-it': 'LV2 Italien',
-            'lv2-chi': 'LV2 Chinois',
-            'lv2-ru': 'LV2 Russe',
-            'lv2-ara': 'LV2 Arabe',
-            # Spés
-            'spe-art': 'Spé Arts',
-            'spe-hggsp': 'Spé HGGSP',
-            'spe-hlp': 'Spé HLP',
-            'spe-ses': 'Spé SES',
-            'spe-maths': 'Spé Mathématiques',
-            'spe-pc': 'Spé Physique-Chimie',
-            'spe-svt': 'Spé SVT',
-            'spe-nsi': 'Spé NSI',
-            'spe-si': 'Spé Sciences de l\'Ingénieur',
-            'spe-lca': 'Spé LCA',
-            'spe-llcer-ang': 'Spé LLCER Anglais',
-            'spe-llcer-esp': 'Spé LLCER Espagnol',
-            'spe-llcer-all': 'Spé LLCER Allemand',
-            'spe-llcer-it': 'Spé LLCER Italien',
-            'spe-bio-eco': 'Spé Biologie-écologie',
-            # Options
-            'opt-lca-latin': 'LCA Latin',
-            'opt-lca-grec': 'LCA Grec',
-            'opt-lv3-ang': 'LV3 Anglais',
-            'opt-lv3-esp': 'LV3 Espagnol',
-            'opt-lv3-all': 'LV3 Allemand',
-            'opt-lv3-por': 'LV3 Portugais',
-            'opt-lv3-it': 'LV3 Italien',
-            'opt-lv3-ru': 'LV3 Russe',
-            'opt-lv3-ara': 'LV3 Arabe',
-            'opt-lv3-chi': 'LV3 Chinois',
-            'opt-eps': 'Option EPS',
-            'opt-arts': 'Option Arts',
-            'opt-musique': 'Option Musique',
-            'opt-mg': 'Option Management et Gestion',
-            'opt-ss': 'Option Santé et Social',
-            'opt-biotech': 'Option Biotechnologies',
-            'opt-sl': 'Option Sciences et laboratoire',
-            'opt-si': 'Option Sciences de l\'Ingénieur',
-            'opt-cit': 'Option Création et culture technologiques',
-            'opt-ccd': 'Option Création et culture - design',
-            'opt-equit': 'Option Hippologie et équitation',
-            'opt-aet': 'Option Agranomie-économie-territoires',
-            'opt-psc': 'Option Pratiques sociales et culturelles',
-            'opt-maths-comp': 'Option Maths Complémentaires',
-            'opt-maths-exp': 'Option Maths Expertes',
-            'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
-            #
-            'none': ''
-        }
-
-        translated += translations.get(a)
+        translated += translations[a]
 
     return translated
 
@@ -1068,7 +1057,7 @@ def login():
     Redirect the user/resource owner to the OAuth provider (ENT)
     using an URL with a few key OAuth parameters.
     """
-    ENT_reply = OAuth2Session(client_id, scope="userinfo", redirect_uri=redirect_uri)
+    ENT_reply = OAuth2Session(client_id, scope=["userinfo", "myinfos", "userbook", "directory"], redirect_uri=redirect_uri)
     authorization_url, state = ENT_reply.authorization_url(authorization_base_url)
 
     # State is used to prevent CSRF, keep this for later.
