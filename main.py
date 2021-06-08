@@ -37,9 +37,11 @@ db_notif = cluster.db.notifications
 #                           password=mdpENT,
 #                           ent=ile_de_france)
 
-xpgens = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})['xp']  
-niv = int(0.473*xpgens**0.615)
-xplvl = int((0.473*xpgens**0.615-niv)*100)
+def recupLevel():
+    xpgens = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})['xp']
+    niv = int(0.473*xpgens**0.615)
+    xplvl = int((0.473*xpgens**0.615-niv)*100)
+    return niv, xplvl, xpgens
 
 def notif(type, id_groupe, id_msg, destinataires):
     db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
@@ -351,7 +353,7 @@ def profil(idUser):
                 })
 
             profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
-
+            niv, xplvl, xpgens = recupLevel()
             return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, xplvl=xplvl, xp=xpgens, niv=niv, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
@@ -1104,7 +1106,8 @@ def connexion():
         session['type'] = user['type']
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
-                db_utilisateurs.update_one({'_id':ObjectId(user['_id'])},{"$set":{"SanctionEnCour":"", "SanctionDuree":""}})
+                db_utilisateurs.update_one({'_id': ObjectId(user['_id'])}, {
+                                           "$set": {"SanctionEnCour": "", "SanctionDuree": ""}})
         return redirect(url_for('accueil'))
     else:
         if data['type'] == "ELEVE":
@@ -1117,8 +1120,8 @@ def connexion():
             else:
                 classe = data['level']
             pseudo = (data['username'].lower()).replace(' ', '_')
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": ""})
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe,
+                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
@@ -1127,8 +1130,8 @@ def connexion():
             return redirect(url_for('profil'))
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(),
-                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": ""})
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
+                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
