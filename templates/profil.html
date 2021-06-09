@@ -24,7 +24,7 @@
   </style>
 </head>
 
-<body style="width: 80%;">
+<body>
   <!-- Bandeau -->
   {% include "bandeau.html" %}
   <!-- Photo de profil -->
@@ -590,6 +590,19 @@
           </div>
         </label>
         <br />
+        <label class="radio">
+          <div style="display: flex;align-items: center;justify-content:space-evenly;">
+            {%if niv < 5%}
+            <input type="radio" name="couleur" disabled value="5" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
+            {%else%}
+            <input type="radio" name="couleur" value="5" {%if session['couleur']=='#8e24aa'%}checked{%endif%}>&nbsp;&nbsp;
+            {%endif%}
+            <input id="couleur" type="color"/>&nbsp;
+            <input id="couleur" type="color"/>&nbsp;
+            <input id="couleur" type="color"/>&nbsp;
+
+          </div>
+        </label>
         <br />
         <!-- Bouton pour valider le choix de la couleur -->
         <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
