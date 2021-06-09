@@ -48,17 +48,6 @@ function divoptionclose(e) {
 }
 
 function envoi(e) {
-  /*e.preventDefault();
-  var donnees = $('#messageForm').serialize();
-  $.ajax({
-    url: '/messages/', // on donne l'URL du fichier de traitement
-    type: "POST", // la requête est de type POST
-    data: donnees, // et on envoie nos données
-    success: function(response) {
-      $('#messageForm').trigger("reset");
-      scroll();
-    },
-  });*/
   const contenuMsg = document.getElementById('inputMsg').value || '';
   const groupe = idGroupe;
   const reponse = document.getElementById('reponse').value || '';
@@ -67,6 +56,7 @@ function envoi(e) {
 
   $('#messageForm').trigger("reset");
   enleverRep();
+  scroll();
 }
 
 /*function searchUser() {
@@ -104,7 +94,9 @@ const socket = io(`ws://${document.location.host}`);
 const idGroupe = document.getElementById('idGroupe').value || undefined;
 
 socket.on('connect', function() {
-  socket.emit('connectToGroup', {room: idGroupe});
+  if (idGroupe != "None"){
+    socket.emit('connectToGroup', {room: idGroupe});
+  }
 });
 
 socket.on('newMsg', (html) => {
@@ -115,8 +107,6 @@ socket.on('newMsg', (html) => {
   }
 });
 
-
-//setInterval(refresh, 1000);
 
 function reponseMsg(nb) {
   var contentMsg = document.getElementById('contenu' + nb).value;
