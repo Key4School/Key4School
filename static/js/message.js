@@ -1,6 +1,7 @@
 var min=0;
 var sec=0;
 var tmp="";
+var idMsg;
 
 $(document).ready(function() {
   $('#titreetmsg').css({
@@ -401,6 +402,63 @@ function designalerDiscussion(e) {
     data: donnees, // et on envoie nos données
     success: function(response) {
       designalisationDiscussionClose();
+      document.getElementById("sign").className = "far fa-flag";
+    },
+  });
+}
+function signalisationMsg (idMsg) {
+  selectionSignMsg = document.getElementById("signMsg_"+idMsg).className
+  if (selectionSignMsg == "far fa-flag") {
+    document.getElementById("idMsgSignalé").value = idMsg;
+    signalisationMsgOpen();
+
+
+  }
+  if (selectionSignMsg == "fas fa-flag"){
+    designalisationMsgOpen();
+  }
+}
+
+function signalisationMsgClose(){
+  $("#signalisationMsg").removeClass("is-active");
+}
+
+function signalisationMsgOpen(){
+  $("#signalisationMsg").addClass("is-active");
+}
+
+function designalisationMsgClose(){
+  $("#designalisationMsg").removeClass("is-active");
+}
+
+function designalisationMsgOpen(){
+  $("#designalisationMsg").addClass("is-active");
+}
+
+function signalerMsg(e) {
+  e.preventDefault();
+  var donnees = $('#signalementMsg').serialize();
+  $.ajax({
+    url: '/signPostMsg/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $('#signalement').trigger("reset");
+      signalisationMsgClose();
+      document.getElementById("sign").className = "fas fa-flag";
+    },
+  });
+}
+
+function designalerMsg(e) {
+  e.preventDefault();
+  var donnees = $('#designalementMsg').serialize();
+  $.ajax({
+    url: '/signPostMsg/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      designalisationMsgClose();
       document.getElementById("sign").className = "far fa-flag";
     },
   });

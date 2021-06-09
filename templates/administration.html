@@ -70,7 +70,7 @@
 <br /><br />
   {%for content in demandeSignale%}
     <div style="border:2px solid {{session['couleur']}};padding:1%;margin-left:20%;margin-right:20%;" id='divDemande_{{content['_id']}}'><div>
-      {{content['rep']['prenom']}} {{content['rep']['nom']}} {{content['contenu']}} {{content['date-envoi']}} {{content['matière']}} 
+      {{content['rep']['prenom']}} {{content['rep']['nom']}} {{content['contenu']}} {{content['date-envoi']}} {{content['matière']}}
       <br />
     </div>
     <br />
@@ -118,6 +118,14 @@
   </div>
   {%endfor%}
 </div>
+  {%endfor%}
+  {%for content in discussionSignale%}
+    {{content['nom']}}
+  {%for element in content['motif']%}
+  <div>
+      motif: {{element['txt']}}
+  </div>
+  {%endfor%}
   {%endfor%}
 </body>
 

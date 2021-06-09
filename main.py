@@ -276,7 +276,7 @@ def createGroupe():
                 pass
             else:
                 participants.append(ObjectId(name))
-        newGroupe = db_groupes.insert_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])]})
+        newGroupe = db_groupes.insert_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[]})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
@@ -790,21 +790,34 @@ def administration():
                     }},
                     {"$sort": {"sign_count": -1}}
                 ])
-            profilSignale = db_utilisateurs.aggregate([
-                {'$match': {"sign": {"$exists": "true", "$ne": []}}},
-                {'$project': {
-                    '_id': 1,
-                    'nom': 1,
-                    'prenom': 1,
-                    'pseudo' : 1,
-                    'motif': 1,
-                    'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
-                }},
-                {"$sort": {"sign_count": -1}}
-                ])
-            # profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
+                profilSignale = db_utilisateurs.aggregate([
+                    {'$match': {"sign": {"$exists": "true", "$ne": []}}},
+                    {'$project': {
+                        '_id': 1,
+                        'nom': 1,
+                        'prenom': 1,
+                        'pseudo' : 1,
+                        'motif': 1,
+                        'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
+                    }},
+                    {"$sort": {"sign_count": -1}}
+                    ])
 
-            return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
+                discussionSignale = db_groupes.aggregate([
+                    {'$match': {"sign": {"$exists": "true", "$ne": []}}},
+                    {'$project': {
+                        '_id': 1,
+                        'id-utilisateurs': 1,
+                        'moderateurs': 1,
+                        'nom' : 1,
+                        'motif': 1,
+                        'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
+                    }},
+                    {"$sort": {"sign_count": -1}}
+                ])
+
+
+                return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
         else:
             return redirect(url_for('accueil'))
     else:
@@ -935,6 +948,40 @@ def signPostProfil():
 
 @app.route('/signPostDiscussion/', methods=['POST'])
 def signPostDiscussion():
+    if 'id' in session:
+        if request.form['idSignalé'] != None:
+            # on récupère les signalements de la demande d'aide
+            sign = db_groupes.find_one({"_id": ObjectId(request.form['idSignalé'])})['sign']
+
+
+            # on check mtn si l'utilisateur a déjà signalé la demande
+            if ObjectId(session['id']) in sign:
+                db_groupes.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$pull': {
+                        'sign': ObjectId(session['id']),
+                        'motif': {'id': ObjectId(session['id'])}}
+                    },
+                )
+
+            else:
+                raison = {request.form['Raison']}
+                db_groupes.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$push':
+                        {'sign': ObjectId(session['id']),
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
+                    }
+                )
+            return 'sent'
+
+        else:
+            abort(403) # il manque l'id du message
+    else:
+        abort(401) # non autorisé
+
+@app.route('/signPostMsg/', methods=['POST'])
+def signPostMsg():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
