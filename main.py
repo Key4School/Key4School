@@ -14,7 +14,6 @@ import smtplib, ssl
 
 # Création de l'application
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'G4Dd^nnftVr%qW6htfj5L1taP83&DYVGt!#62y!F'
 socketio = SocketIO(app)
 
 
@@ -221,38 +220,62 @@ def messages(idGroupe):
 # Connection au groupe pour recevoir les nouveaux messages par la suite
 @socketio.on('connectToGroup')
 def handleEvent_connectToGroup(json):
-    print(request.sid)
-    if 'room' in json:
-        # Check authorized
-        grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
-        if grp != None:
-            if session['id'] in str(grp['id-utilisateurs']): # authorized
-                join_room(json['room'])
+    if 'id' in session:
+        print(request.sid)
+        if 'room' in json:
+            if json['room'] != 'None':
+                # Check authorized
+                grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
+                if grp != None:
+                    if session['id'] in str(grp['id-utilisateurs']): # authorized
+                        join_room(json['room'])
+
 
 @socketio.on('postMsg')
-def handleEvent_postMsg(json):   
-    if 'room' in json:
-        room = json['room']
-        # Check authorized
-        grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
-        if grp != None:
-            if session['id'] in str(grp['id-utilisateurs']): # authorized
-                print('oui²')
-                if json['reponse'] != "None":
-                    reponse = ObjectId(json['reponse'])
-                else:
-                    reponse = "None"
+def handleEvent_postMsg(json):
+    if 'id' in session:
+        if 'room' in json:
+            room = json['room']
+            # Check authorized
+            grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
+            if grp != None:
+                if session['id'] in str(grp['id-utilisateurs']): # authorized
+                    if json['reponse'] != "None":
+                        reponse = ObjectId(json['reponse'])
+                    else:
+                        reponse = "None"
 
-                if not json['contenuMessage'] == '':
-                    message = db_messages.insert_one({"id-groupe": ObjectId(json['group']), "id-utilisateur": ObjectId(session['id']),
-                                                      "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse})
-                    infogroupes = db_groupes.find_one({"_id": ObjectId(json['group'])})
-                    notif("msg", ObjectId(json['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
-
-                    # Sending new message to connected users
-                    json = {'_id': str(message.inserted_id), 'id-groupe': json['group'], 'id-utilisateur': session['id'], 'contenu': json['contenuMessage'], 'date-envoi': str(datetime.now())}
-                    emit('newMsg', json, to=room)
-
+                    if not json['contenuMessage'] == '':
+                        message = db_messages.insert_one({"id-groupe": ObjectId(json['group']), "id-utilisateur": ObjectId(session['id']),
+                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse})
+                        infogroupes = db_groupes.find_one({"_id": ObjectId(json['group'])})
+                        notif("msg", ObjectId(json['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+                        infoUtilisateurs = []
+                        for content in infogroupes['id-utilisateurs']:
+                            infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
+                        # Sending new message to connected users
+                        message = list(db_messages.aggregate([
+                            {'$match': {'_id' : message.inserted_id}},
+                            {'$lookup':
+                                {
+                                    'from': 'messages',
+                                    'localField': 'reponse',
+                                    'foreignField': '_id',
+                                    'as': 'rep',
+                                }
+                            }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                            {'$project': {
+                                '_id': 1,
+                                'id-groupes': 1,
+                                'id-utilisateur': 1,
+                                'contenu': 1,
+                                'date-envoi': 1,
+                                'rep': 1,
+                                'audio': 1
+                            }},
+                        ]))[0]
+                        html = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=json['group'])
+                        emit('newMsg', html, to=room)
 
 @app.route('/uploadAudio/', methods=['POST'])
 def uploadAudio():
@@ -262,7 +285,7 @@ def uploadAudio():
             request.form['group'] + session['id'] + heure
         cluster.save_file(nom, request.files['audio'])
         db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": ""})
+                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": ""})
         return 'yes'
     else:
         return redirect(url_for('login'))
@@ -291,7 +314,7 @@ def supprimerMsg():
         return redirect(url_for('login'))
 
 
-"""@app.route('/searchUser_newgroup/', methods=['POST'])
+@app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
         search = request.form['search']
@@ -308,7 +331,7 @@ def searchUser_newgroup():
                                         }).limit(30)
         return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
     else:
-        return redirect(url_for('login'))"""
+        return redirect(url_for('login'))
 
 
 @app.route('/createGroupe/', methods=['POST'])
@@ -322,44 +345,6 @@ def createGroupe():
                 participants.append(ObjectId(name))
         newGroupe = db_groupes.insert_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[]})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
-    else:
-        return redirect(url_for('login'))
-
-
-@app.route('/refreshMsg/')
-def refreshMsg():
-    if 'id' in session:
-        idGroupe = request.args['idgroupe']
-        if request.args['idMsg'] != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
-            dateLast = datetime.strptime(request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            infogroupes = db_groupes.find_one({"_id": ObjectId(idGroupe)})
-            infoUtilisateurs = []
-            for content in infogroupes['id-utilisateurs']:
-                infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
-            msgDb = db_messages.aggregate([
-                {'$match': {'$and': [
-                    {'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]}},
-                {'$lookup':
-                    {
-                        'from': 'messages',
-                        'localField': 'reponse',
-                        'foreignField': '_id',
-                        'as': 'rep',
-                    }
-                }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
-                {'$project': {
-                    '_id': 1,
-                    'id-groupes': 1,
-                    'id-utilisateur': 1,
-                    'contenu': 1,
-                    'date-envoi': 1,
-                    'rep': 1,
-                    'audio': 1
-                }},
-            ])
-            return render_template("refreshMessages.html", msgDb=msgDb, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=idGroupe)
-        else:
-            return ''
     else:
         return redirect(url_for('login'))
 

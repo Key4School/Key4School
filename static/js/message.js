@@ -107,31 +107,14 @@ socket.on('connect', function() {
   socket.emit('connectToGroup', {room: idGroupe});
 });
 
-socket.on('newMsg', (data) => {
-  console.log(data);
+socket.on('newMsg', (html) => {
+  var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
+  $('#messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
+  if ($('#messages').scrollTop() >= scrollHeight){
+    scroll();
+  }
 });
 
-function refresh() {
-  var dernierID = $('#messages div[id]:last').attr('id'); // on récupère l'id le plus récent
-  var idGroupe = $('[name="group"]').attr("value");
-  if (dernierID === undefined) {
-    dernierID = start.toISOString();
-  }
-  $.ajax({
-    url: "/refreshMsg/",
-    type: "GET",
-    data: "idMsg=" + dernierID + '&idgroupe=' + idGroupe, // et on envoie nos données
-    success: function(html) {
-      var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
-      if (html!='  '){
-        $('#messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
-        if ($('#messages').scrollTop() >= scrollHeight){
-          scroll();
-        }
-      }
-    }
-  });
-}
 
 //setInterval(refresh, 1000);
 
@@ -150,7 +133,7 @@ function reponseMsg(nb) {
   idMsg = "None";
   contentMsg = "";
   document.getElementById('buttonRep').style.display = "block";
-
+  $('#inputMsg').focus();
 }
 
 function enleverRep() {
@@ -158,6 +141,7 @@ function enleverRep() {
   document.getElementById('reponse').value = "None";
   document.getElementById('buttonRep').style.display = "none";
   document.getElementById('divrepmsg').style.backgroundColor = "";
+  $('#inputMsg').focus();
 }
 
 
