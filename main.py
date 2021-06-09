@@ -991,14 +991,27 @@ def signPostDiscussion():
                         'motif': {'id': ObjectId(session['id'])}}
                     },
                 )
+                db_messages.update(
+                    {'id-groupe': ObjectId(request.form['idSignalé'])},
+                    {'$pull': {
+                        'sign': ObjectId(session['id']),
+                        'motif': {'id': ObjectId(session['id'])}}
+                    }
+                )
 
             else:
-                raison = {request.form['Raison']}
                 db_groupes.update_one(
                     {'_id': ObjectId(request.form['idSignalé'])},
                     {'$push':
                         {'sign': ObjectId(session['id']),
                          'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
+                    }
+                )
+                db_messages.update(
+                    {'id-groupe': ObjectId(request.form['idSignalé'])},
+                    {'$push':
+                        {'sign': ObjectId(session['id']),
+                         'motif': {'id': ObjectId(session['id']), 'txt': "Discussion signalé pour "+request.form['Raison']}}
                     }
                 )
             return 'sent'

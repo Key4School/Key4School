@@ -21,16 +21,6 @@
               {%endif%}
               {%if msg['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT"%}
               <div class="navbar-item">
-                <button value="{{msg['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
-                  <span class="icon is-small">
-                    <i class="fas fa-reply"></i>
-                  </span>
-                  <span>Répondre</span>
-                </button>
-                <input type="hidden" id="user{{msg['_id']}}" value="{%for users in infoUtilisateurs %}{%if users['_id']==msg['id-utilisateur']%}{{users['pseudo']}}{%endif%}{%endfor%}" />
-                <input type="hidden" id="contenu{{msg['_id']}}" value="{{msg['contenu']}}" />
-              </div>
-              <div class="navbar-item">
                 <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg">
                   <input type='hidden' name="msgSuppr" value="{{msg['_id']}}" />
                   <input type='hidden' name="grp" value="{{idgroupe}}" />
@@ -44,7 +34,7 @@
                   </button>
                 </form>
               </div>
-              {%else%}
+              {%endif%}
               <div class="navbar-item">
                 <button value="{{msg['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
                   <span class="icon is-small">
@@ -55,7 +45,18 @@
                 <input type="hidden" id="user{{msg['_id']}}" value="{%for users in infoUtilisateurs %}{%if users['_id']==msg['id-utilisateur']%}{{users['pseudo']}}{%endif%}{%endfor%}" />
                 <input type="hidden" id="contenu{{msg['_id']}}" value="{{msg['contenu']}}" />
               </div>
-              {%endif%}
+              <div class="navbar-item">
+              <button  class="button is-warning is-outlined is-small" onClick="signalisationMsg('{{msg['_id']}}');">
+                <span class="icon is-small">
+                  {% if sessionId in msg['sign'] %}
+                    <i id="signMsg_{{msg['_id']}}" class="fas fa-flag" aria-hidden="true"></i>
+                  {% else %}
+                    <i id="signMsg_{{msg['_id']}}" class="far fa-flag" aria-hidden="true"></i>
+                  {% endif %}
+                </span>
+                <span>Signaler</span>
+              </button>
+              </div>
             </div>
           </div>
         </div>
