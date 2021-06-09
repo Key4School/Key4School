@@ -1,6 +1,7 @@
 var min=0;
 var sec=0;
 var tmp="";
+var idMsg;
 
 $(document).ready(function() {
   $('#titreetmsg').css({
@@ -403,7 +404,7 @@ function signalerDiscussion(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      $('#signalement').trigger("reset");
+      $('#signalementDiscussion').trigger("reset");
       signalisationDiscussionClose();
       document.getElementById("sign").className = "fas fa-flag";
     },
@@ -420,6 +421,66 @@ function designalerDiscussion(e) {
     success: function(response) {
       designalisationDiscussionClose();
       document.getElementById("sign").className = "far fa-flag";
+    },
+  });
+}
+
+var idMsg;
+function signalisationMsg (idMsg) {
+  selectionSignMsg = document.getElementById("signMsg_"+idMsg).className
+  if (selectionSignMsg == "far fa-flag") {
+    document.getElementById("idMsgSignalé").value = idMsg;
+    signalisationMsgOpen();
+  }
+  if (selectionSignMsg == "fas fa-flag"){
+    document.getElementById("idMsgDeSignalé").value = idMsg;
+    designalisationMsgOpen();
+  }
+}
+
+function signalisationMsgClose(){
+  $("#signalisationMsg").removeClass("is-active");
+}
+
+function signalisationMsgOpen(){
+  $("#signalisationMsg").addClass("is-active");
+}
+
+function designalisationMsgClose(){
+  $("#designalisationMsg").removeClass("is-active");
+}
+
+function designalisationMsgOpen(){
+  $("#designalisationMsg").addClass("is-active");
+}
+
+function signalerMsg(e) {
+  e.preventDefault();
+  var donnees = $('#signalementMsg').serialize();
+  $.ajax({
+    url: '/signPostMsg/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      signalisationMsgClose();
+      idMsg=document.getElementById('idMsgSignalé').value;
+      document.getElementById("signMsg_"+idMsg).className = "fas fa-flag";
+      $('#signalementMsg').trigger("reset");
+    },
+  });
+}
+
+function designalerMsg(e) {
+  e.preventDefault();
+  var donnees = $('#designalementMsg').serialize();
+  $.ajax({
+    url: '/signPostMsg/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      idMsg=document.getElementById('idMsgDeSignalé').value;
+      document.getElementById("signMsg_"+idMsg).className = "far fa-flag";
+      designalisationMsgClose();
     },
   });
 }
