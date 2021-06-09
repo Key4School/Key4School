@@ -276,16 +276,15 @@ def handleEvent_postMsg(json):
                         html = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=json['group'])
                         emit('newMsg', html, to=room)
 
-@socketio.on('postAudio')
-def uploadAudio(form):
+@app.route('/uploadAudio/', methods=['POST'])
+def uploadAudio():
     if 'id' in session:
-        print(form)
         heure = str(datetime.now())
         nom = "MsgVocal" + \
-            form['group'] + session['id'] + heure
-        cluster.save_file(nom, form['audio'])
-        db_messages.insert_one({"id-groupe": ObjectId(form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": "", "sign": []})
+            request.form['group'] + session['id'] + heure
+        cluster.save_file(nom, request.files['audio'])
+        db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": ""})
         return 'yes'
     else:
         return redirect(url_for('login'))
