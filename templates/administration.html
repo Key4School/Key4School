@@ -121,11 +121,19 @@
   {%endfor%}
   {%for content in discussionSignale%}
     {{content['nom']}}
+  {%for element in msgSignale%}
+  {%if element['id-groupe'] == content['_id'] %}
+    {{element['contenu']}}
+  {%endif%}
+  {%endfor%}
   {%for element in content['motif']%}
   <div>
       motif: {{element['txt']}}
   </div>
   {%endfor%}
+  {%endfor%}
+  {%for element in msgSignale%}
+  {{element['contenu']}}
   {%endfor%}
 </body>
 

@@ -845,8 +845,30 @@ def administration():
                     {"$sort": {"sign_count": -1}}
                 ])
 
+                msgSignale = db_messages.aggregate([
+                {'$match': {"sign": {"$exists": "true", "$ne": []}}},
+                {'$lookup':
+                    {
+                        'from': 'utilisateurs',
+                        'localField': 'id-utilisateur',
+                        'foreignField': '_id',
+                        'as': 'rep',
+                    }
+                }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                {'$project': {
+                    '_id': 1,
+                    'id-groupe': 1,
+                    'id-utilisateur': 1,
+                    'contenu': 1,
+                    'date-envoi': 1,
+                    'rep': 1,
+                    'motif': 1,
+                     'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
+                }},
+                {"$sort": {"sign_count": -1}}
+            ])
 
-                return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
+                return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale, msgSignale=msgSignale)
         else:
             return redirect(url_for('accueil'))
     else:
