@@ -247,7 +247,7 @@ def handleEvent_postMsg(json):
 
                     if not json['contenuMessage'] == '':
                         message = db_messages.insert_one({"id-groupe": ObjectId(json['group']), "id-utilisateur": ObjectId(session['id']),
-                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse})
+                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse, sign: []})
                         infogroupes = db_groupes.find_one({"_id": ObjectId(json['group'])})
                         notif("msg", ObjectId(json['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
                         infoUtilisateurs = []
