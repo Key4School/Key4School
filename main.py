@@ -202,7 +202,7 @@ def messages(idGroupe):
                 return abort(500)
 
             message = db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                              "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse})
+                                              "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse, "sign": []})
             infogroupes = db_groupes.find_one({"_id": ObjectId(request.form['group'])})
             notif("msg", ObjectId(request.form['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
             return 'sent'
@@ -983,15 +983,15 @@ def signPostDiscussion():
 @app.route('/signPostMsg/', methods=['POST'])
 def signPostMsg():
     if 'id' in session:
-        if request.form['idSignalé'] != None:
+        if request.form['idSignalé'] != None and request.form['idMsgSignalé'] != None:
             # on récupère les signalements de la demande d'aide
             sign = db_groupes.find_one({"_id": ObjectId(request.form['idSignalé'])})['sign']
-
+            signMsg = db_messages.find_one({"_id": ObjectId(request.form['idMsgSignalé'])})['sign']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
-            if ObjectId(session['id']) in sign:
-                db_groupes.update_one(
-                    {'_id': ObjectId(request.form['idSignalé'])},
+            if ObjectId(session['id']) in signMsg:
+                db_messages.update_one(
+                    {'_id': ObjectId(request.form['idMsgSignalé'])},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
@@ -999,14 +999,21 @@ def signPostMsg():
                 )
 
             else:
-                raison = {request.form['Raison']}
-                db_groupes.update_one(
-                    {'_id': ObjectId(request.form['idSignalé'])},
+                db_messages.update_one(
+                    {'_id': ObjectId(request.form['idMsgSignalé'])},
                     {'$push':
                         {'sign': ObjectId(session['id']),
                          'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
                     }
                 )
+                if not ObjectId(session['id']) in sign:
+                    db_groupes.update_one(
+                        {'_id': ObjectId(request.form['idSignalé'])},
+                        {'$push':
+                            {'sign': ObjectId(session['id']),
+                             'motif': {'id': ObjectId(session['id']), 'txt': "Message signalé :"+request.form['Raison']}}
+                        }
+                    )
             return 'sent'
 
         else:

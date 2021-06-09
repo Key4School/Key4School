@@ -197,7 +197,7 @@
               <section class="modal-card-body">
                 <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous cette Msg." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
                 <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
-                <input type='hidden' id="idMsgDesignalé" name='idMsgSignalé' value="" />
+                <input type='hidden' id="idMsgSignalé" name='idMsgSignalé' value="" />
               </section>
               <footer class="modal-card-foot">
                 <button type="submit" class="button is-success">Signaler</button>
@@ -279,7 +279,7 @@
                   <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
                 </div>
                 <div class="navbar-item">
-                <button  class="button is-warning is-outlined is-small" onClick="signalisationMsg({{content['_id']}});">
+                <button  class="button is-warning is-outlined is-small" onClick="signalisationMsg('{{content['_id']}}');">
                   <span class="icon is-small">
                     {% if sessionId in infogroupe['sign'] %}
                       <i id="signMsg_{{content['_id']}}" class="fas fa-flag" aria-hidden="true"></i>

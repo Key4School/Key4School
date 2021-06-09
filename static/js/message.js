@@ -406,6 +406,8 @@ function designalerDiscussion(e) {
     },
   });
 }
+
+
 function signalisationMsg (idMsg) {
   selectionSignMsg = document.getElementById("signMsg_"+idMsg).className
   if (selectionSignMsg == "far fa-flag") {
