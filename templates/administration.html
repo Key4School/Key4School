@@ -68,9 +68,12 @@
   <br />
 <h1 class="title" style="text-align:center;">Administration</h1>
 <br /><br />
+<h2 style="margin-left:2%;" class="title">Publications signalées : </h2>
   {%for content in demandeSignale%}
-    <div style="border:2px solid {{session['couleur']}};padding:1%;margin-left:20%;margin-right:20%;" id='divDemande_{{content['_id']}}'><div>
-      {{content['rep']['prenom']}} {{content['rep']['nom']}} {{content['contenu']}} {{content['date-envoi']}} {{content['matière']}}
+    <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;" id='divDemande_{{content['_id']}}'>
+      <div>
+        <a href="{{url_for('profil' ,idUser=content['_id'])}}">
+      {{content['rep']['prenom']}} {{content['rep']['nom']}} </a> : <b>{{content['contenu']}}</b> <em>{{content['date-envoi']}}</em> <b>{{content['matière']}}</b>
       <br />
     </div>
     <br />
@@ -105,28 +108,48 @@
   </div>
   <br /><br />
   {%endfor%}
+  <h2 style="margin-left:2%;" class="title">Utilisteurs signalés :</h2><br /><br />
   {%for content in profilSignale%}
-  <div style="border:2px solid {{session['couleur']}};padding:1%;margin-left:20%;margin-right:20%;">
+  <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;">
     <div>
     <a href="{{url_for('profil' ,idUser=content['_id'])}}">
     {{content['nom']}}
   </a>
   </div>
-  {%for element in content['motif']%}
-  <div>
-      motif: {{element['txt']}}
-  </div>
-  {%endfor%}
+  <ul class="menu-list">
+  <li><u>Motif :</u></li>
+  <li>
+    <ul>
+      {%for element in content['motif']%}
+        <li>
+          {{element['txt']}}
+        </li>
+      {%endfor%}
+    </ul>
+  </li>
+</ul>
 </div>
   {%endfor%}
+  <h2 style="margin-left:2%;" class="title">Groupes signalés :</h2><br /><br />
+  <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;">
+
   {%for content in discussionSignale%}
     <a href="{{url_for('messages', idGroupe=content['_id'])}}">{{content['nom']}}</a>
-  {%for element in content['motif']%}
-  <div>
-      motif: {{element['txt']}}
-  </div>
+    <ul class="menu-list">
+    <li><u>Motif :</u></li>
+    <li>
+      <ul>
+        {%for element in content['motif']%}
+          <li>
+            {{element['txt']}}
+          </li>
+        {%endfor%}
+      </ul>
+    </li>
+  </ul>
   {%endfor%}
-  {%endfor%}
+</div>
+<br /><br />
 </body>
 
 <!-- <div id='divDemande'>
