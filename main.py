@@ -140,7 +140,7 @@ def messages(idGroupe):
         if request.method == 'GET':
             # il faudra récupérer l'id qui sera qans un cookie
             grp = db_groupes.find({"id-utilisateurs": ObjectId(session['id'])})
-
+            user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
             users = db_utilisateurs.aggregate([
                 {'$sort': {'pseudo': 1}},
                 {'$project': {
@@ -183,6 +183,29 @@ def messages(idGroupe):
                     infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
                 if session['id'] in str(infoUtilisateurs):
                     danslegroupe = True
+                elif user['admin'] == True:
+                    msgDb = db_messages.aggregate([
+                        {'$match': {"$and":[{'id-groupe': ObjectId(idGroupe)},{"sign": {"$exists": "true", "$ne": []}}]}},
+                        {'$lookup':
+                            {
+                                'from': 'messages',
+                                'localField': 'reponse',
+                                'foreignField': '_id',
+                                'as': 'rep',
+                            }
+                        }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                        {'$project': {
+                            '_id': 1,
+                            'id-groupes': 1,
+                            'id-utilisateur': 1,
+                            'contenu': 1,
+                            'date-envoi': 1,
+                            'rep': 1,
+                            'audio': 1,
+                            'sign': 1
+                        }},
+                    ])
+
                 else:
                     danslegroupe = False
                     msgDb = None
@@ -192,7 +215,7 @@ def messages(idGroupe):
                 msgDb = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=ObjectId(session['id']), user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=ObjectId(session['id']), user=user)
 
         elif request.method == 'POST':
             if request.form['reponse'] != "None":

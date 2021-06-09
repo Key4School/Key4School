@@ -439,6 +439,7 @@ function signalerMsg(e) {
       signalisationMsgClose();
       idMsg=document.getElementById('idMsgSignalé').value;
       document.getElementById("signMsg_"+idMsg).className = "fas fa-flag";
+      document.getElementById("sign").className = "fas fa-flag";
       $('#signalementMsg').trigger("reset");
     },
   });
@@ -454,6 +455,7 @@ function designalerMsg(e) {
     success: function(response) {
       idMsg=document.getElementById('idMsgDeSignalé').value;
       document.getElementById("signMsg_"+idMsg).className = "far fa-flag";
+      document.getElementById("sign").className = "far fa-flag";
       designalisationMsgClose();
     },
   });
