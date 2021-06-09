@@ -120,7 +120,7 @@
 </div>
   {%endfor%}
   {%for content in discussionSignale%}
-    {{content['nom']}}
+    <a href="{{url_for('messages', idGroupe=content['_id'])}}">{{content['nom']}}</a>
   {%for element in content['motif']%}
   <div>
       motif: {{element['txt']}}

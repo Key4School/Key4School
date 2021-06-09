@@ -845,7 +845,6 @@ def administration():
                     {"$sort": {"sign_count": -1}}
                 ])
 
-
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
         else:
             return redirect(url_for('accueil'))
