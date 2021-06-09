@@ -41,7 +41,7 @@
 
 
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
-<body style="overflow:auto;" onkeydown="enregistrer(event)" onkeyup="stop(event)">
+<body style="overflow:auto;"><!-- onkeydown="enregistrer(event)" onkeyup="stop(event)"--> 
   {% include "bandeau.html" %}
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
   <div>
@@ -352,7 +352,7 @@
               </div>
             &nbsp;&nbsp;
             <div id="buttonAudio2" style="display:none;">
-              <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="stopTel();sendAudio();">
+              <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="stopTel();">
                 <span class="icon is-small">
                   <i class="fas fa-check"></i>
                 </span>
