@@ -48,17 +48,6 @@ function divoptionclose(e) {
 }
 
 function envoi(e) {
-  /*e.preventDefault();
-  var donnees = $('#messageForm').serialize();
-  $.ajax({
-    url: '/messages/', // on donne l'URL du fichier de traitement
-    type: "POST", // la requête est de type POST
-    data: donnees, // et on envoie nos données
-    success: function(response) {
-      $('#messageForm').trigger("reset");
-      scroll();
-    },
-  });*/
   const contenuMsg = document.getElementById('inputMsg').value || '';
   const groupe = idGroupe;
   const reponse = document.getElementById('reponse').value || '';
@@ -67,6 +56,7 @@ function envoi(e) {
 
   $('#messageForm').trigger("reset");
   enleverRep();
+  scroll();
 }
 
 function searchUser() {
@@ -104,7 +94,9 @@ const socket = io(`ws://${document.location.host}`);
 const idGroupe = document.getElementById('idGroupe').value || undefined;
 
 socket.on('connect', function() {
-  socket.emit('connectToGroup', {room: idGroupe});
+  if (idGroupe != "None"){
+    socket.emit('connectToGroup', {room: idGroupe});
+  }
 });
 
 socket.on('newMsg', (html) => {
@@ -312,21 +304,12 @@ function stopTel() {
 
 function sendAudio() {
   if (estEnregistre = true) {
-    $.ajax({
-      url: "/uploadAudio/",
-      type: "POST",
-      data: form,
-      processData: false,
-      contentType: false,
-      cache: false,
-      success: function() {
-        form = new FormData();
-        estEnregistre = false;
-        boutonAudioClose();
-        document.getElementById('txtAudio').innerHTML = "";
-        scroll();
-      }
-    });
+    socket.emit('postAudio', form);
+    form = new FormData();
+    estEnregistre = false;
+    boutonAudioClose();
+    document.getElementById('txtAudio').innerHTML = "";
+    scroll();
   }
 }
 
