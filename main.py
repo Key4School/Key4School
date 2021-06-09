@@ -257,7 +257,6 @@ def handleEvent_connectToGroup(json):
 def handleEvent_postMsg(json):
     if 'id' in session:
         if 'room' in json:
-            room = json['room']
             # Check authorized
             grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
             if grp != None:
@@ -267,11 +266,17 @@ def handleEvent_postMsg(json):
                     else:
                         reponse = "None"
 
-                    if not json['contenuMessage'] == '':
-                        message = db_messages.insert_one({"id-groupe": ObjectId(json['group']), "id-utilisateur": ObjectId(session['id']),
+                    if 'dateAudio' in json:
+                        nom = "MsgVocal" + json['room'] + session['id'] + json['dateAudio']
+                        message = db_messages.insert_one({"id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
+                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": reponse})
+
+                    elif not json['contenuMessage'] == '':
+                        message = db_messages.insert_one({"id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
                                                           "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse, "sign": []})
-                        infogroupes = db_groupes.find_one({"_id": ObjectId(json['group'])})
-                        notif("msg", ObjectId(json['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+                    if message:
+                        infogroupes = db_groupes.find_one({"_id": ObjectId(json['room'])})
+                        notif("msg", ObjectId(json['room']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
                         infoUtilisateurs = []
                         for content in infogroupes['id-utilisateurs']:
                             infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
@@ -296,18 +301,14 @@ def handleEvent_postMsg(json):
                                 'audio': 1
                             }},
                         ]))[0]
-                        html = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=json['group'])
-                        emit('newMsg', html, to=room)
+                        html = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'])
+                        emit('newMsg', html, to=json['room'])
 
 @app.route('/uploadAudio/', methods=['POST'])
 def uploadAudio():
     if 'id' in session:
-        heure = str(datetime.now())
-        nom = "MsgVocal" + \
-            request.form['group'] + session['id'] + heure
+        nom = "MsgVocal" + request.form['group'] + session['id'] + request.form['date']
         cluster.save_file(nom, request.files['audio'])
-        db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": ""})
         return 'yes'
     else:
         return redirect(url_for('login'))

@@ -49,10 +49,9 @@ function divoptionclose(e) {
 
 function envoi(e) {
   const contenuMsg = document.getElementById('inputMsg').value || '';
-  const groupe = idGroupe;
   const reponse = document.getElementById('reponse').value || '';
 
-  socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, group: groupe, reponse: reponse});
+  socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, reponse: reponse});
 
   $('#messageForm').trigger("reset");
   enleverRep();
@@ -199,7 +198,6 @@ function enregistrer(e) {
             console.log(blob);
             var idGroupe = $('[name="group"]').attr("value");
             form.append('audio', blob);
-            form.append('group', idGroupe)
             estEnregistre = true;
             document.getElementById('txtAudio').innerHTML = tmp;
             clearTimeout(chrono);
@@ -275,7 +273,6 @@ function enregistrerTel() {
             console.log(blob);
             var idGroupe = $('[name="group"]').attr("value");
             form.append('audio', blob);
-            form.append('group', idGroupe)
             estEnregistre = true;
             clearTimeout(chrono);
           }
@@ -302,6 +299,9 @@ function stopTel() {
 
 function sendAudio() {
   if (estEnregistre = true) {
+    var datetime = new Date().toISOString().replace(/Z/, '+00:00');
+    form.append('date', datetime);
+    form.append('group', idGroupe);
     $.ajax({
       url: "/uploadAudio/",
       type: "POST",
@@ -310,6 +310,7 @@ function sendAudio() {
       contentType: false,
       cache: false,
       success: function() {
+        socket.emit('postMsg', {room: idGroupe, reponse: 'None', dateAudio: datetime});
         form = new FormData();
         estEnregistre = false;
         boutonAudioClose();
