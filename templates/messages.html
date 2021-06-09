@@ -118,7 +118,7 @@
           <!-- nom du groupe -->
           <p style="font-weight:bold;">{{infogroupe['nom']}}</p>
           <!-- liste des paricipants -->
-          <p style="font-variant: small-caps; text-align: justify;">
+          <p style="font-variant: small-caps; text-align: justify;word-wrap:break-word;">
             {%for content in infoUtilisateurs%} <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>, {%endfor%}
           </p>
         </div>
@@ -302,7 +302,7 @@
             {%if content['rep']['audio']==true%}msg-audio{%else%}{{content['rep']['contenu']}}{%endif%}
           </div>
           {%endif%}
-            <p style="margin:0px">
+            <p style="margin:0px;word-wrap:break-word;">
               {%if 'audio' in content and content['audio'] == true %}
               <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>
               {%else%}
