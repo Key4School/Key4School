@@ -99,7 +99,7 @@
   <br />
   <br />
   <br />
-  <div style="display: flex;align-items: center;justify-content:space-evenly;">
+  <div style="display: flex;align-items: center;justify-content:space-evenly;margin-left:2%;">
    <!-- Début informations -->
     <div>
       <!-- Informations puliques -->
@@ -630,7 +630,7 @@
     {% endif %}
     {%for d in demandes %}
       <!-- Début publi -->
-      <div class="box" style="border-radius: 20px;margin-bottom: 0.8rem; margin-top: 1%;">
+      <div class="box" style="border-radius: 20px;margin-bottom: 0.8rem; margin-top: 1%; width: 70%;">
         <article class="media">
           <div class="media-left">
             <!-- Image photo de profil-->
@@ -695,11 +695,14 @@
           </div>
         </article>
       </div>
+      <!-- Fin publi -->
+    {%endfor%}
   </div>
-  <!-- Fin publi -->
-  {%endfor%}
+  <!-- Sanctions --> <!-- STYLE A FAIRE !!! -->
   {%for element in profilUtilisateur['Sanction']%}
-  Sanction : {{element['SanctionType']}} Motif : {{element['SanctionMotif']}} Prochaine Sanction : {{element['SanctionNext']}}
+    Sanction : {{element['SanctionType']}} 
+    Motif : {{element['SanctionMotif']}} 
+    Prochaine Sanction : {{element['SanctionNext']}}
   {%endfor%}
 <!-- fin de la page -->
 </body>
