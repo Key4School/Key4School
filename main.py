@@ -172,7 +172,8 @@ def messages(idGroupe):
                         'contenu': 1,
                         'date-envoi': 1,
                         'rep': 1,
-                        'audio': 1
+                        'audio': 1,
+                        'sign': 1
                     }},
                 ])
                 infogroupes = db_groupes.find_one({"_id": ObjectId(idGroupe)})

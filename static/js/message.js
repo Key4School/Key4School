@@ -386,7 +386,7 @@ function signalerDiscussion(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      $('#signalement').trigger("reset");
+      $('#signalementDiscussion').trigger("reset");
       signalisationDiscussionClose();
       document.getElementById("sign").className = "fas fa-flag";
     },
@@ -407,16 +407,15 @@ function designalerDiscussion(e) {
   });
 }
 
-
+var idMsg;
 function signalisationMsg (idMsg) {
   selectionSignMsg = document.getElementById("signMsg_"+idMsg).className
   if (selectionSignMsg == "far fa-flag") {
     document.getElementById("idMsgSignalé").value = idMsg;
     signalisationMsgOpen();
-
-
   }
   if (selectionSignMsg == "fas fa-flag"){
+    document.getElementById("idMsgDeSignalé").value = idMsg;
     designalisationMsgOpen();
   }
 }
@@ -445,9 +444,10 @@ function signalerMsg(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      $('#signalement').trigger("reset");
       signalisationMsgClose();
-      document.getElementById("sign").className = "fas fa-flag";
+      idMsg=document.getElementById('idMsgSignalé').value;
+      document.getElementById("signMsg_"+idMsg).className = "fas fa-flag";
+      $('#signalementMsg').trigger("reset");
     },
   });
 }
@@ -460,8 +460,9 @@ function designalerMsg(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
+      idMsg=document.getElementById('idMsgDeSignalé').value;
+      document.getElementById("signMsg_"+idMsg).className = "far fa-flag";
       designalisationMsgClose();
-      document.getElementById("sign").className = "far fa-flag";
     },
   });
 }

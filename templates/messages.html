@@ -215,6 +215,7 @@
             <form onsubmit="designalerMsg(event); return false;" id="designalementMsg" method="POST" autocomplete="off">
               <section class="modal-card-body">
                 <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                <input type='hidden' id="idMsgDeSignalé" name='idMsgSignalé' value="" />
                 Etes-vous sûr de vouloir enlever ce signalement
               </section>
               <footer class="modal-card-foot">
@@ -281,7 +282,7 @@
                 <div class="navbar-item">
                 <button  class="button is-warning is-outlined is-small" onClick="signalisationMsg('{{content['_id']}}');">
                   <span class="icon is-small">
-                    {% if sessionId in infogroupe['sign'] %}
+                    {% if sessionId in content['sign'] %}
                       <i id="signMsg_{{content['_id']}}" class="fas fa-flag" aria-hidden="true"></i>
                     {% else %}
                       <i id="signMsg_{{content['_id']}}" class="far fa-flag" aria-hidden="true"></i>
