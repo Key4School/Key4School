@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort
 from flask_pymongo import PyMongo
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from datetime import *
 from requests_oauthlib import OAuth2Session
 from flask_session import Session
@@ -13,11 +14,12 @@ import smtplib, ssl
 
 # Création de l'application
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'G4Dd^nnftVr%qW6htfj5L1taP83&DYVGt!#62y!F'
+socketio = SocketIO(app)
 
 
 # Récupération d'une base de données
-cluster = PyMongo(
-    app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
+cluster = PyMongo(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 # Voici deux exemples pour créer des BDD
 db_utilisateurs = cluster.db.utilisateurs
 db_demande_aide = cluster.db.demande_aide
@@ -205,9 +207,50 @@ def messages(idGroupe):
                                               "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse})
             infogroupes = db_groupes.find_one({"_id": ObjectId(request.form['group'])})
             notif("msg", ObjectId(request.form['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+
+            # Sending new message to connected users
+            # json = {'_id': message.inserted_id, 'id-groupe': request.form['group'], 'id-utilisateur': session['id'], 'contenu': request.form['contenuMessage'], 'date-envoi': datetime.now()}
+            #request.sid = request.cookies.get('session')
+            # emit('newMsg', json, to=idGroupe, namespace='/')
+
             return 'sent'
     else:
         return redirect(url_for('login'))
+
+# Connection au groupe pour recevoir les nouveaux messages par la suite
+@socketio.on('connectToGroup')
+def handleEvent_connectToGroup(json):
+    print(request.sid)
+    if 'room' in json:
+        # Check authorized
+        grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
+        if grp != None:
+            if session['id'] in str(grp['id-utilisateurs']): # authorized
+                join_room(json['room'])
+
+@socketio.on('postMsg')
+def handleEvent_postMsg(json):   
+    if 'room' in json:
+        room = json['room']
+        # Check authorized
+        grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
+        if grp != None:
+            if session['id'] in str(grp['id-utilisateurs']): # authorized
+                print('oui²')
+                if json['reponse'] != "None":
+                    reponse = ObjectId(json['reponse'])
+                else:
+                    reponse = "None"
+
+                if not json['contenuMessage'] == '':
+                    message = db_messages.insert_one({"id-groupe": ObjectId(json['group']), "id-utilisateur": ObjectId(session['id']),
+                                                      "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse})
+                    infogroupes = db_groupes.find_one({"_id": ObjectId(json['group'])})
+                    notif("msg", ObjectId(json['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+
+                    # Sending new message to connected users
+                    json = {'_id': str(message.inserted_id), 'id-groupe': json['group'], 'id-utilisateur': session['id'], 'contenu': json['contenuMessage'], 'date-envoi': str(datetime.now())}
+                    emit('newMsg', json, to=room)
 
 
 @app.route('/uploadAudio/', methods=['POST'])
@@ -1258,7 +1301,9 @@ if __name__ == "__main__":
         client_secret = 'jHy6g8JG4FdP0a5VI2m'
         redirect_uri = os.environ['redirect_uri']
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-        app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
+        # app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
+        socketio.run(app, host='0.0.0.0', port=os.environ.get("PORT", 3000), debug=True)
+
     else:
         # Le client secret est le code secret de l'application
         # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
@@ -1266,4 +1311,5 @@ if __name__ == "__main__":
         client_secret = 'JR7XcyGWBHt2VA9W'
         redirect_uri = "http://127.0.0.1:3000/callback"
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-        app.run(host="127.0.0.1", port=3000, debug=True)
+        # app.run(host="127.0.0.1", port=3000, debug=True)
+        socketio.run(app, host='127.0.0.1', port=3000, debug=True)
