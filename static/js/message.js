@@ -48,7 +48,7 @@ function divoptionclose(e) {
 }
 
 function envoi(e) {
-  /*e.preventDefault();
+  e.preventDefault();
   var donnees = $('#messageForm').serialize();
   $.ajax({
     url: '/messages/', // on donne l'URL du fichier de traitement
@@ -58,14 +58,7 @@ function envoi(e) {
       $('#messageForm').trigger("reset");
       scroll();
     },
-  });*/
-  const contenuMsg = document.getElementById('inputMsg').value || '';
-  const groupe = idGroupe;
-  const reponse = document.getElementById('reponse').value || '';
-
-  socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, group: groupe, reponse: reponse});
-
-  $('#messageForm').trigger("reset");
+  });
   enleverRep();
 }
 
@@ -100,17 +93,6 @@ const messages = document.getElementById('messages');
 
 var start = new Date();
 
-const socket = io(`ws://${document.location.host}`);
-const idGroupe = document.getElementById('idGroupe').value || undefined;
-
-socket.on('connect', function() {
-  socket.emit('connectToGroup', {room: idGroupe});
-});
-
-socket.on('newMsg', (data) => {
-  console.log(data);
-});
-
 function refresh() {
   var dernierID = $('#messages div[id]:last').attr('id'); // on récupère l'id le plus récent
   var idGroupe = $('[name="group"]').attr("value");
@@ -133,7 +115,7 @@ function refresh() {
   });
 }
 
-//setInterval(refresh, 1000);
+setInterval(refresh, 1000);
 
 function reponseMsg(nb) {
   var contentMsg = document.getElementById('contenu' + nb).value;
