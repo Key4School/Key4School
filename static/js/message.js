@@ -142,6 +142,7 @@ var mediaRecorder = "";
 var form = new FormData();
 var accessMicro = false;
 var estEnregistre = "";
+var final;
 
 function micro() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -275,7 +276,11 @@ function enregistrerTel() {
             form.append('audio', blob);
             estEnregistre = true;
             clearTimeout(chrono);
-            sendAudio();
+            if (final == "jeter"){
+              deleteAudio();
+            }else if (final == "garder"){
+              sendAudio();
+            }
           }
         })
 
@@ -289,7 +294,8 @@ function enregistrerTel() {
   }
 }
 
-function stopTel() {
+function stopTel(but) {
+  final = but ;
   if (stopped == false) {
     mediaRecorder.stop();
     console.log(mediaRecorder.state);
