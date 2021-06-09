@@ -221,7 +221,6 @@ def messages(idGroupe):
 @socketio.on('connectToGroup')
 def handleEvent_connectToGroup(json):
     if 'id' in session:
-        print(request.sid)
         if 'room' in json:
             if json['room'] != 'None':
                 # Check authorized
@@ -315,7 +314,7 @@ def supprimerMsg():
         return redirect(url_for('login'))
 
 
-@app.route('/searchUser_newgroup/', methods=['POST'])
+"""@app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
         search = request.form['search']
@@ -332,7 +331,7 @@ def searchUser_newgroup():
                                         }).limit(30)
         return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('login'))"""
 
 
 @app.route('/createGroupe/', methods=['POST'])
@@ -572,7 +571,7 @@ def comments(idMsg):
         return redirect(url_for('login'))
 
 
-@ app.route('/question/', methods=['POST', 'GET'])
+@app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
@@ -610,7 +609,7 @@ def question():
         return redirect(url_for('login'))
 
 
-@ app.route('/recherche')
+@app.route('/recherche')
 def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
@@ -674,7 +673,7 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@ app.route('/rechercheUser')
+@app.route('/rechercheUser')
 def recherche_user():
     if 'id' in session:
         search = request.args['search']
@@ -690,7 +689,7 @@ def recherche_user():
         return redirect(url_for('login'))
 
 
-@ app.route('/likePost/<idPost>', methods=['POST'])
+@app.route('/likePost/<idPost>', methods=['POST'])
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
@@ -787,13 +786,13 @@ def administration():
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
                     db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
-
                 elif request.form['demandeBut'] == 'Val':
                     db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},
                                                {"$set": {"sign": [], "motif": []}})
                 elif request.form['demandeBut'] == 'ValUser':
                     db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])},
                                                {"$set": {"sign": [],"motif": []}})
+
                 return 'sent'
 
             else:
@@ -820,6 +819,7 @@ def administration():
                     }},
                     {"$sort": {"sign_count": -1}}
                 ])
+
                 profilSignale = db_utilisateurs.aggregate([
                     {'$match': {"sign": {"$exists": "true", "$ne": []}}},
                     {'$project': {
@@ -831,7 +831,7 @@ def administration():
                         'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
                     }},
                     {"$sort": {"sign_count": -1}}
-                    ])
+                ])
 
                 discussionSignale = db_groupes.aggregate([
                     {'$match': {"sign": {"$exists": "true", "$ne": []}}},
@@ -1281,8 +1281,7 @@ def connexion():
     """Fetching a protected resource using an OAuth 2 token.
     """
     ENT_reply = OAuth2Session(client_id, token=session['oauth_token'])
-    data = ENT_reply.get(
-        'https://ent.iledefrance.fr/auth/oauth2/userinfo').json()
+    data = ENT_reply.get('https://ent.iledefrance.fr/auth/oauth2/userinfo').json()
     user = db_utilisateurs.find_one({"idENT": data['userId']})
     if user != None:
         session['id'] = str(user['_id'])

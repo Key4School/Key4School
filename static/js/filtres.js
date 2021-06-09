@@ -63,3 +63,29 @@ const filter = (f) => {
 		}
 	}
 };
+
+const user_filter = (v) => {
+	const value = v.trim().toLowerCase();
+	if(v === '') {
+		Array.from(document.getElementsByClassName('listedUser')).forEach(user => {
+			user.style.display = 'block';
+		});
+	}
+
+	else {
+		Array.from(document.getElementsByClassName('listedUser')).forEach(user => {
+			const id = (user.dataset.id || '').toLowerCase();
+			const pseudo = (user.dataset.pseudo || '').toLowerCase();
+			const nom = (user.dataset.nom || '').toLowerCase();
+			const prenom = (user.dataset || '').prenom.toLowerCase();
+			const lycee = (user.dataset.lycee || '').replace(/LGT-/, '').toLowerCase();
+			const email = (user.dataset.email || '').toLowerCase();
+			const telephone = (user.dataset.telephone || '').toLowerCase();
+
+			if(id.startsWith(value) || pseudo.startsWith(value) || nom.startsWith(value) || prenom.startsWith(value) || lycee.startsWith(value) || email.startsWith(value) || telephone.startsWith(value))
+				user.style.display = 'block';
+			else
+				user.style.display = 'none';
+		});
+	}
+}

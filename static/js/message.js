@@ -59,7 +59,7 @@ function envoi(e) {
   scroll();
 }
 
-function searchUser() {
+/*function searchUser() {
   var recherche = $('#searchUser').val();
   $.ajax({
     url: '/searchUser_newgroup/', // on donne l'URL du fichier de traitement
@@ -71,7 +71,7 @@ function searchUser() {
       $('#listeuser').html(response);
     },
   });
-}
+}*/
 
 // function supprimer(e) { ne sert plus pour le moment
 //   e.preventDefault();
