@@ -120,20 +120,12 @@
 </div>
   {%endfor%}
   {%for content in discussionSignale%}
-    {{content['nom']}}
-  {%for element in msgSignale%}
-  {%if element['id-groupe'] == content['_id'] %}
-    {{element['contenu']}}
-  {%endif%}
-  {%endfor%}
+    <a href="{{url_for('messages', idGroupe=content['_id'])}}">{{content['nom']}}</a>
   {%for element in content['motif']%}
   <div>
       motif: {{element['txt']}}
   </div>
   {%endfor%}
-  {%endfor%}
-  {%for element in msgSignale%}
-  {{element['contenu']}}
   {%endfor%}
 </body>
 
