@@ -233,14 +233,11 @@
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
         <!-- Mes messages -->
-        <div class="moimsg" style="border: 2px solid {{session['couleur'][0]}};margin-left: 55%;margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;"
-          id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z">
+        <div class="moimsg" style="border: 2px solid {{session['couleur'][0]}};margin-left: 55%;margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;">
           <div style="margin-left: 90%;">
           {%else%}
           <!-- Messages des autres -->
-          <div class="participantmsg"
-            id="{{content['date-envoi'].year}}-{{content['date-envoi'].month}}-{{content['date-envoi'].day}}T{{content['date-envoi'].hour}}:{{content['date-envoi'].minute}}:{{content['date-envoi'].second}}.{{content['date-envoi'].microsecond}}Z"
-            style="margin-left: 1%; margin-right: 45%; display: inline-block;max-width: 55%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:{{session['couleur'][1]}};">
+          <div class="participantmsg" style="margin-left: 1%; margin-right: 45%; display: inline-block;max-width: 55%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:{{session['couleur'][1]}};">
             <div style="display: flex;align-items: center;justify-content:space-between;">
           {%endif%}
             {%if content['id-utilisateur']!=sessionId%}
