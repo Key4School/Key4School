@@ -113,14 +113,14 @@
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
     <div id="titreetmsg" style="margin-right: 2%;margin-bottom:2%;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:1%;height:auto;border-bottom: none;">
+      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:1%;height:15%;border-bottom: none;">
         <!-- div avec le nom du groupe et les paticipants -->
         <div style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
           <!-- nom du groupe -->
           <p style="font-weight:bold;">{{infogroupe['nom']}}</p>
           <!-- liste des paricipants -->
           <p style="font-variant: small-caps; text-align: justify;word-wrap:break-word;">
-            {%for content in infoUtilisateurs%} <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>, {%endfor%}
+            {%for content in infoUtilisateurs%} <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>,{%endfor%}
           </p>
         </div>
           <!-- Bouton trois petits points -->
