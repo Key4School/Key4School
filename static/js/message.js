@@ -6,7 +6,7 @@ var idMsg;
 $(document).ready(function() {
   $('#titreetmsg').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
-    width: (85 / 100 * ($(window).width())).toString() + 'px',
+    width: (80 / 100 * ($(window).width())).toString() + 'px',
   });
   $('#nomgroupe').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
