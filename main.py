@@ -115,6 +115,7 @@ def accueil():
                 'a_like': a_like,
                 'a_sign': a_sign,
                 'resolu': a['resolu'],
+                'fileType': a['fileType'],
                 # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
@@ -308,6 +309,7 @@ def handleEvent_postMsg(json):
 def uploadAudio():
     if 'id' in session:
         nom = "MsgVocal" + request.form['group'] + session['id'] + request.form['date']
+
         cluster.save_file(nom, request.files['audio'])
         return 'yes'
     else:
@@ -318,6 +320,13 @@ def uploadAudio():
 def audio(audioName):
     if 'id' in session:
         return cluster.send_file(audioName)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/file/<fileName>')
+def file(fileName):
+    if 'id' in session:
+        return cluster.send_file(fileName)
     else:
         return redirect(url_for('login'))
 
@@ -560,6 +569,7 @@ def comments(idMsg):
                 'a_like': a_like,
                 'a_sign': a_sign,
                 'reponses': reponses,
+                'fileType': msg['fileType'],
                 # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
             }
@@ -604,8 +614,21 @@ def question():
 
             user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
             if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
+                if request.files['file'].mimetype != 'application/octet-stream':
+                    if request.files['file'].mimetype == 'application/pdf':
+                        fileType = 'pdf'
+                    else:
+                        fileType = 'image'
+                else:
+                    fileType = 'none'
+
+                _id = ObjectId()
                 db_demande_aide.insert_one(
-                    {"id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False})
+                    {"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
+
+                if request.files['file'].mimetype != 'application/octet-stream':
+                    nom = "DemandeFile_" + str(_id)
+                    cluster.save_file(nom, request.files['file'])
 
                 demandes = db_demande_aide.aggregate([
                     {'$sort': {'date-envoi': -1}},
