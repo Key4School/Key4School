@@ -27,6 +27,8 @@ db_groupes = cluster.db.groupes
 db_files = cluster.db.fs.files
 db_chunks = cluster.db.fs.chunks
 db_notif = cluster.db.notifications
+listeModeration = open("list_ban_words.txt", "r").read().splitlines()
+
 
 
 def recupLevel():
@@ -48,6 +50,14 @@ def addXP(user: ObjectId, amount: int) -> None:
     )
 
     return
+
+def automoderation(stringModerer):
+    for content in listeModeration:
+        if content  in stringModerer: 
+            stringModerer= stringModerer.replace(content, "*")
+
+    return stringModerer
+
 
 def notif(type, id_groupe, id_msg, destinataires):
     db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
@@ -624,7 +634,7 @@ def question():
 
                 _id = ObjectId()
                 db_demande_aide.insert_one(
-                    {"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": request.form['demande'], "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
+                    {"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": automoderation(request.form['demande']), "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
 
                 if request.files['file'].mimetype != 'application/octet-stream':
                     nom = "DemandeFile_" + str(_id)
