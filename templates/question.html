@@ -28,7 +28,7 @@
   <div class="columns" style="margin-top: 10px; width:100%;">
     <div class="column"></div>
     <div class="column is-three-fifths">
-      <form action="{{url_for('question')}}" method="post">
+      <form action="{{url_for('question')}}" method="post" enctype="multipart/form-data">
         <div class="box demande" style="border-radius: 20px; margin-bottom: 0.8rem;" data-subject="Tag matiere">
           <article class="media">
             <div class="media-left">
@@ -204,24 +204,24 @@
                 </p>
               </div>
               <!-- Icons like et commentaire -->
-              <div style="display:flex">
+              <div style="display:flex; justify-content: space-between; width: 100%;">
                 <nav class="level is-mobile">
                   <div class="level-left">
-                    <a class="level-item" aria-label="like">
+                    <a class="level-item" aria-label="like" style="cursor: not-allowed;">
                       <span class="icon is-small">
                         <i class="fas fa-thumbs-up" aria-hidden="true" style="font-size: 20px;padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;"></i>
                       </span>
                     </a>
-                    <a class="level-item" style="margin-left: 15%;" aria-label="comment">
+                    <a class="level-item" style="margin-left: 15%; cursor: not-allowed;" aria-label="comment">
                       <span class="icon is-small">
                         <i class="far fa-comment" style="font-size: 20px;color:{{session['couleur'][2]}};" aria-hidden="true"></i>
                       </span>
                     </a>
                   </div>
                 </nav>
-                <div style="margin-left:50%;" class="file is-info has-name">
+                <div class="file is-info has-name">
                   <label class="file-label">
-                    <input class="file-input" type="file" name="resume">
+                    <input class="file-input" type="file" name="file" id="fileInput" accept=".pdf,image/*" onchange="document.getElementById('fileName').innerHTML = this.files[0].name;" />
                     <span class="file-cta">
                       <span class="file-icon">
                         <i class="fas fa-upload"></i>
@@ -230,7 +230,7 @@
                         Fichiers
                       </span>
                     </span>
-                    <span class="file-name">
+                    <span class="file-name" id="fileName">
                       Nom du fichier
                     </span>
                   </label>
@@ -238,7 +238,7 @@
               </div>
               <br />
               <div style="display:flex;justify-content:space-between;">
-                <button type="submit" class="button is-success is-outlined">
+                <button type="submit" style="min-width: 30%;" class="button is-success is-outlined">
                   <span class="icon is-small">
                     <i class="fas fa-check"></i>
                   </span>
