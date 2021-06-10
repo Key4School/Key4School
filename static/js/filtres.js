@@ -20,6 +20,8 @@ const filters_slide = (direction) => {
 	}
 };
 
+const userColor2 = document.getElementById('filters').dataset.usercolor2;
+
 const filter = (f) => {
 	const subject = f.parentElement.dataset.subject;
 	const selected = !f.classList.contains('is-light');
@@ -33,6 +35,7 @@ const filter = (f) => {
 			});
 			document.querySelectorAll('.filter button').forEach(filter => {
 				filter.classList.add('is-light');
+				filter.style.backgroundColor = '#fff';
 			});
 		}
 		else {
@@ -41,25 +44,32 @@ const filter = (f) => {
 			});
 			document.querySelectorAll('.filter > button').forEach(filter => {
 				filter.classList.remove('is-light');
+				filter.style.backgroundColor = userColor2;
 			});
 		}
 	}
 
 	else {
-		if(document.querySelectorAll('.filter.subject button.is-light').length)
+		if(document.querySelectorAll('.filter.subject button.is-light').length) {
 			document.querySelector('.filter[data-subject="everything"] > button').classList.add('is-light');
-		else
+			document.querySelector('.filter[data-subject="everything"] > button').style.backgroundColor = '#fff';
+		}
+		else {
 			document.querySelector('.filter[data-subject="everything"] > button').classList.remove('is-light');
+			document.querySelector('.filter[data-subject="everything"] > button').style.backgroundColor = userColor2;
+		}
 
 		if(selected) {
 			document.querySelectorAll(`.demande[data-subject=${subject}]`).forEach(demande => {
 				demande.style.display = 'none';
 			});
+			f.style.backgroundColor = '#fff';
 		}
 		else {
 			document.querySelectorAll(`.demande[data-subject=${subject}]`).forEach(demande => {
 				demande.style.display = 'block';
 			});
+			f.style.backgroundColor = userColor2;
 		}
 	}
 };
