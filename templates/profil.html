@@ -84,7 +84,7 @@
   <!-- Espace photo de profil -->
     <div style="display: flex;align-items: center;justify-content:space-evenly;">
         <img alt="user" onclick="updateImgOpen();" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
-      <div style="display: flex;align-items: center;justify-content:center;">
+      <div style="display: flex;align-items:flex-start;justify-content:center;">
         <!-- Barre de progression -->
           <progress class="progress is-info" value= {{xplvl}} max="100" style="width:250px;">70%</progress>
           &nbsp;&nbsp;&nbsp;&nbsp;
@@ -150,7 +150,7 @@
             <td>
               <div id="contentlangues">
                 <!-- LV1 -->
-                <div class="select" >
+                <div class="select" style="max-width: 30%;"  >
                   <select name="lv1">
                     <option value="none" {%if profilUtilisateur['langues'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
                     <option value="lv1-ang" {%if profilUtilisateur['langues'][0]=="lv1-ang"%}selected{%endif%}>LV1 Anglais</option>
@@ -169,7 +169,7 @@
                   </select>
                 </div>
                 <!-- LV2 -->
-                <div class="select" >
+                <div class="select" style="max-width: 30%;"  >
                   <select name="lv2">
                     <option value="none" {%if profilUtilisateur['langues'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
                     <option value="lv2-ang" {%if profilUtilisateur['langues'][1]=="lv2-ang"%}selected{%endif%}>LV2 Anglais</option>
@@ -194,7 +194,7 @@
             <td>
               <div id="contentoptions">
                 <!-- Option 1 -->
-                <div class="select" >
+                <div class="select" style="max-width: 30%;"  >
                   <select name="option1">
                     <option value="none" {%if profilUtilisateur['options'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
                     <option value="opt-lca-latin" {%if profilUtilisateur['options'][0]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
@@ -230,7 +230,7 @@
                   </select>
                 </div>
                 <!-- Option 2 -->
-                <div class="select" >
+                <div class="select" style="max-width: 30%;"  >
                   <select name="option2">
                     <option value="none" {%if profilUtilisateur['options'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
                     <option value="opt-lca-latin" {%if profilUtilisateur['options'][1]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
@@ -276,7 +276,7 @@
             <td>
               <div id="contentspes">
                 <!-- Spé 1 -->
-                <div class="select" >
+                <div class="select" style="max-width: 30%;"  >
                   <select name="spe1">
                     <option value="none" {%if profilUtilisateur['spes'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
                     <option value="spe-art" {%if profilUtilisateur['spes'][0]=="spe-art"%}selected{%endif%}>Spé Arts</option>
@@ -297,7 +297,7 @@
                   </select>
                 </div>
                 <!-- Spé 2 -->
-                <div class="select" >
+                <div class="select" style="max-width: 30%;"  >
                   <select name="spe2">
                     <option value="none" {%if profilUtilisateur['spes'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
                     <option value="spe-art" {%if profilUtilisateur['spes'][1]=="spe-art"%}selected{%endif%}>Spé Arts</option>
@@ -490,7 +490,7 @@
             </div>
           </td>
           <td>
-            <div class="select" >
+            <div class="select"  >
               <select name="{{element}}Visibilite">
                 <option value="pv"selected>privé</option>
                 <option value="pb">public</option>
@@ -520,7 +520,7 @@
    </div>
    <!-- Fin informations -->
    <!-- Début choix couleurs -->
-    <div>
+    <div style="margin-top: 24%;margin-right: 5%;">
       <form action="{{url_for('changeTheme')}}" method="POST">
         <!-- Titre choix couleurs -->
         <label for"color-select">Choisir une couleur de thème :</label><br />
@@ -604,6 +604,7 @@
           </div>
         </label>
         <br />
+        <br />
         <!-- Bouton pour valider le choix de la couleur -->
         <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
           <span class="icon is-small">
@@ -630,12 +631,12 @@
     {% endif %}
     {%for d in demandes %}
       <!-- Début publi -->
-      <div class="box" style="border-radius: 20px;margin-bottom: 0.8rem; margin-top: 1%; width: 70%;">
+      <div class="box demande" style="border-radius: 20px;margin-bottom: 0.8rem; margin-top: 1%; width: 70%;">
         <article class="media">
           <div class="media-left">
             <!-- Image photo de profil-->
             <figure class="image is-64x64">
-              <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+              <img alt="user"  src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
             </figure>
           </div>
           <!-- Contenu publication -->
@@ -643,13 +644,17 @@
             <div class="content">
               <p style="margin-bottom: 5px;">
                 <!-- Nom utilisateur ; pseudo ; temps -->
-                <strong>{{d['user']['nom']}} {{d['user']['prenom']}}</strong> <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
+                <div style="font-variant: small-caps;">
+                  <a href="{{url_for('profil' ,idUser=d['user']['_id'])}}">{{d['user']['nom']}} {{d['user']['prenom']}}</a>
+                  <span style="display: inline-block; margin-right: 40px;"></span>{{d['matière']}}
+                </div>
+                <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
               </p>
               <!-- Titre -->
-              <h3 style="margin-top: 0;">{{d['titre']}}</h3>
+              <h4 style="margin-top: 0;">{{d['titre']}}</h3>
               <!-- Texte publication -->
-              <p>{{d['contenu']}}</p>
-              </p>
+              <p style="word-wrap:break-word;">{{d['contenu']}}</p>
+
             </div>
             <!-- Icons like et commentaire -->
             <nav class="level is-mobile">
@@ -657,15 +662,15 @@
                 <a class="level-item" aria-label="like" onClick="like('{{d['idMsg']}}')">
                   <span class="icon is-small">
                     {% if d['a_like'] %}
-                      <i id="like_{{d['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{d['nb-likes']}}</i>
+                      <i id="like_{{d['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="font-size: 20px;padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
                     {% else %}
-                      <i id="like_{{d['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{d['nb-likes']}}</i>
+                      <i id="like_{{d['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="font-size: 20px;padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
                     {% endif %}
                   </span>
                 </a>
-                <a class="level-item" aria-label="comment" href="/comments/{{d['idMsg']}}">
+                <a class="level-item" style="margin-left: 15%;" aria-label="comment" href="/comments/{{d['idMsg']}}">
                   <span class="icon is-small">
-                    <i class="far fa-comment" aria-hidden="true"></i>
+                    <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true"></i>
                   </span>
                 </a>
                   <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
@@ -677,6 +682,8 @@
                       {% endif %}
                     </span>
                   </a> -->
+                </div>
+              </div>
                   <div class="navbar-item">
                     <button  class="button is-success is-outlined is-small" onClick="resoudre('{{d['idMsg']}}')">
                       <span class="icon is-small">
