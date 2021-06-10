@@ -53,8 +53,16 @@ def addXP(user: ObjectId, amount: int) -> None:
 
 def automoderation(stringModerer):
     for content in listeModeration:
-        if content  in stringModerer: 
-            stringModerer= stringModerer.replace(content, "*")
+        if len(content) < 5:
+            if stringModerer[0:len(content)+1] == content+" ":
+                stringModerer= stringModerer.replace(content, " * ")
+            if stringModerer[-len(content)+1:] == " "+content:
+                stringModerer= stringModerer.replace(content, " * ")
+            if stringModerer == content:
+                stringModerer= stringModerer.replace(content, " * ")
+            content= " "+content+" "
+        if  content in stringModerer:
+            stringModerer= stringModerer.replace(content, " * ")
 
     return stringModerer
 
@@ -487,7 +495,7 @@ def updateprofile():
         #     elementPrive.append("pseudo")
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': request.form['pseudo'], 'email': request.form['email'], 'telephone': request.form['telephone'], 'interets': request.form['interets'], 'caractere': request.form['caractere'],
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': automoderation(request.form['pseudo']), 'email': automoderation(request.form['email']), 'telephone': automoderation(request.form['telephone']), 'interets': automoderation(request.form['interets']), 'caractere': request.form['caractere'],
                                                                                'langues': [request.form['lv1'], request.form['lv2']], 'options': [request.form['option1'], request.form['option2']], 'spes': [request.form['spe1'], request.form['spe2'], request.form['spe3']],
                                                                                'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
@@ -594,7 +602,7 @@ def comments(idMsg):
                 reponses[str(_id)] = {
                     '_id': ObjectId(_id),
                     'id-utilisateur': ObjectId(session['id']),
-                    'contenu': request.form.get('rep'),
+                    'contenu': automoderation(request.form.get('rep')),
                     'date-envoi': datetime.now(),
                     'likes': []
                 }
@@ -634,7 +642,7 @@ def question():
 
                 _id = ObjectId()
                 db_demande_aide.insert_one(
-                    {"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": request.form['titre'], "contenu": automoderation(request.form['demande']), "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
+                    {"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": automoderation(request.form['titre']), "contenu": automoderation(request.form['demande']), "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
 
                 if request.files['file'].mimetype != 'application/octet-stream':
                     nom = "DemandeFile_" + str(_id)
