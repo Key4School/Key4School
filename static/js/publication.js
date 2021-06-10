@@ -1,45 +1,64 @@
 var id;
 
-function like(id){
-  selectionlike = document.getElementById("like_"+id).className
-  if (selectionlike == "far fa-thumbs-up") {
-    document.getElementById("like_"+id).className = "fas fa-thumbs-up";
-    document.getElementById("like_"+id).innerHTML = parseInt(document.getElementById("like_"+id).innerHTML) + 1; // on ajoute 1 au nb de likes
+const socket = io(`ws://${document.location.host}`);
 
+socket.on('connect', function() {
+  return;
+});
+
+socket.on('newLike', (id_like) => {
+  console.log('new');
+  document.getElementById(`like_${id_like}`).innerHTML = parseInt(document.getElementById(`like_${id_like}`).innerHTML) + 1;
+});
+
+socket.on('removeLike', (id_like) => {
+  console.log('remove');
+  document.getElementById(`like_${id_like}`).innerHTML = parseInt(document.getElementById(`like_${id_like}`).innerHTML) - 1;
+});
+
+function like(id){
+  selectionlike = document.getElementById(`like_${id}`).className
+  if (selectionlike == "far fa-thumbs-up") {
+    document.getElementById(`like_${id}`).className = "fas fa-thumbs-up";
+    //document.getElementById(`like_${id}`).innerHTML = parseInt(document.getElementById(`like_${id}`).innerHTML) + 1; // on ajoute 1 au nb de likes
   }
   if (selectionlike == "fas fa-thumbs-up"){
-    document.getElementById("like_"+id).className = "far fa-thumbs-up";
-    document.getElementById("like_"+id).innerHTML = parseInt(document.getElementById("like_"+id).innerHTML) - 1; // on enlève 1 au nb de likes
+    document.getElementById(`like_${id}`).className = "far fa-thumbs-up";
+    //document.getElementById(`like_${id}`).innerHTML = parseInt(document.getElementById(`like_${id}`).innerHTML) - 1; // on enlève 1 au nb de likes
   }
 
-  fetch(`/likePost/${id}`, {
+  /*fetch(`/likePost/${id}`, {
     method: 'post',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-  });
+  });*/
+
+  socket.emit('postLike', {type: 'post', idPost: id});
 }
 
 function like_rep(idMsg, idRep){
-  selectionlike = document.getElementById("like_"+idRep).className
+  selectionlike = document.getElementById(`like_${idRep}`).className
   if (selectionlike == "far fa-thumbs-up") {
-    document.getElementById("like_"+idRep).className = "fas fa-thumbs-up";
-    document.getElementById("like_"+idRep).innerHTML = parseInt(document.getElementById("like_"+idRep).innerHTML) + 1; // on ajoute 1 au nb de likes
+    document.getElementById(`like_${idRep}`).className = "fas fa-thumbs-up";
+    //document.getElementById(`like_${idRep}`).innerHTML = parseInt(document.getElementById(`like_${idRep}`).innerHTML) + 1; // on ajoute 1 au nb de likes
 
   }
   if (selectionlike == "fas fa-thumbs-up"){
-    document.getElementById("like_"+idRep).className = "far fa-thumbs-up";
-    document.getElementById("like_"+idRep).innerHTML = parseInt(document.getElementById("like_"+idRep).innerHTML) - 1; // on enlève 1 au nb de likes
+    document.getElementById(`like_${idRep}`).className = "far fa-thumbs-up";
+    //document.getElementById(`like_${idRep}`).innerHTML = parseInt(document.getElementById(`like_${idRep}`).innerHTML) - 1; // on enlève 1 au nb de likes
   }
 
-  fetch(`/likeRep/${idMsg}/${idRep}`, {
+  /*fetch(`/likeRep/${idMsg}/${idRep}`, {
     method: 'post',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-  });
+  });*/
+
+  socket.emit('postLike', {type: 'rep', idPost: idMsg, idRep: idRep});
 }
 
 

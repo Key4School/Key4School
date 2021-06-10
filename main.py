@@ -712,7 +712,7 @@ def recherche_user():
         return redirect(url_for('login'))
 
 
-@app.route('/likePost/<idPost>', methods=['POST'])
+#@app.route('/likePost/<idPost>', methods=['POST'])
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
@@ -720,15 +720,18 @@ def likePost(idPost):
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
             likes = demande['likes']
             newLikes = list(likes)
+            action = None
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
+                action = 'remove'
                 newLikes.remove(session['id'])  # on supprime son like
 
                 # remove XP
                 if not ObjectId(session['id']) == demande['id-utilisateur']:
                     addXP(ObjectId(demande['id-utilisateur']), -2)
             else:
+                action = 'add'
                 newLikes.append(session['id'])  # on ajoute son like
 
                 # add XP
@@ -742,7 +745,8 @@ def likePost(idPost):
             )
 
             # on retourne enfin le nouveau nb de likes
-            return {'newNbLikes': len(newLikes)}, 200
+            # return {'newNbLikes': len(newLikes)}, 200
+            return action
 
         else:
             abort(403)  # il manque l'id du message
@@ -750,7 +754,7 @@ def likePost(idPost):
         abort(401)  # non autorisé
 
 
-@app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
+#@app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
 def likeRep(idPost, idRep):
     if 'id' in session:
         if 'idPost' != None and 'idRep' != None:
@@ -762,15 +766,18 @@ def likeRep(idPost, idRep):
             reponse = reponses[idRep]
             likes = reponse['likes']
             newLikes = list(likes)
+            action = None
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
+                action = 'remove'
                 newLikes.remove(session['id'])  # on supprime son like
 
                 # remove XP
                 if not ObjectId(session['id']) == reponse['id-utilisateur']:
                     addXP(ObjectId(reponse['id-utilisateur']), -2)
             else:
+                action = 'add'
                 newLikes.append(session['id'])  # on ajoute son like
 
                 # add XP
@@ -793,12 +800,33 @@ def likeRep(idPost, idRep):
             )
 
             # on retourne enfin le nouveau nb de likes
-            return {'newNbLikes': len(newLikes)}, 200
+            # return {'newNbLikes': len(newLikes)}, 200
+            return action
 
         else:
             abort(400)  # il manque l'id du message
     else:
         abort(401)  # non autorisé
+
+@socketio.on('postLike')
+def handleEvent_postLike(json):
+    if 'id' in session:
+        if 'type' in json:
+            if json['type'] == 'post':
+                if 'idPost' in json:
+                    action = likePost(json['idPost'])
+                    if action == 'add':
+                        emit('newLike', json['idPost'], broadcast=True)
+                    elif action == 'remove':
+                        emit('removeLike', json['idPost'], broadcast=True)
+            elif json['type'] == 'rep':
+                if 'idPost' in json and 'idRep' in json:
+                    action = likeRep(json['idPost'], json['idRep'])
+                    if action == 'add':
+                        emit('newLike', json['idRep'], broadcast=True)
+                    elif action == 'remove':
+                        emit('removeLike', json['idRep'], broadcast=True)
+
 
 
 @app.route('/administration/', methods=['POST', 'GET'])
