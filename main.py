@@ -879,12 +879,11 @@ def administration():
                 if request.form['demandeBut'] == 'Suppr':
                     demande =db_demande_aide.find_one({"_id": ObjectId(request.form['idSuppr'])})
                     addXP(demande['id-utilisateur'],-20)
-                    # MyImage = db_files.find(
-                    #     {'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
-                    # addXP(ObjectId(request.form['idSanctionné'], -20))
-                    # for a in MyImage:
-                    #     db_files.delete_one({'_id': a['_id']})
-                    #     db_chunks.delete_many({'files_id': a['_id']})
+                    MyFile = db_files.find(
+                        {'filename': 'DemandeFile_'+request.form['idSuppr']})
+                    for a in MyFile:
+                        db_files.delete_one({'_id': a['_id']})
+                        db_chunks.delete_many({'files_id': a['_id']})
                     db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
                 elif request.form['demandeBut'] == 'Val':
                     db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},
