@@ -154,6 +154,7 @@ function micro() {
       audio: true
     });
     accessMicro = true;
+    enregistrerTel();
   }
 }
 
