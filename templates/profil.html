@@ -714,11 +714,18 @@
     {%endfor%}
   </div>
   <!-- Sanctions --> <!-- STYLE A FAIRE !!! -->
-  {%for element in profilUtilisateur['Sanction']%}
-    Sanction : {{element['SanctionType']}}
-    Motif : {{element['SanctionMotif']}}
-    Prochaine Sanction : {{element['SanctionNext']}}
-  {%endfor%}
+  <div>
+    <table>
+      {%for element in profilUtilisateur['Sanction']%}
+      <tr>
+        <td>Date : {{element['dateSanction']}}</td>
+        <td>Sanction : {{element['SanctionType']}}</td>
+        <td>Motif : {{element['SanctionMotif']}}</td>
+        <td>Prochaine Sanction : {{element['SanctionNext']}}</td>
+        </tr>
+      {%endfor%}
+    </table>
+  </div>
 <!-- fin de la page -->
 </body>
 

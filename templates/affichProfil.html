@@ -291,6 +291,21 @@
         <span>Valider</span>
       </button>
       {%endif%}
+      <div>
+        {%if profilUtilisateur['SanctionEnCour'] != ""%}
+        Sanction en cours : {{profilUtilisateur['SanctionEnCour']}}, jusqu'au {{profilUtilisateur['SanctionDuree']}}
+        {%endif%}
+      <table>
+        {%for element in profilUtilisateur['Sanction']%}
+        <tr>
+          <td>Date : {{element['dateSanction']}}</td>
+          <td>Sanction : {{element['SanctionType']}}</td>
+          <td>Motif : {{element['SanctionMotif']}}</td>
+          <td>Prochaine Sanction : {{element['SanctionNext']}}</td>
+          </tr>
+        {%endfor%}
+      </table>
+    </div>
       {%endif%}
       <input type="hidden" />
     </div>
