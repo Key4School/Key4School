@@ -171,11 +171,12 @@
                   <button type="submit">Quitter le groupe</button>
                 </form>
                 <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
+                    <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}"/>
                     <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
                     <br /><br />
                     <div id="listeuser" >
                       {% for user in users %}
-                        {% if not sessionId == user['_id'] %}
+                        {% if not sessionId == user['_id'] and not user['_id'] in infogroupe['id-utilisateurs']%}
                           <div class="listedUser"
                               data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}"
                               {% if not 'email' in user['elementPrive'] %} data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
@@ -190,18 +191,17 @@
                 </form>
               </section>
               <footer class="modal-card-foot">
-                <button  class="button is-success">Valider</button>
-                <button onclick="divoptionclose(); return false;" class="button">Annuler</button>
+                <button onclick="divoptionclose(); return false;" class="button">Terminer</button>
               </footer>
           </div>
         </div>
-        <div class="modal" id="optionParticipant" style="overflow:hidden;">
+        <div class="modal" id="optionParticipant" style="overflow:hidden;" >
           <div class="modal-card">
             <section class="modal-card-body">
-              <button onclick="divoptionParticipantclose()" class="delete" aria-label="close"></button>
+              <button onclick="optionParticipantClose()" class="delete" aria-label="close"></button>
               <a id="hrefParticipant" href="">Voir le profil:</a><br />
               <form action="/virerParticipant/" id="virerParticipant" method="POST">
-                <input type='hidden' id="idViré" name='idViré' value="" />
+                <input type='hidden' id="idViré2" name='idViré' value="" />
                 <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
                 <button type="submit">virer du groupe</button>
               </form>

@@ -478,7 +478,7 @@ function designalerMsg(e) {
 function optionParticipantOpen(id){
   $("#optionParticipant").addClass("is-active");
   document.getElementById("hrefParticipant").href="/profil/"+id;
-  document.getElementById("idViré").value=id;
+  document.getElementById("idViré2").value=id;
 }
 
 function optionParticipantClose(){

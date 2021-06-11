@@ -407,17 +407,21 @@ def createGroupe():
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
+
 @app.route('/updateGroupe/', methods=['POST'])
 def updateGroupe():
-    # # if 'id' in session:
-    # #     participants = [ObjectId(session['id'])]
-    # #     for name, value in request.form.items():
-    # #         participants.append(ObjectId(name))
-    # #     db_groupes.update_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[]})
-    # #     return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
-    # # else:
-    #     return redirect(url_for('login'))
-    return 'sent'
+    if 'id' in session:
+        participants = db_utilisateurs.find_one({'_id': ObjectId(request.form['IdGroupe'])})
+        list =[]
+        for name, value in request.form.items():
+            if name == 'IdGroupe':
+                pass
+            else:
+                db_groupes.update_one({'_id': ObjectId(request.form['IdGroupe'])},
+                    {"$push":{"id-utilisateurs":ObjectId(name)}})
+        return redirect(url_for('messages', idGroupe=request.form['IdGroupe']))
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/virerParticipant/', methods=['POST'])
 def virerParticipant():
