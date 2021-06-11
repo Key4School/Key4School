@@ -1301,6 +1301,8 @@ def translate_matiere_spes_options_lv(toTranslate: list) -> str:
         'maths': 'Mathématiques',
         'hg': 'Histoire-Géographie',
         'snt': 'SNT',
+        'pc': 'Physique-Chimie',
+        'svt': 'SVT',
         'emc': 'EMC',
         'ses': 'SES',
         'philo': 'Philosophie',
