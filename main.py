@@ -448,9 +448,20 @@ def modifRole():
 @app.route('/changeTheme/', methods=['POST'])
 def changeTheme():
     if 'id' in session:
+        if int(request.form['couleur']) == 5:
+            color2 = tuple(int(request.form['color2'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+            moyenne = '#%02x%02x%02x' % tuple((color+255)//2 for color in color2)
+            couleurs = [request.form['color1'], request.form['color2'], request.form['color3'], moyenne]
+        else:
+            listColor = [['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'],
+                        ['#4c7450', '#a8d7ad', '#c3455a', '#d4ebd6'],
+                        ['#3f51b5', '#81c5e2', '#e6b2d9', '#c0e2f1'],
+                        ['#e6b991', '#d6c2b0', '#74b3ab', '#ebe1d8'],
+                        ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']]
+            couleurs = listColor[int(request.form['couleur'])]
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
-                                   "$set": {"couleur": ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']}})
-        session['couleur'] = ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']
+                                   "$set": {"couleur": couleurs}})
+        session['couleur'] = couleurs
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
