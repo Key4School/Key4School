@@ -169,6 +169,24 @@
                   <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
                   <button type="submit">Quitter le groupe</button>
                 </form>
+                <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
+                    <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
+                    <br /><br />
+                    <div id="listeuser" >
+                      {% for user in users %}
+                        {% if not sessionId == user['_id'] %}
+                          <div class="listedUser"
+                              data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}"
+                              {% if not 'email' in user['elementPrive'] %} data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
+                            <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}"  style="margin-right: 18px;" />
+                            <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
+                            <br><br />
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                      <button type="submit">valider</button>
+                    </div>
+                </form>
               </section>
               <footer class="modal-card-foot">
                 <button  class="button is-success">Valider</button>
