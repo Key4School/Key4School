@@ -23,7 +23,7 @@
   </style>
 </head>
 
-<body>
+<body style="margin-left:2%;">
   {% include "bandeau.html" %}
   <br /><br /><br />
 
@@ -71,7 +71,7 @@
   <br />
   <h1 class="title" style="text-align:center;">Administration</h1>
   <br /><br />
-  <h2 style="margin-left:2%;" class="title">Publications signalées : </h2>
+  <div style="font-weight: bold; font-size:large;">Publications signalées : </div>
   {%for content in demandeSignale%}
   <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;" id='divDemande_{{content['_id']}}'>
     <div>
@@ -111,7 +111,7 @@
   </div>
   <br /><br />
   {%endfor%}
-  <h2 style="margin-left:2%;" class="title">Utilisteurs signalés :</h2><br /><br />
+  <div style="font-weight: bold; font-size:large;">Utilisteurs signalés :</div><br /><br />
   {%for content in profilSignale%}
   <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;">
     <div>
@@ -133,7 +133,7 @@
     </ul>
   </div>
   {%endfor%}
-  <h2 style="margin-left:2%;" class="title">Groupes signalés :</h2><br /><br />
+  <div style="font-weight: bold; font-size:large;">Groupes signalés :</div><br /><br />
   <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;">
 
     {%for content in discussionSignale%}
