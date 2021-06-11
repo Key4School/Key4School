@@ -284,32 +284,36 @@
         <span>Sanctionner</span>
       </button>
       {%if profilUtilisateur['sign'] != []%}
-      <button  class="button  is-danger is-outlined is-small" onClick="validationUser();">
+      <button  class="button  is-success  is-outlined is-small" onClick="validationUser();">
         <span class="icon is-small">
-          <i id="sign" class="fas fa-ban" aria-hidden="true"></i>
+          <i id="sign" class="fas fa-check" aria-hidden="true"></i>
         </span>
         <span>Valider</span>
       </button>
-      {%endif%}
-      <div>
+      <br /><br />
+      {%endif%}</div></div>
+      <div style="margin-left:2%;">
         {%if profilUtilisateur['SanctionEnCour'] != ""%}
         Sanction en cours : {{profilUtilisateur['SanctionEnCour']}}, jusqu'au {{profilUtilisateur['SanctionDuree']}}
         {%endif%}
-      <table>
+        <br />
         {%for element in profilUtilisateur['Sanction']%}
-        <tr>
-          <td>Date : {{element['dateSanction']}}</td>
-          <td>Sanction : {{element['SanctionType']}}</td>
-          <td>Motif : {{element['SanctionMotif']}}</td>
-          <td>Prochaine Sanction : {{element['SanctionNext']}}</td>
-          </tr>
+        <ul class="menu-list" style="margin-left:1%;">
+          <li><u>Sanction : {{element['SanctionType']}}</u></li>
+          <li>
+            <ul>
+              <li>Motif : {{element['SanctionMotif']}}</li>
+              <li>Prochaine Sanction : {{element['SanctionNext']}}</li>
+              <li>{{element['dateSanction']}}</li>
+            </ul>
+          </li>
+        </ul>
         {%endfor%}
-      </table>
     </div>
       {%endif%}
       <input type="hidden" />
-    </div>
-  </div>
+
+  <!-- </div> -->
 
   </div>
   <!-- fin de la page -->

@@ -52,6 +52,15 @@ def addXP(user: ObjectId, amount: int) -> None:
 
     return
 
+def addXpModeration(user: ObjectId, amount: int) -> None:
+
+    db_utilisateurs.update_one(
+        {'_id': user},
+        {'$inc': {'xpModeration': amount}}
+    )
+
+    return
+
 def automoderation(stringModerer):
     for content in listeModeration:
         if len(content) < 5:
@@ -924,7 +933,7 @@ def administration():
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
                     demande =db_demande_aide.find_one({"_id": ObjectId(request.form['idSuppr'])})
-                    addXP(demande['id-utilisateur'],-20)
+                    addXpModeration(demande['id-utilisateur'], 5)
                     MyFile = db_files.find(
                         {'filename': 'DemandeFile_'+request.form['idSuppr']})
                     for a in MyFile:
@@ -1010,12 +1019,11 @@ def sanction():
                 time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
                 db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
-                addXP(ObjectId(request.form['idSanctionné']), -100)
             if request.form['SanctionType']== 'ResetProfil':
                 Sanctionné = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSanctionné'])})
                 MyImage = db_files.find(
                     {'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
-                addXP(ObjectId(request.form['idSanctionné']), -20)
+                addXpModeration(ObjectId(request.form['idSanctionné']), 10)
                 for a in MyImage:
                     db_files.delete_one({'_id': a['_id']})
                     db_chunks.delete_many({'files_id': a['_id']})
@@ -1026,17 +1034,14 @@ def sanction():
                 time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
                 db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
-                addXP(ObjectId(request.form['idSanctionné']), -20)
             if request.form['SanctionType'] == 'SpecForum':
                 time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
                 db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
-                addXP(ObjectId(request.form['idSanctionné']), -80)
             if request.form['SanctionType'] == 'SpecMsg':
                 time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
                 db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
                                            "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
-                addXP(ObjectId(request.form['idSanctionné']), -20)
             return 'sent'
         else:
             return redirect(url_for('accueil'))

@@ -34,21 +34,22 @@
       <header class="modal-card-head">
         <p class="modal-card-title">Photo de profil</p>
       </header>
-      <form  action="{{url_for('updateImg')}}" enctype='multipart/form-data' id="updatePhoto" method="POST" autocomplete="off">
+      <form action="{{url_for('updateImg')}}" enctype='multipart/form-data' id="updatePhoto" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <input type="file" accept="image/png, image/jpeg" name="Newpicture" required />
           <input type="hidden" name="but" value="replace" required />
         </section>
         <footer class="modal-card-foot">
-          <button type="submit" class="button is-success">Remplacer</button></form>
-          <form method="post" action="{{url_for('updateImg')}}" autocomplete="off" id="deletePhoto">
-            <input type="hidden" name="but" value="remove" required />
-          <button type="submit" class="button">
-            Supprimer photo profil
-          </button>
-          </form>
-          <button onclick="updateImgClose(); return false;" class="button">Annuler</button>
-        </footer>
+          <button type="submit" class="button is-success">Remplacer</button>
+      </form>
+      <form method="post" action="{{url_for('updateImg')}}" autocomplete="off" id="deletePhoto">
+        <input type="hidden" name="but" value="remove" required />
+        <button type="submit" class="button">
+          Supprimer photo profil
+        </button>
+      </form>
+      <button onclick="updateImgClose(); return false;" class="button">Annuler</button>
+      </footer>
     </div>
   </div>
   <div class="modal" id="validationUser" style="overflow:hidden;">
@@ -72,7 +73,7 @@
         </footer>
       </form>
     </div>
-</div>
+  </div>
   <!-- Début de la div pour la page avec les infos -->
   <div class="page"></div>
   <br />
@@ -82,135 +83,137 @@
   <br />
   <br />
   <!-- Espace photo de profil -->
-    <div style="display: flex;align-items: center;justify-content:space-evenly;">
-        <img alt="user" onclick="updateImgOpen();" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
-      <div style="display: flex;align-items:flex-start;justify-content:center;">
-        <!-- Barre de progression -->
-          <progress class="progress is-info" value= {{xplvl}} max="100" style="width:250px;">70%</progress>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <p>
-            NIV:
-            {{niv}}
-            XP :
-            {{xp}}
-          </p>
+  <div style="display: flex;align-items: center;justify-content:space-evenly;">
+    <img alt="user" onclick="updateImgOpen();"
+      src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+      style="width:80px; height:auto;" />
+    <div style="display: flex;align-items:flex-start;justify-content:center;">
+      <!-- Barre de progression -->
+      <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <p>
+        NIV:
+        {{niv}}
+        XP :
+        {{xp}}
+      </p>
     </div>
   </div>
   <br />
   <br />
   <br />
   <div style="display: flex;align-items: center;justify-content:space-evenly;margin-left:2%;">
-   <!-- Début informations -->
+    <!-- Début informations -->
     <div>
       <!-- Informations puliques -->
       <form method="POST" action="/updateprofile/">
-      <div style="font-weight: bold; font-size:large;">Informations publiques :</div>
-      <br />
-      <!-- Début tableau informations publiques -->
-      <table class="table is-narrow">
-        <tbody>
-          <!-- Nom et prénom -->
-          <tr>
-            <td>
-              <i class="fas fa-user-alt" style="font-size:25px;"></i>
+        <div style="font-weight: bold; font-size:large;">Informations publiques :</div>
+        <br />
+        <!-- Début tableau informations publiques -->
+        <table class="table is-narrow">
+          <tbody>
+            <!-- Nom et prénom -->
+            <tr>
+              <td>
+                <i class="fas fa-user-alt" style="font-size:25px;"></i>
                 &nbsp;&nbsp;Nom et Prenom
-            </td>
-            <td>
-              {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
-            </td>
-          </tr>
-          <!-- Pseudo -->
+              </td>
+              <td>
+                {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
+              </td>
+            </tr>
+            <!-- Pseudo -->
             <tr>
               <td>
                 <i class="far fa-smile-wink" style="font-size:25px;"></i>
-                  &nbsp;&nbsp;Pseudo
+                &nbsp;&nbsp;Pseudo
               </td>
               <td>
                 <div id="contentpseudo">
-                  <input type="hidden" value="{{profilUtilisateur['pseudo']}}" name="pseudo"/>
-                  <p {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')"{%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}</p>
+                  <input type="hidden" value="{{profilUtilisateur['pseudo']}}" name="pseudo" />
+                  <p {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}</p>
                 </div>
               </td>
             </tr>
-          <!-- Lycée et classe -->
-          <tr>
-            <td>
-              <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
+            <!-- Lycée et classe -->
+            <tr>
+              <td>
+                <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
                 &nbsp;&nbsp;Lycée/Classe
-            </td>
-            <td>
-              {{profilUtilisateur['lycee']}}/{{profilUtilisateur['classe']}}
-            </td>
-          </tr>
-          <!-- Langues -->
-          <tr>
-            <td>
-              <i class="fas fa-globe" style="font-size:25px;"></i>
-                  &nbsp;&nbsp;Langue(s) vivante(s)
-            <td>
-              <div id="contentlangues">
-                <!-- LV1 -->
-                <div class="select" style="max-width: 30%;"  >
-                  <select name="lv1">
-                    <option value="none" {%if profilUtilisateur['langues'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
-                    <option value="lv1-ang" {%if profilUtilisateur['langues'][0]=="lv1-ang"%}selected{%endif%}>LV1 Anglais</option>
-                    <option value="lv1-ang-euro" {%if profilUtilisateur['langues'][0]=="lv1-ang-euro"%}selected{%endif%}>LV1 Anglais Euro</option>
-                    <option value="lv1-esp" {%if profilUtilisateur['langues'][0]=="lv1-esp"%}selected{%endif%}>LV1 Espagnol</option>
-                    <option value="lv1-esp-euro" {%if profilUtilisateur['langues'][0]=="lv1-esp-euro"%}selected{%endif%}>LV1 Espagnol Euro</option>
-                    <option value="lv1-all" {%if profilUtilisateur['langues'][0]=="lv1-all"%}selected{%endif%}>LV1 Allemand</option>
-                    <option value="lv1-all-euro" {%if profilUtilisateur['langues'][0]=="lv1-all-euro"%}selected{%endif%}>LV1 Allemand Euro</option>
-                    <option value="lv1-por" {%if profilUtilisateur['langues'][0]=="lv1-por"%}selected{%endif%}>LV1 Portugais</option>
-                    <option value="lv1-por-euro" {%if profilUtilisateur['langues'][0]=="lv1-por-euro"%}selected{%endif%}>LV1 Portugais Euro</option>
-                    <option value="lv1-it" {%if profilUtilisateur['langues'][0]=="lv1-it"%}selected{%endif%}>LV1 Italien</option>
-                    <option value="lv1-it-euro" {%if profilUtilisateur['langues'][0]=="lv1-it-euro"%}selected{%endif%}>LV1 Italien Euro</option>
-                    <option value="lv1-chi" {%if profilUtilisateur['langues'][0]=="lv1-chi"%}selected{%endif%}>LV1 Chinois</option>
-                    <option value="lv1-ru" {%if profilUtilisateur['langues'][0]=="lv1-ru"%}selected{%endif%}>LV1 Russe</option>
-                    <option value="lv1-ara" {%if profilUtilisateur['langues'][0]=="lv1-ara"%}selected{%endif%}>LV1 Arabe</option>
-                  </select>
+              </td>
+              <td>
+                {{profilUtilisateur['lycee']}}/{{profilUtilisateur['classe']}}
+              </td>
+            </tr>
+            <!-- Langues -->
+            <tr>
+              <td>
+                <i class="fas fa-globe" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Langue(s) vivante(s)
+              <td>
+                <div id="contentlangues">
+                  <!-- LV1 -->
+                  <div class="select" style="max-width: 30%;">
+                    <select name="lv1">
+                      <option value="none" {%if profilUtilisateur['langues'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
+                      <option value="lv1-ang" {%if profilUtilisateur['langues'][0]=="lv1-ang"%}selected{%endif%}>LV1 Anglais</option>
+                      <option value="lv1-ang-euro" {%if profilUtilisateur['langues'][0]=="lv1-ang-euro"%}selected{%endif%}>LV1 Anglais Euro</option>
+                      <option value="lv1-esp" {%if profilUtilisateur['langues'][0]=="lv1-esp"%}selected{%endif%}>LV1 Espagnol</option>
+                      <option value="lv1-esp-euro" {%if profilUtilisateur['langues'][0]=="lv1-esp-euro"%}selected{%endif%}>LV1 Espagnol Euro</option>
+                      <option value="lv1-all" {%if profilUtilisateur['langues'][0]=="lv1-all"%}selected{%endif%}>LV1 Allemand</option>
+                      <option value="lv1-all-euro" {%if profilUtilisateur['langues'][0]=="lv1-all-euro"%}selected{%endif%}>LV1 Allemand Euro</option>
+                      <option value="lv1-por" {%if profilUtilisateur['langues'][0]=="lv1-por"%}selected{%endif%}>LV1 Portugais</option>
+                      <option value="lv1-por-euro" {%if profilUtilisateur['langues'][0]=="lv1-por-euro"%}selected{%endif%}>LV1 Portugais Euro</option>
+                      <option value="lv1-it" {%if profilUtilisateur['langues'][0]=="lv1-it"%}selected{%endif%}>LV1 Italien</option>
+                      <option value="lv1-it-euro" {%if profilUtilisateur['langues'][0]=="lv1-it-euro"%}selected{%endif%}>LV1 Italien Euro</option>
+                      <option value="lv1-chi" {%if profilUtilisateur['langues'][0]=="lv1-chi"%}selected{%endif%}>LV1 Chinois</option>
+                      <option value="lv1-ru" {%if profilUtilisateur['langues'][0]=="lv1-ru"%}selected{%endif%}>LV1 Russe</option>
+                      <option value="lv1-ara" {%if profilUtilisateur['langues'][0]=="lv1-ara"%}selected{%endif%}>LV1 Arabe</option>
+                    </select>
+                  </div>
+                  <!-- LV2 -->
+                  <div class="select" style="max-width: 30%;">
+                    <select name="lv2">
+                      <option value="none" {%if profilUtilisateur['langues'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
+                      <option value="lv2-ang" {%if profilUtilisateur['langues'][1]=="lv2-ang"%}selected{%endif%}>LV2 Anglais</option>
+                      <option value="lv2-esp" {%if profilUtilisateur['langues'][1]=="lv2-esp"%}selected{%endif%}>LV2 Espagnol</option>
+                      <option value="lv2-all" {%if profilUtilisateur['langues'][1]=="lv2-all"%}selected{%endif%}>LV2 Allemand</option>
+                      <option value="lv2-por" {%if profilUtilisateur['langues'][1]=="lv2-por"%}selected{%endif%}>LV2 Portugais</option>
+                      <option value="lv2-it" {%if profilUtilisateur['langues'][1]=="lv2-it"%}selected{%endif%}>LV2 Italien</option>
+                      <option value="lv2-chi" {%if profilUtilisateur['langues'][1]=="lv2-chi"%}selected{%endif%}>LV2 Chinois</option>
+                      <option value="lv2-ru" {%if profilUtilisateur['langues'][1]=="lv2-ru"%}selected{%endif%}>LV2 Russe</option>
+                      <option value="lv2-ara" {%if profilUtilisateur['langues'][1]=="lv2-ara"%}selected{%endif%}>LV2 Arabe</option>
+                    </select>
+                  </div>
                 </div>
-                <!-- LV2 -->
-                <div class="select" style="max-width: 30%;"  >
-                  <select name="lv2">
-                    <option value="none" {%if profilUtilisateur['langues'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
-                    <option value="lv2-ang" {%if profilUtilisateur['langues'][1]=="lv2-ang"%}selected{%endif%}>LV2 Anglais</option>
-                    <option value="lv2-esp" {%if profilUtilisateur['langues'][1]=="lv2-esp"%}selected{%endif%}>LV2 Espagnol</option>
-                    <option value="lv2-all" {%if profilUtilisateur['langues'][1]=="lv2-all"%}selected{%endif%}>LV2 Allemand</option>
-                    <option value="lv2-por" {%if profilUtilisateur['langues'][1]=="lv2-por"%}selected{%endif%}>LV2 Portugais</option>
-                    <option value="lv2-it" {%if profilUtilisateur['langues'][1]=="lv2-it"%}selected{%endif%}>LV2 Italien</option>
-                    <option value="lv2-chi" {%if profilUtilisateur['langues'][1]=="lv2-chi"%}selected{%endif%}>LV2 Chinois</option>
-                    <option value="lv2-ru" {%if profilUtilisateur['langues'][1]=="lv2-ru"%}selected{%endif%}>LV2 Russe</option>
-                    <option value="lv2-ara" {%if profilUtilisateur['langues'][1]=="lv2-ara"%}selected{%endif%}>LV2 Arabe</option>
-                  </select>
-                </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Options -->
-          <tr>
-            <td>
-              <i class="fas fa-book" style="font-size:25px;"></i>
+              </td>
+            </tr>
+            <!-- Options -->
+            <tr>
+              <td>
+                <i class="fas fa-book" style="font-size:25px;"></i>
                 &nbsp;&nbsp;Option(s)
-            </td>
-            <td>
-              <div id="contentoptions">
-                <!-- Option 1 -->
-                <div class="select" style="max-width: 30%;"  >
-                  <select name="option1">
-                    <option value="none" {%if profilUtilisateur['options'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
-                    <option value="opt-lca-latin" {%if profilUtilisateur['options'][0]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
-                    <option value="opt-lca-grec" {%if profilUtilisateur['options'][0]=="opt-lca-grec"%}selected{%endif%}>LCA Grec</option>
-                    <option value="opt-lv3-ang" {%if profilUtilisateur['options'][0]=="opt-lv3-ang"%}selected{%endif%}>LV3 Anglais</option>
-                    <option value="opt-lv3-esp" {%if profilUtilisateur['options'][0]=="opt-lv3-esp"%}selected{%endif%}>LV3 Espagnol</option>
-                    <option value="opt-lv3-all" {%if profilUtilisateur['options'][0]=="opt-lv3-all"%}selected{%endif%}>LV3 Allemand</option>
-                    <option value="opt-lv3-por" {%if profilUtilisateur['options'][0]=="opt-lv3-por"%}selected{%endif%}>LV3 Portugais</option>
-                    <option value="opt-lv3-it" {%if profilUtilisateur['options'][0]=="opt-lv3-it"%}selected{%endif%}>LV3 Italien</option>
-                    <option value="opt-lv3-ru" {%if profilUtilisateur['options'][0]=="opt-lv3-ru"%}selected{%endif%}>LV3 Russe</option>
-                    <option value="opt-lv3-ara" {%if profilUtilisateur['options'][0]=="opt-lv3-ara"%}selected{%endif%}>LV3 Arabe</option>
-                    <option value="opt-lv3-chi" {%if profilUtilisateur['options'][0]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
-                    <option value="opt-eps" {%if profilUtilisateur['options'][0]=="opt-eps"%}selected{%endif%}>EPS</option>
-                    <option value="opt-arts" {%if profilUtilisateur['options'][0]=="opt-arts"%}selected{%endif%}>Arts</option>
-                    <option value="opt-musique" {%if profilUtilisateur['options'][0]=="opt-musique"%}selected{%endif%}>Musique</option>
-                    {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
+              </td>
+              <td>
+                <div id="contentoptions">
+                  <!-- Option 1 -->
+                  <div class="select" style="max-width: 30%;">
+                    <select name="option1">
+                      <option value="none" {%if profilUtilisateur['options'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
+                      <option value="opt-lca-latin" {%if profilUtilisateur['options'][0]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
+                      <option value="opt-lca-grec" {%if profilUtilisateur['options'][0]=="opt-lca-grec"%}selected{%endif%}>LCA Grec</option>
+                      <option value="opt-lv3-ang" {%if profilUtilisateur['options'][0]=="opt-lv3-ang"%}selected{%endif%}>LV3 Anglais</option>
+                      <option value="opt-lv3-esp" {%if profilUtilisateur['options'][0]=="opt-lv3-esp"%}selected{%endif%}>LV3 Espagnol</option>
+                      <option value="opt-lv3-all" {%if profilUtilisateur['options'][0]=="opt-lv3-all"%}selected{%endif%}>LV3 Allemand</option>
+                      <option value="opt-lv3-por" {%if profilUtilisateur['options'][0]=="opt-lv3-por"%}selected{%endif%}>LV3 Portugais</option>
+                      <option value="opt-lv3-it" {%if profilUtilisateur['options'][0]=="opt-lv3-it"%}selected{%endif%}>LV3 Italien</option>
+                      <option value="opt-lv3-ru" {%if profilUtilisateur['options'][0]=="opt-lv3-ru"%}selected{%endif%}>LV3 Russe</option>
+                      <option value="opt-lv3-ara" {%if profilUtilisateur['options'][0]=="opt-lv3-ara"%}selected{%endif%}>LV3 Arabe</option>
+                      <option value="opt-lv3-chi" {%if profilUtilisateur['options'][0]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
+                      <option value="opt-eps" {%if profilUtilisateur['options'][0]=="opt-eps"%}selected{%endif%}>EPS</option>
+                      <option value="opt-arts" {%if profilUtilisateur['options'][0]=="opt-arts"%}selected{%endif%}>Arts</option>
+                      <option value="opt-musique" {%if profilUtilisateur['options'][0]=="opt-musique"%}selected{%endif%}>Musique</option>
+                      {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
                       <option value="opt-mg" {%if profilUtilisateur['options'][0]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
                       <option value="opt-ss" {%if profilUtilisateur['options'][0]=="opt-ss"%}selected{%endif%}>Santé et social</option>
                       <option value="opt-biotech" {%if profilUtilisateur['options'][0]=="opt-biotech"%}selected{%endif%}>Biotechnologies</option>
@@ -218,34 +221,34 @@
                       <option value="opt-si" {%if profilUtilisateur['options'][0]=="opt-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
                       <option value="opt-cit" {%if profilUtilisateur['options'][0]=="opt-cit"%}selected{%endif%}>Création et innovation technologiques</option>
                       <option value="opt-ccd" {%if profilUtilisateur['options'][0]=="opt-ccd"%}selected{%endif%}>Création et culture - design</option>
-                    {% endif %}
-                    {% if profilUtilisateur['classe']=='TG' %}
+                      {% endif %}
+                      {% if profilUtilisateur['classe']=='TG' %}
                       <option value="opt-maths-comp" {%if profilUtilisateur['options'][0]=="opt-maths-comp"%}selected{%endif%}>Maths complémentaires</option>
                       <option value="opt-maths-exp" {%if profilUtilisateur['options'][0]=="opt-maths-exp"%}selected{%endif%}>Maths expertes</option>
                       <option value="opt-dgemc" {%if profilUtilisateur['options'][0]=="opt-dgemc"%}selected{%endif%}>Droits et grands enjeux du monde contemporain</option>
-                    {% endif %}
-                    <option value="opt-equit" {%if profilUtilisateur['options'][0]=="opt-equit"%}selected{%endif%}>Hippologie et équitation</option>
-                    <option value="opt-aet" {%if profilUtilisateur['options'][0]=="opt-aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
-                    <option value="opt-psc" {%if profilUtilisateur['options'][0]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
-                  </select>
-                </div>
-                <!-- Option 2 -->
-                <div class="select" style="max-width: 30%;"  >
-                  <select name="option2">
-                    <option value="none" {%if profilUtilisateur['options'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
-                    <option value="opt-lca-latin" {%if profilUtilisateur['options'][1]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
-                    <option value="opt-lca-grec" {%if profilUtilisateur['options'][1]=="opt-lca-grec"%}selected{%endif%}>LCA Grec</option>
-                    <option value="opt-lv3-ang" {%if profilUtilisateur['options'][1]=="opt-lv3-ang"%}selected{%endif%}>LV3 Anglais</option>
-                    <option value="opt-lv3-esp" {%if profilUtilisateur['options'][1]=="opt-lv3-esp"%}selected{%endif%}>LV3 Espagnol</option>
-                    <option value="opt-lv3-all" {%if profilUtilisateur['options'][1]=="opt-lv3-all"%}selected{%endif%}>LV3 Allemand</option>
-                    <option value="opt-lv3-por" {%if profilUtilisateur['options'][1]=="opt-lv3-por"%}selected{%endif%}>LV3 Portugais</option>
-                    <option value="opt-lv3-it" {%if profilUtilisateur['options'][1]=="opt-lv3-it"%}selected{%endif%}>LV3 Italien</option>
-                    <option value="opt-lv3-ru" {%if profilUtilisateur['options'][1]=="opt-lv3-ru"%}selected{%endif%}>LV3 Russe</option>
-                    <option value="opt-lv3-ara" {%if profilUtilisateur['options'][1]=="opt-lv3-ara"%}selected{%endif%}>LV3 Arabe</option>
-                    <option value="opt-lv3-chi" {%if profilUtilisateur['options'][1]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
-                    <option value="opt-eps" {%if profilUtilisateur['options'][1]=="opt-eps"%}selected{%endif%}>EPS</option>
-                    <option value="opt-arts" {%if profilUtilisateur['options'][1]=="opt-arts"%}selected{%endif%}>Arts</option>
-                    {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
+                      {% endif %}
+                      <option value="opt-equit" {%if profilUtilisateur['options'][0]=="opt-equit"%}selected{%endif%}>Hippologie et équitation</option>
+                      <option value="opt-aet" {%if profilUtilisateur['options'][0]=="opt-aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
+                      <option value="opt-psc" {%if profilUtilisateur['options'][0]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
+                    </select>
+                  </div>
+                  <!-- Option 2 -->
+                  <div class="select" style="max-width: 30%;">
+                    <select name="option2">
+                      <option value="none" {%if profilUtilisateur['options'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
+                      <option value="opt-lca-latin" {%if profilUtilisateur['options'][1]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
+                      <option value="opt-lca-grec" {%if profilUtilisateur['options'][1]=="opt-lca-grec"%}selected{%endif%}>LCA Grec</option>
+                      <option value="opt-lv3-ang" {%if profilUtilisateur['options'][1]=="opt-lv3-ang"%}selected{%endif%}>LV3 Anglais</option>
+                      <option value="opt-lv3-esp" {%if profilUtilisateur['options'][1]=="opt-lv3-esp"%}selected{%endif%}>LV3 Espagnol</option>
+                      <option value="opt-lv3-all" {%if profilUtilisateur['options'][1]=="opt-lv3-all"%}selected{%endif%}>LV3 Allemand</option>
+                      <option value="opt-lv3-por" {%if profilUtilisateur['options'][1]=="opt-lv3-por"%}selected{%endif%}>LV3 Portugais</option>
+                      <option value="opt-lv3-it" {%if profilUtilisateur['options'][1]=="opt-lv3-it"%}selected{%endif%}>LV3 Italien</option>
+                      <option value="opt-lv3-ru" {%if profilUtilisateur['options'][1]=="opt-lv3-ru"%}selected{%endif%}>LV3 Russe</option>
+                      <option value="opt-lv3-ara" {%if profilUtilisateur['options'][1]=="opt-lv3-ara"%}selected{%endif%}>LV3 Arabe</option>
+                      <option value="opt-lv3-chi" {%if profilUtilisateur['options'][1]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
+                      <option value="opt-eps" {%if profilUtilisateur['options'][1]=="opt-eps"%}selected{%endif%}>EPS</option>
+                      <option value="opt-arts" {%if profilUtilisateur['options'][1]=="opt-arts"%}selected{%endif%}>Arts</option>
+                      {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
                       <option value="opt-mg" {%if profilUtilisateur['options'][1]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
                       <option value="opt-ss" {%if profilUtilisateur['options'][1]=="opt-ss"%}selected{%endif%}>Santé et social</option>
                       <option value="opt-biotech" {%if profilUtilisateur['options'][1]=="opt-biotech"%}selected{%endif%}>Biotechnologies</option>
@@ -253,254 +256,256 @@
                       <option value="opt-si" {%if profilUtilisateur['options'][1]=="opt-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
                       <option value="opt-cit" {%if profilUtilisateur['options'][1]=="opt-cit"%}selected{%endif%}>Création et innovation technologiques</option>
                       <option value="opt-ccd" {%if profilUtilisateur['options'][1]=="opt-ccd"%}selected{%endif%}>Création et culture - design</option>
-                    {% endif %}
-                    {% if profilUtilisateur['classe']=='TG' %}
+                      {% endif %}
+                      {% if profilUtilisateur['classe']=='TG' %}
                       <option value="opt-maths-comp" {%if profilUtilisateur['options'][1]=="opt-maths-comp"%}selected{%endif%}>Maths complémentaires</option>
                       <option value="opt-maths-exp" {%if profilUtilisateur['options'][1]=="opt-maths-exp"%}selected{%endif%}>Maths expertes</option>
                       <option value="opt-dgemc" {%if profilUtilisateur['options'][1]=="opt-dgemc"%}selected{%endif%}>Droits et grands enjeux du monde contemporain</option>
-                    {% endif %}
-                    <option value="opt-equit" {%if profilUtilisateur['options'][1]=="opt-equit"%}selected{%endif%}>Hippologie et équitation</option>
-                    <option value="opt-aet" {%if profilUtilisateur['options'][1]=="opt-aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
-                    <option value="opt-psc" {%if profilUtilisateur['options'][1]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
+                      {% endif %}
+                      <option value="opt-equit" {%if profilUtilisateur['options'][1]=="opt-equit"%}selected{%endif%}>Hippologie et équitation</option>
+                      <option value="opt-aet" {%if profilUtilisateur['options'][1]=="opt-aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
+                      <option value="opt-psc" {%if profilUtilisateur['options'][1]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
+                    </select>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <!-- Spécialités -->
+            <tr {% if profilUtilisateur['classe']=='2GT' %} style="display: none;" {% endif %}>
+              <td>
+                <i class="fas fa-book-open" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Spécialités
+              </td>
+              <td>
+                <div id="contentspes">
+                  <!-- Spé 1 -->
+                  <div class="select" style="max-width: 30%;">
+                    <select name="spe1">
+                      <option value="none" {%if profilUtilisateur['spes'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
+                      <option value="spe-art" {%if profilUtilisateur['spes'][0]=="spe-art"%}selected{%endif%}>Spé Arts</option>
+                      <option value="spe-hggsp" {%if profilUtilisateur['spes'][0]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                      <option value="spe-hlp" {%if profilUtilisateur['spes'][0]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
+                      <option value="spe-ses" {%if profilUtilisateur['spes'][0]=="spe-ses"%}selected{%endif%}>Spé SES</option>
+                      <option value="spe-maths" {%if profilUtilisateur['spes'][0]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
+                      <option value="spe-pc" {%if profilUtilisateur['spes'][0]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                      <option value="spe-svt" {%if profilUtilisateur['spes'][0]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
+                      <option value="spe-nsi" {%if profilUtilisateur['spes'][0]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
+                      <option value="spe-si" {%if profilUtilisateur['spes'][0]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                      <option value="spe-lca" {%if profilUtilisateur['spes'][0]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
+                      <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][0]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                      <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][0]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                      <option value="spe-llcer-all" {%if profilUtilisateur['spes'][0]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                      <option value="spe-llcer-it" {%if profilUtilisateur['spes'][0]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
+                      <option value="spe-bio-eco" {%if profilUtilisateur['spes'][0]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                    </select>
+                  </div>
+                  <!-- Spé 2 -->
+                  <div class="select" style="max-width: 30%;">
+                    <select name="spe2">
+                      <option value="none" {%if profilUtilisateur['spes'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
+                      <option value="spe-art" {%if profilUtilisateur['spes'][1]=="spe-art"%}selected{%endif%}>Spé Arts</option>
+                      <option value="spe-hggsp" {%if profilUtilisateur['spes'][1]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                      <option value="spe-hlp" {%if profilUtilisateur['spes'][1]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
+                      <option value="spe-ses" {%if profilUtilisateur['spes'][1]=="spe-ses"%}selected{%endif%}>Spé SES</option>
+                      <option value="spe-maths" {%if profilUtilisateur['spes'][1]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
+                      <option value="spe-pc" {%if profilUtilisateur['spes'][1]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                      <option value="spe-svt" {%if profilUtilisateur['spes'][1]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
+                      <option value="spe-nsi" {%if profilUtilisateur['spes'][1]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
+                      <option value="spe-si" {%if profilUtilisateur['spes'][1]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                      <option value="spe-lca" {%if profilUtilisateur['spes'][1]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
+                      <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][1]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                      <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][1]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                      <option value="spe-llcer-all" {%if profilUtilisateur['spes'][1]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                      <option value="spe-llcer-it" {%if profilUtilisateur['spes'][1]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
+                      <option value="spe-bio-eco" {%if profilUtilisateur['spes'][1]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                    </select>
+                  </div>
+                  <!-- Spé 3 -->
+                  <div class="select" {% if profilUtilisateur['classe']=='TG' %} style="display: none;" {% endif %}>
+                    <select name="spe3">
+                      <option value="none" {%if profilUtilisateur['spes'][2]=="none"%}selected{%endif%}>Non renseignée...</option>
+                      <option value="spe-art" {%if profilUtilisateur['spes'][2]=="spe-art"%}selected{%endif%}>Spé Arts</option>
+                      <option value="spe-hggsp" {%if profilUtilisateur['spes'][2]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
+                      <option value="spe-hlp" {%if profilUtilisateur['spes'][2]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
+                      <option value="spe-ses" {%if profilUtilisateur['spes'][2]=="spe-ses"%}selected{%endif%}>Spé SES</option>
+                      <option value="spe-maths" {%if profilUtilisateur['spes'][2]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
+                      <option value="spe-pc" {%if profilUtilisateur['spes'][2]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
+                      <option value="spe-svt" {%if profilUtilisateur['spes'][2]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
+                      <option value="spe-nsi" {%if profilUtilisateur['spes'][2]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
+                      <option value="spe-si" {%if profilUtilisateur['spes'][2]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
+                      <option value="spe-lca" {%if profilUtilisateur['spes'][2]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
+                      <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][2]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
+                      <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][2]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
+                      <option value="spe-llcer-all" {%if profilUtilisateur['spes'][2]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
+                      <option value="spe-llcer-it" {%if profilUtilisateur['spes'][2]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
+                      <option value="spe-bio-eco" {%if profilUtilisateur['spes'][2]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                    </select>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {%for element in profilUtilisateur['elementPublic']%}
+            {%if element=="caractere"%}
+            <tr>
+              <td>
+                <i class="fas fa-user" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Caractère
+              </td>
+              <td>
+                <div class="select">
+                  <select name="caractere">
+                    <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
+                    <option value="tr" {%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
+                    <option value="det" {%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
+                    <option value="fat" {%if profilUtilisateur['caractere']=="fat"%}selected{%endif%}>Fatigué.e</option>
+                    <option value="dro" {%if profilUtilisateur['caractere']=="dro"%}selected{%endif%}>Drôle</option>
+                    <option value="ti" {%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}>Timide</option>
+                    <option value="crea" {%if profilUtilisateur['caractere']=="crea"%}selected{%endif%}>Créatif.ve</option>
+                    <option value="ser" {%if profilUtilisateur['caractere']=="ser"%}selected{%endif%}>Sérieux.se</option>
+                    <option value="op" {%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
+                    <option value="pe" {%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
+                    <option value="ro" {%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
                   </select>
                 </div>
-              </div>
-            </td>
-          </tr>
-          <!-- Spécialités -->
-          <tr {% if profilUtilisateur['classe']=='2GT' %} style="display: none;" {% endif %}>
-            <td>
-              <i class="fas fa-book-open" style="font-size:25px;"></i>
-                  &nbsp;&nbsp;Spécialités
-            </td>
-            <td>
-              <div id="contentspes">
-                <!-- Spé 1 -->
-                <div class="select" style="max-width: 30%;"  >
-                  <select name="spe1">
-                    <option value="none" {%if profilUtilisateur['spes'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
-                    <option value="spe-art" {%if profilUtilisateur['spes'][0]=="spe-art"%}selected{%endif%}>Spé Arts</option>
-                    <option value="spe-hggsp" {%if profilUtilisateur['spes'][0]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                    <option value="spe-hlp" {%if profilUtilisateur['spes'][0]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
-                    <option value="spe-ses" {%if profilUtilisateur['spes'][0]=="spe-ses"%}selected{%endif%}>Spé SES</option>
-                    <option value="spe-maths" {%if profilUtilisateur['spes'][0]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
-                    <option value="spe-pc" {%if profilUtilisateur['spes'][0]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                    <option value="spe-svt" {%if profilUtilisateur['spes'][0]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
-                    <option value="spe-nsi" {%if profilUtilisateur['spes'][0]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
-                    <option value="spe-si" {%if profilUtilisateur['spes'][0]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                    <option value="spe-lca" {%if profilUtilisateur['spes'][0]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
-                    <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][0]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                    <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][0]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                    <option value="spe-llcer-all" {%if profilUtilisateur['spes'][0]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                    <option value="spe-llcer-it" {%if profilUtilisateur['spes'][0]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
-                    <option value="spe-bio-eco" {%if profilUtilisateur['spes'][0]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+              </td>
+              <td>
+                <div class="select">
+                  <select name="caractereVisibilite">
+                    <option value="pv">privé</option>
+                    <option value="pb" selected>public</option>
                   </select>
                 </div>
-                <!-- Spé 2 -->
-                <div class="select" style="max-width: 30%;"  >
-                  <select name="spe2">
-                    <option value="none" {%if profilUtilisateur['spes'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
-                    <option value="spe-art" {%if profilUtilisateur['spes'][1]=="spe-art"%}selected{%endif%}>Spé Arts</option>
-                    <option value="spe-hggsp" {%if profilUtilisateur['spes'][1]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                    <option value="spe-hlp" {%if profilUtilisateur['spes'][1]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
-                    <option value="spe-ses" {%if profilUtilisateur['spes'][1]=="spe-ses"%}selected{%endif%}>Spé SES</option>
-                    <option value="spe-maths" {%if profilUtilisateur['spes'][1]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
-                    <option value="spe-pc" {%if profilUtilisateur['spes'][1]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                    <option value="spe-svt" {%if profilUtilisateur['spes'][1]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
-                    <option value="spe-nsi" {%if profilUtilisateur['spes'][1]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
-                    <option value="spe-si" {%if profilUtilisateur['spes'][1]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                    <option value="spe-lca" {%if profilUtilisateur['spes'][1]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
-                    <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][1]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                    <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][1]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                    <option value="spe-llcer-all" {%if profilUtilisateur['spes'][1]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                    <option value="spe-llcer-it" {%if profilUtilisateur['spes'][1]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
-                    <option value="spe-bio-eco" {%if profilUtilisateur['spes'][1]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
-                  </select>
-                </div>
-                <!-- Spé 3 -->
-                <div class="select" {% if profilUtilisateur['classe']=='TG' %} style="display: none;" {% endif %} >
-                  <select name="spe3">
-                    <option value="none" {%if profilUtilisateur['spes'][2]=="none"%}selected{%endif%}>Non renseignée...</option>
-                    <option value="spe-art" {%if profilUtilisateur['spes'][2]=="spe-art"%}selected{%endif%}>Spé Arts</option>
-                    <option value="spe-hggsp" {%if profilUtilisateur['spes'][2]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                    <option value="spe-hlp" {%if profilUtilisateur['spes'][2]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
-                    <option value="spe-ses" {%if profilUtilisateur['spes'][2]=="spe-ses"%}selected{%endif%}>Spé SES</option>
-                    <option value="spe-maths" {%if profilUtilisateur['spes'][2]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
-                    <option value="spe-pc" {%if profilUtilisateur['spes'][2]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                    <option value="spe-svt" {%if profilUtilisateur['spes'][2]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
-                    <option value="spe-nsi" {%if profilUtilisateur['spes'][2]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
-                    <option value="spe-si" {%if profilUtilisateur['spes'][2]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                    <option value="spe-lca" {%if profilUtilisateur['spes'][2]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
-                    <option value="spe-llcer-ang" {%if profilUtilisateur['spes'][2]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                    <option value="spe-llcer-esp" {%if profilUtilisateur['spes'][2]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                    <option value="spe-llcer-all" {%if profilUtilisateur['spes'][2]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                    <option value="spe-llcer-it" {%if profilUtilisateur['spes'][2]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
-                    <option value="spe-bio-eco" {%if profilUtilisateur['spes'][2]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
-                  </select>
-                </div>
-              </div>
-            </td>
-          </tr>
-          {%for element in profilUtilisateur['elementPublic']%}
-          {%if element=="caractere"%}
-          <tr>
-            <td>
-              <i class="fas fa-user" style="font-size:25px;"></i>
-                  &nbsp;&nbsp;Caractère
-            </td>
-            <td>
-              <div class="select" >
-                <select name="caractere">
-                  <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
-                  <option value="tr"{%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
-                  <option value="det"{%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
-                  <option value="fat"{%if profilUtilisateur['caractere']=="fat"%}selected{%endif%}>Fatigué.e</option>
-                  <option value="dro"{%if profilUtilisateur['caractere']=="dro"%}selected{%endif%}>Drôle</option>
-                  <option value="ti"{%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}>Timide</option>
-                  <option value="crea"{%if profilUtilisateur['caractere']=="crea"%}selected{%endif%}>Créatif.ve</option>
-                  <option value="ser"{%if profilUtilisateur['caractere']=="ser"%}selected{%endif%}>Sérieux.se</option>
-                  <option value="op"{%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
-                  <option value="pe"{%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
-                  <option value="ro"{%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
-                </select>
-              </div>
-            </td>
-            <td>
-              <div class="select" >
-                <select name="caractereVisibilite">
-                  <option value="pv">privé</option>
-                  <option value="pb"selected>public</option>
-                </select>
-              </div>
-            </td>
-          </tr>
-          {%elif element=="birth_date"%}
-          <tr>
-            <td>
-              <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
+              </td>
+            </tr>
+            {%elif element=="birth_date"%}
+            <tr>
+              <td>
+                <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
                 &nbsp;&nbsp;Date de naissance
-            </td>
-            <td>
-              {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
-            </td>
-            <td>
-              <div class="select" >
-                <select name="birth_dateVisibilite">
-                  <option value="pv">privé</option>
-                  <option value="pb"selected>public</option>
-                </select>
-              </div>
-            </td>
-          </tr>
-          {%else%}
-          <tr>
-            <td>
-              <i {%if element=="email"%}class="fas fa-at"{%endif%}{%if element=="telephone"%}class="fas fa-phone-alt"{%endif%}{%if element=="interets"%}class="far fa-smile-beam"{%endif%} style="font-size:25px;"></i>
-                  &nbsp;&nbsp;{%if element=="email"%}adresse mail{%endif%}{%if element=="telephone"%}Téléphone{%endif%}{%if element=="interets"%}Centres d'intérêts{%endif%}
-            </td>
-            <td>
-              <div id="content{{element}}">
-                <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
-                <p id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')"{%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
-              </div>
-            </td>
-            <td>
-              <div class="select" >
-                <select name="{{element}}Visibilite">
-                  <option value="pv">privé</option>
-                  <option value="pb" selected>public</option>
-                </select>
-              </div>
-            </td>
-          </tr>
-          {%endif%}
-          {%endfor%}
-        </tbody>
-      </table>
-      <!-- Fin tableau informations publiques -->
-      <!-- Informations privées -->
-      {% if profilUtilisateur['elementPrive'] != [] %}
+              </td>
+              <td>
+                {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
+              </td>
+              <td>
+                <div class="select">
+                  <select name="birth_dateVisibilite">
+                    <option value="pv">privé</option>
+                    <option value="pb" selected>public</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            {%else%}
+            <tr>
+              <td>
+                <i {%if element=="email"%}class="fas fa-at" {%endif%}{%if element=="telephone"%}class="fas fa-phone-alt" {%endif%}{%if element=="interets"%}class="far fa-smile-beam" {%endif%} style="font-size:25px;"></i>
+                &nbsp;&nbsp;{%if element=="email"%}adresse mail{%endif%}{%if element=="telephone"%}Téléphone{%endif%}{%if element=="interets"%}Centres d'intérêts{%endif%}
+              </td>
+              <td>
+                <div id="content{{element}}">
+                  <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
+                  <p id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
+                  </p>
+                </div>
+              </td>
+              <td>
+                <div class="select">
+                  <select name="{{element}}Visibilite">
+                    <option value="pv">privé</option>
+                    <option value="pb" selected>public</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            {%endif%}
+            {%endfor%}
+          </tbody>
+        </table>
+        <!-- Fin tableau informations publiques -->
+        <!-- Informations privées -->
+        {% if profilUtilisateur['elementPrive'] != [] %}
         <div style="font-weight: bold; font-size:large;">Informations privées :</div>
         <br />
-      {% endif %}
-      <!-- Début tableau informations privées -->
-      <table class="table is-narrow">
-        <tbody>
-        {%for element in profilUtilisateur['elementPrive']%}
-        {%if element=="caractere"%}
-        <tr>
-          <td>
-            <i class="fas fa-user" style="font-size:25px;"></i>
+        {% endif %}
+        <!-- Début tableau informations privées -->
+        <table class="table is-narrow">
+          <tbody>
+            {%for element in profilUtilisateur['elementPrive']%}
+            {%if element=="caractere"%}
+            <tr>
+              <td>
+                <i class="fas fa-user" style="font-size:25px;"></i>
                 &nbsp;&nbsp;Caractère
-          </td>
-          <td>
-            <div class="select" >
-              <select name="caractere">
-                <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
-                <option value="tr"{%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
-                <option value="det"{%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
-                <option value="fat"{%if profilUtilisateur['caractere']=="fat"%}selected{%endif%}>Fatigué.e</option>
-                <option value="dro"{%if profilUtilisateur['caractere']=="dro"%}selected{%endif%}>Drôle</option>
-                <option value="ti"{%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}>Timide</option>
-                <option value="crea"{%if profilUtilisateur['caractere']=="crea"%}selected{%endif%}>Créatif.ve</option>
-                <option value="ser"{%if profilUtilisateur['caractere']=="ser"%}selected{%endif%}>Sérieux.se</option>
-                <option value="op"{%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
-                <option value="pe"{%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
-                <option value="ro"{%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
-              </select>
-            </div>
-          </td>
-          <td>
-            <div class="select" >
-              <select name="caractereVisibilite">
-                <option value="pv"selected>privé</option>
-                <option value="pb">public</option>
-              </select>
-            </div>
-          </td>
-        </tr>
-        {%elif element=="birth_date"%}
-        <tr>
-          <td>
-            <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
-              &nbsp;&nbsp;Date de naissance
-          </td>
-          <td>
-            {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
-          </td>
-          <td>
-            <div class="select" >
-              <select name="birth_dateVisibilite">
-                <option value="pv"selected>privé</option>
-                <option value="pb">public</option>
-              </select>
-            </div>
-          </td>
-        </tr>
-        {%else%}
-        <tr>
-          <td>
-            <i {%if element=="email"%}class="fas fa-at"{%endif%}{%if element=="telephone"%}class="fas fa-phone-alt"{%endif%}{%if element=="interets"%}class="far fa-smile-beam"{%endif%} style="font-size:25px;"></i>
+              </td>
+              <td>
+                <div class="select">
+                  <select name="caractere">
+                    <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
+                    <option value="tr" {%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
+                    <option value="det" {%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
+                    <option value="fat" {%if profilUtilisateur['caractere']=="fat"%}selected{%endif%}>Fatigué.e</option>
+                    <option value="dro" {%if profilUtilisateur['caractere']=="dro"%}selected{%endif%}>Drôle</option>
+                    <option value="ti" {%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}>Timide</option>
+                    <option value="crea" {%if profilUtilisateur['caractere']=="crea"%}selected{%endif%}>Créatif.ve</option>
+                    <option value="ser" {%if profilUtilisateur['caractere']=="ser"%}selected{%endif%}>Sérieux.se</option>
+                    <option value="op" {%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
+                    <option value="pe" {%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
+                    <option value="ro" {%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="select">
+                  <select name="caractereVisibilite">
+                    <option value="pv" selected>privé</option>
+                    <option value="pb">public</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            {%elif element=="birth_date"%}
+            <tr>
+              <td>
+                <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Date de naissance
+              </td>
+              <td>
+                {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
+              </td>
+              <td>
+                <div class="select">
+                  <select name="birth_dateVisibilite">
+                    <option value="pv" selected>privé</option>
+                    <option value="pb">public</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            {%else%}
+            <tr>
+              <td>
+                <i {%if element=="email"%}class="fas fa-at" {%endif%}{%if element=="telephone"%}class="fas fa-phone-alt" {%endif%}{%if element=="interets"%}class="far fa-smile-beam" {%endif%} style="font-size:25px;"></i>
                 &nbsp;&nbsp;{%if element=="email"%}adresse mail{%endif%}{%if element=="birth_date"%}date de naissance{%endif%}{%if element=="telephone"%}Téléphone{%endif%}{%if element=="interets"%}Centres d'intérêts{%endif%}
-          </td>
-          <td>
-            <div id="content{{element}}">
-              <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
-              <p id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')"{%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
-            </div>
-          </td>
-          <td>
-            <div class="select"  >
-              <select name="{{element}}Visibilite">
-                <option value="pv"selected>privé</option>
-                <option value="pb">public</option>
-              </select>
-            </div>
-          </td>
-        </tr>
-        {%endif%}
-        {%endfor%}
-          <!-- Bouton pour valider les informations -->
+              </td>
+              <td>
+                <div id="content{{element}}">
+                  <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
+                  <p id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
+                  </p>
+                </div>
+              </td>
+              <td>
+                <div class="select">
+                  <select name="{{element}}Visibilite">
+                    <option value="pv" selected>privé</option>
+                    <option value="pb">public</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            {%endif%}
+            {%endfor%}
+            <!-- Bouton pour valider les informations -->
             <tr>
               <td>
                 <br />
@@ -513,13 +518,13 @@
                 </button>
               </td>
             </tr>
-        </tbody>
-      </table>
-      <!-- Fin tableau informations privées -->
-    </form>
-   </div>
-   <!-- Fin informations -->
-   <!-- Début choix couleurs -->
+          </tbody>
+        </table>
+        <!-- Fin tableau informations privées -->
+      </form>
+    </div>
+    <!-- Fin informations -->
+    <!-- Début choix couleurs -->
     <div style="margin-top: 24%;margin-right: 5%;">
       <form action="{{url_for('changeTheme')}}" method="POST">
         <!-- Titre choix couleurs -->
@@ -537,11 +542,7 @@
         <!-- Couleur 2 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
-            {%if niv < 2%}
-            <input type="radio" name="couleur" disbaled value="1" {%if session['couleur']==['#4c7450', '#a8d7ad', '#c3455a', '#d4ebd6']%}checked{%endif%}>&nbsp;&nbsp;
-            {%else%}
-            <input type="radio" name="couleur" value="1" {%if session['couleur']=='1'%}checked{%endif%}>&nbsp;&nbsp;
-            {%endif%}
+            <input type="radio" name="couleur" {%if niv < 2%} disabled {%endif%} value="1" {%if session['couleur']==['#4c7450', '#a8d7ad', '#c3455a', '#d4ebd6']%}checked{%endif%}>&nbsp;&nbsp;
             <p id="couleur" style="background-color:#4c7450;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#a8d7ad;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#c3455a;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
@@ -551,11 +552,7 @@
         <!-- Couleur 3 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
-            {%if niv < 3%}
-            <input type="radio" name="couleur" disabled value="2" {%if session['couleur']==['#3f51b5', '#81c5e2', '#e6b2d9', '#c0e2f1']%}checked{%endif%}>&nbsp;&nbsp;
-            {%else%}
-            <input type="radio" name="couleur" value="2" {%if session['couleur']==['#3f51b5', '#81c5e2', '#e6b2d9', '#c0e2f1']%}checked{%endif%}>&nbsp;&nbsp;
-            {%endif%}
+            <input type="radio" name="couleur" {%if niv < 3%} disabled {%endif%} value="2" {%if session['couleur']==['#3f51b5', '#81c5e2', '#e6b2d9', '#c0e2f1']%}checked{%endif%}>&nbsp;&nbsp;
             <p id="couleur" style="background-color:#3f51b5;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#81c5e2;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#e6b2d9;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
@@ -565,11 +562,7 @@
         <!-- Couleur 4 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
-            {%if niv < 4%}
-            <input type="radio" name="couleur" disabled value="3" {%if session['couleur']==['#e6b991', '#d6c2b0', '#74b3ab', '#ebe1d8']%}checked{%endif%}>&nbsp;&nbsp;
-            {%else%}
-            <input type="radio" name="couleur" value="3" {%if session['couleur']==['#e6b991', '#d6c2b0', '#74b3ab', '#ebe1d8']%}checked{%endif%}>&nbsp;&nbsp;
-            {%endif%}
+            <input type="radio" name="couleur" {%if niv < 4%} disabled {%endif%} value="3" {%if session['couleur']==['#e6b991', '#d6c2b0', '#74b3ab', '#ebe1d8']%}checked{%endif%}>&nbsp;&nbsp;
             <p id="couleur" style="background-color:#e6b991;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#d6c2b0;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#74b3ab;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
@@ -579,11 +572,7 @@
         <!-- Couleur 5 -->
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
-            {%if niv < 5%}
-            <input type="radio" name="couleur" disabled value="4" {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>&nbsp;&nbsp;
-            {%else%}
-            <input type="radio" name="couleur" value="4" {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>&nbsp;&nbsp;
-            {%endif%}
+            <input type="radio" name="couleur" {%if niv < 5%} disabled {%endif%} value="4" {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>&nbsp;&nbsp;
             <p id="couleur" style="background-color:#deb72f;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#e6cf81;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#e68181;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
@@ -592,14 +581,10 @@
         <br />
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
-            {%if niv < 5%}
-            <input type="radio" name="couleur" disabled value="5" {%if session['couleur']=='5'%}checked{%endif%}>&nbsp;&nbsp;
-            {%else%}
-            <input type="radio" name="couleur" value="5" {%if session['couleur']=='5'%}checked{%endif%}>&nbsp;&nbsp;
-            {%endif%}
-            <input id="couleur" type="color"/>&nbsp;
-            <input id="couleur" type="color"/>&nbsp;
-            <input id="couleur" type="color"/>&nbsp;
+            <input type="radio" name="couleur" {%if niv < 5%} disabled {%endif%} value="5" {%if session['couleur']=='5'%}checked{%endif%}>&nbsp;&nbsp;
+            <input id="couleur" type="color" />&nbsp;
+            <input id="couleur" type="color" />&nbsp;
+            <input id="couleur" type="color" />&nbsp;
 
           </div>
         </label>
@@ -617,7 +602,7 @@
     <!-- Fin choix couleurs -->
   </div>
   {%if user['admin']==true and profilUtilisateur['sign'] != []%}
-  <button  class="button  is-danger is-outlined is-small" onClick="validationUser();">
+  <button class="button  is-danger is-outlined is-small" onClick="validationUser();">
     <span class="icon is-small">
       <i id="sign" class="fas fa-ban" aria-hidden="true"></i>
     </span>
@@ -628,60 +613,62 @@
   {% if demandes != [] %}
   <div style="margin-left:2%;display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly;">
     <div style="font-weight: bold; font-size:large;">Mes demandes d'aide :</div>
+    <br />
     {% endif %}
     {%for d in demandes %}
-      <!-- Début publi -->
-      <div class="box demande" style="border-radius: 20px;margin-bottom: 0.8rem; margin-top: 1%; width: 70%;">
-        <article class="media">
-          <div class="media-left">
-            <!-- Image photo de profil-->
-            <figure class="image is-64x64">
-              <img alt="user"  src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
-            </figure>
-          </div>
-          <!-- Contenu publication -->
-          <div class="media-content">
-            <div class="content">
-              <p style="margin-bottom: 5px;">
-                <!-- Nom utilisateur ; pseudo ; temps -->
-                <div style="font-variant: small-caps;">
-                  <a href="{{url_for('profil' ,idUser=d['user']['_id'])}}">{{d['user']['nom']}} {{d['user']['prenom']}}</a>
-                  <span style="display: inline-block; margin-right: 40px;"></span>{{d['matière']}}
-                </div>
-                <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
-              </p>
-              <!-- Titre -->
-              <h4 style="margin-top: 0;">{{d['titre']}}</h3>
+    <!-- Début publi -->
+    <div class="box demande" style="border-radius: 20px;margin-bottom: 0.8rem; margin-top: 1%; width: 70%;">
+      <article class="media">
+        <div class="media-left">
+          <!-- Image photo de profil-->
+          <figure class="image is-64x64">
+            <img alt="user" src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+              style="width:80px; height:auto;" />
+          </figure>
+        </div>
+        <!-- Contenu publication -->
+        <div class="media-content">
+          <div class="content">
+            <p style="margin-bottom: 5px;">
+              <!-- Nom utilisateur ; pseudo ; temps -->
+            <div style="font-variant: small-caps;">
+              <a href="{{url_for('profil' ,idUser=d['user']['_id'])}}">{{d['user']['nom']}} {{d['user']['prenom']}}</a>
+              <span style="display: inline-block; margin-right: 40px;"></span>{{d['matière']}}
+            </div>
+            <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
+            </p>
+            <!-- Titre -->
+            <h4 style="margin-top: 0;">{{d['titre']}}</h3>
               <!-- Texte publication -->
               <p style="word-wrap:break-word;">{{d['contenu']}}</p>
               {% if d['fileType'] == 'image' %}
-                  <a href="/file/DemandeFile_{{d['idMsg']}}" download="Fichier demande d'aide {{d['idMsg']}}.png">
-                    <img src="/file/DemandeFile_{{d['idMsg']}}" style="max-width: 100%; max-height: 25vh;" />
-                  </a>
-                {% elif d['fileType'] == 'pdf' %}
-                  <a href="/file/DemandeFile_{{d['idMsg']}}" download="Fichier demande d'aide {{d['idMsg']}}.pdf">
-                    <i class="fas fa-file-pdf" style="font-size: 36px; margin-right: 15px;"></i><span>1 fichier PDF joint</span>
-                  </a>
-                {% endif %}
-            </div>
-            <!-- Icons like et commentaire -->
-            <nav class="level is-mobile">
-              <div class="level-left">
-                <a class="level-item" aria-label="like" onClick="like('{{d['idMsg']}}')">
-                  <span class="icon is-small">
-                    {% if d['a_like'] %}
-                      <i id="like_{{d['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="font-size: 20px;padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
-                    {% else %}
-                      <i id="like_{{d['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="font-size: 20px;padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
-                    {% endif %}
-                  </span>
-                </a>
-                <a class="level-item" style="margin-left: 15%;" aria-label="comment" href="/comments/{{d['idMsg']}}">
-                  <span class="icon is-small">
-                    <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true"></i>
-                  </span>
-                </a>
-                  <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
+              <a href="/file/DemandeFile_{{d['idMsg']}}" download="Fichier demande d'aide {{d['idMsg']}}.png">
+                <img src="/file/DemandeFile_{{d['idMsg']}}" style="max-width: 100%; max-height: 25vh;" />
+              </a>
+              {% elif d['fileType'] == 'pdf' %}
+              <a href="/file/DemandeFile_{{d['idMsg']}}" download="Fichier demande d'aide {{d['idMsg']}}.pdf">
+                <i class="fas fa-file-pdf" style="font-size: 36px; margin-right: 15px;"></i><span>1 fichier PDF joint</span>
+              </a>
+              {% endif %}
+          </div>
+          <!-- Icons like et commentaire -->
+          <nav class="level is-mobile">
+            <div class="level-left">
+              <a class="level-item" aria-label="like" onClick="like('{{d['idMsg']}}')">
+                <span class="icon is-small">
+                  {% if d['a_like'] %}
+                  <i id="like_{{d['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="font-size: 20px;padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
+                  {% else %}
+                  <i id="like_{{d['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="font-size: 20px;padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
+                  {% endif %}
+                </span>
+              </a>
+              <a class="level-item" style="margin-left: 15%;" aria-label="comment" href="/comments/{{d['idMsg']}}">
+                <span class="icon is-small">
+                  <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true"></i>
+                </span>
+              </a>
+              <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
                     <span class="icon is-small">
                       {% if d['a_sign'] %}
                         <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
@@ -690,43 +677,49 @@
                       {% endif %}
                     </span>
                   </a> -->
-                </div>
-              </div>
-                  <div class="navbar-item">
-                    <button  class="button is-success is-outlined is-small" onClick="resoudre('{{d['idMsg']}}')">
-                      <span class="icon is-small">
-                        {% if d['resolu'] %}
-                        <i class="fas fa-check-square" aria-hidden="true"></i>
-                        {% else %}
-                        <i class="far fa-check-square" aria-hidden="true"></i>
-                        {% endif %}
-                      </span>
-                      <span>Résolu &nbsp;</span>
-                    </button>
-                    <input type="hidden" />
-                  </div>
-              </div>
-            </nav>
-          </div>
-        </article>
-      </div>
-      <!-- Fin publi -->
+            </div>
+        </div>
+        <div class="navbar-item">
+          <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['idMsg']}}')">
+            <span class="icon is-small">
+              {% if d['resolu'] %}
+              <i class="fas fa-check-square" aria-hidden="true"></i>
+              {% else %}
+              <i class="far fa-check-square" aria-hidden="true"></i>
+              {% endif %}
+            </span>
+            <span>Résolu &nbsp;</span>
+          </button>
+          <input type="hidden" />
+        </div>
+    </div>
+    </nav>
+  </div>
+  </article>
+  </div>
+  <!-- Fin publi -->
+  <br />
+  {%endfor%}
+  </div>
+  <!-- Sanctions -->
+  <!-- STYLE A FAIRE !!! -->
+  <div style="margin-left:2%;">
+    <div style="font-weight: bold; font-size:large;">Mes sanctions :</div>
+    <br />
+    {%for element in profilUtilisateur['Sanction']%}
+    <ul class="menu-list" style="margin-left:1%;">
+      <li><u>Sanction : {{element['SanctionType']}}</u></li>
+      <li>
+        <ul>
+          <li>Motif : {{element['SanctionMotif']}}</li>
+          <li>Prochaine Sanction : {{element['SanctionNext']}}</li>
+          <li>{{element['dateSanction']}}</li>
+        </ul>
+      </li>
+    </ul>
     {%endfor%}
   </div>
-  <!-- Sanctions --> <!-- STYLE A FAIRE !!! -->
-  <div>
-    <table>
-      {%for element in profilUtilisateur['Sanction']%}
-      <tr>
-        <td>Date : {{element['dateSanction']}}</td>
-        <td>Sanction : {{element['SanctionType']}}</td>
-        <td>Motif : {{element['SanctionMotif']}}</td>
-        <td>Prochaine Sanction : {{element['SanctionNext']}}</td>
-        </tr>
-      {%endfor%}
-    </table>
-  </div>
-<!-- fin de la page -->
+  <!-- fin de la page -->
 </body>
 
 </html>
