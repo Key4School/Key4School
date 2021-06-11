@@ -27,7 +27,8 @@ db_groupes = cluster.db.groupes
 db_files = cluster.db.fs.files
 db_chunks = cluster.db.fs.chunks
 db_notif = cluster.db.notifications
-listeModeration = open("list_ban_words.txt", "r").read().splitlines()
+with open("list_ban_words.txt", "r") as fichierBanWords:
+    listeModeration = fichierBanWords.read().splitlines()
 
 
 
@@ -398,6 +399,24 @@ def createGroupe():
     else:
         return redirect(url_for('login'))
 
+@app.route('/virerParticipant/', methods=['POST'])
+def virerParticipant():
+    if 'id' in session:
+        if ObjectId(session['id']) in db_groupes.find_one({'_id': ObjectId(request.form['idViréGrp'])})['moderateurs'] or request.form['idViré'] == session['id']:
+            db_groupes.update_one({'_id': ObjectId(request.form['idViréGrp'])},
+                {'$pull': {
+                    'id-utilisateurs': ObjectId(request.form['idViré']),
+                    'moderateurs': ObjectId(request.form['idViré'])}
+                },
+            )
+            if request.form['idViré'] == session['id']:
+                return redirect(url_for('messages'))
+            else:
+                return  redirect('/messages/'+request.form['idViréGrp'])
+        else:
+            return redirect(url_for('accueil'))
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/changeTheme/', methods=['POST'])
 def changeTheme():

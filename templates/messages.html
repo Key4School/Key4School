@@ -134,7 +134,7 @@
             </header>
               <section class="modal-card-body">
                 Info Utilisateur : <br />
-                {%for users in infoUtilisateurs%}{{users['prenom']}} {{users['nom']}} {{ users['pseudo']}}{%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}<br />{%endfor%}
+                {%for users in infoUtilisateurs%}{%if sessionId in infogroupe['moderateurs']%}<button onclick="optionParticipantOpen('{{users['_id']}}')">{{users['prenom']}} {{users['nom']}} {{users['pseudo']}}</button>{%else%}<a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['prenom']}} {{users['nom']}} {{users['pseudo']}}</a>{%endif%}{%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}<br />{%endfor%}
                 <button  class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
                   <span class="icon is-small">
                     {% if sessionId in infogroupe['sign'] %}
@@ -145,11 +145,29 @@
                   </span>
                   <span>Signaler</span>
                 </button>
+                <form action="/virerParticipant/" id="virerParticipant" method="POST">
+                  <input type='hidden' id="idViré" name='idViré' value="{{sessionId}}" />
+                  <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
+                  <button type="submit">Quitter le groupe</button>
+                </form>
               </section>
               <footer class="modal-card-foot">
                 <button  class="button is-success">Valider</button>
                 <button onclick="divoptionclose(); return false;" class="button">Annuler</button>
               </footer>
+          </div>
+        </div>
+        <div class="modal" id="optionParticipant" style="overflow:hidden;">
+          <div class="modal-card">
+            <section class="modal-card-body">
+              <a id="hrefParticipant" href="">Voir le profil:</a><br />
+              mettre administration<br />
+              <form action="/virerParticipant/" id="virerParticipant" method="POST">
+                <input type='hidden' id="idViré" name='idViré' value="" />
+                <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
+                <button type="submit">virer du groupe</button>
+              </form>
+            </section>
           </div>
         </div>
         <div class="modal" id="signalisationDiscussion" style="overflow:hidden;">
@@ -251,7 +269,7 @@
               {%else%}
               <div class="navbar-dropdown">
               {%endif%}
-                {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT"%}
+                {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT" or user['admin']== "True"%}
                 <div class="navbar-item">
                   <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg">
                     <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
