@@ -480,3 +480,18 @@ function optionParticipantOpen(id){
   document.getElementById("hrefParticipant").href="/profil/"+id;
   document.getElementById("idViré").value=id;
 }
+
+function optionParticipantClose(){
+  $("#optionParticipant").removeClass("is-active");
+}
+
+function modifRole(id, idGrp){
+  $.ajax({
+    url: '/modifRole/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: ({idModifié :  id, idGrp : idGrp}), // et on envoie nos données
+    success: function(response) {
+      document.getElementById("ModifRoleUser"+id).innerHTML=response;
+    },
+  });
+}

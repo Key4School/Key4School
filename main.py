@@ -418,6 +418,33 @@ def virerParticipant():
     else:
         return redirect(url_for('login'))
 
+@app.route('/modifRole/', methods=['POST'])
+def modifRole():
+    if 'id' in session:
+        grp =db_groupes.find_one({'_id': ObjectId(request.form['idGrp'])})
+        modo = grp['moderateurs']
+        participant = grp['id-utilisateurs']
+        if ObjectId(session['id']) in modo and ObjectId(request.form['idModifié']) in participant:
+            if ObjectId(request.form['idModifié']) in modo :
+                db_groupes.update_one({'_id': ObjectId(request.form['idGrp'])},
+                    {'$pull': {
+                        'moderateurs': ObjectId(request.form['idModifié'])}
+                    },
+                )
+                return 'participant'
+            else:
+                db_groupes.update_one({'_id': ObjectId(request.form['idGrp'])},
+                    {'$push': {
+                        'moderateurs': ObjectId(request.form['idModifié'])}
+                    },
+                )
+                return 'admin'
+        else:
+            return redirect(url_for('accueil'))
+    else:
+        return redirect(url_for('login'))
+
+
 @app.route('/changeTheme/', methods=['POST'])
 def changeTheme():
     if 'id' in session:

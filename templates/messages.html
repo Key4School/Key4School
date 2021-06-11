@@ -134,7 +134,22 @@
             </header>
               <section class="modal-card-body">
                 Info Utilisateur : <br />
-                {%for users in infoUtilisateurs%}{%if sessionId in infogroupe['moderateurs']%}<button onclick="optionParticipantOpen('{{users['_id']}}')">{{users['prenom']}} {{users['nom']}} {{users['pseudo']}}</button>{%else%}<a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['prenom']}} {{users['nom']}} {{users['pseudo']}}</a>{%endif%}{%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}<br />{%endfor%}
+                {%for users in infoUtilisateurs%}
+                {%if sessionId in infogroupe['moderateurs']%}
+                <button onclick="optionParticipantOpen('{{users['_id']}}')">
+                  {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
+                </button>
+                {%else%}
+                <a href="{{url_for('profil' ,idUser=users['_id'])}}">
+                  {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
+                </a>
+                {%endif%}
+                <button onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
+                  <div id="ModifRoleUser{{users['_id']}}">
+                    {%if users['_id'] in infogroupe['moderateurs']%} admin{%else%}participant{%endif%}
+                  </div>
+                </button>
+                <br />{%endfor%}
                 <button  class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
                   <span class="icon is-small">
                     {% if sessionId in infogroupe['sign'] %}
@@ -160,8 +175,8 @@
         <div class="modal" id="optionParticipant" style="overflow:hidden;">
           <div class="modal-card">
             <section class="modal-card-body">
+              <button onclick="divoptionParticipantclose()" class="delete" aria-label="close"></button>
               <a id="hrefParticipant" href="">Voir le profil:</a><br />
-              mettre administration<br />
               <form action="/virerParticipant/" id="virerParticipant" method="POST">
                 <input type='hidden' id="idViré" name='idViré' value="" />
                 <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
