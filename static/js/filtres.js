@@ -20,7 +20,9 @@ const filters_slide = (direction) => {
 	}
 };
 
-const userColor2 = document.getElementById('filters').dataset.usercolor2;
+let userColor2 = '#fff';
+if(!document.location.pathname.match(/^\/messages/))
+	userColor2 = document.getElementById('filters').dataset.usercolor2;
 
 const filter = (f) => {
 	const subject = f.parentElement.dataset.subject;
