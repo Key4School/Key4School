@@ -144,11 +144,15 @@
                   {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
                 </a>
                 {%endif%}
+                {%if sessionId in infogroupe['moderateurs']%}
                 <button onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
                   <div id="ModifRoleUser{{users['_id']}}">
                     {%if users['_id'] in infogroupe['moderateurs']%} admin{%else%}participant{%endif%}
                   </div>
                 </button>
+                {%else%}
+                {%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}
+                {%endif%}
                 <br />{%endfor%}
                 <button  class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
                   <span class="icon is-small">
