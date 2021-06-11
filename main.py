@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort
-# import pronotepy  # api Pronote
-# from pronotepy.ent import ile_de_france
 from flask_pymongo import PyMongo
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from datetime import *
 from requests_oauthlib import OAuth2Session
 from flask_session import Session
@@ -15,11 +14,11 @@ import smtplib, ssl
 
 # Création de l'application
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 
 # Récupération d'une base de données
-cluster = PyMongo(
-    app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
+cluster = PyMongo(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 # Voici deux exemples pour créer des BDD
 db_utilisateurs = cluster.db.utilisateurs
 db_demande_aide = cluster.db.demande_aide
@@ -28,14 +27,54 @@ db_groupes = cluster.db.groupes
 db_files = cluster.db.fs.files
 db_chunks = cluster.db.fs.chunks
 db_notif = cluster.db.notifications
-# Voici un exemple pour ajouter un utilisateur avec son nom et son mot de passe
+with open("list_ban_words.txt", "r") as fichierBanWords:
+    listeModeration = fichierBanWords.read().splitlines()
 
-'''connexion a l'api Pronote avec l'username et le mdp ENT mais je suis pas sur que ca va etre possible'''
-'''le lien de l'api pour plus d'info https://github.com/bain3/pronotepy'''
-# client = pronotepy.Client('https://0910626l.index-education.net/pronote/eleve.html',
-#                           username=username,
-#                           password=mdpENT,
-#                           ent=ile_de_france)
+
+
+def recupLevel():
+    xpgens = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})['xp']
+    niv = int(0.473*xpgens**0.615)
+    xplvl = int((0.473*xpgens**0.615-niv)*100)
+    return niv, xplvl, xpgens
+
+def addXP(user: ObjectId, amount: int) -> None:
+    """
+        +10 pour une demande d’aide
+        +15 pour une réponse
+        +2 pour chaque like reçu
+    """
+
+    db_utilisateurs.update_one(
+        {'_id': user},
+        {'$inc': {'xp': amount}}
+    )
+
+    return
+
+def addXpModeration(user: ObjectId, amount: int) -> None:
+
+    db_utilisateurs.update_one(
+        {'_id': user},
+        {'$inc': {'xpModeration': amount}}
+    )
+
+    return
+
+def automoderation(stringModerer):
+    for content in listeModeration:
+        if len(content) < 5:
+            if stringModerer[0:len(content)+1] == content+" ":
+                stringModerer= stringModerer.replace(content, " * ")
+            if stringModerer[-len(content)+1:] == " "+content:
+                stringModerer= stringModerer.replace(content, " * ")
+            if stringModerer == content:
+                stringModerer= stringModerer.replace(content, " * ")
+            content= " "+content+" "
+        if  content in stringModerer:
+            stringModerer= stringModerer.replace(content, " * ")
+
+    return stringModerer
 
 
 def notif(type, id_groupe, id_msg, destinataires):
@@ -104,6 +143,7 @@ def accueil():
                 'a_like': a_like,
                 'a_sign': a_sign,
                 'resolu': a['resolu'],
+                'fileType': a['fileType'],
                 # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
             })
@@ -129,8 +169,22 @@ def messages(idGroupe):
         if request.method == 'GET':
             # il faudra récupérer l'id qui sera qans un cookie
             grp = db_groupes.find({"id-utilisateurs": ObjectId(session['id'])})
+            user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
+            users = db_utilisateurs.aggregate([
+                {'$sort': {'pseudo': 1}},
+                {'$project': {
+                    '_id': 1,
+                    'nom': 1,
+                    'prenom': 1,
+                    'pseudo': 1,
+                    'lycee': 1,
+                    'email': 1,
+                    'telephone': 1,
+                    'elementPrive': 1
+                }}
+            ])
+
             if idGroupe != None:
-                idGroupe = escape(idGroupe)
                 msgDb = db_messages.aggregate([
                     {'$match': {'id-groupe': ObjectId(idGroupe)}},
                     {'$lookup':
@@ -148,15 +202,39 @@ def messages(idGroupe):
                         'contenu': 1,
                         'date-envoi': 1,
                         'rep': 1,
-                        'audio': 1
+                        'audio': 1,
+                        'sign': 1
                     }},
                 ])
                 infogroupes = db_groupes.find_one({"_id": ObjectId(idGroupe)})
                 infoUtilisateurs = []
                 for content in infogroupes['id-utilisateurs']:
                     infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
-                if session['id'] in str(infoUtilisateurs) or '6075cae8fb56bf0654e5f4ab' in str(infoUtilisateurs):
+                if session['id'] in str(infoUtilisateurs):
                     danslegroupe = True
+                elif user['admin'] == True:
+                    msgDb = db_messages.aggregate([
+                        {'$match': {"$and":[{'id-groupe': ObjectId(idGroupe)},{"sign": {"$exists": "true", "$ne": []}}]}},
+                        {'$lookup':
+                            {
+                                'from': 'messages',
+                                'localField': 'reponse',
+                                'foreignField': '_id',
+                                'as': 'rep',
+                            }
+                        }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                        {'$project': {
+                            '_id': 1,
+                            'id-groupes': 1,
+                            'id-utilisateur': 1,
+                            'contenu': 1,
+                            'date-envoi': 1,
+                            'rep': 1,
+                            'audio': 1,
+                            'sign': 1
+                        }},
+                    ])
+
                 else:
                     danslegroupe = False
                     msgDb = None
@@ -166,35 +244,101 @@ def messages(idGroupe):
                 msgDb = None
                 infogroupes = None
                 infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=db_utilisateurs.find(), sessionId=ObjectId(session['id']), user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])}))
+            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=ObjectId(session['id']), user=user)
 
         elif request.method == 'POST':
             if request.form['reponse'] != "None":
-                reponse = ObjectId(escape(request.form['reponse']))
+                reponse = ObjectId(request.form['reponse'])
             else:
                 reponse = "None"
 
-            if escape(request.form['contenuMessage']) == '':
+            if request.form['contenuMessage'] == '':
                 return abort(500)
 
-            message = db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
-                                              "contenu": escape(request.form['contenuMessage']), "date-envoi": datetime.now(), "reponse": reponse})
-            infogroupes = db_groupes.find_one({"_id": ObjectId(escape(request.form['group']))})
-            notif("msg", ObjectId(escape(request.form['group'])), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+            message = db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                                              "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse, "sign": []})
+            infogroupes = db_groupes.find_one({"_id": ObjectId(request.form['group'])})
+            notif("msg", ObjectId(request.form['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+
+            # Sending new message to connected users
+            # json = {'_id': message.inserted_id, 'id-groupe': request.form['group'], 'id-utilisateur': session['id'], 'contenu': request.form['contenuMessage'], 'date-envoi': datetime.now()}
+            #request.sid = request.cookies.get('session')
+            # emit('newMsg', json, to=idGroupe, namespace='/')
+
             return 'sent'
     else:
         return redirect(url_for('login'))
 
+# Connection au groupe pour recevoir les nouveaux messages par la suite
+@socketio.on('connectToGroup')
+def handleEvent_connectToGroup(json):
+    if 'id' in session:
+        if 'room' in json:
+            if json['room'] != 'None':
+                # Check authorized
+                grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
+                if grp != None:
+                    if session['id'] in str(grp['id-utilisateurs']): # authorized
+                        join_room(json['room'])
+
+
+@socketio.on('postMsg')
+def handleEvent_postMsg(json):
+    if 'id' in session:
+        if 'room' in json:
+            # Check authorized
+            grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
+            if grp != None:
+                if session['id'] in str(grp['id-utilisateurs']): # authorized
+                    if json['reponse'] != "None":
+                        reponse = ObjectId(json['reponse'])
+                    else:
+                        reponse = "None"
+
+                    if 'dateAudio' in json:
+                        nom = "MsgVocal" + json['room'] + session['id'] + json['dateAudio']
+                        message = db_messages.insert_one({"id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
+                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": reponse})
+
+                    elif not json['contenuMessage'] == '':
+                        message = db_messages.insert_one({"id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
+                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse, "sign": []})
+                    if message:
+                        infogroupes = db_groupes.find_one({"_id": ObjectId(json['room'])})
+                        notif("msg", ObjectId(json['room']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+                        infoUtilisateurs = []
+                        for content in infogroupes['id-utilisateurs']:
+                            infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
+                        # Sending new message to connected users
+                        message = list(db_messages.aggregate([
+                            {'$match': {'_id' : message.inserted_id}},
+                            {'$lookup':
+                                {
+                                    'from': 'messages',
+                                    'localField': 'reponse',
+                                    'foreignField': '_id',
+                                    'as': 'rep',
+                                }
+                            }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
+                            {'$project': {
+                                '_id': 1,
+                                'id-groupes': 1,
+                                'id-utilisateur': 1,
+                                'contenu': 1,
+                                'date-envoi': 1,
+                                'rep': 1,
+                                'audio': 1
+                            }},
+                        ]))[0]
+                        html = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'])
+                        emit('newMsg', html, to=json['room'])
 
 @app.route('/uploadAudio/', methods=['POST'])
 def uploadAudio():
     if 'id' in session:
-        heure = str(datetime.now())
-        nom = "MsgVocal" + \
-            escape(request.form['group']) + session['id'] + heure
+        nom = "MsgVocal" + request.form['group'] + session['id'] + request.form['date']
+
         cluster.save_file(nom, request.files['audio'])
-        db_messages.insert_one({"id-groupe": ObjectId(escape(request.form['group'])), "id-utilisateur": ObjectId(session['id']),
-                                "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": ""})
         return 'yes'
     else:
         return redirect(url_for('login'))
@@ -203,7 +347,14 @@ def uploadAudio():
 @app.route('/audio/<audioName>')
 def audio(audioName):
     if 'id' in session:
-        return cluster.send_file(escape(audioName))
+        return cluster.send_file(audioName)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/file/<fileName>')
+def file(fileName):
+    if 'id' in session:
+        return cluster.send_file(fileName)
     else:
         return redirect(url_for('login'))
 
@@ -211,10 +362,10 @@ def audio(audioName):
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     if 'id' in session:
-        idGroupe = escape(request.form['grp'])
-        db_messages.delete_one({"_id": ObjectId(escape(request.form['msgSuppr']))})
+        idGroupe = request.form['grp']
+        db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
         if request.form['audio'] == 'True':
-            MyAudio = db_files.find_one({'filename': escape(request.form['audioName'])})
+            MyAudio = db_files.find_one({'filename': request.form['audioName']})
             db_files.delete_one({'_id': MyAudio['_id']})
             db_chunks.delete_many({'files_id': MyAudio['_id']})
         return redirect(url_for('messages', idGroupe=idGroupe))
@@ -223,10 +374,10 @@ def supprimerMsg():
         return redirect(url_for('login'))
 
 
-@app.route('/searchUser_newgroup/', methods=['POST'])
+"""@app.route('/searchUser_newgroup/', methods=['POST'])
 def searchUser_newgroup():
     if 'id' in session:
-        search = escape(request.form['search'])
+        search = request.form['search']
         users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {
                                                   '$regex': search, '$options': 'i'}},
@@ -240,7 +391,7 @@ def searchUser_newgroup():
                                         }).limit(30)
         return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('login'))"""
 
 
 @app.route('/createGroupe/', methods=['POST'])
@@ -251,47 +402,54 @@ def createGroupe():
             if name == 'nomnewgroupe':
                 pass
             else:
-                participants.append(ObjectId(escape(name)))
-        newGroupe = db_groupes.insert_one({'nom': escape(request.form['nomnewgroupe']), 'id-utilisateurs': participants})
+                participants.append(ObjectId(name))
+        newGroupe = db_groupes.insert_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[]})
         return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
     else:
         return redirect(url_for('login'))
 
-
-@app.route('/refreshMsg/')
-def refreshMsg():
+@app.route('/virerParticipant/', methods=['POST'])
+def virerParticipant():
     if 'id' in session:
-        idGroupe = escape(request.args['idgroupe'])
-        if escape(request.args['idMsg']) != 'undefined' and idGroupe != 'undefined' and idGroupe != 'None':
-            dateLast = datetime.strptime(request.args['idMsg'], '%Y-%m-%dT%H:%M:%S.%fZ')
-            infogroupes = db_groupes.find_one({"_id": ObjectId(idGroupe)})
-            infoUtilisateurs = []
-            for content in infogroupes['id-utilisateurs']:
-                infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
-            msgDb = db_messages.aggregate([
-                {'$match': {'$and': [
-                    {'id-groupe': ObjectId(idGroupe)}, {'date-envoi': {'$gt': dateLast}}]}},
-                {'$lookup':
-                    {
-                        'from': 'messages',
-                        'localField': 'reponse',
-                        'foreignField': '_id',
-                        'as': 'rep',
-                    }
-                }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
-                {'$project': {
-                    '_id': 1,
-                    'id-groupes': 1,
-                    'id-utilisateur': 1,
-                    'contenu': 1,
-                    'date-envoi': 1,
-                    'rep': 1,
-                    'audio': 1
-                }},
-            ])
-            return render_template("refreshMessages.html", msgDb=msgDb, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=idGroupe)
+        if ObjectId(session['id']) in db_groupes.find_one({'_id': ObjectId(request.form['idViréGrp'])})['moderateurs'] or request.form['idViré'] == session['id']:
+            db_groupes.update_one({'_id': ObjectId(request.form['idViréGrp'])},
+                {'$pull': {
+                    'id-utilisateurs': ObjectId(request.form['idViré']),
+                    'moderateurs': ObjectId(request.form['idViré'])}
+                },
+            )
+            if request.form['idViré'] == session['id']:
+                return redirect(url_for('messages'))
+            else:
+                return  redirect('/messages/'+request.form['idViréGrp'])
         else:
-            return ''
+            return redirect(url_for('accueil'))
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/modifRole/', methods=['POST'])
+def modifRole():
+    if 'id' in session:
+        grp =db_groupes.find_one({'_id': ObjectId(request.form['idGrp'])})
+        modo = grp['moderateurs']
+        participant = grp['id-utilisateurs']
+        if ObjectId(session['id']) in modo and ObjectId(request.form['idModifié']) in participant:
+            if ObjectId(request.form['idModifié']) in modo :
+                db_groupes.update_one({'_id': ObjectId(request.form['idGrp'])},
+                    {'$pull': {
+                        'moderateurs': ObjectId(request.form['idModifié'])}
+                    },
+                )
+                return 'participant'
+            else:
+                db_groupes.update_one({'_id': ObjectId(request.form['idGrp'])},
+                    {'$push': {
+                        'moderateurs': ObjectId(request.form['idModifié'])}
+                    },
+                )
+                return 'admin'
+        else:
+            return redirect(url_for('accueil'))
     else:
         return redirect(url_for('login'))
 
@@ -299,9 +457,20 @@ def refreshMsg():
 @app.route('/changeTheme/', methods=['POST'])
 def changeTheme():
     if 'id' in session:
+        if int(request.form['couleur']) == 5:
+            color2 = tuple(int(request.form['color2'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+            moyenne = '#%02x%02x%02x' % tuple((color+255)//2 for color in color2)
+            couleurs = [request.form['color1'], request.form['color2'], request.form['color3'], moyenne]
+        else:
+            listColor = [['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'],
+                        ['#4c7450', '#a8d7ad', '#c3455a', '#d4ebd6'],
+                        ['#3f51b5', '#81c5e2', '#e6b2d9', '#c0e2f1'],
+                        ['#e6b991', '#d6c2b0', '#74b3ab', '#ebe1d8'],
+                        ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']]
+            couleurs = listColor[int(request.form['couleur'])]
         db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
-                                   "$set": {"couleur": escape(request.form['couleur'])}})
-        session['couleur'] = request.form['couleur']
+                                   "$set": {"couleur": couleurs}})
+        session['couleur'] = couleurs
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
@@ -349,8 +518,8 @@ def profil(idUser):
                 })
 
             profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
-
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
+            niv, xplvl, xpgens = recupLevel()
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, xplvl=xplvl, xp=xpgens, niv=niv, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
 
         else:
             profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(idUser)})
@@ -371,7 +540,7 @@ def profil(idUser):
 @app.route('/userImg/<profilImg>')
 def userImg(profilImg):
     if 'id' in session:
-        return cluster.send_file(escape(profilImg))
+        return cluster.send_file(profilImg)
     else:
         return redirect(url_for('login'))
 
@@ -384,16 +553,16 @@ def updateprofile():
         elementPublic = []
         for content in request.form:
             if request.form[content] == "pv":
-                elementPrive.append(escape(content.replace('Visibilite', '')))
+                elementPrive.append(content.replace('Visibilite', ''))
             elif request.form[content] == "pb":
-                elementPublic.append(escape(content.replace('Visibilite', '')))
+                elementPublic.append(content.replace('Visibilite', ''))
 
         # if request.form['pseudoVisibilite'] == "pv":
         #     elementPrive.append("pseudo")
         # elif request.form['pseudoVisibilite'] == "pb":
         #     elementPublic.append("pseudo")
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': escape(request.form['pseudo']), 'email': escape(request.form['email']), 'telephone': escape(request.form['telephone']), 'interets': escape(request.form['interets']), 'caractere': escape(request.form['caractere']),
-                                                                               'langues': [escape(request.form['lv1']), escape(request.form['lv2'])], 'options': [escape(request.form['option1']), escape(request.form['option2'])], 'spes': [escape(request.form['spe1']), escape(request.form['spe2']), escape(request.form['spe3'])],
+        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': automoderation(request.form['pseudo']), 'email': automoderation(request.form['email']), 'telephone': automoderation(request.form['telephone']), 'interets': automoderation(request.form['interets']), 'caractere': request.form['caractere'],
+                                                                               'langues': [request.form['lv1'], request.form['lv2']], 'options': [request.form['option1'], request.form['option2']], 'spes': [request.form['spe1'], request.form['spe2'], request.form['spe3']],
                                                                                'elementPrive': elementPrive, 'elementPublic': elementPublic}})
         # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
         return redirect(url_for('profil'))
@@ -436,7 +605,6 @@ def redirect_comments():
 @app.route('/comments/<idMsg>', methods=['GET', 'POST'])
 def comments(idMsg):
     if 'id' in session:
-        idMsg = escape(idMsg)
         if request.method == 'GET':
             msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
 
@@ -485,6 +653,7 @@ def comments(idMsg):
                 'a_like': a_like,
                 'a_sign': a_sign,
                 'reponses': reponses,
+                'fileType': msg['fileType'],
                 # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
                 'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
             }
@@ -499,7 +668,7 @@ def comments(idMsg):
                 reponses[str(_id)] = {
                     '_id': ObjectId(_id),
                     'id-utilisateur': ObjectId(session['id']),
-                    'contenu': escape(request.form.get('rep')),
+                    'contenu': automoderation(request.form.get('rep')),
                     'date-envoi': datetime.now(),
                     'likes': []
                 }
@@ -509,28 +678,50 @@ def comments(idMsg):
                     {'$set':{'réponses associées': reponses}}
                 )
                 notif("demande", ObjectId(idMsg), _id, msg['id-utilisateur'])
+
+                # add XP
+                if not ObjectId(session['id']) == msg['id-utilisateur']:
+                    addXP(ObjectId(session['id']), 15)
+
             return redirect('/comments/' + idMsg)
     else:
         return redirect(url_for('login'))
 
 
-@ app.route('/question/', methods=['POST', 'GET'])
+@app.route('/question/', methods=['POST', 'GET'])
 def question():
     if 'id' in session:
         if request.method == 'POST':
             # Impossibilité demande d'aide vide
-            if escape(request.form['titre']) == '':
+            if request.form['titre'] == '':
                 return redirect('/question/')
 
             user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
             if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
+                if request.files['file'].mimetype != 'application/octet-stream':
+                    if request.files['file'].mimetype == 'application/pdf':
+                        fileType = 'pdf'
+                    else:
+                        fileType = 'image'
+                else:
+                    fileType = 'none'
+
+                _id = ObjectId()
                 db_demande_aide.insert_one(
-                    {"id-utilisateur": ObjectId(session['id']), "titre": escape(request.form['titre']), "contenu": escape(request.form['demande']), "date-envoi": datetime.now(), "matière": escape(request.form['matiere']), "réponses associées": {}, "likes": [], "sign": [], "resolu": False})
+                    {"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": automoderation(request.form['titre']), "contenu": automoderation(request.form['demande']), "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
+
+                if request.files['file'].mimetype != 'application/octet-stream':
+                    nom = "DemandeFile_" + str(_id)
+                    cluster.save_file(nom, request.files['file'])
 
                 demandes = db_demande_aide.aggregate([
                     {'$sort': {'date-envoi': -1}},
                     {'$limit': 1}
                 ])
+
+                # add XP
+                addXP(ObjectId(session['id']), 10)
+
                 for demande in demandes:
                     return redirect('/comments/' + str(demande['_id']))
             else:
@@ -548,11 +739,11 @@ def question():
         return redirect(url_for('login'))
 
 
-@ app.route('/recherche')
+@app.route('/recherche')
 def recherche():
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
-            search = escape(request.args['search'])
+            search = request.args['search']
 
             user = db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
             subjects = getUserSubjects(user)
@@ -612,10 +803,10 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@ app.route('/rechercheUser')
+@app.route('/rechercheUser')
 def recherche_user():
     if 'id' in session:
-        search = escape(request.args['search'])
+        search = request.args['search']
         users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
                                               {'nom': {'$regex': search, '$options': 'i'}},
                                               {'prenom': {'$regex': search, '$options': 'i'}},
@@ -628,21 +819,31 @@ def recherche_user():
         return redirect(url_for('login'))
 
 
-@ app.route('/likePost/<idPost>', methods=['POST'])
+#@app.route('/likePost/<idPost>', methods=['POST'])
 def likePost(idPost):
     if 'id' in session:
         if 'idPost' != None:
-            idPost = escape(idPost)
             # on récupère les likes de la demande d'aide
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
             likes = demande['likes']
             newLikes = list(likes)
+            action = None
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
+                action = 'remove'
                 newLikes.remove(session['id'])  # on supprime son like
+
+                # remove XP
+                if not ObjectId(session['id']) == demande['id-utilisateur']:
+                    addXP(ObjectId(demande['id-utilisateur']), -2)
             else:
+                action = 'add'
                 newLikes.append(session['id'])  # on ajoute son like
+
+                # add XP
+                if not ObjectId(session['id']) == demande['id-utilisateur']:
+                    addXP(ObjectId(demande['id-utilisateur']), 2)
 
             # on update dans la DB
             db_demande_aide.update(
@@ -651,7 +852,8 @@ def likePost(idPost):
             )
 
             # on retourne enfin le nouveau nb de likes
-            return {'newNbLikes': len(newLikes)}, 200
+            # return {'newNbLikes': len(newLikes)}, 200
+            return action
 
         else:
             abort(403)  # il manque l'id du message
@@ -659,12 +861,10 @@ def likePost(idPost):
         abort(401)  # non autorisé
 
 
-@app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
+#@app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
 def likeRep(idPost, idRep):
     if 'id' in session:
         if 'idPost' != None and 'idRep' != None:
-            idPost = escape(idPost)
-            idRep = escape(idRep)
             # on récupère les likes de la demande d'aide
             reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})['réponses associées']
             if not idRep in reponses:
@@ -673,12 +873,23 @@ def likeRep(idPost, idRep):
             reponse = reponses[idRep]
             likes = reponse['likes']
             newLikes = list(likes)
+            action = None
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
+                action = 'remove'
                 newLikes.remove(session['id'])  # on supprime son like
+
+                # remove XP
+                if not ObjectId(session['id']) == reponse['id-utilisateur']:
+                    addXP(ObjectId(reponse['id-utilisateur']), -2)
             else:
+                action = 'add'
                 newLikes.append(session['id'])  # on ajoute son like
+
+                # add XP
+                if not ObjectId(session['id']) == reponse['id-utilisateur']:
+                    addXP(ObjectId(reponse['id-utilisateur']), 2)
 
             reponse = {
                 '_id': ObjectId(reponse['_id']),
@@ -692,35 +903,63 @@ def likeRep(idPost, idRep):
             # on update dans la DB
             db_demande_aide.update(
                 {'_id': ObjectId(idPost)},
-                {'$set':
-                    {'réponses associées': reponses}
-                }
+                {'$set':{'réponses associées': reponses}}
             )
 
             # on retourne enfin le nouveau nb de likes
-            return {'newNbLikes': len(newLikes)}, 200
+            # return {'newNbLikes': len(newLikes)}, 200
+            return action
 
         else:
             abort(400)  # il manque l'id du message
     else:
         abort(401)  # non autorisé
 
+@socketio.on('postLike')
+def handleEvent_postLike(json):
+    if 'id' in session:
+        if 'type' in json:
+            if json['type'] == 'post':
+                if 'idPost' in json:
+                    action = likePost(json['idPost'])
+                    if action == 'add':
+                        emit('newLike', json['idPost'], broadcast=True)
+                    elif action == 'remove':
+                        emit('removeLike', json['idPost'], broadcast=True)
+            elif json['type'] == 'rep':
+                if 'idPost' in json and 'idRep' in json:
+                    action = likeRep(json['idPost'], json['idRep'])
+                    if action == 'add':
+                        emit('newLike', json['idRep'], broadcast=True)
+                    elif action == 'remove':
+                        emit('removeLike', json['idRep'], broadcast=True)
+
+
 
 @app.route('/administration/', methods=['POST', 'GET'])
 def administration():
     if 'id' in session:
-        utilisateur = db_utilisateurs.find_one(
-            {"_id": ObjectId(session['id'])})
+        utilisateur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
         if utilisateur['admin'] == True:
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
-                    db_demande_aide.delete_one(
-                        {"_id": ObjectId(request.form['idSuppr'])})
-
+                    demande =db_demande_aide.find_one({"_id": ObjectId(request.form['idSuppr'])})
+                    addXpModeration(demande['id-utilisateur'], 5)
+                    MyFile = db_files.find(
+                        {'filename': 'DemandeFile_'+request.form['idSuppr']})
+                    for a in MyFile:
+                        db_files.delete_one({'_id': a['_id']})
+                        db_chunks.delete_many({'files_id': a['_id']})
+                    db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
                 elif request.form['demandeBut'] == 'Val':
-                    db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])}, {
-                                               "$set": {"sign": [], "motif": []}})
-                return'sent'
+                    db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},
+                                               {"$set": {"sign": [], "motif": []}})
+                elif request.form['demandeBut'] == 'ValUser':
+                    db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])},
+                                               {"$set": {"sign": [],"motif": []}})
+
+                return 'sent'
+
             else:
                 demandeSignale = db_demande_aide.aggregate([
                     {'$match': {"sign": {"$exists": "true", "$ne": []}}},
@@ -741,11 +980,38 @@ def administration():
                         'rep': 1,
                         'matière': 1,
                         'motif': 1,
+                         'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
                     }},
+                    {"$sort": {"sign_count": -1}}
                 ])
-                profilSignale = db_utilisateurs.find({"sign": {"$exists": "true", "$ne": []}})
 
-                return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale)
+                profilSignale = db_utilisateurs.aggregate([
+                    {'$match': {"sign": {"$exists": "true", "$ne": []}}},
+                    {'$project': {
+                        '_id': 1,
+                        'nom': 1,
+                        'prenom': 1,
+                        'pseudo' : 1,
+                        'motif': 1,
+                        'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
+                    }},
+                    {"$sort": {"sign_count": -1}}
+                ])
+
+                discussionSignale = db_groupes.aggregate([
+                    {'$match': {"sign": {"$exists": "true", "$ne": []}}},
+                    {'$project': {
+                        '_id': 1,
+                        'id-utilisateurs': 1,
+                        'moderateurs': 1,
+                        'nom' : 1,
+                        'motif': 1,
+                        'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
+                    }},
+                    {"$sort": {"sign_count": -1}}
+                ])
+
+                return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
         else:
             return redirect(url_for('accueil'))
     else:
@@ -759,7 +1025,7 @@ def sanction():
             {"_id": ObjectId(session['id'])})
         if utilisateur['admin'] == True:
             db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$push": {"Sanction": {
-                                       "SanctionType": request.form['Sanction'], "SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next']}}})
+                                       "SanctionType": request.form['Sanction'], "SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next'], "dateSanction" : datetime.now()}}})
             if request.form['SanctionType'] == 'Spec':
                 time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
                 db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
@@ -768,6 +1034,7 @@ def sanction():
                 Sanctionné = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSanctionné'])})
                 MyImage = db_files.find(
                     {'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
+                addXpModeration(ObjectId(request.form['idSanctionné']), 10)
                 for a in MyImage:
                     db_files.delete_one({'_id': a['_id']})
                     db_chunks.delete_many({'files_id': a['_id']})
@@ -798,7 +1065,7 @@ def signPost():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
+            demande = db_demande_aide.find_one({"_id": ObjectId(request.form['idSignalé'])})
             sign = demande['sign']
             newSign = list(sign)
 
@@ -807,7 +1074,7 @@ def signPost():
                 # on supprime son signalement
                 newSign.remove(ObjectId(session['id']))
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(request.form['idSignalé'])},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
@@ -816,12 +1083,12 @@ def signPost():
 
             else:
                 newSign.append(session['id']) # on ajoute son signalement
-                raison = {escape(request.form['Raison'])}
+                raison = {request.form['Raison']}
                 db_demande_aide.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(request.form['idSignalé'])},
                     {'$push':
                         {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
                     }
                 )
 
@@ -845,13 +1112,13 @@ def signPostProfil():
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            user = db_utilisateurs.find_one({"_id": ObjectId(escape(request.form['idSignalé']))})
+            user = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSignalé'])})
             sign = user['sign']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(request.form['idSignalé'])},
                     {'$pull': {
                         'sign': ObjectId(session['id']),
                         'motif': {'id': ObjectId(session['id'])}}
@@ -859,14 +1126,102 @@ def signPostProfil():
                 )
 
             else:
-                raison = {escape(request.form['Raison'])}
+                raison = {request.form['Raison']}
                 db_utilisateurs.update_one(
-                    {'_id': ObjectId(escape(request.form['idSignalé']))},
+                    {'_id': ObjectId(request.form['idSignalé'])},
                     {'$push':
                         {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': escape(request.form['Raison'])}}
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
                     }
                 )
+            return 'sent'
+
+        else:
+            abort(403) # il manque l'id du message
+    else:
+        abort(401) # non autorisé
+
+@app.route('/signPostDiscussion/', methods=['POST'])
+def signPostDiscussion():
+    if 'id' in session:
+        if request.form['idSignalé'] != None:
+            # on récupère les signalements de la demande d'aide
+            sign = db_groupes.find_one({"_id": ObjectId(request.form['idSignalé'])})['sign']
+
+
+            # on check mtn si l'utilisateur a déjà signalé la demande
+            if ObjectId(session['id']) in sign:
+                db_groupes.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$pull': {
+                        'sign': ObjectId(session['id']),
+                        'motif': {'id': ObjectId(session['id'])}}
+                    },
+                )
+                db_messages.update(
+                    {'id-groupe': ObjectId(request.form['idSignalé'])},
+                    {'$pull': {
+                        'sign': ObjectId(session['id']),
+                        'motif': {'id': ObjectId(session['id'])}}
+                    }
+                )
+
+            else:
+                db_groupes.update_one(
+                    {'_id': ObjectId(request.form['idSignalé'])},
+                    {'$push':
+                        {'sign': ObjectId(session['id']),
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
+                    }
+                )
+                db_messages.update(
+                    {'id-groupe': ObjectId(request.form['idSignalé'])},
+                    {'$push':
+                        {'sign': ObjectId(session['id']),
+                         'motif': {'id': ObjectId(session['id']), 'txt': "Discussion signalé pour "+request.form['Raison']}}
+                    }
+                )
+            return 'sent'
+
+        else:
+            abort(403) # il manque l'id du message
+    else:
+        abort(401) # non autorisé
+
+@app.route('/signPostMsg/', methods=['POST'])
+def signPostMsg():
+    if 'id' in session:
+        if request.form['idSignalé'] != None and request.form['idMsgSignalé'] != None:
+            # on récupère les signalements de la demande d'aide
+            sign = db_groupes.find_one({"_id": ObjectId(request.form['idSignalé'])})['sign']
+            signMsg = db_messages.find_one({"_id": ObjectId(request.form['idMsgSignalé'])})['sign']
+
+            # on check mtn si l'utilisateur a déjà signalé la demande
+            if ObjectId(session['id']) in signMsg:
+                db_messages.update_one(
+                    {'_id': ObjectId(request.form['idMsgSignalé'])},
+                    {'$pull': {
+                        'sign': ObjectId(session['id']),
+                        'motif': {'id': ObjectId(session['id'])}}
+                    },
+                )
+
+            else:
+                db_messages.update_one(
+                    {'_id': ObjectId(request.form['idMsgSignalé'])},
+                    {'$push':
+                        {'sign': ObjectId(session['id']),
+                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
+                    }
+                )
+                if not ObjectId(session['id']) in sign:
+                    db_groupes.update_one(
+                        {'_id': ObjectId(request.form['idSignalé'])},
+                        {'$push':
+                            {'sign': ObjectId(session['id']),
+                             'motif': {'id': ObjectId(session['id']), 'txt': "Message signalé :"+request.form['Raison']}}
+                        }
+                    )
             return 'sent'
 
         else:
@@ -878,7 +1233,6 @@ def signPostProfil():
 def resoudre(idPost):
     if 'id' in session:
         if 'idPost' != None:
-            idPost = escape(idPost)
             demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
 
             # on check mtn si l'utilisateur a déjà liké la demande
@@ -886,10 +1240,9 @@ def resoudre(idPost):
                 # on update dans la DB
                 db_demande_aide.update(
                     {'_id': ObjectId(idPost)},
-                    {'$set':
-                        {'resolu': True}
-                    }
+                    {'$set':{'resolu': True}}
                 )
+
                 return "ok", 200
             else:
                 abort(401) # non autorisé
@@ -958,91 +1311,101 @@ def getUserSubjects(user):
 
 def translate_matiere_spes_options_lv(toTranslate: list) -> str:
     translated = ''
+    translations = {
+        # Matières tronc commun
+        'fr': 'Français',
+        'maths': 'Mathématiques',
+        'hg': 'Histoire-Géographie',
+        'snt': 'SNT',
+        'pc': 'Physique-Chimie',
+        'svt': 'SVT',
+        'emc': 'EMC',
+        'ses': 'SES',
+        'philo': 'Philosophie',
+        'eps': 'EPS',
+        # Langues
+        'ang': 'Anglais',
+        'esp': 'Espagnol',
+        'all': 'Allemand',
+        'por': 'Portugais',
+        'it': 'Italien',
+        'chi': 'Chinois',
+        'ru': 'Russe',
+        'ara': 'Arabe',
+        # LV1
+        'lv1-ang': 'LV1 Anglais',
+        'lv1-ang-euro': 'LV1 Anglais Euro',
+        'lv1-esp': 'LV1 Espagnol',
+        'lv1-esp-euro': 'LV1 Espagnol Euro',
+        'lv1-all': 'LV1 Allemand',
+        'lv1-all-euro': 'LV1 Allemand Euro',
+        'lv1-por': 'LV1 Portugais',
+        'lv1-por-euro': 'LV1 Portugais Euro',
+        'lv1-it': 'LV1 Itlien',
+        'lv1-it-euro': 'LV1 Itlien Euro',
+        'lv1-chi': 'LV1 Chinois',
+        'lv1-ru': 'LV1 Russe',
+        'lv1-ara': 'LV1 Arabe',
+        # LV2
+        'lv2-ang': 'LV2 Anglais',
+        'lv2-esp': 'LV2 Espagnol',
+        'lv2-all': 'LV2 Allemand',
+        'lv2-por': 'LV2 Portugais',
+        'lv2-it': 'LV2 Italien',
+        'lv2-chi': 'LV2 Chinois',
+        'lv2-ru': 'LV2 Russe',
+        'lv2-ara': 'LV2 Arabe',
+        # Spés
+        'spe-art': 'Spé Arts',
+        'spe-hggsp': 'Spé HGGSP',
+        'spe-hlp': 'Spé HLP',
+        'spe-ses': 'Spé SES',
+        'spe-maths': 'Spé Mathématiques',
+        'spe-pc': 'Spé Physique-Chimie',
+        'spe-svt': 'Spé SVT',
+        'spe-nsi': 'Spé NSI',
+        'spe-si': 'Spé Sciences de l\'Ingénieur',
+        'spe-lca': 'Spé LCA',
+        'spe-llcer-ang': 'Spé LLCER Anglais',
+        'spe-llcer-esp': 'Spé LLCER Espagnol',
+        'spe-llcer-all': 'Spé LLCER Allemand',
+        'spe-llcer-it': 'Spé LLCER Italien',
+        'spe-bio-eco': 'Spé Biologie-écologie',
+        # Options
+        'opt-lca-latin': 'LCA Latin',
+        'opt-lca-grec': 'LCA Grec',
+        'opt-lv3-ang': 'LV3 Anglais',
+        'opt-lv3-esp': 'LV3 Espagnol',
+        'opt-lv3-all': 'LV3 Allemand',
+        'opt-lv3-por': 'LV3 Portugais',
+        'opt-lv3-it': 'LV3 Italien',
+        'opt-lv3-ru': 'LV3 Russe',
+        'opt-lv3-ara': 'LV3 Arabe',
+        'opt-lv3-chi': 'LV3 Chinois',
+        'opt-eps': 'Option EPS',
+        'opt-arts': 'Option Arts',
+        'opt-musique': 'Option Musique',
+        'opt-mg': 'Option Management et Gestion',
+        'opt-ss': 'Option Santé et Social',
+        'opt-biotech': 'Option Biotechnologies',
+        'opt-sl': 'Option Sciences et laboratoire',
+        'opt-si': 'Option Sciences de l\'Ingénieur',
+        'opt-cit': 'Option Création et culture technologiques',
+        'opt-ccd': 'Option Création et culture - design',
+        'opt-equit': 'Option Hippologie et équitation',
+        'opt-aet': 'Option Agranomie-économie-territoires',
+        'opt-psc': 'Option Pratiques sociales et culturelles',
+        'opt-maths-comp': 'Option Maths Complémentaires',
+        'opt-maths-exp': 'Option Maths Expertes',
+        'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
+        #
+        'none': ''
+    }
 
     for a in toTranslate:
         if translated != '' and a != 'none':
             translated += ' / '
-
-        translations = {
-            # Matières tronc commun
-            'fr': 'Français',
-            'maths': 'Mathématiques',
-            'hg': 'Histoire-Géographie',
-            'snt': 'SNT',
-            'emc': 'EMC',
-            'ses': 'SES',
-            'philo': 'Philosophie',
-            # LV1
-            'lv1-ang': 'LV1 Anglais',
-            'lv1-ang-euro': 'LV1 Anglais Euro',
-            'lv1-esp': 'LV1 Espagnol',
-            'lv1-esp-euro': 'LV1 Espagnol Euro',
-            'lv1-all': 'LV1 Allemand',
-            'lv1-all-euro': 'LV1 Allemand Euro',
-            'lv1-por': 'LV1 Portugais',
-            'lv1-por-euro': 'LV1 Portugais Euro',
-            'lv1-it': 'LV1 Itlien',
-            'lv1-it-euro': 'LV1 Itlien Euro',
-            'lv1-chi': 'LV1 Chinois',
-            'lv1-ru': 'LV1 Russe',
-            'lv1-ara': 'LV1 Arabe',
-            # LV2
-            'lv2-ang': 'LV2 Anglais',
-            'lv2-esp': 'LV2 Espagnol',
-            'lv2-all': 'LV2 Allemand',
-            'lv2-por': 'LV2 Portugais',
-            'lv2-it': 'LV2 Italien',
-            'lv2-chi': 'LV2 Chinois',
-            'lv2-ru': 'LV2 Russe',
-            'lv2-ara': 'LV2 Arabe',
-            # Spés
-            'spe-art': 'Spé Arts',
-            'spe-hggsp': 'Spé HGGSP',
-            'spe-hlp': 'Spé HLP',
-            'spe-ses': 'Spé SES',
-            'spe-maths': 'Spé Mathématiques',
-            'spe-pc': 'Spé Physique-Chimie',
-            'spe-svt': 'Spé SVT',
-            'spe-nsi': 'Spé NSI',
-            'spe-si': 'Spé Sciences de l\'Ingénieur',
-            'spe-lca': 'Spé LCA',
-            'spe-llcer-ang': 'Spé LLCER Anglais',
-            'spe-llcer-esp': 'Spé LLCER Espagnol',
-            'spe-llcer-all': 'Spé LLCER Allemand',
-            'spe-llcer-it': 'Spé LLCER Italien',
-            'spe-bio-eco': 'Spé Biologie-écologie',
-            # Options
-            'opt-lca-latin': 'LCA Latin',
-            'opt-lca-grec': 'LCA Grec',
-            'opt-lv3-ang': 'LV3 Anglais',
-            'opt-lv3-esp': 'LV3 Espagnol',
-            'opt-lv3-all': 'LV3 Allemand',
-            'opt-lv3-por': 'LV3 Portugais',
-            'opt-lv3-it': 'LV3 Italien',
-            'opt-lv3-ru': 'LV3 Russe',
-            'opt-lv3-ara': 'LV3 Arabe',
-            'opt-lv3-chi': 'LV3 Chinois',
-            'opt-eps': 'Option EPS',
-            'opt-arts': 'Option Arts',
-            'opt-musique': 'Option Musique',
-            'opt-mg': 'Option Management et Gestion',
-            'opt-ss': 'Option Santé et Social',
-            'opt-biotech': 'Option Biotechnologies',
-            'opt-sl': 'Option Sciences et laboratoire',
-            'opt-si': 'Option Sciences de l\'Ingénieur',
-            'opt-cit': 'Option Création et culture technologiques',
-            'opt-ccd': 'Option Création et culture - design',
-            'opt-equit': 'Option Hippologie et équitation',
-            'opt-aet': 'Option Agranomie-économie-territoires',
-            'opt-psc': 'Option Pratiques sociales et culturelles',
-            'opt-maths-comp': 'Option Maths Complémentaires',
-            'opt-maths-exp': 'Option Maths Expertes',
-            'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
-            #
-            'none': ''
-        }
-
-        translated += translations.get(a)
+        translated += translations[a]
 
     return translated
 
@@ -1062,7 +1425,7 @@ def login():
     Redirect the user/resource owner to the OAuth provider (ENT)
     using an URL with a few key OAuth parameters.
     """
-    ENT_reply = OAuth2Session(client_id, scope="userinfo", redirect_uri=redirect_uri)
+    ENT_reply = OAuth2Session(client_id, scope=["userinfo", "myinfos", "userbook", "directory"], redirect_uri=redirect_uri)
     authorization_url, state = ENT_reply.authorization_url(authorization_base_url)
 
     # State is used to prevent CSRF, keep this for later.
@@ -1099,8 +1462,7 @@ def connexion():
     """Fetching a protected resource using an OAuth 2 token.
     """
     ENT_reply = OAuth2Session(client_id, token=session['oauth_token'])
-    data = ENT_reply.get(
-        'https://ent.iledefrance.fr/auth/oauth2/userinfo').json()
+    data = ENT_reply.get('https://ent.iledefrance.fr/auth/oauth2/userinfo').json()
     user = db_utilisateurs.find_one({"idENT": data['userId']})
     if user != None:
         session['id'] = str(user['_id'])
@@ -1109,7 +1471,8 @@ def connexion():
         session['type'] = user['type']
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
-                db_utilisateurs.update_one({'_id':ObjectId(user['_id'])},{"$set":{"SanctionEnCour":"", "SanctionDuree":""}})
+                db_utilisateurs.update_one({'_id': ObjectId(user['_id'])}, {
+                                           "$set": {"SanctionEnCour": "", "SanctionDuree": ""}})
         return redirect(url_for('accueil'))
     else:
         if data['type'] == "ELEVE":
@@ -1122,8 +1485,8 @@ def connexion():
             else:
                 classe = data['level']
             pseudo = (data['username'].lower()).replace(' ', '_')
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "classe": classe, "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": ""})
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe,
+                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
@@ -1132,8 +1495,8 @@ def connexion():
             return redirect(url_for('profil'))
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(),
-                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': '#3f51b5', 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": ""})
+            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
+                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             user = db_utilisateurs.find_one({"idENT": data['userId']})
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
@@ -1151,15 +1514,16 @@ if __name__ == "__main__":
     # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
     authorization_base_url = 'https://ent.iledefrance.fr/auth/oauth2/auth'
     token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
-
     if 'redirect_uri' in os.environ:
         # Le client secret est le code secret de l'application
         # NE PAS TOUCHER AUX 3 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
-        client_id = 'code-ton-lycee'
-        client_secret = 'JR7XcyGWBHt2VA9W'
+        client_id = 'code-ton-lycee-key4school'
+        client_secret = 'jHy6g8JG4FdP0a5VI2m'
         redirect_uri = os.environ['redirect_uri']
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-        app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
+        # app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
+        socketio.run(app, host='0.0.0.0', port=os.environ.get("PORT", 3000), debug=True)
+
     else:
         # Le client secret est le code secret de l'application
         # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
@@ -1167,4 +1531,5 @@ if __name__ == "__main__":
         client_secret = 'JR7XcyGWBHt2VA9W'
         redirect_uri = "http://127.0.0.1:3000/callback"
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-        app.run(host="127.0.0.1", port=3000, debug=True)
+        # app.run(host="127.0.0.1", port=3000, debug=True)
+        socketio.run(app, host='127.0.0.1', port=3000, debug=True)

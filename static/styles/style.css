@@ -11,3 +11,19 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #e9ebe9;
 }
+#couleur{
+    border-radius: 100%;
+    width: 15px;
+    height: 15px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+#couleur::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+#couleur::-webkit-color-swatch {
+    border: none;
+    border-radius: 100%;
+}

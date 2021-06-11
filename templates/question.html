@@ -6,12 +6,15 @@
   <meta charset="utf-8">
   <!-- pour l'adapter plus ou moins bien sur telephone -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- titre en haut dans le navigateur -->
+  <!-- titre en haut dans le navigateur -->
   <title>Question</title>
-    <!-- page de style -->
+  <!-- page de style -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/mystyles.css')}}">
+  <!-- <link rel="stylesheet" href="{{url_for('static',filename='css/mystyles.css')}}"> -->
   <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+  <script src="{{url_for('static',filename='js/notification.js')}}" type="text/javascript" defer></script>
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
   <style>
     .logoBouton:hover {
@@ -22,188 +25,240 @@
 
 <body>
   <!-- Bandeau -->
-  {% include "bandeau2.html" %}
-  <div class="columns" style="margin-top:10%; width: 80%;">
+  {% include "bandeau.html" %}
+  <br /><br /><br />
+  <div class="columns" style="margin-top: 10px; width:100%;">
     <div class="column"></div>
-    <div class="column">
-      <form action="{{url_for('question')}}" method="post">
-        <!-- Titre question -->
-        <label>Titre</label>
-        <!-- Zone pour mettre le titre  -->
-        <input type="text" class="input" name="titre" required /><br /><br />
-        <!-- Choix matière -->
-        <label>Matière</label>
-        <div class="control has-icons-left">
-          <div class="select" >
-            <select name="matiere" required>
-              <!-- Tronc commun -->
-              {% if profilUtilisateur['classe']=='2GT' or profilUtilisateur['classe']=='1G' %}
-                <option value="fr">Français</option>
-              {% endif %}
-              <option value="hg">Histoire-Géographie</option>
-              <option value="emc">EMC</option>
-              {% if profilUtilisateur['classe']=='2GT' %}
-                <option value="maths">Mathématiques</option>
-                <option value="pc">Physiques-chimie</option>
-                <option value="ses">SES</option>
-              {% endif %}
-              {% if profilUtilisateur['classe']=='TG' %}
-                <option value="philo">Philosophie</option>
-              {% endif %}
-              <!-- Langues -->
-              {% if 'lv1-ang' in profilUtilisateur['langues'] or 'lv1-ang-euro' in profilUtilisateur['langues'] or 'lv2-ang' in profilUtilisateur['langues'] or 'opt-lv3-ang' in profilUtilisateur['options'] %}
-                <option value="ang">Anglais</option>
-              {% endif %}
-              {% if 'lv1-esp' in profilUtilisateur['langues'] or 'lv1-esp-euro' in profilUtilisateur['langues'] or 'lv2-esp' in profilUtilisateur['langues'] or 'opt-lv3-esp' in profilUtilisateur['options'] %}
-                <option value="esp">Espagnol</option>
-              {% endif %}
-              {% if 'lv1-all' in profilUtilisateur['langues'] or 'lv1-all-euro' in profilUtilisateur['langues'] or 'lv2-all' in profilUtilisateur['langues'] or 'opt-lv3-all' in profilUtilisateur['options'] %}
-                <option value="all">Allemand</option>
-              {% endif %}
-              {% if 'lv1-it' in profilUtilisateur['langues'] or 'lv1-it-euro' in profilUtilisateur['langues'] or 'lv2-it' in profilUtilisateur['langues'] or 'opt-lv3-it' in profilUtilisateur['options'] %}
-                <option value="it">Italien</option>
-              {% endif %}
-              {% if 'lv1-chi' in profilUtilisateur['langues'] or 'lv2-chi' in profilUtilisateur['langues'] or 'opt-lv3-chi' in profilUtilisateur['options'] %}
-                <option value="chi">Chinois</option>
-              {% endif %}
-              {% if 'lv1-ru' in profilUtilisateur['langues'] or 'lv2-ru' in profilUtilisateur['langues'] or 'opt-lv3-ru' in profilUtilisateur['options'] %}
-                <option value="ru">Russe</option>
-              {% endif %}
-              {% if 'lv1-por' in profilUtilisateur['langues'] or 'lv2-por' in profilUtilisateur['langues'] or 'opt-lv3-por' in profilUtilisateur['options'] %}
-                <option value="por">Portugais</option>
-              {% endif %}
-              {% if 'lv1-ara' in profilUtilisateur['langues'] or 'lv2-ara' in profilUtilisateur['langues'] or 'opt-lv3-ara' in profilUtilisateur['options'] %}
-                <option value="ara">Arabe</option>
-              {% endif %}
-              <!-- Spés -->
-              {% if 'spe-art' in profilUtilisateur['spes'] %}
-                <option value="spe-art">Spé Arts</option>
-              {% endif %}
-              {% if 'spe-hggsp' in profilUtilisateur['spes'] %}
-                <option value="spe-hggsp">Spé HGGSP</option>
-              {% endif %}
-              {% if 'spe-hlp' in profilUtilisateur['spes'] %}
-                <option value="spe-hlp">Spé HLP</option>
-              {% endif %}
-              {% if 'spe-ses' in profilUtilisateur['spes'] %}
-                <option value="spe-ses">Spé SES</option>
-              {% endif %}
-              {% if 'spe-maths' in profilUtilisateur['spes'] %}
-                <option value="spe-maths">Spé Mathématiques</option>
-              {% endif %}
-              {% if 'spe-pc' in profilUtilisateur['spes'] %}
-                <option value="spe-pc">Spé Physique-Chimie</option>
-              {% endif %}
-              {% if 'spe-svt' in profilUtilisateur['spes'] %}
-                <option value="spe-svt">Spé SVT</option>
-              {% endif %}
-              {% if 'spe-nsi' in profilUtilisateur['spes'] %}
-                <option value="spe-nsi">Spé NSI</option>
-              {% endif %}
-              {% if 'spe-si' in profilUtilisateur['spes'] %}
-                <option value="spe-si">Spé Sciences de l'Ingénieur</option>
-              {% endif %}
-              {% if 'spe-lca' in profilUtilisateur['spes'] %}
-                <option value="spe-lca">Spé LCA</option>
-              {% endif %}
-              {% if 'spe-llcer-ang' in profilUtilisateur['spes'] %}
-                <option value="spe-llcer-ang">Spé LLCER Anglais</option>
-              {% endif %}
-              {% if 'spe-llcer-esp' in profilUtilisateur['spes'] %}
-                <option value="spe-llcer-esp">Spé LLCER Espagnol</option>
-              {% endif %}
-              {% if 'spe-llcer-all' in profilUtilisateur['spes'] %}
-                <option value="spe-llcer-all">Spé LLCER Allemand</option>
-              {% endif %}
-              {% if 'spe-llcer-it' in profilUtilisateur['spes'] %}
-                <option value="spe-llcer-it">Spé LLCER Italien</option>
-              {% endif %}
-              {% if 'spe-bio-eco' in profilUtilisateur['spes'] %}
-                <option value="spe-bio-eco">Spé Biologie-écologie</option>
-              {% endif %}
-              <!-- Options -->
-              {% if 'opt-lca-latin' in profilUtilisateur['options'] %}
-                <option value="opt-lca-latin">Option LCA Latin</option>
-              {% endif %}
-              {% if 'opt-lca-grec' in profilUtilisateur['options'] %}
-                <option value="opt-lca-grec">Option LCA Grec</option>
-              {% endif %}
-              {% if 'opt-arts' in profilUtilisateur['options'] %}
-                <option value="opt-arts">Option Arts</option>
-              {% endif %}
-              {% if 'opt-mg' in profilUtilisateur['options'] %}
-                <option value="opt-mg">Option Management et Gestion</option>
-              {% endif %}
-              {% if 'opt-ss' in profilUtilisateur['options'] %}
-                <option value="opt-ss">Option Santé et Social</option>
-              {% endif %}
-              {% if 'opt-biotech' in profilUtilisateur['options'] %}
-                <option value="opt-biotech">Option Biotechnologies</option>
-              {% endif %}
-              {% if 'opt-sl' in profilUtilisateur['options'] %}
-                <option value="opt-sl">Option Sciences et Laboratoire</option>
-              {% endif %}
-              {% if 'opt-si' in profilUtilisateur['options'] %}
-                <option value="opt-si">Option Sciences de l'Ingénieur</option>
-              {% endif %}
-              {% if 'opt-cit' in profilUtilisateur['options'] %}
-                <option value="opt-cit">Option Création et innovations technologiques</option>
-              {% endif %}
-              {% if 'opt-ccd' in profilUtilisateur['options'] %}
-                <option value="opt-ccd">Option Création et culture - design</option>
-              {% endif %}
-              {% if 'opt-maths-comp' in profilUtilisateur['options'] %}
-                <option value="opt-maths-comp">Option Maths complémentaires</option>
-              {% endif %}
-              {% if 'opt-maths-exp' in profilUtilisateur['options'] %}
-                <option value="opt-maths-exp">Option Maths expertes</option>
-              {% endif %}
-              {% if 'opt-dgemc' in profilUtilisateur['options'] %}
-                <option value="opt-dgemc">Option Droit et grand enjeux du monde contemporain</option>
-              {% endif %}
-              {% if 'opt-equit' in profilUtilisateur['options'] %}
-                <option value="opt-equit">Option Hippologie et équitation</option>
-              {% endif %}
-              {% if 'opt-aet' in profilUtilisateur['options'] %}
-                <option value="opt-aet">Option Agronomie-économie-territoires</option>
-              {% endif %}
-              {% if 'opt-psc' in profilUtilisateur['options'] %}
-                <option value="opt-psc">Option Pratiques sociales et culturelles</option>
-              {% endif %}
-              <option value="eps">EPS</option>
-            </select>
-          </div>
-          <span class="icon is-left">
-            <i class="fas fa-book"></i>
-          </span>
+    <div class="column is-three-fifths">
+      <form action="{{url_for('question')}}" method="post" enctype="multipart/form-data">
+        <div class="box demande" style="border-radius: 20px; margin-bottom: 0.8rem;" data-subject="Tag matiere">
+          <article class="media">
+            <div class="media-left">
+              <!-- Image photo de profil-->
+              <figure class="image is-64x64">
+                <img alt="user" src="{%if 'nomImg' in user and user['nomImg'] != "" %}{{url_for('userImg', profilImg = user['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
+              </figure>
+            </div>
+            <!-- Contenu publication -->
+            <div class="media-content">
+              <div class="content">
+                <p style="margin-bottom: 5px;">
+                  <!-- Nom utilisateur ; pseudo ; temps -->
+                <div style="font-variant: small-caps;display:flex;">
+
+                  <a>{{user['nom']}} {{user['prenom']}}</a>
+
+                  <div style="margin-left:5%;" class="control has-icons-left">
+                    <div class="select">
+                      <select name="matiere" required>
+                        <!-- Tronc commun -->
+                        {% if profilUtilisateur['classe']=='2GT' or profilUtilisateur['classe']=='1G' %}
+                        <option value="fr">Français</option>
+                        {% endif %}
+                        <option value="hg">Histoire-Géographie</option>
+                        <option value="emc">EMC</option>
+                        {% if profilUtilisateur['classe']=='2GT' %}
+                        <option value="maths">Mathématiques</option>
+                        <option value="pc">Physiques-chimie</option>
+                        <option value="ses">SES</option>
+                        {% endif %}
+                        {% if profilUtilisateur['classe']=='TG' %}
+                        <option value="philo">Philosophie</option>
+                        {% endif %}
+                        <!-- Langues -->
+                        {% if 'lv1-ang' in profilUtilisateur['langues'] or 'lv1-ang-euro' in profilUtilisateur['langues'] or 'lv2-ang' in profilUtilisateur['langues'] or 'opt-lv3-ang' in profilUtilisateur['options'] %}
+                        <option value="ang">Anglais</option>
+                        {% endif %}
+                        {% if 'lv1-esp' in profilUtilisateur['langues'] or 'lv1-esp-euro' in profilUtilisateur['langues'] or 'lv2-esp' in profilUtilisateur['langues'] or 'opt-lv3-esp' in profilUtilisateur['options'] %}
+                        <option value="esp">Espagnol</option>
+                        {% endif %}
+                        {% if 'lv1-all' in profilUtilisateur['langues'] or 'lv1-all-euro' in profilUtilisateur['langues'] or 'lv2-all' in profilUtilisateur['langues'] or 'opt-lv3-all' in profilUtilisateur['options'] %}
+                        <option value="all">Allemand</option>
+                        {% endif %}
+                        {% if 'lv1-it' in profilUtilisateur['langues'] or 'lv1-it-euro' in profilUtilisateur['langues'] or 'lv2-it' in profilUtilisateur['langues'] or 'opt-lv3-it' in profilUtilisateur['options'] %}
+                        <option value="it">Italien</option>
+                        {% endif %}
+                        {% if 'lv1-chi' in profilUtilisateur['langues'] or 'lv2-chi' in profilUtilisateur['langues'] or 'opt-lv3-chi' in profilUtilisateur['options'] %}
+                        <option value="chi">Chinois</option>
+                        {% endif %}
+                        {% if 'lv1-ru' in profilUtilisateur['langues'] or 'lv2-ru' in profilUtilisateur['langues'] or 'opt-lv3-ru' in profilUtilisateur['options'] %}
+                        <option value="ru">Russe</option>
+                        {% endif %}
+                        {% if 'lv1-por' in profilUtilisateur['langues'] or 'lv2-por' in profilUtilisateur['langues'] or 'opt-lv3-por' in profilUtilisateur['options'] %}
+                        <option value="por">Portugais</option>
+                        {% endif %}
+                        {% if 'lv1-ara' in profilUtilisateur['langues'] or 'lv2-ara' in profilUtilisateur['langues'] or 'opt-lv3-ara' in profilUtilisateur['options'] %}
+                        <option value="ara">Arabe</option>
+                        {% endif %}
+                        <!-- Spés -->
+                        {% if 'spe-art' in profilUtilisateur['spes'] %}
+                        <option value="spe-art">Spé Arts</option>
+                        {% endif %}
+                        {% if 'spe-hggsp' in profilUtilisateur['spes'] %}
+                        <option value="spe-hggsp">Spé HGGSP</option>
+                        {% endif %}
+                        {% if 'spe-hlp' in profilUtilisateur['spes'] %}
+                        <option value="spe-hlp">Spé HLP</option>
+                        {% endif %}
+                        {% if 'spe-ses' in profilUtilisateur['spes'] %}
+                        <option value="spe-ses">Spé SES</option>
+                        {% endif %}
+                        {% if 'spe-maths' in profilUtilisateur['spes'] %}
+                        <option value="spe-maths">Spé Mathématiques</option>
+                        {% endif %}
+                        {% if 'spe-pc' in profilUtilisateur['spes'] %}
+                        <option value="spe-pc">Spé Physique-Chimie</option>
+                        {% endif %}
+                        {% if 'spe-svt' in profilUtilisateur['spes'] %}
+                        <option value="spe-svt">Spé SVT</option>
+                        {% endif %}
+                        {% if 'spe-nsi' in profilUtilisateur['spes'] %}
+                        <option value="spe-nsi">Spé NSI</option>
+                        {% endif %}
+                        {% if 'spe-si' in profilUtilisateur['spes'] %}
+                        <option value="spe-si">Spé Sciences de l'Ingénieur</option>
+                        {% endif %}
+                        {% if 'spe-lca' in profilUtilisateur['spes'] %}
+                        <option value="spe-lca">Spé LCA</option>
+                        {% endif %}
+                        {% if 'spe-llcer-ang' in profilUtilisateur['spes'] %}
+                        <option value="spe-llcer-ang">Spé LLCER Anglais</option>
+                        {% endif %}
+                        {% if 'spe-llcer-esp' in profilUtilisateur['spes'] %}
+                        <option value="spe-llcer-esp">Spé LLCER Espagnol</option>
+                        {% endif %}
+                        {% if 'spe-llcer-all' in profilUtilisateur['spes'] %}
+                        <option value="spe-llcer-all">Spé LLCER Allemand</option>
+                        {% endif %}
+                        {% if 'spe-llcer-it' in profilUtilisateur['spes'] %}
+                        <option value="spe-llcer-it">Spé LLCER Italien</option>
+                        {% endif %}
+                        {% if 'spe-bio-eco' in profilUtilisateur['spes'] %}
+                        <option value="spe-bio-eco">Spé Biologie-écologie</option>
+                        {% endif %}
+                        <!-- Options -->
+                        {% if 'opt-lca-latin' in profilUtilisateur['options'] %}
+                        <option value="opt-lca-latin">Option LCA Latin</option>
+                        {% endif %}
+                        {% if 'opt-lca-grec' in profilUtilisateur['options'] %}
+                        <option value="opt-lca-grec">Option LCA Grec</option>
+                        {% endif %}
+                        {% if 'opt-arts' in profilUtilisateur['options'] %}
+                        <option value="opt-arts">Option Arts</option>
+                        {% endif %}
+                        {% if 'opt-mg' in profilUtilisateur['options'] %}
+                        <option value="opt-mg">Option Management et Gestion</option>
+                        {% endif %}
+                        {% if 'opt-ss' in profilUtilisateur['options'] %}
+                        <option value="opt-ss">Option Santé et Social</option>
+                        {% endif %}
+                        {% if 'opt-biotech' in profilUtilisateur['options'] %}
+                        <option value="opt-biotech">Option Biotechnologies</option>
+                        {% endif %}
+                        {% if 'opt-sl' in profilUtilisateur['options'] %}
+                        <option value="opt-sl">Option Sciences et Laboratoire</option>
+                        {% endif %}
+                        {% if 'opt-si' in profilUtilisateur['options'] %}
+                        <option value="opt-si">Option Sciences de l'Ingénieur</option>
+                        {% endif %}
+                        {% if 'opt-cit' in profilUtilisateur['options'] %}
+                        <option value="opt-cit">Option Création et innovations technologiques</option>
+                        {% endif %}
+                        {% if 'opt-ccd' in profilUtilisateur['options'] %}
+                        <option value="opt-ccd">Option Création et culture - design</option>
+                        {% endif %}
+                        {% if 'opt-maths-comp' in profilUtilisateur['options'] %}
+                        <option value="opt-maths-comp">Option Maths complémentaires</option>
+                        {% endif %}
+                        {% if 'opt-maths-exp' in profilUtilisateur['options'] %}
+                        <option value="opt-maths-exp">Option Maths expertes</option>
+                        {% endif %}
+                        {% if 'opt-dgemc' in profilUtilisateur['options'] %}
+                        <option value="opt-dgemc">Option Droit et grand enjeux du monde contemporain</option>
+                        {% endif %}
+                        {% if 'opt-equit' in profilUtilisateur['options'] %}
+                        <option value="opt-equit">Option Hippologie et équitation</option>
+                        {% endif %}
+                        {% if 'opt-aet' in profilUtilisateur['options'] %}
+                        <option value="opt-aet">Option Agronomie-économie-territoires</option>
+                        {% endif %}
+                        {% if 'opt-psc' in profilUtilisateur['options'] %}
+                        <option value="opt-psc">Option Pratiques sociales et culturelles</option>
+                        {% endif %}
+                        <option value="eps">EPS</option>
+                      </select>
+                    </div>
+                    <span class="icon is-left">
+                      <i class="fas fa-book"></i>
+                    </span>
+                  </div>
+                </div>
+                <small><em>@{{user['pseudo']}}</em></small> <small>Heure</small>
+                </p>
+                <!-- Titre -->
+                <h4 style="margin-top: 0;">
+                  <input placeholder="Titre" type="text" class="input" name="titre" required />
+                </h4>
+                <!-- Texte publication -->
+                <p style="word-wrap:break-word;">
+                  <textarea placeholder="Ma Demande" class="textarea" placeholder="Tapez-ici" type="text" name="demande"></textarea>
+                </p>
+                </p>
+              </div>
+              <!-- Icons like et commentaire -->
+              <div style="display:flex; justify-content: space-between; width: 100%;">
+                <nav class="level is-mobile">
+                  <div class="level-left">
+                    <a class="level-item" aria-label="like" style="cursor: not-allowed;">
+                      <span class="icon is-small">
+                        <i class="fas fa-thumbs-up" aria-hidden="true" style="font-size: 20px;padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;"></i>
+                      </span>
+                    </a>
+                    <a class="level-item" style="margin-left: 15%; cursor: not-allowed;" aria-label="comment">
+                      <span class="icon is-small">
+                        <i class="far fa-comment" style="font-size: 20px;color:{{session['couleur'][2]}};" aria-hidden="true"></i>
+                      </span>
+                    </a>
+                  </div>
+                </nav>
+                <div class="file is-info has-name">
+                  <label class="file-label">
+                    <input class="file-input" type="file" name="file" id="fileInput" accept=".pdf,image/*" onchange="document.getElementById('fileName').innerHTML = this.files[0].name;" />
+                    <span class="file-cta">
+                      <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                      <span class="file-label">
+                        Fichiers
+                      </span>
+                    </span>
+                    <span class="file-name" id="fileName">
+                      Nom du fichier
+                    </span>
+                  </label>
+                </div>
+              </div>
+              <br />
+              <div style="display:flex;justify-content:space-between;">
+                <button type="submit" style="min-width: 30%;" class="button is-success is-outlined">
+                  <span class="icon is-small">
+                    <i class="fas fa-check"></i>
+                  </span>
+                  <span>Envoyer</span>
+                </button>
+                <a href="{{url_for('accueil')}}" class="button is-danger is-outlined">
+                  <span>Annuler</span>
+                  <span class="icon is-small">
+                    <i class="fas fa-times"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
+
+          </article>
         </div>
-        <br>
-        <br>
-        <!-- Texte demande -->
-        <label>Ma Demande</label> : <textarea class="textarea" placeholder="Tapez-ici" type="text" name="demande"></textarea>
-        <br>
-        <!-- Bouton envoyer des fichiers -->
-        <div class="file is-info has-name">
-          <label class="file-label">
-            <input class="file-input" type="file" name="resume">
-            <span class="file-cta">
-              <span class="file-icon">
-                <i class="fas fa-upload"></i>
-              </span>
-              <span class="file-label">
-                Fichiers
-              </span>
-            </span>
-            <span class="file-name">
-              Nom du fichier
-            </span>
-          </label>
-        </div>
-        <br>
-        <!-- Bouton pour envoyer la demande d'aide -->
-        <input class="button" type="submit" value="Envoyer">
-      </form>
     </div>
+    </form>
     <div class="column"></div>
   </div>
 </body>
