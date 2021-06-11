@@ -411,14 +411,15 @@ def createGroupe():
 @app.route('/updateGroupe/', methods=['POST'])
 def updateGroupe():
     if 'id' in session:
-        participants = db_utilisateurs.find_one({'_id': ObjectId(request.form['IdGroupe'])})
+        participants = db_groupes.find_one({'_id': ObjectId(request.form['IdGroupe'])})
         list =[]
-        for name, value in request.form.items():
-            if name == 'IdGroupe':
-                pass
-            else:
-                db_groupes.update_one({'_id': ObjectId(request.form['IdGroupe'])},
-                    {"$push":{"id-utilisateurs":ObjectId(name)}})
+        if ObjectId(session['id']) in participants['id-utilisateurs'] and ObjectId(session['id']) in participants['moderateurs']:
+            for name, value in request.form.items():
+                if name == 'IdGroupe':
+                    pass
+                else:
+                    db_groupes.update_one({'_id': ObjectId(request.form['IdGroupe'])},
+                        {"$push":{"id-utilisateurs":ObjectId(name)}})
         return redirect(url_for('messages', idGroupe=request.form['IdGroupe']))
     else:
         return redirect(url_for('login'))
