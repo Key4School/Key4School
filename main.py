@@ -164,7 +164,7 @@ def accueil2():
 
 @app.route('/messages/', defaults={'idGroupe': None}, methods=['POST', 'GET'])
 @app.route('/messages/<idGroupe>', methods=['POST', 'GET'])
-def messages(idGroupe):
+def page_messages(idGroupe):
     if 'id' in session:
         if request.method == 'GET':
             # il faudra récupérer l'id qui sera qans un cookie
@@ -351,12 +351,6 @@ def audio(audioName):
     else:
         return redirect(url_for('login'))
 
-@app.route('/file/<fileName>')
-def file(fileName):
-    if 'id' in session:
-        return cluster.send_file(fileName)
-    else:
-        return redirect(url_for('login'))
 
 @app.route('/file/<fileName>')
 def file(fileName):
