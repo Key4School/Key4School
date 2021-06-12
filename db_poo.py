@@ -261,7 +261,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 	def recupLevel(self):
 		niv = int(0.473*self.xp**0.615)
 		xplvl = int((0.473*self.xp**0.615-niv)*100)
-		
+
 		return niv, xplvl, self.xp
 
 	def getUserSubjects(self):
@@ -329,7 +329,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 
 	def diffTemps(self):
 		diff_temps = int((datetime.now() - self.date_envoi).total_seconds())
-		return diff_temps 
+		return diff_temps
 
 	def convertTime(self):
 		tempsStr = ''
@@ -356,7 +356,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 		if session['id'] in self.likes:
 			return True
 		else:
-			return False 
+			return False
 
 	def aSign(self):
 		if ObjectId(session['id']) in self.sign:
@@ -401,6 +401,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 	        'réponses associées': {idRep: rep.toDB() for (idRep, rep) in self.reponses_associees.items()},
 	        'likes': self.likes,
 	        'sign': self.sign,
+			'motif': self.motif,
 	        'resolu': self.resolu,
 	        'fileType' : self.fileType
 	    }
@@ -415,6 +416,8 @@ class Reponse(Demande):
 		self.contenu = params['contenu']
 		self.date_envoi = params['date-envoi']
 		self.likes = params['likes']
+		self.sign = params.get('sign', [])
+		self.motif = params.get('motif', [])
 
 	def toDict(self) -> dict:
 		return {
@@ -426,7 +429,10 @@ class Reponse(Demande):
 	        'likes': self.likes,
 	        'nb-likes': len(self.likes),
 	        'a_like': self.aLike(),
-	        'temps': self.convertTime(),    
+			'a_sign': self.aSign(),
+	        'temps': self.convertTime(),
+			'sign': self.sign,
+	        'motif': self.motif,
 	        # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
 	        'user': utilisateurs.get(str(self.id_utilisateur)).toDict()
 		}
@@ -438,12 +444,14 @@ class Reponse(Demande):
 	        'contenu': self.contenu,
 	        'date-envoi': self.date_envoi,
 	        'likes': self.likes,
+			'sign': self.sign,
+	        'motif': self.motif
 		}
 
 	def __str__(self):
 		return str(self.toDict())
 
-class Message(Actions): 
+class Message(Actions):
 	def __init__(self, params: dict):
 		self._id = params['_id']
 		self.id_groupe = params['id-groupe']

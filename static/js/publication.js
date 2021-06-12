@@ -161,7 +161,7 @@ function signalerRep(e) {
     success: function(response) {
       $('#signalementRep').trigger("reset");
       signalisationRepClose();
-      document.getElementById("sign"+id).className = "fas fa-flag";
+      document.getElementById("sign_"+id).className = "fas fa-flag";
     },
   });
 }
@@ -176,7 +176,7 @@ function designalerRep(e) {
     success: function(response) {
       $('#designalementRep').trigger("reset");
       designalisationRepClose();
-      document.getElementById("sign_rep"+id).className = "far fa-flag";
+      document.getElementById("sign_"+id).className = "far fa-flag";
     },
   });
 }

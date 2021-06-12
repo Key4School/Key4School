@@ -615,7 +615,8 @@ def comments(idMsg):
                     'id-utilisateur': ObjectId(session['id']),
                     'contenu': automoderation(request.form.get('rep')),
                     'date-envoi': datetime.now(),
-                    'likes': []
+                    'likes': [],
+                    'sign': [],
                 })
 
                 demandes_aide[idMsg].update()
@@ -942,6 +943,35 @@ def signPost():
 
             demandes_aide[request.form['idSignalé']].update()
 
+            return 'sent'
+
+        else:
+            abort(403) # il manque l'id du message
+    else:
+        abort(401) # non autorisé
+
+@app.route('/signRepPost/', methods=['POST'])
+def signRepPost():
+    global demandes_aide
+    if 'id' in session:
+        if request.form['idSignalé'] != None and request.form['idDemandSignalé'] != None:
+            # on récupère les signalements de la demande d'aide
+            demande = demandes_aide[request.form['idDemandSignalé']].toDict()
+            sign = demande['reponsesDict'][request.form['idSignalé']]['sign']
+            motif = demande['reponsesDict'][request.form['idSignalé']]['motif']
+
+            if ObjectId(session['id']) in sign:
+                # on supprime son signalement
+                sign.remove(ObjectId(session['id']))
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
+                del motif[index]
+
+            else:
+                # on ajoute son signalement
+                sign.append(ObjectId(session['id'])) # on ajoute son signalement
+                motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+
+            demandes_aide[request.form['idDemandSignalé']].update()
             return 'sent'
 
         else:
