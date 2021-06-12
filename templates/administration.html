@@ -78,7 +78,7 @@
   <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;" id='divDemande_{{content['_id']}}'>
     <div>
       <a href="{{url_for('profil' ,idUser=content['_id'])}}">
-        {{content['rep']['prenom']}} {{content['rep']['nom']}} </a> : <b>{{content['contenu']}}</b> <em>{{content['date-envoi']}}</em> <b>{{content['matière']}}</b>
+        {{content['user']['prenom']}} {{content['user']['nom']}} </a> : <b>{{content['contenu']}}</b> <em>{{content['date-envoi']}}</em> <b>{{content['matière']}}</b>
       <br />
     </div>
     <br />
@@ -139,7 +139,7 @@
   <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;">
 
     {%for content in discussionSignale%}
-    <a href="{{url_for('messages', idGroupe=content['_id'])}}">{{content['nom']}}</a>
+    <a href="{{url_for('page_messages', idGroupe=content['_id'])}}">{{content['nom']}}</a>
     <ul class="menu-list">
       <li><u>Motif :</u></li>
       <li>

@@ -358,6 +358,12 @@ def file(fileName):
     else:
         return redirect(url_for('login'))
 
+@app.route('/file/<fileName>')
+def file(fileName):
+    if 'id' in session:
+        return DB.cluster.send_file(fileName)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
