@@ -75,7 +75,7 @@ def addXpModeration(user: str, amount: int) -> None:
 
     return
 
-with open("list_ban_words.txt", "r") as fichierBanWords:
+with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
     listeModeration = fichierBanWords.read().splitlines()
 
 def automoderation(stringModerer: str) -> str:
