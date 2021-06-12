@@ -11,57 +11,74 @@ from bson import Binary
 import os
 import gridfs
 import smtplib, ssl
+from difflib import SequenceMatcher
+from db_poo import *
+
 
 # Création de l'application
 app = Flask(__name__)
 socketio = SocketIO(app)
 
+# Création du Cluster de la DB
+DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 
-# Récupération d'une base de données
-cluster = PyMongo(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
-# Voici deux exemples pour créer des BDD
-db_utilisateurs = cluster.db.utilisateurs
-db_demande_aide = cluster.db.demande_aide
-db_messages = cluster.db.messages
-db_groupes = cluster.db.groupes
-db_files = cluster.db.fs.files
-db_chunks = cluster.db.fs.chunks
-db_notif = cluster.db.notifications
-with open("list_ban_words.txt", "r") as fichierBanWords:
-    listeModeration = fichierBanWords.read().splitlines()
+# Enregistrement de la DB
 
+all_utilisateurs = DB.db_utilisateurs.find()
+for u in all_utilisateurs:
+    utilisateurs[str(u['_id'])] = Utilisateur(u)
+
+all_demandes_aide = DB.db_demande_aide.find()
+for d in all_demandes_aide:
+    demandes_aide[str(d['_id'])] = Demande(d)
+
+all_groupes = DB.db_groupes.find()
+for g in all_groupes:
+    groupes[str(g['_id'])] = Groupe(g)
+
+all_messages = DB.db_messages.find()
+for m in all_messages:
+    messages[str(m['_id'])] = Message(m)
 
 
 def recupLevel():
-    xpgens = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})['xp']
+    global utilisateurs
+
+    user = utilisateurs[session['id']].toDict()
+    xpgens = user['xp']
     niv = int(0.473*xpgens**0.615)
     xplvl = int((0.473*xpgens**0.615-niv)*100)
+
     return niv, xplvl, xpgens
 
-def addXP(user: ObjectId, amount: int) -> None:
+def addXP(userID: str, amount: int) -> None:
     """
         +10 pour une demande d’aide
         +15 pour une réponse
         +2 pour chaque like reçu
     """
 
-    db_utilisateurs.update_one(
-        {'_id': user},
-        {'$inc': {'xp': amount}}
-    )
+    user = utilisateurs[userID]
+    user.xp += amount
+
+    utilisateurs[userID].update()
 
     return
 
-def addXpModeration(user: ObjectId, amount: int) -> None:
+def addXpModeration(user: str, amount: int) -> None:
+    global utilisateurs
 
-    db_utilisateurs.update_one(
-        {'_id': user},
-        {'$inc': {'xpModeration': amount}}
-    )
+    user = utilisateurs[userID]
+    user.xpModeration += amount
+
+    utilisateurs[userID].update()
 
     return
 
-def automoderation(stringModerer):
+with open("list_ban_words.txt", "r") as fichierBanWords:
+    listeModeration = fichierBanWords.read().splitlines()
+
+def automoderation(stringModerer: str) -> str:
     for content in listeModeration:
         if len(content) < 5:
             if stringModerer[0:len(content)+1] == content+" ":
@@ -76,9 +93,8 @@ def automoderation(stringModerer):
 
     return stringModerer
 
-
 def notif(type, id_groupe, id_msg, destinataires):
-    db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
+    DB.db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
                         "date": datetime.now(), "destinataires": destinataires})
     # # on rentre les renseignements pris sur le site du fournisseur
     # smtp_adress = 'smtp.gmail.com'
@@ -103,50 +119,15 @@ def notif(type, id_groupe, id_msg, destinataires):
 # Quand on arrive sur le site, on affiche la page "ma_page.html"
 @app.route('/')
 def accueil():
+    global utilisateurs
+    global demandes_aide
+    
     if 'id' in session:
-        user = db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
-        subjects = getUserSubjects(user)
+        user = utilisateurs[session['id']].toDict()
+        # subjects = getUserSubjects(user)
 
-        toutesDemandes = db_demande_aide.aggregate([
-            {'$match': {'matière': {'$in': subjects}}},
-            {'$match': {'resolu': False}},
-            {'$sort': {'date-envoi': -1}},
-            {'$limit': 10}
-        ])  # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-
-        demandes = []
-        for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
-            # on convertit en nombre de secondes la durée depuis le post
-            diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
-            tempsStr = convertTime(diffTemps)
-
-            # on check si l'utilisateur a déjà liké le post
-            if session['id'] in a['likes']:
-                a_like = True
-            else:
-                a_like = False
-
-            if ObjectId(session['id']) in a['sign']:
-                a_sign = True
-            else:
-                a_sign = False
-
-            demandes.append({  # on ajoute à la liste ce qui nous interesse
-                'idMsg': a['_id'],
-                'idAuteur': a['id-utilisateur'],
-                'titre': a['titre'],
-                'contenu': a['contenu'],
-                'temps': tempsStr,
-                'tag-matière': a['matière'],
-                'matière': translate_matiere_spes_options_lv([a['matière']]),
-                'nb-likes': len(a['likes']),
-                'a_like': a_like,
-                'a_sign': a_sign,
-                'resolu': a['resolu'],
-                'fileType': a['fileType'],
-                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
-            })
+        # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
+        demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:9] 
 
         return render_template("index.html", demandes=demandes, user=user)
     else:
@@ -161,122 +142,69 @@ def accueil2():
     else:
         return redirect(url_for('login'))
 
-
-@app.route('/messages/', defaults={'idGroupe': None}, methods=['POST', 'GET'])
-@app.route('/messages/<idGroupe>', methods=['POST', 'GET'])
-def messages(idGroupe):
+@app.route('/messages/', defaults={'idGroupe': None})
+@app.route('/messages/<idGroupe>')
+def page_messages(idGroupe):
+    global utilisateurs
+    global messages
+    global groupes
+    
     if 'id' in session:
-        if request.method == 'GET':
-            # il faudra récupérer l'id qui sera qans un cookie
-            grp = db_groupes.find({"id-utilisateurs": ObjectId(session['id'])})
-            user=db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
-            users = db_utilisateurs.aggregate([
-                {'$sort': {'pseudo': 1}},
-                {'$project': {
-                    '_id': 1,
-                    'nom': 1,
-                    'prenom': 1,
-                    'pseudo': 1,
-                    'lycee': 1,
-                    'email': 1,
-                    'telephone': 1,
-                    'elementPrive': 1
-                }}
-            ])
+        # il faudra récupérer l'id qui sera qans un cookie
+        grp = [groupes[idGrp] for idGrp in [idGrp for (idGrp , groupe) in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs]]
+        user = utilisateurs[session['id']].toDict()
+        users = sorted([u.toDict() for u in utilisateurs.values()], key = lambda u: u['pseudo'])
 
-            if idGroupe != None:
-                msgDb = db_messages.aggregate([
-                    {'$match': {'id-groupe': ObjectId(idGroupe)}},
-                    {'$lookup':
-                        {
-                            'from': 'messages',
-                            'localField': 'reponse',
-                            'foreignField': '_id',
-                            'as': 'rep',
-                        }
-                    }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
-                    {'$project': {
-                        '_id': 1,
-                        'id-groupes': 1,
-                        'id-utilisateur': 1,
-                        'contenu': 1,
-                        'date-envoi': 1,
-                        'rep': 1,
-                        'audio': 1,
-                        'sign': 1
-                    }},
-                ])
-                infogroupes = db_groupes.find_one({"_id": ObjectId(idGroupe)})
-                infoUtilisateurs = []
-                for content in infogroupes['id-utilisateurs']:
-                    infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
-                if session['id'] in str(infoUtilisateurs):
+        if idGroupe != None:
+            msgDb = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(idGroupe)]
+            toDel = []
+
+            for m in msgDb:
+                if m['reponse'] != 'None' and m['reponse'] != '':
+                    toDel.append(messages[str(m['reponse'])].toDict())
+                    m['rep'] = messages[str(m['reponse'])].toDict()
+            for a in toDel:
+                msgDb.remove(a)
+
+            infogroupes = groupes[idGroupe].toDict()
+            infoUtilisateurs = [utilisateurs[str(content)].toDict() for content in infogroupes['id-utilisateurs']]
+
+            danslegroupe = False
+            for user in infoUtilisateurs:
+                if ObjectId(session['id']) == user['_id']:
                     danslegroupe = True
-                elif user['admin'] == True:
-                    msgDb = db_messages.aggregate([
-                        {'$match': {"$and":[{'id-groupe': ObjectId(idGroupe)},{"sign": {"$exists": "true", "$ne": []}}]}},
-                        {'$lookup':
-                            {
-                                'from': 'messages',
-                                'localField': 'reponse',
-                                'foreignField': '_id',
-                                'as': 'rep',
-                            }
-                        }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
-                        {'$project': {
-                            '_id': 1,
-                            'id-groupes': 1,
-                            'id-utilisateur': 1,
-                            'contenu': 1,
-                            'date-envoi': 1,
-                            'rep': 1,
-                            'audio': 1,
-                            'sign': 1
-                        }},
-                    ])
 
-                else:
-                    danslegroupe = False
-                    msgDb = None
-                    infogroupes = None
-                    infoUtilisateurs = None
-            else:
-                msgDb = None
-                infogroupes = None
-                infoUtilisateurs = None
-            return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=list(users), sessionId=ObjectId(session['id']), user=user)
+            if user['admin'] == True:
+                msgDb = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(idGroupe) and m.sign != []]
+                toDel = []
 
-        elif request.method == 'POST':
-            if request.form['reponse'] != "None":
-                reponse = ObjectId(request.form['reponse'])
-            else:
-                reponse = "None"
+                for m in msgDb:
+                    if m['reponse'] != 'None' and m['reponse'] != '':
+                        toDel.append(messages[str(m['reponse'])].toDict())
+                        m['rep'] = messages[str(m['reponse'])].toDict()
+                for a in toDel:
+                    msgDb.remove(a)
 
-            if request.form['contenuMessage'] == '':
-                return abort(500)
+        else:
+            msgDb = None
+            infogroupes = None
+            infoUtilisateurs = None
 
-            message = db_messages.insert_one({"id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                                              "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse, "sign": []})
-            infogroupes = db_groupes.find_one({"_id": ObjectId(request.form['group'])})
-            notif("msg", ObjectId(request.form['group']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=ObjectId(session['id']), user=user)
 
-            # Sending new message to connected users
-            # json = {'_id': message.inserted_id, 'id-groupe': request.form['group'], 'id-utilisateur': session['id'], 'contenu': request.form['contenuMessage'], 'date-envoi': datetime.now()}
-            #request.sid = request.cookies.get('session')
-            # emit('newMsg', json, to=idGroupe, namespace='/')
-
-            return 'sent'
     else:
         return redirect(url_for('login'))
 
 # Connection au groupe pour recevoir les nouveaux messages par la suite
 @socketio.on('connectToGroup')
 def handleEvent_connectToGroup(json):
+    global groupes
+    
     if 'id' in session:
         if 'room' in json:
             if json['room'] != 'None':
                 # Check authorized
-                grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
+                grp = groupes[json['room']].toDict()
                 if grp != None:
                     if session['id'] in str(grp['id-utilisateurs']): # authorized
                         join_room(json['room'])
@@ -284,10 +212,14 @@ def handleEvent_connectToGroup(json):
 
 @socketio.on('postMsg')
 def handleEvent_postMsg(json):
+    global utilisateurs
+    global messages
+    global groupes
+    
     if 'id' in session:
         if 'room' in json:
             # Check authorized
-            grp = db_groupes.find_one({'_id': ObjectId(json['room'])})
+            grp = groupes[json['room']].toDict()
             if grp != None:
                 if session['id'] in str(grp['id-utilisateurs']): # authorized
                     if json['reponse'] != "None":
@@ -297,39 +229,32 @@ def handleEvent_postMsg(json):
 
                     if 'dateAudio' in json:
                         nom = "MsgVocal" + json['room'] + session['id'] + json['dateAudio']
-                        message = db_messages.insert_one({"id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": reponse})
+
+                        _id = ObjectId()
+                        messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
+                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": reponse, "sign": []})
+                        messages[str(_id)].insert()
+                        message = messages[str(_id)]
 
                     elif not json['contenuMessage'] == '':
-                        message = db_messages.insert_one({"id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
-                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "reponse": reponse, "sign": []})
+                        _id = ObjectId()
+                        messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
+                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []}) 
+                        messages[str(_id)].insert()
+                        message = messages[str(_id)]
                     if message:
-                        infogroupes = db_groupes.find_one({"_id": ObjectId(json['room'])})
-                        notif("msg", ObjectId(json['room']), ObjectId(message.inserted_id), infogroupes['id-utilisateurs'])
+                        infogroupes = groupes[json['room']].toDict()
+                        notif("msg", ObjectId(json['room']), _id, infogroupes['id-utilisateurs'])
+
                         infoUtilisateurs = []
                         for content in infogroupes['id-utilisateurs']:
-                            infoUtilisateurs += db_utilisateurs.find({"_id": ObjectId(content)})
+                            infoUtilisateurs += utilisateurs[str(content)].toDict()
+
                         # Sending new message to connected users
-                        message = list(db_messages.aggregate([
-                            {'$match': {'_id' : message.inserted_id}},
-                            {'$lookup':
-                                {
-                                    'from': 'messages',
-                                    'localField': 'reponse',
-                                    'foreignField': '_id',
-                                    'as': 'rep',
-                                }
-                            }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
-                            {'$project': {
-                                '_id': 1,
-                                'id-groupes': 1,
-                                'id-utilisateur': 1,
-                                'contenu': 1,
-                                'date-envoi': 1,
-                                'rep': 1,
-                                'audio': 1
-                            }},
-                        ]))[0]
+                        message = messages[str(_id)].toDict()
+                        if message['reponse'] != 'None' and message['reponse'] != '':
+                            message['rep'] = messages[str(message['reponse'])].toDict()
+                            
                         html = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'])
                         emit('newMsg', html, to=json['room'])
 
@@ -337,8 +262,7 @@ def handleEvent_postMsg(json):
 def uploadAudio():
     if 'id' in session:
         nom = "MsgVocal" + request.form['group'] + session['id'] + request.form['date']
-
-        cluster.save_file(nom, request.files['audio'])
+        DB.cluster.save_file(nom, request.files['audio'])
         return 'yes'
     else:
         return redirect(url_for('login'))
@@ -347,55 +271,35 @@ def uploadAudio():
 @app.route('/audio/<audioName>')
 def audio(audioName):
     if 'id' in session:
-        return cluster.send_file(audioName)
-    else:
-        return redirect(url_for('login'))
-
-@app.route('/file/<fileName>')
-def file(fileName):
-    if 'id' in session:
-        return cluster.send_file(fileName)
+        return DB.cluster.send_file(audioName)
     else:
         return redirect(url_for('login'))
 
 
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
+    global messages
+    
     if 'id' in session:
         idGroupe = request.form['grp']
-        db_messages.delete_one({"_id": ObjectId(request.form['msgSuppr'])})
+
+        messages[request.form['msgSuppr']].delete()
+        del messages[request.form['msgSuppr']]
+
         if request.form['audio'] == 'True':
-            MyAudio = db_files.find_one({'filename': request.form['audioName']})
-            db_files.delete_one({'_id': MyAudio['_id']})
-            db_chunks.delete_many({'files_id': MyAudio['_id']})
+            MyAudio = DB.db_files.find_one({'filename': request.form['audioName']})
+            DB.db_files.delete_one({'_id': MyAudio['_id']})
+            DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
+
         return redirect(url_for('messages', idGroupe=idGroupe))
 
     else:
         return redirect(url_for('login'))
 
-
-"""@app.route('/searchUser_newgroup/', methods=['POST'])
-def searchUser_newgroup():
-    if 'id' in session:
-        search = request.form['search']
-        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
-                                              {'nom': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'prenom': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'lycee': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'email': {
-                                                  '$regex': search, '$options': 'i'}},
-                                              {'telephone': {'$regex': search, '$options': 'i'}}]
-                                        }).limit(30)
-        return render_template("searchUser_newgroup.html", users=users, sessionId=session['id'])
-    else:
-        return redirect(url_for('login'))"""
-
-
 @app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
+    global groupes
+    
     if 'id' in session:
         participants = [ObjectId(session['id'])]
         for name, value in request.form.items():
@@ -403,39 +307,56 @@ def createGroupe():
                 pass
             else:
                 participants.append(ObjectId(name))
-        newGroupe = db_groupes.insert_one({'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[]})
-        return redirect(url_for('messages', idGroupe=newGroupe.inserted_id))
+
+        _id = ObjectId()
+        groupes[str(_id)] = Groupe({'_id': _id, 'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[], 'motif': []})  
+        groupes[str(_id)].insert()
+
+        return redirect(url_for('page_messages', idGroupe=_id))
     else:
         return redirect(url_for('login'))
 
 @app.route('/updateGroupe/', methods=['POST'])
 def updateGroupe():
+    global groupes 
+
     if 'id' in session:
-        participants = db_groupes.find_one({'_id': ObjectId(request.form['IdGroupe'])})
-        list =[]
-        if ObjectId(session['id']) in participants['id-utilisateurs'] and ObjectId(session['id']) in participants['moderateurs']:
+        groupe = groupes[request.form['IdGroupe']].toDict()
+        participants = groupe['id-utilisateurs']
+
+        if ObjectId(session['id']) in participants and ObjectId(session['id']) in groupe['moderateurs']:
             for name, value in request.form.items():
                 if name == 'IdGroupe':
                     pass
                 else:
-                    db_groupes.update_one({'_id': ObjectId(request.form['IdGroupe'])},
-                        {"$push":{"id-utilisateurs":ObjectId(name)}})
-        return redirect(url_for('messages', idGroupe=request.form['IdGroupe']))
+                    participants.append(ObjectId(name))
+
+            groupes[request.form['IdGroupe']].update()
+
+        return redirect(url_for('page_messages', idGroupe=request.form['IdGroupe']))
     else:
         return redirect(url_for('login'))
 
 @app.route('/virerParticipant/', methods=['POST'])
 def virerParticipant():
+    global utilisateurs
+    global groupes
+
     if 'id' in session:
-        if ObjectId(session['id']) in db_groupes.find_one({'_id': ObjectId(request.form['idViréGrp'])})['moderateurs'] or request.form['idViré'] == session['id']:
-            db_groupes.update_one({'_id': ObjectId(request.form['idViréGrp'])},
-                {'$pull': {
-                    'id-utilisateurs': ObjectId(request.form['idViré']),
-                    'moderateurs': ObjectId(request.form['idViré'])}
-                },
-            )
+        groupe = groupes[request.form['idViréGrp']].toDict()
+        participants = groupe['id-utilisateurs']
+        moderateurs = groupe['moderateurs']
+        
+        if ObjectId(session['id']) in moderateurs or request.form['idViré'] == session['id']:
+            participants.remove(ObjectId(request.form['idViré']))
+
+            if ObjectId(request.form['idViré']) in moderateurs:
+                moderateurs.remove(ObjectId(request.form['idViré']))
+
+            groupes[request.form['idViréGrp']].update()
+
             if request.form['idViré'] == session['id']:
-                return redirect(url_for('messages'))
+                return redirect(url_for('page_messages'))
             else:
                 return  redirect('/messages/'+request.form['idViréGrp'])
         else:
@@ -446,37 +367,37 @@ def virerParticipant():
 @app.route('/modifRole/', methods=['POST'])
 def modifRole():
     if 'id' in session:
-        grp =db_groupes.find_one({'_id': ObjectId(request.form['idGrp'])})
-        modo = grp['moderateurs']
-        participant = grp['id-utilisateurs']
-        if ObjectId(session['id']) in modo and ObjectId(request.form['idModifié']) in participant:
-            if ObjectId(request.form['idModifié']) in modo :
-                db_groupes.update_one({'_id': ObjectId(request.form['idGrp'])},
-                    {'$pull': {
-                        'moderateurs': ObjectId(request.form['idModifié'])}
-                    },
-                )
+        grp = groupes[request.form['idGrp']].toDict()
+        modos = grp['moderateurs']
+        participants = grp['id-utilisateurs']
+
+        if ObjectId(session['id']) in modos and ObjectId(request.form['idModifié']) in participants:
+            if ObjectId(request.form['idModifié']) in modos:
+                modos.remove(ObjectId(request.form['idModifié']))
+                groupes[request.form['idGrp']].update()
+
                 return 'participant'
+                
             else:
-                db_groupes.update_one({'_id': ObjectId(request.form['idGrp'])},
-                    {'$push': {
-                        'moderateurs': ObjectId(request.form['idModifié'])}
-                    },
-                )
+                modos.append(ObjectId(request.form['idModifié']))
+                groupes[request.form['idGrp']].update()
+
                 return 'admin'
         else:
-            return redirect(url_for('accueil'))
+            abort(401) # non autorisé
     else:
-        return redirect(url_for('login'))
-
+        abort(403) # doit se connecter
 
 @app.route('/changeTheme/', methods=['POST'])
 def changeTheme():
+    global utilisateurs
+    
     if 'id' in session:
         if int(request.form['couleur']) == 5:
             color2 = tuple(int(request.form['color2'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
             moyenne = '#%02x%02x%02x' % tuple((color+255)//2 for color in color2)
             couleurs = [request.form['color1'], request.form['color2'], request.form['color3'], moyenne]
+
         else:
             listColor = [['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'],
                         ['#4c7450', '#a8d7ad', '#c3455a', '#d4ebd6'],
@@ -484,9 +405,14 @@ def changeTheme():
                         ['#e6b991', '#d6c2b0', '#74b3ab', '#ebe1d8'],
                         ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']]
             couleurs = listColor[int(request.form['couleur'])]
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {
-                                   "$set": {"couleur": couleurs}})
+
+        user = utilisateurs[session['id']]
+        user.couleur = couleurs
+
+        utilisateurs[session['id']].update()
+
         session['couleur'] = couleurs
+
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
@@ -495,60 +421,33 @@ def changeTheme():
 @app.route('/profil/', defaults={'idUser': None}, methods=['POST', 'GET'])
 @app.route('/profil/<idUser>', methods=['POST', 'GET'])
 def profil(idUser):
+    global utilisateurs
+    global demandes_aide
+    
     if 'id' in session:
         if idUser == None or idUser == session['id']:
-            toutesDemandes = db_demande_aide.aggregate([
-                {'$match': {'id-utilisateur': ObjectId(session['id'])}},
-                {'$sort': {'date-envoi': -1}}
-            ])  # ici on récupère les 5 dernières demandes les plus récentes
+            toutesDemandes = sorted([d for d in demandes_aide.values() if d.id_utilisateur == ObjectId(session['id'])], key = lambda d: d.date_envoi, reverse=True)
 
             demandes = []
-            for a in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
-                # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
-                tempsStr = convertTime(diffTemps)
+            for d in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
+                demandes.append(d.toDict())
 
-                # on check si l'utilisateur a déjà liké le post
-                if session['id'] in a['likes']:
-                    a_like = True
-                else:
-                    a_like = False
-
-                if session['id'] in a['sign']:
-                    a_sign = True
-                else:
-                    a_sign = False
-
-                demandes.append({  # on ajoute à la liste ce qui nous interesse
-                    'idMsg': a['_id'],
-                    'titre': a['titre'],
-                    'contenu': a['contenu'],
-                    'temps': tempsStr,
-                    'matière': a['matière'],
-                    'nb-likes': len(a['likes']),
-                    'a_like': a_like,
-                    'a_sign': a_sign,
-                    'resolu': a['resolu'],
-                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
-                })
-
-            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
-            niv, xplvl, xpgens = recupLevel()
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, xplvl=xplvl, xp=xpgens, niv=niv, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
+            user = utilisateurs[session['id']]
+            profilUtilisateur = user.toDict()
+            niv, xplvl, xpgens = user.recupLevel()
+            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, xplvl=xplvl, xp=xpgens, niv=niv, user=user)
 
         else:
-            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(idUser)})
-            if ObjectId(session['id']) in profilUtilisateur['sign']:
-                a_sign = True
-            else:
-                a_sign = False
-            # translate spes/options/lv
-            profilUtilisateur['langues'] = translate_matiere_spes_options_lv(profilUtilisateur['langues'])
-            profilUtilisateur['spes'] = translate_matiere_spes_options_lv(profilUtilisateur['spes'])
-            profilUtilisateur['options'] = translate_matiere_spes_options_lv(profilUtilisateur['options'])
+            user = utilisateurs[idUser]
+            profilUtilisateur = user.toDict()
+            niv, xplvl, xpgens = user.recupLevel()
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=a_sign, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
+            # translate spes/options/lv
+            profilUtilisateur['langues'] = profilUtilisateur['langues-str']
+            profilUtilisateur['spes'] = profilUtilisateur['spes-str']
+            profilUtilisateur['options'] = profilUtilisateur['options-str']
+
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], user=utilisateurs[session['id']].toDict())
     else:
         return redirect(url_for('login'))
 
@@ -556,13 +455,15 @@ def profil(idUser):
 @app.route('/userImg/<profilImg>')
 def userImg(profilImg):
     if 'id' in session:
-        return cluster.send_file(profilImg)
+        return DB.cluster.send_file(profilImg)
     else:
         return redirect(url_for('login'))
 
 
 @app.route("/updateprofile/", methods=["POST"])
 def updateprofile():
+    global utilisateurs
+    
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
         elementPrive = []
@@ -573,14 +474,21 @@ def updateprofile():
             elif request.form[content] == "pb":
                 elementPublic.append(content.replace('Visibilite', ''))
 
-        # if request.form['pseudoVisibilite'] == "pv":
-        #     elementPrive.append("pseudo")
-        # elif request.form['pseudoVisibilite'] == "pb":
-        #     elementPublic.append("pseudo")
-        db_utilisateurs.update_one({"_id": ObjectId(session['id'])}, {'$set': {'pseudo': automoderation(request.form['pseudo']), 'email': automoderation(request.form['email']), 'telephone': automoderation(request.form['telephone']), 'interets': automoderation(request.form['interets']), 'caractere': request.form['caractere'],
-                                                                               'langues': [request.form['lv1'], request.form['lv2']], 'options': [request.form['option1'], request.form['option2']], 'spes': [request.form['spe1'], request.form['spe2'], request.form['spe3']],
-                                                                               'elementPrive': elementPrive, 'elementPublic': elementPublic}})
-        # requete vers la db update pour ne pas créer un nouvel utilisateur ensuite 1ere partie on spécifie l'id de l'utilisateur qu'on veut modifier  puis pour chaque champ on précise les nouvelles valeurs.
+        user = utilisateurs[session['id']]
+
+        user.pseudo = automoderation(request.form['pseudo'])
+        user.email = automoderation(request.form['email'])
+        user.telephone = automoderation(request.form['telephone'])
+        user.interets = automoderation(request.form['interets'])
+        user.caractere = request.form['caractere']
+        user.langues = [request.form['lv1'], request.form['lv2']]
+        user.options = [request.form['option1'], request.form['option2']]
+        user.spes = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
+        user.elementPrive = elementPrive
+        user.elementPublic = elementPublic
+
+        utilisateurs[session['id']].update()
+
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
@@ -588,26 +496,35 @@ def updateprofile():
 
 @app.route('/updateImg/', methods=['POST'])
 def updateImg():
+    global utilisateurs
+    
     if 'id' in session:
         if request.form['but'] == "remove":
-            MyImage = db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
+            MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
-                db_files.delete_one({'_id': a['_id']})
-                db_chunks.delete_many({'files_id': a['_id']})
-            db_utilisateurs.update_one(
-                {'_id': ObjectId(session['id'])},
-                {'$set': {'imgProfile': "", 'nomImg': ""}})
+                DB.db_files.delete_one({'_id': a['_id']})
+                DB.db_chunks.delete_many({'files_id': a['_id']})
+
+            user = utilisateurs[session['id']]
+            user.nomImg = ''
+            user.imgProfile = ''
+            utilisateurs[session['id']].update()
+
         elif request.form['but'] == "replace":
-            ImgNom = request.files['Newpicture'].filename + \
-                'imgProfile' + session['id']
-            MyImage = db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
+            ImgNom = request.files['Newpicture'].filename + 'imgProfile' + session['id']
+            MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
-                db_files.delete_one({'_id': a['_id']})
-                db_chunks.delete_many({'files_id': a['_id']})
-            cluster.save_file(ImgNom, request.files['Newpicture'])
-            image = db_files.find_one({'filename': ImgNom})
-            db_utilisateurs.update_one({'_id': ObjectId(session['id'])}, {
-                                       '$set': {'imgProfile': image['_id'], 'nomImg': ImgNom}})
+                DB.db_files.delete_one({'_id': a['_id']})
+                DB.db_chunks.delete_many({'files_id': a['_id']})
+
+            DB.cluster.save_file(ImgNom, request.files['Newpicture'])
+            image = DB.db_files.find_one({'filename': ImgNom})
+
+            user = utilisateurs[session['id']]
+            user.imgProfile = image['_id']
+            user.nomImg = ImgNom
+            utilisateurs[session['id']].update()
+
         return redirect(url_for('profil'))
     else:
         return redirect(url_for('login'))
@@ -620,84 +537,36 @@ def redirect_comments():
 
 @app.route('/comments/<idMsg>', methods=['GET', 'POST'])
 def comments(idMsg):
+    global utilisateurs
+    global demandes_aide
+    
     if 'id' in session:
         if request.method == 'GET':
-            msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
+            msg = demandes_aide[idMsg].toDict()
 
-            diffTemps = int((datetime.now() - msg['date-envoi']).total_seconds())
-            tempsStr = convertTime(diffTemps)
-
-            # on check si l'utilisateur a déjà liké le post
-            if session['id'] in msg['likes']:
-                a_like = True
-            else:
-                a_like = False
-
-            if session['id'] in msg['sign']:
-                a_sign = True
-            else:
-                a_sign = False
-
-            reponses = []
-            for r in msg['réponses associées'].values():
-                diffTemps2 = int((datetime.now() - r['date-envoi']).total_seconds())
-                tempsStr2 = convertTime(diffTemps2)
-
-                # on check si l'utilisateur a déjà liké le post
-                if session['id'] in r['likes']:
-                    a_like2 = True
-                else:
-                    a_like2 = False
-
-                reponses.append({
-                    'idRep': r['_id'],
-                    'contenu': r['contenu'],
-                    'temps': tempsStr2,
-                    'nb-likes': len(r['likes']),
-                    'a_like': a_like2,
-                    'user': db_utilisateurs.find_one({'_id': ObjectId(r['id-utilisateur'])})
-                })
-
-            result = { # on ajoute à la liste ce qui nous interesse
-                'idMsg': msg['_id'],
-                'titre': msg['titre'],
-                'contenu': msg['contenu'],
-                'temps': tempsStr,
-                'tag-matière': msg['matière'],
-                'matière': translate_matiere_spes_options_lv([msg['matière']]),
-                'nb-likes': len(msg['likes']),
-                'a_like': a_like,
-                'a_sign': a_sign,
-                'reponses': reponses,
-                'fileType': msg['fileType'],
-                # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                'user': db_utilisateurs.find_one({'_id': ObjectId(msg['id-utilisateur'])})
-            }
-
-            return render_template("comments.html", d=result, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
+            return render_template("comments.html", d=msg, user=utilisateurs[session['id']].toDict())
 
         else:
             if 'rep' in request.form:
-                msg = db_demande_aide.find_one({'_id': ObjectId(idMsg)})
-                reponses = msg['réponses associées']
+                msg = demandes_aide[idMsg].toDict()
+                reponses = msg['reponsesObjects']
+
                 _id = ObjectId()
-                reponses[str(_id)] = {
+                reponses[str(_id)] = Reponse({
                     '_id': ObjectId(_id),
                     'id-utilisateur': ObjectId(session['id']),
                     'contenu': automoderation(request.form.get('rep')),
                     'date-envoi': datetime.now(),
                     'likes': []
-                }
+                })
 
-                db_demande_aide.update(
-                    {'_id': ObjectId(idMsg)},
-                    {'$set':{'réponses associées': reponses}}
-                )
-                notif("demande", ObjectId(idMsg), _id, msg['id-utilisateur'])
+                demandes_aide[idMsg].update()
+
+                notif("demande", ObjectId(idMsg), _id, msg['idAuteur'])
 
                 # add XP
-                if not ObjectId(session['id']) == msg['id-utilisateur']:
-                    addXP(ObjectId(session['id']), 15)
+                if not ObjectId(session['id']) == msg['idAuteur']:
+                    addXP(session['id'], 15)
 
             return redirect('/comments/' + idMsg)
     else:
@@ -706,13 +575,16 @@ def comments(idMsg):
 
 @app.route('/question/', methods=['POST', 'GET'])
 def question():
+    global utilisateurs
+    global demandes_aide
+
     if 'id' in session:
         if request.method == 'POST':
             # Impossibilité demande d'aide vide
             if request.form['titre'] == '':
                 return redirect('/question/')
 
-            user = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+            user = utilisateurs[session['id']].toDict()
             if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
                 if request.files['file'].mimetype != 'application/octet-stream':
                     if request.files['file'].mimetype == 'application/pdf':
@@ -723,32 +595,27 @@ def question():
                     fileType = 'none'
 
                 _id = ObjectId()
-                db_demande_aide.insert_one(
-                    {"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": automoderation(request.form['titre']), "contenu": automoderation(request.form['demande']), "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
+                demandes_aide[str(_id)] = Demande({"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": automoderation(request.form['titre']), "contenu": automoderation(request.form['demande']), "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
+                demandes_aide[str(_id)].insert()
 
                 if request.files['file'].mimetype != 'application/octet-stream':
                     nom = "DemandeFile_" + str(_id)
-                    cluster.save_file(nom, request.files['file'])
-
-                demandes = db_demande_aide.aggregate([
-                    {'$sort': {'date-envoi': -1}},
-                    {'$limit': 1}
-                ])
+                    DB.cluster.save_file(nom, request.files['file'])
 
                 # add XP
-                addXP(ObjectId(session['id']), 10)
+                addXP(session['id'], 10)
+                
+                return redirect('/comments/' + str(_id))
 
-                for demande in demandes:
-                    return redirect('/comments/' + str(demande['_id']))
             else:
                 return redirect(url_for('accueil'))
 
             # return render_template('question.html', envoi="Envoi réussi")
         else:
-            profilUtilisateur = db_utilisateurs.find_one({'_id': ObjectId(session['id'])})
+            profilUtilisateur = utilisateurs[session['id']].toDict()
 
             if profilUtilisateur["SanctionEnCour"] != "Spec" and profilUtilisateur['SanctionEnCour'] != "SpecForum":
-                return render_template('question.html', profilUtilisateur=profilUtilisateur, user=db_utilisateurs.find_one({"_id": ObjectId(session['id'])}))
+                return render_template('question.html', profilUtilisateur=profilUtilisateur, user=profilUtilisateur)
             else:
                 return redirect(url_for('accueil'))
     else:
@@ -757,59 +624,29 @@ def question():
 
 @app.route('/recherche')
 def recherche():
+    global utilisateurs
+    global demandes_aide
+    
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
             search = request.args['search']
 
-            user = db_utilisateurs.find_one({"_id":ObjectId(session['id'])})
-            subjects = getUserSubjects(user)
+            user = utilisateurs[session['id']].toDict()
 
-            firstResult = db_demande_aide.aggregate([
-                {'$match': {'$text': {'$search': search}}}, # doit resté en premier !
-                {'$match': {'matière': {'$in': subjects}}},
-                {'$sort': {'date-envoi': -1}}
-            ]) # ici on récupère les demandes d'aide correspondant à la recherche et aux matières de l'utilisateur
+            # on récupère les demandes d'aide correspondant à la recherche
+            result = sorted(
+                [d.toDict() for d in demandes_aide.values() 
+                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre, search).ratio()>0.7 or SequenceMatcher(None, d.contenu, search).ratio()>0.7 )
+                ], key = lambda d: d['date-envoi'], reverse=True
+            )
 
-            result = []
-            for a in firstResult: # pour chaque résultat, on va l'ajouter dans une liste qui sera donnée à la page HTML
-                # on convertit en nombre de secondes la durée depuis le post
-                diffTemps = int((datetime.now() - a['date-envoi']).total_seconds())
-                tempsStr = convertTime(diffTemps)
-
-                # on check si l'utilisateur a déjà liké le post
-                if session['id'] in a['likes']:
-                    a_like = True
-                else:
-                    a_like = False
-
-                if session['id'] in a['sign']:
-                    a_sign = True
-                else:
-                    a_sign = False
-
-                result.append({ # on ajoute à la liste ce qui nous interesse
-                    'idMsg': a['_id'],
-                    'idAuteur': a['id-utilisateur'],
-                    'titre': a['titre'],
-                    'contenu': a['contenu'],
-                    'temps': tempsStr,
-                    'tag-matière': a['matière'],
-                    'matière': translate_matiere_spes_options_lv([a['matière']]),
-                    'nb-likes': len(a['likes']),
-                    'a_like': a_like,
-                    'a_sign': a_sign,
-                    'resolu': a['resolu'],
-                    # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-                    'user': db_utilisateurs.find_one({'_id': ObjectId(a['id-utilisateur'])})
-                })
-
-            users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
-                                                  {'nom': {'$regex': search, '$options': 'i'}},
-                                                  {'prenom': {'$regex': search, '$options': 'i'}},
-                                                  {'lycee': {'$regex': search, '$options': 'i'}},
-                                                  {'email': {'$regex': search, '$options': 'i'}},
-                                                  {'telephone': {'$regex': search, '$options': 'i'}}]
-                                            }).limit(3)
+            # on récupère 3 utilisateurs correspondants à la recherche
+            users = sorted(
+                [u.toDict() for u in utilisateurs.values()
+                    if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7 
+                        or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.7 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.7 )
+                ], key = lambda u: u['pseudo']
+            )[:2] 
 
             return render_template('recherche.html', results=result, users=users, search=search, user=user)
 
@@ -821,55 +658,53 @@ def recherche():
 
 @app.route('/rechercheUser')
 def recherche_user():
+    global utilisateurs
+    
     if 'id' in session:
         search = request.args['search']
-        users = db_utilisateurs.find({'$or': [{'pseudo': {'$regex': search, '$options': 'i'}},
-                                              {'nom': {'$regex': search, '$options': 'i'}},
-                                              {'prenom': {'$regex': search, '$options': 'i'}},
-                                              {'lycee': {'$regex': search, '$options': 'i'}},
-                                              {'email': {'$regex': search, '$options': 'i'}},
-                                              {'telephone': {'$regex': search, '$options': 'i'}}]
-                                        }).limit(30)
-        return render_template('rechercheUser.html', users=users)
+        
+        # on récupère 30 utilisateurs correspondants à la recherche
+        users = sorted(
+            [u.toDict() for u in utilisateurs.values()
+                if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7 
+                    or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.7 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.7 )
+            ], key = lambda u: u['pseudo']
+        )[:29] 
+
+        return render_template('rechercheUser.html', users=users, user = utilisateurs[session['id']].toDict())
     else:
         return redirect(url_for('login'))
 
 
-#@app.route('/likePost/<idPost>', methods=['POST'])
+@app.route('/likePost/<idPost>', methods=['POST'])
 def likePost(idPost):
+    global demandes_aide
+    
     if 'id' in session:
         if 'idPost' != None:
             # on récupère les likes de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
+            demande = demandes_aide[idPost].toDict()
             likes = demande['likes']
-            newLikes = list(likes)
-            action = None
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
-                action = 'remove'
-                newLikes.remove(session['id'])  # on supprime son like
+                likes.remove(session['id'])  # on supprime son like
 
                 # remove XP
-                if not ObjectId(session['id']) == demande['id-utilisateur']:
-                    addXP(ObjectId(demande['id-utilisateur']), -2)
+                if not ObjectId(session['id']) == demande['idAuteur']:
+                    addXP(demande['id-utilisateur'], -2)
             else:
-                action = 'add'
-                newLikes.append(session['id'])  # on ajoute son like
+                likes.append(session['id'])  # on ajoute son like
 
                 # add XP
-                if not ObjectId(session['id']) == demande['id-utilisateur']:
-                    addXP(ObjectId(demande['id-utilisateur']), 2)
+                if not ObjectId(session['id']) == demande['idAuteur']:
+                    addXP(demande['id-utilisateur'], 2)
 
             # on update dans la DB
-            db_demande_aide.update(
-                {'_id': ObjectId(idPost)},
-                {'$set':{'likes': newLikes}}
-            )
+            demandes_aide[idPost].update()
 
             # on retourne enfin le nouveau nb de likes
-            # return {'newNbLikes': len(newLikes)}, 200
-            return action
+            return {'newNbLikes': len(likes)}, 200
 
         else:
             abort(403)  # il manque l'id du message
@@ -877,54 +712,40 @@ def likePost(idPost):
         abort(401)  # non autorisé
 
 
-#@app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
+@app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
 def likeRep(idPost, idRep):
+    global demandes_aide
+    
     if 'id' in session:
         if 'idPost' != None and 'idRep' != None:
             # on récupère les likes de la demande d'aide
-            reponses = db_demande_aide.find_one({"_id": ObjectId(idPost)})['réponses associées']
+            demande = demandes_aide[idPost].toDict()
+            reponses = demande['reponsesDict']
             if not idRep in reponses:
                 return abort(400)
-
             reponse = reponses[idRep]
+
             likes = reponse['likes']
-            newLikes = list(likes)
-            action = None
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
-                action = 'remove'
-                newLikes.remove(session['id'])  # on supprime son like
+                likes.remove(session['id'])  # on supprime son like
 
                 # remove XP
-                if not ObjectId(session['id']) == reponse['id-utilisateur']:
-                    addXP(ObjectId(reponse['id-utilisateur']), -2)
+                if not ObjectId(session['id']) == demande['idAuteur']:
+                    addXP(demande['id-utilisateur'], -2)
             else:
-                action = 'add'
-                newLikes.append(session['id'])  # on ajoute son like
+                likes.append(session['id'])  # on ajoute son like
 
                 # add XP
-                if not ObjectId(session['id']) == reponse['id-utilisateur']:
-                    addXP(ObjectId(reponse['id-utilisateur']), 2)
-
-            reponse = {
-                '_id': ObjectId(reponse['_id']),
-                'id-utilisateur': ObjectId(reponse['id-utilisateur']),
-                'contenu': reponse['contenu'],
-                'date-envoi': reponse['date-envoi'],
-                'likes': newLikes
-            }
-            reponses[idRep] = reponse
+                if not ObjectId(session['id']) == demande['idAuteur']:
+                    addXP(demande['id-utilisateur'], 2)
 
             # on update dans la DB
-            db_demande_aide.update(
-                {'_id': ObjectId(idPost)},
-                {'$set':{'réponses associées': reponses}}
-            )
+            demandes_aide[idPost].update()
 
             # on retourne enfin le nouveau nb de likes
-            # return {'newNbLikes': len(newLikes)}, 200
-            return action
+            return {'newNbLikes': len(likes)}, 200
 
         else:
             abort(400)  # il manque l'id du message
@@ -951,81 +772,41 @@ def handleEvent_postLike(json):
                         emit('removeLike', json['idRep'], broadcast=True)
 
 
-
 @app.route('/administration/', methods=['POST', 'GET'])
 def administration():
+    global utilisateurs
+    global demandes_aide
+    global groupes
+    
     if 'id' in session:
-        utilisateur = db_utilisateurs.find_one({"_id": ObjectId(session['id'])})
+        utilisateur = utilisateurs[session['id']].toDict()
+
         if utilisateur['admin'] == True:
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
-                    demande =db_demande_aide.find_one({"_id": ObjectId(request.form['idSuppr'])})
-                    addXpModeration(demande['id-utilisateur'], 5)
-                    MyFile = db_files.find(
-                        {'filename': 'DemandeFile_'+request.form['idSuppr']})
-                    for a in MyFile:
-                        db_files.delete_one({'_id': a['_id']})
-                        db_chunks.delete_many({'files_id': a['_id']})
-                    db_demande_aide.delete_one({"_id": ObjectId(request.form['idSuppr'])})
+                    demandes_aide[request.form['idSuppr']].delete()
+                    del demandes_aide[request.form['idSuppr']]
+
                 elif request.form['demandeBut'] == 'Val':
-                    db_demande_aide.update_one({"_id": ObjectId(request.form['idVal'])},
-                                               {"$set": {"sign": [], "motif": []}})
+                    demande = demandes_aide[request.form['idVal']]
+                    demande.sign = []
+                    demande.motif = []
+
+                    demandes_aide[request.form['idVal']].update()
+
                 elif request.form['demandeBut'] == 'ValUser':
-                    db_utilisateurs.update_one({"_id": ObjectId(request.form['idValidé'])},
-                                               {"$set": {"sign": [],"motif": []}})
+                    user = utilisateurs[request.form['idValidé']]
+                    user.sign = []
+                    user.motif = []
+
+                    utilisateurs[request.form['idValidé']].update()
 
                 return 'sent'
 
             else:
-                demandeSignale = db_demande_aide.aggregate([
-                    {'$match': {"sign": {"$exists": "true", "$ne": []}}},
-                    {'$lookup':
-                        {
-                            'from': 'utilisateurs',
-                            'localField': 'id-utilisateur',
-                            'foreignField': '_id',
-                            'as': 'rep',
-                        }
-                    }, {'$set': {'rep': {'$arrayElemAt': ["$rep", 0]}}},
-                    {'$project': {
-                        '_id': 1,
-                        'titre': 1,
-                        'id-utilisateur': 1,
-                        'contenu': 1,
-                        'date-envoi': 1,
-                        'rep': 1,
-                        'matière': 1,
-                        'motif': 1,
-                         'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
-                    }},
-                    {"$sort": {"sign_count": -1}}
-                ])
-
-                profilSignale = db_utilisateurs.aggregate([
-                    {'$match': {"sign": {"$exists": "true", "$ne": []}}},
-                    {'$project': {
-                        '_id': 1,
-                        'nom': 1,
-                        'prenom': 1,
-                        'pseudo' : 1,
-                        'motif': 1,
-                        'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
-                    }},
-                    {"$sort": {"sign_count": -1}}
-                ])
-
-                discussionSignale = db_groupes.aggregate([
-                    {'$match': {"sign": {"$exists": "true", "$ne": []}}},
-                    {'$project': {
-                        '_id': 1,
-                        'id-utilisateurs': 1,
-                        'moderateurs': 1,
-                        'nom' : 1,
-                        'motif': 1,
-                        'sign_count': {"$size": { "$ifNull": [ "$sign", [] ] } }
-                    }},
-                    {"$sort": {"sign_count": -1}}
-                ])
+                demandeSignale = sorted([d.toDict() for d in demandes_aide.values() if d.sign != []], key = lambda d: len(d['sign']), reverse=True)
+                profilSignale = sorted([u.toDict() for u in utilisateurs.values() if u.sign != []], key = lambda u: len(u['sign']), reverse=True)
+                discussionSignale = sorted([g.toDict() for g in groupes.values() if g.sign != []], key = lambda g: len(g['sign']), reverse=True)
 
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
         else:
@@ -1036,40 +817,42 @@ def administration():
 
 @app.route('/sanction/', methods=['POST'])
 def sanction():
+    global utilisateurs
+    
     if 'id' in session:
-        utilisateur = db_utilisateurs.find_one(
-            {"_id": ObjectId(session['id'])})
+        utilisateur = utilisateurs[session['id']].toDict()
+        
         if utilisateur['admin'] == True:
-            db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$push": {"Sanction": {
-                                       "SanctionType": request.form['Sanction'], "SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next'], "dateSanction" : datetime.now()}}})
-            if request.form['SanctionType'] == 'Spec':
-                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
-                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
-                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
-            if request.form['SanctionType']== 'ResetProfil':
-                Sanctionné = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSanctionné'])})
-                MyImage = db_files.find(
-                    {'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
-                addXpModeration(ObjectId(request.form['idSanctionné']), 10)
+            user = utilisateurs[request.form['idSanctionné']]
+            userDict = user.toDict()
+            sanctions = userDict['Sanctions']
+
+            sanctions.append({"SanctionType": request.form['Sanction'], "SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next'], "dateSanction" : datetime.now()})
+
+            time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
+
+            if request.form['SanctionType'] == 'Spec' or request.form['SanctionType'] == 'SpecProfil' or request.form['SanctionType'] == 'SpecForum' or request.form['SanctionType'] == 'SpecMsg':
+                user.SanctionEnCour = request.form['SanctionType']
+                user.SanctionDuree = time
+
+            elif request.form['SanctionType'] == 'ResetProfil':
+                MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
+                addXpModeration(request.form['idSanctionné'], 10)
                 for a in MyImage:
-                    db_files.delete_one({'_id': a['_id']})
-                    db_chunks.delete_many({'files_id': a['_id']})
-                db_utilisateurs.update_one({'_id': ObjectId(request.form['idSanctionné'])}, {
-                                           '$set': {'imgProfile': "", 'nomImg': ""}})
-                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {"$set":{"pseudo":  Sanctionné['nom']+"_"+Sanctionné['prenom'], "telephone": "", "interets": "", "email" : "" }})
-            if request.form['SanctionType'] == 'SpecProfil':
-                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
-                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
-                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
-            if request.form['SanctionType'] == 'SpecForum':
-                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
-                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
-                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
-            if request.form['SanctionType'] == 'SpecMsg':
-                time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
-                db_utilisateurs.update_one({"_id": ObjectId(request.form['idSanctionné'])}, {
-                                           "$set": {"SanctionEnCour": request.form['SanctionType'], "SanctionDuree": time}})
+                    DB.db_files.delete_one({'_id': a['_id']})
+                    DB.db_chunks.delete_many({'files_id': a['_id']})
+
+                user.imgProfile = ''
+                user.nomImg = ''
+                user.pseudo = '{}_{}'.format(user.nom, user.prenom)
+                user.telephone = ''
+                user.interets = ''
+                user.email = ''
+
+            utilisateurs[request.form['idSanctionné']].update()    
+
             return 'sent'
+
         else:
             return redirect(url_for('accueil'))
     else:
@@ -1078,43 +861,29 @@ def sanction():
 
 @app.route('/signPost/', methods=['POST'])
 def signPost():
+    global demandes_aide
+    
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            demande = db_demande_aide.find_one({"_id": ObjectId(request.form['idSignalé'])})
+            demande = demandes_aide[request.form['idSignalé']].toDict()
             sign = demande['sign']
-            newSign = list(sign)
+            motif = demande['motif']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
                 # on supprime son signalement
-                newSign.remove(ObjectId(session['id']))
-                db_demande_aide.update_one(
-                    {'_id': ObjectId(request.form['idSignalé'])},
-                    {'$pull': {
-                        'sign': ObjectId(session['id']),
-                        'motif': {'id': ObjectId(session['id'])}}
-                    },
-                )
+                sign.remove(ObjectId(session['id']))
+                index = next((i for i, item in enumerate(motif) if item.id == ObjectId(session['id'])), -1)
+                del motif[index]
 
             else:
-                newSign.append(session['id']) # on ajoute son signalement
-                raison = {request.form['Raison']}
-                db_demande_aide.update_one(
-                    {'_id': ObjectId(request.form['idSignalé'])},
-                    {'$push':
-                        {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
-                    }
-                )
+                # on ajoute son signalement
+                sign.append(ObjectId(session['id'])) # on ajoute son signalement
+                motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
 
-            # on update dans la DB
-            # db_demande_aide.update_one(
-            #     {'_id': ObjectId(request.form['idSignalé'])},
-            #     {'$set':
-            #         {'sign': newSign}
-            #      }
-            # )
+            demandes_aide[request.form['idSignalé']].update()
+
             return 'sent'
 
         else:
@@ -1125,31 +894,29 @@ def signPost():
 
 @app.route('/signPostProfil/', methods=['POST'])
 def signPostProfil():
+    global utilisateurs
+    
     if 'id' in session:
         if request.form['idSignalé'] != None:
-            # on récupère les signalements de la demande d'aide
-            user = db_utilisateurs.find_one({"_id": ObjectId(request.form['idSignalé'])})
+            # on récupère les signalements de l'utilisateur
+            user = utilisateurs[request.form['idSignalé']].toDict()
             sign = user['sign']
+            motif = user['motif']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
-                db_utilisateurs.update_one(
-                    {'_id': ObjectId(request.form['idSignalé'])},
-                    {'$pull': {
-                        'sign': ObjectId(session['id']),
-                        'motif': {'id': ObjectId(session['id'])}}
-                    },
-                )
+                # on supprime son signalement
+                sign.remove(ObjectId(session['id']))
+                index = next((i for i, item in enumerate(motif) if item.id == ObjectId(session['id'])), -1)
+                del motif[index]
 
             else:
-                raison = {request.form['Raison']}
-                db_utilisateurs.update_one(
-                    {'_id': ObjectId(request.form['idSignalé'])},
-                    {'$push':
-                        {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
-                    }
-                )
+                # on ajoute son signalement
+                sign.append(ObjectId(session['id']))
+                motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+
+            utilisateurs[request.form['idSignalé']].update()
+
             return 'sent'
 
         else:
@@ -1159,44 +926,51 @@ def signPostProfil():
 
 @app.route('/signPostDiscussion/', methods=['POST'])
 def signPostDiscussion():
+    global messages
+    global groupes
+    
     if 'id' in session:
         if request.form['idSignalé'] != None:
-            # on récupère les signalements de la demande d'aide
-            sign = db_groupes.find_one({"_id": ObjectId(request.form['idSignalé'])})['sign']
-
+            # on récupère les signalements du groupe
+            groupe = groupes[request.form['idSignalé']].toDict()
+            sign = groupe['sign']
+            motif = groupe['motif']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in sign:
-                db_groupes.update_one(
-                    {'_id': ObjectId(request.form['idSignalé'])},
-                    {'$pull': {
-                        'sign': ObjectId(session['id']),
-                        'motif': {'id': ObjectId(session['id'])}}
-                    },
-                )
-                db_messages.update(
-                    {'id-groupe': ObjectId(request.form['idSignalé'])},
-                    {'$pull': {
-                        'sign': ObjectId(session['id']),
-                        'motif': {'id': ObjectId(session['id'])}}
-                    }
-                )
+                # on supprime son signalement
+                sign.remove(ObjectId(session['id']))
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
+                del motif[index]
+
+                grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idSignalé'])]
+                for m in grpMsg:
+                    mSign = m['sign']
+                    mMotif = m['motif']
+
+                    mSign.remove(ObjectId(session['id']))
+                    mIndex = next((i for i, item in enumerate(mMotif) if item['id'] == ObjectId(session['id'])), -1)
+                    del mMotif[mIndex]
+
+                    messages[str(m['_id'])].update()
 
             else:
-                db_groupes.update_one(
-                    {'_id': ObjectId(request.form['idSignalé'])},
-                    {'$push':
-                        {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
-                    }
-                )
-                db_messages.update(
-                    {'id-groupe': ObjectId(request.form['idSignalé'])},
-                    {'$push':
-                        {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': "Discussion signalé pour "+request.form['Raison']}}
-                    }
-                )
+                # on ajoute son signalement
+                sign.append(ObjectId(session['id']))
+                motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+
+                grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idSignalé'])]
+                for m in grpMsg:
+                    mSign = m['sign']
+                    mMotif = m['motif']
+
+                    mSign.append(ObjectId(session['id']))
+                    mMotif.append({'id': ObjectId(session['id']), 'txt': "Discussion signalée pour : "+request.form['Raison']})
+
+                    messages[str(m['_id'])].update()
+
+            groupe = groupes[request.form['idSignalé']].update()
+
             return 'sent'
 
         else:
@@ -1206,38 +980,39 @@ def signPostDiscussion():
 
 @app.route('/signPostMsg/', methods=['POST'])
 def signPostMsg():
+    global messages
+    global groupes
+    
     if 'id' in session:
         if request.form['idSignalé'] != None and request.form['idMsgSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            sign = db_groupes.find_one({"_id": ObjectId(request.form['idSignalé'])})['sign']
-            signMsg = db_messages.find_one({"_id": ObjectId(request.form['idMsgSignalé'])})['sign']
+            groupe = groupes[request.form['idSignalé']].toDict()
+            sign = groupe['sign']
+            motif = groupe['motif']
+            message = messages[request.form['idMsgSignalé']].toDict()
+            signMsg = message['sign']
+            motifMsg = message['motif']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
             if ObjectId(session['id']) in signMsg:
-                db_messages.update_one(
-                    {'_id': ObjectId(request.form['idMsgSignalé'])},
-                    {'$pull': {
-                        'sign': ObjectId(session['id']),
-                        'motif': {'id': ObjectId(session['id'])}}
-                    },
-                )
+                # on retire son signalement
+                signMsg.remove(ObjectId(session['id']))
+                index = next((i for i, item in enumerate(motifMsg) if item['id'] == ObjectId(session['id'])), -1)
+                del motifMsg[index]
 
             else:
-                db_messages.update_one(
-                    {'_id': ObjectId(request.form['idMsgSignalé'])},
-                    {'$push':
-                        {'sign': ObjectId(session['id']),
-                         'motif': {'id': ObjectId(session['id']), 'txt': request.form['Raison']}}
-                    }
-                )
+                # on ajoute son signalement
+                signMsg.append(ObjectId(session['id']))
+                motifMsg.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+
                 if not ObjectId(session['id']) in sign:
-                    db_groupes.update_one(
-                        {'_id': ObjectId(request.form['idSignalé'])},
-                        {'$push':
-                            {'sign': ObjectId(session['id']),
-                             'motif': {'id': ObjectId(session['id']), 'txt': "Message signalé :"+request.form['Raison']}}
-                        }
-                    )
+                    sign.append(ObjectId(session['id']))
+                    motif.append({'id': ObjectId(session['id']), 'txt': "Message signalé : "+request.form['Raison']})
+
+                    groupes[request.form['idSignalé']].update()
+
+            messages[request.form['idMsgSignalé']].update()
+
             return 'sent'
 
         else:
@@ -1247,17 +1022,18 @@ def signPostMsg():
 
 @app.route('/resoudre/<idPost>', methods=['POST'])
 def resoudre(idPost):
+    global demandes_aide
+    
     if 'id' in session:
         if 'idPost' != None:
-            demande = db_demande_aide.find_one({"_id": ObjectId(idPost)})
+            demande = demandes_aide[idPost]
 
             # on check mtn si l'utilisateur a déjà liké la demande
-            if demande['id-utilisateur'] == ObjectId(session['id']):
+            if demande.id_utilisateur == ObjectId(session['id']):
                 # on update dans la DB
-                db_demande_aide.update(
-                    {'_id': ObjectId(idPost)},
-                    {'$set':{'resolu': True}}
-                )
+                demande.resolu = True
+                
+                demandes_aide[idPost].update()
 
                 return "ok", 200
             else:
@@ -1268,162 +1044,6 @@ def resoudre(idPost):
             abort(403) # il manque l'id du message
     else:
         abort(401) # non autorisé
-
-
-def convertTime(diffTemps):
-    tempsStr = ''
-    # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
-    if diffTemps // (60 * 60 * 24 * 7): # semaines
-        tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
-        if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
-            tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
-    elif diffTemps // (60 * 60 * 24): # jours
-        tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
-        if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
-            tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
-    elif diffTemps // (60 * 60):  # heures
-        tempsStr += '{}h '.format(diffTemps // (60 * 60))
-        if (diffTemps % (60 * 60)) // 60: # minutes
-            tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
-    else:
-        tempsStr = '{}min'.format(diffTemps // 60)
-
-    return tempsStr
-
-def getUserSubjects(user):
-    subjects = ['hg', 'emc', 'eps']
-
-    # Tronc commun
-    if user['classe']=='2GT' or user['classe']=='1G':
-        subjects.append('fr')
-    if user['classe']=='2GT':
-        subjects.append('maths')
-        subjects.append('pc')
-        subjects.append('ses')
-    if user['classe']=='TG':
-        subjects.append('philo')
-    # Langues
-    if 'lv1-ang' in user['langues'] or 'lv1-ang-euro' in user['langues'] or 'lv2-ang' in user['langues'] or 'opt-lv3-ang' in user['options']:
-        subjects.append('ang')
-    if 'lv1-esp' in user['langues'] or 'lv1-esp-euro' in user['langues'] or 'lv2-esp' in user['langues'] or 'opt-lv3-esp' in user['options']:
-        subjects.append('esp')
-    if 'lv1-all' in user['langues'] or 'lv1-all-euro' in user['langues'] or 'lv2-all' in user['langues'] or 'opt-lv3-all' in user['options']:
-        subjects.append('all')
-    if 'lv1-it' in user['langues'] or 'lv1-it-euro' in user['langues'] or 'lv2-it' in user['langues'] or 'opt-lv3-it' in user['options']:
-        subjects.append('it')
-    if 'lv1-chi' in user['langues'] or 'lv2-chi' in user['langues'] or 'opt-lv3-chi' in user['options']:
-        subjects.append('chi')
-    if 'lv1-ru' in user['langues'] or 'lv2-ru' in user['langues'] or 'opt-lv3-ru' in user['options']:
-        subjects.append('ru')
-    if 'lv1-por' in user['langues'] or 'lv2-por' in user['langues'] or 'opt-lv3-por' in user['options']:
-        subjects.append('por')
-    if 'lv1-ara' in user['langues'] or 'lv2-ara' in user['langues'] or 'opt-lv3-ara' in user['options']:
-        subjects.append('ara')
-    # Spés + options
-    subjects += user['spes']
-    subjects += user['options']
-
-    return subjects
-
-def translate_matiere_spes_options_lv(toTranslate: list) -> str:
-    translated = ''
-    translations = {
-        # Matières tronc commun
-        'fr': 'Français',
-        'maths': 'Mathématiques',
-        'hg': 'Histoire-Géographie',
-        'snt': 'SNT',
-        'pc': 'Physique-Chimie',
-        'svt': 'SVT',
-        'emc': 'EMC',
-        'ses': 'SES',
-        'philo': 'Philosophie',
-        'eps': 'EPS',
-        # Langues
-        'ang': 'Anglais',
-        'esp': 'Espagnol',
-        'all': 'Allemand',
-        'por': 'Portugais',
-        'it': 'Italien',
-        'chi': 'Chinois',
-        'ru': 'Russe',
-        'ara': 'Arabe',
-        # LV1
-        'lv1-ang': 'LV1 Anglais',
-        'lv1-ang-euro': 'LV1 Anglais Euro',
-        'lv1-esp': 'LV1 Espagnol',
-        'lv1-esp-euro': 'LV1 Espagnol Euro',
-        'lv1-all': 'LV1 Allemand',
-        'lv1-all-euro': 'LV1 Allemand Euro',
-        'lv1-por': 'LV1 Portugais',
-        'lv1-por-euro': 'LV1 Portugais Euro',
-        'lv1-it': 'LV1 Itlien',
-        'lv1-it-euro': 'LV1 Itlien Euro',
-        'lv1-chi': 'LV1 Chinois',
-        'lv1-ru': 'LV1 Russe',
-        'lv1-ara': 'LV1 Arabe',
-        # LV2
-        'lv2-ang': 'LV2 Anglais',
-        'lv2-esp': 'LV2 Espagnol',
-        'lv2-all': 'LV2 Allemand',
-        'lv2-por': 'LV2 Portugais',
-        'lv2-it': 'LV2 Italien',
-        'lv2-chi': 'LV2 Chinois',
-        'lv2-ru': 'LV2 Russe',
-        'lv2-ara': 'LV2 Arabe',
-        # Spés
-        'spe-art': 'Spé Arts',
-        'spe-hggsp': 'Spé HGGSP',
-        'spe-hlp': 'Spé HLP',
-        'spe-ses': 'Spé SES',
-        'spe-maths': 'Spé Mathématiques',
-        'spe-pc': 'Spé Physique-Chimie',
-        'spe-svt': 'Spé SVT',
-        'spe-nsi': 'Spé NSI',
-        'spe-si': 'Spé Sciences de l\'Ingénieur',
-        'spe-lca': 'Spé LCA',
-        'spe-llcer-ang': 'Spé LLCER Anglais',
-        'spe-llcer-esp': 'Spé LLCER Espagnol',
-        'spe-llcer-all': 'Spé LLCER Allemand',
-        'spe-llcer-it': 'Spé LLCER Italien',
-        'spe-bio-eco': 'Spé Biologie-écologie',
-        # Options
-        'opt-lca-latin': 'LCA Latin',
-        'opt-lca-grec': 'LCA Grec',
-        'opt-lv3-ang': 'LV3 Anglais',
-        'opt-lv3-esp': 'LV3 Espagnol',
-        'opt-lv3-all': 'LV3 Allemand',
-        'opt-lv3-por': 'LV3 Portugais',
-        'opt-lv3-it': 'LV3 Italien',
-        'opt-lv3-ru': 'LV3 Russe',
-        'opt-lv3-ara': 'LV3 Arabe',
-        'opt-lv3-chi': 'LV3 Chinois',
-        'opt-eps': 'Option EPS',
-        'opt-arts': 'Option Arts',
-        'opt-musique': 'Option Musique',
-        'opt-mg': 'Option Management et Gestion',
-        'opt-ss': 'Option Santé et Social',
-        'opt-biotech': 'Option Biotechnologies',
-        'opt-sl': 'Option Sciences et laboratoire',
-        'opt-si': 'Option Sciences de l\'Ingénieur',
-        'opt-cit': 'Option Création et culture technologiques',
-        'opt-ccd': 'Option Création et culture - design',
-        'opt-equit': 'Option Hippologie et équitation',
-        'opt-aet': 'Option Agranomie-économie-territoires',
-        'opt-psc': 'Option Pratiques sociales et culturelles',
-        'opt-maths-comp': 'Option Maths Complémentaires',
-        'opt-maths-exp': 'Option Maths Expertes',
-        'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
-        #
-        'none': ''
-    }
-
-    for a in toTranslate:
-        if translated != '' and a != 'none':
-            translated += ' / '
-        translated += translations[a]
-
-    return translated
 
 
 @app.route('/deconnexion/')
@@ -1441,11 +1061,13 @@ def login():
     Redirect the user/resource owner to the OAuth provider (ENT)
     using an URL with a few key OAuth parameters.
     """
+
     ENT_reply = OAuth2Session(client_id, scope=["userinfo", "myinfos", "userbook", "directory"], redirect_uri=redirect_uri)
     authorization_url, state = ENT_reply.authorization_url(authorization_base_url)
 
     # State is used to prevent CSRF, keep this for later.
     session['oauth_state'] = state
+
     return redirect(authorization_url)
 
 
@@ -1475,21 +1097,35 @@ def callback():
 # Fonction de test pour afficher ce que l'on récupère
 @app.route("/connexion/", methods=["GET"])
 def connexion():
+    global utilisateurs
+    
     """Fetching a protected resource using an OAuth 2 token.
     """
     ENT_reply = OAuth2Session(client_id, token=session['oauth_token'])
     data = ENT_reply.get('https://ent.iledefrance.fr/auth/oauth2/userinfo').json()
-    user = db_utilisateurs.find_one({"idENT": data['userId']})
+
+    user = [u.toDict() for u in utilisateurs.values() if u.idENT == data['userId']]
+    if len(user) > 0:
+        user = user[0]
+    else:
+        user = None
+
     if user != None:
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
         session['type'] = user['type']
+
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
-                db_utilisateurs.update_one({'_id': ObjectId(user['_id'])}, {
-                                           "$set": {"SanctionEnCour": "", "SanctionDuree": ""}})
+                u = utilisateurs[user['_id']]
+                u.SanctionEnCour = ''
+                u.SanctionDuree = ''
+                
+                utilisateurs[user['_id']].update()
+
         return redirect(url_for('accueil'))
+
     else:
         if data['type'] == "ELEVE":
             if data['level'] == 'PREMIERE GENERALE & TECHNO YC BT':
@@ -1500,25 +1136,39 @@ def connexion():
                 classe = 'TG'
             else:
                 classe = data['level']
+
             pseudo = (data['username'].lower()).replace(' ', '_')
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe,
+
+            _id = ObjectId()
+            utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe,
                                         "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
-            user = db_utilisateurs.find_one({"idENT": data['userId']})
+            utilisateurs[str(_id)].insert()
+            
+            user = utilisateurs[str(_id)].toDict()
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
             session['couleur'] = '#3f51b5'
             session['type'] = user['type']
+
             return redirect(url_for('profil'))
+
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
-            db_utilisateurs.insert_one({"idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
+
+            _id = ObjectId()
+            utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
                 data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
-            user = db_utilisateurs.find_one({"idENT": data['userId']})
+            utilisateurs[str(_id)].insert()
+
+            user = utilisateurs[str(_id)]
+
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
             session['couleur'] = '#3f51b5'
             session['type'] = user['type']
+
             return redirect(url_for('profil'))
+
         else:
             return redirect("https://ent.iledefrance.fr/auth/login")
 
@@ -1527,15 +1177,18 @@ if __name__ == "__main__":
     # This allows us to use a plain HTTP callback
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
     app.secret_key = os.urandom(24)
+
     # NE PAS TOUCHER AUX 2 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
     authorization_base_url = 'https://ent.iledefrance.fr/auth/oauth2/auth'
     token_url = 'https://ent.iledefrance.fr/auth/oauth2/token'
+
     if 'redirect_uri' in os.environ:
         # Le client secret est le code secret de l'application
         # NE PAS TOUCHER AUX 3 LIGNES SUIVANTES, C'EST POUR LA CONNEXION A L'ENT
         client_id = 'code-ton-lycee-key4school'
         client_secret = 'jHy6g8JG4FdP0a5VI2m'
         redirect_uri = os.environ['redirect_uri']
+
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         # app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
         socketio.run(app, host='0.0.0.0', port=os.environ.get("PORT", 3000), debug=True)
@@ -1546,6 +1199,7 @@ if __name__ == "__main__":
         client_id = 'code-ton-lycee-localhost'
         client_secret = 'JR7XcyGWBHt2VA9W'
         redirect_uri = "http://127.0.0.1:3000/callback"
+
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         # app.run(host="127.0.0.1", port=3000, debug=True)
         socketio.run(app, host='127.0.0.1', port=3000, debug=True)
