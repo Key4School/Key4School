@@ -495,3 +495,13 @@ function modifRole(id, idGrp){
     },
   });
 }
+
+function ajouterParticipantVoir(){
+  if (document.getElementById("ajouterParticipant").style.display== "none"){
+    document.getElementById("ajouterParticipant").style.display= "block";
+    document.getElementById("buttonAjouterParticipant").innerHTML = "fermer l'ajout de participant";
+  }else{
+    document.getElementById("ajouterParticipant").style.display= "none";
+    document.getElementById("buttonAjouterParticipant").innerHTML = "ajouter un participant";
+  }
+}

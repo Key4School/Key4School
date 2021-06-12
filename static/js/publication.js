@@ -61,7 +61,6 @@ function like_rep(idMsg, idRep){
   socket.emit('postLike', {type: 'rep', idPost: idMsg, idRep: idRep});
 }
 
-
 function sign(rep){
   id=rep;
   selectionlike = document.getElementById("sign_"+id).className
@@ -119,6 +118,67 @@ function designaler(e) {
       $('#designalement').trigger("reset");
       designalisationClose();
       document.getElementById("sign_"+id).className = "far fa-flag";
+    },
+  });
+}
+
+function sign_rep(rep){
+  id=rep;
+  selectionlike = document.getElementById("sign_"+id).className
+  if (selectionlike == "far fa-flag") {
+    document.getElementById("idRepSignalé").value = id;
+    signalisationRepOpen();
+
+
+  }
+  if (selectionlike == "fas fa-flag"){
+    document.getElementById("idRepDesignalé").value = id;
+    designalisationRepOpen();
+  }
+}
+
+function signalisationRepOpen() {
+  $("#signalisationRep").addClass("is-active");
+}
+
+function signalisationRepClose() {
+  $("#signalisationRep").removeClass("is-active");
+}
+
+function designalisationRepOpen() {
+  $("#designalisationRep").addClass("is-active");
+}
+
+function designalisationRepClose() {
+  $("#designalisationRep").removeClass("is-active");
+}
+
+function signalerRep(e) {
+  e.preventDefault();
+  var donnees = $('#signalementRep').serialize();
+  $.ajax({
+    url: '/signRepPost/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $('#signalementRep').trigger("reset");
+      signalisationRepClose();
+      document.getElementById("sign"+id).className = "fas fa-flag";
+    },
+  });
+}
+
+function designalerRep(e) {
+  e.preventDefault();
+  var donnees = $('#designalementRep').serialize();
+  $.ajax({
+    url: '/signRepPost/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $('#designalementRep').trigger("reset");
+      designalisationRepClose();
+      document.getElementById("sign_rep"+id).className = "far fa-flag";
     },
   });
 }
