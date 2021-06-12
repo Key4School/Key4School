@@ -28,7 +28,80 @@
 
 <body>
   {% include "bandeau.html" %}
-
+  <div class="modal" id="signalisation" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Signalement</p>
+      </header>
+      <form onsubmit="signaler(event); return false;" id="signalement" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous ce message." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
+          <input type='hidden' id="idSignalé" name='idSignalé' value="" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Signaler</button>
+          <button onclick="signalisationClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  <div class="modal" id="designalisation" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Retrait de signalement</p>
+      </header>
+      <form onsubmit="designaler(event); return false;" id="designalement" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type='hidden' id="idDesignalé" name='idSignalé' value="" />
+          Etes-vous sûr de vouloir enlever ce signalement
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Oui</button>
+          <button onclick="designalisationClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  <div class="modal" id="signalisationRep" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Signalement réponse</p>
+      </header>
+      <form onsubmit="signalerRep(event); return false;" id="signalementRep" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input id='inputRepRaison' class="input" type="text" placeholder="Pourquoi Signalez vous ce message." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
+          <input type='hidden' id="idRepSignalé" name='idSignalé' value="" />
+          <input type='hidden' id="idDemandSignalé" name='idDemandSignalé' value="{{d['idMsg']}}" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Signaler</button>
+          <button onclick="signalisationRepClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  <div class="modal" id="designalisationRep" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Retrait de signalement réponse</p>
+      </header>
+      <form onsubmit="designalerRep(event); return false;" id="designalementRep" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type='hidden' id="idRepDesignalé" name='idSignalé' value="" />
+          <input type='hidden' id="idDemandDesignalé" name='idDemandSignalé' value="{{d['idMsg']}}" />
+          Etes-vous sûr de vouloir enlever ce signalement
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Oui</button>
+          <button onclick="designalisationRepClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   <!-- debut de la div pour tt les publications -->
   <div class="columns" style="margin-top:5%;">
     <div class="column"></div>
@@ -86,6 +159,34 @@
                 </a>
               </div>
             </nav>
+            <div class="navbar-item">
+              <button  class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
+                <span class="icon is-small">
+                  {% if d['a_sign'] %}
+                  <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true"></i>
+                  {% else %}
+                    <i id="sign_{{d['idMsg']}}" class="far fa-flag" aria-hidden="true"></i>
+                  {% endif %}
+                </span>
+                <span>Signaler</span>
+              </button>
+              <input type="hidden" />
+            </div>
+            {% if d['idAuteur'] == user['_id'] %}
+            <div class="navbar-item">
+              <button  class="button is-success is-outlined is-small" onClick="resoudre('{{d['idMsg']}}')">
+                <span class="icon is-small">
+                  {% if d['resolu'] %}
+                  <i class="fas fa-check-square" aria-hidden="true"></i>
+                  {% else %}
+                  <i class="far fa-check-square" aria-hidden="true"></i>
+                  {% endif %}
+                </span>
+                <span>Résolu &nbsp;</span>
+              </button>
+              <input type="hidden" />
+            </div>
+            {% endif %}
           </div>
         </article>
       </div>
@@ -161,6 +262,19 @@
                   </a>
                 </div>
               </nav>
+              <div class="navbar-item">
+                <button  class="button is-warning is-outlined is-small" onClick="sign_rep('{{r['idRep']}}')">
+                  <span class="icon is-small">
+                    {% if r['a_sign'] %}
+                    <i id="sign_{{r['idRep']}}" class="fas fa-flag" aria-hidden="true"></i>
+                    {% else %}
+                      <i id="sign_{{r['idRep']}}" class="far fa-flag" aria-hidden="true"></i>
+                    {% endif %}
+                  </span>
+                  <span>Signaler</span>
+                </button>
+                <input type="hidden" />
+              </div>
             </div>
           </article>
         </div>
