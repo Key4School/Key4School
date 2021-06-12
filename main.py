@@ -141,8 +141,9 @@ def accueil():
 @socketio.on('connectToNotif')
 def handleEvent_connectToNotif():
     if 'id' in session:
-        print(request.sid + " connected")
-        clientsNotif[session['id']] = request.sid
+        print(session['id'] + " connected")
+        clientsNotif[session['id']] = True
+        join_room(session['id'])
 
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
@@ -150,8 +151,9 @@ def handleEvent_connectToNotif():
 def handleEvent_disconnect():
     if 'id' in session:
         if session['id'] in clientsNotif:
-            print(request.sid + " disconnected")
+            print(session['id'] + " disconnected")
             clientsNotif.pop(session['id'])
+            leave_room(session['id'])
 
 
 # laisser le nom entre deux slash ca permet d'accepter toutes les urls du style http://127.0.0.1:3000/messages/ sinon ca marche pas.s
