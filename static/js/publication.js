@@ -1,6 +1,6 @@
 var id;
 
-const socket = io(`ws://${document.location.host}`);
+var socket = io(`ws://${document.location.host}`);
 
 socket.on('connect', function() {
   return;

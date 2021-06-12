@@ -89,7 +89,7 @@ const messages = document.getElementById('messages');
 
 var start = new Date();
 
-const socket = io(`ws://${document.location.host}`);
+var socket = io(`ws://${document.location.host}`);
 const idGroupe = document.getElementById('idGroupe').value || undefined;
 
 socket.on('connect', function() {

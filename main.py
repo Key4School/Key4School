@@ -93,6 +93,9 @@ def automoderation(stringModerer: str) -> str:
 
     return stringModerer
 
+
+clientsNotif = {}
+
 def notif(type, id_groupe, id_msg, destinataires):
     DB.db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
                         "date": datetime.now(), "destinataires": destinataires})
@@ -121,17 +124,34 @@ def notif(type, id_groupe, id_msg, destinataires):
 def accueil():
     global utilisateurs
     global demandes_aide
-    
+
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
         # subjects = getUserSubjects(user)
 
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-        demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:9] 
+        demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:9]
 
         return render_template("index.html", demandes=demandes, user=user)
     else:
         return redirect(url_for('login'))
+
+
+# Connection au groupe pour recevoir les nouvelles notif
+@socketio.on('connectToNotif')
+def handleEvent_connectToNotif():
+    if 'id' in session:
+        print(request.sid + " connected")
+        clientsNotif[session['id']] = request.sid
+
+
+# Deconnexion au groupe pour recevoir les nouvelles notif
+@socketio.on('disconnect')
+def handleEvent_disconnect():
+    if 'id' in session:
+        if session['id'] in clientsNotif:
+            print(request.sid + " disconnected")
+            clientsNotif.pop(session['id'])
 
 
 # laisser le nom entre deux slash ca permet d'accepter toutes les urls du style http://127.0.0.1:3000/messages/ sinon ca marche pas.s
@@ -148,7 +168,7 @@ def page_messages(idGroupe):
     global utilisateurs
     global messages
     global groupes
-    
+
     if 'id' in session:
         # il faudra récupérer l'id qui sera qans un cookie
         grp = [groupes[idGrp] for idGrp in [idGrp for (idGrp , groupe) in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs]]
@@ -199,7 +219,7 @@ def page_messages(idGroupe):
 @socketio.on('connectToGroup')
 def handleEvent_connectToGroup(json):
     global groupes
-    
+
     if 'id' in session:
         if 'room' in json:
             if json['room'] != 'None':
@@ -215,7 +235,7 @@ def handleEvent_postMsg(json):
     global utilisateurs
     global messages
     global groupes
-    
+
     if 'id' in session:
         if 'room' in json:
             # Check authorized
@@ -239,7 +259,7 @@ def handleEvent_postMsg(json):
                     elif not json['contenuMessage'] == '':
                         _id = ObjectId()
                         messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
-                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []}) 
+                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []})
                         messages[str(_id)].insert()
                         message = messages[str(_id)]
                     if message:
@@ -254,7 +274,7 @@ def handleEvent_postMsg(json):
                         message = messages[str(_id)].toDict()
                         if message['reponse'] != 'None' and message['reponse'] != '':
                             message['rep'] = messages[str(message['reponse'])].toDict()
-                            
+
                         html = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'])
                         emit('newMsg', html, to=json['room'])
 
@@ -285,7 +305,7 @@ def file(fileName):
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     global messages
-    
+
     if 'id' in session:
         idGroupe = request.form['grp']
 
@@ -305,7 +325,7 @@ def supprimerMsg():
 @app.route('/createGroupe/', methods=['POST'])
 def createGroupe():
     global groupes
-    
+
     if 'id' in session:
         participants = [ObjectId(session['id'])]
         for name, value in request.form.items():
@@ -315,7 +335,7 @@ def createGroupe():
                 participants.append(ObjectId(name))
 
         _id = ObjectId()
-        groupes[str(_id)] = Groupe({'_id': _id, 'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[], 'motif': []})  
+        groupes[str(_id)] = Groupe({'_id': _id, 'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[], 'motif': []})
         groupes[str(_id)].insert()
 
         return redirect(url_for('page_messages', idGroupe=_id))
@@ -324,7 +344,7 @@ def createGroupe():
 
 @app.route('/updateGroupe/', methods=['POST'])
 def updateGroupe():
-    global groupes 
+    global groupes
 
     if 'id' in session:
         groupe = groupes[request.form['IdGroupe']].toDict()
@@ -352,7 +372,7 @@ def virerParticipant():
         groupe = groupes[request.form['idViréGrp']].toDict()
         participants = groupe['id-utilisateurs']
         moderateurs = groupe['moderateurs']
-        
+
         if ObjectId(session['id']) in moderateurs or request.form['idViré'] == session['id']:
             participants.remove(ObjectId(request.form['idViré']))
 
@@ -383,7 +403,7 @@ def modifRole():
                 groupes[request.form['idGrp']].update()
 
                 return 'participant'
-                
+
             else:
                 modos.append(ObjectId(request.form['idModifié']))
                 groupes[request.form['idGrp']].update()
@@ -397,7 +417,7 @@ def modifRole():
 @app.route('/changeTheme/', methods=['POST'])
 def changeTheme():
     global utilisateurs
-    
+
     if 'id' in session:
         if int(request.form['couleur']) == 5:
             color2 = tuple(int(request.form['color2'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
@@ -429,7 +449,7 @@ def changeTheme():
 def profil(idUser):
     global utilisateurs
     global demandes_aide
-    
+
     if 'id' in session:
         if idUser == None or idUser == session['id']:
             toutesDemandes = sorted([d for d in demandes_aide.values() if d.id_utilisateur == ObjectId(session['id'])], key = lambda d: d.date_envoi, reverse=True)
@@ -469,7 +489,7 @@ def userImg(profilImg):
 @app.route("/updateprofile/", methods=["POST"])
 def updateprofile():
     global utilisateurs
-    
+
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
         elementPrive = []
@@ -503,7 +523,7 @@ def updateprofile():
 @app.route('/updateImg/', methods=['POST'])
 def updateImg():
     global utilisateurs
-    
+
     if 'id' in session:
         if request.form['but'] == "remove":
             MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
@@ -545,7 +565,7 @@ def redirect_comments():
 def comments(idMsg):
     global utilisateurs
     global demandes_aide
-    
+
     if 'id' in session:
         if request.method == 'GET':
             msg = demandes_aide[idMsg].toDict()
@@ -610,7 +630,7 @@ def question():
 
                 # add XP
                 addXP(session['id'], 10)
-                
+
                 return redirect('/comments/' + str(_id))
 
             else:
@@ -632,7 +652,7 @@ def question():
 def recherche():
     global utilisateurs
     global demandes_aide
-    
+
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
             search = request.args['search']
@@ -641,7 +661,7 @@ def recherche():
 
             # on récupère les demandes d'aide correspondant à la recherche
             result = sorted(
-                [d.toDict() for d in demandes_aide.values() 
+                [d.toDict() for d in demandes_aide.values()
                     if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre, search).ratio()>0.7 or SequenceMatcher(None, d.contenu, search).ratio()>0.7 )
                 ], key = lambda d: d['date-envoi'], reverse=True
             )
@@ -649,10 +669,10 @@ def recherche():
             # on récupère 3 utilisateurs correspondants à la recherche
             users = sorted(
                 [u.toDict() for u in utilisateurs.values()
-                    if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7 
+                    if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7
                         or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.7 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.7 )
                 ], key = lambda u: u['pseudo']
-            )[:2] 
+            )[:2]
 
             return render_template('recherche.html', results=result, users=users, search=search, user=user)
 
@@ -665,17 +685,17 @@ def recherche():
 @app.route('/rechercheUser')
 def recherche_user():
     global utilisateurs
-    
+
     if 'id' in session:
         search = request.args['search']
-        
+
         # on récupère 30 utilisateurs correspondants à la recherche
         users = sorted(
             [u.toDict() for u in utilisateurs.values()
-                if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7 
+                if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7
                     or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.7 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.7 )
             ], key = lambda u: u['pseudo']
-        )[:29] 
+        )[:29]
 
         return render_template('rechercheUser.html', users=users, user = utilisateurs[session['id']].toDict())
     else:
@@ -685,7 +705,7 @@ def recherche_user():
 @app.route('/likePost/<idPost>', methods=['POST'])
 def likePost(idPost):
     global demandes_aide
-    
+
     if 'id' in session:
         if 'idPost' != None:
             # on récupère les likes de la demande d'aide
@@ -721,7 +741,7 @@ def likePost(idPost):
 @app.route('/likeRep/<idPost>/<idRep>', methods=['POST'])
 def likeRep(idPost, idRep):
     global demandes_aide
-    
+
     if 'id' in session:
         if 'idPost' != None and 'idRep' != None:
             # on récupère les likes de la demande d'aide
@@ -783,7 +803,7 @@ def administration():
     global utilisateurs
     global demandes_aide
     global groupes
-    
+
     if 'id' in session:
         utilisateur = utilisateurs[session['id']].toDict()
 
@@ -824,10 +844,10 @@ def administration():
 @app.route('/sanction/', methods=['POST'])
 def sanction():
     global utilisateurs
-    
+
     if 'id' in session:
         utilisateur = utilisateurs[session['id']].toDict()
-        
+
         if utilisateur['admin'] == True:
             user = utilisateurs[request.form['idSanctionné']]
             userDict = user.toDict()
@@ -855,7 +875,7 @@ def sanction():
                 user.interets = ''
                 user.email = ''
 
-            utilisateurs[request.form['idSanctionné']].update()    
+            utilisateurs[request.form['idSanctionné']].update()
 
             return 'sent'
 
@@ -868,7 +888,7 @@ def sanction():
 @app.route('/signPost/', methods=['POST'])
 def signPost():
     global demandes_aide
-    
+
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
@@ -901,7 +921,7 @@ def signPost():
 @app.route('/signPostProfil/', methods=['POST'])
 def signPostProfil():
     global utilisateurs
-    
+
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de l'utilisateur
@@ -934,7 +954,7 @@ def signPostProfil():
 def signPostDiscussion():
     global messages
     global groupes
-    
+
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements du groupe
@@ -988,7 +1008,7 @@ def signPostDiscussion():
 def signPostMsg():
     global messages
     global groupes
-    
+
     if 'id' in session:
         if request.form['idSignalé'] != None and request.form['idMsgSignalé'] != None:
             # on récupère les signalements de la demande d'aide
@@ -1029,7 +1049,7 @@ def signPostMsg():
 @app.route('/resoudre/<idPost>', methods=['POST'])
 def resoudre(idPost):
     global demandes_aide
-    
+
     if 'id' in session:
         if 'idPost' != None:
             demande = demandes_aide[idPost]
@@ -1038,7 +1058,7 @@ def resoudre(idPost):
             if demande.id_utilisateur == ObjectId(session['id']):
                 # on update dans la DB
                 demande.resolu = True
-                
+
                 demandes_aide[idPost].update()
 
                 return "ok", 200
@@ -1104,7 +1124,7 @@ def callback():
 @app.route("/connexion/", methods=["GET"])
 def connexion():
     global utilisateurs
-    
+
     """Fetching a protected resource using an OAuth 2 token.
     """
     ENT_reply = OAuth2Session(client_id, token=session['oauth_token'])
@@ -1127,7 +1147,7 @@ def connexion():
                 u = utilisateurs[user['_id']]
                 u.SanctionEnCour = ''
                 u.SanctionDuree = ''
-                
+
                 utilisateurs[user['_id']].update()
 
         return redirect(url_for('accueil'))
@@ -1149,7 +1169,7 @@ def connexion():
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe,
                                         "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             utilisateurs[str(_id)].insert()
-            
+
             user = utilisateurs[str(_id)].toDict()
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
