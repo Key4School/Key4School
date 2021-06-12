@@ -88,7 +88,7 @@
   <div style="display: flex;align-items: center;justify-content:space-evenly;">
     <img alt="user" onclick="updateImgOpen();"
       src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-      style="width:80px; height:auto;" />
+      style="width:80px; height:auto; cursor: pointer;" />
     <div style="display: flex;align-items:flex-start;justify-content:center;">
       <!-- Barre de progression -->
       <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
