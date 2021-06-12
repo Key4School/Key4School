@@ -10,7 +10,9 @@ from flask import escape
 from bson import Binary
 import os
 import gridfs
-import smtplib, ssl
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from difflib import SequenceMatcher
 from db_poo import *
 
@@ -97,29 +99,58 @@ def automoderation(stringModerer: str) -> str:
 clientsNotif = {}
 
 def notif(type, id_groupe, id_msg, destinataires):
+    global groupes
+    global utilisateurs
+    global messages
+    global demandes_aide
+
+    if type == 'msg':
+        destinataires.remove(ObjectId(session['id']))
+
     DB.db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
-                        "date": datetime.now(), "destinataires": destinataires})
-    # # on rentre les renseignements pris sur le site du fournisseur
-    # smtp_adress = 'smtp.gmail.com'
-    # smtp_port = 465
-    # # on rentre les informations sur notre adresse e-mail
-    # email_adress = 'example@gmail.com'
-    # email_password = 'my_password'
-    # # on crée la connexion
-    # context = ssl.create_default_context()
-    # with smtplib.SMTP_SSL(smtp_address, smtp_port, context=context) as server:
-    #     # connexion au compte
-    #     server.login(email_adress, email_password)
-    #     for destinataire in destinataires:
-    #         if str(destinataire)==session['id']:
-    #             user = db_utilisateurs.find_one({"_id": destinataire})
-    #             if user['email'] != "":
-    #                 # envoi du mail
-    #                 server.sendmail(email_address, user['email'], 'le contenu de l\'e-mail')
+                            "date": datetime.now(), "destinataires": destinataires})
+
+    serveur = 'smtp.gmail.com'
+    port = '465'
+    From = 'key4school@gmail.com'
+    password = 'CtlLemeilleurGroupe'
+    codage = 'utf-8'
+
+    if type == 'msg':
+        grp = groupes[str(id_groupe)].toDict()
+        message = messages[str(id_msg)].toDict()
+    elif type == 'demande':
+        grp = demandes_aide[str(id_groupe)].toDict()
+        message = grp['reponsesDict'][str(id_msg)]
+    sender = utilisateurs[str(message['id-utilisateur'])].toDict()
+    html = render_template("notification.html", grp=grp, message=message, sender=sender, redirect=str(id_groupe))
+
+    for destinataire in destinataires:
+        user = utilisateurs[str(destinataire)].toDict()
+        if str(destinataire) in clientsNotif:
+            emit('newNotif', html, to=str(destinataire))
+        # elif user['email'] != "":
+        #     To = user['email']
+        #     msg = MIMEMultipart()
+        #     msg['From'] = From
+        #     msg['To'] = To
+        #     msg['Subject'] = sujet
+        #     msg['Charset'] = codage
+        #
+        #     # attache message texte
+        #     msg.attach(MIMEText('message'.encode(codage),
+        #                         'plain', _charset=codage))
+        #     # attache message HTML
+        #     msg.attach(MIMEText('html'.encode(codage),
+        #                         'html', _charset=codage))
+        #
+        #     mailserver = smtplib.SMTP_SSL(serveur, port)
+        #     mailserver.login(From, password)
+        #     mailserver.sendmail(From, To, msg.as_string())
+        #     mailserver.quit
 
 
 
-# Quand on arrive sur le site, on affiche la page "ma_page.html"
 @app.route('/')
 def accueil():
     global utilisateurs
@@ -172,7 +203,6 @@ def page_messages(idGroupe):
     global groupes
 
     if 'id' in session:
-        # il faudra récupérer l'id qui sera qans un cookie
         grp = [groupes[idGrp] for idGrp in [idGrp for (idGrp , groupe) in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs]]
         user = utilisateurs[session['id']].toDict()
         users = sorted([u.toDict() for u in utilisateurs.values()], key = lambda u: u['pseudo'])
@@ -590,7 +620,7 @@ def comments(idMsg):
 
                 demandes_aide[idMsg].update()
 
-                notif("demande", ObjectId(idMsg), _id, msg['idAuteur'])
+                notif("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
 
                 # add XP
                 if not ObjectId(session['id']) == msg['idAuteur']:

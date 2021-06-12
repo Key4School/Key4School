@@ -1,7 +1,5 @@
 var id;
 
-var socket = io(`ws://${document.location.host}`);
-
 socket.on('connect', function() {
   return;
 });
