@@ -13,17 +13,17 @@
         <p>
           <!-- Nom ; pseudo ; temps -->
         <div style="display: inline-flex; align-content: space-between;">
-          <div style="font-variant: small-caps;">{{sender['nom']}} {{sender['prenom']}}</div>&nbsp<div style="font-style: italic;">@{{sender['pseudo']}}</div>&nbsp<small>31min</small>
+          <div style="font-variant: small-caps;">{{notif['sender']['nom']}} {{notif['sender']['prenom']}}</div>&nbsp<div style="font-style: italic;">@{{notif['sender']['pseudo']}}</div>&nbsp<small>{{notif['temps']}}</small>
         </div>
         <br>
         Sur
-        {%if 'titre' in grp%}
-        la demande d'aide <a href="{{url_for('comments', idMsg = redirect)}}">{{grp['titre']}}</a>
-        {%elif 'nom' in grp%}
-        le groupe <a href="{{url_for('page_messages', idGroupe = redirect)}}">{{grp['nom']}}</a>
+        {%if 'titre' in notif['groupe']%}
+        la demande d'aide <a href="{{url_for('comments', idMsg = notif['id_groupe'])}}">{{notif['groupe']['titre']}}</a>
+        {%elif 'nom' in notif['groupe']%}
+        le groupe <a href="{{url_for('page_messages', idGroupe = notif['id_groupe'])}}">{{notif['groupe']['nom']}}</a>
         {%endif%} <br>
         <!-- Texte publication -->
-        <i>{{message['contenu']}}</i>
+        <i>{{notif['message']['contenu']}}</i>
         </p>
       </div>
     </div>

@@ -42,6 +42,10 @@ all_messages = DB.db_messages.find()
 for m in all_messages:
     messages[str(m['_id'])] = Message(m)
 
+all_notifications = DB.db_notif.find()
+for n in all_notifications:
+    notifications[str(m['_id'])] = Message(m)
+
 
 def recupLevel():
     global utilisateurs
@@ -104,50 +108,45 @@ def notif(type, id_groupe, id_msg, destinataires):
     global messages
     global demandes_aide
 
-    if type == 'msg':
-        destinataires.remove(ObjectId(session['id']))
+    # destinataires.remove(ObjectId(session['id']))
 
-    DB.db_notif.insert_one({"type": type, "id_groupe": id_groupe, "id_msg": id_msg,
-                            "date": datetime.now(), "destinataires": destinataires})
+    if len(destinataires) > 0:
+        _id = ObjectId()
+        notifications[str(_id)] = Notification({"_id": _id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
+                                        "date": datetime.now(), "destinataires": destinataires})
+        notifications[str(_id)].insert()
+        notification = notifications[str(_id)].toDict()
 
-    serveur = 'smtp.gmail.com'
-    port = '465'
-    From = 'key4school@gmail.com'
-    password = 'CtlLemeilleurGroupe'
-    codage = 'utf-8'
+        serveur = 'smtp.gmail.com'
+        port = '465'
+        From = 'key4school@gmail.com'
+        password = 'CtlLemeilleurGroupe'
+        codage = 'utf-8'
 
-    if type == 'msg':
-        grp = groupes[str(id_groupe)].toDict()
-        message = messages[str(id_msg)].toDict()
-    elif type == 'demande':
-        grp = demandes_aide[str(id_groupe)].toDict()
-        message = grp['reponsesDict'][str(id_msg)]
-    sender = utilisateurs[str(message['id-utilisateur'])].toDict()
-    html = render_template("notification.html", grp=grp, message=message, sender=sender, redirect=str(id_groupe))
+        html = render_template("notification.html", notif=notification)
 
-    for destinataire in destinataires:
-        user = utilisateurs[str(destinataire)].toDict()
-        if str(destinataire) in clientsNotif:
-            emit('newNotif', html, to=str(destinataire))
-        # elif user['email'] != "":
-        #     To = user['email']
-        #     msg = MIMEMultipart()
-        #     msg['From'] = From
-        #     msg['To'] = To
-        #     msg['Subject'] = sujet
-        #     msg['Charset'] = codage
-        #
-        #     # attache message texte
-        #     msg.attach(MIMEText('message'.encode(codage),
-        #                         'plain', _charset=codage))
-        #     # attache message HTML
-        #     msg.attach(MIMEText('html'.encode(codage),
-        #                         'html', _charset=codage))
-        #
-        #     mailserver = smtplib.SMTP_SSL(serveur, port)
-        #     mailserver.login(From, password)
-        #     mailserver.sendmail(From, To, msg.as_string())
-        #     mailserver.quit
+        for user in notification['userDest']:
+            if str(user['_id']) in clientsNotif:
+                emit('newNotif', html, to=str(user['_id']))
+            # elif user['email'] != "":
+            #     To = user['email']
+            #     msg = MIMEMultipart()
+            #     msg['From'] = From
+            #     msg['To'] = To
+            #     msg['Subject'] = sujet
+            #     msg['Charset'] = codage
+            #
+            #     # attache message texte
+            #     msg.attach(MIMEText('message'.encode(codage),
+            #                         'plain', _charset=codage))
+            #     # attache message HTML
+            #     msg.attach(MIMEText('html'.encode(codage),
+            #                         'html', _charset=codage))
+            #
+            #     mailserver = smtplib.SMTP_SSL(serveur, port)
+            #     mailserver.login(From, password)
+            #     mailserver.sendmail(From, To, msg.as_string())
+            #     mailserver.quit
 
 
 

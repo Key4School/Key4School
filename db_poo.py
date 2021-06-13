@@ -7,6 +7,7 @@ utilisateurs = {}
 demandes_aide = {}
 messages = {}
 groupes = {}
+notifications = {}
 DB = None
 
 class DB_Manager:
@@ -523,6 +524,77 @@ class Groupe(Actions):
 	        'moderateurs': self.moderateurs,
 	        'sign': self.sign,
 	        'motif': self.motif
+	    }
+
+	def __str__(self):
+		return str(self.toDict())
+
+
+class Notification(Actions):
+	def __init__(self, params: dict):
+		self._id = params['_id']
+		self.type = params['type']
+		self.id_groupe = params['id_groupe']
+		self.id_msg = params['id_msg']
+		self.date = params['date']
+		self.destinataires = params['destinataires']
+		self.db_table = DB.db_notif
+
+	def diffTemps(self):
+		diff_temps = int((datetime.now() - self.date).total_seconds())
+		return diff_temps
+
+	def convertTime(self):
+		tempsStr = ''
+		diffTemps = self.diffTemps()
+		# puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+		if diffTemps // (60 * 60 * 24 * 7): # semaines
+			tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
+			if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24): # jours
+				tempsStr += '{}j '.format((diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+		elif diffTemps // (60 * 60 * 24): # jours
+			tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
+			if (diffTemps % (60 * 60 * 24)) // (60 * 60): # heures
+				tempsStr += '{}h '.format((diffTemps % (60 * 60 * 24)) // (60 * 60))
+		elif diffTemps // (60 * 60):  # heures
+			tempsStr += '{}h '.format(diffTemps // (60 * 60))
+			if (diffTemps % (60 * 60)) // 60: # minutes
+				tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+		else:
+			tempsStr = '{}min'.format(diffTemps // 60)
+
+		return tempsStr
+
+	def toDict(self) -> dict:
+		if self.type == 'msg':
+			grp = groupes[str(self.id_groupe)].toDict()
+			msg = messages[str(self.id_msg)].toDict()
+		elif self.type == 'demande':
+			grp = demandes_aide[str(self.id_groupe)].toDict()
+			msg = grp['reponsesDict'][str(self.id_msg)]
+		sender = utilisateurs[str(msg['id-utilisateur'])].toDict()
+		return {  # on ajoute à la liste ce qui nous interesse
+			'_id': self._id,
+	        'type': self.type,
+	        'id_groupe': self.id_groupe,
+			'groupe' : grp,
+	        'id_msg': self.id_msg,
+			'message' : msg,
+			"sender": sender,
+			'date': self.date,
+	        'temps': self.convertTime(),
+	        'destinataires': self.destinataires,
+	        'userDest': [utilisateurs.get(str(destinataire)).toDict() for destinataire in self.destinataires]
+	    }
+
+	def toDB(self) -> dict:
+		return {  # on ajoute à la liste ce qui nous interesse
+	        '_id': self._id,
+	        'type': self.type,
+	        'id_groupe': self.id_groupe,
+	        'id_msg': self.id_msg,
+	        'date-date': self.date,
+	        'destinataires': self.destinataires
 	    }
 
 	def __str__(self):
