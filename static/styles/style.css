@@ -29,11 +29,29 @@
 }
 /* Pour telephone */
 @media screen and (max-width:1023px){
-  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel{
+  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock{
     display:block;
   }
   .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi{
     display:none;
+  }
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  tr { border: 1px solid #ccc; }
+  td {
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 200px;
+  }
+  .selectProfil{
+    max-width: 50%;
   }
 }
 /* Pour ordinateur */
@@ -41,10 +59,17 @@
   .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel{
     display:none;
   }
-  .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi{
+  .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi, .ordiFlexTelBlock{
     display:flex;
   }
   .selectMatiereOrdi{
     display:block;
+  }
+  .ChoixCouleur{
+    margin-top: 24%;
+    margin-right: 5%;
+  }
+  .selectProfil{
+    max-width: 30%;
   }
 }

@@ -81,16 +81,12 @@
   <div class="page"></div>
   <br />
   <br />
-  <br />
-  <br />
-  <br />
-  <br />
   <!-- Espace photo de profil -->
-  <div style="display: flex;align-items: center;justify-content:space-evenly;">
+  <div style="display:flex;align-items: center;justify-content:space-evenly;">
     <img alt="user" onclick="updateImgOpen();"
       src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
       style="width:80px; height:auto; cursor: pointer;" />
-    <div style="display: flex;align-items:flex-start;justify-content:center;">
+    <div class="ordiFlexTelBlock" style="align-items:flex-start;justify-content:center;">
       <!-- Barre de progression -->
       <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
@@ -105,7 +101,7 @@
   <br />
   <br />
   <br />
-  <div style="display: flex;align-items: center;justify-content:space-evenly;margin-left:2%;">
+  <div class="ordiFlexTelBlock" style="align-items: center;justify-content:space-evenly;margin-left:2%;">
     <!-- Début informations -->
     <div>
       <!-- Informations puliques -->
@@ -156,7 +152,7 @@
               <td>
                 <div id="contentlangues">
                   <!-- LV1 -->
-                  <div class="select" style="max-width: 30%;">
+                  <div class="select" class="selectProfil">
                     <select name="lv1">
                       <option value="none" {%if profilUtilisateur['langues'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="lv1-ang" {%if profilUtilisateur['langues'][0]=="lv1-ang"%}selected{%endif%}>LV1 Anglais</option>
@@ -175,7 +171,7 @@
                     </select>
                   </div>
                   <!-- LV2 -->
-                  <div class="select" style="max-width: 30%;">
+                  <div class="select" class="selectProfil">
                     <select name="lv2">
                       <option value="none" {%if profilUtilisateur['langues'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="lv2-ang" {%if profilUtilisateur['langues'][1]=="lv2-ang"%}selected{%endif%}>LV2 Anglais</option>
@@ -200,7 +196,7 @@
               <td>
                 <div id="contentoptions">
                   <!-- Option 1 -->
-                  <div class="select" style="max-width: 30%;">
+                  <div class="select" class="selectProfil">
                     <select name="option1">
                       <option value="none" {%if profilUtilisateur['options'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="opt-lca-latin" {%if profilUtilisateur['options'][0]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
@@ -236,7 +232,7 @@
                     </select>
                   </div>
                   <!-- Option 2 -->
-                  <div class="select" style="max-width: 30%;">
+                  <div class="select" class="selectProfil">
                     <select name="option2">
                       <option value="none" {%if profilUtilisateur['options'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="opt-lca-latin" {%if profilUtilisateur['options'][1]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
@@ -282,7 +278,7 @@
               <td>
                 <div id="contentspes">
                   <!-- Spé 1 -->
-                  <div class="select" style="max-width: 30%;">
+                  <div class="select" class="selectProfil">
                     <select name="spe1">
                       <option value="none" {%if profilUtilisateur['spes'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="spe-art" {%if profilUtilisateur['spes'][0]=="spe-art"%}selected{%endif%}>Spé Arts</option>
@@ -303,7 +299,7 @@
                     </select>
                   </div>
                   <!-- Spé 2 -->
-                  <div class="select" style="max-width: 30%;">
+                  <div class="select" class="selectProfil">
                     <select name="spe2">
                       <option value="none" {%if profilUtilisateur['spes'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="spe-art" {%if profilUtilisateur['spes'][1]=="spe-art"%}selected{%endif%}>Spé Arts</option>
@@ -528,7 +524,7 @@
     </div>
     <!-- Fin informations -->
     <!-- Début choix couleurs -->
-    <div style="margin-top: 24%;margin-right: 5%;">
+    <div class="ChoixCouleur">
       <form action="{{url_for('changeTheme')}}" method="POST">
         <!-- Titre choix couleurs -->
         <label for"color-select">Choisir une couleur de thème :</label><br />
