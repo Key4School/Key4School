@@ -864,13 +864,32 @@ def administration():
 
                     utilisateurs[request.form['idValidé']].update()
 
+                elif request.form['demandeBut'] == 'SupprRep':
+                    demande = demandes_aide[request.form['idDemandSuppr']].toDict()
+                    reponse = demande['réponses associées']
+                    index = next((i for i, item in enumerate(reponse) if item['idRep'] == ObjectId(request.form['idSuppr'])), -1)
+                    del reponse[index]
+                    print(reponse)
+
+                    demandes_aide[request.form['idDemandSuppr']].update()
+
+                elif request.form['demandeBut'] == 'ValRep':
+                    demande = demandes_aide[request.form['idDemandVal']].toDict()
+                    réponse = demande['reponsesDict'][request.form['idVal']]
+                    réponse['sign'] = []
+                    réponse['motif'] = []
+                    demandes_aide[request.form['idDemandVal']].update()
+                    print (réponse)
+
                 return 'sent'
 
             else:
                 demandeSignale = sorted([d.toDict() for d in demandes_aide.values() if d.sign != []], key = lambda d: len(d['sign']), reverse=True)
                 profilSignale = sorted([u.toDict() for u in utilisateurs.values() if u.sign != []], key = lambda u: len(u['sign']), reverse=True)
                 discussionSignale = sorted([g.toDict() for g in groupes.values() if g.sign != []], key = lambda g: len(g['sign']), reverse=True)
-
+                demande2 = demandes_aide['60c605faa77155626141bba8'].toDict()
+                réponse = demande2['reponsesDict']['60c6060ba77155626141bbab']
+                print (réponse)
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
         else:
             return redirect(url_for('accueil'))
@@ -963,17 +982,25 @@ def signRepPost():
             demande = demandes_aide[request.form['idDemandSignalé']].toDict()
             sign = demande['reponsesDict'][request.form['idSignalé']]['sign']
             motif = demande['reponsesDict'][request.form['idSignalé']]['motif']
+            signDemand = demande['sign']
+            motifDemand = demande['motif']
 
             if ObjectId(session['id']) in sign:
                 # on supprime son signalement
                 sign.remove(ObjectId(session['id']))
                 index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
                 del motif[index]
+                signDemand.remove(request.form['idSignalé']+"/"+session['id'])
+                index = next((i for i, item in enumerate(motifDemand) if item['id'] == str(request.form['idSignalé'])+"/"+str(session['id'])), -1)
+                del motifDemand[index]
 
             else:
                 # on ajoute son signalement
                 sign.append(ObjectId(session['id'])) # on ajoute son signalement
                 motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+                signDemand.append(request.form['idSignalé']+"/"+session['id'])
+                motifDemand.append({'id': request.form['idSignalé']+"/"+session['id'], 'txt': 'Réponse Signalée'})
+
 
             demandes_aide[request.form['idDemandSignalé']].update()
             return 'sent'
