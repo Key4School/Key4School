@@ -869,7 +869,6 @@ def administration():
                     reponse = demande['réponses associées']
                     index = next((i for i, item in enumerate(reponse) if item['idRep'] == ObjectId(request.form['idSuppr'])), -1)
                     del reponse[index]
-                    print(reponse)
 
                     demandes_aide[request.form['idDemandSuppr']].update()
 
@@ -879,7 +878,6 @@ def administration():
                     réponse['sign'] = []
                     réponse['motif'] = []
                     demandes_aide[request.form['idDemandVal']].update()
-                    print (réponse)
 
                 return 'sent'
 
