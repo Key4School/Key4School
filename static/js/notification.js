@@ -7,6 +7,7 @@ function updateNotif(){
     document.getElementById('nbNotif').innerHTML = nbNotif;
   } else {
     document.getElementById('nbNotif').style.display = "none";
+    document.getElementById('notifContent').innerHTML = "Aucune notification";
   }
 }
 
@@ -17,6 +18,9 @@ socket.on('connect', function() {
 });
 
 socket.on('newNotif', (html) => {
+  if (document.getElementById('notifContent').innerHTML == "Aucune notification"){
+    document.getElementById('notifContent').innerHTML = "";
+  }
   document.getElementById('notifContent').innerHTML += html;
   updateNotif()
 });
