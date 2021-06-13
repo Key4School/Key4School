@@ -171,7 +171,6 @@ def accueil():
 @socketio.on('connectToNotif')
 def handleEvent_connectToNotif():
     if 'id' in session:
-        print(session['id'] + " connected")
         clientsNotif[session['id']] = True
         join_room(session['id'])
 
@@ -186,7 +185,6 @@ def handleEvent_connectToNotif():
 def handleEvent_disconnect():
     if 'id' in session:
         if session['id'] in clientsNotif:
-            print(session['id'] + " disconnected")
             clientsNotif.pop(session['id'])
             leave_room(session['id'])
 
@@ -300,19 +298,21 @@ def handleEvent_postMsg(json):
                         message = messages[str(_id)].toDict()
                     if message:
                         infogroupes = groupes[json['room']].toDict()
-                        notif("msg", ObjectId(json['room']), _id, infogroupes['id-utilisateurs'])
+                        notif("msg", ObjectId(json['room']), _id, list(infogroupes['id-utilisateurs']))
 
                         infoUtilisateurs = []
                         for content in infogroupes['id-utilisateurs']:
-                            infoUtilisateurs += utilisateurs[str(content)].toDict()
+                            infoUtilisateurs.append(utilisateurs[str(content)].toDict())
 
                         # Sending new message to connected users
                         message = messages[str(_id)].toDict()
                         if message['reponse'] != 'None' and message['reponse'] != '':
                             message['rep'] = messages[str(message['reponse'])].toDict()
 
-                        html = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'])
-                        emit('newMsg', html, to=json['room'])
+                        ownHTML = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infogroupe=grp, infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
+                        otherHTML = render_template("refreshMessages.html", msg=message, sessionId=None, infogroupe=grp, infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
+
+                        emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=json['room'])
 
 @app.route('/uploadAudio/', methods=['POST'])
 def uploadAudio():

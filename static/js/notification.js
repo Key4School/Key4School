@@ -22,5 +22,5 @@ socket.on('newNotif', (html) => {
     document.getElementById('notifContent').innerHTML = "";
   }
   document.getElementById('notifContent').innerHTML += html;
-  updateNotif()
+  updateNotif();
 });

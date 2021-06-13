@@ -90,6 +90,7 @@ const messages = document.getElementById('messages');
 var start = new Date();
 
 const idGroupe = document.getElementById('idGroupe').value || undefined;
+const idUser = document.getElementById('idUser').value || undefined;
 
 socket.on('connect', function() {
   if (idGroupe != "None"){
@@ -97,9 +98,15 @@ socket.on('connect', function() {
   }
 });
 
-socket.on('newMsg', (html) => {
+socket.on('newMsg', (data) => {
+  console.log(data);
   var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
-  $('#messages').append(html); // on veut ajouter les nouveaux messages au début du bloc #messages
+
+  if(data.fromUser == idUser) 
+    $('#messages').append(data.ownHTML); // on veut ajouter les nouveaux messages au début du bloc #messages
+  else
+    $('#messages').append(data.otherHTML); // on veut ajouter les nouveaux messages au début du bloc #messages
+  
   if ($('#messages').scrollTop() >= scrollHeight){
     scroll();
   }
