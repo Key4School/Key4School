@@ -34,6 +34,12 @@
   .formOrdi{
     display:none;
   }
+  .boutonPubliOrdi{
+    display:none;
+  }
+  .boutonPubliTel{
+    display:block;
+  }
 }
 @media screen and (min-width:1023px){
   .telRecherche{
@@ -41,5 +47,11 @@
   }
   .formOrdi{
     display:flex;
+  }
+  .boutonPubliOrdi{
+    display:flex;
+  }
+  .boutonPubliTel{
+    display:none;
   }
 }
