@@ -18,5 +18,5 @@ socket.on('connect', function() {
 
 socket.on('newNotif', (html) => {
   document.getElementById('notifContent').innerHTML += html;
-  updateNotif()
+  updateNotif();
 });
