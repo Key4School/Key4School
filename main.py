@@ -348,7 +348,7 @@ def supprimerMsg():
             DB.db_files.delete_one({'_id': MyAudio['_id']})
             DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
 
-        return redirect(url_for('messages', idGroupe=idGroupe))
+        return redirect(url_for('page_messages', idGroupe=idGroupe))
 
     else:
         return redirect(url_for('login'))
