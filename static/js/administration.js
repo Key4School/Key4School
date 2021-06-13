@@ -108,7 +108,7 @@ function validerUserClose(){
 
 function supprimerRep(e) {
   e.preventDefault();
-  var id = document.getElementById('idSupprimé').value;
+  var id = document.getElementById('idRepSupprimé').value;
   var donnees = $('#supprRepForm').serialize();
   $.ajax({
     url: '/administration/', // on donne l'URL du fichier de traitement
