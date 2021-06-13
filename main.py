@@ -865,7 +865,7 @@ def administration():
                     utilisateurs[request.form['idValidé']].update()
 
                 elif request.form['demandeBut'] == 'SupprRep':
-                    demande = demandes_aide[request.form['idDemandSuppr']]
+                    demande = demandes_aide[request.form['idDemandSuppr']].toDict()
                     reponse = demande['réponses associées']
                     index = next((i for i, item in enumerate(reponse) if item['idRep'] == ObjectId(request.form['idSuppr'])), -1)
                     del reponse[index]
@@ -873,7 +873,7 @@ def administration():
                     demandes_aide[request.form['idDemandSuppr']].update()
 
                 elif request.form['demandeBut'] == 'ValRep':
-                    demande = demandes_aide[request.form['idDemandVal']]
+                    demande = demandes_aide[request.form['idDemandVal']].toDict()
                     réponse = demande['reponsesDict'][request.form['idVal']]
                     réponse['sign'] = []
                     réponse['motif'] = []
