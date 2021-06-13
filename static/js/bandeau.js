@@ -11,3 +11,12 @@ function remove(){
     document.getElementById('contentPost').style.width = "100%";
   }
 }
+function recherche(){
+  if (document.getElementById('rechercheTel').style.display == "none"){
+    document.getElementById('rechercheTel').style.display = "block";
+
+  }
+  else{
+    document.getElementById('rechercheTel').style.display = "none";
+  }
+}

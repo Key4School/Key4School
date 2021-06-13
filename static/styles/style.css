@@ -27,3 +27,19 @@
     border: none;
     border-radius: 100%;
 }
+@media screen and (max-width:1023px){
+  .telRecherche{
+    display:block;
+  }
+  .formOrdi{
+    display:none;
+  }
+}
+@media screen and (min-width:1023px){
+  .telRecherche{
+    display:none;
+  }
+  .formOrdi{
+    display:flex;
+  }
+}
