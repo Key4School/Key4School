@@ -5683,7 +5683,7 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
   margin: .5rem 0
 }
 
-@media screen and (max-width:1023px) {
+/* @media screen and (max-width:1023px) {
   .navbar>.container {
     display: block
   }
@@ -5739,9 +5739,9 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
   body.has-navbar-fixed-bottom-touch, html.has-navbar-fixed-bottom-touch {
     padding-bottom: 3.25rem
   }
-}
+} */
 
-@media screen and (min-width:1024px) {
+@media screen  {
   .navbar, .navbar-end, .navbar-menu, .navbar-start {
     align-items: stretch;
     display: flex

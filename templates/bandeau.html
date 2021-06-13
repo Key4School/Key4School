@@ -1,10 +1,11 @@
 <!-- Début barre de navigation -->
-<nav class="navbar is-fixed-top" role="navigation" aria-label="dropdown navigation" style="background-color:{{session['couleur'][0]}}; padding-bottom:5px;">
-  <div id="navbar" class="navbar-menu">
+<nav class="navbar is-fixed-top" role="navigation" aria-label="dropdown navigation" style="display:flex;background-color:{{session['couleur'][0]}}; padding-bottom:5px;">
+  <div id="navbar" class="navbar-menu" style="display:flex;">
     <!-- Partie gauche de la barre de navigation -->
-    <div class="navbar-start">
+    <div class="navbar-start" >
       <!-- Début menu déroulant -->
-      <div class="navbar-item has-dropdown is-hoverable ">
+      <div class="navbar-item has-dropdown is-hoverable"
+   >
         <a class="navbar-link">
           <i style="color: black; font-size:30px;" class="fas fa-bars"></i>
         </a>
