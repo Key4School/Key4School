@@ -178,7 +178,7 @@ def handleEvent_connectToNotif():
         notifs = [notif.toDict() for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
         for notif in notifs:
             html = render_template("notification.html", notif=notif)
-            emit('newNotif', html, to=str(user['_id']))
+            emit('newNotif', html, to=str(session['id']))
 
 
 # Deconnexion au groupe pour recevoir les nouvelles notif

@@ -565,27 +565,37 @@ class Notification(Actions):
 
 		return tempsStr
 
+	def supprNotif(self):
+		self.delete()
+		notifications.pop(str(self._id))
+		return
+
+	def supprUser(self, uid):
+		self.destinataires.remove(uid)
+		if len(self.destinataires) > 0:
+			self.update()
+		else:
+			self.supprNotif()
+		return
+
 	def toDict(self) -> dict:
 		if self.type == 'msg':
-			if self.id_groupe in groupes and self.id_msg in messages:
+			if str(self.id_groupe) in groupes and str(self.id_msg) in messages:
 				grp = groupes[str(self.id_groupe)].toDict()
 				msg = messages[str(self.id_msg)].toDict()
 			else:
-				self.delete()
-				notifications.pop(str(self._id))
+				self.supprNotif()
 				return
 		elif self.type == 'demande':
-			if self.id_groupe in demandes_aide:
+			if str(self.id_groupe) in demandes_aide:
 				grp = demandes_aide[str(self.id_groupe)].toDict()
-				if self.id_msg in grp['reponsesDict']:
+				if str(self.id_msg) in grp['reponsesDict']:
 					msg = grp['reponsesDict'][str(self.id_msg)]
 				else:
-					self.delete()
-					notifications.pop(str(self._id))
+					self.supprNotif()
 					return
 			else:
-				self.delete()
-				notifications.pop(str(self._id))
+				self.supprNotif()
 				return
 		sender = utilisateurs[str(msg['id-utilisateur'])].toDict()
 		return {  # on ajoute à la liste ce qui nous interesse
