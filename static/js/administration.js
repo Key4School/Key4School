@@ -105,3 +105,61 @@ function validerUserOpen(){
 function validerUserClose(){
   $("#validationUser").removeClass("is-active");
 }
+
+function supprimerRep(e) {
+  e.preventDefault();
+  var id = document.getElementById('idRepSupprimé').value;
+  var donnees = $('#supprRepForm').serialize();
+  $.ajax({
+    url: '/administration/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      document.getElementById('divRep_'+id).style.display='None';
+      supprimerRepClose();
+    },
+  });
+}
+
+function suppressionRep(id, idDemand){
+  document.getElementById("idRepSupprimé").value = id;
+  document.getElementById("idrepDemandSupprimé").value = idDemand;
+  supprimerRepOpen();
+}
+
+function supprimerRepOpen(){
+  $("#suppressionRep").addClass("is-active");
+}
+
+function supprimerRepClose(){
+  $("#suppressionRep").removeClass("is-active");
+}
+
+function validerRep(e) {
+  e.preventDefault();
+  var id = document.getElementById('idRepValidé').value;
+  var donnees = $('#valRepForm').serialize();
+  $.ajax({
+    url: '/administration/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      document.getElementById('divRep_'+id).style.display='None';
+      validerRepClose();
+    },
+  });
+}
+
+function validationRep(id, idDemand){
+  document.getElementById("idRepValidé").value = id;
+  document.getElementById("idrepDemandValidé").value = idDemand;
+  validerRepOpen();
+}
+
+function validerRepOpen(){
+  $("#validationRep").addClass("is-active");
+}
+
+function validerRepClose(){
+  $("#validationRep").removeClass("is-active");
+}
