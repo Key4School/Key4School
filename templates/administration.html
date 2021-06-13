@@ -119,7 +119,7 @@
   <br /><br />
   <div style="font-weight: bold; font-size:large;">Publications signalées : </div>
   {%for content in demandeSignale%}
-  <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;" id='divDemande_{{content['_id']}}'>
+  <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['_id']}}'>
     <div>
       <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}">
         {{content['user']['prenom']}} {{content['user']['nom']}} </a> : <b>{{content['titre']}} {{content['contenu']}}</b> <em>{{content['date-envoi']}}</em> <b>{{content['matière']}}</b>
@@ -176,7 +176,7 @@
   {%endfor%}
   <div style="font-weight: bold; font-size:large;">Utilisteurs signalés :</div><br /><br />
   {%for content in profilSignale%}
-  <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;">
+  <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
     <div>
       <a href="{{url_for('profil' ,idUser=content['_id'])}}">
         {{content['nom']}}
@@ -197,7 +197,7 @@
   </div>
   {%endfor%}
   <div style="font-weight: bold; font-size:large;">Groupes signalés :</div><br /><br />
-  <div style="border:2px solid {{session['couleur'][1]}};padding:1%;margin-left:20%;margin-right:20%;">
+  <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
 
     {%for content in discussionSignale%}
     <a href="{{url_for('page_messages', idGroupe=content['_id'])}}">{{content['nom']}}</a>
