@@ -27,31 +27,24 @@
     border: none;
     border-radius: 100%;
 }
+/* Pour telephone */
 @media screen and (max-width:1023px){
-  .telRecherche{
+  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel{
     display:block;
   }
-  .formOrdi{
+  .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi{
     display:none;
-  }
-  .boutonPubliOrdi{
-    display:none;
-  }
-  .boutonPubliTel{
-    display:block;
   }
 }
+/* Pour ordinateur */
 @media screen and (min-width:1023px){
-  .telRecherche{
+  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel{
     display:none;
   }
-  .formOrdi{
+  .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi{
     display:flex;
   }
-  .boutonPubliOrdi{
-    display:flex;
-  }
-  .boutonPubliTel{
-    display:none;
+  .selectMatiereOrdi{
+    display:block;
   }
 }
