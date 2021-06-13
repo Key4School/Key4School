@@ -567,11 +567,26 @@ class Notification(Actions):
 
 	def toDict(self) -> dict:
 		if self.type == 'msg':
-			grp = groupes[str(self.id_groupe)].toDict()
-			msg = messages[str(self.id_msg)].toDict()
+			if self.id_groupe in groupes and self.id_msg in messages:
+				grp = groupes[str(self.id_groupe)].toDict()
+				msg = messages[str(self.id_msg)].toDict()
+			else:
+				self.delete()
+				notifications.pop(str(self._id))
+				return
 		elif self.type == 'demande':
-			grp = demandes_aide[str(self.id_groupe)].toDict()
-			msg = grp['reponsesDict'][str(self.id_msg)]
+			if self.id_groupe in demandes_aide:
+				grp = demandes_aide[str(self.id_groupe)].toDict()
+				if self.id_msg in grp['reponsesDict']:
+					msg = grp['reponsesDict'][str(self.id_msg)]
+				else:
+					self.delete()
+					notifications.pop(str(self._id))
+					return
+			else:
+				self.delete()
+				notifications.pop(str(self._id))
+				return
 		sender = utilisateurs[str(msg['id-utilisateur'])].toDict()
 		return {  # on ajoute à la liste ce qui nous interesse
 			'_id': self._id,
@@ -593,7 +608,7 @@ class Notification(Actions):
 	        'type': self.type,
 	        'id_groupe': self.id_groupe,
 	        'id_msg': self.id_msg,
-	        'date-date': self.date,
+	        'date': self.date,
 	        'destinataires': self.destinataires
 	    }
 

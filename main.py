@@ -44,7 +44,7 @@ for m in all_messages:
 
 all_notifications = DB.db_notif.find()
 for n in all_notifications:
-    notifications[str(m['_id'])] = Message(m)
+    notifications[str(n['_id'])] = Notification(n)
 
 
 def recupLevel():
@@ -108,7 +108,7 @@ def notif(type, id_groupe, id_msg, destinataires):
     global messages
     global demandes_aide
 
-    # destinataires.remove(ObjectId(session['id']))
+    destinataires.remove(ObjectId(session['id']))
 
     if len(destinataires) > 0:
         _id = ObjectId()
@@ -174,6 +174,11 @@ def handleEvent_connectToNotif():
         print(session['id'] + " connected")
         clientsNotif[session['id']] = True
         join_room(session['id'])
+
+        notifs = [notif.toDict() for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
+        for notif in notifs:
+            html = render_template("notification.html", notif=notif)
+            emit('newNotif', html, to=str(user['_id']))
 
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
