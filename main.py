@@ -865,7 +865,7 @@ def administration():
                     utilisateurs[request.form['idValidé']].update()
 
                 elif request.form['demandeBut'] == 'SupprRep':
-                    demande = demandes_aide[request.form['idDemandSuppr']].toDict()
+                    demande = demandes_aide[request.form['idDemandSuppr']]
                     reponse = demande['réponses associées']
                     index = next((i for i, item in enumerate(reponse) if item['idRep'] == ObjectId(request.form['idSuppr'])), -1)
                     del reponse[index]
@@ -873,10 +873,11 @@ def administration():
                     demandes_aide[request.form['idDemandSuppr']].update()
 
                 elif request.form['demandeBut'] == 'ValRep':
-                    demande = demandes_aide[request.form['idDemandVal']].toDict()
+                    demande = demandes_aide[request.form['idDemandVal']]
                     réponse = demande['reponsesDict'][request.form['idVal']]
                     réponse['sign'] = []
                     réponse['motif'] = []
+
                     demandes_aide[request.form['idDemandVal']].update()
 
                 return 'sent'
@@ -885,9 +886,6 @@ def administration():
                 demandeSignale = sorted([d.toDict() for d in demandes_aide.values() if d.sign != []], key = lambda d: len(d['sign']), reverse=True)
                 profilSignale = sorted([u.toDict() for u in utilisateurs.values() if u.sign != []], key = lambda u: len(u['sign']), reverse=True)
                 discussionSignale = sorted([g.toDict() for g in groupes.values() if g.sign != []], key = lambda g: len(g['sign']), reverse=True)
-                demande2 = demandes_aide['60c605faa77155626141bba8'].toDict()
-                réponse = demande2['reponsesDict']['60c6060ba77155626141bbab']
-                print (réponse)
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
         else:
             return redirect(url_for('accueil'))
