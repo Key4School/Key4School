@@ -18,7 +18,7 @@
         <br>
         Sur
         {%if 'titre' in notif['groupe']%}
-        la demande d'aide <a href="{{url_for('comments', idMsg = notif['id_groupe'])}}">{{notif['groupe']['titre']}}</a>
+        la demande d'aide <a onclick="supprNotif('{{notif['_id']}}')" href="{{url_for('comments', idMsg = notif['id_groupe'])}}">{{notif['groupe']['titre']}}</a>
         {%elif 'nom' in notif['groupe']%}
         le groupe <a onclick="supprNotif('{{notif['_id']}}')" href="{{url_for('page_messages', idGroupe = notif['id_groupe'])}}">{{notif['groupe']['nom']}}</a>
         {%endif%} <br>
