@@ -28,9 +28,9 @@
   <!-- Bandeau -->
   {% include "bandeau.html" %}
   <br /><br /><br />
-  <div class="columns" style="margin-top: 10px; width:100%;">
+  <div class="columns">
     <div class="column"></div>
-    <div class="column is-three-fifths">
+    <div class="column is-three-fifths divQuestion">
       <form action="{{url_for('question')}}" method="post" enctype="multipart/form-data">
         <div class="box demande" style="border-radius: 20px; margin-bottom: 0.8rem;" data-subject="Tag matiere">
           <article class="media">
