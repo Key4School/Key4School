@@ -86,16 +86,19 @@ with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
 
 def automoderation(stringModerer: str) -> str:
     for content in listeModeration:
+        strReplace = ""
+        for i in range (len(content)):
+            strReplace += "*"
         if len(content) < 5:
             if stringModerer[0:len(content)+1] == content+" ":
-                stringModerer= stringModerer.replace(content, " * ")
+                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             if stringModerer[-len(content)+1:] == " "+content:
-                stringModerer= stringModerer.replace(content, " * ")
+                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             if stringModerer == content:
-                stringModerer= stringModerer.replace(content, " * ")
+                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             content= " "+content+" "
         if  content in stringModerer:
-            stringModerer= stringModerer.replace(content, " * ")
+            stringModerer= stringModerer.replace(content, " "+strReplace+" ")
 
     return stringModerer
 
