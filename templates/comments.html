@@ -2,24 +2,8 @@
 <html class="has-navbar-fixed-top" lang="fr">
 
 <head>
-  <!-- language utf8 pour indiquer l'encodage -->
-  <meta charset="UTF-8">
-  <!-- pour l'adapter plus ou moins bien sur telephone -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- titre en haut dans le navigateur -->
+  {% include 'head.html' with context %}
   <title>Commentaire</title>
-  <!-- page de style -->
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
-  <!-- importation de la bibliotheque j query qui est requise pour faire marcher le js-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <link rel="stylesheet" href="{{url_for('static',filename='css/mystyles.css')}}">
-  <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-  <script src="{{url_for('static',filename='js/notification.js')}}" type="text/javascript" defer></script>
-  <!-- importation du JS pour afficher et enlever les div -->
-  <script type="text/javascript" src="/static/js/bandeau.js"></script>
-  <script src="{{url_for('static',filename='js/publication.js')}}" type="text/javascript" defer></script><script src="{{url_for('static',filename='js/main.js')}}" type="text/javascript"></script>
-  <script src="{{url_for('static',filename='js/rep.js')}}" type="text/javascript"></script><script src="{{url_for('static',filename='js/main.js')}}" type="text/javascript"></script>
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -29,6 +13,49 @@
 
 <body>
   {% include "bandeau.html" %}
+  {%if user['admin']%}
+  <div class="modal" id="suppression" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Supression</p>
+      </header>
+      <form onsubmit="supprimer(event); return false;" id="supprForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type="text" name="motif" placeholder="motif" required />
+          <input type='hidden' id="idSupprimé" name='idSuppr' value="" />
+          <input type='hidden' name="demandeBut" value="Suppr" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">supprimer</button>
+          <button onclick="supprimerClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  <div class="modal" id="validation" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Validation</p>
+      </header>
+      <form onsubmit="valider(event); return false;" id="valForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <select name="motif">
+            <option value="abusif">Signalement abusif</option>
+            <option value="justifie">Justifié</option>
+          </select>
+          <input type='hidden' id="idValidé" name='idVal' value="" />
+          <input type='hidden' name="demandeBut" value="Val" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Valider</button>
+          <button onclick="validerClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  {%endif%}
   <div class="modal" id="signalisation" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">

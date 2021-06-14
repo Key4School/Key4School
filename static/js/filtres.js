@@ -101,3 +101,15 @@ const user_filter = (v) => {
 		});
 	}
 }
+var lastScrollTop = 0;
+$(window).scroll(function(event){
+   var st = $(this).scrollTop();
+   if (st > lastScrollTop){
+		 document.getElementById('filters').style.position = "";
+       document.getElementById('filters').style.display = "none";
+   } else {
+       document.getElementById('filters').style.display = "flex";
+			 document.getElementById('filters').style.position = "fixed";
+   }
+   lastScrollTop = st;
+});

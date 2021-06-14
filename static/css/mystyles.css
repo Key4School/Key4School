@@ -5607,8 +5607,8 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
 }
 
 .navbar-link.is-active, .navbar-link:focus, .navbar-link:focus-within, .navbar-link:hover, a.navbar-item.is-active, a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover {
-  background-color: #fafafa;
-  color: #3273dc
+  background-color: transparent;
+  color: black
 }
 
 .navbar-item {

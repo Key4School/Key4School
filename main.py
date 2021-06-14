@@ -86,16 +86,19 @@ with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
 
 def automoderation(stringModerer: str) -> str:
     for content in listeModeration:
-        if len(content) < 5:
+        strReplace = ""
+        for i in range (len(content)):
+            strReplace += "*"
+        if len(content) < 6:
             if stringModerer[0:len(content)+1] == content+" ":
-                stringModerer= stringModerer.replace(content, " * ")
+                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             if stringModerer[-len(content)+1:] == " "+content:
-                stringModerer= stringModerer.replace(content, " * ")
+                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             if stringModerer == content:
-                stringModerer= stringModerer.replace(content, " * ")
+                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             content= " "+content+" "
         if  content in stringModerer:
-            stringModerer= stringModerer.replace(content, " * ")
+            stringModerer= stringModerer.replace(content, " "+strReplace+" ")
 
     return stringModerer
 
@@ -964,7 +967,7 @@ def signPost():
             if ObjectId(session['id']) in sign:
                 # on supprime son signalement
                 sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item.id == ObjectId(session['id'])), -1)
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
                 del motif[index]
 
             else:
@@ -1034,7 +1037,7 @@ def signPostProfil():
             if ObjectId(session['id']) in sign:
                 # on supprime son signalement
                 sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item.id == ObjectId(session['id'])), -1)
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
                 del motif[index]
 
             else:
