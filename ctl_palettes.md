@@ -5,6 +5,12 @@
   * Moyenne : (+ bande de citation message)
 
 
+  **Palette de base (nuance de bleu)**
+  * Couleur 1 : ![#00b7ff](https://via.placeholder.com/15/00b7ff/000000?text=+) `#00b7ff`
+  * Couleur 2 : ![#a7ceff](https://via.placeholder.com/15/a7ceff/000000?text=+) `#a7ceff`
+  * Couleur 3 : ![#94e1ff](https://via.placeholder.com/15/94e1ff/000000?text=+) `#94e1ff`
+  * Moyenne: ![#d3e6ff](https://via.placeholder.com/15/d3e6ff/000000?text=+) `#d3e6ff`
+
 **Palette 1 (rouge, rose, bleu clair)**
 * Couleur 1 : ![#e6445f](https://via.placeholder.com/15/e6445f/000000?text=+) `#e6445f`
 * Couleur 2 : ![#f3a6b3](https://via.placeholder.com/15/f3a6b3/000000?text=+) `#f3a6b3`
