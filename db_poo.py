@@ -519,10 +519,10 @@ class Groupe(Actions):
 		self.db_table = DB.db_groupes
 
 	def getAllMessages(self):
-		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe], key = lambda message: message['date-envoi'], reverse=True)
+		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe], key = lambda message: message['date-envoi'])
 
 	def getAllMessagesSign(self):
-		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe and message.sign != []], key = lambda message: message['date-envoi'], reverse=True)
+		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe and message.sign != []], key = lambda message: message['date-envoi'])
 
 	def toDict(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
