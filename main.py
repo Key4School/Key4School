@@ -108,7 +108,8 @@ def notif(type, id_groupe, id_msg, destinataires):
     global messages
     global demandes_aide
 
-    destinataires.remove(ObjectId(session['id']))
+    if ObjectId(session['id']) in destinataires:
+        destinataires.remove(ObjectId(session['id']))
 
     if len(destinataires) > 0:
         _id = ObjectId()
@@ -177,7 +178,7 @@ def handleEvent_connectToNotif():
         notifs = [notif.toDict() for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
         for notif in notifs:
             html = render_template("notification.html", notif=notif)
-            emit('newNotif', html, to=str(session['id']))
+            emit('newNotif', html, to=session['id'])
 
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
@@ -187,6 +188,13 @@ def handleEvent_disconnect():
         if session['id'] in clientsNotif:
             clientsNotif.pop(session['id'])
             leave_room(session['id'])
+
+@socketio.on('supprNotif')
+def handleEvent_supprNotif(id):
+    global notifications
+    if 'id' in session:
+        notification = notifications[id]
+        notification.supprUser(ObjectId(session['id']))
 
 
 # laisser le nom entre deux slash ca permet d'accepter toutes les urls du style http://127.0.0.1:3000/messages/ sinon ca marche pas.s
@@ -840,6 +848,7 @@ def administration():
     global utilisateurs
     global demandes_aide
     global groupes
+    global Reponse
 
     if 'id' in session:
         utilisateur = utilisateurs[session['id']].toDict()
@@ -865,19 +874,31 @@ def administration():
                     utilisateurs[request.form['idValidé']].update()
 
                 elif request.form['demandeBut'] == 'SupprRep':
-                    demande = demandes_aide[request.form['idDemandSuppr']].toDict()
-                    reponse = demande['réponses associées']
-                    index = next((i for i, item in enumerate(reponse) if item['idRep'] == ObjectId(request.form['idSuppr'])), -1)
-                    del reponse[index]
-
-                    demandes_aide[request.form['idDemandSuppr']].update()
+                    demande = demandes_aide[request.form['idDemandSuppr']]
+                    demande.reponses_associees.pop(request.form['idSuppr'])
+                    signDemande = demande.sign
+                    motifDemande = demande.motif
+                    print (len(signDemande))
+                    for i in range (len(signDemande)):
+                        if str(request.form['idSuppr']+"/") in str(signDemande[i]):
+                            del signDemande[i]
+                    for a in range (len(motifDemande)):
+                        if str(request.form['idSuppr']+"/") in str(motifDemande[a]):
+                            del motifDemande[a]
+                    demande.update()
 
                 elif request.form['demandeBut'] == 'ValRep':
-                    demande = demandes_aide[request.form['idDemandVal']].toDict()
-                    réponse = demande['reponsesDict'][request.form['idVal']]
-                    réponse['sign'] = []
-                    réponse['motif'] = []
-
+                    demande = demandes_aide[request.form['idDemandVal']]
+                    signDemande = demande.sign
+                    motifDemande = demande.motif
+                    demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign'].clear()
+                    demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['motif'].clear()
+                    for i in range (len(signDemande)):
+                        if str(request.form['idValidé']+"/") in str(signDemande[i]):
+                            del signDemande[i]
+                    for a in range (len(motifDemande)):
+                        if str(request.form['idVal']+"/") in str(motifDemande[a]):
+                            del motifDemande[a]
                     demandes_aide[request.form['idDemandVal']].update()
 
                 return 'sent'
@@ -1233,11 +1254,11 @@ def connexion():
 
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
-                u = utilisateurs[user['_id']]
+                u = utilisateurs[str(user['_id'])]
                 u.SanctionEnCour = ''
                 u.SanctionDuree = ''
 
-                utilisateurs[user['_id']].update()
+                utilisateurs[str(user['_id'])].update()
 
         return redirect(url_for('accueil'))
 
