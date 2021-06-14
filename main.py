@@ -298,8 +298,8 @@ def handleEvent_postMsg(json):
 
                         users = groupe['utilisateurs']
 
-                        ownHTML = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
-                        otherHTML = render_template("refreshMessages.html", msg=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
+                        ownHTML = render_template("refreshMessages.html", content=message, sessionId=ObjectId(session['id']), infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
+                        otherHTML = render_template("refreshMessages.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
 
                         emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=json['room'])
 
@@ -886,9 +886,11 @@ def administration():
 
                 elif request.form['demandeBut'] == 'ValUser':
                     user = utilisateurs[request.form['idValidé']]
+                    if request.form['motif'] == "abusif":
+                        for content in user.sign:
+                                addXpModeration(str(content), 5)
                     user.sign = []
                     user.motif = []
-
                     utilisateurs[request.form['idValidé']].update()
 
                 elif request.form['demandeBut'] == 'SupprRep':
@@ -909,10 +911,14 @@ def administration():
                     demande = demandes_aide[request.form['idDemandVal']]
                     signDemande = demande.sign
                     motifDemande = demande.motif
+                    sign =  demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign']
+                    if request.form['motif'] == "abusif":
+                        for content in sign :
+                                addXpModeration(str(content), 5)
                     demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign'].clear()
                     demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['motif'].clear()
                     for i in range (len(signDemande)):
-                        if str(request.form['idValidé']+"/") in str(signDemande[i]):
+                        if str(request.form['idVal']+"/") in str(signDemande[i]):
                             del signDemande[i]
                     for a in range (len(motifDemande)):
                         if str(request.form['idVal']+"/") in str(motifDemande[a]):
@@ -951,10 +957,11 @@ def sanction():
             if request.form['SanctionType'] == 'Spec' or request.form['SanctionType'] == 'SpecProfil' or request.form['SanctionType'] == 'SpecForum' or request.form['SanctionType'] == 'SpecMsg':
                 user.SanctionEnCour = request.form['SanctionType']
                 user.SanctionDuree = time
+                addXpModeration(request.form['idSanctionné'], 50)
 
             elif request.form['SanctionType'] == 'ResetProfil':
                 MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
-                addXpModeration(request.form['idSanctionné'], 10)
+                addXpModeration(request.form['idSanctionné'], 25)
                 for a in MyImage:
                     DB.db_files.delete_one({'_id': a['_id']})
                     DB.db_chunks.delete_many({'files_id': a['_id']})
