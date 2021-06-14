@@ -108,7 +108,8 @@ def notif(type, id_groupe, id_msg, destinataires):
     global messages
     global demandes_aide
 
-    destinataires.remove(ObjectId(session['id']))
+    if ObjectId(session['id']) in destinataires:
+        destinataires.remove(ObjectId(session['id']))
 
     if len(destinataires) > 0:
         _id = ObjectId()
