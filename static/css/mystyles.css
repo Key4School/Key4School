@@ -5607,8 +5607,8 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
 }
 
 .navbar-link.is-active, .navbar-link:focus, .navbar-link:focus-within, .navbar-link:hover, a.navbar-item.is-active, a.navbar-item:focus, a.navbar-item:focus-within, a.navbar-item:hover {
-  background-color: #fafafa;
-  color: #3273dc
+  background-color: transparent;
+  color: black
 }
 
 .navbar-item {
@@ -5659,7 +5659,7 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
 }
 
 .navbar-link:not(.is-arrowless)::after {
-  border-color: #3273dc;
+  border-color: black;
   margin-top: -.375em;
   right: 1.125em
 }
@@ -5940,7 +5940,7 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
   }
 
   .navbar-item.has-dropdown.is-active .navbar-link, .navbar-item.has-dropdown:focus .navbar-link, .navbar-item.has-dropdown:hover .navbar-link {
-    background-color: #fafafa
+    background-color: transparent
   }
 }
 

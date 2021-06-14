@@ -29,10 +29,10 @@
 }
 /* Pour telephone */
 @media screen and (max-width:1023px){
-  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock{
+  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel{
     display:block;
   }
-  .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi{
+  .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi{
     display:none;
   }
   .selectProfil{
@@ -48,13 +48,13 @@
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
-  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel{
+  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel{
     display:none;
   }
   .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi, .ordiFlexTelBlock{
     display:flex;
   }
-  .selectMatiereOrdi{
+  .selectMatiereOrdi, .questionNavbarOrdi{
     display:block;
   }
   .ChoixCouleur{

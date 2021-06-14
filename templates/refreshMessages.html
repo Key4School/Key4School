@@ -35,6 +35,22 @@
                 </form>
               </div>
               {%endif%}
+              {%if user['admin']%}
+              <div class="navbar-item">
+                <form method="post" action="/validationMsg/" class="valider" id="ValidationMsg">
+                  <input type='hidden' name="msgVal" value="{{content['_id']}}" />
+                  <input type='hidden' name="grp" value="{{idgroupe}}" />
+                  <input type='hidden' name="audio" value="{{content['audio']}}" />
+                  {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
+                  <button type="submit" class="button is-danger is-outlined is-small">
+                    <span class="icon is-small">
+                      <i class="fas fa-times"></i>
+                    </span>
+                    <span>Valider</span>
+                  </button>
+                </form>
+              </div>
+              {%endif%}
               <div class="navbar-item">
                 <button value="{{msg['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
                   <span class="icon is-small">
@@ -60,7 +76,7 @@
             </div>
           </div>
         </div>
-        {%if "rep" in msg%}
+        {%if msg['rep'] != None%}
         <div style="background-color:{{session['couleur'][3]}};padding:1%;padding-left:2%;border-left:4px solid {{session['couleur'][0]}};border-radius:5px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
           {%for users in infoUtilisateurs %}{%if users['_id']==msg['rep']['id-utilisateur']%}
           <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['pseudo']}}</a></div>

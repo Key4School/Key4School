@@ -2,24 +2,10 @@
 <html lang="fr" style="overflow:hidden;">
 
 <head>
-  <!-- language utf8 pour indiquer l'encodage -->
-  <meta charset="UTF-8">
-  <!-- pour l'adapter plus ou moins bien sur telephone -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- titre en haut dans le navigateur -->
   <title>Messages</title>
-  <!-- page de style -->
-  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
-  <!-- on inclut la bibliothèque depuis les serveurs de Google -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-  <link rel="stylesheet" href="{{url_for('static',filename='css/mystyles.css')}}">
-  <!-- <link rel="stylesheet" href="{{url_for('static',filename='css/mystyles.css')}}"> -->
-  <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-  <script src="{{url_for('static',filename='js/notification.js')}}" type="text/javascript" defer></script>
+  {% include 'head.html' with context %}
   <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript" defer></script>
-  <script type="text/javascript" src="/static/js/filtres.js" defer></script>
-  <script type="text/javascript" src="/static/js/bandeau.js"></script>
+
   <style>
     .liengroupe {
       color: black;
@@ -292,12 +278,12 @@
         </div>
       </div>
       <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
-      <div id="messages" style="box-sizing: border-box;overflow-y: auto; overflow-x:hidden;height:80%;border: 3px solid {{session['couleur'][0]}};padding-top:2%;">
+      <div id="messages" style="overflow-y: auto; overflow-x:hidden;height:80%;border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
         {% for content in msgDb%}
         <!--Pour chaque message -->
         {%if content['id-utilisateur']==sessionId%}
         <!-- Mes messages -->
-        <div class="moimsg" style="border: 2px solid {{session['couleur'][0]}};margin-left: 55%;margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;">
+        <div class="moimsg" style="max-width: 55%;align-self: flex-end;border: 2px solid {{session['couleur'][0]}};margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;">
           <div style="margin-left: 90%;">
           {%else%}
           <!-- Messages des autres -->
@@ -315,7 +301,7 @@
               {%else%}
               <div class="navbar-dropdown">
               {%endif%}
-                {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT" or user['admin']== "True"%}
+                {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT" or user['admin']== True%}
                 <div class="navbar-item">
                   <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg">
                     <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
@@ -327,6 +313,22 @@
                         <i class="fas fa-times"></i>
                       </span>
                       <span>Supprimer</span>
+                    </button>
+                  </form>
+                </div>
+                {%endif%}
+                {%if user['admin']%}
+                <div class="navbar-item">
+                  <form method="post" action="/validationMsg/" class="valider" id="ValidationMsg">
+                    <input type='hidden' name="msgVal" value="{{content['_id']}}" />
+                    <input type='hidden' name="grp" value="{{idgroupe}}" />
+                    <input type='hidden' name="audio" value="{{content['audio']}}" />
+                    {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
+                    <button type="submit" class="button is-danger is-outlined is-small">
+                      <span class="icon is-small">
+                        <i class="fas fa-times"></i>
+                      </span>
+                      <span>Valider</span>
                     </button>
                   </form>
                 </div>
@@ -356,7 +358,7 @@
               </div>
             </div>
           </div>
-          {%if "rep" in content%}
+          {%if content['rep'] != None%}
           <div style="background-color:{{session['couleur'][3]}};padding:1%;padding-left:2%;border-left:4px solid {{session['couleur'][0]}};border-radius:5px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
             {%for users in infoUtilisateurs %}{%if users['_id']==content['rep']['id-utilisateur']%}
             <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['pseudo']}}</a></div>
@@ -384,7 +386,7 @@
         </div>
         <div id="divrepmsg" style="padding:0.5%;width:100%;display:none;align-items: center;width: 100%;">
           <div style="width: 95%;" id='champReponse'></div>&nbsp;&nbsp;
-          <button onclick="enleverRep()" id="buttonRep" style="display:none;background-color:{{session['couleur'][1]}};border: 0px solid {{session['couleur'][0]}}" class="icon is-medium logoBouton">
+          <button onclick="enleverRep()" id="buttonRep" style="display:none;background-color:{{session['couleur'][3]}};border: 0px solid {{session['couleur'][0]}}" class="icon is-medium logoBouton">
               <i class="fas fa-times"></i>
           </button>
         </div>

@@ -10,10 +10,10 @@
     <!-- Contenu publication -->
     <div class="media-content">
       <div class="content">
-        <p>
           <!-- Nom ; pseudo ; temps -->
+          <div style="font-size: 11px;font-variant: small-caps;">{{notif['sender']['nom']}} {{notif['sender']['prenom']}}</div>
         <div style="display: inline-flex; align-content: space-between;">
-          <div style="font-variant: small-caps;">{{notif['sender']['nom']}} {{notif['sender']['prenom']}}</div>&nbsp<div style="font-style: italic;">@{{notif['sender']['pseudo']}}</div>&nbsp<small>{{notif['temps']}}</small>
+          <div style="font-size: 11px;font-style: italic;">@{{notif['sender']['pseudo']}}</div>&nbsp&nbsp&nbsp<small>{{notif['temps']}}</small>
         </div>
         <br>
         Sur
@@ -23,7 +23,8 @@
         le groupe <a onclick="supprNotif('{{notif['_id']}}')" href="{{url_for('page_messages', idGroupe = notif['id_groupe'])}}">{{notif['groupe']['nom']}}</a>
         {%endif%} <br>
         <!-- Texte publication -->
-        <i>{{notif['message']['contenu']}}</i>
+        <p>
+          <i>{{notif['message']['contenu']}}</i>
         </p>
       </div>
     </div>
