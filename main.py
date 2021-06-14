@@ -848,6 +848,7 @@ def administration():
     global utilisateurs
     global demandes_aide
     global groupes
+    global Reponse
 
     if 'id' in session:
         utilisateur = utilisateurs[session['id']].toDict()
@@ -873,19 +874,31 @@ def administration():
                     utilisateurs[request.form['idValidé']].update()
 
                 elif request.form['demandeBut'] == 'SupprRep':
-                    demande = demandes_aide[request.form['idDemandSuppr']].toDict()
-                    reponse = demande['réponses associées']
-                    index = next((i for i, item in enumerate(reponse) if item['idRep'] == ObjectId(request.form['idSuppr'])), -1)
-                    del reponse[index]
-
-                    demandes_aide[request.form['idDemandSuppr']].update()
+                    demande = demandes_aide[request.form['idDemandSuppr']]
+                    demande.reponses_associees.pop(request.form['idSuppr'])
+                    signDemande = demande.sign
+                    motifDemande = demande.motif
+                    print (len(signDemande))
+                    for i in range (len(signDemande)):
+                        if str(request.form['idSuppr']+"/") in str(signDemande[i]):
+                            del signDemande[i]
+                    for a in range (len(motifDemande)):
+                        if str(request.form['idSuppr']+"/") in str(motifDemande[a]):
+                            del motifDemande[a]
+                    demande.update()
 
                 elif request.form['demandeBut'] == 'ValRep':
-                    demande = demandes_aide[request.form['idDemandVal']].toDict()
-                    réponse = demande['reponsesDict'][request.form['idVal']]
-                    réponse['sign'] = []
-                    réponse['motif'] = []
-
+                    demande = demandes_aide[request.form['idDemandVal']]
+                    signDemande = demande.sign
+                    motifDemande = demande.motif
+                    demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign'].clear()
+                    demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['motif'].clear()
+                    for i in range (len(signDemande)):
+                        if str(request.form['idValidé']+"/") in str(signDemande[i]):
+                            del signDemande[i]
+                    for a in range (len(motifDemande)):
+                        if str(request.form['idVal']+"/") in str(motifDemande[a]):
+                            del motifDemande[a]
                     demandes_aide[request.form['idDemandVal']].update()
 
                 return 'sent'
