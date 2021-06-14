@@ -89,7 +89,7 @@ def automoderation(stringModerer: str) -> str:
         strReplace = ""
         for i in range (len(content)):
             strReplace += "*"
-        if len(content) < 5:
+        if len(content) < 6:
             if stringModerer[0:len(content)+1] == content+" ":
                 stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             if stringModerer[-len(content)+1:] == " "+content:
