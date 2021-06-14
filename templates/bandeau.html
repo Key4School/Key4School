@@ -72,8 +72,14 @@
         <!-- Notifications -->
         <div class="navbar-dropdown is-right" style="width: 300%;max-height:500px;overflow-y: auto;" id="notifContent">
           <!-- NE PAS SUPPRIMER contenu notif -->
-          <p id="noNotif">Aucune notification</p>
-          <button id="toutLu" onclick="allSuppr()">Tout marquer comme lu</button>
+          <p style="width: 60%;margin: auto;margin-top: 5%;"id="noNotif">Aucune notification</p>
+          <button  style="margin-left:2%;" onclick="allSuppr()" id="toutLu" class="button is-small is-info is-outlined">
+            <span>Tout marquer comme lu</span>
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+          </button>
+          <br />
         </div>
       </div>
     </div>

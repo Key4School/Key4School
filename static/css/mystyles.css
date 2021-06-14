@@ -5659,7 +5659,7 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
 }
 
 .navbar-link:not(.is-arrowless)::after {
-  border-color: #3273dc;
+  border-color: black;
   margin-top: -.375em;
   right: 1.125em
 }
@@ -5940,7 +5940,7 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
   }
 
   .navbar-item.has-dropdown.is-active .navbar-link, .navbar-item.has-dropdown:focus .navbar-link, .navbar-item.has-dropdown:hover .navbar-link {
-    background-color: #fafafa
+    background-color: transparent
   }
 }
 
