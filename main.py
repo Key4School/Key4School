@@ -330,16 +330,40 @@ def file(fileName):
 @app.route('/suppressionMsg/', methods=['POST'])
 def supprimerMsg():
     global messages
+    global utilisateurs
+    global Groupe
 
     if 'id' in session:
         idGroupe = request.form['grp']
+        user = utilisateurs[session['id']].toDict()
+        msg = messages[request.form['msgSuppr']].toDict()
+        # grp = Groupe[request.form['grp']].toDict()
+        if user['admin'] or user['type']=="ENSEIGNANT" or msg['id-utilisateur']==ObjectId(session['id']) or ObjectId(session['id'] in grp['moderateurs']):
+            messages[request.form['msgSuppr']].suppr()
 
-        messages[request.form['msgSuppr']].suppr()
+            if request.form['audio'] == 'True':
+                MyAudio = DB.db_files.find_one({'filename': request.form['audioName']})
+                DB.db_files.delete_one({'_id': MyAudio['_id']})
+                DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
 
-        if request.form['audio'] == 'True':
-            MyAudio = DB.db_files.find_one({'filename': request.form['audioName']})
-            DB.db_files.delete_one({'_id': MyAudio['_id']})
-            DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
+        return redirect(url_for('page_messages', idGroupe=idGroupe))
+
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/validationMsg/', methods=['POST'])
+def validerMsg():
+    global messages
+
+    if 'id' in session:
+        user = utilisateurs[session['id']].toDict()
+        idGroupe = request.form['grp']
+        if user['admin']:
+            message = messages[request.form['msgVal']].toDict()
+            signMsg = message['sign']
+            motifMsg = message['motif']
+            signMsg.clear()
+            motifMsg.clear()
 
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
