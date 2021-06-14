@@ -17,59 +17,59 @@ function updateImgClose() {
   $("#replaceImg").removeClass("is-active");
 }
 
-function signalisation(){
-  selectionSign = document.getElementById("sign").className
+function signalisationProfil(){
+  selectionSign = document.getElementById("signProfil").className
   if (selectionSign == "far fa-flag") {
-    signalisationOpen();
+    signalisationProfilOpen();
 
 
   }
   if (selectionSign == "fas fa-flag"){
-    designalisationOpen();
+    designalisationProfilOpen();
   }
 }
 
-function signalisationOpen() {
-  $("#signalisation").addClass("is-active");
+function signalisationProfilOpen() {
+  $("#signalisationProfil").addClass("is-active");
 }
 
-function signalisationClose() {
-  $("#signalisation").removeClass("is-active");
+function signalisationProfilClose() {
+  $("#signalisationProfil").removeClass("is-active");
 }
 
-function designalisationOpen() {
-  $("#designalisation").addClass("is-active");
+function designalisationProfilOpen() {
+  $("#designalisationProfil").addClass("is-active");
 }
 
-function designalisationClose() {
-  $("#designalisation").removeClass("is-active");
+function designalisationProfilClose() {
+  $("#designalisationProfil").removeClass("is-active");
 }
 
-function signaler(e) {
+function signalerProfil(e) {
   e.preventDefault();
-  var donnees = $('#signalement').serialize();
+  var donnees = $('#signalementProfil').serialize();
   $.ajax({
     url: '/signPostProfil/', // on donne l'URL du fichier de traitement
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      $('#signalement').trigger("reset");
-      signalisationClose();
-      document.getElementById("sign").className = "fas fa-flag";
+      $('#signalementProfil').trigger("reset");
+      signalisationProfilClose();
+      document.getElementById("signProfil").className = "fas fa-flag";
     },
   });
 }
 
-function designaler(e) {
+function designalerProfil(e) {
   e.preventDefault();
-  var donnees = $('#signalement').serialize();
+  var donnees = $('#signalementProfil').serialize();
   $.ajax({
     url: '/signPostProfil/', // on donne l'URL du fichier de traitement
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      designalisationClose();
-      document.getElementById("sign").className = "far fa-flag";
+      designalisationProfilClose();
+      document.getElementById("signProfil").className = "far fa-flag";
     },
   });
 }

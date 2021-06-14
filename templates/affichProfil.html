@@ -35,38 +35,38 @@
 <body>
   <!-- Bandeau -->
   {% include "bandeau.html" %}
-  <div class="modal" id="signalisation" style="overflow:hidden;">
+  <div class="modal" id="signalisationProfil" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Signalement</p>
       </header>
-      <form onsubmit="signaler(event); return false;" id="signalement" method="POST" autocomplete="off">
+      <form onsubmit="signalerProfil(event); return false;" id="signalementProfil" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous ce profil." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
           <input type='hidden' id="idSignalé" name='idSignalé' value="{{profilUtilisateur['_id']}}" />
         </section>
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Signaler</button>
-          <button onclick="signalisationClose(); return false;" class="button">Annuler</button>
+          <button onclick="signalisationProfilClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>
     </div>
   </div>
-  <div class="modal" id="designalisation" style="overflow:hidden;">
+  <div class="modal" id="designalisationProfil" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
         <p class="modal-card-title">Retrait de signalement</p>
       </header>
-      <form onsubmit="designaler(event); return false;" id="designalement" method="POST" autocomplete="off">
+      <form onsubmit="designalerProfil(event); return false;" id="designalementProfil" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <input type='hidden' id="idDesignalé" name='idSignalé' value="{{profilUtilisateur['_id']}}" />
           Etes-vous sûr de vouloir enlever ce signalement
         </section>
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Oui</button>
-          <button onclick="designalisationClose(); return false;" class="button">Annuler</button>
+          <button onclick="designalisationProfilClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>
     </div>
@@ -275,12 +275,12 @@
     <!-- Fin informations -->
     <br />
     <div class="navbar-item" style="display:block;">
-      <button  class="button is-warning is-outlined is-small" onClick="signalisation();">
+      <button  class="button is-warning is-outlined is-small" onClick="signalisationProfil();">
         <span class="icon is-small">
           {% if a_sign %}
-          <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+          <i id="signProfil" class="fas fa-flag" aria-hidden="true"></i>
           {% else %}
-            <i id="sign" class="far fa-flag" aria-hidden="true"></i>
+            <i id="signProfil" class="far fa-flag" aria-hidden="true"></i>
           {% endif %}
         </span>
         <span>Signaler</span>
