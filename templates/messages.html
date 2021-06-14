@@ -2,8 +2,9 @@
 <html lang="fr" style="overflow:hidden;">
 
 <head>
-{% include 'head.html' with context %}
   <title>Messages</title>
+  <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript" defer></script>
+  {% include 'head.html' with context %}
 
   <style>
     .liengroupe {
