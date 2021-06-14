@@ -33,7 +33,7 @@
 * Couleur 1 : ![#ffbb00](https://via.placeholder.com/15/ffbb00/000000?text=+) `#ffbb00`
 * Couleur 2 : ![#e8c959](https://via.placeholder.com/15/e8c959/000000?text=+) `#e8c959`
 * Couleur 3 : ![#ffe294](https://via.placeholder.com/15/ffe294/000000?text=+) `#ffe294`
-* Moyenne: ![#ffbb00](https://via.placeholder.com/15/ffbb00/000000?text=+) `#ffbb00`
+* Moyenne: ![#f3e4ac](https://via.placeholder.com/15/f3e4ac/000000?text=+) `#f3e4ac`
 
 **Palette 1 (rouge, rose, bleu clair)**
 * Couleur 1 : ![#e6445f](https://via.placeholder.com/15/e6445f/000000?text=+) `#e6445f`
