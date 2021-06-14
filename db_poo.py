@@ -466,14 +466,26 @@ class Message(Actions):
 
 		self.db_table = DB.db_messages
 
+	def suppr(self) -> None:
+		self.delete()
+		messages.pop(str(self._id))
+		return
+
 	def toDict(self) -> dict:
+		if self.reponse != "None":
+			rep = messages[str(self.reponse)].toDict()
+		else:
+			rep = None
 		return {  # on ajoute à la liste ce qui nous interesse
 	        '_id': self._id,
 	        'id-groupe': self.id_groupe,
+			'groupe': groupes[str(self.id_groupe)].toDict(),
 	        'id-utilisateur': self.id_utilisateur,
+			'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
 	        'contenu': self.contenu,
 	        'date-envoi': self.date_envoi,
 	        'reponse': self.reponse,
+			'rep': rep,
 	        'audio': self.audio,
 	        'sign': self.sign,
 	        'motif': self.motif
@@ -506,12 +518,20 @@ class Groupe(Actions):
 
 		self.db_table = DB.db_groupes
 
+	def getAllMessages(self):
+		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe], key = lambda message: message['date-envoi'], reverse=True)
+
+	def getAllMessagesSign(self):
+		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe and message.sign != []], key = lambda message: message['date-envoi'], reverse=True)
+
 	def toDict(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
 	        '_id': self._id,
 	        'nom': self.nom,
 	        'id-utilisateurs': self.id_utilisateurs,
+			'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
 	        'moderateurs': self.moderateurs,
+			'modos': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.moderateurs],
 	        'sign': self.sign,
 	        'motif': self.motif
 	    }

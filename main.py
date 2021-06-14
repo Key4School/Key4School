@@ -216,54 +216,31 @@ def page_messages(idGroupe):
     global groupes
 
     if 'id' in session:
-        grp = [groupes[idGrp] for idGrp in [idGrp for (idGrp , groupe) in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs]]
+        grp = [groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs]
         user = utilisateurs[session['id']].toDict()
         users = sorted([u.toDict() for u in utilisateurs.values()], key = lambda u: u['pseudo'])
 
         if idGroupe != None:
-            infogroupes = groupes[idGroupe].toDict()
-            infoUtilisateurs = [utilisateurs[str(content)].toDict() for content in infogroupes['id-utilisateurs']]
-            if ObjectId(session['id']) in infogroupes['id-utilisateurs']:
-                msgDb = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(idGroupe)]
-                toDel = []
-
-                for m in msgDb:
-                    if m['reponse'] != 'None' and m['reponse'] != '':
-                        toDel.append(messages[str(m['reponse'])].toDict())
-                        m['rep'] = messages[str(m['reponse'])].toDict()
-                for a in toDel:
-                    msgDb.remove(a)
-
-                infogroupes = groupes[idGroupe].toDict()
-                infoUtilisateurs = [utilisateurs[str(content)].toDict() for content in infogroupes['id-utilisateurs']]
-
-                danslegroupe = False
-                for user in infoUtilisateurs:
-                    if ObjectId(session['id']) == user['_id']:
-                        danslegroupe = True
+            groupe = groupes[idGroupe]
+            infoUtilisateurs = groupe.toDict()['utilisateurs']
+            if ObjectId(session['id']) in groupe.toDict()['id-utilisateurs']: # verif autorization
+                msgDb = groupe.getAllMessages()
 
             elif user['admin'] == True:
-                msgDb = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(idGroupe) and m.sign != []]
-                toDel = []
-
-                for m in msgDb:
-                    if m['reponse'] != 'None' and m['reponse'] != '':
-                        toDel.append(messages[str(m['reponse'])].toDict())
-                        m['rep'] = messages[str(m['reponse'])].toDict()
-                for a in toDel:
-                    msgDb.remove(a)
+                msgDb = groupe.getAllMessagesSign()
 
             else:
                 msgDb = None
                 infogroupes = None
                 infoUtilisateurs = None
+            groupe = groupe.toDict()
 
         else:
             msgDb = None
-            infogroupes = None
+            groupe = None
             infoUtilisateurs = None
 
-        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=infogroupes, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=ObjectId(session['id']), user=user)
+        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=groupe, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=ObjectId(session['id']), user=user)
 
     else:
         return redirect(url_for('login'))
@@ -294,7 +271,7 @@ def handleEvent_postMsg(json):
             # Check authorized
             grp = groupes[json['room']].toDict()
             if grp != None:
-                if session['id'] in str(grp['id-utilisateurs']): # authorized
+                if ObjectId(session['id']) in grp['id-utilisateurs']: # authorized
                     if json['reponse'] != "None":
                         reponse = ObjectId(json['reponse'])
                     else:
@@ -316,20 +293,13 @@ def handleEvent_postMsg(json):
                         messages[str(_id)].insert()
                         message = messages[str(_id)].toDict()
                     if message:
-                        infogroupes = groupes[json['room']].toDict()
-                        notif("msg", ObjectId(json['room']), _id, list(infogroupes['id-utilisateurs']))
+                        groupe = message['groupe']
+                        notif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
 
-                        infoUtilisateurs = []
-                        for content in infogroupes['id-utilisateurs']:
-                            infoUtilisateurs.append(utilisateurs[str(content)].toDict())
+                        users = groupe['utilisateurs']
 
-                        # Sending new message to connected users
-                        message = messages[str(_id)].toDict()
-                        if message['reponse'] != 'None' and message['reponse'] != '':
-                            message['rep'] = messages[str(message['reponse'])].toDict()
-
-                        ownHTML = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infogroupe=grp, infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
-                        otherHTML = render_template("refreshMessages.html", msg=message, sessionId=None, infogroupe=grp, infoUtilisateurs=infoUtilisateurs, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
+                        ownHTML = render_template("refreshMessages.html", msg=message, sessionId=ObjectId(session['id']), infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
+                        otherHTML = render_template("refreshMessages.html", msg=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
 
                         emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=json['room'])
 
@@ -364,8 +334,7 @@ def supprimerMsg():
     if 'id' in session:
         idGroupe = request.form['grp']
 
-        messages[request.form['msgSuppr']].delete()
-        del messages[request.form['msgSuppr']]
+        messages[request.form['msgSuppr']].suppr()
 
         if request.form['audio'] == 'True':
             MyAudio = DB.db_files.find_one({'filename': request.form['audioName']})
@@ -393,7 +362,7 @@ def createGroupe():
         groupes[str(_id)] = Groupe({'_id': _id, 'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [ObjectId(session['id'])], 'sign':[], 'motif': []})
         groupes[str(_id)].insert()
 
-        return redirect(url_for('page_messages', idGroupe=_id))
+        return redirect(url_for('page_messages', idGroupe=str(_id)))
     else:
         return redirect(url_for('login'))
 
@@ -402,17 +371,17 @@ def updateGroupe():
     global groupes
 
     if 'id' in session:
-        groupe = groupes[request.form['IdGroupe']].toDict()
-        participants = groupe['id-utilisateurs']
+        groupe = groupes[request.form['IdGroupe']]
+        participants = groupe.toDict()['id-utilisateurs']
 
-        if ObjectId(session['id']) in participants and ObjectId(session['id']) in groupe['moderateurs']:
+        if ObjectId(session['id']) in participants and ObjectId(session['id']) in groupe.toDict()['moderateurs']:
             for name, value in request.form.items():
                 if name == 'IdGroupe':
                     pass
                 else:
                     participants.append(ObjectId(name))
-
-            groupes[request.form['IdGroupe']].update()
+            groupe.id_utilisateurs = participants
+            groupe.update()
 
         return redirect(url_for('page_messages', idGroupe=request.form['IdGroupe']))
     else:
@@ -424,9 +393,9 @@ def virerParticipant():
     global groupes
 
     if 'id' in session:
-        groupe = groupes[request.form['idViréGrp']].toDict()
-        participants = groupe['id-utilisateurs']
-        moderateurs = groupe['moderateurs']
+        groupe = groupes[request.form['idViréGrp']]
+        participants = groupe.toDict()['id-utilisateurs']
+        moderateurs = groupe.toDict()['moderateurs']
 
         if ObjectId(session['id']) in moderateurs or request.form['idViré'] == session['id']:
             participants.remove(ObjectId(request.form['idViré']))
@@ -434,12 +403,14 @@ def virerParticipant():
             if ObjectId(request.form['idViré']) in moderateurs:
                 moderateurs.remove(ObjectId(request.form['idViré']))
 
-            groupes[request.form['idViréGrp']].update()
+            groupe.id_utilisateurs = participants
+            groupe.moderateurs = moderateurs
+            groupe.update()
 
             if request.form['idViré'] == session['id']:
                 return redirect(url_for('page_messages'))
             else:
-                return  redirect('/messages/'+request.form['idViréGrp'])
+                return  redirect(url_for('page_messages', idGroupe=request.form['idViréGrp']))
         else:
             return redirect(url_for('accueil'))
     else:
@@ -448,20 +419,22 @@ def virerParticipant():
 @app.route('/modifRole/', methods=['POST'])
 def modifRole():
     if 'id' in session:
-        grp = groupes[request.form['idGrp']].toDict()
-        modos = grp['moderateurs']
-        participants = grp['id-utilisateurs']
+        grp = groupes[request.form['idGrp']]
+        modos = grp.toDict()['moderateurs']
+        participants = grp.toDict()['id-utilisateurs']
 
         if ObjectId(session['id']) in modos and ObjectId(request.form['idModifié']) in participants:
             if ObjectId(request.form['idModifié']) in modos:
                 modos.remove(ObjectId(request.form['idModifié']))
-                groupes[request.form['idGrp']].update()
+                grp.moderateurs = modos
+                grp.update()
 
                 return 'participant'
 
             else:
                 modos.append(ObjectId(request.form['idModifié']))
-                groupes[request.form['idGrp']].update()
+                grp.moderateurs = modos
+                grp.update()
 
                 return 'admin'
         else:
@@ -994,7 +967,7 @@ def signPost():
             if ObjectId(session['id']) in sign:
                 # on supprime son signalement
                 sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item.id == ObjectId(session['id'])), -1)
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
                 del motif[index]
 
             else:
@@ -1064,7 +1037,7 @@ def signPostProfil():
             if ObjectId(session['id']) in sign:
                 # on supprime son signalement
                 sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item.id == ObjectId(session['id'])), -1)
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
                 del motif[index]
 
             else:

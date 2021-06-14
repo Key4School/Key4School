@@ -13,6 +13,49 @@
 
 <body>
   {% include "bandeau.html" %}
+  {%if user['admin']%}
+  <div class="modal" id="suppression" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Supression</p>
+      </header>
+      <form onsubmit="supprimer(event); return false;" id="supprForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type="text" name="motif" placeholder="motif" required />
+          <input type='hidden' id="idSupprimé" name='idSuppr' value="" />
+          <input type='hidden' name="demandeBut" value="Suppr" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">supprimer</button>
+          <button onclick="supprimerClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  <div class="modal" id="validation" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Validation</p>
+      </header>
+      <form onsubmit="valider(event); return false;" id="valForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <select name="motif">
+            <option value="abusif">Signalement abusif</option>
+            <option value="justifie">Justifié</option>
+          </select>
+          <input type='hidden' id="idValidé" name='idVal' value="" />
+          <input type='hidden' name="demandeBut" value="Val" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Valider</button>
+          <button onclick="validerClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  {%endif%}
   <div class="modal" id="signalisation" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">

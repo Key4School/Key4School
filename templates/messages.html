@@ -301,7 +301,7 @@
               {%else%}
               <div class="navbar-dropdown">
               {%endif%}
-                {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT" or user['admin']== "True"%}
+                {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT" or user['admin']== True%}
                 <div class="navbar-item">
                   <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg">
                     <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
@@ -342,7 +342,7 @@
               </div>
             </div>
           </div>
-          {%if "rep" in content%}
+          {%if content['rep'] != None%}
           <div style="background-color:{{session['couleur'][3]}};padding:1%;padding-left:2%;border-left:4px solid {{session['couleur'][0]}};border-radius:5px;margin-top:1%;margin-bottom:2%;padding-right: 100%;">
             {%for users in infoUtilisateurs %}{%if users['_id']==content['rep']['id-utilisateur']%}
             <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['pseudo']}}</a></div>

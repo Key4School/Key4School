@@ -2,7 +2,7 @@
 <html class="has-navbar-fixed-top" lang="fr">
 
 <head>
-  {% include 'filtres.html' with context %}
+  {% include 'head.html' with context %}
   <title>Profil</title>
   <!-- importation du JS pour afficher et enlever les div -->
   <style>
@@ -306,7 +306,7 @@
         Sanction en cours : {{profilUtilisateur['SanctionEnCour']}}, jusqu'au {{profilUtilisateur['SanctionDuree']}}
         {%endif%}
         <br />
-        {%for element in profilUtilisateur['Sanction']%}
+        {%for element in profilUtilisateur['Sanctions']%}
         <ul class="menu-list" style="margin-left:1%;">
           <li><u>Sanction : {{element['SanctionType']}}</u></li>
           <li>
