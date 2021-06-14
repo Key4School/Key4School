@@ -177,7 +177,7 @@ def handleEvent_connectToNotif():
         notifs = [notif.toDict() for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
         for notif in notifs:
             html = render_template("notification.html", notif=notif)
-            emit('newNotif', html, to=str(session['id']))
+            emit('newNotif', html, to=session['id'])
 
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
@@ -187,6 +187,13 @@ def handleEvent_disconnect():
         if session['id'] in clientsNotif:
             clientsNotif.pop(session['id'])
             leave_room(session['id'])
+
+@socketio.on('supprNotif')
+def handleEvent_supprNotif(id):
+    global notifications
+    if 'id' in session:
+        notification = notifications[id]
+        notification.supprUser(ObjectId(session['id']))
 
 
 # laisser le nom entre deux slash ca permet d'accepter toutes les urls du style http://127.0.0.1:3000/messages/ sinon ca marche pas.s
