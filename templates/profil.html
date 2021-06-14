@@ -632,10 +632,10 @@
   </div>
   <!-- Sanctions -->
   <!-- STYLE A FAIRE !!! -->
-  <div style="margin-left:2%;">
+  {%if profilUtilisateur['Sanctions'] %}<div style="margin-left:2%;">
     <div style="font-weight: bold; font-size:large;">Mes sanctions :</div>
     <br />
-    {%for element in profilUtilisateur['Sanction']%}
+    {%for element in profilUtilisateur['Sanctions']%}
     <ul class="menu-list" style="margin-left:1%;">
       <li><u>Sanction : {{element['SanctionType']}}</u></li>
       <li>
@@ -648,6 +648,7 @@
     </ul>
     {%endfor%}
   </div>
+  {%endif%}
   <!-- fin de la page -->
 </body>
 

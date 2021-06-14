@@ -127,7 +127,7 @@
     {%if element['sign']!=[]%}
     <div id="divRep_{{element['_id']}}">
       {{element['contenu']}}
-    </div><button onclick="validationRep('{{element['_id']}}','{{content['_id']}}')" class="button is-success is-outlined">
+    <button onclick="validationRep('{{element['_id']}}','{{content['_id']}}')" class="button is-success is-outlined">
       <span>Valider</span>
       <span class="icon is-small">
         <i class="fas fa-check"></i>
@@ -139,6 +139,7 @@
         <i class="fas fa-times"></i>
       </span>
     </button>
+  </div>
       {%endif%}
     {%endfor%}
 

@@ -994,7 +994,7 @@ def signPost():
             if ObjectId(session['id']) in sign:
                 # on supprime son signalement
                 sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item.id == ObjectId(session['id'])), -1)
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
                 del motif[index]
 
             else:
@@ -1064,7 +1064,7 @@ def signPostProfil():
             if ObjectId(session['id']) in sign:
                 # on supprime son signalement
                 sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item.id == ObjectId(session['id'])), -1)
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
                 del motif[index]
 
             else:
