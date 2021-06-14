@@ -23,6 +23,26 @@
     .logoBouton:hover {
       cursor: pointer;
     }
+    @media screen and (max-width:1023px){
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+      tr {
+        border: 1px solid #ccc;
+        margin-bottom: 5%;
+       }
+      td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 200px;
+      }
+    }
   </style>
 </head>
 
@@ -129,7 +149,7 @@
   <!-- Espace photo de profil -->
     <div style="display: flex;align-items: center;justify-content:space-evenly;">
         <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:80px; height:auto;" />
-      <div style="display: flex;align-items: center;justify-content:center;">
+      <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
         <!-- Barre de progression -->
           <progress class="progress is-info" value="70" max="100" style="width:250px;">70%</progress>
           &nbsp;&nbsp;&nbsp;&nbsp;
@@ -139,7 +159,7 @@
     </div>
   </div>
   <br /><br /><br />
-  <div align="center">
+  <div align="center" style="margin:0% 2%;">
     <!-- Début informations -->
     <div>
       <!-- Informations puliques -->
