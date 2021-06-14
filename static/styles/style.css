@@ -42,6 +42,9 @@
     padding:3%;
     margin-right:2%;
   }
+  .divQuestion{
+    margin: 0% 2%;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
