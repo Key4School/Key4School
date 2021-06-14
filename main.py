@@ -1254,11 +1254,11 @@ def connexion():
 
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
-                u = utilisateurs[user['_id']]
+                u = utilisateurs[str(user['_id'])]
                 u.SanctionEnCour = ''
                 u.SanctionDuree = ''
 
-                utilisateurs[user['_id']].update()
+                utilisateurs[str(user['_id'])].update()
 
         return redirect(url_for('accueil'))
 
