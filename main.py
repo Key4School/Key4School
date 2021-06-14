@@ -71,7 +71,7 @@ def addXP(userID: str, amount: int) -> None:
 
     return
 
-def addXpModeration(user: str, amount: int) -> None:
+def addXpModeration(userID: str, amount: int) -> None:
     global utilisateurs
 
     user = utilisateurs[userID]
@@ -218,25 +218,28 @@ def page_messages(idGroupe):
         users = sorted([u.toDict() for u in utilisateurs.values()], key = lambda u: u['pseudo'])
 
         if idGroupe != None:
-            msgDb = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(idGroupe)]
-            toDel = []
-
-            for m in msgDb:
-                if m['reponse'] != 'None' and m['reponse'] != '':
-                    toDel.append(messages[str(m['reponse'])].toDict())
-                    m['rep'] = messages[str(m['reponse'])].toDict()
-            for a in toDel:
-                msgDb.remove(a)
-
             infogroupes = groupes[idGroupe].toDict()
             infoUtilisateurs = [utilisateurs[str(content)].toDict() for content in infogroupes['id-utilisateurs']]
+            if ObjectId(session['id']) in infogroupes['id-utilisateurs']:
+                msgDb = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(idGroupe)]
+                toDel = []
 
-            danslegroupe = False
-            for user in infoUtilisateurs:
-                if ObjectId(session['id']) == user['_id']:
-                    danslegroupe = True
+                for m in msgDb:
+                    if m['reponse'] != 'None' and m['reponse'] != '':
+                        toDel.append(messages[str(m['reponse'])].toDict())
+                        m['rep'] = messages[str(m['reponse'])].toDict()
+                for a in toDel:
+                    msgDb.remove(a)
 
-            if user['admin'] == True:
+                infogroupes = groupes[idGroupe].toDict()
+                infoUtilisateurs = [utilisateurs[str(content)].toDict() for content in infogroupes['id-utilisateurs']]
+
+                danslegroupe = False
+                for user in infoUtilisateurs:
+                    if ObjectId(session['id']) == user['_id']:
+                        danslegroupe = True
+
+            elif user['admin'] == True:
                 msgDb = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(idGroupe) and m.sign != []]
                 toDel = []
 
@@ -246,6 +249,11 @@ def page_messages(idGroupe):
                         m['rep'] = messages[str(m['reponse'])].toDict()
                 for a in toDel:
                     msgDb.remove(a)
+
+            else:
+                msgDb = None
+                infogroupes = None
+                infoUtilisateurs = None
 
         else:
             msgDb = None
@@ -861,8 +869,18 @@ def administration():
 
                 elif request.form['demandeBut'] == 'Val':
                     demande = demandes_aide[request.form['idVal']]
-                    demande.sign = []
-                    demande.motif = []
+                    sign = demande.sign
+                    if request.form['motif'] == "abusif":
+                        for content in sign:
+                            if "/" not in str(content):
+                                addXpModeration(str(content), 5)
+                    motif = demande.motif
+                    for i in range (len(sign)):
+                        if "/" not in str(sign[i]):
+                            del sign[i]
+                    for a in range (len(motif)):
+                        if "/" not in str(motif[a]):
+                            del motif[a]
 
                     demandes_aide[request.form['idVal']].update()
 
