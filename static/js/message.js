@@ -24,12 +24,14 @@ $(document).ready(function() {
   $('#inputMsg').focus();
 });
 
-const scroll = () => {
-  const messagesDiv = document.getElementById('messages');
-  const scrollHeight = messagesDiv.scrollHeight;
+window.onload = function(){
+  const scroll = () => {
+    const messagesDiv = document.getElementById('messages');
+    const scrollHeight = messagesDiv.scrollHeight;
 
-  return messagesDiv.scrollBy(0, scrollHeight);
-};
+    return messagesDiv.scrollBy(0, scrollHeight);
+  };
+}
 
 function divnewgroupopen() {
   $("#newgrou").addClass("is-active");
@@ -102,11 +104,11 @@ socket.on('newMsg', (data) => {
   console.log(data);
   var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
 
-  if(data.fromUser == idUser) 
+  if(data.fromUser == idUser)
     $('#messages').append(data.ownHTML); // on veut ajouter les nouveaux messages au début du bloc #messages
   else
     $('#messages').append(data.otherHTML); // on veut ajouter les nouveaux messages au début du bloc #messages
-  
+
   if ($('#messages').scrollTop() >= scrollHeight){
     scroll();
   }
