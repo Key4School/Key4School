@@ -26,6 +26,7 @@ $(document).ready(function() {
 
 const scroll = () => {
   const messagesDiv = document.getElementById('messages');
+  // peut entrainer une erreur mais cela n'empeche pas l'éxécution du script
   const scrollHeight = messagesDiv.scrollHeight;
 
   return messagesDiv.scrollBy(0, scrollHeight);
