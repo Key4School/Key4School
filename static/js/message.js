@@ -24,14 +24,12 @@ $(document).ready(function() {
   $('#inputMsg').focus();
 });
 
-window.onload = function(){
-  const scroll = () => {
-    const messagesDiv = document.getElementById('messages');
-    const scrollHeight = messagesDiv.scrollHeight;
+const scroll = () => {
+  const messagesDiv = document.getElementById('messages');
+  const scrollHeight = messagesDiv.scrollHeight;
 
-    return messagesDiv.scrollBy(0, scrollHeight);
-  };
-}
+  return messagesDiv.scrollBy(0, scrollHeight);
+};
 
 function divnewgroupopen() {
   $("#newgrou").addClass("is-active");
@@ -101,7 +99,6 @@ socket.on('connect', function() {
 });
 
 socket.on('newMsg', (data) => {
-  console.log(data);
   var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
 
   if(data.fromUser == idUser)
