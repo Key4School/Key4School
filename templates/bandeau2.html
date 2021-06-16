@@ -28,17 +28,21 @@
       <progress class="progress is-link" value="70" max="100">70%</progress>
       </div> -->
       <!-- Partie droite de la barre de navigation -->
+      {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
       <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%;" >
         <a class="navbar-item" href="{{url_for('question')}}">
           <i style="color: black; font-size:20px;" class="fas fa-question"></i>
           &nbsp;&nbsp;Poser une question
         </a>
       </div>
+      {%endif%}
+      {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
       <div class="navbarhover questionNavbarTel" style="margin:auto;padding:0.5%;" >
         <a class="navbar-item" href="{{url_for('question')}}">
         <i style="color: black; font-size:20px;" class="fas fa-question"></i>
         </a>
       </div>
+      {%endif%}
 
     <div class="navbar-end">
       <!-- Début notifications -->
@@ -71,13 +75,6 @@
             <i style="color: black; font-size:20px;" class="fas fa-home"></i>
             &nbsp;&nbsp;Accueil
           </a>
-          <!-- Question -->
-          {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
-          <a class="navbar-item" href="{{url_for('question')}}">
-            <i style="color: black; font-size:20px;" class="fas fa-question"></i>
-            &nbsp;&nbsp;Poser une question
-          </a>
-          {%endif%}
           <!-- Messages privés -->
           <a class="navbar-item" href="{{url_for('page_messages')}}">
             <i style="color: black; font-size:20px;" class="fas fa-envelope"></i>
