@@ -2,9 +2,9 @@
 <nav class="navbar is-fixed-top" role="navigation" aria-label="dropdown navigation" style="background-color:{{session['couleur'][0]}}; padding-bottom:5px;">
   <div id="navbar" class="navbar-menu" style="display:flex;">
     <!-- Partie gauche de la barre de navigation -->
-    <div class="navbar-start" style="margin-right: 14%;" >
+    <div class="navbar-start navbarStart" >
       <!-- Début menu déroulant -->
-      <img class="logo" src="static/image/logo/logo_bleu.png" style="border:2px solid white;" />
+      <img class="logo" src="static/image/logo/logo_bleu_sans_bordure.png" />
       <p class="key4schoolNavbar" style="font-weight:bold;font-size:25px;margin:auto;font-family: 'Comic Sans MS', cursive, sans-serif;">
         KEY4SCHOOL
       </p>
@@ -16,7 +16,7 @@
         <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
         <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
       </form>
-      <button onclick="recherche()" class="telRecherche" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
+      <button onclick="recherche()" class="telRecherche" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}};font-size: 20px;margin:auto;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
       {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;margin-top: 1%;">mode spectateur</div>{%endif%}
       <!-- Profil -->
       <!-- <a href="{{url_for('profil')}}">
@@ -32,7 +32,7 @@
           &nbsp;&nbsp;Poser une question
         </a>
       </div>
-      <div class="navbarhover questionNavbarTel" style="margin-top: 3%;margin-right:10%;padding:0.5%;" >
+      <div class="navbarhover questionNavbarTel" style="margin:auto;padding:0.5%;" >
         <a class="navbar-item" href="{{url_for('question')}}">
         <i style="color: black; font-size:20px;" class="fas fa-question"></i>
         </a>
