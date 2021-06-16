@@ -4,10 +4,12 @@
     <!-- Partie gauche de la barre de navigation -->
     <div class="navbar-start navbarStart" >
       <!-- Début menu déroulant -->
-      <img class="logo" src="static/image/logo/logo_bleu_sans_bordure.png" />
-      <p class="key4schoolNavbar" style="font-weight:bold;font-size:25px;margin:auto;font-family: 'Comic Sans MS', cursive, sans-serif;">
-        KEY4SCHOOL
-      </p>
+      <a href="{{url_for('accueil')}}" style="display:flex;">
+        <img class="logo" src="static/image/logo/logo_bleu_sans_bordure.png" />
+        <p class="key4schoolNavbar" style="color:black;font-weight:bold;font-size:25px;margin:auto;font-family: 'Comic Sans MS', cursive, sans-serif;">
+          KEY4SCHOOL
+        </p>
+      </a>
     </div>
     <!-- Fin menu déroulant -->
 
