@@ -19,7 +19,7 @@
 <script type="text/javascript" src="/static/js/bandeau.js"></script>
 <script src="{{url_for('static',filename='js/rep.js')}}" type="text/javascript"></script>
 <script src="{{url_for('static',filename='js/profil.js')}}" type="text/javascript"></script>
-<link rel="icon" href="static/image/logo/logo_bleu.png" />
+<link rel="icon" href="{{url_for('static',filename='image/logo/logo_bleu_sans_bordure.png')}}" />
 <style>
   .navbarhover:hover{
     background:{{session['couleur'][2]}};
