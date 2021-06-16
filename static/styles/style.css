@@ -32,7 +32,7 @@
   .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel{
     display:block;
   }
-  .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar{
+  .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre{
     display:none;
   }
   .selectProfil{
@@ -51,6 +51,17 @@
     margin-top: 13%;
     margin-left: 13%;
   }
+  .filtreTelOrdi{
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  #filters-container::-webkit-scrollbar {
+    display: none;
+  }
+  .listeMatiereFiltre{
+    width: 100%;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
@@ -60,7 +71,7 @@
   .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi, .ordiFlexTelBlock{
     display:flex;
   }
-  .selectMatiereOrdi, .questionNavbarOrdi, .key4schoolNavbar{
+  .selectMatiereOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre{
     display:block;
   }
   .ChoixCouleur{
@@ -84,5 +95,8 @@
   }
   .navbarStart{
     margin-right: 14%;
+  }
+  .listeMatiereFiltre{
+     width: calc(100% - 100px);
   }
 }
