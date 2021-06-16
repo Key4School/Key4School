@@ -32,7 +32,7 @@
   .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel{
     display:block;
   }
-  .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi{
+  .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar{
     display:none;
   }
   .selectProfil{
@@ -45,6 +45,12 @@
   .divQuestion{
     margin: 0% 2%;
   }
+  .logo{
+    height: 40px;
+    width: 40px;
+    margin-top: 13%;
+    margin-left: 13%;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
@@ -54,7 +60,7 @@
   .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi, .ordiFlexTelBlock{
     display:flex;
   }
-  .selectMatiereOrdi, .questionNavbarOrdi{
+  .selectMatiereOrdi, .questionNavbarOrdi, .key4schoolNavbar{
     display:block;
   }
   .ChoixCouleur{
@@ -68,5 +74,12 @@
     padding:1%;
     margin-left:20%;
     margin-right:20%;
+  }
+  .logo{
+    width:40px;
+    height:40px;
+    margin-left:5%;
+    margin-right:5%;
+    margin-top:5%;
   }
 }
