@@ -23,11 +23,11 @@
 * Couleur 3 : ![#a0ff94](https://via.placeholder.com/15/a0ff94/000000?text=+) `#a0ff94`
 * Moyenne: ![#d6ffd3](https://via.placeholder.com/15/d6ffd3/000000?text=+) `#d6ffd3`
 
-**Palette  (nuance de rose)**
+<!-- **Palette  (nuance de rose)**
 * Couleur 1 : ![#ce14db](https://via.placeholder.com/15/ce14db/000000?text=+) `#ce14db`
 * Couleur 2 : ![#eca8ff](https://via.placeholder.com/15/eca8ff/000000?text=+) `#eca8ff`
 * Couleur 3 : ![#f894ff](https://via.placeholder.com/15/f894ff/000000?text=+) `#f894ff`
-* Moyenne: ![#f5d3ff](https://via.placeholder.com/15/f5d3ff/000000?text=+) `#f5d3ff`
+* Moyenne: ![#f5d3ff](https://via.placeholder.com/15/f5d3ff/000000?text=+) `#f5d3ff` -->
 
 **Palette  (nuance de orange)**
 * Couleur 1 : ![#ffbb00](https://via.placeholder.com/15/ffbb00/000000?text=+) `#ffbb00`
@@ -41,13 +41,13 @@
 * Couleur 3 : ![#afe2e7](https://via.placeholder.com/15/afe2e7/000000?text=+) `#afe2e7`
 * Moyenne: ![#f9d3d9](https://via.placeholder.com/15/f9d3d9/000000?text=+) `#f9d3d9`
 
-**Palette 2 (vert foncé, vert clair, rouge foncé)**
+<!-- **Palette 2 (vert foncé, vert clair, rouge foncé)**
 * Couleur 1 : ![#4c7450](https://via.placeholder.com/15/4c7450/000000?text=+) `#4c7450`
 * Couleur 2 : ![#a8d7ad](https://via.placeholder.com/15/a8d7ad/000000?text=+) `#a8d7ad`
 * Couleur 3 : ![#c3455a](https://via.placeholder.com/15/c3455a/000000?text=+) `#c3455a`
-* Moyenne: ![#d4ebd6](https://via.placeholder.com/15/d4ebd6/000000?text=+) `#d4ebd6`
+* Moyenne: ![#d4ebd6](https://via.placeholder.com/15/d4ebd6/000000?text=+) `#d4ebd6` -->
 
-**Palette 3 (bleu foncé, bleu clair, rose clair)**
+<!-- **Palette 3 (bleu foncé, bleu clair, rose clair)**
 * Couleur 1 : ![#3f51b5](https://via.placeholder.com/15/3f51b5/000000?text=+) `#3f51b5`
 * Couleur 2 : ![#81c5e2](https://via.placeholder.com/15/81c5e2/000000?text=+) `#81c5e2`
 * Couleur 3 : ![#e6b2d9](https://via.placeholder.com/15/e6b2d9/000000?text=+) `#e6b2d9`
@@ -58,7 +58,7 @@
 * Couleur 1 : ![#e6b991](https://via.placeholder.com/15/e6b991/000000?text=+) `#e6b991`
 * Couleur 2 : ![#d6c2b0](https://via.placeholder.com/15/d6c2b0/000000?text=+) `#d6c2b0`
 * Couleur 3 : ![#74b3ab](https://via.placeholder.com/15/74b3ab/000000?text=+) `#74b3ab`
-* Moyenne: ![#ebe1d8](https://via.placeholder.com/15/ebe1d8/000000?text=+) `#ebe1d8`
+* Moyenne: ![#ebe1d8](https://via.placeholder.com/15/ebe1d8/000000?text=+) `#ebe1d8` -->
 
 **Palette 5 (moutarde, beige foncé, rose un peu pétant mais pas trop)**
 * Couleur 1 : ![#deb72f](https://via.placeholder.com/15/deb72f/000000?text=+) `#deb72f`
