@@ -53,11 +53,7 @@
           &nbsp;&nbsp;Poser une question
         </a>
       </div>
-      <div class="navbarhover questionNavbarTel" style="margin-top: 3%;margin-right:10%;padding:0.5%;" >
-        <a class="navbar-item" href="{{url_for('question')}}">
-        <i style="color: black; font-size:20px;" class="fas fa-question"></i>
-        </a>
-      </div>
+
       <!-- Recherche -->
       <form class="formOrdi" action="{{url_for('recherche')}}" method="GET" style="margin-left:5%;margin-top: 0.5%; width: 40%;align-items:center;">
         <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
@@ -73,6 +69,11 @@
       <progress class="progress is-link" value="70" max="100">70%</progress>
       </div> -->
       <!-- Partie droite de la barre de navigation -->
+      <div class="navbarhover questionNavbarTel" style="margin-top: 3%;margin-right:10%;padding:0.5%;" >
+        <a class="navbar-item" href="{{url_for('question')}}">
+        <i style="color: black; font-size:20px;" class="fas fa-question"></i>
+        </a>
+      </div>
 
 
     <div class="navbar-end">

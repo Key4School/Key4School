@@ -1,10 +1,10 @@
 <div id="filters" data-userColor2="{{session['couleur'][2]}}" style="z-index: 2;background-color: {{session['couleur'][0]}}; width: 100%; height: 50px; padding-left: 20px; padding-right: 20px; display: flex; flex-direction: row; justify-content: space-between;">
   <br />
-  <div class="filter-arrow" style="position: relative; height: 100%; width: 50px; color: black; cursor: pointer;" onclick="filters_slide('left');">
+  <div class="filter-arrow flecheFiltre" style="position: relative; height: 100%; width: 50px; color: black; cursor: pointer;" onclick="filters_slide('left');">
     <span class="chevron" style="font-size: 30px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"><i class="fas fa-chevron-left"></i></span>
   </div>
-  <div style="position: relative; width: calc(100% - 100px); overflow: hidden; padding-left: 20px;">
-    <div id="filters-container" style="position: absolute; left: 0; top: 10%; height: 80%; display: flex; flex-direction: row; transition: left .5s;">
+  <div class="listeMatiereFiltre" style="position: relative;overflow: hidden; padding-left: 20px;">
+    <div id="filters-container" class="filtreTelOrdi" style="left:0;position: absolute; top: 10%; height: 80%; display: flex; flex-direction: row; transition: left .5s;">
       <div style="position: relative; height: 100%; width: 20px;"></div>
       <div class="filter" style="position: relative; height: 100%; margin-right: 20px;" data-subject="everything">
         <button class="button" style="background-color:{{session['couleur'][2]}};" onclick="filter(this);">Toutes</button>
@@ -242,7 +242,7 @@
 
     </div>
   </div>
-  <div class="filter-arrow" style="position: relative; height: 100%; width: 50px; color: black; cursor: pointer;" onclick="filters_slide('right');">
+  <div class="filter-arrow flecheFiltre" style="position: relative; height: 100%; width: 50px; color: black; cursor: pointer;" onclick="filters_slide('right');">
     <span class="chevron" style="font-size: 30px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"><i class="fas fa-chevron-right"></i></span>
   </div>
 </div>

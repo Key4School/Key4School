@@ -1,65 +1,166 @@
-<nav class="navbar is-fixed-top" style="background-color:{{session['couleur']}}; height: 90px; border: 2px solid black;">
-
-    <a class="navbar-item" href="{{url_for('accueil')}}" style="width: 15%; font-size: 20px; color: black;">
-      <img src="/static/image/logo.png" style="width:40%;">
-      <span style="width:60%;">Key4School</span>
-    </a>
-
-    {%if user['SanctionEnCour'] == "Spec"%}
-      <div style="color: red; width: 10%;">mode spectateur</div>
-      {%else%}
-      <div class="navbar-item" style="width: 10%;"></div>
-    {%endif%}
-
-    <form class="navbar-item" action="{{url_for('recherche')}}" method="GET" style="margin-top: 2px; width: 50%;">
-      <input type="text" name="search" placeholder="Rechercher un sujet..." style="width: 60%; height: 60%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
-      <button type="submit" style="background-color:{{session['couleur']}}; border: 1px solid {{session['couleur']}}; font-size: 20px;margin-right:10%;"><i class="fas fa-search logoBouton"></i></button>
-    </form>
-
-    <div class="tabs is-centered is-boxed is-medium" style="width: 25%;">
-      <ul>
-        <li>
-          <a>
-            <!-- lien vers les notifications -->
-            <span onclick="remove();" class="icon is-medium"><i class="fas fa-bell" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
-          </a>
-        </li>
-        <li>
-          <a href="{{url_for('messages')}}">
-            <!-- lien vers les messages privés -->
-            <span class="icon is-medium"><i class="fas fa-envelope" aria-hidden="true" style="color: black; font-size:30px;"></i></span>
-          </a>
-        </li>
-        <li>
-          <a href="{{url_for('profil')}}">
-            <!-- lien vers le profil -->
-            <span class="icon is-medium">
-              <i class="fas fa-user-circle" aria-hidden="true" style="color: black; font-size:30px;"></i>
-            </span>
-          </a>
-        </li>
-        {%if user['admin']== true%}
-        <li>
-            <a href="{{url_for('administration')}}">
-              <span class="icon is-medium">
-                <i class="fas fa-user-shield" aria-hidden="true" style="color: black; font-size:30px;"></i>
-              </span>
-            </a>
-        </li>
+<!-- Début barre de navigation -->
+<nav class="navbar is-fixed-top" role="navigation" aria-label="dropdown navigation" style="background-color:{{session['couleur'][0]}}; padding-bottom:5px;">
+  <div id="navbar" class="navbar-menu" style="display:flex;">
+    <!-- Partie gauche de la barre de navigation -->
+    <div class="navbar-start navbarStart" >
+      <!-- Début menu déroulant -->
+      <a href="{{url_for('accueil')}}" style="display:flex;">
+        <img class="logo" src="
+        {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}
+        {{url_for('static',filename='image/logo/logo_bleu_sans_bordure.png')}}
         {%endif%}
-      </ul>
+        {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}
+        {{url_for('static',filename='image/logo/logo_nuances_rouge.png')}}
+        {%endif%}
+        {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}
+        {{url_for('static',filename='image/logo/logo_nuances_vert.png')}}
+        {%endif%}
+        {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}
+        {{url_for('static',filename='image/logo/logo_nuances_orange.png')}}
+        {%endif%}
+        {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}
+        {{url_for('static',filename='image/logo/logo_bleuframboise.png')}}
+        {%endif%}
+        {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+        {{url_for('static',filename='image/logo/logo_rosepetantmoutarde.png')}}
+        {%endif%}
+        {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+        session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+        session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+        session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+        session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+        session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+        {{url_for('static',filename='image/logo/cle_blanche.png')}}
+        {%endif%}
+        "
+        style="
+        {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+        session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+        session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+        session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+        session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+        session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+
+        background: linear-gradient(to bottom right, {{session['couleur'][0]}}, {{session['couleur'][1]}}, {{session['couleur'][2]}});{%endif%}border-radius: 8px;
+        "
+         />
+        <span class="key4schoolNavbar" style="color:black;font-weight:bold;font-size:30px;margin:auto;">
+          <p style="font-family: 'Roboto', sans-serif;">
+            Key
+          </p>
+          <p style="font-family: 'M PLUS Rounded 1c', sans-serif;">
+            4
+          </p>
+          <p style="font-family: 'Rochester', cursive;">
+            School
+          </p>
+        </span>
+      </a>
     </div>
+    <!-- Fin menu déroulant -->
+
+      <!-- Recherche -->
+      <form class="formOrdi" action="{{url_for('recherche')}}" method="GET" style="margin-left:5%;margin-top: 0.5%; width: 40%;align-items:center;">
+        <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
+        <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}};font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
+      </form>
+      <button onclick="recherche()" class="telRecherche" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}};font-size: 20px;margin:auto;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
+      {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;margin-top: 1%;">mode spectateur</div>{%endif%}
+      <!-- Profil -->
+      <!-- <a href="{{url_for('profil')}}">
+        <i style="color:black;font-size:30px;margin-top:40%;" class="fas fa-user-circle"></i>
+      </a>
+      <div style="width:20%; margin-top: 10px; padding:10px;">
+      <progress class="progress is-link" value="70" max="100">70%</progress>
+      </div> -->
+      <!-- Partie droite de la barre de navigation -->
+      {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
+      <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%;" >
+        <a class="navbar-item" href="{{url_for('question')}}">
+          <i style="color: black; font-size:20px;" class="fas fa-question"></i>
+          &nbsp;&nbsp;Poser une question
+        </a>
+      </div>
+      {%endif%}
+      {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
+      <div class="navbarhover questionNavbarTel" style="margin:auto;padding:0.5%;" >
+        <a class="navbar-item" href="{{url_for('question')}}">
+        <i style="color: black; font-size:20px;" class="fas fa-question"></i>
+        </a>
+      </div>
+      {%endif%}
+
+    <div class="navbar-end">
+      <!-- Début notifications -->
+      <div class="navbar-item has-dropdown is-hoverable navbarhover">
+        <a class="navbar-link">
+          <i style="color: black; font-size:30px;" class="fas fa-bell"></i>
+          <p id="nbNotif" style="color:black;margin-left: -17%;border-radius: 50%;padding-left: 8px;padding-right: 8px;background-color: red;"></p>
+        </a>
+        <!-- Notifications -->
+        <div class="navbar-dropdown is-right" style="width: 300%;max-height:500px;overflow-y: auto;" id="notifContent">
+          <!-- NE PAS SUPPRIMER contenu notif -->
+          <p style="width: 60%;margin: auto;margin-top: 5%;"id="noNotif">Aucune notification</p>
+          <button  style="margin-left:2%;" onclick="allSuppr()" id="toutLu" class="button is-small is-info is-outlined">
+            <span>Tout marquer comme lu</span>
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+          </button>
+          <br />
+        </div>
+      </div>
+      <div class="navbar-item has-dropdown is-hoverable navbarhover">
+        <a class="navbar-link">
+          <i style="color: black; font-size:30px;" class="fas fa-bars"></i>
+        </a>
+        <!-- Pages du menu -->
+        <div class="navbar-dropdown is-boxed is-right">
+          <!-- Accueil -->
+          <a class="navbar-item" href="{{url_for('accueil')}}">
+            <i style="color: black; font-size:20px;" class="fas fa-home"></i>
+            &nbsp;&nbsp;Accueil
+          </a>
+          <!-- Messages privés -->
+          <a class="navbar-item" href="{{url_for('page_messages')}}">
+            <i style="color: black; font-size:20px;" class="fas fa-envelope"></i>
+            &nbsp;&nbsp;Messages privés
+          </a>
+          {%if user['admin']== true%}
+          <a class="navbar-item" href="{{url_for('administration')}}">
+            <i style="color: black; font-size:20px;" class="fas fa-user-shield"></i>
+            &nbsp;&nbsp;Administration
+          </a>
+          {%endif%}
+          <!-- Barre de division -->
+          <hr class="navbar-divider">
+          <!-- Profil + Préférences -->
+          <a class="navbar-item" href="{{url_for('profil')}}">
+            <i style="color: black; font-size:20px;" class="fas fa-user-circle"></i>
+            &nbsp;&nbsp;Profil et préférences
+          </a>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="rechercheTel" style="
+    left: 0;
+    padding: 1rem;
+    position: fixed;
+    right: 0;
+    top: 3.25rem;
+    /* z-index: 100; */
+    background-color: {{session['couleur'][0]}};;
+    box-shadow: ;
+    box-shadow: 0 0.5em 1em {{session['couleur'][0]}};
+    display: none;">
+    <form action="/recherche" method="GET" style="/* margin-top: 2px; *//* width: 40%; */display:flex;">
+      <input type="text" name="search" placeholder="Recherche..." style="width: 80%;height: 80%;border-radius: 4px;border: none;outline: none;padding: 2%;padding-left: 8px;" spellcheck="false" data-ms-editor="true">
+      <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i style="color: black;" class="fas fa-search logoBouton" aria-hidden="true"></i></button>
+    </form>
+  </div>
 
 </nav>
-
-<div id="bandeauDroite" style="display:none;position: fixed; right: 0; top: 90px;width: 20%; height: 100%; background-color:{{session['couleur']}}; border-left: 2px solid black;">
-  <!-- Question -->
-  {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
-    <a class="navbar-item" href="{{url_for('question')}}" style="color: black; background-color: ghostwhite; border: 1px solid; border-radius: 10px;">
-    <i style="color: black; font-size:20px;" class="fas fa-question"></i>
-    &nbsp;&nbsp;Je me pose une question
-    </a>
-  {%endif%}
-
-    {{ variable_test }}
-</div>
+<!-- Fin barre de navigation -->
