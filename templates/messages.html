@@ -282,7 +282,6 @@
         {% for content in msgDb%}
           {% include "widget_message.html" %}
         {%endfor%}
-
           {% endif %}
 
         </div>
@@ -330,6 +329,10 @@
             </div>
           </div>
           {%endif%}
+          {%else%}
+          <div>
+            test
+          </div>
           {%endif%}
           <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
         </div>
