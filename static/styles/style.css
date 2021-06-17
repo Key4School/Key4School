@@ -68,10 +68,10 @@
   .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel{
     display:none;
   }
-  .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi, .ordiFlexTelBlock{
+  .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi, .ordiFlexTelBlock, .key4schoolNavbar{
     display:flex;
   }
-  .selectMatiereOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre{
+  .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre{
     display:block;
   }
   .ChoixCouleur{
