@@ -565,10 +565,10 @@ def updateprofile():
 
         notifs = {}
         if request.form['notifs_demandes'] == 'yes':
-            notifs['demandes'] = True 
+            notifs['demandes'] = True
         else:
             notifs['demandes'] = False
-        if request.form['notifs_messages'] == 'yes': 
+        if request.form['notifs_messages'] == 'yes':
             notifs['messages'] = True
         else:
             notifs['messages'] = False
@@ -1273,6 +1273,7 @@ def connexion():
     """
     ENT_reply = OAuth2Session(client_id, token=session['oauth_token'])
     data = ENT_reply.get('https://ent.iledefrance.fr/auth/oauth2/userinfo').json()
+    data_plus = ENT_reply.get('https://ent.iledefrance.fr/directory/myinfos').json()
 
     user = [u.toDict() for u in utilisateurs.values() if u.idENT == data['userId']]
     if len(user) > 0:
@@ -1286,32 +1287,39 @@ def connexion():
         session['couleur'] = user['couleur']
         session['type'] = user['type']
 
+        u = utilisateurs[str(user['_id'])]
         if user['SanctionEnCour'] != "":
             if user['SanctionDuree'] < datetime.now():
-                u = utilisateurs[str(user['_id'])]
                 u.SanctionEnCour = ''
                 u.SanctionDuree = ''
 
-                utilisateurs[str(user['_id'])].update()
+        u.classe = data_plus['classes'][0].split('$')[1]
+        if data_plus['email'] != '':
+            u.email = data_plus['email']
+        if data_plus['mobile'] != '':
+            u.telephone = data_plus['mobile']
+        elif data_plus['homePhone'] != '':
+            u.telephone = data_plus['homePhone']
+        if data_plus['emailInternal'] != '':
+            u.emailENT = data_plus['emailInternal']
+        utilisateurs[str(user['_id'])].update()
 
         return redirect(url_for('accueil'))
 
     else:
         if data['type'] == "ELEVE":
-            if data['level'] == 'PREMIERE GENERALE & TECHNO YC BT':
-                classe = '1G'
-            elif data['level'] == 'SECONDE GENERALE & TECHNO YC BT':
-                classe = '2GT'
-            elif data['level'] == 'TERMINALE GENERALE & TECHNO YC BT':
-                classe = 'TG'
-            else:
-                classe = data['level']
-
+            classe = data_plus['classes'][0].split('$')[1]
             pseudo = (data['username'].lower()).replace(' ', '_')
+            if data_plus['mobile'] != "":
+                tel = data_plus['mobile']
+            else:
+                tel = data_plus['homePhone']
 
             _id = ObjectId()
-            utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(), "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe,
-                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+            utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(),
+                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'],
+                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [],
+                                        'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             utilisateurs[str(_id)].insert()
 
             user = utilisateurs[str(_id)].toDict()
@@ -1324,10 +1332,15 @@ def connexion():
 
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
+            if data_plus['mobile'] != "":
+                tel = data_plus['mobile']
+            else:
+                tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
+                'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             utilisateurs[str(_id)].insert()
 
             user = utilisateurs[str(_id)]
@@ -1340,7 +1353,7 @@ def connexion():
             return redirect(url_for('profil'))
 
         else:
-            return redirect("https://ent.iledefrance.fr/auth/login")
+            return redirect("https://ent.iledefrance.fr/timeline/timeline")
 
 
 if __name__ == "__main__":
