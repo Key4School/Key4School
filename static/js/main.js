@@ -1,4 +1,7 @@
 $(document).ready(function() {
+  // redirection to HTTPS
+  if(document.location.host === 'key4school.herokuapp.com' && document.location.protocol === 'http:')
+    document.location.href = document.location.href.replace(/^http/, 'https');
 
   // Check for click events on the navbar burger icon
   $(".navbar-burger").click(function() {
