@@ -62,7 +62,7 @@
       <!-- Recherche -->
       <form class="formOrdi" action="{{url_for('recherche')}}" method="GET" style="margin-left:5%;margin-top: 0.5%; width: 40%;align-items:center;">
         <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
-        <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
+        <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}};font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
       </form>
       <button onclick="recherche()" class="telRecherche" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}};font-size: 20px;margin:auto;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
       {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;margin-top: 1%;">mode spectateur</div>{%endif%}
