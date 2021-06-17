@@ -5,7 +5,44 @@
     <div class="navbar-start navbarStart" >
       <!-- Début menu déroulant -->
       <a href="{{url_for('accueil')}}" style="display:flex;">
-        <img class="logo" src="{{url_for('static',filename='image/logo/logo_bleu_sans_bordure.png')}}" />
+        <img class="logo" src="
+        {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}
+        {{url_for('static',filename='image/logo/logo_bleu_sans_bordure.png')}}
+        {%endif%}
+        {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}
+        {{url_for('static',filename='image/logo/logo_nuances_rouge.png')}}
+        {%endif%}
+        {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}
+        {{url_for('static',filename='image/logo/logo_nuances_vert.png')}}
+        {%endif%}
+        {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}
+        {{url_for('static',filename='image/logo/logo_nuances_orange.png')}}
+        {%endif%}
+        {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}
+        {{url_for('static',filename='image/logo/logo_bleuframboise.png')}}
+        {%endif%}
+        {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+        {{url_for('static',filename='image/logo/logo_rosepetantmoutarde.png')}}
+        {%endif%}
+        {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+        session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+        session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+        session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+        session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+        session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+        {{url_for('static',filename='image/logo/cle.png')}}
+        {%endif%}
+        "
+        {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+        session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+        session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+        session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+        session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+        session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+          style="
+        background: linear-gradient(to bottom right, {{session['couleur'][0]}}, {{session['couleur'][1]}}, {{session['couleur'][2]}});
+        "
+        {%endif%} />
         <p class="key4schoolNavbar" style="color:black;font-weight:bold;font-size:25px;margin:auto;font-family: 'Comic Sans MS', cursive, sans-serif;">
           KEY4SCHOOL
         </p>
