@@ -5590,7 +5590,7 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
 }
 
 .navbar-item, .navbar-link {
-  color: #4a4a4a;
+  color: black;
   display: block;
   line-height: 1.5;
   padding: .5rem .75rem;
