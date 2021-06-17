@@ -173,6 +173,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 		self.elementPrive = params['elementPrive']
 		self.caractere = params.get('caractere')
 		self.email = params.get('email', '')
+		self.emailENT = params.get('emailENT', '')
 		self.interets = params.get('interets', '')
 		self.telephone = params.get('telephone', '')
 		self.sign = params.get('sign', [])
@@ -212,6 +213,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 	        'elementPrive': self.elementPrive,
 	        'caractere': self.caractere,
 	        'email': self.email,
+			'emailENT': self.emailENT,
 	        'interets': self.interets,
 	        'telephone': self.telephone,
 	        'sign': self.sign,
@@ -247,6 +249,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 	        'elementPrive': self.elementPrive,
 	        'caractere': self.caractere,
 	        'email': self.email,
+			'emailENT': self.emailENT,
 	        'interets': self.interets,
 	        'telephone': self.telephone,
 	        'sign': self.sign,
