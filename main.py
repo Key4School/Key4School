@@ -565,10 +565,10 @@ def updateprofile():
 
         notifs = {}
         if request.form['notifs_demandes'] == 'yes':
-            notifs['demandes'] = True 
+            notifs['demandes'] = True
         else:
             notifs['demandes'] = False
-        if request.form['notifs_messages'] == 'yes': 
+        if request.form['notifs_messages'] == 'yes':
             notifs['messages'] = True
         else:
             notifs['messages'] = False
@@ -1353,7 +1353,7 @@ def connexion():
             return redirect(url_for('profil'))
 
         else:
-            return redirect("https://ent.iledefrance.fr/auth/login")
+            return redirect("https://ent.iledefrance.fr/timeline/timeline")
 
 
 if __name__ == "__main__":
