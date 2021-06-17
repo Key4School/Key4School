@@ -176,6 +176,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 		self.emailENT = params.get('emailENT', '')
 		self.interets = params.get('interets', '')
 		self.telephone = params.get('telephone', '')
+		self.notifs = params.get('notifs', {'demandes': True, 'messages': True})
 		self.sign = params.get('sign', [])
 		self.Sanctions = params.get('Sanction', [])
 		self.SanctionEnCour = params['SanctionEnCour']
@@ -216,6 +217,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 			'emailENT': self.emailENT,
 	        'interets': self.interets,
 	        'telephone': self.telephone,
+	        'notifs': self.notifs,
 	        'sign': self.sign,
 	        'Sanctions': self.Sanctions,
 	        'SanctionEnCour': self.SanctionEnCour,
@@ -252,6 +254,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 			'emailENT': self.emailENT,
 	        'interets': self.interets,
 	        'telephone': self.telephone,
+	        'notifs': self.notifs,
 	        'sign': self.sign,
 	        'Sanction': self.Sanctions,
 	        'SanctionEnCour': self.SanctionEnCour,

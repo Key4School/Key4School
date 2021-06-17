@@ -106,10 +106,7 @@ def automoderation(stringModerer: str) -> str:
 clientsNotif = {}
 
 def notif(type, id_groupe, id_msg, destinataires):
-    global groupes
-    global utilisateurs
-    global messages
-    global demandes_aide
+    global notifications
 
     if ObjectId(session['id']) in destinataires:
         destinataires.remove(ObjectId(session['id']))
@@ -130,28 +127,28 @@ def notif(type, id_groupe, id_msg, destinataires):
         html = render_template("notification.html", notif=notification)
 
         for user in notification['userDest']:
-            if str(user['_id']) in clientsNotif:
-                emit('newNotif', html, to=str(user['_id']))
-            # elif user['email'] != "":
-            #     To = user['email']
-            #     msg = MIMEMultipart()
-            #     msg['From'] = From
-            #     msg['To'] = To
-            #     msg['Subject'] = sujet
-            #     msg['Charset'] = codage
-            #
-            #     # attache message texte
-            #     msg.attach(MIMEText('message'.encode(codage),
-            #                         'plain', _charset=codage))
-            #     # attache message HTML
-            #     msg.attach(MIMEText('html'.encode(codage),
-            #                         'html', _charset=codage))
-            #
-            #     mailserver = smtplib.SMTP_SSL(serveur, port)
-            #     mailserver.login(From, password)
-            #     mailserver.sendmail(From, To, msg.as_string())
-            #     mailserver.quit
-
+            if (type == 'msg' and user['notifs']['messages']) or (type == 'demande' and user['notifs']['demandes']):
+                if str(user['_id']) in clientsNotif:
+                    emit('newNotif', html, to=str(user['_id']))
+                # elif user['email'] != "":
+                #     To = user['email']
+                #     msg = MIMEMultipart()
+                #     msg['From'] = From
+                #     msg['To'] = To
+                #     msg['Subject'] = sujet
+                #     msg['Charset'] = codage
+                #
+                #     # attache message texte
+                #     msg.attach(MIMEText('message'.encode(codage),
+                #                         'plain', _charset=codage))
+                #     # attache message HTML
+                #     msg.attach(MIMEText('html'.encode(codage),
+                #                         'html', _charset=codage))
+                #
+                #     mailserver = smtplib.SMTP_SSL(serveur, port)
+                #     mailserver.login(From, password)
+                #     mailserver.sendmail(From, To, msg.as_string())
+                #     mailserver.quit
 
 
 @app.route('/')
@@ -565,6 +562,17 @@ def updateprofile():
         user.spes = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
         user.elementPrive = elementPrive
         user.elementPublic = elementPublic
+
+        notifs = {}
+        if request.form['notifs_demandes'] == 'yes':
+            notifs['demandes'] = True 
+        else:
+            notifs['demandes'] = False
+        if request.form['notifs_messages'] == 'yes': 
+            notifs['messages'] = True
+        else:
+            notifs['messages'] = False
+        user.notifs = notifs
 
         utilisateurs[session['id']].update()
 
