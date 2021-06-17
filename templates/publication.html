@@ -4,7 +4,7 @@
       <!-- Image photo de profil-->
       <figure class="image is-64x64">
         <img alt="user" src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-          style="width:80px; height:auto;" />
+          style="width:80px; height:auto;border-radius: 50%;" />
       </figure>
     </div>
     <!-- Contenu publication -->
@@ -103,6 +103,17 @@
         </button>
         <input type="hidden" />
       </div>
+      {%if d['sign'] != []%}
+      <div class="navbar-item">
+        <button class="button is-danger is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
+          <span class="icon is-small">
+            <i class="fas fa-check"></i>
+          </span>
+          <span>valider &nbsp;</span>
+        </button>
+        <input type="hidden" />
+      </div>
+      {%endif%}
       {%endif%}
     </div>
     <div class="boutonPubliTel">
@@ -146,6 +157,15 @@
                 <i class="fas fa-times"></i>
               </span>
               <span>Supprimer &nbsp;</span>
+            </button>
+            <input type="hidden" />
+          </div>
+          <div class="navbar-item">
+            <button class="button is-danger is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
+              <span class="icon is-small">
+                <i class="fas fa-check"></i>
+              </span>
+              <span>valider &nbsp;</span>
             </button>
             <input type="hidden" />
           </div>

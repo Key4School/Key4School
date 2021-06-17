@@ -1,0 +1,92 @@
+{%if content['id-utilisateur']==sessionId%}
+<div class="moimsg" style="max-width: 55%;align-self: flex-end;border: 2px solid {{session['couleur'][0]}};margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;display: flex;flex-direction:column;align-items: flex-start;">
+  <div style="align-self: flex-end;">
+  {%else%}
+  <!-- Messages des autres -->
+  <div class="participantmsg" style="margin-left: 1%; margin-right: 45%;max-width: 55%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:{{session['couleur'][1]}};">
+    <div style="display: flex;align-items: center;justify-content:space-between;">
+  {%endif%}
+    {%if content['id-utilisateur']!=sessionId%}
+    <p style="font-weight: bold; font-variant:small-caps;margin:0px"><a href="{{url_for('profil' ,idUser=content['utilisateur']['_id'])}}">{{content['utilisateur']['pseudo']}}</a></p>
+    {%endif%}
+    <div class="navbar-item has-dropdown is-hoverable">
+      <div class="navbar-link">
+      </div>
+      {%if content['id-utilisateur']==sessionId%}
+      <div class="navbar-dropdown is-right">
+      {%else%}
+      <div class="navbar-dropdown">
+      {%endif%}
+        {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT" or user['admin']== True%}
+        <div class="navbar-item">
+          <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg">
+            <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
+            <input type='hidden' name="grp" value="{{idgroupe}}" />
+            <input type='hidden' name="audio" value="{{content['audio']}}" />
+            {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
+            <button type="submit" class="button is-danger is-outlined is-small">
+              <span class="icon is-small">
+                <i class="fas fa-times"></i>
+              </span>
+              <span>Supprimer</span>
+            </button>
+          </form>
+        </div>
+        {%endif%}
+        {%if user['admin']%}
+        <div class="navbar-item">
+          <form method="post" action="/validationMsg/" class="valider" id="ValidationMsg">
+            <input type='hidden' name="msgVal" value="{{content['_id']}}" />
+            <input type='hidden' name="grp" value="{{idgroupe}}" />
+            <input type='hidden' name="audio" value="{{content['audio']}}" />
+            {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
+            <button type="submit" class="button is-danger is-outlined is-small">
+              <span class="icon is-small">
+                <i class="fas fa-times"></i>
+              </span>
+              <span>Valider</span>
+            </button>
+          </form>
+        </div>
+        {%endif%}
+        <div class="navbar-item">
+          <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+            <span class="icon is-small">
+              <i class="fas fa-reply"></i>
+            </span>
+            <span>Répondre</span>
+          </button>
+          <input type="hidden" id="user{{content['_id']}}" value="{{content['utilisateur']['pseudo']}}" />
+          <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+        </div>
+        <div class="navbar-item">
+        <button  class="button is-warning is-outlined is-small" onClick="signalisationMsg('{{content['_id']}}');">
+          <span class="icon is-small">
+            {% if sessionId in content['sign'] %}
+              <i id="signMsg_{{content['_id']}}" class="fas fa-flag" aria-hidden="true"></i>
+            {% else %}
+              <i id="signMsg_{{content['_id']}}" class="far fa-flag" aria-hidden="true"></i>
+            {% endif %}
+          </span>
+          <span>Signaler</span>
+        </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%if content['rep'] != None%}
+  <div style="background-color:{{session['couleur'][3]}};padding:1%;padding-left:2%;border-left:4px solid {{session['couleur'][0]}};border-radius:5px;margin-top:1%;margin-bottom:2%;">
+    <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=content['utilisateur']['_id'])}}">{{content['utilisateur']['pseudo']}}</a></div>
+    {%if content['rep']['audio']==true%}msg-audio{%else%}{{content['rep']['contenu']}}{%endif%}
+  </div>
+  {%endif%}
+    <p style="margin:0px;word-wrap:break-word;">
+      {%if 'audio' in content and content['audio'] == true %}
+      <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>
+      {%else%}
+      {{content['contenu']}}
+      {%endif%}
+      <!--On affiche le contenu du message -->
+    </p>
+    <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+  </div>

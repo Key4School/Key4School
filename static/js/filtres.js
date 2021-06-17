@@ -1,3 +1,18 @@
+const centerFilters = () => {
+	const filtersContainer = document.getElementById('filters-container');
+	const filtersContainer_size = parseInt(window.getComputedStyle(filtersContainer, null).getPropertyValue('width').replace(/px/, ''));
+	const filtersContainerParent_size = parseInt(window.getComputedStyle(filtersContainer.parentElement, null).getPropertyValue('width').replace(/px/, ''));
+
+	if(filtersContainer_size < filtersContainerParent_size) {
+		const diff = filtersContainerParent_size - filtersContainer_size;
+		const pos = diff / 2;
+
+		return filtersContainer.style.left = `${pos}px`;
+	}
+};
+
+centerFilters();
+
 const filters_slide = (direction) => {
 	const filtersContainer = document.getElementById('filters-container');
 	const pos = parseInt(filtersContainer.style.left.replace(/px/, ''));
@@ -101,3 +116,15 @@ const user_filter = (v) => {
 		});
 	}
 }
+var lastScrollTop = 0;
+$(window).scroll(function(event){
+   var st = $(this).scrollTop();
+   if (st > lastScrollTop){
+		 document.getElementById('filters').style.position = "";
+       document.getElementById('filters').style.display = "none";
+   } else {
+       document.getElementById('filters').style.display = "flex";
+			 document.getElementById('filters').style.position = "fixed";
+   }
+   lastScrollTop = st;
+});

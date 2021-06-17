@@ -4,7 +4,7 @@
     <!-- Partie gauche de la barre de navigation -->
     <div class="navbar-start" >
       <!-- Début menu déroulant -->
-      <div class="navbar-item has-dropdown is-hoverable"
+      <div class="navbar-item has-dropdown is-hoverable navbarhover"
    >
         <a class="navbar-link">
           <i style="color: black; font-size:30px;" class="fas fa-bars"></i>
@@ -47,24 +47,38 @@
       </div>
     </div>
     <!-- Fin menu déroulant -->
-    <!-- Recherche -->
-    <form class="formOrdi" action="{{url_for('recherche')}}" method="GET" style="margin-top: 2px; width: 40%;">
-      <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
-      <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
-    </form>
-    <button onclick="recherche()" class="telRecherche" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
-    {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;">mode spectateur</div>{%endif%}
-    <!-- Profil -->
-    <!-- <a href="{{url_for('profil')}}">
-      <i style="color:black;font-size:30px;margin-top:40%;" class="fas fa-user-circle"></i>
-    </a>
-    <div style="width:20%; margin-top: 10px; padding:10px;">
-    <progress class="progress is-link" value="70" max="100">70%</progress>
-    </div> -->
-    <!-- Partie droite de la barre de navigation -->
+      <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%;margin-right:5%;" >
+        <a class="navbar-item" href="{{url_for('question')}}">
+          <i style="color: black; font-size:20px;" class="fas fa-question"></i>
+          &nbsp;&nbsp;Poser une question
+        </a>
+      </div>
+
+      <!-- Recherche -->
+      <form class="formOrdi" action="{{url_for('recherche')}}" method="GET" style="margin-left:5%;margin-top: 0.5%; width: 40%;align-items:center;">
+        <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;" />
+        <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
+      </form>
+      <button onclick="recherche()" class="telRecherche" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-left:10%;"><i  style="color: black;" class="fas fa-search logoBouton"></i></button>
+      {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;margin-top: 1%;">mode spectateur</div>{%endif%}
+      <!-- Profil -->
+      <!-- <a href="{{url_for('profil')}}">
+        <i style="color:black;font-size:30px;margin-top:40%;" class="fas fa-user-circle"></i>
+      </a>
+      <div style="width:20%; margin-top: 10px; padding:10px;">
+      <progress class="progress is-link" value="70" max="100">70%</progress>
+      </div> -->
+      <!-- Partie droite de la barre de navigation -->
+      <div class="navbarhover questionNavbarTel" style="margin-top: 3%;margin-right:10%;padding:0.5%;" >
+        <a class="navbar-item" href="{{url_for('question')}}">
+        <i style="color: black; font-size:20px;" class="fas fa-question"></i>
+        </a>
+      </div>
+
+
     <div class="navbar-end">
       <!-- Début notifications -->
-      <div class="navbar-item has-dropdown is-hoverable ">
+      <div class="navbar-item has-dropdown is-hoverable navbarhover">
         <a class="navbar-link">
           <i style="color: black; font-size:30px;" class="fas fa-bell"></i>
           <p id="nbNotif" style="color:black;margin-left: -17%;border-radius: 50%;padding-left: 8px;padding-right: 8px;background-color: red;"></p>
@@ -72,8 +86,14 @@
         <!-- Notifications -->
         <div class="navbar-dropdown is-right" style="width: 300%;max-height:500px;overflow-y: auto;" id="notifContent">
           <!-- NE PAS SUPPRIMER contenu notif -->
-          <p id="noNotif">Aucune notification</p>
-          <button id="toutLu" onclick="allSuppr()">Tout marquer comme lu</button>
+          <p style="width: 60%;margin: auto;margin-top: 5%;"id="noNotif">Aucune notification</p>
+          <button  style="margin-left:2%;" onclick="allSuppr()" id="toutLu" class="button is-small is-info is-outlined">
+            <span>Tout marquer comme lu</span>
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+          </button>
+          <br />
         </div>
       </div>
     </div>
@@ -85,13 +105,13 @@
     right: 0;
     top: 3.25rem;
     /* z-index: 100; */
-    background-color: #deb72f;
+    background-color: {{session['couleur'][0]}};;
     box-shadow: ;
-    box-shadow: 0 0.5em 1em rgb(0 0 0 / 5%);
+    box-shadow: 0 0.5em 1em {{session['couleur'][0]}};
     display: none;">
     <form action="/recherche" method="GET" style="/* margin-top: 2px; *//* width: 40%; */display:flex;">
       <input type="text" name="search" placeholder="Recherche..." style="width: 80%;height: 80%;border-radius: 4px;border: none;outline: none;padding: 2%;padding-left: 8px;" spellcheck="false" data-ms-editor="true">
-      <button type="submit" style="background-color:#deb72f; border: 1px solid #deb72f; margin-top:1%;font-size: 20px;margin-right:10%;"><i style="color: black;" class="fas fa-search logoBouton" aria-hidden="true"></i></button>
+      <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i style="color: black;" class="fas fa-search logoBouton" aria-hidden="true"></i></button>
     </form>
   </div>
 
