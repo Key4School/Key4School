@@ -509,10 +509,46 @@
             </tr>
             {%endif%}
             {%endfor%}
+          </tbody>
+        </table>
+        <!-- Fin tableau informations privées -->
+        <!-- Préférences -->
+        <div style="font-weight: bold; font-size:large;">Notifications par email :</div>
+        <br />
+        <table class="table is-narrow">
+          <tbody>
+            <tr>
+              <td>
+                <i class="fas fa-envelope-open-text" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Notifications par email concernant les demandes d'aide
+              </td>
+              <td>
+                <div class="select">
+                  <select name="notifs_demandes">
+                    <option value="yes" {% if profilUtilisateur['notifs']['demandes'] %}selected{%endif%}>Accepter</option>
+                    <option value="no" {% if not profilUtilisateur['notifs']['demandes'] %}selected{%endif%}>Refuser</option>
+                  </select>
+                </div>
+              </td>            
+            </tr>
+            <tr>
+              <td>
+                <i class="fas fa-envelope-open-text" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Notifications par email concernant les messages
+              </td>
+              <td>
+                <div class="select">
+                  <select name="notifs_messages">
+                    <option value="yes" {% if profilUtilisateur['notifs']['messages'] %}selected{%endif%}>Accepter</option>
+                    <option value="no" {% if not profilUtilisateur['notifs']['messages'] %}selected{%endif%}>Refuser</option>
+                  </select>
+                </div>
+              </td>            
+            </tr>
             <!-- Bouton pour valider les informations -->
             <tr>
               <td>
-                <br />
+                <br /><br />
 
                 <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
                   <span class="icon is-small">
@@ -524,7 +560,6 @@
             </tr>
           </tbody>
         </table>
-        <!-- Fin tableau informations privées -->
       </form>
     </div>
     <!-- Fin informations -->
@@ -600,9 +635,9 @@
             session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
             session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
             session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>&nbsp;&nbsp;
-            <input id="couleur" type="color" name="color1" value="{{session['couleur'][0]}}"/>&nbsp;
-            <input id="couleur" type="color" name="color2" value="{{session['couleur'][1]}}"/>&nbsp;
-            <input id="couleur" type="color" name="color3" value="{{session['couleur'][2]}}"/>&nbsp;
+            <input id="couleur" type="color" name="color1" value="{{session['couleur'][0]}}" />&nbsp;
+            <input id="couleur" type="color" name="color2" value="{{session['couleur'][1]}}" />&nbsp;
+            <input id="couleur" type="color" name="color3" value="{{session['couleur'][2]}}" />&nbsp;
 
           </div>
         </label>
@@ -629,8 +664,8 @@
   {%endif%}
   <!-- Mes demandes d'aide -->
   {% if demandes != [] %}
-  <div style="margin-left:2%;display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly;">
-    <div style="font-weight: bold; font-size:large;">Mes demandes d'aide :</div>
+  <div style="margin-left: 15%;display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly; width: 70%;">
+    <div style="font-weight: bold; font-size:large; margin-top: 15px;">Mes demandes d'aide :</div>
     <br />
     {% endif %}
     {%for d in demandes %}

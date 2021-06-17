@@ -566,6 +566,17 @@ def updateprofile():
         user.elementPrive = elementPrive
         user.elementPublic = elementPublic
 
+        notifs = {}
+        if request.form['notifs_demandes'] == 'yes':
+            notifs['demandes'] = True 
+        else:
+            notifs['demandes'] = False
+        if request.form['notifs_messages'] == 'yes': 
+            notifs['messages'] = True
+        else:
+            notifs['messages'] = False
+        user.notifs = notifs
+
         utilisateurs[session['id']].update()
 
         return redirect(url_for('profil'))
