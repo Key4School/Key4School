@@ -1,4 +1,4 @@
-const socket = io(`ws://${document.location.host}`);
+const socket = io(`wss://${document.location.host}`);
 
 function updateNotif() {
   var nbNotif = document.querySelectorAll('#notifContent > .notif').length;
