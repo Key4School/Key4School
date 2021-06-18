@@ -1292,13 +1292,16 @@ def connexion():
                 u.SanctionEnCour = ''
                 u.SanctionDuree = ''
 
-        u.classe = data_plus['classes'][0].split('$')[1]
+        if u.type == "ELEVE":
+            u.classe = data_plus['classes'][0].split('$')[1]
         if data_plus['email'] != '':
             u.email = data_plus['email']
-        if data_plus['mobile'] != '':
-            u.telephone = data_plus['mobile']
-        elif data_plus['homePhone'] != '':
-            u.telephone = data_plus['homePhone']
+        if 'mobile' in data_plus:
+            if data_plus['mobile'] != "":
+                u.telephone = data_plus['mobile']
+            else:
+                if 'homePhone' in data_plus:
+                    u.telephone = data_plus['homePhone']
         if data_plus['emailInternal'] != '':
             u.emailENT = data_plus['emailInternal']
         utilisateurs[str(user['_id'])].update()
@@ -1309,10 +1312,13 @@ def connexion():
         if data['type'] == "ELEVE":
             classe = data_plus['classes'][0].split('$')[1]
             pseudo = (data['username'].lower()).replace(' ', '_')
-            if data_plus['mobile'] != "":
-                tel = data_plus['mobile']
-            else:
-                tel = data_plus['homePhone']
+            tel = ''
+            if 'mobile' in data_plus:
+                if data_plus['mobile'] != "":
+                    tel = data_plus['mobile']
+                else:
+                    if 'homePhone' in data_plus:
+                        tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(),
@@ -1331,18 +1337,21 @@ def connexion():
 
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
-            if data_plus['mobile'] != "":
-                tel = data_plus['mobile']
-            else:
-                tel = data_plus['homePhone']
+            tel = ''
+            if 'mobile' in data_plus:
+                if data_plus['mobile'] != "":
+                    tel = data_plus['mobile']
+                else:
+                    if 'homePhone' in data_plus:
+                        tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
                 data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
-                'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+                'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0, 'nomImg': ''})
             utilisateurs[str(_id)].insert()
 
-            user = utilisateurs[str(_id)]
+            user = utilisateurs[str(_id)].toDict()
 
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
