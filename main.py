@@ -1293,7 +1293,7 @@ def connexion():
                 u.SanctionEnCour = ''
                 u.SanctionDuree = ''
 
-        u.classeReelle = data_plus['classes'][0].split('$')[1]
+        u.classe = data_plus['classes'][0].split('$')[1]
         if data_plus['email'] != '':
             u.email = data_plus['email']
         if data_plus['mobile'] != '':
@@ -1308,16 +1308,7 @@ def connexion():
 
     else:
         if data['type'] == "ELEVE":
-            if data['level'] == 'PREMIERE GENERALE & TECHNO YC BT':
-                classe = '1G'
-            elif data['level'] == 'SECONDE GENERALE & TECHNO YC BT':
-                classe = '2GT'
-            elif data['level'] == 'TERMINALE GENERALE & TECHNO YC BT':
-                classe = 'TG'
-            else:
-                classe = data['level']
-
-            classeReelle = data_plus['classes'][0].split('$')[1]
+            classe = data_plus['classes'][0].split('$')[1]
             pseudo = (data['username'].lower()).replace(' ', '_')
             if data_plus['mobile'] != "":
                 tel = data_plus['mobile']
@@ -1326,7 +1317,7 @@ def connexion():
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(),
-                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "classeReelle": classeReelle, "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'],
+                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'],
                                         "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [],
                                         'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             utilisateurs[str(_id)].insert()

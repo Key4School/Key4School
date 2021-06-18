@@ -163,7 +163,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 		self.dateInscription = params['dateInscription']
 		self.birth_date = params.get('birth_date')
 		self.classe = params.get('classe', '')
-		self.classeReelle = params.get('classeReelle', '')
 		self.lycee = params['lycee']
 		self.spes = params.get('spes', [])
 		self.langues = params.get('langues', [])
@@ -201,7 +200,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 	        'dateInscription': self.dateInscription,
 	        'birth_date': self.birth_date,
 	        'classe': self.classe,
-	        'classeReelle': self.classeReelle,
 	        'lycee': self.lycee,
 	        'spes': self.spes,
 	        'spes-str': self.translate_matiere_spes_options_lv(self.spes),
@@ -243,7 +241,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 	        'dateInscription': self.dateInscription,
 	        'birth_date': self.birth_date,
 	        'classe': self.classe,
-	        'classeReelle': self.classeReelle,
 	        'lycee': self.lycee,
 	        'spes': self.spes,
 	        'langues': self.langues,
