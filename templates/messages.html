@@ -133,12 +133,18 @@
           {%endfor%}
       </table>
     </div>
+
+    {%if msgDb == none%}
+    <div style="margin-right: 2%;margin-bottom: 2%;height: 80%;width: 80%;">
+      test
+    </div>
+    {%endif%}
     <!-- fin de la div pour les noms de tt les groupes -->
     {% if msgDb != None %}
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
     <div id="titreetmsg" style="margin-right: 2%;margin-bottom:2%;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:1%;height:15%;border-bottom: none;">
+      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:1%;height:15%;min-height: 93px;border-bottom: none;">
         <!-- div avec le nom du groupe et les paticipants -->
         <div style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
           <!-- nom du groupe -->
@@ -378,10 +384,6 @@
             </div>
           </div>
           {%endif%}
-          {%else%}
-          <div>
-            test
-          </div>
           {%endif%}
           <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
         </div>
