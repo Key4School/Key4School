@@ -344,14 +344,22 @@ def supprimerMsg():
         idGroupe = request.form['grp']
         user = utilisateurs[session['id']].toDict()
         msg = messages[request.form['msgSuppr']].toDict()
+        groupe = groupes[request.form['grp']].toDict()
+        sign=groupe['sign']
+        motif = groupe['motif']
         # grp = Groupe[request.form['grp']].toDict()
         if user['admin'] or user['type']=="ENSEIGNANT" or msg['id-utilisateur']==ObjectId(session['id']) or ObjectId(session['id'] in grp['moderateurs']):
+            if msg['sign'] != []:
+                sign.remove(ObjectId(request.form['msgSuppr']))
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['msgSuppr'])), -1)
+                del motif[index]
             messages[request.form['msgSuppr']].suppr()
-
             if request.form['audio'] == 'True':
                 MyAudio = DB.db_files.find_one({'filename': request.form['audioName']})
                 DB.db_files.delete_one({'_id': MyAudio['_id']})
                 DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
+
+            groupes[request.form['grp']].update()
 
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
@@ -361,7 +369,7 @@ def supprimerMsg():
 @app.route('/validationMsg/', methods=['POST'])
 def validerMsg():
     global messages
-
+    global groupes
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
         idGroupe = request.form['grp']
@@ -371,6 +379,16 @@ def validerMsg():
             motifMsg = message['motif']
             signMsg.clear()
             motifMsg.clear()
+            groupe = groupes[request.form['grp']].toDict()
+            sign = groupe['sign']
+            motif = groupe['motif']
+            print (sign)
+            sign.remove(ObjectId(request.form['msgVal']))
+            index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['msgVal'])), -1)
+            del motif[index]
+
+            groupes[request.form['grp']].update()
+            messages[request.form['msgVal']].update()
 
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
@@ -944,6 +962,7 @@ def administration():
                             del motifDemande[a]
                     demandes_aide[request.form['idDemandVal']].update()
 
+
                 return 'sent'
 
             else:
@@ -1179,6 +1198,9 @@ def signPostMsg():
                 signMsg.remove(ObjectId(session['id']))
                 index = next((i for i, item in enumerate(motifMsg) if item['id'] == ObjectId(session['id'])), -1)
                 del motifMsg[index]
+                sign.remove(ObjectId(request.form['idMsgSignalé']))
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['idMsgSignalé'])), -1)
+                del motif[index]
 
             else:
                 # on ajoute son signalement
@@ -1186,8 +1208,8 @@ def signPostMsg():
                 motifMsg.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
 
                 if not ObjectId(session['id']) in sign:
-                    sign.append(ObjectId(session['id']))
-                    motif.append({'id': ObjectId(session['id']), 'txt': "Message signalé : "+request.form['Raison']})
+                    sign.append(ObjectId(request.form['idMsgSignalé']))
+                    motif.append({'id': ObjectId(request.form['idMsgSignalé']), 'txt': "Message signalé : "+request.form['Raison']})
 
                     groupes[request.form['idSignalé']].update()
 
