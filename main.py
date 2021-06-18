@@ -909,8 +909,10 @@ def administration():
         if utilisateur['admin'] == True:
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
+                    auteur = demandes_aide[request.form['idSuppr']].toDict()['idAuteur']
                     demandes_aide[request.form['idSuppr']].delete()
                     del demandes_aide[request.form['idSuppr']]
+                    addXpModeration(str(auteur), 10)
 
                 elif request.form['demandeBut'] == 'Val':
                     demande = demandes_aide[request.form['idVal']]
@@ -940,6 +942,8 @@ def administration():
 
                 elif request.form['demandeBut'] == 'SupprRep':
                     demande = demandes_aide[request.form['idDemandSuppr']]
+                    auteur = demandes_aide[request.form['idDemandSuppr']].toDict()['reponsesDict'][request.form['idSuppr']]['id-utilisateur']
+                    addXpModeration(str(auteur), 5)
                     demande.reponses_associees.pop(request.form['idSuppr'])
                     signDemande = demande.sign
                     motifDemande = demande.motif
@@ -974,6 +978,8 @@ def administration():
                     groupe = groupes[request.form['idDiscSuppr']].toDict()
                     sign = groupe['sign']
                     motif = groupe['motif']
+                    for auteur in groupe['id-utilisateurs'] :
+                        addXpModeration(str(auteur), 10)
 
                     sign.clear()
                     motif.clear()
@@ -988,7 +994,9 @@ def administration():
                     groupe = groupes[request.form['idDiscVal']].toDict()
                     sign = groupe['sign']
                     motif = groupe['motif']
-
+                    if request.form['motif'] == "abusif":
+                        for content in sign:
+                                addXpModeration(str(content), 5)
                         # on supprime son signalement
                     sign.clear()
                     motif.clear()
