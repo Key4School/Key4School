@@ -6,6 +6,44 @@
   {% include 'head.html' with context %}
   <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript" defer></script>
 
+  <style type="text/css">
+    .moimsg {
+      max-width: 75%;
+      align-self: flex-end;
+      border: 2px solid {{session['couleur'][0]}};
+      margin-right: 1%;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      padding: 1%;
+      padding-left: 2%;
+      padding-right: 2%;
+      display: flex;
+      flex-direction:column;
+      align-items: flex-start;
+    }
+
+    .participantmsg {
+      max-width: 75%;
+      margin-left: 1%;
+      margin-right: 45%;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      padding: 1%;
+      padding-left: 2%;
+      padding-right: 2%;
+      background-color:{{session['couleur'][1]}};
+    }
+
+    .rep {
+      background-color:{{session['couleur'][3]}};
+      padding:1%;
+      padding-left:2%;
+      border-left:4px solid {{session['couleur'][0]}};
+      border-radius:5px;
+      margin-top:1%;
+      margin-bottom:2%;
+    }
+  </style>
   <style>
     .liengroupe {
       color: black;
@@ -25,6 +63,53 @@
       cursor: pointer;
     }
   </style>
+  <style type="text/css">
+    /* RESPONSIVE MESSAGES */
+
+    @media screen and (min-width: 700px) {
+      #nomgroupe {
+        width: 15%;
+      }
+
+      #titreetmsg {
+        width: calc(85% - 60px);
+      }
+
+      .moimsg, .participantmsg {
+        min-width: 20%;
+      }
+
+      #backButton {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 700px) {
+      #nomgroupe {
+        {% if msgDb == None %}
+          width: calc(100% - 50px);
+        {% else %}
+          display: none;
+        {% endif %}
+      }
+
+      #titreetmsg {
+        {% if msgDb == None %}
+          display: none;
+        {% else %}
+          display: block;
+        {% endif %}
+      }
+
+      .moimsg, .participantmsg {
+        min-width: 35%;
+      }
+
+      #backButton {
+        display: inline-block;
+      }
+    }
+  </style>
 </head>
 
 
@@ -32,10 +117,10 @@
 <body style="overflow:auto;"><!-- onkeydown="enregistrer(event)" onkeyup="stop(event)"-->
   {% include 'bandeau2.html' %}
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
-  <div>
-  <div style="display: flex;justify-content:space-between;height:95%;margin-top:5%;">
+  <div style=" position: fixed; margin-top: 55px; width: 100%;">
+  <div style="display: flex;justify-content:space-between;height:95%;margin-top:15px;">
     <!-- div pour afficher tout les groupes -->
-    <div id="nomgroupe" style="  width: 15%;margin-left: 5%;overflow-y:auto;margin-bottom:5%;">
+    <div id="nomgroupe" style="/*width: 15%;*/margin-left: 25px;overflow-y:auto;margin-bottom:5%;">
       <div class="liengroupe">
         <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
@@ -99,16 +184,26 @@
     <!-- fin de la div pour les noms de tt les groupes -->
     {% if msgDb != None %}
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
-    <div id="titreetmsg" style="margin-right: 2%;margin-bottom:2%;">
+    <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:1%;height:15%;border-bottom: none;">
+      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:1%;height: 100px; border-bottom: none;">
         <!-- div avec le nom du groupe et les paticipants -->
         <div style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
           <!-- nom du groupe -->
-          <p style="font-weight:bold;">{{infogroupe['nom']}}</p>
+          <p style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>{{infogroupe['nom']}}</p>
           <!-- liste des paricipants -->
-          <p style="font-variant: small-caps; text-align: justify;word-wrap:break-word;">
-            {%for content in infoUtilisateurs%} <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>,{%endfor%}
+          <p style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.1;">
+            {% if infogroupe['nbUtilisateurs'] > 8 %}
+              {% for i in range(8) %}
+                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i<7 %},{%endif%}
+              {%endfor%}
+              <br />&nbsp;
+              <a style="margin-left: 15px;" onclick="divoptionopen()"><em>et {{infogroupe['nbUtilisateurs']-8}} autres utilisateurs</em></a>
+            {% else %}
+              {% for i in range(infogroupe['nbUtilisateurs']) %}
+                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
+              {%endfor%}
+            {% endif %}
           </p>
         </div>
           <!-- Bouton trois petits points -->
@@ -123,7 +218,7 @@
               <section class="modal-card-body">
                 Info Utilisateur : <br />
                 {%for users in infoUtilisateurs%}
-                {%if sessionId in infogroupe['moderateurs']%}
+                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick="optionParticipantOpen('{{users['_id']}}')">
                   {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
                 </button>
@@ -132,7 +227,7 @@
                   {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
                 </a>
                 {%endif%}
-                {%if sessionId in infogroupe['moderateurs']%}
+                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
                   <div id="ModifRoleUser{{users['_id']}}">
                     {%if users['_id'] in infogroupe['moderateurs']%} admin{%else%}participant{%endif%}
@@ -152,12 +247,28 @@
                   </span>
                   <span>Signaler</span>
                 </button>
+                {%if user['admin']%}
+                <button  class="button is-warning is-outlined is-small" onClick="supprDiscOpen();">
+                  <span class="icon is-small">
+                    <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+                  </span>
+                  <span>Supprimer</span>
+                </button>
+                <button  class="button is-warning is-outlined is-small" onClick="valDiscOpen();">
+                  <span class="icon is-small">
+                    <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+                  </span>
+                  <span>Valider</span>
+                </button>
+                {%endif%}
+                {%if infogroupe['is_class'] == False%}
                 <form action="/virerParticipant/" id="virerParticipant" method="POST">
                   <input type='hidden' id="idViré" name='idViré' value="{{sessionId}}" />
                   <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
                   <button type="submit">Quitter le groupe</button>
                 </form>
-                {%if sessionId in infogroupe['moderateurs']%}
+                {%endif%}
+                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">Ajouter des participants</button>
                 <div id="ajouterParticipant" style="display:block;">
                 <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
@@ -187,7 +298,7 @@
               </footer>
           </div>
         </div>
-        {%if sessionId in infogroupe['moderateurs']%}
+        {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
         <div class="modal" id="optionParticipant" style="overflow:hidden;" >
           <div class="modal-card">
             <section class="modal-card-body">
@@ -277,8 +388,51 @@
           </div>
         </div>
       </div>
+      {%if user['admin']%}
+      <div class="modal" id="supprDisc" style="overflow:hidden;">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Supression de la discussion</p>
+          </header>
+          <form onsubmit="supprDisc(event); return false;" id="supprDiscForm" method="POST" autocomplete="off">
+            <section class="modal-card-body">
+              <input id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
+              <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['_id']}}" />
+              <input type='hidden' name="demandeBut" value="supprDisc" />
+            </section>
+            <footer class="modal-card-foot">
+              <button type="submit" class="button is-success">Supprimer</button>
+              <button onclick="supprDiscClose(); return false;" class="button">Annuler</button>
+            </footer>
+          </form>
+        </div>
+      </div>
+      <div class="modal" id="valDisc" style="overflow:hidden;">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Validation de la discussion</p>
+          </header>
+          <form onsubmit="valDisc(event); return false;" id="valDiscForm" method="POST" autocomplete="off">
+            <section class="modal-card-body">
+              <input type='hidden' id="idDiscVal" name='idDiscVal' value="{{infogroupe['_id']}}" />
+              <select name="motif">
+                <option value="abusif">Signalement abusif</option>
+                <option value="justifie">Justifié</option>
+              </select>
+              <input type='hidden' name="demandeBut" value="valDisc" />
+            </section>
+            <footer class="modal-card-foot">
+              <button type="submit" class="button is-success">Valider</button>
+              <button onclick="designalisationMsgClose(); return false;" class="button">Annuler</button>
+            </footer>
+          </form>
+        </div>
+      </div>
+      {%endif%}
       <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
-      <div id="messages" style="overflow-y: auto; overflow-x:hidden;height:80%;border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
+      <div id="messages" style="overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
         {% for content in msgDb%}
           {% include "widget_message.html" %}
         {%endfor%}
@@ -329,10 +483,6 @@
             </div>
           </div>
           {%endif%}
-          {%else%}
-          <div>
-            test
-          </div>
           {%endif%}
           <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
         </div>

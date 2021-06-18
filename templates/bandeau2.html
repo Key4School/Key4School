@@ -1,5 +1,5 @@
 <!-- Début barre de navigation -->
-<nav class="navbar is-fixed-top" role="navigation" aria-label="dropdown navigation" style="background-color:{{session['couleur'][0]}}; padding-bottom:5px;">
+<nav id="nav" class="navbar is-fixed-top" role="navigation" aria-label="dropdown navigation" style="background-color:{{session['couleur'][0]}}; padding-bottom:5px;">
   <div id="navbar" class="navbar-menu" style="display:flex;">
     <!-- Partie gauche de la barre de navigation -->
     <div class="navbar-start navbarStart" >
@@ -7,22 +7,22 @@
       <a href="{{url_for('accueil')}}" style="display:flex;">
         <img class="logo" src="
         {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}
-        {{url_for('static',filename='image/logo/logo_bleu_sans_bordure.png')}}
+        {{url_for('static',filename='image/logo/Nuances_bleu.png')}}
         {%endif%}
         {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}
-        {{url_for('static',filename='image/logo/logo_nuances_rouge.png')}}
+        {{url_for('static',filename='image/logo/Nuances_rouge.png')}}
         {%endif%}
         {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}
-        {{url_for('static',filename='image/logo/logo_nuances_vert.png')}}
+        {{url_for('static',filename='image/logo/Nuances_vert.png')}}
         {%endif%}
         {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}
-        {{url_for('static',filename='image/logo/logo_nuances_orange.png')}}
+        {{url_for('static',filename='image/logo/Nuances_orange.png')}}
         {%endif%}
         {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}
-        {{url_for('static',filename='image/logo/logo_bleuframboise.png')}}
+        {{url_for('static',filename='image/logo/Framboise_bleu.png')}}
         {%endif%}
         {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
-        {{url_for('static',filename='image/logo/logo_rosepetantmoutarde.png')}}
+        {{url_for('static',filename='image/logo/Moutarde_rose.png')}}
         {%endif%}
         {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
         session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
@@ -75,7 +75,7 @@
       </div> -->
       <!-- Partie droite de la barre de navigation -->
       {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
-      <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%;" >
+      <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%; transition: all .5s; border-radius: 4px;" >
         <a class="navbar-item" href="{{url_for('question')}}">
           <i style="color: black; font-size:20px;" class="fas fa-question"></i>
           &nbsp;&nbsp;Poser une question
@@ -92,13 +92,13 @@
 
     <div class="navbar-end">
       <!-- Début notifications -->
-      <div class="navbar-item has-dropdown is-hoverable navbarhover">
+      <div class="navbar-item has-dropdown is-hoverable navbarhover" style="transition: all .1s;">
         <a class="navbar-link">
           <i style="color: black; font-size:30px;" class="fas fa-bell"></i>
           <p id="nbNotif" style="color:black;margin-left: -17%;border-radius: 50%;padding-left: 8px;padding-right: 8px;background-color: red;"></p>
         </a>
         <!-- Notifications -->
-        <div class="navbar-dropdown is-right" style="width: 300%;max-height:500px;overflow-y: auto;" id="notifContent">
+        <div class="navbar-dropdown is-boxed is-right" style="width: 300%;max-height:500px;overflow-y: auto;" id="notifContent">
           <!-- NE PAS SUPPRIMER contenu notif -->
           <p style="width: 60%;margin: auto;margin-top: 5%;"id="noNotif">Aucune notification</p>
           <button  style="margin-left:2%;" onclick="allSuppr()" id="toutLu" class="button is-small is-info is-outlined">
@@ -110,7 +110,7 @@
           <br />
         </div>
       </div>
-      <div class="navbar-item has-dropdown is-hoverable navbarhover">
+      <div class="navbar-item has-dropdown is-hoverable navbarhover" style="transition: all .1s;">
         <a class="navbar-link">
           <i style="color: black; font-size:30px;" class="fas fa-bars"></i>
         </a>

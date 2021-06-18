@@ -226,7 +226,7 @@
                       <option value="opt-cit" {%if profilUtilisateur['options'][0]=="opt-cit"%}selected{%endif%}>Création et innovation technologiques</option>
                       <option value="opt-ccd" {%if profilUtilisateur['options'][0]=="opt-ccd"%}selected{%endif%}>Création et culture - design</option>
                       {% endif %}
-                      {% if profilUtilisateur['classe']=='TG' %}
+                      {% if profilUtilisateur['classe'][0]=='T' %}
                       <option value="opt-maths-comp" {%if profilUtilisateur['options'][0]=="opt-maths-comp"%}selected{%endif%}>Maths complémentaires</option>
                       <option value="opt-maths-exp" {%if profilUtilisateur['options'][0]=="opt-maths-exp"%}selected{%endif%}>Maths expertes</option>
                       <option value="opt-dgemc" {%if profilUtilisateur['options'][0]=="opt-dgemc"%}selected{%endif%}>Droits et grands enjeux du monde contemporain</option>
@@ -261,7 +261,7 @@
                       <option value="opt-cit" {%if profilUtilisateur['options'][1]=="opt-cit"%}selected{%endif%}>Création et innovation technologiques</option>
                       <option value="opt-ccd" {%if profilUtilisateur['options'][1]=="opt-ccd"%}selected{%endif%}>Création et culture - design</option>
                       {% endif %}
-                      {% if profilUtilisateur['classe']=='TG' %}
+                      {% if profilUtilisateur['classe'][0]=='T' %}
                       <option value="opt-maths-comp" {%if profilUtilisateur['options'][1]=="opt-maths-comp"%}selected{%endif%}>Maths complémentaires</option>
                       <option value="opt-maths-exp" {%if profilUtilisateur['options'][1]=="opt-maths-exp"%}selected{%endif%}>Maths expertes</option>
                       <option value="opt-dgemc" {%if profilUtilisateur['options'][1]=="opt-dgemc"%}selected{%endif%}>Droits et grands enjeux du monde contemporain</option>

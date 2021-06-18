@@ -5,12 +5,12 @@ var idMsg;
 
 $(document).ready(function() {
   $('#titreetmsg').css({
-    height: (80 / 100 * ($(window).height())).toString() + 'px',
-    width: (80 / 100 * ($(window).width())).toString() + 'px',
+    height: ($(window).height() - parseInt(window.getComputedStyle(document.getElementById('nav'), null).getPropertyValue('height').replace(/px/, '')) - 90).toString() + 'px',
+    //width: (80 / 100 * ($(window).width())).toString() + 'px',
   });
-  $('#nomgroupe').css({
+  /*$('#nomgroupe').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
-  });
+  });*/
   $('#listeuser').css({
     height: (40 / 100 * ($(window).height())).toString() + 'px',
   });

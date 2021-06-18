@@ -1,9 +1,9 @@
 {%if content['id-utilisateur']==sessionId%}
-<div class="moimsg" style="max-width: 55%;align-self: flex-end;border: 2px solid {{session['couleur'][0]}};margin-right: 1%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;display: flex;flex-direction:column;align-items: flex-start;">
+<div class="moimsg">
   <div style="align-self: flex-end;">
   {%else%}
   <!-- Messages des autres -->
-  <div class="participantmsg" style="margin-left: 1%; margin-right: 45%;max-width: 55%;margin-bottom: 12px;border-radius: 20px;padding: 1%;padding-left: 2%;padding-right: 2%;background-color:{{session['couleur'][1]}};">
+  <div class="participantmsg">
     <div style="display: flex;align-items: center;justify-content:space-between;">
   {%endif%}
     {%if content['id-utilisateur']!=sessionId%}
@@ -75,7 +75,7 @@
     </div>
   </div>
   {%if content['rep'] != None%}
-  <div style="background-color:{{session['couleur'][3]}};padding:1%;padding-left:2%;border-left:4px solid {{session['couleur'][0]}};border-radius:5px;margin-top:1%;margin-bottom:2%;">
+  <div class="rep">
     <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=content['utilisateur']['_id'])}}">{{content['utilisateur']['pseudo']}}</a></div>
     {%if content['rep']['audio']==true%}msg-audio{%else%}{{content['rep']['contenu']}}{%endif%}
   </div>

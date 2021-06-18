@@ -163,3 +163,51 @@ function validerRepOpen(){
 function validerRepClose(){
   $("#validationRep").removeClass("is-active");
 }
+
+
+
+function supprDisc(e) {
+  e.preventDefault();
+  var donnees = $('#supprDiscForm').serialize();
+  $.ajax({
+    url: '/administration/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      window.location.reload(false); 
+    },
+  });
+}
+
+
+function supprDiscOpen(){
+  $("#supprDisc").addClass("is-active");
+}
+
+function supprDiscClose(){
+  $("#supprDisc").removeClass("is-active");
+}
+
+function valDisc(e) {
+  e.preventDefault();
+  var donnees = $('#valDiscForm').serialize();
+  $.ajax({
+    url: '/administration/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      window.location.reload(false);
+
+    },
+  });
+}
+
+
+
+function valDiscOpen(){
+  $("#valDisc").addClass("is-active");
+}
+
+function valDiscClose(){
+  $("#valDisc").removeClass("is-active");
+}

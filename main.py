@@ -85,19 +85,23 @@ with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
     listeModeration = fichierBanWords.read().splitlines()
 
 def automoderation(stringModerer: str) -> str:
+    stringModerer2 =stringModerer
+    for key in ['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}']:
+            stringModerer2 = stringModerer2.replace(key," ")
+            print (stringModerer2)
     for content in listeModeration:
         strReplace = ""
         for i in range (len(content)):
             strReplace += "*"
         if len(content) < 6:
-            if stringModerer[0:len(content)+1] == content+" ":
+            if stringModerer2[0:len(content)+1] == content+" ":
                 stringModerer= stringModerer.replace(content, " "+strReplace+" ")
-            if stringModerer[-len(content)+1:] == " "+content:
+            if stringModerer2[-len(content)+1:] == " "+content:
                 stringModerer= stringModerer.replace(content, " "+strReplace+" ")
-            if stringModerer == content:
+            if stringModerer2 == content:
                 stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             content= " "+content+" "
-        if  content in stringModerer:
+        if  content in stringModerer2:
             stringModerer= stringModerer.replace(content, " "+strReplace+" ")
 
     return stringModerer
@@ -127,28 +131,38 @@ def notif(type, id_groupe, id_msg, destinataires):
         html = render_template("notification.html", notif=notification)
 
         for user in notification['userDest']:
-            if (type == 'msg' and user['notifs']['messages']) or (type == 'demande' and user['notifs']['demandes']):
-                if str(user['_id']) in clientsNotif:
-                    emit('newNotif', html, to=str(user['_id']))
-                # elif user['email'] != "":
-                #     To = user['email']
-                #     msg = MIMEMultipart()
-                #     msg['From'] = From
-                #     msg['To'] = To
-                #     msg['Subject'] = sujet
-                #     msg['Charset'] = codage
-                #
-                #     # attache message texte
-                #     msg.attach(MIMEText('message'.encode(codage),
-                #                         'plain', _charset=codage))
-                #     # attache message HTML
-                #     msg.attach(MIMEText('html'.encode(codage),
-                #                         'html', _charset=codage))
-                #
-                #     mailserver = smtplib.SMTP_SSL(serveur, port)
-                #     mailserver.login(From, password)
-                #     mailserver.sendmail(From, To, msg.as_string())
-                #     mailserver.quit
+            if str(user['_id']) in clientsNotif:
+                emit('newNotif', html, to=str(user['_id']))
+            # elif user['email'] != "":
+            #     # si l'user a autorisé les notifs par mail
+            #     if (type == 'msg' and user['notifs']['messages']) or (type == 'demande' and user['notifs']['demandes']):
+            #         # si un mail n'a pas déja été envoyé pour ce groupe
+            #         if (type == 'msg' and len([notif for notif in notifications.values() if notif.id_groupe == id_groupe and notif.type == 'msg' and user in notif.destinataires]) == 0 ) or type == 'demande':
+            #             To = user['email']
+            #             msg = MIMEMultipart()
+            #             msg['From'] = From
+            #             msg['To'] = To
+            #             msg['Subject'] = sujet
+            #             msg['Charset'] = codage
+            #
+            #             # attache message texte
+            #             msg.attach(MIMEText('message'.encode(codage),
+            #                                 'plain', _charset=codage))
+            #             # attache message HTML
+            #             msg.attach(MIMEText('html'.encode(codage),
+            #                                 'html', _charset=codage))
+            #
+            #             mailserver = smtplib.SMTP_SSL(serveur, port)
+            #             mailserver.login(From, password)
+            #             mailserver.sendmail(From, To, msg.as_string())
+            #             mailserver.quit
+# route temporaire
+@app.route('/mail/')
+def mail():
+    if 'id' in session:
+        return render_template("mail.html")
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/')
@@ -159,7 +173,6 @@ def accueil():
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
         # subjects = getUserSubjects(user)
-
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
         demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:9]
 
@@ -228,7 +241,7 @@ def page_messages(idGroupe):
 
             else:
                 msgDb = None
-                infogroupes = None
+                groupe = None
                 infoUtilisateurs = None
             groupe = groupe.toDict()
 
@@ -334,14 +347,22 @@ def supprimerMsg():
         idGroupe = request.form['grp']
         user = utilisateurs[session['id']].toDict()
         msg = messages[request.form['msgSuppr']].toDict()
+        groupe = groupes[request.form['grp']].toDict()
+        sign=groupe['sign']
+        motif = groupe['motif']
         # grp = Groupe[request.form['grp']].toDict()
         if user['admin'] or user['type']=="ENSEIGNANT" or msg['id-utilisateur']==ObjectId(session['id']) or ObjectId(session['id'] in grp['moderateurs']):
+            if msg['sign'] != []:
+                sign.remove(ObjectId(request.form['msgSuppr']))
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['msgSuppr'])), -1)
+                del motif[index]
             messages[request.form['msgSuppr']].suppr()
-
             if request.form['audio'] == 'True':
                 MyAudio = DB.db_files.find_one({'filename': request.form['audioName']})
                 DB.db_files.delete_one({'_id': MyAudio['_id']})
                 DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
+
+            groupes[request.form['grp']].update()
 
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
@@ -351,7 +372,7 @@ def supprimerMsg():
 @app.route('/validationMsg/', methods=['POST'])
 def validerMsg():
     global messages
-
+    global groupes
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
         idGroupe = request.form['grp']
@@ -361,6 +382,16 @@ def validerMsg():
             motifMsg = message['motif']
             signMsg.clear()
             motifMsg.clear()
+            groupe = groupes[request.form['grp']].toDict()
+            sign = groupe['sign']
+            motif = groupe['motif']
+            print (sign)
+            sign.remove(ObjectId(request.form['msgVal']))
+            index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['msgVal'])), -1)
+            del motif[index]
+
+            groupes[request.form['grp']].update()
+            messages[request.form['msgVal']].update()
 
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
@@ -710,7 +741,7 @@ def question():
         return redirect(url_for('login'))
 
 
-@app.route('/recherche')
+@app.route('/recherche/')
 def recherche():
     global utilisateurs
     global demandes_aide
@@ -744,7 +775,7 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@app.route('/rechercheUser')
+@app.route('/rechercheUser/')
 def recherche_user():
     global utilisateurs
 
@@ -933,6 +964,36 @@ def administration():
                         if str(request.form['idVal']+"/") in str(motifDemande[a]):
                             del motifDemande[a]
                     demandes_aide[request.form['idDemandVal']].update()
+
+                elif request.form['demandeBut'] == 'supprDisc':
+                    groupe = groupes[request.form['idDiscSuppr']].toDict()
+                    sign = groupe['sign']
+                    motif = groupe['motif']
+
+                    sign.clear()
+                    motif.clear()
+                    grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idDiscSuppr'])]
+                    for m in grpMsg:
+                        messages[str(m['_id'])].suppr()
+
+                            # messages[str(m['_id'])].update()
+                    groupes[request.form['idDiscSuppr']].update()
+
+                elif request.form['demandeBut'] == 'valDisc':
+                    groupe = groupes[request.form['idDiscVal']].toDict()
+                    sign = groupe['sign']
+                    motif = groupe['motif']
+
+                        # on supprime son signalement
+                    sign.clear()
+                    motif.clear()
+                    grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idDiscVal'])]
+                    for m in grpMsg:
+                        m['motif'].clear()
+                        m['sign'].clear()
+                        messages[str(m['_id'])].update()
+                    groupes[request.form['idDiscVal']].update()
+
 
                 return 'sent'
 
@@ -1169,6 +1230,9 @@ def signPostMsg():
                 signMsg.remove(ObjectId(session['id']))
                 index = next((i for i, item in enumerate(motifMsg) if item['id'] == ObjectId(session['id'])), -1)
                 del motifMsg[index]
+                sign.remove(ObjectId(request.form['idMsgSignalé']))
+                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['idMsgSignalé'])), -1)
+                del motif[index]
 
             else:
                 # on ajoute son signalement
@@ -1176,8 +1240,8 @@ def signPostMsg():
                 motifMsg.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
 
                 if not ObjectId(session['id']) in sign:
-                    sign.append(ObjectId(session['id']))
-                    motif.append({'id': ObjectId(session['id']), 'txt': "Message signalé : "+request.form['Raison']})
+                    sign.append(ObjectId(request.form['idMsgSignalé']))
+                    motif.append({'id': ObjectId(request.form['idMsgSignalé']), 'txt': "Message signalé : "+request.form['Raison']})
 
                     groupes[request.form['idSignalé']].update()
 
@@ -1268,6 +1332,7 @@ def callback():
 @app.route("/connexion/", methods=["GET"])
 def connexion():
     global utilisateurs
+    global groupes
 
     """Fetching a protected resource using an OAuth 2 token.
     """
@@ -1293,70 +1358,98 @@ def connexion():
                 u.SanctionEnCour = ''
                 u.SanctionDuree = ''
 
-        u.classeReelle = data_plus['classes'][0].split('$')[1]
+        if u.type == "ELEVE":
+            classe = data_plus['classes'][0].split('$')[1]
+            u.classe = classe
+            nomClasse = f"{user['lycee']}/{classe}"
+            group = [g for g in groupes.values() if g.nom == nomClasse and g.is_class == True]
+            if len(group) > 0:
+                group = group[0]
+                if user['_id'] not in group.id_utilisateurs:
+                    group.id_utilisateurs.append(user['_id'])
+                    group.update()
+            else:
+                _id = ObjectId()
+                groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
+                groupes[str(_id)].insert()
+
         if data_plus['email'] != '':
             u.email = data_plus['email']
-        if data_plus['mobile'] != '':
-            u.telephone = data_plus['mobile']
-        elif data_plus['homePhone'] != '':
-            u.telephone = data_plus['homePhone']
+
+        if 'mobile' in data_plus:
+            if data_plus['mobile'] != "":
+                u.telephone = data_plus['mobile']
+        elif 'homePhone' in data_plus:
+            if data_plus['homePhone'] != "":
+                u.telephone = data_plus['homePhone']
+
         if data_plus['emailInternal'] != '':
             u.emailENT = data_plus['emailInternal']
+
         utilisateurs[str(user['_id'])].update()
 
         return redirect(url_for('accueil'))
 
     else:
         if data['type'] == "ELEVE":
-            if data['level'] == 'PREMIERE GENERALE & TECHNO YC BT':
-                classe = '1G'
-            elif data['level'] == 'SECONDE GENERALE & TECHNO YC BT':
-                classe = '2GT'
-            elif data['level'] == 'TERMINALE GENERALE & TECHNO YC BT':
-                classe = 'TG'
-            else:
-                classe = data['level']
-
-            classeReelle = data_plus['classes'][0].split('$')[1]
+            classe = data_plus['classes'][0].split('$')[1]
             pseudo = (data['username'].lower()).replace(' ', '_')
-            if data_plus['mobile'] != "":
-                tel = data_plus['mobile']
-            else:
-                tel = data_plus['homePhone']
+            tel = ''
+            if 'mobile' in data_plus:
+                if data_plus['mobile'] != "":
+                    tel = data_plus['mobile']
+            elif 'homePhone' in data_plus:
+                if data_plus['homePhone'] != "":
+                    tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(),
-                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "classeReelle": classeReelle, "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'],
-                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [],
+                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'],
+                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'], 'type': data['type'], 'elementPublic': [],
                                         'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             utilisateurs[str(_id)].insert()
 
             user = utilisateurs[str(_id)].toDict()
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
-            session['couleur'] = '#3f51b5'
+            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
             session['type'] = user['type']
+
+            nomClasse = f"{data['schoolName']}/{classe}"
+            group = [g for g in groupes.values() if g.nom == nomClasse and g.is_class == True]
+            if len(group) > 0:
+                group = group[0]
+                if user['_id'] not in group.id_utilisateurs:
+                    group.id_utilisateurs.append(user['_id'])
+                    group.update()
+            else:
+                _id = ObjectId()
+                groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
+                groupes[str(_id)].insert()
 
             return redirect(url_for('profil'))
 
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
-            if data_plus['mobile'] != "":
-                tel = data_plus['mobile']
-            else:
-                tel = data_plus['homePhone']
+            tel = ''
+            if 'mobile' in data_plus:
+                if data_plus['mobile'] != "":
+                    tel = data_plus['mobile']
+            elif 'homePhone' in data_plus:
+                if data_plus['homePhone'] != "":
+                    tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
-                'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
+                'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0, 'nomImg': ''})
             utilisateurs[str(_id)].insert()
 
-            user = utilisateurs[str(_id)]
+            user = utilisateurs[str(_id)].toDict()
 
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
-            session['couleur'] = '#3f51b5'
+            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
             session['type'] = user['type']
 
             return redirect(url_for('profil'))
