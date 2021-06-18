@@ -229,7 +229,6 @@ def page_messages(idGroupe):
     global utilisateurs
     global messages
     global groupes
-    global notifications
 
     if 'id' in session:
         grp = [groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs]
@@ -251,10 +250,6 @@ def page_messages(idGroupe):
                 infoUtilisateurs = None
             groupe = groupe.toDict()
 
-            # Suppr notifs lors de l'ouverture du grp
-            notifsGrp = [notif for notif in notifications.values() if notif.id_groupe == ObjectId(idGroupe) and ObjectId(session['id']) in notif.destinataires]
-            for notif in notifsGrp:
-                notif.supprUser(ObjectId(session['id']))
 
         else:
             msgDb = None
