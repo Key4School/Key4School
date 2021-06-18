@@ -252,7 +252,7 @@ def page_messages(idGroupe):
             groupe = groupe.toDict()
 
             # Suppr notifs lors de l'ouverture du grp
-            notifsGrp = [notif for notif in notifications if notif.id_groupe == ObjectId(idGroupe) and ObjectId(session['id']) in notif.destinataires]
+            notifsGrp = [notif for notifs in notifications if notif.id_groupe == ObjectId(idGroupe) and ObjectId(session['id']) in notif.destinataires]
             for notif in notifsGrp:
                 notif.supprUser(ObjectId(session['id']))
 
