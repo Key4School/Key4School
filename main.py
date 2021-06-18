@@ -251,6 +251,9 @@ def page_messages(idGroupe):
                 infoUtilisateurs = None
             groupe = groupe.toDict()
 
+            for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idGroupe) and notification.type == 'msg' and ObjectId(session['id']) in notification.destinataires]:
+                notif.supprUser(ObjectId(session['id']))
+
 
         else:
             msgDb = None
