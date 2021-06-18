@@ -153,6 +153,13 @@ def notif(type, id_groupe, id_msg, destinataires):
                 #     mailserver.login(From, password)
                 #     mailserver.sendmail(From, To, msg.as_string())
                 #     mailserver.quit
+# route temporaire
+@app.route('/mail/')
+def mail():
+    if 'id' in session:
+        return render_template("mail.html")
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/')
