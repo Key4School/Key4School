@@ -131,28 +131,31 @@ def notif(type, id_groupe, id_msg, destinataires):
         html = render_template("notification.html", notif=notification)
 
         for user in notification['userDest']:
-            if (type == 'msg' and user['notifs']['messages']) or (type == 'demande' and user['notifs']['demandes']):
-                if str(user['_id']) in clientsNotif:
-                    emit('newNotif', html, to=str(user['_id']))
-                # elif user['email'] != "":
-                #     To = user['email']
-                #     msg = MIMEMultipart()
-                #     msg['From'] = From
-                #     msg['To'] = To
-                #     msg['Subject'] = sujet
-                #     msg['Charset'] = codage
-                #
-                #     # attache message texte
-                #     msg.attach(MIMEText('message'.encode(codage),
-                #                         'plain', _charset=codage))
-                #     # attache message HTML
-                #     msg.attach(MIMEText('html'.encode(codage),
-                #                         'html', _charset=codage))
-                #
-                #     mailserver = smtplib.SMTP_SSL(serveur, port)
-                #     mailserver.login(From, password)
-                #     mailserver.sendmail(From, To, msg.as_string())
-                #     mailserver.quit
+            if str(user['_id']) in clientsNotif:
+                emit('newNotif', html, to=str(user['_id']))
+            # elif user['email'] != "":
+            #     # si l'user a autorisé les notifs par mail
+            #     if (type == 'msg' and user['notifs']['messages']) or (type == 'demande' and user['notifs']['demandes']):
+            #         # si un mail n'a pas déja été envoyé pour ce groupe
+            #         if (type == 'msg' and len([notif for notif in notifications.values() if notif.id_groupe == id_groupe and notif.type == 'msg' and user in notif.destinataires]) == 0 ) or type == 'demande':
+            #             To = user['email']
+            #             msg = MIMEMultipart()
+            #             msg['From'] = From
+            #             msg['To'] = To
+            #             msg['Subject'] = sujet
+            #             msg['Charset'] = codage
+            #
+            #             # attache message texte
+            #             msg.attach(MIMEText('message'.encode(codage),
+            #                                 'plain', _charset=codage))
+            #             # attache message HTML
+            #             msg.attach(MIMEText('html'.encode(codage),
+            #                                 'html', _charset=codage))
+            #
+            #             mailserver = smtplib.SMTP_SSL(serveur, port)
+            #             mailserver.login(From, password)
+            #             mailserver.sendmail(From, To, msg.as_string())
+            #             mailserver.quit
 # route temporaire
 @app.route('/mail/')
 def mail():
