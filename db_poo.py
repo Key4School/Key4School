@@ -480,7 +480,7 @@ class Message(Actions):
 		return
 
 	def toDict(self) -> dict:
-		if self.reponse != "None":
+		if self.reponse != "None" and str(self.reponse) in messages:
 			rep = messages[str(self.reponse)].toDict()
 		else:
 			rep = None

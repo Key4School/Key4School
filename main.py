@@ -112,8 +112,8 @@ clientsNotif = {}
 def notif(type, id_groupe, id_msg, destinataires):
     global notifications
 
-    if ObjectId(session['id']) in destinataires:
-        destinataires.remove(ObjectId(session['id']))
+    # if ObjectId(session['id']) in destinataires:
+    #     destinataires.remove(ObjectId(session['id']))
 
     if len(destinataires) > 0:
         _id = ObjectId()
@@ -250,11 +250,6 @@ def page_messages(idGroupe):
                 groupe = None
                 infoUtilisateurs = None
             groupe = groupe.toDict()
-
-            # Suppr notifs lors de l'ouverture du grp
-            notifsGrp = [notif for notif in notifications.values() if notif.id_groupe == ObjectId(idGroupe) and ObjectId(session['id']) in notif.destinataires]
-            for notif in notifsGrp:
-                notif.supprUser(ObjectId(session['id']))
 
 
         else:
@@ -669,10 +664,14 @@ def redirect_comments():
 def comments(idMsg):
     global utilisateurs
     global demandes_aide
+    global notifications
 
     if 'id' in session:
         if request.method == 'GET':
             msg = demandes_aide[idMsg].toDict()
+
+            for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idMsg) and notification.type == 'demande' and ObjectId(session['id']) in notification.destinataires]:
+                notif.supprUser(ObjectId(session['id']))
 
             return render_template("comments.html", d=msg, user=utilisateurs[session['id']].toDict())
 
