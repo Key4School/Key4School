@@ -22,7 +22,7 @@
     }
 
     .participantmsg {
-      margin-left: 1%; 
+      margin-left: 1%;
       margin-right: 45%;
       max-width: 55%;
       margin-bottom: 12px;
@@ -133,6 +133,12 @@
           {%endfor%}
       </table>
     </div>
+
+    {%if msgDb == none%}
+    <div>
+      test
+    </div>
+    {%endif%}
     <!-- fin de la div pour les noms de tt les groupes -->
     {% if msgDb != None %}
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
@@ -152,7 +158,7 @@
               <br />&nbsp;
               <a style="margin-left: 15px;" onclick="divoptionopen()"><em>et {{infogroupe['nbUtilisateurs']-10}} autres utilisateurs</em></a>
             {% else %}
-              {%for content in infoUtilisateurs%} 
+              {%for content in infoUtilisateurs%}
                 <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>,
               {%endfor%}
             {% endif %}
@@ -376,10 +382,6 @@
             </div>
           </div>
           {%endif%}
-          {%else%}
-          <div>
-            test
-          </div>
           {%endif%}
           <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
         </div>
