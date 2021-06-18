@@ -8,6 +8,24 @@ $(document).ready(function() {
     height: ($(window).height() - parseInt(window.getComputedStyle(document.getElementById('nav'), null).getPropertyValue('height').replace(/px/, '')) - 90).toString() + 'px',
     //width: (80 / 100 * ($(window).width())).toString() + 'px',
   });
+
+  // Affichage nb de participants, en fonction de la taille de l'écran
+  const groupTitle_size = parseInt(window.getComputedStyle(document.getElementById('groupTitle'), null).getPropertyValue('height').replace(/px/, ''));
+  let listGroupUsers_size = parseInt(window.getComputedStyle(document.getElementById('listGroupUsers'), null).getPropertyValue('height').replace(/px/, ''));
+  if(groupTitle_size + listGroupUsers_size > 88) {
+    document.getElementById('listGroupUsers').innerHTML += `<br />&nbsp;<a style="margin-left: 15px;" onclick="divoptionopen()"><em>et <span id="lastedGroupUsers">0</span> autres utilisateurs</em></a>`;
+    const lastedGroupUsers_count = document.getElementById('lastedGroupUsers');
+
+    while(groupTitle_size + listGroupUsers_size > 88) {
+      listGroupUsers_size = parseInt(window.getComputedStyle(document.getElementById('listGroupUsers'), null).getPropertyValue('height').replace(/px/, ''));
+      showedGroupUsers = document.querySelectorAll('.groupUser[style="display: inline;"]');
+      // hide last user
+      showedGroupUsers[showedGroupUsers.length - 1].style.display = 'none';
+      // add count of lasted users
+      lastedGroupUsers_count.innerHTML = parseInt(lastedGroupUsers_count.innerHTML) + 1;
+    }
+  }
+
   /*$('#nomgroupe').css({
     height: (80 / 100 * ($(window).height())).toString() + 'px',
   });*/

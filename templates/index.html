@@ -76,8 +76,8 @@
   {% include 'filtres.html' with context %}
 
   <!-- debut de la div pour tt les publications -->
-  <div id="contentPost" class="columns" style="margin-top: 10px; width:100%;">
-    <div class="column"></div>
+  <div id="contentPost" class="columns" style="margin-top: 10px; width:100%; margin: 0;">
+    <div class="column" style="padding: 0;"></div>
     <div class="column is-three-fifths">
       {%for d in demandes %}
       <!-- Début publi -->
@@ -85,7 +85,7 @@
       <!-- Fin publi -->
       {%endfor%}
     </div>
-    <div class="column"></div>
+    <div class="column" style="padding: 0;"></div>
   </div>
 
   <!-- fin de l'espace des publication -->
