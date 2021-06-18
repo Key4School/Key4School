@@ -15,14 +15,14 @@ socket.on('removeLike', (id_like) => {
 });
 
 function like(id){
-  selectionlike = document.getElementById(`like_${id}`).className
+  selectionlike = document.getElementById(`like_${id}`).className;
   if (selectionlike == "far fa-thumbs-up") {
     document.getElementById(`like_${id}`).className = "fas fa-thumbs-up";
-    //document.getElementById(`like_${id}`).innerHTML = parseInt(document.getElementById(`like_${id}`).innerHTML) + 1; // on ajoute 1 au nb de likes
+    document.getElementById(`like_${id}`).innerHTML = parseInt(document.getElementById(`like_${id}`).innerHTML) + 1; // on ajoute 1 au nb de likes
   }
   if (selectionlike == "fas fa-thumbs-up"){
     document.getElementById(`like_${id}`).className = "far fa-thumbs-up";
-    //document.getElementById(`like_${id}`).innerHTML = parseInt(document.getElementById(`like_${id}`).innerHTML) - 1; // on enlève 1 au nb de likes
+    document.getElementById(`like_${id}`).innerHTML = parseInt(document.getElementById(`like_${id}`).innerHTML) - 1; // on enlève 1 au nb de likes
   }
 
   /*fetch(`/likePost/${id}`, {
@@ -40,12 +40,12 @@ function like_rep(idMsg, idRep){
   selectionlike = document.getElementById(`like_${idRep}`).className
   if (selectionlike == "far fa-thumbs-up") {
     document.getElementById(`like_${idRep}`).className = "fas fa-thumbs-up";
-    //document.getElementById(`like_${idRep}`).innerHTML = parseInt(document.getElementById(`like_${idRep}`).innerHTML) + 1; // on ajoute 1 au nb de likes
+    document.getElementById(`like_${idRep}`).innerHTML = parseInt(document.getElementById(`like_${idRep}`).innerHTML) + 1; // on ajoute 1 au nb de likes
 
   }
   if (selectionlike == "fas fa-thumbs-up"){
     document.getElementById(`like_${idRep}`).className = "far fa-thumbs-up";
-    //document.getElementById(`like_${idRep}`).innerHTML = parseInt(document.getElementById(`like_${idRep}`).innerHTML) - 1; // on enlève 1 au nb de likes
+    document.getElementById(`like_${idRep}`).innerHTML = parseInt(document.getElementById(`like_${idRep}`).innerHTML) - 1; // on enlève 1 au nb de likes
   }
 
   /*fetch(`/likeRep/${idMsg}/${idRep}`, {
@@ -193,3 +193,14 @@ function resoudre(idMsg) {
       window.location.reload(true);
     });
 }
+
+function afficheArea() {
+  $('#rep-form').show();
+  $('#showbutton').hide();
+}
+
+function enleveArea() {
+  $('#rep-form').hide();
+  $('#showbutton').show();
+}
+
