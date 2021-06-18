@@ -47,7 +47,7 @@
           </a>
           <a class="level-item" style="margin-left:2%;" aria-label="comment" href="/comments/{{d['idMsg']}}">
             <span class="icon is-small">
-              <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true"></i>
+              <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">{{d['réponses associées']|length}}</i>
             </span>
           </a>
           <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
