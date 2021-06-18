@@ -672,7 +672,7 @@ def comments(idMsg):
         if request.method == 'GET':
             msg = demandes_aide[idMsg].toDict()
 
-            for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectIdk(idMsg) and notification.type == 'demande' and ObjectId(session['id']) in notification.destinataires]:
+            for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idMsg) and notification.type == 'demande' and ObjectId(session['id']) in notification.destinataires]:
                 notif.supprUser(ObjectId(session['id']))
 
             return render_template("comments.html", d=msg, user=utilisateurs[session['id']].toDict())
