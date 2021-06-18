@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- page de style -->
   <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static',filename='css/mystyles.css')}}">
   <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -16,22 +17,95 @@
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
-  <title>Nouvelle notification</title>
 </head>
 
-<body>
-  <div>
+<body style="background-color:#f0f2f5;text-align: center;height:100%;">
+  <div style="padding:2% 0%;margin:1%;background-color:white;display:flex;height:10%">
+    <span style="border-top: 2px solid {{session['couleur'][0]}};height:50%;width:40%;margin:auto;">
+    </span>
+    <a class="maillogoNom" href="https://key4school.herokuapp.com/" style="text-decoration: none;display:flex;align-items:center;">
+      <img class="logo" src="
+      {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}
+      {{url_for('static',filename='image/logo/Nuances_bleu.png')}}
+      {%endif%}
+      {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}
+      {{url_for('static',filename='image/logo/Nuances_rouge.png')}}
+      {%endif%}
+      {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}
+      {{url_for('static',filename='image/logo/Nuances_vert.png')}}
+      {%endif%}
+      {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}
+      {{url_for('static',filename='image/logo/Nuances_orange.png')}}
+      {%endif%}
+      {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}
+      {{url_for('static',filename='image/logo/Framboise_bleu.png')}}
+      {%endif%}
+      {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+      {{url_for('static',filename='image/logo/Moutarde_rose.png')}}
+      {%endif%}
+      {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+      session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+      session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+      session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+      session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+      session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+      {{url_for('static',filename='image/logo/cle_blanche.png')}}
+      {%endif%}
+      " style="
+      {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+      session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+      session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+      session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+      session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+      session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+
+      background: linear-gradient(to bottom right, {{session['couleur'][0]}}, {{session['couleur'][1]}}, {{session['couleur'][2]}});{%endif%}
+      border-radius: 8px;height:50px;width:50px;margin-right:3%;margin-bottom:3%;"/>
+      <span class="key4schoolNavbar" style="color:black;font-weight:bold;font-size:30px;display:flex;">
+        <p style="font-family: 'Roboto', sans-serif;">
+          Key
+        </p>
+        <p style="font-family: 'M PLUS Rounded 1c', sans-serif;">
+          4
+        </p>
+        <p style="font-family: 'Rochester', cursive;">
+          School
+        </p>
+      </span>
+    </a>
+    <span style="border-top: 2px solid {{session['couleur'][0]}};height:50%;width:40%;margin:auto;">
+
+    </span>
 
   </div>
-  <p>
-    Bonjour, user['prenom'] user['nom'], vous avez reçu un <b>nouveau message</b>
-    <div style="background-color:{{session['couleur'][0]}};">
-      <a>
-        Aller sur "Nom du site"
-      </a>
-    </div>
-  </p>
-  <div id="root"></div>
+  <div style="background-color:white;margin:3%;height:60%;padding:2% 0%">
+    <p style="color:{{session['couleur'][2]}};">
+      La cloche sonne !
+    </p><br />
+    <i style="font-size:80px;color:{{session['couleur'][2]}};margin:auto" class="fas fa-bell"></i><br /><br />
+    <p>
+      Bonjour, Utilisateur 1707, vous avez reçu <b>une nouvelle notification :</b>
+    </p><br />
+    <div style="display:flex;margin:auto;align-items:center;">
+      <span style="border-top: 1px solid #e7f0f2;height:50%;width:45%;margin:auto;">
+      </span>
+      <img src="{{url_for('static',filename='image/sans_profil.png')}}" style="border-radius: 50%;height:60px;width:60px;"/>
+      <span style="border-top: 1px solid #e7f0f2;height:50%;width:45%;margin:auto;">
+      </span>
+    </div><br />
+    <p>
+      <b>Utilisateur 1874</b> vous a envoyé un message :
+    </p>
+    <p style="color:#3e97ff;">
+      <b>Salut, comment ça va depuis hier ? ...</b>
+    </p>
+  </div>
+  <button class="button is-link is-outlined">
+    <span>Répondre</span>
+  </button><br /><br />
+  <p style="color:#c6c7c7;">
+    Pour changer vos préférences de notifications, <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/profil/">cliquez ici</a>
+  </p><br /><br />
 </body>
 
 </html>
