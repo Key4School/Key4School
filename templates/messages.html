@@ -120,7 +120,7 @@
   <div style=" position: fixed; margin-top: 55px; width: 100%;">
   <div style="display: flex;justify-content:space-between;height:95%;margin-top:15px;">
     <!-- div pour afficher tout les groupes -->
-    <div id="nomgroupe" style="/*width: 15%;*/margin-left: 25px;overflow-y:auto;margin-bottom:5%;">
+    <div id="nomgroupe" style="/*width: 15%;*/margin-left: 25px;overflow-y:auto;overflow-x: hidden;margin-bottom:5%;">
       <div class="liengroupe">
         <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
       </div>
@@ -160,20 +160,19 @@
       </div>
 
 
-      <table class="table is-narrow">
+      <table class="table is-narrow" style="position: relative; width: 15%;">
         <tbody>
           <!-- div pour le groupe -->
           {%for content in grpUtilisateur%}
           <tr>
             <td>
-              <div style="margin-bottom: 5%;font-size: 20px;">
-                <!-- lien vers le 1er groupe (ne marche pas) en gras car c'est le groupe sur lequel on est  -->
-
-
-                <a class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
-                  {{content['nom']}}
-                </a>
-
+              <div class="tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
+                <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;">
+                  <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
+                    {{content['nom']}}
+                  </a>
+                </span>
+                <a class="tag is-delete" onclick="quitterGroupeOpen('{{content['_id']}}', '{{sessionId}}');"></a>
               </div>
             </td>
           </tr>
@@ -264,12 +263,9 @@
                   <span>Valider</span>
                 </button>
                 {%endif%}
+                <br />
                 {%if infogroupe['is_class'] == False%}
-                <form action="/virerParticipant/" id="virerParticipant" method="POST">
-                  <input type='hidden' id="idViré" name='idViré' value="{{sessionId}}" />
-                  <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
-                  <button type="submit">Quitter le groupe</button>
-                </form>
+                  <button type="submit" onclick="quitterGroupeOpen();">Quitter le groupe</button>
                 {%endif%}
                 {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">Ajouter des participants</button>
@@ -389,6 +385,25 @@
               </footer>
             </form>
           </div>
+        </div>
+      </div>
+      <div class="modal" id="quitterGroupe" style="overflow:hidden;">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Quitter le groupe</p>
+          </header>
+          <form onsubmit="quitterGroupe(event); return false;" id="quitterGroupeForm" method="POST" autocomplete="off">
+            <section class="modal-card-body">
+              <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="{{idgroupe}}" />
+              <input type='hidden' id="quitter_idviré" name='idViré' value="{{sessionId}}" />
+              Etes-vous sûr de vouloir quitter le groupe ?
+            </section>
+            <footer class="modal-card-foot">
+              <button type="submit" class="button is-success">Quitter le groupe</button>
+              <button onclick="quitterGroupeClose(); return false;" class="button">Rester</button>
+            </footer>
+          </form>
         </div>
       </div>
       {%if user['admin']%}

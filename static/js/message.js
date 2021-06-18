@@ -530,3 +530,27 @@ function ajouterParticipantVoir(){
     document.getElementById("buttonAjouterParticipant").innerHTML = "ajouter un participant";
   }
 }
+
+function quitterGroupe(e) {
+  e.preventDefault();
+  var donnees = $('#quitterGroupeForm').serialize();
+  $.ajax({
+    url: '/virerParticipant/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      document.location.href = '/messages';
+    },
+  });
+}
+
+function quitterGroupeOpen(grpID, userID) {
+  $("#quitterGroupe").addClass("is-active");
+
+  document.getElementById('quitter_idviréGrp').value = grpID;
+  document.getElementById('quitter_idviré').value = userID;
+}
+
+function quitterGroupeClose(){
+  $("#quitterGroupe").removeClass("is-active");
+}
