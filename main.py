@@ -85,19 +85,23 @@ with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
     listeModeration = fichierBanWords.read().splitlines()
 
 def automoderation(stringModerer: str) -> str:
+    stringModerer2 =stringModerer
+    for key in ['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}']:
+            stringModerer2 = stringModerer2.replace(key," ")
+            print (stringModerer2)
     for content in listeModeration:
         strReplace = ""
         for i in range (len(content)):
             strReplace += "*"
         if len(content) < 6:
-            if stringModerer[0:len(content)+1] == content+" ":
+            if stringModerer2[0:len(content)+1] == content+" ":
                 stringModerer= stringModerer.replace(content, " "+strReplace+" ")
-            if stringModerer[-len(content)+1:] == " "+content:
+            if stringModerer2[-len(content)+1:] == " "+content:
                 stringModerer= stringModerer.replace(content, " "+strReplace+" ")
-            if stringModerer == content:
+            if stringModerer2 == content:
                 stringModerer= stringModerer.replace(content, " "+strReplace+" ")
             content= " "+content+" "
-        if  content in stringModerer:
+        if  content in stringModerer2:
             stringModerer= stringModerer.replace(content, " "+strReplace+" ")
 
     return stringModerer
