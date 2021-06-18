@@ -78,6 +78,10 @@
       .moimsg, .participantmsg {
         min-width: 20%;
       }
+
+      #backButton {
+        display: none;
+      }
     }
 
     @media screen and (max-width: 700px) {
@@ -99,6 +103,10 @@
 
       .moimsg, .participantmsg {
         min-width: 35%;
+      }
+
+      #backButton {
+        display: inline-block;
       }
     }
   </style>
@@ -182,18 +190,18 @@
         <!-- div avec le nom du groupe et les paticipants -->
         <div style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
           <!-- nom du groupe -->
-          <p style="font-weight:bold;">{{infogroupe['nom']}}</p>
+          <p style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>{{infogroupe['nom']}}</p>
           <!-- liste des paricipants -->
-          <p style="font-variant: small-caps; text-align: justify;word-wrap:break-word;">
-            {% if infogroupe['nbUtilisateurs'] > 10 %}
-              {% for i in range(10) %}
-                <a href="{{url_for('profil' ,idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>,
+          <p style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.1;">
+            {% if infogroupe['nbUtilisateurs'] > 8 %}
+              {% for i in range(8) %}
+                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i<7 %},{%endif%}
               {%endfor%}
               <br />&nbsp;
-              <a style="margin-left: 15px;" onclick="divoptionopen()"><em>et {{infogroupe['nbUtilisateurs']-10}} autres utilisateurs</em></a>
+              <a style="margin-left: 15px;" onclick="divoptionopen()"><em>et {{infogroupe['nbUtilisateurs']-8}} autres utilisateurs</em></a>
             {% else %}
-              {%for content in infoUtilisateurs%}
-                <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>,
+              {% for i in range(infogroupe['nbUtilisateurs']) %}
+                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
               {%endfor%}
             {% endif %}
           </p>
