@@ -6,6 +6,43 @@
   {% include 'head.html' with context %}
   <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript" defer></script>
 
+  <style type="text/css">
+    .moimsg {
+      max-width: 55%;
+      align-self: flex-end;
+      border: 2px solid {{session['couleur'][0]}};
+      margin-right: 1%;
+      margin-bottom: 12px;
+      border-radius: 20px;padding: 1%;
+      padding-left: 2%;
+      padding-right: 2%;
+      display: flex;
+      flex-direction:column;
+      align-items: flex-start;
+    }
+
+    .participantmsg {
+      margin-left: 1%; 
+      margin-right: 45%;
+      max-width: 55%;
+      margin-bottom: 12px;
+      border-radius: 20px;
+      padding: 1%;
+      padding-left: 2%;
+      padding-right: 2%;
+      background-color:{{session['couleur'][1]}};
+    }
+
+    .rep {
+      background-color:{{session['couleur'][3]}};
+      padding:1%;
+      padding-left:2%;
+      border-left:4px solid {{session['couleur'][0]}};
+      border-radius:5px;
+      margin-top:1%;
+      margin-bottom:2%;
+    }
+  </style>
   <style>
     .liengroupe {
       color: black;

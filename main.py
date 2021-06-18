@@ -159,7 +159,6 @@ def accueil():
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
         # subjects = getUserSubjects(user)
-
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
         demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:9]
 
@@ -710,7 +709,7 @@ def question():
         return redirect(url_for('login'))
 
 
-@app.route('/recherche')
+@app.route('/recherche/')
 def recherche():
     global utilisateurs
     global demandes_aide
@@ -744,7 +743,7 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@app.route('/rechercheUser')
+@app.route('/rechercheUser/')
 def recherche_user():
     global utilisateurs
 
@@ -1293,13 +1292,16 @@ def connexion():
                 u.SanctionEnCour = ''
                 u.SanctionDuree = ''
 
-        u.classeReelle = data_plus['classes'][0].split('$')[1]
+        if u.type == "ELEVE":
+            u.classe = data_plus['classes'][0].split('$')[1]
         if data_plus['email'] != '':
             u.email = data_plus['email']
-        if data_plus['mobile'] != '':
-            u.telephone = data_plus['mobile']
-        elif data_plus['homePhone'] != '':
-            u.telephone = data_plus['homePhone']
+        if 'mobile' in data_plus:
+            if data_plus['mobile'] != "":
+                u.telephone = data_plus['mobile']
+            else:
+                if 'homePhone' in data_plus:
+                    u.telephone = data_plus['homePhone']
         if data_plus['emailInternal'] != '':
             u.emailENT = data_plus['emailInternal']
         utilisateurs[str(user['_id'])].update()
@@ -1308,55 +1310,52 @@ def connexion():
 
     else:
         if data['type'] == "ELEVE":
-            if data['level'] == 'PREMIERE GENERALE & TECHNO YC BT':
-                classe = '1G'
-            elif data['level'] == 'SECONDE GENERALE & TECHNO YC BT':
-                classe = '2GT'
-            elif data['level'] == 'TERMINALE GENERALE & TECHNO YC BT':
-                classe = 'TG'
-            else:
-                classe = data['level']
-
-            classeReelle = data_plus['classes'][0].split('$')[1]
+            classe = data_plus['classes'][0].split('$')[1]
             pseudo = (data['username'].lower()).replace(' ', '_')
-            if data_plus['mobile'] != "":
-                tel = data_plus['mobile']
-            else:
-                tel = data_plus['homePhone']
+            tel = ''
+            if 'mobile' in data_plus:
+                if data_plus['mobile'] != "":
+                    tel = data_plus['mobile']
+                else:
+                    if 'homePhone' in data_plus:
+                        tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(),
-                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "classeReelle": classeReelle, "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'],
-                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [],
+                                        "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d'), "classe": classe, "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'],
+                                        "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'], 'type': data['type'], 'elementPublic': [],
                                         'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
             utilisateurs[str(_id)].insert()
 
             user = utilisateurs[str(_id)].toDict()
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
-            session['couleur'] = '#3f51b5'
+            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
             session['type'] = user['type']
 
             return redirect(url_for('profil'))
 
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
-            if data_plus['mobile'] != "":
-                tel = data_plus['mobile']
-            else:
-                tel = data_plus['homePhone']
+            tel = ''
+            if 'mobile' in data_plus:
+                if data_plus['mobile'] != "":
+                    tel = data_plus['mobile']
+                else:
+                    if 'homePhone' in data_plus:
+                        tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
-                'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0})
+                data['birthDate'], '%Y-%m-%d'), "lycee": data['schoolName'], 'couleur': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
+                'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0, 'nomImg': ''})
             utilisateurs[str(_id)].insert()
 
-            user = utilisateurs[str(_id)]
+            user = utilisateurs[str(_id)].toDict()
 
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
-            session['couleur'] = '#3f51b5'
+            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
             session['type'] = user['type']
 
             return redirect(url_for('profil'))

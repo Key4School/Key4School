@@ -54,94 +54,94 @@ class Translate_matiere_spes_options_lv:
 	def translate_matiere_spes_options_lv(self, toTranslate):
 		translated = ''
 		translations = {
-	        # Matières tronc commun
-	        'fr': 'Français',
-	        'maths': 'Mathématiques',
-	        'hg': 'Histoire-Géographie',
-	        'snt': 'SNT',
-	        'pc': 'Physique-Chimie',
-	        'svt': 'SVT',
-	        'emc': 'EMC',
-	        'ses': 'SES',
-	        'philo': 'Philosophie',
-	        'eps': 'EPS',
-	        # Langues
-	        'ang': 'Anglais',
-	        'esp': 'Espagnol',
-	        'all': 'Allemand',
-	        'por': 'Portugais',
-	        'it': 'Italien',
-	        'chi': 'Chinois',
-	        'ru': 'Russe',
-	        'ara': 'Arabe',
-	        # LV1
-	        'lv1-ang': 'LV1 Anglais',
-	        'lv1-ang-euro': 'LV1 Anglais Euro',
-	        'lv1-esp': 'LV1 Espagnol',
-	        'lv1-esp-euro': 'LV1 Espagnol Euro',
-	        'lv1-all': 'LV1 Allemand',
-	        'lv1-all-euro': 'LV1 Allemand Euro',
-	        'lv1-por': 'LV1 Portugais',
-	        'lv1-por-euro': 'LV1 Portugais Euro',
-	        'lv1-it': 'LV1 Itlien',
-	        'lv1-it-euro': 'LV1 Itlien Euro',
-	        'lv1-chi': 'LV1 Chinois',
-	        'lv1-ru': 'LV1 Russe',
-	        'lv1-ara': 'LV1 Arabe',
-	        # LV2
-	        'lv2-ang': 'LV2 Anglais',
-	        'lv2-esp': 'LV2 Espagnol',
-	        'lv2-all': 'LV2 Allemand',
-	        'lv2-por': 'LV2 Portugais',
-	        'lv2-it': 'LV2 Italien',
-	        'lv2-chi': 'LV2 Chinois',
-	        'lv2-ru': 'LV2 Russe',
-	        'lv2-ara': 'LV2 Arabe',
-	        # Spés
-	        'spe-art': 'Spé Arts',
-	        'spe-hggsp': 'Spé HGGSP',
-	        'spe-hlp': 'Spé HLP',
-	        'spe-ses': 'Spé SES',
-	        'spe-maths': 'Spé Mathématiques',
-	        'spe-pc': 'Spé Physique-Chimie',
-	        'spe-svt': 'Spé SVT',
-	        'spe-nsi': 'Spé NSI',
-	        'spe-si': 'Spé Sciences de l\'Ingénieur',
-	        'spe-lca': 'Spé LCA',
-	        'spe-llcer-ang': 'Spé LLCER Anglais',
-	        'spe-llcer-esp': 'Spé LLCER Espagnol',
-	        'spe-llcer-all': 'Spé LLCER Allemand',
-	        'spe-llcer-it': 'Spé LLCER Italien',
-	        'spe-bio-eco': 'Spé Biologie-écologie',
-	        # Options
-	        'opt-lca-latin': 'LCA Latin',
-	        'opt-lca-grec': 'LCA Grec',
-	        'opt-lv3-ang': 'LV3 Anglais',
-	        'opt-lv3-esp': 'LV3 Espagnol',
-	        'opt-lv3-all': 'LV3 Allemand',
-	        'opt-lv3-por': 'LV3 Portugais',
-	        'opt-lv3-it': 'LV3 Italien',
-	        'opt-lv3-ru': 'LV3 Russe',
-	        'opt-lv3-ara': 'LV3 Arabe',
-	        'opt-lv3-chi': 'LV3 Chinois',
-	        'opt-eps': 'Option EPS',
-	        'opt-arts': 'Option Arts',
-	        'opt-musique': 'Option Musique',
-	        'opt-mg': 'Option Management et Gestion',
-	        'opt-ss': 'Option Santé et Social',
-	        'opt-biotech': 'Option Biotechnologies',
-	        'opt-sl': 'Option Sciences et laboratoire',
-	        'opt-si': 'Option Sciences de l\'Ingénieur',
-	        'opt-cit': 'Option Création et culture technologiques',
-	        'opt-ccd': 'Option Création et culture - design',
-	        'opt-equit': 'Option Hippologie et équitation',
-	        'opt-aet': 'Option Agranomie-économie-territoires',
-	        'opt-psc': 'Option Pratiques sociales et culturelles',
-	        'opt-maths-comp': 'Option Maths Complémentaires',
-	        'opt-maths-exp': 'Option Maths Expertes',
-	        'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
-	        #
-	        'none': ''
+			# Matières tronc commun
+			'fr': 'Français',
+			'maths': 'Mathématiques',
+			'hg': 'Histoire-Géographie',
+			'snt': 'SNT',
+			'pc': 'Physique-Chimie',
+			'svt': 'SVT',
+			'emc': 'EMC',
+			'ses': 'SES',
+			'philo': 'Philosophie',
+			'eps': 'EPS',
+			# Langues
+			'ang': 'Anglais',
+			'esp': 'Espagnol',
+			'all': 'Allemand',
+			'por': 'Portugais',
+			'it': 'Italien',
+			'chi': 'Chinois',
+			'ru': 'Russe',
+			'ara': 'Arabe',
+			# LV1
+			'lv1-ang': 'LV1 Anglais',
+			'lv1-ang-euro': 'LV1 Anglais Euro',
+			'lv1-esp': 'LV1 Espagnol',
+			'lv1-esp-euro': 'LV1 Espagnol Euro',
+			'lv1-all': 'LV1 Allemand',
+			'lv1-all-euro': 'LV1 Allemand Euro',
+			'lv1-por': 'LV1 Portugais',
+			'lv1-por-euro': 'LV1 Portugais Euro',
+			'lv1-it': 'LV1 Itlien',
+			'lv1-it-euro': 'LV1 Itlien Euro',
+			'lv1-chi': 'LV1 Chinois',
+			'lv1-ru': 'LV1 Russe',
+			'lv1-ara': 'LV1 Arabe',
+			# LV2
+			'lv2-ang': 'LV2 Anglais',
+			'lv2-esp': 'LV2 Espagnol',
+			'lv2-all': 'LV2 Allemand',
+			'lv2-por': 'LV2 Portugais',
+			'lv2-it': 'LV2 Italien',
+			'lv2-chi': 'LV2 Chinois',
+			'lv2-ru': 'LV2 Russe',
+			'lv2-ara': 'LV2 Arabe',
+			# Spés
+			'spe-art': 'Spé Arts',
+			'spe-hggsp': 'Spé HGGSP',
+			'spe-hlp': 'Spé HLP',
+			'spe-ses': 'Spé SES',
+			'spe-maths': 'Spé Mathématiques',
+			'spe-pc': 'Spé Physique-Chimie',
+			'spe-svt': 'Spé SVT',
+			'spe-nsi': 'Spé NSI',
+			'spe-si': 'Spé Sciences de l\'Ingénieur',
+			'spe-lca': 'Spé LCA',
+			'spe-llcer-ang': 'Spé LLCER Anglais',
+			'spe-llcer-esp': 'Spé LLCER Espagnol',
+			'spe-llcer-all': 'Spé LLCER Allemand',
+			'spe-llcer-it': 'Spé LLCER Italien',
+			'spe-bio-eco': 'Spé Biologie-écologie',
+			# Options
+			'opt-lca-latin': 'LCA Latin',
+			'opt-lca-grec': 'LCA Grec',
+			'opt-lv3-ang': 'LV3 Anglais',
+			'opt-lv3-esp': 'LV3 Espagnol',
+			'opt-lv3-all': 'LV3 Allemand',
+			'opt-lv3-por': 'LV3 Portugais',
+			'opt-lv3-it': 'LV3 Italien',
+			'opt-lv3-ru': 'LV3 Russe',
+			'opt-lv3-ara': 'LV3 Arabe',
+			'opt-lv3-chi': 'LV3 Chinois',
+			'opt-eps': 'Option EPS',
+			'opt-arts': 'Option Arts',
+			'opt-musique': 'Option Musique',
+			'opt-mg': 'Option Management et Gestion',
+			'opt-ss': 'Option Santé et Social',
+			'opt-biotech': 'Option Biotechnologies',
+			'opt-sl': 'Option Sciences et laboratoire',
+			'opt-si': 'Option Sciences de l\'Ingénieur',
+			'opt-cit': 'Option Création et culture technologiques',
+			'opt-ccd': 'Option Création et culture - design',
+			'opt-equit': 'Option Hippologie et équitation',
+			'opt-aet': 'Option Agranomie-économie-territoires',
+			'opt-psc': 'Option Pratiques sociales et culturelles',
+			'opt-maths-comp': 'Option Maths Complémentaires',
+			'opt-maths-exp': 'Option Maths Expertes',
+			'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
+			#
+			'none': ''
 		}
 
 		for a in toTranslate:
@@ -163,7 +163,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 		self.dateInscription = params['dateInscription']
 		self.birth_date = params.get('birth_date')
 		self.classe = params.get('classe', '')
-		self.classeReelle = params.get('classeReelle', '')
 		self.lycee = params['lycee']
 		self.spes = params.get('spes', [])
 		self.langues = params.get('langues', [])
@@ -191,82 +190,80 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 
 	def toDict(self):
 		return {  # on ajoute à la liste ce qui nous interesse
-	        '_id': self._id,
-	        'idENT': self.idENT,
-	        'nom': self.nom,
-	        'prenom': self.prenom,
-	        'pseudo': self.pseudo,
-	        'nomImg': self.nomImg,
-	        'imgProfile': self.imgProfile,
-	        'dateInscription': self.dateInscription,
-	        'birth_date': self.birth_date,
-	        'classe': self.classe,
-	        'classeReelle': self.classeReelle,
-	        'lycee': self.lycee,
-	        'spes': self.spes,
-	        'spes-str': self.translate_matiere_spes_options_lv(self.spes),
-	        'langues': self.langues,
-	        'langues-str': self.translate_matiere_spes_options_lv(self.langues),
-	        'options': self.options,
-	        'options-str': self.translate_matiere_spes_options_lv(self.options),
-	        'matieres': self.getUserSubjects(),
-	        'couleur': self.couleur,
-	        'type': self.type,
-	        'elementPublic': self.elementPublic,
-	        'elementPrive': self.elementPrive,
-	        'caractere': self.caractere,
-	        'email': self.email,
+			'_id': self._id,
+			'idENT': self.idENT,
+			'nom': self.nom,
+			'prenom': self.prenom,
+			'pseudo': self.pseudo,
+			'nomImg': self.nomImg,
+			'imgProfile': self.imgProfile,
+			'dateInscription': self.dateInscription,
+			'birth_date': self.birth_date,
+			'classe': self.classe,
+			'lycee': self.lycee,
+			'spes': self.spes,
+			'spes-str': self.translate_matiere_spes_options_lv(self.spes),
+			'langues': self.langues,
+			'langues-str': self.translate_matiere_spes_options_lv(self.langues),
+			'options': self.options,
+			'options-str': self.translate_matiere_spes_options_lv(self.options),
+			'matieres': self.getUserSubjects(),
+			'couleur': self.couleur,
+			'type': self.type,
+			'elementPublic': self.elementPublic,
+			'elementPrive': self.elementPrive,
+			'caractere': self.caractere,
+			'email': self.email,
 			'emailENT': self.emailENT,
-	        'interets': self.interets,
-	        'telephone': self.telephone,
-	        'notifs': self.notifs,
-	        'sign': self.sign,
-	        'Sanctions': self.Sanctions,
-	        'SanctionEnCour': self.SanctionEnCour,
-	        'SanctionDuree': self.SanctionDuree,
-	        'xp': self.xp,
-	        'xpModeration': self.xpModeration,
-	        'motif': self.motif,
-	        'admin': self.admin,
-	        'a_sign': self.aSign()
-	    }
+			'interets': self.interets,
+			'telephone': self.telephone,
+			'notifs': self.notifs,
+			'sign': self.sign,
+			'Sanctions': self.Sanctions,
+			'SanctionEnCour': self.SanctionEnCour,
+			'SanctionDuree': self.SanctionDuree,
+			'xp': self.xp,
+			'xpModeration': self.xpModeration,
+			'motif': self.motif,
+			'admin': self.admin,
+			'a_sign': self.aSign()
+		}
 
 	def toDB(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
-	        '_id': self._id,
-	        'idENT': self.idENT,
-	        'nom': self.nom,
-	        'prenom': self.prenom,
-	        'pseudo': self.pseudo,
-	        'nomImg': self.nomImg,
-	        'imgProfile': self.imgProfile,
-	        'dateInscription': self.dateInscription,
-	        'birth_date': self.birth_date,
-	        'classe': self.classe,
-	        'classeReelle': self.classeReelle,
-	        'lycee': self.lycee,
-	        'spes': self.spes,
-	        'langues': self.langues,
-	        'options': self.options,
-	        'couleur': self.couleur,
-	        'type': self.type,
-	        'elementPublic': self.elementPublic,
-	        'elementPrive': self.elementPrive,
-	        'caractere': self.caractere,
-	        'email': self.email,
+			'_id': self._id,
+			'idENT': self.idENT,
+			'nom': self.nom,
+			'prenom': self.prenom,
+			'pseudo': self.pseudo,
+			'nomImg': self.nomImg,
+			'imgProfile': self.imgProfile,
+			'dateInscription': self.dateInscription,
+			'birth_date': self.birth_date,
+			'classe': self.classe,
+			'lycee': self.lycee,
+			'spes': self.spes,
+			'langues': self.langues,
+			'options': self.options,
+			'couleur': self.couleur,
+			'type': self.type,
+			'elementPublic': self.elementPublic,
+			'elementPrive': self.elementPrive,
+			'caractere': self.caractere,
+			'email': self.email,
 			'emailENT': self.emailENT,
-	        'interets': self.interets,
-	        'telephone': self.telephone,
-	        'notifs': self.notifs,
-	        'sign': self.sign,
-	        'Sanction': self.Sanctions,
-	        'SanctionEnCour': self.SanctionEnCour,
-	        'SanctionDuree': self.SanctionDuree,
-	        'xp': self.xp,
-	        'xpModeration': self.xpModeration,
-	        'motif': self.motif,
-	        'admin': self.admin
-	    }
+			'interets': self.interets,
+			'telephone': self.telephone,
+			'notifs': self.notifs,
+			'sign': self.sign,
+			'Sanction': self.Sanctions,
+			'SanctionEnCour': self.SanctionEnCour,
+			'SanctionDuree': self.SanctionDuree,
+			'xp': self.xp,
+			'xpModeration': self.xpModeration,
+			'motif': self.motif,
+			'admin': self.admin
+		}
 
 	def recupLevel(self):
 		niv = int(0.473*self.xp**0.615)
@@ -275,39 +272,41 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 		return niv, xplvl, self.xp
 
 	def getUserSubjects(self):
-	    subjects = ['hg', 'emc', 'eps']
+		if self.type == "ELEVE":
+			subjects = ['hg', 'emc', 'eps']
+			# Tronc commun
+			if self.classe[0] == '2' or self.classe[0] == '1':
+				subjects.append('fr')
+			if self.classe[0] == '2':
+				subjects.append('maths')
+				subjects.append('pc')
+				subjects.append('ses')
+			if self.classe[0] == 'T':
+				subjects.append('philo')
+			# Langues
+			if 'lv1-ang' in self.langues or 'lv1-ang-euro' in self.langues or 'lv2-ang' in self.langues or 'opt-lv3-ang' in self.options:
+				subjects.append('ang')
+			if 'lv1-esp' in self.langues or 'lv1-esp-euro' in self.langues or 'lv2-esp' in self.langues or 'opt-lv3-esp' in self.options:
+				subjects.append('esp')
+			if 'lv1-all' in self.langues or 'lv1-all-euro' in self.langues or 'lv2-all' in self.langues or 'opt-lv3-all' in self.options:
+				subjects.append('all')
+			if 'lv1-it' in self.langues or 'lv1-it-euro' in self.langues or 'lv2-it' in self.langues or 'opt-lv3-it' in self.options:
+				subjects.append('it')
+			if 'lv1-chi' in self.langues or 'lv2-chi' in self.langues or 'opt-lv3-chi' in self.options:
+				subjects.append('chi')
+			if 'lv1-ru' in self.langues or 'lv2-ru' in self.langues or 'opt-lv3-ru' in self.options:
+				subjects.append('ru')
+			if 'lv1-por' in self.langues or 'lv2-por' in self.langues or 'opt-lv3-por' in self.options:
+				subjects.append('por')
+			if 'lv1-ara' in self.langues or 'lv2-ara' in self.langues or 'opt-lv3-ara' in self.options:
+				subjects.append('ara')
+			# Spés + options
+			subjects += self.spes
+			subjects += self.options
+		else:
+			subjects = []
 
-	    # Tronc commun
-	    if self.classe == '2GT' or self.classe == '1G':
-	        subjects.append('fr')
-	    if self.classe == '2GT':
-	        subjects.append('maths')
-	        subjects.append('pc')
-	        subjects.append('ses')
-	    if self.classe == 'TG':
-	        subjects.append('philo')
-	    # Langues
-	    if 'lv1-ang' in self.langues or 'lv1-ang-euro' in self.langues or 'lv2-ang' in self.langues or 'opt-lv3-ang' in self.options:
-	        subjects.append('ang')
-	    if 'lv1-esp' in self.langues or 'lv1-esp-euro' in self.langues or 'lv2-esp' in self.langues or 'opt-lv3-esp' in self.options:
-	        subjects.append('esp')
-	    if 'lv1-all' in self.langues or 'lv1-all-euro' in self.langues or 'lv2-all' in self.langues or 'opt-lv3-all' in self.options:
-	        subjects.append('all')
-	    if 'lv1-it' in self.langues or 'lv1-it-euro' in self.langues or 'lv2-it' in self.langues or 'opt-lv3-it' in self.options:
-	        subjects.append('it')
-	    if 'lv1-chi' in self.langues or 'lv2-chi' in self.langues or 'opt-lv3-chi' in self.options:
-	        subjects.append('chi')
-	    if 'lv1-ru' in self.langues or 'lv2-ru' in self.langues or 'opt-lv3-ru' in self.options:
-	        subjects.append('ru')
-	    if 'lv1-por' in self.langues or 'lv2-por' in self.langues or 'opt-lv3-por' in self.options:
-	        subjects.append('por')
-	    if 'lv1-ara' in self.langues or 'lv2-ara' in self.langues or 'opt-lv3-ara' in self.options:
-	        subjects.append('ara')
-	    # Spés + options
-	    subjects += self.spes
-	    subjects += self.options
-
-	    return subjects
+		return subjects
 
 	def aSign(self):
 		if ObjectId(session.get('id')) in self.sign:
@@ -377,44 +376,44 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 	def toDict(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
 			'_id': self._id,
-	        'idMsg': self._id,
-	        'idAuteur': self.id_utilisateur,
-	        'titre': self.titre,
-	        'contenu': self.contenu,
-	        'date-envoi': self.date_envoi,
-	        'temps': self.convertTime(),
-	        'tag-matière': self.matiere,
-	        'matière': self.translate_matiere_spes_options_lv([self.matiere]),
-	        'likes': self.likes,
-	        'nb-likes': len(self.likes),
-	        'réponses associées': [r.toDict() for r in self.reponses_associees.values()],
-	        'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
-	        'reponsesObjects': self.reponses_associees,
-	        'a_like': self.aLike(),
-	        'a_sign': self.aSign(),
-	        'sign': self.sign,
-	        'motif': self.motif,
-	        'resolu': self.resolu,
-	        'fileType' : self.fileType,
-	        # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-	        'user': utilisateurs.get(str(self.id_utilisateur)).toDict()
-	    }
+			'idMsg': self._id,
+			'idAuteur': self.id_utilisateur,
+			'titre': self.titre,
+			'contenu': self.contenu,
+			'date-envoi': self.date_envoi,
+			'temps': self.convertTime(),
+			'tag-matière': self.matiere,
+			'matière': self.translate_matiere_spes_options_lv([self.matiere]),
+			'likes': self.likes,
+			'nb-likes': len(self.likes),
+			'réponses associées': [r.toDict() for r in self.reponses_associees.values()],
+			'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
+			'reponsesObjects': self.reponses_associees,
+			'a_like': self.aLike(),
+			'a_sign': self.aSign(),
+			'sign': self.sign,
+			'motif': self.motif,
+			'resolu': self.resolu,
+			'fileType' : self.fileType,
+			# on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+			'user': utilisateurs.get(str(self.id_utilisateur)).toDict()
+		}
 
 	def toDB(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
-	        '_id': self._id,
-	        'id-utilisateur': self.id_utilisateur,
-	        'titre': self.titre,
-	        'contenu': self.contenu,
-	        'date-envoi': self.date_envoi,
-	        'matière': self.matiere,
-	        'réponses associées': {idRep: rep.toDB() for (idRep, rep) in self.reponses_associees.items()},
-	        'likes': self.likes,
-	        'sign': self.sign,
+			'_id': self._id,
+			'id-utilisateur': self.id_utilisateur,
+			'titre': self.titre,
+			'contenu': self.contenu,
+			'date-envoi': self.date_envoi,
+			'matière': self.matiere,
+			'réponses associées': {idRep: rep.toDB() for (idRep, rep) in self.reponses_associees.items()},
+			'likes': self.likes,
+			'sign': self.sign,
 			'motif': self.motif,
-	        'resolu': self.resolu,
-	        'fileType' : self.fileType
-	    }
+			'resolu': self.resolu,
+			'fileType' : self.fileType
+		}
 
 	def __str__(self):
 		return str(self.toDict())
@@ -433,29 +432,29 @@ class Reponse(Demande):
 		return {
 			'_id': self._id,
 			'idRep': self._id,
-	        'id-utilisateur': self.id_utilisateur,
-	        'contenu': self.contenu,
-	        'date-envoi': self.date_envoi,
-	        'likes': self.likes,
-	        'nb-likes': len(self.likes),
-	        'a_like': self.aLike(),
+			'id-utilisateur': self.id_utilisateur,
+			'contenu': self.contenu,
+			'date-envoi': self.date_envoi,
+			'likes': self.likes,
+			'nb-likes': len(self.likes),
+			'a_like': self.aLike(),
 			'a_sign': self.aSign(),
-	        'temps': self.convertTime(),
+			'temps': self.convertTime(),
 			'sign': self.sign,
-	        'motif': self.motif,
-	        # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-	        'user': utilisateurs.get(str(self.id_utilisateur)).toDict()
+			'motif': self.motif,
+			# on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
+			'user': utilisateurs.get(str(self.id_utilisateur)).toDict()
 		}
 
 	def toDB(self) -> dict:
 		return {
 			'_id': self._id,
-	        'id-utilisateur': self.id_utilisateur,
-	        'contenu': self.contenu,
-	        'date-envoi': self.date_envoi,
-	        'likes': self.likes,
+			'id-utilisateur': self.id_utilisateur,
+			'contenu': self.contenu,
+			'date-envoi': self.date_envoi,
+			'likes': self.likes,
 			'sign': self.sign,
-	        'motif': self.motif
+			'motif': self.motif
 		}
 
 	def __str__(self):
@@ -486,32 +485,32 @@ class Message(Actions):
 		else:
 			rep = None
 		return {  # on ajoute à la liste ce qui nous interesse
-	        '_id': self._id,
-	        'id-groupe': self.id_groupe,
+			'_id': self._id,
+			'id-groupe': self.id_groupe,
 			'groupe': groupes[str(self.id_groupe)].toDict(),
-	        'id-utilisateur': self.id_utilisateur,
+			'id-utilisateur': self.id_utilisateur,
 			'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
-	        'contenu': self.contenu,
-	        'date-envoi': self.date_envoi,
-	        'reponse': self.reponse,
+			'contenu': self.contenu,
+			'date-envoi': self.date_envoi,
+			'reponse': self.reponse,
 			'rep': rep,
-	        'audio': self.audio,
-	        'sign': self.sign,
-	        'motif': self.motif
-	    }
+			'audio': self.audio,
+			'sign': self.sign,
+			'motif': self.motif
+		}
 
 	def toDB(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
-	        '_id': self._id,
-	        'id-groupe': self.id_groupe,
-	        'id-utilisateur': self.id_utilisateur,
-	        'contenu': self.contenu,
-	        'date-envoi': self.date_envoi,
-	        'reponse': self.reponse,
-	        'audio': self.audio,
-	        'sign': self.sign,
-	        'motif': self.motif
-	    }
+			'_id': self._id,
+			'id-groupe': self.id_groupe,
+			'id-utilisateur': self.id_utilisateur,
+			'contenu': self.contenu,
+			'date-envoi': self.date_envoi,
+			'reponse': self.reponse,
+			'audio': self.audio,
+			'sign': self.sign,
+			'motif': self.motif
+		}
 
 	def __str__(self):
 		return str(self.toDict())
@@ -535,25 +534,25 @@ class Groupe(Actions):
 
 	def toDict(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
-	        '_id': self._id,
-	        'nom': self.nom,
-	        'id-utilisateurs': self.id_utilisateurs,
+			'_id': self._id,
+			'nom': self.nom,
+			'id-utilisateurs': self.id_utilisateurs,
 			'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
-	        'moderateurs': self.moderateurs,
+			'moderateurs': self.moderateurs,
 			'modos': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.moderateurs],
-	        'sign': self.sign,
-	        'motif': self.motif
-	    }
+			'sign': self.sign,
+			'motif': self.motif
+		}
 
 	def toDB(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
-	        '_id': self._id,
-	        'nom': self.nom,
-	        'id-utilisateurs': self.id_utilisateurs,
-	        'moderateurs': self.moderateurs,
-	        'sign': self.sign,
-	        'motif': self.motif
-	    }
+			'_id': self._id,
+			'nom': self.nom,
+			'id-utilisateurs': self.id_utilisateurs,
+			'moderateurs': self.moderateurs,
+			'sign': self.sign,
+			'motif': self.motif
+		}
 
 	def __str__(self):
 		return str(self.toDict())
@@ -629,27 +628,27 @@ class Notification(Actions):
 		sender = utilisateurs[str(msg['id-utilisateur'])].toDict()
 		return {  # on ajoute à la liste ce qui nous interesse
 			'_id': self._id,
-	        'type': self.type,
-	        'id_groupe': self.id_groupe,
+			'type': self.type,
+			'id_groupe': self.id_groupe,
 			'groupe' : grp,
-	        'id_msg': self.id_msg,
+			'id_msg': self.id_msg,
 			'message' : msg,
 			"sender": sender,
 			'date': self.date,
-	        'temps': self.convertTime(),
-	        'destinataires': self.destinataires,
-	        'userDest': [utilisateurs.get(str(destinataire)).toDict() for destinataire in self.destinataires]
-	    }
+			'temps': self.convertTime(),
+			'destinataires': self.destinataires,
+			'userDest': [utilisateurs.get(str(destinataire)).toDict() for destinataire in self.destinataires]
+		}
 
 	def toDB(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
-	        '_id': self._id,
-	        'type': self.type,
-	        'id_groupe': self.id_groupe,
-	        'id_msg': self.id_msg,
-	        'date': self.date,
-	        'destinataires': self.destinataires
-	    }
+			'_id': self._id,
+			'type': self.type,
+			'id_groupe': self.id_groupe,
+			'id_msg': self.id_msg,
+			'date': self.date,
+			'destinataires': self.destinataires
+		}
 
 	def __str__(self):
 		return str(self.toDict())
