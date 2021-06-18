@@ -75,7 +75,7 @@
       </div> -->
       <!-- Partie droite de la barre de navigation -->
       {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
-      <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%;" >
+      <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%; transition: all .5s; border-radius: 4px;" >
         <a class="navbar-item" href="{{url_for('question')}}">
           <i style="color: black; font-size:20px;" class="fas fa-question"></i>
           &nbsp;&nbsp;Poser une question
@@ -92,13 +92,13 @@
 
     <div class="navbar-end">
       <!-- Début notifications -->
-      <div class="navbar-item has-dropdown is-hoverable navbarhover">
+      <div class="navbar-item has-dropdown is-hoverable navbarhover" style="transition: all .1s;">
         <a class="navbar-link">
           <i style="color: black; font-size:30px;" class="fas fa-bell"></i>
           <p id="nbNotif" style="color:black;margin-left: -17%;border-radius: 50%;padding-left: 8px;padding-right: 8px;background-color: red;"></p>
         </a>
         <!-- Notifications -->
-        <div class="navbar-dropdown is-right" style="width: 300%;max-height:500px;overflow-y: auto;" id="notifContent">
+        <div class="navbar-dropdown is-boxed is-right" style="width: 300%;max-height:500px;overflow-y: auto;" id="notifContent">
           <!-- NE PAS SUPPRIMER contenu notif -->
           <p style="width: 60%;margin: auto;margin-top: 5%;"id="noNotif">Aucune notification</p>
           <button  style="margin-left:2%;" onclick="allSuppr()" id="toutLu" class="button is-small is-info is-outlined">
@@ -110,7 +110,7 @@
           <br />
         </div>
       </div>
-      <div class="navbar-item has-dropdown is-hoverable navbarhover">
+      <div class="navbar-item has-dropdown is-hoverable navbarhover" style="transition: all .1s;">
         <a class="navbar-link">
           <i style="color: black; font-size:30px;" class="fas fa-bars"></i>
         </a>
