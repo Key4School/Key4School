@@ -159,7 +159,6 @@ def accueil():
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
         # subjects = getUserSubjects(user)
-
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
         demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:9]
 
@@ -710,7 +709,7 @@ def question():
         return redirect(url_for('login'))
 
 
-@app.route('/recherche')
+@app.route('/recherche/')
 def recherche():
     global utilisateurs
     global demandes_aide
@@ -744,7 +743,7 @@ def recherche():
         return redirect(url_for('login'))
 
 
-@app.route('/rechercheUser')
+@app.route('/rechercheUser/')
 def recherche_user():
     global utilisateurs
 
