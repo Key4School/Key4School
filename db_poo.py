@@ -275,13 +275,13 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 	    subjects = ['hg', 'emc', 'eps']
 
 	    # Tronc commun
-	    if self.classe == '2GT' or self.classe == '1G':
+	    if self.classe[0] == '2' or self.classe[0] == '1':
 	        subjects.append('fr')
-	    if self.classe == '2GT':
+	    if self.classe[0] == '2':
 	        subjects.append('maths')
 	        subjects.append('pc')
 	        subjects.append('ses')
-	    if self.classe == 'TG':
+	    if self.classe[0] == 'T':
 	        subjects.append('philo')
 	    # Langues
 	    if 'lv1-ang' in self.langues or 'lv1-ang-euro' in self.langues or 'lv2-ang' in self.langues or 'opt-lv3-ang' in self.options:
