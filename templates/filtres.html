@@ -10,7 +10,7 @@
         <button class="button" style="background-color:{{session['couleur'][2]}};" onclick="filter(this);">Toutes</button>
       </div>
       <!-- Tronc commun -->
-      {% if user['classe']=='2GT' or user['classe']=='1G' %}
+      {% if user['classe'][0]=='2' or user['classe'][0]=='1' %}
         <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="fr">
           <button class="button" style="background-color:{{session['couleur'][2]}};" onclick="filter(this);">Français</button>
         </div>
@@ -32,7 +32,7 @@
           <button class="button" style="background-color:{{session['couleur'][2]}};" onclick="filter(this);">SES</button>
         </div>
       {% endif %}
-      {% if user['classe']=='TG' %}
+      {% if user['classe'][0]=='T' %}
         <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="philo">
           <button class="button" style="background-color:{{session['couleur'][2]}};" onclick="filter(this);">Philosophie</button>
         </div>
