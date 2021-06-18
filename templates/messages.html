@@ -145,7 +145,17 @@
           <p style="font-weight:bold;">{{infogroupe['nom']}}</p>
           <!-- liste des paricipants -->
           <p style="font-variant: small-caps; text-align: justify;word-wrap:break-word;">
-            {%for content in infoUtilisateurs%} <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>,{%endfor%}
+            {% if infogroupe['nbUtilisateurs'] > 10 %}
+              {% for i in range(10) %}
+                <a href="{{url_for('profil' ,idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>,
+              {%endfor%}
+              <br />&nbsp;
+              <a style="margin-left: 15px;" onclick="divoptionopen()"><em>et {{infogroupe['nbUtilisateurs']-10}} autres utilisateurs</em></a>
+            {% else %}
+              {%for content in infoUtilisateurs%} 
+                <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>,
+              {%endfor%}
+            {% endif %}
           </p>
         </div>
           <!-- Bouton trois petits points -->

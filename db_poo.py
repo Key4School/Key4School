@@ -538,6 +538,7 @@ class Groupe(Actions):
 			'nom': self.nom,
 			'id-utilisateurs': self.id_utilisateurs,
 			'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
+			'nbUtilisateurs': len(self.id_utilisateurs),
 			'moderateurs': self.moderateurs,
 			'modos': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.moderateurs],
 			'sign': self.sign,
