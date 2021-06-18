@@ -205,6 +205,20 @@
                   </span>
                   <span>Signaler</span>
                 </button>
+                {%if user['admin']%}
+                <button  class="button is-warning is-outlined is-small" onClick="supprDiscOpen();">
+                  <span class="icon is-small">
+                    <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+                  </span>
+                  <span>Supprimer</span>
+                </button>
+                <button  class="button is-warning is-outlined is-small" onClick="valDiscOpen();">
+                  <span class="icon is-small">
+                    <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+                  </span>
+                  <span>Valider</span>
+                </button>
+                {%endif%}
                 {%if infogroupe['is_class'] == False%}
                 <form action="/virerParticipant/" id="virerParticipant" method="POST">
                   <input type='hidden' id="idViré" name='idViré' value="{{sessionId}}" />
@@ -332,6 +346,49 @@
           </div>
         </div>
       </div>
+      {%if user['admin']%}
+      <div class="modal" id="supprDisc" style="overflow:hidden;">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Supression de la discussion</p>
+          </header>
+          <form onsubmit="supprDisc(event); return false;" id="supprDiscForm" method="POST" autocomplete="off">
+            <section class="modal-card-body">
+              <input id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
+              <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['_id']}}" />
+              <input type='hidden' name="demandeBut" value="supprDisc" />
+            </section>
+            <footer class="modal-card-foot">
+              <button type="submit" class="button is-success">Supprimer</button>
+              <button onclick="supprDiscClose(); return false;" class="button">Annuler</button>
+            </footer>
+          </form>
+        </div>
+      </div>
+      <div class="modal" id="valDisc" style="overflow:hidden;">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Validation de la discussion</p>
+          </header>
+          <form onsubmit="valDisc(event); return false;" id="valDiscForm" method="POST" autocomplete="off">
+            <section class="modal-card-body">
+              <input type='hidden' id="idDiscVal" name='idDiscVal' value="{{infogroupe['_id']}}" />
+              <select name="motif">
+                <option value="abusif">Signalement abusif</option>
+                <option value="justifie">Justifié</option>
+              </select>
+              <input type='hidden' name="demandeBut" value="valDisc" />
+            </section>
+            <footer class="modal-card-foot">
+              <button type="submit" class="button is-success">Valider</button>
+              <button onclick="designalisationMsgClose(); return false;" class="button">Annuler</button>
+            </footer>
+          </form>
+        </div>
+      </div>
+      {%endif%}
       <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
       <div id="messages" style="overflow-y: auto; overflow-x:hidden;height:80%;border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
         {% for content in msgDb%}

@@ -962,6 +962,35 @@ def administration():
                             del motifDemande[a]
                     demandes_aide[request.form['idDemandVal']].update()
 
+                elif request.form['demandeBut'] == 'supprDisc':
+                    groupe = groupes[request.form['idDiscSuppr']].toDict()
+                    sign = groupe['sign']
+                    motif = groupe['motif']
+
+                    sign.clear()
+                    motif.clear()
+                    grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idDiscSuppr'])]
+                    for m in grpMsg:
+                        messages[str(m['_id'])].suppr()
+
+                            # messages[str(m['_id'])].update()
+                    groupes[request.form['idDiscSuppr']].update()
+
+                elif request.form['demandeBut'] == 'valDisc':
+                    groupe = groupes[request.form['idDiscVal']].toDict()
+                    sign = groupe['sign']
+                    motif = groupe['motif']
+
+                        # on supprime son signalement
+                    sign.clear()
+                    motif.clear()
+                    grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idDiscVal'])]
+                    for m in grpMsg:
+                        m['motif'].clear()
+                        m['sign'].clear()
+                        messages[str(m['_id'])].update()
+                    groupes[request.form['idDiscVal']].update()
+
 
                 return 'sent'
 
