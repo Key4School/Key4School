@@ -607,7 +607,8 @@ class Notification(Actions):
 		return
 
 	def supprUser(self, uid):
-		self.destinataires.remove(uid)
+		if uid in self.destinataires:
+			self.destinataires.remove(uid)
 		if len(self.destinataires) > 0:
 			self.update()
 		else:
