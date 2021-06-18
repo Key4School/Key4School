@@ -22,7 +22,7 @@
     }
 
     .participantmsg {
-      margin-left: 1%; 
+      margin-left: 1%;
       margin-right: 45%;
       max-width: 55%;
       margin-bottom: 12px;
@@ -152,7 +152,7 @@
               <br />&nbsp;
               <a style="margin-left: 15px;" onclick="divoptionopen()"><em>et {{infogroupe['nbUtilisateurs']-10}} autres utilisateurs</em></a>
             {% else %}
-              {%for content in infoUtilisateurs%} 
+              {%for content in infoUtilisateurs%}
                 <a href="{{url_for('profil' ,idUser=content['_id'])}}">{{content['pseudo']}}</a>,
               {%endfor%}
             {% endif %}
@@ -170,7 +170,7 @@
               <section class="modal-card-body">
                 Info Utilisateur : <br />
                 {%for users in infoUtilisateurs%}
-                {%if sessionId in infogroupe['moderateurs']%}
+                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick="optionParticipantOpen('{{users['_id']}}')">
                   {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
                 </button>
@@ -179,7 +179,7 @@
                   {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
                 </a>
                 {%endif%}
-                {%if sessionId in infogroupe['moderateurs']%}
+                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
                   <div id="ModifRoleUser{{users['_id']}}">
                     {%if users['_id'] in infogroupe['moderateurs']%} admin{%else%}participant{%endif%}
@@ -199,12 +199,14 @@
                   </span>
                   <span>Signaler</span>
                 </button>
+                {%if infogroupe['is_class'] == False%}
                 <form action="/virerParticipant/" id="virerParticipant" method="POST">
                   <input type='hidden' id="idViré" name='idViré' value="{{sessionId}}" />
                   <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
                   <button type="submit">Quitter le groupe</button>
                 </form>
-                {%if sessionId in infogroupe['moderateurs']%}
+                {%endif%}
+                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">Ajouter des participants</button>
                 <div id="ajouterParticipant" style="display:block;">
                 <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
@@ -234,7 +236,7 @@
               </footer>
           </div>
         </div>
-        {%if sessionId in infogroupe['moderateurs']%}
+        {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
         <div class="modal" id="optionParticipant" style="overflow:hidden;" >
           <div class="modal-card">
             <section class="modal-card-body">

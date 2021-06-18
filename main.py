@@ -231,7 +231,7 @@ def page_messages(idGroupe):
 
             else:
                 msgDb = None
-                infogroupes = None
+                groupe = None
                 infoUtilisateurs = None
             groupe = groupe.toDict()
 
@@ -1271,6 +1271,7 @@ def callback():
 @app.route("/connexion/", methods=["GET"])
 def connexion():
     global utilisateurs
+    global groupes
 
     """Fetching a protected resource using an OAuth 2 token.
     """
@@ -1297,17 +1298,33 @@ def connexion():
                 u.SanctionDuree = ''
 
         if u.type == "ELEVE":
-            u.classe = data_plus['classes'][0].split('$')[1]
+            classe = data_plus['classes'][0].split('$')[1]
+            u.classe = classe
+            nomClasse = f"{user['lycee']}/{classe}"
+            group = [g for g in groupes.values() if g.nom == nomClasse and g.is_class == True]
+            if len(group) > 0:
+                group = group[0]
+                if user['_id'] not in group.id_utilisateurs:
+                    group.id_utilisateurs.append(user['_id'])
+                    group.update()
+            else:
+                _id = ObjectId()
+                groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
+                groupes[str(_id)].insert()
+
         if data_plus['email'] != '':
             u.email = data_plus['email']
+
         if 'mobile' in data_plus:
             if data_plus['mobile'] != "":
                 u.telephone = data_plus['mobile']
-            else:
-                if 'homePhone' in data_plus:
-                    u.telephone = data_plus['homePhone']
+        elif 'homePhone' in data_plus:
+            if data_plus['homePhone'] != "":
+                u.telephone = data_plus['homePhone']
+
         if data_plus['emailInternal'] != '':
             u.emailENT = data_plus['emailInternal']
+
         utilisateurs[str(user['_id'])].update()
 
         return redirect(url_for('accueil'))
@@ -1320,9 +1337,9 @@ def connexion():
             if 'mobile' in data_plus:
                 if data_plus['mobile'] != "":
                     tel = data_plus['mobile']
-                else:
-                    if 'homePhone' in data_plus:
-                        tel = data_plus['homePhone']
+            elif 'homePhone' in data_plus:
+                if data_plus['homePhone'] != "":
+                    tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(),
@@ -1337,6 +1354,18 @@ def connexion():
             session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
             session['type'] = user['type']
 
+            nomClasse = f"{data['schoolName']}/{classe}"
+            group = [g for g in groupes.values() if g.nom == nomClasse and g.is_class == True]
+            if len(group) > 0:
+                group = group[0]
+                if user['_id'] not in group.id_utilisateurs:
+                    group.id_utilisateurs.append(user['_id'])
+                    group.update()
+            else:
+                _id = ObjectId()
+                groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
+                groupes[str(_id)].insert()
+
             return redirect(url_for('profil'))
 
         elif data['type'] == 'ENSEIGNANT':
@@ -1345,9 +1374,9 @@ def connexion():
             if 'mobile' in data_plus:
                 if data_plus['mobile'] != "":
                     tel = data_plus['mobile']
-                else:
-                    if 'homePhone' in data_plus:
-                        tel = data_plus['homePhone']
+            elif 'homePhone' in data_plus:
+                if data_plus['homePhone'] != "":
+                    tel = data_plus['homePhone']
 
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(

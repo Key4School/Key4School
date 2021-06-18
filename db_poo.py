@@ -519,6 +519,7 @@ class Groupe(Actions):
 	def __init__(self, params: dict):
 		self._id = params['_id']
 		self.nom = params['nom']
+		self.is_class = params.get('is_class', )
 		self.id_utilisateurs = params['id-utilisateurs']
 		self.moderateurs = params.get('moderateurs', [])
 		self.sign = params.get('sign', [])
@@ -536,6 +537,7 @@ class Groupe(Actions):
 		return {  # on ajoute à la liste ce qui nous interesse
 			'_id': self._id,
 			'nom': self.nom,
+			'is_class': self.is_class,
 			'id-utilisateurs': self.id_utilisateurs,
 			'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
 			'nbUtilisateurs': len(self.id_utilisateurs),
@@ -549,6 +551,7 @@ class Groupe(Actions):
 		return {  # on ajoute à la liste ce qui nous interesse
 			'_id': self._id,
 			'nom': self.nom,
+			'is_class': self.is_class,
 			'id-utilisateurs': self.id_utilisateurs,
 			'moderateurs': self.moderateurs,
 			'sign': self.sign,
