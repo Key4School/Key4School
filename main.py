@@ -128,7 +128,7 @@ def notif(type, id_groupe, id_msg, destinataires):
         password = 'CtlLemeilleurGroupe'
         codage = 'utf-8'
 
-        html = render_template("notification.html", notif=notification)
+        html = render_template("notification.html", notif=notification, similar=0)
 
         for user in notification['userDest']:
             if str(user['_id']) in clientsNotif:
@@ -188,10 +188,13 @@ def handleEvent_connectToNotif():
         clientsNotif[session['id']] = True
         join_room(session['id'])
 
-        notifs = [notif.toDict() for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
+        alreadySend = []
+        notifs = [notif for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
         for notif in notifs:
-            html = render_template("notification.html", notif=notif)
-            emit('newNotif', html, to=session['id'])
+            if notif.id_groupe not in alreadySend:
+                alreadySend.append(notif.id_groupe)
+                html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(ObjectId(session['id']))))
+                emit('newNotif', html, to=session['id'])
 
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
@@ -207,6 +210,8 @@ def handleEvent_supprNotif(id):
     global notifications
     if 'id' in session:
         notification = notifications[id]
+        for notif in notification.getSimilar(ObjectId(session['id'])):
+            notif.supprUser(ObjectId(session['id']))
         notification.supprUser(ObjectId(session['id']))
 
 
