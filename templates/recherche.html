@@ -76,8 +76,8 @@
 
 
  <!-- debut de la div pour tt les publications -->
- <div class="columns" style="margin-top:5%; ">
-  <div class="column"></div>
+ <div class="columns" style="margin: 0; margin-top:5%;">
+  <div class="column" style="padding: 0;"></div>
   <div class="column">
     {%if user|length > 0%}
       <a href="{{url_for('recherche_user', search=search)}}">Voir plus de profils</a><br />
@@ -96,7 +96,7 @@
   {%if user|length == 0 and results|length == 0%}
     Aucun résultat
   {%endif%}
-  <div class="column"></div>
+  <div class="column" style="padding: 0;"></div>
 </div>
 
 <!-- fin de l'espace des publication -->

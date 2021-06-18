@@ -106,8 +106,16 @@
   <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['_id']}}'>
     <div>
       <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}">
-        {{content['user']['prenom']}} {{content['user']['nom']}} </a> : <b>{{content['titre']}} {{content['contenu']}}</b> <em>{{content['date-envoi']}}</em> <b>{{content['matière']}}</b>
+        {{content['user']['prenom']}} {{content['user']['nom']}} </a> :
+        <br />
       <br />
+      <a href="{{url_for('comments' ,idMsg=content['_id'])}}"><b>{{content['titre']}}</b></a>
+      <br />
+      <br />
+      {{content['contenu']}}
+      <br /><br />
+      le : <em>{{content['date-envoi']}}</em><br />
+      matière : <b>{{content['matière']}}</b>
     </div>
     <br />
 
@@ -182,6 +190,7 @@
   </div>
   {%endfor%}
   <div style="font-weight: bold; font-size:large;">Groupes signalés :</div><br /><br />
+  {%if discussionSignale != []%}
   <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
 
     {%for content in discussionSignale%}
@@ -200,6 +209,7 @@
     </ul>
     {%endfor%}
   </div>
+  {%endif%}
   <br /><br />
 </body>
 

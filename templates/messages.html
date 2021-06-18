@@ -186,14 +186,14 @@
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
     <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative;">
       <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:1%;height: 100px; border-bottom: none;">
+      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:10px;height: 100px; border-bottom: none;">
         <!-- div avec le nom du groupe et les paticipants -->
-        <div style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
+        <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
           <!-- nom du groupe -->
-          <p style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>{{infogroupe['nom']}}</p>
+          <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>{{infogroupe['nom']}}</p>
           <!-- liste des paricipants -->
-          <p style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.1;">
-            {% if infogroupe['nbUtilisateurs'] > 8 %}
+          <p id="listGroupUsers" style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.2;">
+            <!--{% if infogroupe['nbUtilisateurs'] > 8 %}
               {% for i in range(8) %}
                 <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i<7 %},{%endif%}
               {%endfor%}
@@ -203,7 +203,10 @@
               {% for i in range(infogroupe['nbUtilisateurs']) %}
                 <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
               {%endfor%}
-            {% endif %}
+            {% endif %}-->
+            {% for content in infoUtilisateurs %}
+              <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['_id'])}}">{{content['pseudo']}}</a>, </span>
+            {%endfor%}
           </p>
         </div>
           <!-- Bouton trois petits points -->

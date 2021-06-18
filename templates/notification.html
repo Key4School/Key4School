@@ -24,7 +24,14 @@
         {%endif%} <br>
         <!-- Texte publication -->
         <p>
-          <i>{{notif['message']['contenu']}}</i>
+          <i>
+            {{notif['message']['contenu']}}
+            {%if similar == 1%}
+            et 1 autre {%if 'titre' in notif['groupe']%}reponse{%elif 'nom' in notif['groupe']%}message{%endif%}
+            {%elif similar > 1%}
+            et {{similar}} autres {%if 'titre' in notif['groupe']%}reponses{%elif 'nom' in notif['groupe']%}messages{%endif%}
+            {%endif%}
+          </i>
         </p>
       </div>
     </div>
