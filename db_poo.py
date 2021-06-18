@@ -519,7 +519,7 @@ class Groupe(Actions):
 	def __init__(self, params: dict):
 		self._id = params['_id']
 		self.nom = params['nom']
-		self.is_class = params.get('is_class', )
+		self.is_class = params.get('is_class', False)
 		self.id_utilisateurs = params['id-utilisateurs']
 		self.moderateurs = params.get('moderateurs', [])
 		self.sign = params.get('sign', [])
