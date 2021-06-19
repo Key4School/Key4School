@@ -21,7 +21,7 @@
         <!-- Titre -->
         <h4 style="margin-top: 0;"><a href="/comments/{{d['idMsg']}}">{{d['titre']}}</a></h4>
         <!-- Texte publication -->
-        <p style="word-wrap:break-word;">{{d['contenu']}}</p>
+        <p style="word-wrap:break-word;"><div id="contenu{{d['idMsg']}}">{{d['contenu']}}</div></p>
         </p>
         {% if d['fileType'] == 'image' %}
         <a href="/file/DemandeFile_{{d['idMsg']}}" download="Fichier demande d'aide {{d['idMsg']}}.png">
@@ -39,9 +39,9 @@
           <a class="level-item" aria-label="like" onClick="like('{{d['idMsg']}}')">
             <span class="icon">
               {% if d['a_like'] %}
-              <i id="like_{{d['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">&nbsp;{{d['nb-likes']}}</i>
+              <i id="like_{{d['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
               {% else %}
-              <i id="like_{{d['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">&nbsp;{{d['nb-likes']}}</i>
+              <i id="like_{{d['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
               {% endif %}
             </span>
           </a>&emsp;&ensp;
@@ -49,7 +49,14 @@
             <span class="icon is-small">
               <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">&nbsp;{{d['réponses associées']|length}}</i>
             </span>
+          </a>&emsp;&ensp;
+          {% if d['idAuteur'] == user['_id'] %}
+          <a class="level-item" style="margin-left:2%;" aria-label="comment" onclick="DemandModificationOpen('{{d['idMsg']}}');">
+            <span class="icon is-small">
+              <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">&nbsp;modifier</i>
+            </span>
           </a>
+          {%endif%}
           <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
               <span class="icon is-small">
                 {% if d['a_sign'] %}

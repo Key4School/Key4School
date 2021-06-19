@@ -757,6 +757,19 @@ def question():
     else:
         return redirect(url_for('login'))
 
+@app.route('/updateDemand/', methods=['POST'])
+def updateDemand():
+    global utilisateurs
+    global demandes_aide
+
+    if 'id' in session:
+        demand = demandes_aide[request.form['idDemandModif']]
+        if ObjectId(session['id']) == demand.id_utilisateur:
+            demand.contenu = request.form['txtModif']
+            demand.update()
+        return 'sent'
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/recherche/')
 def recherche():

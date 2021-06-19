@@ -130,6 +130,24 @@
       </form>
     </div>
   </div>
+  <div class="modal" id="DemandModif" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Modifier</p>
+      </header>
+      <form onsubmit="DemandModification(event); return false;" id="DemandModification" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type="text" id="txtModif" name="txtModif" value="" />
+          <input type='hidden' id="idDemandModif" name='idDemandModif' value="" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">modifier</button>
+          <button onclick="DemandModificationClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   <!-- debut de la div pour tt les publications -->
   <div class="columns" style="margin-top:5%;">
     <div class="column"></div>

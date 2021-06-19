@@ -204,3 +204,29 @@ function enleveArea() {
   $('#showbutton').show();
 }
 
+function DemandModificationOpen(id) {
+  document.getElementById('txtModif').value = document.getElementById('contenu'+id).innerHTML;
+  document.getElementById('idDemandModif').value = id;
+  $("#DemandModif").addClass("is-active");
+}
+
+function DemandModification(e) {
+  e.preventDefault();
+  var id = document.getElementById('idDemandModif').value;
+  var txt = document.getElementById('txtModif').value;
+  var donnees = $('#DemandModification').serialize();
+  $.ajax({
+    url: '/updateDemand/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      document.getElementById('contenu'+id).innerHTML = document.getElementById('txtModif').value;
+      $('#DemandModification').trigger("reset");
+      DemandModificationClose();
+    },
+  });
+}
+
+function DemandModificationClose(){
+  $("#DemandModif").removeClass("is-active");
+}
