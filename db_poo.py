@@ -485,7 +485,7 @@ class Message(Actions):
 			'id-groupe': self.id_groupe,
 			'id-utilisateur': self.id_utilisateur,
 			'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
-			'contenu': self.contenu,
+			'contenu': self.contenu[0:10],
 			'date-envoi': self.date_envoi,
 			'audio': self.audio,
 		}
