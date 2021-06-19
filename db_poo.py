@@ -479,6 +479,17 @@ class Message(Actions):
 		messages.pop(str(self._id))
 		return
 
+	def toDictLast(self) -> dict:
+		return {  # on ajoute à la liste ce qui nous interesse
+			'_id': self._id,
+			'id-groupe': self.id_groupe,
+			'id-utilisateur': self.id_utilisateur,
+			'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
+			'contenu': self.contenu[0:10],
+			'date-envoi': self.date_envoi,
+			'audio': self.audio,
+		}
+
 	def toDict(self) -> dict:
 		if self.reponse != "None" and str(self.reponse) in messages:
 			rep = messages[str(self.reponse)].toDict()
@@ -533,6 +544,10 @@ class Groupe(Actions):
 	def getAllMessagesSign(self):
 		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe and message.sign != []], key = lambda message: message['date-envoi'])
 
+	def getLastMessage(self):
+		l = sorted([message.toDictLast() for id, message in messages.items() if self._id == message.id_groupe], key = lambda message: message['date-envoi'])
+		return l[-1] if len(l) > 0 else None
+
 	def toDict(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
 			'_id': self._id,
@@ -541,6 +556,7 @@ class Groupe(Actions):
 			'id-utilisateurs': self.id_utilisateurs,
 			'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
 			'nbUtilisateurs': len(self.id_utilisateurs),
+			'lastMsg': self.getLastMessage(),
 			'moderateurs': self.moderateurs,
 			'modos': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.moderateurs],
 			'sign': self.sign,

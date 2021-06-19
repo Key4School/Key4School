@@ -232,7 +232,7 @@ def page_messages(idGroupe):
     global notifications
 
     if 'id' in session:
-        grp = [groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs]
+        grp = sorted([groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs], key = lambda groupe: groupe['lastMsg']['date-envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
         user = utilisateurs[session['id']].toDict()
         users = sorted([u.toDict() for u in utilisateurs.values()], key = lambda u: u['pseudo'])
 

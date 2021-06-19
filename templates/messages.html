@@ -170,9 +170,13 @@
                 <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;">
                   <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
                     {{content['nom']}}
+                    <br />
+                    {%if content['lastMsg']!=None%}
+                    <i>{{content['lastMsg']['utilisateur']['pseudo']}} : {{content['lastMsg']['contenu']}}</i>
+                    {%endif%}
                   </a>
                 </span>
-                <a class="tag is-delete" onclick="quitterGroupeOpen('{{content['_id']}}', '{{sessionId}}');"></a>
+                {%if content['_id']|string==idgroupe%}<a class="tag is-delete" onclick="quitterGroupeOpen('{{content['_id']}}', '{{sessionId}}');"></a>{%endif%}
               </div>
             </td>
           </tr>
