@@ -76,9 +76,11 @@
   </div>
   {%if content['rep'] != None%}
   <div class="rep">
-    <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['_id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
-    <a href="#msg{{content['rep']['_id']}}">{%if content['rep']['audio']==true%}msg-audio{%else%}{{content['rep']['contenu']}}{%endif%}
-  </a></div>
+    <div style="font-variant: small-caps;" ><a href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['_id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
+    <a href="#msg{{content['rep']['_id']}}" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
+      {%if content['rep']['audio']==true%}Message Vocal{%else%}{{content['rep']['contenu']}}{%endif%}
+    </a>
+  </div>
   {%endif%}
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}
