@@ -538,6 +538,22 @@ class Groupe(Actions):
 
 		self.db_table = DB.db_groupes
 
+	def supprGroupe(self):
+		self.delete()
+		groupes.pop(str(self._id))
+		return
+
+	def supprUser(self, uid):
+		self.id_utilisateurs.remove(uid)
+		if uid in self.moderateurs:
+			self.moderateurs.remove(uid)
+		if len(self.id_utilisateurs) == 0:
+			self.supprGroupe()
+			return
+		elif len(self.moderateurs) == 0 and self.is_class == False:
+			self.moderateurs.append(self.id_utilisateurs[0])
+		groupe.update()
+
 	def getAllMessages(self):
 		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe], key = lambda message: message['date-envoi'])
 

@@ -459,25 +459,17 @@ def virerParticipant():
 
     if 'id' in session:
         groupe = groupes[request.form['idViréGrp']]
-        participants = groupe.toDict()['id-utilisateurs']
         moderateurs = groupe.toDict()['moderateurs']
 
         if ObjectId(session['id']) in moderateurs or request.form['idViré'] == session['id']:
-            participants.remove(ObjectId(request.form['idViré']))
-
-            if ObjectId(request.form['idViré']) in moderateurs:
-                moderateurs.remove(ObjectId(request.form['idViré']))
-
-            groupe.id_utilisateurs = participants
-            groupe.moderateurs = moderateurs
-            groupe.update()
+            groupe.supprUser(ObjectId(request.form['idViré']))
 
             if request.form['idViré'] == session['id']:
                 return redirect(url_for('page_messages'))
             else:
-                return  redirect(url_for('page_messages', idGroupe=request.form['idViréGrp']))
+                return redirect(url_for('page_messages', idGroupe=request.form['idViréGrp']))
         else:
-            return redirect(url_for('accueil'))
+            return redirect(url_for('page_messages'))
     else:
         return redirect(url_for('login'))
 
@@ -1413,8 +1405,7 @@ def connexion():
             # on retire l'user des anciens groupe de classe
             oldGroups = [g for g in groupes.values() if g.nom != nomClasse and g.is_class == True and user['_id'] in g.id_utilisateurs]
             for oldGroup in oldGroups:
-                oldGroups.id_utilisateurs.remove(user['_id'])
-                oldGroups.update()
+                oldGroups.supprUser(user['_id'])
 
         if data_plus['email'] != '':
             u.email = data_plus['email']
