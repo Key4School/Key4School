@@ -5,6 +5,7 @@
   <title>Messages</title>
   {% include 'head.html' with context %}
   <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript" defer></script>
+  <script src="{{url_for('static',filename='js/filtres.js')}}" type="text/javascript" defer></script>
 
 
   <style type="text/css">
@@ -122,8 +123,9 @@
   <div style="display: flex;justify-content:space-between;height:95%;margin-top:15px;">
     <!-- div pour afficher tout les groupes -->
     <div id="nomgroupe" style="/*width: 15%;*/margin-left: 25px;overflow-y:auto;overflow-x: hidden;margin-bottom:5%;">
-      <div class="liengroupe">
-        <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%;"></i>
+      <div class="liengroupe" style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
+        <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%; cursor: pointer;"></i>
+        <input class="input is-info" type="text" placeholder="Rechercher..." style="display: inline-block; width: calc(100% - 40px); height: 50%;" oninput="grp_filter(this.value);" />
       </div>
 
       <div class="modal" id="newgrou" style="overflow:auto;">
@@ -165,7 +167,7 @@
         <tbody>
           <!-- div pour le groupe -->
           {%for content in grpUtilisateur%}
-          <tr>
+          <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
             <td>
               <div class="tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
                 <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
