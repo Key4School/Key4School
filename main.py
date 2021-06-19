@@ -174,7 +174,7 @@ def accueil():
         user = utilisateurs[session['id']].toDict()
         # subjects = getUserSubjects(user)
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-        demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:9]
+        demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:10]
 
         return render_template("index.html", demandes=demandes, user=user)
     else:
@@ -787,7 +787,7 @@ def recherche():
                     if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7
                         or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.5 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.5 )
                 ], key = lambda u: u['pseudo']
-            )[:2]
+            )[:3]
 
             return render_template('recherche.html', results=result, users=users, search=search, user=user)
 
