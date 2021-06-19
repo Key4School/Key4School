@@ -1410,6 +1410,11 @@ def connexion():
                 _id = ObjectId()
                 groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
                 groupes[str(_id)].insert()
+            # on retire l'user des anciens groupe de classe
+            oldGroups = [g for g in groupes.values() if g.nom != nomClasse and g.is_class == True and user['_id'] in g.id_utilisateurs]
+            for oldGroup in oldGroups:
+                oldGroups.id_utilisateurs.remove(user['_id'])
+                oldGroups.update()
 
         if data_plus['email'] != '':
             u.email = data_plus['email']
