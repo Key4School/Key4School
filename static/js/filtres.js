@@ -11,7 +11,10 @@ const centerFilters = () => {
 	}
 };
 
-centerFilters();
+try {
+	centerFilters();
+} catch(e) {}
+
 
 const filters_slide = (direction) => {
 	const filtersContainer = document.getElementById('filters-container');
@@ -116,6 +119,34 @@ const user_filter = (v) => {
 		});
 	}
 }
+
+const grp_filter = (v) => {
+	const value = v.trim().toLowerCase();
+	if(v === '') {
+		Array.from(document.getElementsByClassName('listedGrp')).forEach(grp => {
+			grp.style.display = 'table-row';
+		});
+	}
+
+	else {
+		Array.from(document.getElementsByClassName('listedGrp')).forEach(grp => {
+			const grpName = (grp.dataset.grpname || '').toLowerCase();
+			const grpUsers = JSON.parse(grp.dataset.grpusers);
+
+			grp.style.display = 'none';
+
+			if(grpName.startsWith(value))
+				return grp.style.display = 'table-row';
+			else {
+				grpUsers.forEach(user => {
+					if(user.pseudo.toLowerCase().startsWith(value) || user.prenom.toLowerCase().startsWith(value) || user.nom.toLowerCase().startsWith(value))
+						return grp.style.display = 'table-row';
+				});
+			}
+		});
+	}
+};
+
 var lastScrollTop = 0;
 $(window).scroll(function(event){
    var st = $(this).scrollTop();
