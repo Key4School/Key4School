@@ -25,7 +25,11 @@
         <!-- Texte publication -->
         <p>
           <i>
+            {%if 'audio' in notif['message'] and notif['message']['audio'] == true %}
+            Message Vocal
+            {%else%}
             {{notif['message']['contenu']}}
+            {%endif%}
             {%if similar == 1%}
             et 1 autre {%if 'titre' in notif['groupe']%}reponse{%elif 'nom' in notif['groupe']%}message{%endif%}
             {%elif similar > 1%}

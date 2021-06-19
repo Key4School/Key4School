@@ -173,7 +173,13 @@
                     {{content['nom']}}
                     <br />
                     {%if content['lastMsg']!=None%}
-                    <i>{{content['lastMsg']['utilisateur']['pseudo']}} : {{content['lastMsg']['contenu']}}</i>
+                    <i>{{content['lastMsg']['utilisateur']['pseudo']}} :
+                      {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
+                      Message Vocal
+                      {%else%}
+                      {{content['lastMsg']['contenu']}}
+                      {%endif%}
+                    </i>
                     {%endif%}
                   </a>
                 </span>

@@ -112,8 +112,8 @@ clientsNotif = {}
 def notif(type, id_groupe, id_msg, destinataires):
     global notifications
 
-    # if ObjectId(session['id']) in destinataires:
-    #     destinataires.remove(ObjectId(session['id']))
+    if ObjectId(session['id']) in destinataires:
+        destinataires.remove(ObjectId(session['id']))
 
     if len(destinataires) > 0:
         _id = ObjectId()
