@@ -50,13 +50,6 @@
               <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">&nbsp;{{d['réponses associées']|length}}</i>
             </span>
           </a>&emsp;&ensp;
-          {% if d['idAuteur'] == user['_id'] %}
-          <a class="level-item" style="margin-left:2%;" aria-label="comment" onclick="DemandModificationOpen('{{d['idMsg']}}');">
-            <span class="icon is-small">
-              <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">&nbsp;modifier</i>
-            </span>
-          </a>
-          {%endif%}
           <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
               <span class="icon is-small">
                 {% if d['a_sign'] %}
@@ -99,7 +92,17 @@
         </button>
         <input type="hidden" />
       </div>
-      {% endif %}
+      <div class="navbar-item">
+      <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['idMsg']}}');">
+        <span class="icon is-small">
+          <i class="fas fa-pen" aria-hidden="true"></i>
+        </span>
+        <span>
+          Modifier
+        </span>
+      </button>
+      </div>
+      {%endif%}
       {%if user['admin']==true%}
       <div class="navbar-item">
         <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
@@ -155,6 +158,16 @@
               <span>Résolu</span>
             </button>
             <input type="hidden" />
+          </div>
+          <div class="navbar-item">
+          <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['idMsg']}}');">
+            <span class="icon is-small">
+              <i class="fas fa-pen" aria-hidden="true"></i>
+            </span>
+            <span>
+              Modifier
+            </span>
+          </button>
           </div>
           {% endif %}
           {%if user['admin']==true%}
