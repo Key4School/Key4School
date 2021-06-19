@@ -190,11 +190,15 @@ def handleEvent_connectToNotif():
 
         alreadySend = []
         notifs = [notif for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
+        toSend = []
         for notif in notifs:
             if notif.id_groupe not in alreadySend:
                 alreadySend.append(notif.id_groupe)
-                html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(ObjectId(session['id']))))
-                emit('newNotif', html, to=session['id'])
+                toSend.append(notif)
+        toSend.reverse()
+        for notif in toSend:
+            html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(ObjectId(session['id']))))
+            emit('newNotif', html, to=session['id'])
 
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
