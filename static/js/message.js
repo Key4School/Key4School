@@ -172,6 +172,9 @@ var form = new FormData();
 var accessMicro = false;
 var estEnregistre = "";
 var final;
+var options = {
+      audioBitsPerSecond : 56000
+    }
 
 function micro() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -273,7 +276,7 @@ function enregistrerTel() {
         // Success callback
         .then(function(stream) {
           boutonAudioOpen();
-          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder = new MediaRecorder(stream, options);
           mediaRecorder.start();
           stopped = false;
           sec = 0;
