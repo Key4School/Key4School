@@ -235,6 +235,7 @@
                   {{users['pseudo']}}
                 </button>
                 {%else%}
+                {% include 'apercu_profil.html' with context %}
                 <a href="{{url_for('profil' ,idUser=users['_id'])}}">
                   {{users['pseudo']}}
                 </a>
