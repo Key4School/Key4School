@@ -109,7 +109,7 @@ def automoderation(stringModerer: str) -> str:
 
 clientsNotif = {}
 
-def notif(type, id_groupe, id_msg, destinataires):
+def sendNotif(type, id_groupe, id_msg, destinataires):
     global notifications
 
     if ObjectId(session['id']) in destinataires:
@@ -317,7 +317,7 @@ def handleEvent_postMsg(json):
                         message = messages[str(_id)].toDict()
                     if message:
                         groupe = message['groupe']
-                        notif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
+                        sendNotif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
 
                         users = groupe['utilisateurs']
 
@@ -698,7 +698,7 @@ def comments(idMsg):
 
                 demandes_aide[idMsg].update()
 
-                notif("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
+                sendNotif("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
 
                 # add XP
                 if not ObjectId(session['id']) == msg['idAuteur']:
