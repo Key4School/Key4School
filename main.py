@@ -173,7 +173,7 @@ def accueil():
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
         # subjects = getUserSubjects(user)
-        # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
+        # ici on récupère les 9 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
         demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[:9]
 
         return render_template("index.html", demandes=demandes, user=user)
@@ -789,7 +789,7 @@ def recherche():
                 ], key = lambda d: d['date-envoi'], reverse=True
             )
 
-            # on récupère 3 utilisateurs correspondants à la recherche
+            # on récupère 2 utilisateurs correspondants à la recherche
             users = sorted(
                 [u.toDict() for u in utilisateurs.values()
                     if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7
