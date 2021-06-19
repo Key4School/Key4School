@@ -1,0 +1,21 @@
+<div class="box profil" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;">
+  <article class="media">
+    <div class="media-left">
+      <!-- Image photo de profil-->
+      <figure class="image is-64x64">
+        <img alt="user" src="{%if 'nomImg' in users and users['nomImg'] != "" %}{{url_for('userImg', profilImg = users['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+          style="width:80px; height:auto;border-radius: 50%;" />
+      </figure>
+    </div>
+    <!-- Contenu publication -->
+    <div class="media-content">
+      <div class="content">
+        <p style="margin-bottom: 5px;">
+          <!-- Nom utilisateur ; pseudo ; temps -->
+        <div style="font-variant: small-caps;">
+          <a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['nom']}} {{users['prenom']}}</a>
+        </div>
+        <small><em>@{{users['pseudo']}}</em></small>
+        </p>
+  </article>
+</div>

@@ -40,11 +40,11 @@
             <input type='hidden' name="grp" value="{{idgroupe}}" />
             <input type='hidden' name="audio" value="{{content['audio']}}" />
             {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
-            <button type="submit" class="button is-danger is-outlined is-small">
+            <button type="submit" class="button is-success is-outlined is-small">
               <span class="icon is-small">
-                <i class="fas fa-times"></i>
+                <i class="fas fa-check"></i>
               </span>
-              <span>Valider</span>
+              <span>Valider le signalement</span>
             </button>
           </form>
         </div>

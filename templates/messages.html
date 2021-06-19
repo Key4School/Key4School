@@ -222,11 +222,11 @@
                 {%for users in infoUtilisateurs%}
                 {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick="optionParticipantOpen('{{users['_id']}}')">
-                  {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
+                  {{users['pseudo']}}
                 </button>
                 {%else%}
                 <a href="{{url_for('profil' ,idUser=users['_id'])}}">
-                  {{users['prenom']}} {{users['nom']}} {{users['pseudo']}}
+                  {{users['pseudo']}}
                 </a>
                 {%endif%}
                 {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
@@ -238,7 +238,9 @@
                 {%else%}
                 {%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}
                 {%endif%}
-                <br />{%endfor%}
+                ,&nbsp;
+                {%endfor%}<br /><br />
+                <div style="display:flex;">
                 <button  class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
                   <span class="icon is-small">
                     {% if sessionId in infogroupe['sign'] %}
@@ -248,27 +250,39 @@
                     {% endif %}
                   </span>
                   <span>Signaler</span>
-                </button>
+                </button>&emsp;
                 {%if user['admin']%}
-                <button  class="button is-warning is-outlined is-small" onClick="supprDiscOpen();">
+                <button  class="button is-danger is-outlined is-small" onClick="supprDiscOpen();">
                   <span class="icon is-small">
-                    <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+                    <i id="sign" class="fas fa-times" aria-hidden="true"></i>
                   </span>
                   <span>Supprimer</span>
-                </button>
-                <button  class="button is-warning is-outlined is-small" onClick="valDiscOpen();">
+                </button>&emsp;
+                <button  class="button is-success is-outlined is-small" onClick="valDiscOpen();">
                   <span class="icon is-small">
-                    <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+                    <i id="sign" class="fas fa-check" aria-hidden="true"></i>
                   </span>
                   <span>Valider</span>
                 </button>
                 {%endif%}
-                <br />
+              </div>
+                <br /><br />
                 {%if infogroupe['is_class'] == False%}
-                  <button type="submit" onclick="quitterGroupeOpen();">Quitter le groupe</button>
+                <button  class="button is-danger is-outlined is-small" type="submit" onclick="quitterGroupeOpen();">
+                  <span class="icon is-small">
+                    <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                  </span>
+                  <span>Quitter le groupe</span>
+                </button>
                 {%endif%}
+                <br /><br /><br />
                 {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
-                <button onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">Ajouter des participants</button>
+                <button  class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">
+                  <span class="icon is-small">
+                    <i class="fas fa-plus" aria-hidden="true"></i>
+                  </span>
+                  <span>Ajouter des participants</span>
+                </button><br />
                 <div id="ajouterParticipant" style="display:block;">
                 <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
                     <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}"/>
@@ -286,14 +300,24 @@
                           </div>
                         {% endif %}
                       {% endfor %}
-                      <button type="submit">valider</button>
+                      <button  class="button is-success is-outlined is-small" type="submit">
+                        <span class="icon is-small">
+                          <i class="fas fa-check" aria-hidden="true"></i>
+                        </span>
+                        <span>Valider</span>
+                      </button>
                     </div>
                 </form>
               </div>
                 {%endif%}
               </section>
               <footer class="modal-card-foot">
-                <button onclick="divoptionclose(); return false;" class="button">Terminer</button>
+                <button  class="button is-success is-outlined" onclick="divoptionclose(); return false;">
+                  <span class="icon is-small">
+                    <i class="fas fa-check" aria-hidden="true"></i>
+                  </span>
+                  <span>Terminer</span>
+                </button>
               </footer>
           </div>
         </div>
@@ -305,8 +329,13 @@
               <a id="hrefParticipant" href="">Voir le profil:</a><br />
               <form action="/virerParticipant/" id="virerParticipant" method="POST">
                 <input type='hidden' id="idViré2" name='idViré' value="" />
-                <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
-                <button type="submit">virer du groupe</button>
+                <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" /><br />
+                <button  class="button is-danger is-outlined is-small" type="submit">
+                  <span class="icon is-small">
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                  </span>
+                  <span>Virer du groupe</span>
+                </button>
               </form>
             </section>
           </div>
