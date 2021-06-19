@@ -90,7 +90,7 @@
   <div style="display:flex;align-items: center;justify-content:space-evenly;">
     <img alt="user" onclick="updateImgOpen();"
       src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-      style="width:80px; height:auto; cursor: pointer;" />
+      style="width:64px; height:64px;object-fit: cover;border-radius:50%; cursor: pointer;" />
     <div class="ordiFlexTelBlock" style="align-items:flex-start;justify-content:center;">
       <!-- Barre de progression -->
       <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
@@ -529,7 +529,7 @@
                     <option value="no" {% if not profilUtilisateur['notifs']['demandes'] %}selected{%endif%}>Refuser</option>
                   </select>
                 </div>
-              </td>            
+              </td>
             </tr>
             <tr>
               <td>
@@ -543,7 +543,7 @@
                     <option value="no" {% if not profilUtilisateur['notifs']['messages'] %}selected{%endif%}>Refuser</option>
                   </select>
                 </div>
-              </td>            
+              </td>
             </tr>
             <!-- Bouton pour valider les informations -->
             <tr>

@@ -236,9 +236,6 @@
                 </button>
                 {%else%}
                 {% include 'apercu_profil.html' with context %}
-                <a href="{{url_for('profil' ,idUser=users['_id'])}}">
-                  {{users['pseudo']}}
-                </a>
                 {%endif%}
                 {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
