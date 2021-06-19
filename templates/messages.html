@@ -6,6 +6,7 @@
   {% include 'head.html' with context %}
   <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript" defer></script>
 
+
   <style type="text/css">
     .moimsg {
       max-width: 75%;
@@ -258,12 +259,14 @@
                   </span>
                   <span>Supprimer</span>
                 </button>&emsp;
+                {%if infogroupe['sign'] != []%}
                 <button  class="button is-success is-outlined is-small" onClick="valDiscOpen();">
                   <span class="icon is-small">
                     <i id="sign" class="fas fa-check" aria-hidden="true"></i>
                   </span>
                   <span>Valider</span>
                 </button>
+                {%endif%}
                 {%endif%}
               </div>
                 <br /><br />
@@ -283,7 +286,7 @@
                   </span>
                   <span>Ajouter des participants</span>
                 </button><br />
-                <div id="ajouterParticipant" style="display:block;">
+                <div id="ajouterParticipant" style="display:none;">
                 <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
                     <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}"/>
                     <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />

@@ -33,7 +33,7 @@
           </form>
         </div>
         {%endif%}
-        {%if user['admin']%}
+        {%if user['admin'] and content['sign'] != []%}
         <div class="navbar-item">
           <form method="post" action="/validationMsg/" class="valider" id="ValidationMsg">
             <input type='hidden' name="msgVal" value="{{content['_id']}}" />
