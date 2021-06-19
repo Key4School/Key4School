@@ -40,17 +40,17 @@
                     <div class="select">
                       <select name="matiere" required>
                         <!-- Tronc commun -->
-                        {% if profilUtilisateur['classe']=='2GT' or profilUtilisateur['classe']=='1G' %}
+                        {% if profilUtilisateur['classe'][0]=='2' or profilUtilisateur['classe'][0]=='1' %}
                         <option value="fr">Français</option>
                         {% endif %}
                         <option value="hg">Histoire-Géographie</option>
                         <option value="emc">EMC</option>
-                        {% if profilUtilisateur['classe']=='2GT' %}
+                        {% if profilUtilisateur['classe'][0]=='2' %}
                         <option value="maths">Mathématiques</option>
                         <option value="pc">Physiques-chimie</option>
                         <option value="ses">SES</option>
                         {% endif %}
-                        {% if profilUtilisateur['classe']=='TG' %}
+                        {% if profilUtilisateur['classe'][0]=='T' %}
                         <option value="philo">Philosophie</option>
                         {% endif %}
                         <!-- Langues -->
@@ -187,17 +187,17 @@
                   <div class="select">
                     <select name="matiere" required>
                       <!-- Tronc commun -->
-                      {% if profilUtilisateur['classe']=='2GT' or profilUtilisateur['classe']=='1G' %}
+                      {% if profilUtilisateur['classe'][0]=='2' or profilUtilisateur['classe'][0]=='1' %}
                       <option value="fr">Français</option>
                       {% endif %}
                       <option value="hg">Histoire-Géographie</option>
                       <option value="emc">EMC</option>
-                      {% if profilUtilisateur['classe']=='2GT' %}
+                      {% if profilUtilisateur['classe'][0]=='2' %}
                       <option value="maths">Mathématiques</option>
                       <option value="pc">Physiques-chimie</option>
                       <option value="ses">SES</option>
                       {% endif %}
-                      {% if profilUtilisateur['classe']=='TG' %}
+                      {% if profilUtilisateur['classe'][0]=='T' %}
                       <option value="philo">Philosophie</option>
                       {% endif %}
                       <!-- Langues -->
