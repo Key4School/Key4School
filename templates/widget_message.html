@@ -1,9 +1,9 @@
 {%if content['id-utilisateur']==sessionId%}
-<div class="moimsg">
+<div class="moimsg" id="msg{{content['_id']}}">
   <div style="align-self: flex-end;">
   {%else%}
   <!-- Messages des autres -->
-  <div class="participantmsg">
+  <div class="participantmsg" id="msg{{content['_id']}}">
     <div style="display: flex;align-items: center;justify-content:space-between;">
   {%endif%}
     {%if content['id-utilisateur']!=sessionId%}
@@ -33,18 +33,18 @@
           </form>
         </div>
         {%endif%}
-        {%if user['admin']%}
+        {%if user['admin'] and content['sign'] != []%}
         <div class="navbar-item">
           <form method="post" action="/validationMsg/" class="valider" id="ValidationMsg">
             <input type='hidden' name="msgVal" value="{{content['_id']}}" />
             <input type='hidden' name="grp" value="{{idgroupe}}" />
             <input type='hidden' name="audio" value="{{content['audio']}}" />
             {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
-            <button type="submit" class="button is-danger is-outlined is-small">
+            <button type="submit" class="button is-success is-outlined is-small">
               <span class="icon is-small">
-                <i class="fas fa-times"></i>
+                <i class="fas fa-check"></i>
               </span>
-              <span>Valider</span>
+              <span>Valider le signalement</span>
             </button>
           </form>
         </div>
@@ -77,8 +77,8 @@
   {%if content['rep'] != None%}
   <div class="rep">
     <div style="font-variant: small-caps;"><a href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['_id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
-    {%if content['rep']['audio']==true%}msg-audio{%else%}{{content['rep']['contenu']}}{%endif%}
-  </div>
+    <a href="#msg{{content['rep']['_id']}}">{%if content['rep']['audio']==true%}msg-audio{%else%}{{content['rep']['contenu']}}{%endif%}
+  </a></div>
   {%endif%}
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}

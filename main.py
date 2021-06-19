@@ -109,11 +109,11 @@ def automoderation(stringModerer: str) -> str:
 
 clientsNotif = {}
 
-def notif(type, id_groupe, id_msg, destinataires):
+def sendNotif(type, id_groupe, id_msg, destinataires):
     global notifications
 
-    # if ObjectId(session['id']) in destinataires:
-    #     destinataires.remove(ObjectId(session['id']))
+    if ObjectId(session['id']) in destinataires:
+        destinataires.remove(ObjectId(session['id']))
 
     if len(destinataires) > 0:
         _id = ObjectId()
@@ -190,11 +190,15 @@ def handleEvent_connectToNotif():
 
         alreadySend = []
         notifs = [notif for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
+        toSend = []
         for notif in notifs:
             if notif.id_groupe not in alreadySend:
                 alreadySend.append(notif.id_groupe)
-                html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(ObjectId(session['id']))))
-                emit('newNotif', html, to=session['id'])
+                toSend.append(notif)
+        toSend.reverse()
+        for notif in toSend:
+            html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(ObjectId(session['id']))))
+            emit('newNotif', html, to=session['id'])
 
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
@@ -232,7 +236,7 @@ def page_messages(idGroupe):
     global notifications
 
     if 'id' in session:
-        grp = [groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs]
+        grp = sorted([groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs], key = lambda groupe: groupe['lastMsg']['date-envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
         user = utilisateurs[session['id']].toDict()
         users = sorted([u.toDict() for u in utilisateurs.values()], key = lambda u: u['pseudo'])
 
@@ -314,7 +318,7 @@ def handleEvent_postMsg(json):
                         message = messages[str(_id)].toDict()
                     if message:
                         groupe = message['groupe']
-                        notif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
+                        sendNotif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
 
                         users = groupe['utilisateurs']
 
@@ -456,25 +460,17 @@ def virerParticipant():
 
     if 'id' in session:
         groupe = groupes[request.form['idViréGrp']]
-        participants = groupe.toDict()['id-utilisateurs']
         moderateurs = groupe.toDict()['moderateurs']
 
         if ObjectId(session['id']) in moderateurs or request.form['idViré'] == session['id']:
-            participants.remove(ObjectId(request.form['idViré']))
-
-            if ObjectId(request.form['idViré']) in moderateurs:
-                moderateurs.remove(ObjectId(request.form['idViré']))
-
-            groupe.id_utilisateurs = participants
-            groupe.moderateurs = moderateurs
-            groupe.update()
+            groupe.supprUser(ObjectId(request.form['idViré']))
 
             if request.form['idViré'] == session['id']:
                 return redirect(url_for('page_messages'))
             else:
-                return  redirect(url_for('page_messages', idGroupe=request.form['idViréGrp']))
+                return redirect(url_for('page_messages', idGroupe=request.form['idViréGrp']))
         else:
-            return redirect(url_for('accueil'))
+            return redirect(url_for('page_messages'))
     else:
         return redirect(url_for('login'))
 
@@ -695,7 +691,7 @@ def comments(idMsg):
 
                 demandes_aide[idMsg].update()
 
-                notif("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
+                sendNotif("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
 
                 # add XP
                 if not ObjectId(session['id']) == msg['idAuteur']:
@@ -754,6 +750,19 @@ def question():
     else:
         return redirect(url_for('login'))
 
+@app.route('/updateDemand/', methods=['POST'])
+def updateDemand():
+    global utilisateurs
+    global demandes_aide
+
+    if 'id' in session:
+        demand = demandes_aide[request.form['idDemandModif']]
+        if ObjectId(session['id']) == demand.id_utilisateur:
+            demand.contenu = request.form['txtModif']
+            demand.update()
+        return 'sent'
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/recherche/')
 def recherche():
@@ -769,15 +778,15 @@ def recherche():
             # on récupère les demandes d'aide correspondant à la recherche
             result = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre, search).ratio()>0.7 or SequenceMatcher(None, d.contenu, search).ratio()>0.7 )
-                ], key = lambda d: d['date-envoi'], reverse=True
+                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre, search).ratio()>0.5 or SequenceMatcher(None, d.contenu, search).ratio()>0.5 )
+                ], key = lambda d: ( SequenceMatcher(None, d['titre'], search).ratio() + SequenceMatcher(None, d['contenu'], search).ratio() ), reverse=True
             )
 
             # on récupère 3 utilisateurs correspondants à la recherche
             users = sorted(
                 [u.toDict() for u in utilisateurs.values()
                     if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7
-                        or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.7 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.7 )
+                        or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.5 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.5 )
                 ], key = lambda u: u['pseudo']
             )[:2]
 
@@ -1394,6 +1403,10 @@ def connexion():
                 _id = ObjectId()
                 groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
                 groupes[str(_id)].insert()
+            # on retire l'user des anciens groupe de classe
+            oldGroups = [g for g in groupes.values() if g.nom != nomClasse and g.is_class == True and user['_id'] in g.id_utilisateurs]
+            for oldGroup in oldGroups:
+                oldGroups.supprUser(user['_id'])
 
         if data_plus['email'] != '':
             u.email = data_plus['email']

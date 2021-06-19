@@ -130,6 +130,24 @@
       </form>
     </div>
   </div>
+  <div class="modal" id="DemandModif" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Modifier</p>
+      </header>
+      <form onsubmit="DemandModification(event); return false;" id="DemandModification" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type="text" id="txtModif" name="txtModif" value="" />
+          <input type='hidden' id="idDemandModif" name='idDemandModif' value="" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">modifier</button>
+          <button onclick="DemandModificationClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   <!-- debut de la div pour tt les publications -->
   <div class="columns" style="margin-top:5%;">
     <div class="column"></div>
@@ -189,10 +207,10 @@
               <div class="content">
                 <p style="margin-bottom: 5px;">
                   <!-- Nom utilisateur ; pseudo ; temps -->
-                  <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}">{{r['user']['nom']}} {{r['user']['prenom']}}</a></strong> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
+                  <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}">{{r['user']['nom']}} {{r['user']['prenom']}}</a></strong><br /> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
                 </p>
                 <!-- Texte publication -->
-                <p>{{r['contenu']}}</p>
+                <p><b>{{r['contenu']}}</b></p>
               </div>
               <!-- Icons like et commentaire -->
               <nav class="level is-mobile">
@@ -200,14 +218,16 @@
                   <a class="level-item" aria-label="like" onClick="like_rep('{{d['idMsg']}}', '{{r['idRep']}}')">
                     <span class="icon is-small">
                       {% if r['a_like'] %}
-                        <i id="like_{{r['idRep']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
+                        <i id="like_{{r['idRep']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb-likes']}}</i>
                       {% else %}
-                        <i id="like_{{r['idRep']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;">{{r['nb-likes']}}</i>
+                        <i id="like_{{r['idRep']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb-likes']}}</i>
                       {% endif %}
                     </span>
                   </a>
                 </div>
               </nav>
+              </div>
+              <div class="boutonPubliOrdi" style="flex-direction: column;align-items: flex-end;">
               <div class="navbar-item">
                 <button  class="button is-warning is-outlined is-small" onClick="sign_rep('{{r['idRep']}}')">
                   <span class="icon is-small">
@@ -220,6 +240,45 @@
                   <span>Signaler</span>
                 </button>
                 <input type="hidden" />
+              </div>
+              <!-- <div class="navbar-item">
+                <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
+                  <span class="icon is-small">
+                    <i class="fas fa-times"></i>
+                  </span>
+                  <span>Supprimer </span>
+                </button>
+                <input type="hidden" />
+              </div> -->
+            </div>
+            <div class="boutonPubliTel">
+              <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                </a>
+                <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;">
+                  <div class="navbar-item">
+                    <button  class="button is-warning is-outlined is-small" onClick="sign_rep('{{r['idRep']}}')">
+                      <span class="icon is-small">
+                        {% if r['a_sign'] %}
+                        <i id="sign_{{r['idRep']}}" class="fas fa-flag" aria-hidden="true"></i>
+                        {% else %}
+                          <i id="sign_{{r['idRep']}}" class="far fa-flag" aria-hidden="true"></i>
+                        {% endif %}
+                      </span>
+                      <span>Signaler</span>
+                    </button>
+                    <input type="hidden" />
+                  </div>
+                  <!-- <div class="navbar-item">
+                    <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
+                      <span class="icon is-small">
+                        <i class="fas fa-times"></i>
+                      </span>
+                      <span>Supprimer </span>
+                    </button>
+                    <input type="hidden" />
+                  </div> -->
+                </div>
               </div>
             </div>
           </article>

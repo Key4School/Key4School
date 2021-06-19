@@ -23,7 +23,7 @@
   <div style="padding:2% 0%;margin:1%;background-color:white;display:flex;height:10%">
     <span style="border-top: 2px solid {{session['couleur'][0]}};height:50%;width:40%;margin:auto;">
     </span>
-    <a class="maillogoNom" href="https://key4school.herokuapp.com/" style="text-decoration: none;display:flex;align-items:center;">
+    <a class="maillogoNom" href="{{url_for('accueil')}}" style="text-decoration: none;display:flex;align-items:center;">
       <img class="logo" src="
       {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}
       {{url_for('static',filename='image/logo/Nuances_bleu.png')}}
@@ -89,7 +89,7 @@
     <div style="display:flex;margin:auto;align-items:center;">
       <span style="border-top: 1px solid #e7f0f2;height:50%;width:45%;margin:auto;">
       </span>
-      <img src="{{url_for('static',filename='image/sans_profil.png')}}" style="border-radius: 50%;height:60px;width:60px;"/>
+      <img src="{{url_for('static',filename='image/sans_profil.png')}}" style="border-radius: 50%;height:60px;width:60px;object-fit: cover;"/>
       <span style="border-top: 1px solid #e7f0f2;height:50%;width:45%;margin:auto;">
       </span>
     </div><br />
@@ -100,9 +100,9 @@
       <b>Salut, comment ça va depuis hier ? ...</b>
     </p>
   </div>
-  <button class="button is-link is-outlined">
+  <a href="{{url_for('page_messages')}}" class="button is-link is-outlined">
     <span>Répondre</span>
-  </button><br /><br />
+  </a><br /><br />
   <p style="color:#c6c7c7;">
     Pour changer vos préférences de notifications, <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/profil/">cliquez ici</a>
   </p><br /><br />
