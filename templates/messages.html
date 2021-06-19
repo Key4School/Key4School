@@ -35,6 +35,11 @@
       background-color:{{session['couleur'][1]}};
     }
 
+    td:hover{
+      background-color:#f5f5f5;
+      cursor: pointer;
+    }
+
     .rep {
       background-color:{{session['couleur'][3]}};
       padding:1%;
@@ -52,11 +57,6 @@
     }
 
     .current {
-      font-weight: bold;
-    }
-
-    .liengroupe:hover {
-      cursor: pointer;
       font-weight: bold;
     }
 
@@ -161,14 +161,14 @@
       </div>
 
 
-      <table class="table is-narrow" style="position: relative; width: 15%;">
+      <table class="table is-narrow">
         <tbody>
           <!-- div pour le groupe -->
           {%for content in grpUtilisateur%}
           <tr>
             <td>
               <div class="tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
-                <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;">
+                <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
                   <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
                     {{content['nom']}}
                     <br />
@@ -182,8 +182,7 @@
                     </i>
                     {%endif%}
                   </a>
-                </span>
-                {%if content['_id']|string==idgroupe%}<a class="tag is-delete" onclick="quitterGroupeOpen('{{content['_id']}}', '{{sessionId}}');"></a>{%endif%}
+                <!-- </span> -->
               </div>
             </td>
           </tr>
