@@ -1,10 +1,19 @@
-var lastPost = 10;
-
 var deviceAgent = navigator.userAgent.toLowerCase();
 var agentID = deviceAgent.match(/(iphone|ipod|ipad)/);
 $(window).data('ajaxready', true);
+var lastPost = 10;
 
-if (search === undefined){
+if (document.location.pathname == '/rechercheUser/') {
+  // si c pour les user
+  var url = '/moreUser/';
+  var $content = $('#users');
+} else {
+  // si c pour les publications
+  var url = '/morePost/';
+  var $content = $('#publis');
+}
+
+if (search === undefined) {
   var search = "";
 }
 
@@ -16,7 +25,7 @@ $(window).scroll(function() {
 
     $(window).data('ajaxready', false);
     $.ajax({
-      url: '/morePost/', // on donne l'URL du fichier de traitement
+      url: url, // on donne l'URL du fichier de traitement
       type: "POST", // la requête est de type POST
       data: {
         'lastPost': lastPost,
@@ -25,10 +34,14 @@ $(window).scroll(function() {
       success: function(json) {
         lastPost = json.lastPost;
         if (json.html != '') {
-          $('#publis').append(json.html);
+          $content.append(json.html);
           $(window).data('ajaxready', true);
         } else {
-          $('#publis').append("<p>Aucune nouvelle demande d'aide</p>");
+          if (search != '') {
+            $content.append("<p>Aucun autre résultat</p>");
+          } else {
+            $content.append("<p>Aucune nouvelle demande d'aide</p>");
+          }
         }
       },
     });

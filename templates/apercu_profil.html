@@ -3,7 +3,7 @@
     <div class="media-left">
       <!-- Image photo de profil-->
       <figure class="image is-64x64">
-        <img alt="user" src="{%if 'nomImg' in users and users['nomImg'] != "" %}{{url_for('userImg', profilImg = users['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        <img alt="user" src="{%if 'nomImg' in u and u['nomImg'] != "" %}{{url_for('userImg', profilImg = u['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
           style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
       </figure>
     </div>
@@ -13,9 +13,9 @@
         <p style="margin-bottom: 5px;">
           <!-- Nom utilisateur ; pseudo ; temps -->
         <div style="font-variant: small-caps;">
-          <a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['nom']}} {{users['prenom']}}</a>
+          <a href="{{url_for('profil' ,idUser=u['_id'])}}">{{u['nom']}} {{u['prenom']}}</a>
         </div>
-        <small><em>@{{users['pseudo']}}</em></small>
+        <small><em>@{{u['pseudo']}}</em></small>
         </p>
       </div>
     </div>

@@ -86,7 +86,7 @@
     {%if user|length > 0%}
       <a href="{{url_for('recherche_user', search=search)}}">Voir plus de profils</a><br />
     {%endif%}
-    {%for users in users%}
+    {%for u in users%}
       {% include 'apercu_profil.html' with context %}
     {%endfor%}
 
