@@ -807,6 +807,21 @@ def updateDemand():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@app.route('/updateComment/', methods=['POST'])
+def updateComment():
+    global utilisateurs
+    global demandes_aide
+
+    if 'id' in session:
+        Comment = demandes_aide[request.form['idDemandCommentModif']].toDict()['reponsesDict2'][request.form['idCommentModif']]
+        if ObjectId(session['id']) == Comment.id_utilisateur:
+            Comment.contenu = request.form['txtModif']
+            demandes_aide[request.form['idDemandCommentModif']].update()
+        return 'sent'
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
 @app.route('/recherche/')
 def recherche():
     global utilisateurs
