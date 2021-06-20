@@ -27,7 +27,7 @@ class DB_Manager:
 		global utilisateurs
 		global demandes_aide
 		global messages
-		global groupes 
+		global groupes
 		global notifications
 
 		# create DB
@@ -55,7 +55,7 @@ class DB_Manager:
 		for n in all_notifications:
 		    notifications[str(n['_id'])] = Notification(n)
 
-		# return DB 
+		# return DB
 		return DB
 
 	def update(self, db_table, data):
@@ -419,6 +419,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 			'nb-likes': len(self.likes),
 			'réponses associées': [r.toDict() for r in self.reponses_associees.values()],
 			'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
+			'reponsesDict2': {idRep: rep for (idRep, rep) in self.reponses_associees.items()},
 			'reponsesObjects': self.reponses_associees,
 			'a_like': self.aLike(),
 			'a_sign': self.aSign(),

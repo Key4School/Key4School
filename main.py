@@ -188,6 +188,7 @@ def mail():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+
 # Connection au groupe pour recevoir les nouvelles notif
 @socketio.on('connectToNotif')
 def handleEvent_connectToNotif():
@@ -280,6 +281,7 @@ def handleEvent_postMsg(json):
                         otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
 
                         emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=json['room'])
+
 
 @socketio.on('postLike')
 def handleEvent_postLike(json):
