@@ -181,6 +181,33 @@ def accueil():
         return redirect(url_for('login'))
 
 
+@app.route('/morePost/', methods=['POST'])
+def morePost():
+    global utilisateurs
+    global demandes_aide
+
+    if 'id' in session:
+        user = utilisateurs[session['id']].toDict()
+        lastPost = int(request.form['lastPost'])
+        if request.form['search'] == '':
+            # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
+            demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[lastPost:lastPost+10]
+        else:
+            search = request.form['search']
+            demandes = sorted(
+                [d.toDict() for d in demandes_aide.values()
+                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre, search).ratio()>0.5 or SequenceMatcher(None, d.contenu, search).ratio()>0.5 )
+                ], key = lambda d: ( SequenceMatcher(None, d['titre'], search).ratio() + SequenceMatcher(None, d['contenu'], search).ratio() ), reverse=True
+            )[lastPost:lastPost+10]
+        html = ''
+        for demande in demandes:
+            html += render_template("publication.html", d=demande, user=user)
+
+        return {'html': html, 'lastPost': lastPost+10}
+    else:
+        abort(401) # non connecté
+
+
 # Connection au groupe pour recevoir les nouvelles notif
 @socketio.on('connectToNotif')
 def handleEvent_connectToNotif():
@@ -779,7 +806,7 @@ def recherche():
                 [d.toDict() for d in demandes_aide.values()
                     if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre, search).ratio()>0.5 or SequenceMatcher(None, d.contenu, search).ratio()>0.5 )
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'], search).ratio() + SequenceMatcher(None, d['contenu'], search).ratio() ), reverse=True
-            )
+            )[:10]
 
             # on récupère 3 utilisateurs correspondants à la recherche
             users = sorted(

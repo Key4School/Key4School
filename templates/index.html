@@ -4,6 +4,7 @@
 <head>
   {% include 'head.html' with context %}
   <script type="text/javascript" src="/static/js/filtres.js" defer></script>
+  <script type="text/javascript" src="/static/js/scrollInfini.js" defer></script>
   <title>Key4School</title>
   <style>
     .logoBouton:hover {
@@ -96,7 +97,7 @@
   <!-- debut de la div pour tt les publications -->
   <div id="contentPost" class="columns" style="margin-top: 10px; width:100%; margin: 0;">
     <div class="column" style="padding: 0;"></div>
-    <div class="column is-three-fifths">
+    <div class="column is-three-fifths" id="publis">
       {%for d in demandes %}
       <!-- Début publi -->
       {% include 'publication.html' with context %}
