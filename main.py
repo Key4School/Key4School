@@ -30,7 +30,7 @@ from routing.recherche import recherche, recherche_user, morePost, moreUser
 from routing.messages import page_messages, uploadAudio, audio, createGroupe, updateGroupe, virerParticipant, modifRole
 from routing.administration import administration, supprimerMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
 from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
-from routing.demandes_aide import question, redirect_comments, comments, updateDemand, file, likePost, likeRep, resoudre
+from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, likePost, likeRep, resoudre
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
 from routing.functions import recupLevel, addXP, addXpModeration, listeModeration, automoderation, sendNotif, clientsNotif
 
@@ -58,6 +58,7 @@ app.add_url_rule('/question/', 'question', question, methods=['POST', 'GET'])
 app.add_url_rule('/comments/', 'redirect_comments', redirect_comments)
 app.add_url_rule('/comments/<idMsg>/', 'comments', comments, methods=['GET', 'POST'])
 app.add_url_rule('/updateDemand/', 'updateDemand', updateDemand, methods=['POST'])
+app.add_url_rule('/updateComment/', 'updateComment', updateComment, methods=['POST'])
 app.add_url_rule('/file/<fileName>/', 'file', file)
 app.add_url_rule('/recherche/', 'recherche', recherche)
 app.add_url_rule('/rechercheUser/', 'recherche_user', recherche_user)
