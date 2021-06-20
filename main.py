@@ -162,6 +162,7 @@ def mail():
     if 'id' in session:
         return render_template("mail.html")
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -178,6 +179,7 @@ def accueil():
 
         return render_template("index.html", demandes=demandes, user=user)
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -272,6 +274,7 @@ def accueil2():
     if 'id' in session:
         return redirect(url_for('accueil'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/messages/', defaults={'idGroupe': None})
@@ -313,6 +316,7 @@ def page_messages(idGroupe):
         return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=groupe, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=ObjectId(session['id']), user=user)
 
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 # Connection au groupe pour recevoir les nouveaux messages par la suite
@@ -380,6 +384,7 @@ def uploadAudio():
         DB.cluster.save_file(nom, request.files['audio'])
         return 'yes'
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -388,6 +393,7 @@ def audio(audioName):
     if 'id' in session:
         return DB.cluster.send_file(audioName)
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/file/<fileName>')
@@ -395,6 +401,7 @@ def file(fileName):
     if 'id' in session:
         return DB.cluster.send_file(fileName)
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/suppressionMsg/', methods=['POST'])
@@ -427,6 +434,7 @@ def supprimerMsg():
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/validationMsg/', methods=['POST'])
@@ -456,6 +464,7 @@ def validerMsg():
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/createGroupe/', methods=['POST'])
@@ -476,6 +485,7 @@ def createGroupe():
 
         return redirect(url_for('page_messages', idGroupe=str(_id)))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/updateGroupe/', methods=['POST'])
@@ -497,6 +507,7 @@ def updateGroupe():
 
         return redirect(url_for('page_messages', idGroupe=request.form['IdGroupe']))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/virerParticipant/', methods=['POST'])
@@ -518,6 +529,7 @@ def virerParticipant():
         else:
             return redirect(url_for('page_messages'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/modifRole/', methods=['POST'])
@@ -574,6 +586,7 @@ def changeTheme():
 
         return redirect(url_for('profil'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -608,6 +621,7 @@ def profil(idUser):
 
             return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], user=utilisateurs[session['id']].toDict())
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -616,6 +630,7 @@ def userImg(profilImg):
     if 'id' in session:
         return DB.cluster.send_file(profilImg)
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -661,6 +676,7 @@ def updateprofile():
 
         return redirect(url_for('profil'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -697,6 +713,7 @@ def updateImg():
 
         return redirect(url_for('profil'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -745,6 +762,7 @@ def comments(idMsg):
 
             return redirect('/comments/' + idMsg)
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -794,6 +812,7 @@ def question():
             else:
                 return redirect(url_for('accueil'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/updateDemand/', methods=['POST'])
@@ -808,6 +827,7 @@ def updateDemand():
             demand.update()
         return 'sent'
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @app.route('/recherche/')
@@ -842,6 +862,7 @@ def recherche():
         else:
             return redirect(url_for('accueil'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -863,6 +884,7 @@ def recherche_user():
 
         return render_template('rechercheUser.html', users=users, user = utilisateurs[session['id']].toDict(), search=search)
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -1084,6 +1106,7 @@ def administration():
         else:
             return redirect(url_for('accueil'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -1129,6 +1152,7 @@ def sanction():
         else:
             return redirect(url_for('accueil'))
     else:
+        session['redirect'] = request.path
         return redirect(url_for('login'))
 
 
@@ -1359,13 +1383,6 @@ def resoudre(idPost):
         abort(401) # non autorisé
 
 
-@app.route('/deconnexion/')
-def deconnexion():
-    for s in session:
-        session[s] = None
-    return redirect(url_for('login'))
-
-
 # TOUT LE CODE QUI VA SUIVRE PERMET LA CONNEXION A L'ENT VIA OAUTH
 # Route qui va permettre de rediriger l'utilisateur sur le site d'authentification et de récupérer un token (pour pouvoir se connecter)
 @app.route("/login/")
@@ -1471,7 +1488,12 @@ def connexion():
 
         utilisateurs[str(user['_id'])].update()
 
-        return redirect(url_for('accueil'))
+        if 'redirect' in session:
+            path = session['redirect']
+            session.pop('redirect')
+            return redirect(path)
+        else:
+            return redirect(url_for('accueil'))
 
     else:
         if data['type'] == "ELEVE":
