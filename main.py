@@ -95,7 +95,7 @@ def handleEvent_disconnect():
 
 @socketio.on('supprNotif')
 def handleEvent_supprNotif(id):
-
+    supprNotif()
 
 # Connection au groupe pour recevoir les nouveaux messages par la suite
 @socketio.on('connectToGroup')
