@@ -12,7 +12,14 @@
     .moimsg {
       max-width: 75%;
       align-self: flex-end;
-      border: 2px solid {{session['couleur'][0]}};
+
+      border: 2px solid {
+          {
+          session['couleur'][0]
+        }
+      }
+
+      ;
       margin-right: 1%;
       margin-bottom: 12px;
       border-radius: 12px;
@@ -33,19 +40,39 @@
       padding: 1%;
       padding-left: 2%;
       padding-right: 2%;
-      background-color:{{session['couleur'][1]}};
+
+      background-color: {
+          {
+          session['couleur'][1]
+        }
+      }
+
+      ;
     }
 
-    td:hover{
-      background-color:#f5f5f5;
+    td:hover {
+      background-color: #f5f5f5;
       cursor: pointer;
     }
 
     .rep {
-      background-color:{{session['couleur'][3]}};
+      background-color: {
+          {
+          session['couleur'][3]
+        }
+      }
+
+      ;
       padding:1%;
       padding-left:2%;
-      border-left:4px solid {{session['couleur'][0]}};
+
+      border-left:4px solid {
+          {
+          session['couleur'][0]
+        }
+      }
+
+      ;
       border-radius:5px;
       margin-top:1%;
       margin-bottom:2%;
@@ -77,38 +104,72 @@
         width: calc(85% - 60px);
       }
 
-      .moimsg, .participantmsg {
+      .moimsg,
+      .participantmsg {
         min-width: 20%;
       }
 
       #backButton {
         display: none;
       }
+
+      .divCoteMessage {
+        display: block;
+      }
+
+      .divCoteMessage:hover {
+        cursor: pointer;
+      }
     }
 
     @media screen and (max-width: 700px) {
       #nomgroupe {
-        {% if msgDb == None %}
-          width: calc(100% - 50px);
-        {% else %}
-          display: none;
-        {% endif %}
+          {
+          % if msgDb==None %
+        }
+
+        width: calc(100% - 50px);
+
+          {
+          % else %
+        }
+
+        display: none;
+
+          {
+          % endif %
+        }
       }
 
       #titreetmsg {
-        {% if msgDb == None %}
-          display: none;
-        {% else %}
-          display: block;
-        {% endif %}
+          {
+          % if msgDb==None %
+        }
+
+        display: none;
+
+          {
+          % else %
+        }
+
+        display: block;
+
+          {
+          % endif %
+        }
       }
 
-      .moimsg, .participantmsg {
+      .moimsg,
+      .participantmsg {
         min-width: 35%;
       }
 
       #backButton {
         display: inline-block;
+      }
+
+      .divCoteMessage {
+        display: none;
       }
     }
   </style>
@@ -116,95 +177,115 @@
 
 
 <!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
-<body style="overflow:auto;"><!-- onkeydown="enregistrer(event)" onkeyup="stop(event)"-->
+
+<body style="overflow:auto;">
+  <!-- onkeydown="enregistrer(event)" onkeyup="stop(event)"-->
   {% include 'bandeau2.html' %}
   <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
   <div style=" position: fixed; margin-top: 55px; width: 100%;">
-  <div style="display: flex;justify-content:space-between;height:95%;margin-top:15px;">
-    <!-- div pour afficher tout les groupes -->
-    <div id="nomgroupe" style="/*width: 15%;*/margin-left: 25px;overflow-y:auto;overflow-x: hidden;margin-bottom:5%;">
-      <div class="liengroupe" style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-        <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%; cursor: pointer;"></i>
-        <input class="input is-info" type="text" placeholder="Rechercher..." style="display: inline-block; width: calc(100% - 40px); height: 50%;" oninput="grp_filter(this.value);" />
-      </div>
-
-      <div class="modal" id="newgrou" style="overflow:auto;">
-        <div class="modal-background"></div>
-        <div class="modal-card" style="height: 89%;margin-top: 3%;">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Créer un nouveau groupe</p>
-            <button onclick="divnewgroupclose()" class="delete" aria-label="close"></button>
-          </header>
-          <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
-            <section class="modal-card-body">
-              <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' required /><br><br>
-              <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
-              <br /><br />
-              <div id="listeuser" style="overflow:auto;">
-                {% for user in users %}
-                  {% if not sessionId == user['_id'] %}
-                    <div class="listedUser"
-                        data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}"
-                        {% if not 'email' in user['elementPrive'] %} data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
-                      <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}"  style="margin-right: 18px;" />
-                      <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
-                      <br><br />
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </section>
-            <footer class="modal-card-foot">
-              <button type="submit" class="button is-success">Créer le groupe</button>
-              <button onclick="divnewgroupclose(event); return false;" class="button">Annuler</button>
-            </footer>
-          </form>
+    <div style="display: flex;height:95%;margin-top:15px;">
+      <!-- div pour afficher tout les groupes -->
+      <div id="nomgroupe" style="/*width: 15%;*/margin-left: 25px;overflow-y:auto;overflow-x: hidden;margin-bottom:5%;">
+        <div class="liengroupe" style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
+          <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%; cursor: pointer;"></i>
+          <input class="input is-info" type="text" placeholder="Rechercher..." style="display: inline-block; width: calc(100% - 40px); height: 50%;" oninput="grp_filter(this.value);" />
         </div>
-      </div>
 
-
-      <table class="table is-narrow">
-        <tbody>
-          <!-- div pour le groupe -->
-          {%for content in grpUtilisateur%}
-          <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
-            <td>
-              <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
-                <div class="tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
-                <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
-                  {{content['nom']}}
-                  <br />
-                  {%if content['lastMsg']!=None%}
-                  <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
-                    {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
-                    Message Vocal
-                    {%else%}
-                    {{content['lastMsg']['contenu']}}
-                    {%endif%}
-                  </i>
-                    {%endif%}
-                <!-- </span> -->
+        <div class="modal" id="newgrou" style="overflow:auto;">
+          <div class="modal-background"></div>
+          <div class="modal-card" style="height: 89%;margin-top: 3%;overflow:auto;">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Créer un nouveau groupe</p>
+              <button onclick="divnewgroupclose()" class="delete" aria-label="close"></button>
+            </header>
+            <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
+              <section class="modal-card-body">
+                <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' required /><br><br>
+                <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
+                <br /><br />
+                <div id="listeuser" style="overflow:auto;">
+                  {% for user in users %}
+                  {% if not sessionId == user['_id'] %}
+                  <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
+                    data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
+                    <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
+                    <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
+                    <br><br />
+                  </div>
+                  {% endif %}
+                  {% endfor %}
                 </div>
-              </a>
-            </td>
-          </tr>
+              </section>
+              <footer class="modal-card-foot">
+                <button type="submit" class="button is-success">Créer le groupe</button>
+                <button onclick="divnewgroupclose(event); return false;" class="button">Annuler</button>
+              </footer>
+            </form>
+          </div>
+        </div>
 
-          {%endfor%}
-      </table>
-    </div>
-    <!-- fin de la div pour les noms de tt les groupes -->
-    {% if msgDb != None %}
-    <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
-    <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative;">
-      <!-- debut de la div pour la partie haute a droite -->
-      <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:10px;height: 100px; border-bottom: none;">
-        <!-- div avec le nom du groupe et les paticipants -->
-        <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
-          <!-- nom du groupe -->
-          <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>{{infogroupe['nom']}}</p>
-          <!-- liste des paricipants -->
-          <p id="listGroupUsers" style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.2;">
-            <!--{% if infogroupe['nbUtilisateurs'] > 8 %}
+
+        <table class="table is-narrow">
+          <tbody>
+            <!-- div pour le groupe -->
+            {%for content in grpUtilisateur%}
+            <tr class="listedGrp" data-grpName="{{content['nom']}}"
+              data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
+              <td>
+                <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
+                  <div class="tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
+                    <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
+                    {{content['nom']}}
+                    <br />
+                    {%if content['lastMsg']!=None%}
+                    <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
+                      {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
+                      Message Vocal
+                      {%else%}
+                      {{content['lastMsg']['contenu']}}
+                      {%endif%}
+                    </i>
+                    {%endif%}
+                    <!-- </span> -->
+                  </div>
+                </a>
+              </td>
+            </tr>
+
+            {%endfor%}
+        </table>
+      </div>
+      {%if msgDb == none%}
+      <div class="divCoteMessage" style="border: 3px solid {{session['couleur'][0]}};width: 100%;margin: 3% 3%;text-align:center;padding-top:5%;padding-bottom:3%;">
+        <i class="fas fa-paper-plane" style="border: 2px solid black;border-radius:50%;padding: 3% 4% 3% 2%;font-size:70px;background-color:#dbdbdb;"></i><br />
+        <br />
+        <p style="font-size: 20px">
+          <b>Messages privés</b>
+        </p>
+        <br />
+        <p style="font-size: 20px;margin: 0% 31%;">
+          Vous pouvez discuter avec vos ami.e.s, avec vos camarades de classe ou d'autre personnes de la communauté !
+        </p>
+        <br /><br />
+        <span onclick="divnewgroupopen()" style="background-color:#dbdbdb;border-radius:9%;padding:1%;">
+          Lancer une conversation
+        </span>
+      </div>
+      <!-- DIV A NE PAS SUPPRIMER (POUR LE STYLE) -->
+      {%endif%}
+      <!-- fin de la div pour les noms de tt les groupes -->
+      {% if msgDb != None %}
+      <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
+      <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative;">
+        <!-- debut de la div pour la partie haute a droite -->
+        <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:10px;height: 100px; border-bottom: none;">
+          <!-- div avec le nom du groupe et les paticipants -->
+          <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
+            <!-- nom du groupe -->
+            <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>{{infogroupe['nom']}}</p>
+            <!-- liste des paricipants -->
+            <p id="listGroupUsers" style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.2;">
+              <!--{% if infogroupe['nbUtilisateurs'] > 8 %}
               {% for i in range(8) %}
                 <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i<7 %},{%endif%}
               {%endfor%}
@@ -215,20 +296,20 @@
                 <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
               {%endfor%}
             {% endif %}-->
-            {% for content in infoUtilisateurs %}
+              {% for content in infoUtilisateurs %}
               <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['_id'])}}">{{content['pseudo']}}</a>, </span>
-            {%endfor%}
-          </p>
-        </div>
+              {%endfor%}
+            </p>
+          </div>
           <!-- Bouton trois petits points -->
-        <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:{{session['couleur'][0]}};font-size: 20px;"></i>
-        <div class="modal" id="option">
-          <div class="modal-background"></div>
-          <div class="modal-card" style="height: 87%;margin-top: 3%;">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Options</p>
-              <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
-            </header>
+          <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:{{session['couleur'][0]}};font-size: 20px;"></i>
+          <div class="modal" id="option">
+            <div class="modal-background"></div>
+            <div class="modal-card" style="height: 87%;margin-top: 3%;">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Options</p>
+                <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
+              </header>
               <section class="modal-card-body">
                 Info Utilisateur : <br />
                 {%for users in infoUtilisateurs%}
@@ -253,67 +334,67 @@
                         </p>
                       </div>
                     </div>
-                      <div style="flex-direction: column;align-items: flex-end;">
-                        <div class="navbar-item">
-                          {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
-                          {%if users['_id'] in infogroupe['moderateurs']%}
-                          <button class="button is-warning is-outlined" onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
-                            <span class="icon is-small">
-                              <i class="fas fa-crown" aria-hidden="true"></i>
-                            </span>
-                            <span id="ModifRoleUser{{users['_id']}}">
-                               Admin
-                            </span>
-                          </button>
-                          {%else%}
-                          <button class="button is-info is-outlined" onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
-                            <span class="icon is-small">
-                              <i class="fas fa-users" aria-hidden="true"></i>
-                            </span>
-                            <span id="ModifRoleUser{{users['_id']}}">
-                              Participant
-                            </span>
-                          </button>
-                          {%endif%}
-                          {%else%}
-                          {%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}
-                          {%endif%}
-                        </div>
+                    <div style="flex-direction: column;align-items: flex-end;">
+                      <div class="navbar-item">
+                        {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
+                        {%if users['_id'] in infogroupe['moderateurs']%}
+                        <button class="button is-warning is-outlined" onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
+                          <span class="icon is-small">
+                            <i class="fas fa-crown" aria-hidden="true"></i>
+                          </span>
+                          <span id="ModifRoleUser{{users['_id']}}">
+                            Admin
+                          </span>
+                        </button>
+                        {%else%}
+                        <button class="button is-info is-outlined" onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
+                          <span class="icon is-small">
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                          </span>
+                          <span id="ModifRoleUser{{users['_id']}}">
+                            Participant
+                          </span>
+                        </button>
+                        {%endif%}
+                        {%else%}
+                        {%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}
+                        {%endif%}
                       </div>
+                    </div>
                   </article>
                 </div>
                 {%endfor%}<br /><br />
                 <div style="display:flex;">
-                <button  class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
-                  <span class="icon is-small">
-                    {% if sessionId in infogroupe['sign'] %}
-                    <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
-                    {% else %}
+                  <button class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
+                    <span class="icon is-small">
+                      {% if sessionId in infogroupe['sign'] %}
+                      <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
+                      {% else %}
                       <i id="sign" class="far fa-flag" aria-hidden="true"></i>
-                    {% endif %}
-                  </span>
-                  <span>Signaler</span>
-                </button>&emsp;
-                {%if user['admin']%}
-                <button  class="button is-danger is-outlined is-small" onClick="supprDiscOpen();">
-                  <span class="icon is-small">
-                    <i id="sign" class="fas fa-times" aria-hidden="true"></i>
-                  </span>
-                  <span>Supprimer</span>
-                </button>&emsp;
-                {%if infogroupe['sign'] != []%}
-                <button  class="button is-success is-outlined is-small" onClick="valDiscOpen();">
-                  <span class="icon is-small">
-                    <i id="sign" class="fas fa-check" aria-hidden="true"></i>
-                  </span>
-                  <span>Valider</span>
-                </button>
-                {%endif%}
-                {%endif%}
-              </div>
+                      {% endif %}
+                    </span>
+                    <span>Signaler</span>
+                  </button>&emsp;
+                  {%if user['admin']%}
+                  <button class="button is-danger is-outlined is-small" onClick="supprDiscOpen();">
+                    <span class="icon is-small">
+                      <i id="sign" class="fas fa-times" aria-hidden="true"></i>
+                    </span>
+                    <span>Supprimer</span>
+                  </button>&emsp;
+                  {%if infogroupe['sign'] != []%}
+                  <button class="button is-success is-outlined is-small" onClick="valDiscOpen();">
+                    <span class="icon is-small">
+                      <i id="sign" class="fas fa-check" aria-hidden="true"></i>
+                    </span>
+                    <span>Valider</span>
+                  </button>
+                  {%endif%}
+                  {%endif%}
+                </div>
                 <br /><br />
                 {%if infogroupe['is_class'] == False%}
-                <button  class="button is-danger is-outlined is-small" type="submit" onclick="quitterGroupeOpen();">
+                <button class="button is-danger is-outlined is-small" type="submit" onclick="quitterGroupeOpen();">
                   <span class="icon is-small">
                     <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
                   </span>
@@ -322,219 +403,218 @@
                 {%endif%}
                 <br /><br /><br />
                 {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
-                <button  class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">
+                <button class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">
                   <span class="icon is-small">
                     <i class="fas fa-plus" aria-hidden="true"></i>
                   </span>
                   <span>Ajouter des participants</span>
                 </button><br />
                 <div id="ajouterParticipant" style="display:none;">
-                <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
-                    <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}"/>
+                  <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
+                    <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}" />
                     <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
                     <br /><br />
-                    <div id="listeuser" >
+                    <div id="listeuser">
                       {% for user in users %}
-                        {% if not sessionId == user['_id'] and not user['_id'] in infogroupe['id-utilisateurs']%}
-                          <div class="listedUser"
-                              data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}"
-                              {% if not 'email' in user['elementPrive'] %} data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
-                            <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}"  style="margin-right: 18px;" />
-                            <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
-                            <br><br />
-                          </div>
-                        {% endif %}
+                      {% if not sessionId == user['_id'] and not user['_id'] in infogroupe['id-utilisateurs']%}
+                      <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
+                        data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
+                        <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
+                        <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
+                        <br><br />
+                      </div>
+                      {% endif %}
                       {% endfor %}
-                      <button  class="button is-success is-outlined is-small" type="submit">
+                      <button class="button is-success is-outlined is-small" type="submit">
                         <span class="icon is-small">
                           <i class="fas fa-check" aria-hidden="true"></i>
                         </span>
                         <span>Valider</span>
                       </button>
                     </div>
-                </form>
-              </div>
+                  </form>
+                </div>
                 {%endif%}
               </section>
               <footer class="modal-card-foot">
-                <button  class="button is-success is-outlined" onclick="divoptionclose(); return false;">
+                <button class="button is-success is-outlined" onclick="divoptionclose(); return false;">
                   <span class="icon is-small">
                     <i class="fas fa-check" aria-hidden="true"></i>
                   </span>
                   <span>Terminer</span>
                 </button>
               </footer>
+            </div>
           </div>
-        </div>
-        {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
-        <div class="modal" id="optionParticipant" style="overflow:hidden;" >
-          <div class="modal-card">
-            <section class="modal-card-body">
-              <button onclick="optionParticipantClose()" class="delete" aria-label="close"></button>
-              <a id="hrefParticipant" href="">Voir le profil:</a><br />
-              <form action="/virerParticipant/" id="virerParticipant" method="POST">
-                <input type='hidden' id="idViré2" name='idViré' value="" />
-                <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" /><br />
-                <button  class="button is-danger is-outlined is-small" type="submit">
-                  <span class="icon is-small">
-                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                  </span>
-                  <span>Virer du groupe</span>
-                </button>
+          {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
+          <div class="modal" id="optionParticipant" style="overflow:hidden;">
+            <div class="modal-card">
+              <section class="modal-card-body">
+                <button onclick="optionParticipantClose()" class="delete" aria-label="close"></button>
+                <a id="hrefParticipant" href="">Voir le profil:</a><br />
+                <form action="/virerParticipant/" id="virerParticipant" method="POST">
+                  <input type='hidden' id="idViré2" name='idViré' value="" />
+                  <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" /><br />
+                  <button class="button is-danger is-outlined is-small" type="submit">
+                    <span class="icon is-small">
+                      <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    </span>
+                    <span>Virer du groupe</span>
+                  </button>
+                </form>
+              </section>
+            </div>
+          </div>
+          {%endif%}
+          <div class="modal" id="signalisationDiscussion" style="overflow:hidden;">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Signalement de Discussion</p>
+              </header>
+              <form onsubmit="signalerDiscussion(event); return false;" id="signalementDiscussion" method="POST" autocomplete="off">
+                <section class="modal-card-body">
+                  <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous cette Discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
+                  <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                </section>
+                <footer class="modal-card-foot">
+                  <button type="submit" class="button is-success">Signaler</button>
+                  <button onclick="signalisationDiscussionClose(); return false;" class="button">Annuler</button>
+                </footer>
               </form>
-            </section>
+            </div>
+          </div>
+          <div class="modal" id="designalisationDiscussion" style="overflow:hidden;">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Retrait de signalement de la Discussion</p>
+              </header>
+              <form onsubmit="designalerDiscussion(event); return false;" id="designalementDiscussion" method="POST" autocomplete="off">
+                <section class="modal-card-body">
+                  <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                  Etes-vous sûr de vouloir enlever ce signalement
+                </section>
+                <footer class="modal-card-foot">
+                  <button type="submit" class="button is-success">Oui</button>
+                  <button onclick="designalisationDiscussionClose(); return false;" class="button">Annuler</button>
+                </footer>
+              </form>
+            </div>
+          </div>
+          <div class="modal" id="signalisationMsg" style="overflow:hidden;">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Signalement de Msg</p>
+              </header>
+              <form onsubmit="signalerMsg(event); return false;" id="signalementMsg" method="POST" autocomplete="off">
+                <section class="modal-card-body">
+                  <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous cette Msg." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
+                  <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' id="idMsgSignalé" name='idMsgSignalé' value="" />
+                </section>
+                <footer class="modal-card-foot">
+                  <button type="submit" class="button is-success">Signaler</button>
+                  <button onclick="signalisationMsgClose(); return false;" class="button">Annuler</button>
+                </footer>
+              </form>
+            </div>
+          </div>
+          <div class="modal" id="designalisationMsg" style="overflow:hidden;">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Retrait de signalement de la Msg</p>
+              </header>
+              <form onsubmit="designalerMsg(event); return false;" id="designalementMsg" method="POST" autocomplete="off">
+                <section class="modal-card-body">
+                  <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' id="idMsgDeSignalé" name='idMsgSignalé' value="" />
+                  Etes-vous sûr de vouloir enlever ce signalement
+                </section>
+                <footer class="modal-card-foot">
+                  <button type="submit" class="button is-success">Oui</button>
+                  <button onclick="designalisationMsgClose(); return false;" class="button">Annuler</button>
+                </footer>
+              </form>
+            </div>
           </div>
         </div>
-        {%endif%}
-        <div class="modal" id="signalisationDiscussion" style="overflow:hidden;">
+        <div class="modal" id="quitterGroupe" style="overflow:hidden;">
           <div class="modal-background"></div>
           <div class="modal-card">
             <header class="modal-card-head">
-              <p class="modal-card-title">Signalement de Discussion</p>
+              <p class="modal-card-title">Quitter le groupe</p>
             </header>
-            <form onsubmit="signalerDiscussion(event); return false;" id="signalementDiscussion" method="POST" autocomplete="off">
+            <form onsubmit="quitterGroupe(event); return false;" id="quitterGroupeForm" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous cette Discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
-                <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="{{idgroupe}}" />
+                <input type='hidden' id="quitter_idviré" name='idViré' value="{{sessionId}}" />
+                Etes-vous sûr de vouloir quitter le groupe ?
               </section>
               <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Signaler</button>
-                <button onclick="signalisationDiscussionClose(); return false;" class="button">Annuler</button>
+                <button type="submit" class="button is-success">Quitter le groupe</button>
+                <button onclick="quitterGroupeClose(); return false;" class="button">Rester</button>
               </footer>
             </form>
           </div>
         </div>
-        <div class="modal" id="designalisationDiscussion" style="overflow:hidden;">
+        {%if user['admin']%}
+        <div class="modal" id="supprDisc" style="overflow:hidden;">
           <div class="modal-background"></div>
           <div class="modal-card">
             <header class="modal-card-head">
-              <p class="modal-card-title">Retrait de signalement de la Discussion</p>
+              <p class="modal-card-title">Supression de la discussion</p>
             </header>
-            <form onsubmit="designalerDiscussion(event); return false;" id="designalementDiscussion" method="POST" autocomplete="off">
+            <form onsubmit="supprDisc(event); return false;" id="supprDiscForm" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
-                Etes-vous sûr de vouloir enlever ce signalement
+                <input id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
+                <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['_id']}}" />
+                <input type='hidden' name="demandeBut" value="supprDisc" />
               </section>
               <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Oui</button>
-                <button onclick="designalisationDiscussionClose(); return false;" class="button">Annuler</button>
+                <button type="submit" class="button is-success">Supprimer</button>
+                <button onclick="supprDiscClose(); return false;" class="button">Annuler</button>
               </footer>
             </form>
           </div>
         </div>
-        <div class="modal" id="signalisationMsg" style="overflow:hidden;">
+        <div class="modal" id="valDisc" style="overflow:hidden;">
           <div class="modal-background"></div>
           <div class="modal-card">
             <header class="modal-card-head">
-              <p class="modal-card-title">Signalement de Msg</p>
+              <p class="modal-card-title">Validation de la discussion</p>
             </header>
-            <form onsubmit="signalerMsg(event); return false;" id="signalementMsg" method="POST" autocomplete="off">
+            <form onsubmit="valDisc(event); return false;" id="valDiscForm" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous cette Msg." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
-                <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
-                <input type='hidden' id="idMsgSignalé" name='idMsgSignalé' value="" />
+                <input type='hidden' id="idDiscVal" name='idDiscVal' value="{{infogroupe['_id']}}" />
+                <select name="motif">
+                  <option value="abusif">Signalement abusif</option>
+                  <option value="justifie">Justifié</option>
+                </select>
+                <input type='hidden' name="demandeBut" value="valDisc" />
               </section>
               <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Signaler</button>
-                <button onclick="signalisationMsgClose(); return false;" class="button">Annuler</button>
-              </footer>
-            </form>
-          </div>
-        </div>
-        <div class="modal" id="designalisationMsg" style="overflow:hidden;">
-          <div class="modal-background"></div>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Retrait de signalement de la Msg</p>
-            </header>
-            <form onsubmit="designalerMsg(event); return false;" id="designalementMsg" method="POST" autocomplete="off">
-              <section class="modal-card-body">
-                <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
-                <input type='hidden' id="idMsgDeSignalé" name='idMsgSignalé' value="" />
-                Etes-vous sûr de vouloir enlever ce signalement
-              </section>
-              <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Oui</button>
+                <button type="submit" class="button is-success">Valider</button>
                 <button onclick="designalisationMsgClose(); return false;" class="button">Annuler</button>
               </footer>
             </form>
           </div>
         </div>
-      </div>
-      <div class="modal" id="quitterGroupe" style="overflow:hidden;">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Quitter le groupe</p>
-          </header>
-          <form onsubmit="quitterGroupe(event); return false;" id="quitterGroupeForm" method="POST" autocomplete="off">
-            <section class="modal-card-body">
-              <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="{{idgroupe}}" />
-              <input type='hidden' id="quitter_idviré" name='idViré' value="{{sessionId}}" />
-              Etes-vous sûr de vouloir quitter le groupe ?
-            </section>
-            <footer class="modal-card-foot">
-              <button type="submit" class="button is-success">Quitter le groupe</button>
-              <button onclick="quitterGroupeClose(); return false;" class="button">Rester</button>
-            </footer>
-          </form>
-        </div>
-      </div>
-      {%if user['admin']%}
-      <div class="modal" id="supprDisc" style="overflow:hidden;">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Supression de la discussion</p>
-          </header>
-          <form onsubmit="supprDisc(event); return false;" id="supprDiscForm" method="POST" autocomplete="off">
-            <section class="modal-card-body">
-              <input id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
-              <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['_id']}}" />
-              <input type='hidden' name="demandeBut" value="supprDisc" />
-            </section>
-            <footer class="modal-card-foot">
-              <button type="submit" class="button is-success">Supprimer</button>
-              <button onclick="supprDiscClose(); return false;" class="button">Annuler</button>
-            </footer>
-          </form>
-        </div>
-      </div>
-      <div class="modal" id="valDisc" style="overflow:hidden;">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Validation de la discussion</p>
-          </header>
-          <form onsubmit="valDisc(event); return false;" id="valDiscForm" method="POST" autocomplete="off">
-            <section class="modal-card-body">
-              <input type='hidden' id="idDiscVal" name='idDiscVal' value="{{infogroupe['_id']}}" />
-              <select name="motif">
-                <option value="abusif">Signalement abusif</option>
-                <option value="justifie">Justifié</option>
-              </select>
-              <input type='hidden' name="demandeBut" value="valDisc" />
-            </section>
-            <footer class="modal-card-foot">
-              <button type="submit" class="button is-success">Valider</button>
-              <button onclick="designalisationMsgClose(); return false;" class="button">Annuler</button>
-            </footer>
-          </form>
-        </div>
-      </div>
-      {%endif%}
-      <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
-      <div id="messages" style="overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
-        {% for content in msgDb%}
+        {%endif%}
+        <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
+        <div id="messages" style="overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
+          {% for content in msgDb%}
           {% include "widget_message.html" %}
-        {%endfor%}
+          {%endfor%}
           {% endif %}
 
         </div>
         <div id="divrepmsg" style="padding:0.5%;width:100%;display:none;align-items: center;width: 100%;">
           <div style="width: 95%;" id='champReponse'></div>&nbsp;&nbsp;
           <button onclick="enleverRep()" id="buttonRep" style="display:none;background-color:{{session['couleur'][3]}};border: 0px solid {{session['couleur'][0]}}" class="icon is-medium logoBouton">
-              <i class="fas fa-times"></i>
+            <i class="fas fa-times"></i>
           </button>
         </div>
         {%if infogroupe%}
@@ -550,21 +630,21 @@
             <input type='hidden' id='reponse' name='reponse' value="None" />
             <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
           </form>
-          <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;"  onClick="enregistrerTel()">
+          <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;" onClick="enregistrerTel()">
             <i class="fas fa-microphone" style="font-size: 20px;"></i>
           </button>
           <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
           <div style="display:flex;align-items:center;">
             <div id="buttonAudio1" style="display:none;">
-              <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="stopTel('jeter');" >
+              <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="stopTel('jeter');">
                 <span class="icon is-small">
                   <i class="fas fa-times"></i>
                 </span>
               </button>
             </div>
-              &nbsp;&nbsp;
-              <div id="txtAudio">
-              </div>
+            &nbsp;&nbsp;
+            <div id="txtAudio">
+            </div>
             &nbsp;&nbsp;
             <div id="buttonAudio2" style="display:none;">
               <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="stopTel('garder');">
@@ -580,13 +660,13 @@
         </div>
       </div>
     </div>
-    </div>
-<script type="text/javascript">
-  var couleur_un = "{{session['couleur'][0]}}";
-  var couleur_deux = "{{session['couleur'][1]}}";
-  var couleur_trois = "{{session['couleur'][2]}}";
-  var couleur_quatre = "{{session['couleur'][3]}}";
-</script>
+  </div>
+  <script type="text/javascript">
+    var couleur_un = "{{session['couleur'][0]}}";
+    var couleur_deux = "{{session['couleur'][1]}}";
+    var couleur_trois = "{{session['couleur'][2]}}";
+    var couleur_quatre = "{{session['couleur'][3]}}";
+  </script>
 </body>
 
 </html>
