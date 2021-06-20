@@ -31,6 +31,8 @@ from routing.messages import page_messages, uploadAudio, audio, createGroupe, up
 from routing.administration import administration, supprimerMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
 from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
 from routing.demandes_aide import question, redirect_comments, comments, updateDemand, file, likePost, likeRep, resoudre
+from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
+from routing.functions import recupLevel, addXP, addXpModeration, listeModeration, automoderation, sendNotif, clientsNotif
 
 app.add_url_rule('/', 'accueil', accueil)
 app.add_url_rule('/accueil/', 'accueil2', accueil2)
@@ -70,114 +72,6 @@ app.add_url_rule('/signPostDiscussion/', 'signPostDiscussion', signPostDiscussio
 app.add_url_rule('/signPostMsg/', 'signPostMsg', signPostMsg, methods=['POST'])
 app.add_url_rule('/resoudre/<idPost>/', 'resoudre', resoudre, methods=['POST'])
 
-def recupLevel():
-    global utilisateurs
-
-    user = utilisateurs[session['id']].toDict()
-    xpgens = user['xp']
-    niv = int(0.473*xpgens**0.615)
-    xplvl = int((0.473*xpgens**0.615-niv)*100)
-
-    return niv, xplvl, xpgens
-
-def addXP(userID: str, amount: int) -> None:
-    """
-        +10 pour une demande d’aide
-        +15 pour une réponse
-        +2 pour chaque like reçu
-    """
-
-    user = utilisateurs[userID]
-    user.xp += amount
-
-    utilisateurs[userID].update()
-
-    return
-
-def addXpModeration(userID: str, amount: int) -> None:
-    global utilisateurs
-
-    user = utilisateurs[userID]
-    user.xpModeration += amount
-
-    utilisateurs[userID].update()
-
-    return
-
-with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
-    listeModeration = fichierBanWords.read().splitlines()
-
-def automoderation(stringModerer: str) -> str:
-    stringModerer2 =stringModerer
-    for key in ['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}']:
-            stringModerer2 = stringModerer2.replace(key," ")
-            print (stringModerer2)
-    for content in listeModeration:
-        strReplace = ""
-        for i in range (len(content)):
-            strReplace += "*"
-        if len(content) < 6:
-            if stringModerer2[0:len(content)+1] == content+" ":
-                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
-            if stringModerer2[-len(content)+1:] == " "+content:
-                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
-            if stringModerer2 == content:
-                stringModerer= stringModerer.replace(content, " "+strReplace+" ")
-            content= " "+content+" "
-        if  content in stringModerer2:
-            stringModerer= stringModerer.replace(content, " "+strReplace+" ")
-
-    return stringModerer
-
-clientsNotif = {}
-
-def sendNotif(type, id_groupe, id_msg, destinataires):
-    global notifications
-
-    if ObjectId(session['id']) in destinataires:
-        destinataires.remove(ObjectId(session['id']))
-
-    if len(destinataires) > 0:
-        _id = ObjectId()
-        notifications[str(_id)] = Notification({"_id": _id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
-                                        "date": datetime.now(), "destinataires": destinataires})
-        notifications[str(_id)].insert()
-        notification = notifications[str(_id)].toDict()
-
-        serveur = 'smtp.gmail.com'
-        port = '465'
-        From = 'key4school@gmail.com'
-        password = 'CtlLemeilleurGroupe'
-        codage = 'utf-8'
-
-        html = render_template("notification.html", notif=notification, similar=0)
-
-        for user in notification['userDest']:
-            if str(user['_id']) in clientsNotif:
-                emit('newNotif', html, to=str(user['_id']))
-            # elif user['email'] != "":
-            #     # si l'user a autorisé les notifs par mail
-            #     if (type == 'msg' and user['notifs']['messages']) or (type == 'demande' and user['notifs']['demandes']):
-            #         # si un mail n'a pas déja été envoyé pour ce groupe
-            #         if (type == 'msg' and len([notif for notif in notifications.values() if notif.id_groupe == id_groupe and notif.type == 'msg' and user in notif.destinataires]) == 0 ) or type == 'demande':
-            #             To = user['email']
-            #             msg = MIMEMultipart()
-            #             msg['From'] = From
-            #             msg['To'] = To
-            #             msg['Subject'] = sujet
-            #             msg['Charset'] = codage
-            #
-            #             # attache message texte
-            #             msg.attach(MIMEText('message'.encode(codage),
-            #                                 'plain', _charset=codage))
-            #             # attache message HTML
-            #             msg.attach(MIMEText('html'.encode(codage),
-            #                                 'html', _charset=codage))
-            #
-            #             mailserver = smtplib.SMTP_SSL(serveur, port)
-            #             mailserver.login(From, password)
-            #             mailserver.sendmail(From, To, msg.as_string())
-            #             mailserver.quit
 
 # route temporaire
 @app.route('/mail/')
@@ -192,115 +86,30 @@ def mail():
 # Connection au groupe pour recevoir les nouvelles notif
 @socketio.on('connectToNotif')
 def handleEvent_connectToNotif():
-    if 'id' in session:
-        clientsNotif[session['id']] = True
-        join_room(session['id'])
-
-        alreadySend = []
-        notifs = [notif for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
-        toSend = []
-        for notif in notifs:
-            if notif.id_groupe not in alreadySend:
-                alreadySend.append(notif.id_groupe)
-                toSend.append(notif)
-        toSend.reverse()
-        for notif in toSend:
-            html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(ObjectId(session['id']))))
-            emit('newNotif', html, to=session['id'])
+    connectToNotif()
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
 @socketio.on('disconnect')
 def handleEvent_disconnect():
-    if 'id' in session:
-        if session['id'] in clientsNotif:
-            clientsNotif.pop(session['id'])
-            leave_room(session['id'])
+    disconnect()
 
 @socketio.on('supprNotif')
 def handleEvent_supprNotif(id):
-    global notifications
-    if 'id' in session:
-        notification = notifications[id]
-        for notif in notification.getSimilar(ObjectId(session['id'])):
-            notif.supprUser(ObjectId(session['id']))
-        notification.supprUser(ObjectId(session['id']))
+    supprNotif(id)
 
 # Connection au groupe pour recevoir les nouveaux messages par la suite
 @socketio.on('connectToGroup')
 def handleEvent_connectToGroup(json):
-    global groupes
-
-    if 'id' in session:
-        if 'room' in json:
-            if json['room'] != 'None':
-                # Check authorized
-                grp = groupes[json['room']].toDict()
-                if grp != None:
-                    if session['id'] in str(grp['id-utilisateurs']): # authorized
-                        join_room(json['room'])
+    connectToGroup(json)
 
 @socketio.on('postMsg')
 def handleEvent_postMsg(json):
-    global utilisateurs
-    global messages
-    global groupes
-
-    if 'id' in session:
-        if 'room' in json:
-            # Check authorized
-            grp = groupes[json['room']].toDict()
-            if grp != None:
-                if ObjectId(session['id']) in grp['id-utilisateurs']: # authorized
-                    if json['reponse'] != "None":
-                        reponse = ObjectId(json['reponse'])
-                    else:
-                        reponse = "None"
-
-                    if 'dateAudio' in json:
-                        nom = "MsgVocal" + json['room'] + session['id'] + json['dateAudio']
-
-                        _id = ObjectId()
-                        messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": reponse, "sign": []})
-                        messages[str(_id)].insert()
-                        message = messages[str(_id)].toDict()
-
-                    elif not json['contenuMessage'] == '':
-                        _id = ObjectId()
-                        messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
-                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []})
-                        messages[str(_id)].insert()
-                        message = messages[str(_id)].toDict()
-                    if message:
-                        groupe = message['groupe']
-                        sendNotif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
-
-                        users = groupe['utilisateurs']
-
-                        ownHTML = render_template("widget_message.html", content=message, sessionId=ObjectId(session['id']), infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
-                        otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
-
-                        emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=json['room'])
+    postMsg(json)
 
 
 @socketio.on('postLike')
 def handleEvent_postLike(json):
-    if 'id' in session:
-        if 'type' in json:
-            if json['type'] == 'post':
-                if 'idPost' in json:
-                    action = likePost(json['idPost'])
-                    if action == 'add':
-                        emit('newLike', json['idPost'], broadcast=True)
-                    elif action == 'remove':
-                        emit('removeLike', json['idPost'], broadcast=True)
-            elif json['type'] == 'rep':
-                if 'idPost' in json and 'idRep' in json:
-                    action = likeRep(json['idPost'], json['idRep'])
-                    if action == 'add':
-                        emit('newLike', json['idRep'], broadcast=True)
-                    elif action == 'remove':
-                        emit('removeLike', json['idRep'], broadcast=True)
+    postLike(json)
 
 
 # TOUT LE CODE QUI VA SUIVRE PERMET LA CONNEXION A L'ENT VIA OAUTH
