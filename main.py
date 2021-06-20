@@ -24,29 +24,6 @@ socketio = SocketIO(app)
 # Création du Cluster de la DB
 DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 
-# Enregistrement de la DB
-
-all_utilisateurs = DB.db_utilisateurs.find()
-for u in all_utilisateurs:
-    utilisateurs[str(u['_id'])] = Utilisateur(u)
-
-all_demandes_aide = DB.db_demande_aide.find()
-for d in all_demandes_aide:
-    demandes_aide[str(d['_id'])] = Demande(d)
-
-all_groupes = DB.db_groupes.find()
-for g in all_groupes:
-    groupes[str(g['_id'])] = Groupe(g)
-
-all_messages = DB.db_messages.find()
-for m in all_messages:
-    messages[str(m['_id'])] = Message(m)
-
-all_notifications = DB.db_notif.find()
-for n in all_notifications:
-    notifications[str(n['_id'])] = Notification(n)
-
-
 def recupLevel():
     global utilisateurs
 
