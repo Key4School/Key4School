@@ -230,3 +230,31 @@ function DemandModification(e) {
 function DemandModificationClose(){
   $("#DemandModif").removeClass("is-active");
 }
+
+function CommentModificationOpen(id, idDemand) {
+  document.getElementById('txtModif2').value = document.getElementById('contenuComment'+id).innerHTML;
+  document.getElementById('idCommentModif').value = id;
+  document.getElementById('idDemandCommentModif').value = idDemand;
+  $("#CommentModif").addClass("is-active");
+}
+
+function CommentModification(e) {
+  e.preventDefault();
+  var id = document.getElementById('idCommentModif').value;
+  var txt = document.getElementById('txtModif').value;
+  var donnees = $('#CommentModification').serialize();
+  $.ajax({
+    url: '/updateComment/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      document.getElementById('contenuComment'+id).innerHTML = document.getElementById('txtModif2').value;
+      $('#CommentModification').trigger("reset");
+      CommentModificationClose();
+    },
+  });
+}
+
+function CommentModificationClose(){
+  $("#CommentModif").removeClass("is-active");
+}

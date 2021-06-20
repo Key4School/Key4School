@@ -1,7 +1,6 @@
 var deviceAgent = navigator.userAgent.toLowerCase();
 var agentID = deviceAgent.match(/(iphone|ipod|ipad)/);
 $(window).data('ajaxready', true);
-var lastPost = 10;
 
 if (document.location.pathname == '/rechercheUser/') {
   // si c pour les user
@@ -12,6 +11,8 @@ if (document.location.pathname == '/rechercheUser/') {
   var url = '/morePost/';
   var $content = $('#publis');
 }
+
+var lastPost =  $content.children('div.elem').length;
 
 if (search === undefined) {
   var search = "";
@@ -32,7 +33,7 @@ $(window).scroll(function() {
         'search': search
       }, // et on envoie nos données
       success: function(json) {
-        lastPost = json.lastPost;
+        lastPost =  $content.children('div.elem').length;
         if (json.html != '') {
           $content.append(json.html);
           $(window).data('ajaxready', true);

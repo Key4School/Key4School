@@ -24,7 +24,38 @@ class DB_Manager:
 	@staticmethod
 	def createCluster(app, cluster_url):
 		global DB
+		global utilisateurs
+		global demandes_aide
+		global messages
+		global groupes
+		global notifications
+
+		# create DB
 		DB = DB_Manager(app, cluster_url)
+
+		# save DB
+
+		all_utilisateurs = DB.db_utilisateurs.find()
+		for u in all_utilisateurs:
+		    utilisateurs[str(u['_id'])] = Utilisateur(u)
+
+		all_demandes_aide = DB.db_demande_aide.find()
+		for d in all_demandes_aide:
+		    demandes_aide[str(d['_id'])] = Demande(d)
+
+		all_groupes = DB.db_groupes.find()
+		for g in all_groupes:
+		    groupes[str(g['_id'])] = Groupe(g)
+
+		all_messages = DB.db_messages.find()
+		for m in all_messages:
+		    messages[str(m['_id'])] = Message(m)
+
+		all_notifications = DB.db_notif.find()
+		for n in all_notifications:
+		    notifications[str(n['_id'])] = Notification(n)
+
+		# return DB
 		return DB
 
 	def update(self, db_table, data):
@@ -388,6 +419,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 			'nb-likes': len(self.likes),
 			'réponses associées': [r.toDict() for r in self.reponses_associees.values()],
 			'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
+			'reponsesDict2': {idRep: rep for (idRep, rep) in self.reponses_associees.items()},
 			'reponsesObjects': self.reponses_associees,
 			'a_like': self.aLike(),
 			'a_sign': self.aSign(),
