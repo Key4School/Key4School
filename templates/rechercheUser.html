@@ -4,6 +4,10 @@
 <head>
 {% include 'head.html' with context %}
   <title>Recherche</title>
+  <script type="text/javascript" src="/static/js/scrollInfini.js" defer></script>
+  <script type="text/javascript">
+    var search = "{{search}}";
+  </script>
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -19,8 +23,8 @@
  <!-- debut de la div pour tt les publications -->
  <div class="columns" style="margin-top:5%;">
   <div class="column"></div>
-  <div class="column">
-    {%for users in users%}
+  <div class="column" id="users">
+    {%for u in users%}
       {% include 'apercu_profil.html' with context %}
     {%endfor%}
   </div>
