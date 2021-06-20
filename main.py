@@ -196,8 +196,8 @@ def morePost():
             search = request.form['search']
             demandes = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre, search).ratio()>0.5 or SequenceMatcher(None, d.contenu, search).ratio()>0.5 )
-                ], key = lambda d: ( SequenceMatcher(None, d['titre'], search).ratio() + SequenceMatcher(None, d['contenu'], search).ratio() ), reverse=True
+                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.5 )
+                ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[lastPost:lastPost+10]
         html = ''
         for demande in demandes:
@@ -797,23 +797,24 @@ def recherche():
 
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
-            search = request.args['search']
+            search = request.args['search'].lower()
 
             user = utilisateurs[session['id']].toDict()
 
             # on récupère les demandes d'aide correspondant à la recherche
             result = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre, search).ratio()>0.5 or SequenceMatcher(None, d.contenu, search).ratio()>0.5 )
-                ], key = lambda d: ( SequenceMatcher(None, d['titre'], search).ratio() + SequenceMatcher(None, d['contenu'], search).ratio() ), reverse=True
+                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.5 )
+                ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[:10]
 
             # on récupère 3 utilisateurs correspondants à la recherche
             users = sorted(
                 [u.toDict() for u in utilisateurs.values()
-                    if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7
-                        or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.5 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.5 )
-                ], key = lambda u: u['pseudo']
+                    if SequenceMatcher(None, u.pseudo.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.nom.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.prenom.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.lycee.lower(), search).ratio()>0.7
+                        or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email.lower(), search).ratio()>0.5 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone.lower(), search).ratio()>0.5 )
+                ], key = lambda u: SequenceMatcher(None, u['pseudo'].lower(), search).ratio() + SequenceMatcher(None, u['nom'].lower(), search).ratio() + SequenceMatcher(None, u['prenom'].lower(), search).ratio() + \
+                        SequenceMatcher(None, u['lycee'].lower(), search).ratio() + SequenceMatcher(None, u['email'].lower(), search).ratio() + SequenceMatcher(None, u['telephone'].lower(), search).ratio()
             )[:3]
 
             return render_template('recherche.html', results=result, users=users, search=search, user=user)
@@ -834,9 +835,10 @@ def recherche_user():
         # on récupère 30 utilisateurs correspondants à la recherche
         users = sorted(
             [u.toDict() for u in utilisateurs.values()
-                if SequenceMatcher(None, u.pseudo, search).ratio()>0.7 or SequenceMatcher(None, u.nom, search).ratio()>0.7 or SequenceMatcher(None, u.prenom, search).ratio()>0.7 or SequenceMatcher(None, u.lycee, search).ratio()>0.7
-                    or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email, search).ratio()>0.7 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone, search).ratio()>0.7 )
-            ], key = lambda u: u['pseudo']
+                if SequenceMatcher(None, u.pseudo.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.nom.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.prenom.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.lycee.lower(), search).ratio()>0.7
+                    or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email.lower(), search).ratio()>0.5 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone.lower(), search).ratio()>0.5 )
+            ], key = lambda u: SequenceMatcher(None, u['pseudo'].lower(), search).ratio() + SequenceMatcher(None, u['nom'].lower(), search).ratio() + SequenceMatcher(None, u['prenom'].lower(), search).ratio() + \
+                    SequenceMatcher(None, u['lycee'].lower(), search).ratio() + SequenceMatcher(None, u['email'].lower(), search).ratio() + SequenceMatcher(None, u['telephone'].lower(), search).ratio()
         )[:29]
 
         return render_template('rechercheUser.html', users=users, user = utilisateurs[session['id']].toDict())
