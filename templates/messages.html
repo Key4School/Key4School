@@ -169,23 +169,23 @@
           {%for content in grpUtilisateur%}
           <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
             <td>
-              <div class="tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
+              <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
+                <div class="tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
                 <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
-                  <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
-                    {{content['nom']}}
-                    <br />
-                    {%if content['lastMsg']!=None%}
-                    <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
-                      {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
-                      Message Vocal
-                      {%else%}
-                      {{content['lastMsg']['contenu']}}
-                      {%endif%}
-                    </i>
+                  {{content['nom']}}
+                  <br />
+                  {%if content['lastMsg']!=None%}
+                  <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
+                    {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
+                    Message Vocal
+                    {%else%}
+                    {{content['lastMsg']['contenu']}}
                     {%endif%}
-                  </a>
+                  </i>
+                    {%endif%}
                 <!-- </span> -->
-              </div>
+                </div>
+              </a>
             </td>
           </tr>
 
