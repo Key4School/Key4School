@@ -130,7 +130,7 @@
 
       <div class="modal" id="newgrou" style="overflow:auto;">
         <div class="modal-background"></div>
-        <div class="modal-card" style="height: 87%;margin-top: 3%;">
+        <div class="modal-card" style="height: 89%;margin-top: 3%;">
           <header class="modal-card-head">
             <p class="modal-card-title">Créer un nouveau groupe</p>
             <button onclick="divnewgroupclose()" class="delete" aria-label="close"></button>
@@ -232,23 +232,56 @@
               <section class="modal-card-body">
                 Info Utilisateur : <br />
                 {%for users in infoUtilisateurs%}
-                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
-                <button onclick="optionParticipantOpen('{{users['_id']}}')">
-                  {{users['pseudo']}}
-                </button>
-                {%else%}
-                {% include 'apercu_profil.html' with context %}
-                {%endif%}
-                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
-                <button onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
-                  <div id="ModifRoleUser{{users['_id']}}">
-                    {%if users['_id'] in infogroupe['moderateurs']%} admin{%else%}participant{%endif%}
-                  </div>
-                </button>
-                {%else%}
-                {%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}
-                {%endif%}
-                ,&nbsp;
+                <div class="box profil" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;">
+                  <article class="media">
+                    <div class="media-left">
+                      <!-- Image photo de profil-->
+                      <figure class="image is-64x64">
+                        <img alt="user" src="{%if 'nomImg' in users and users['nomImg'] != "" %}{{url_for('userImg', profilImg = users['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+                          style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
+                      </figure>
+                    </div>
+                    <!-- Contenu publication -->
+                    <div class="media-content">
+                      <div class="content">
+                        <p style="margin-bottom: 5px;">
+                          <!-- Nom utilisateur ; pseudo ; temps -->
+                        <div style="font-variant: small-caps;">
+                          <a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['nom']}} {{users['prenom']}}</a>
+                        </div>
+                        <small><em>@{{users['pseudo']}}</em></small>
+                        </p>
+                      </div>
+                    </div>
+                      <div class="boutonPubliOrdi" style="flex-direction: column;align-items: flex-end;">
+                        <div class="navbar-item">
+                          {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
+                          {%if users['_id'] in infogroupe['moderateurs']%}
+                          <button class="button is-warning is-outlined" onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
+                            <span class="icon is-small">
+                              <i class="fas fa-crown" aria-hidden="true"></i>
+                            </span>
+                            <span id="ModifRoleUser{{users['_id']}}">
+                               Admin
+                            </span>
+                          </button>
+                          {%else%}
+                          <button class="button is-info is-outlined" onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
+                            <span class="icon is-small">
+                              <i class="fas fa-users" aria-hidden="true"></i>
+                            </span>
+                            <span id="ModifRoleUser{{users['_id']}}">
+                              Participant
+                            </span>
+                          </button>
+                          {%endif%}
+                          {%else%}
+                          {%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}
+                          {%endif%}
+                        </div>
+                      </div>
+                  </article>
+                </div>
                 {%endfor%}<br /><br />
                 <div style="display:flex;">
                 <button  class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
