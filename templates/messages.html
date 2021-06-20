@@ -192,6 +192,12 @@
           {%endfor%}
       </table>
     </div>
+    {%if msgDb == none%}
+    <div>
+      test
+    </div>
+    <!-- DIV A NE PAS SUPPRIMER (POUR LE STYLE) -->
+    {%endif%}
     <!-- fin de la div pour les noms de tt les groupes -->
     {% if msgDb != None %}
     <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
