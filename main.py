@@ -182,7 +182,7 @@ def morePost():
         for demande in demandes:
             html += render_template("publication.html", d=demande, user=user)
 
-        return {'html': html, 'lastPost': lastPost+10}
+        return {'html': html}
     else:
         abort(401) # non connecté
 
@@ -204,7 +204,7 @@ def moreUser():
     for user in users:
         html += render_template("apercu_profil.html", u=user, user=utilisateurs[session['id']].toDict())
 
-    return {'html': html, 'lastPost': lastPost+10}
+    return {'html': html}
 
 
 # Connection au groupe pour recevoir les nouvelles notif
