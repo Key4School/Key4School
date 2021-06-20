@@ -56,6 +56,8 @@ const filter = (f) => {
 			document.querySelectorAll('.filter button').forEach(filter => {
 				filter.classList.add('is-light');
 				filter.style.backgroundColor = '#fff';
+				filter.style.opacity = '.6';
+				filter.style.textDecoration = 'line-through';
 			});
 		}
 		else {
@@ -65,6 +67,8 @@ const filter = (f) => {
 			document.querySelectorAll('.filter > button').forEach(filter => {
 				filter.classList.remove('is-light');
 				filter.style.backgroundColor = userColor2;
+				filter.style.opacity = '1';
+				filter.style.textDecoration = 'none';
 			});
 		}
 	}
@@ -73,10 +77,14 @@ const filter = (f) => {
 		if(document.querySelectorAll('.filter.subject button.is-light').length) {
 			document.querySelector('.filter[data-subject="everything"] > button').classList.add('is-light');
 			document.querySelector('.filter[data-subject="everything"] > button').style.backgroundColor = '#fff';
+			document.querySelector('.filter[data-subject="everything"] > button').style.opacity = '.6';
+			document.querySelector('.filter[data-subject="everything"] > button').style.textDecoration = 'line-through';
 		}
 		else {
 			document.querySelector('.filter[data-subject="everything"] > button').classList.remove('is-light');
 			document.querySelector('.filter[data-subject="everything"] > button').style.backgroundColor = userColor2;
+			document.querySelector('.filter[data-subject="everything"] > button').style.opacity = '1';
+			document.querySelector('.filter[data-subject="everything"] > button').style.textDecoration = 'none';
 		}
 
 		if(selected) {
@@ -84,12 +92,16 @@ const filter = (f) => {
 				demande.style.display = 'none';
 			});
 			f.style.backgroundColor = '#fff';
+			f.style.opacity = '.6';
+			f.style.textDecoration = 'line-through';
 		}
 		else {
 			document.querySelectorAll(`.demande[data-subject=${subject}]`).forEach(demande => {
 				demande.style.display = 'block';
 			});
 			f.style.backgroundColor = userColor2;
+			f.style.opacity = '1';
+			f.style.textDecoration = 'none';
 		}
 	}
 };
