@@ -19,5 +19,17 @@
         </p>
       </div>
     </div>
+    {%if user['admin']== true%}
+    <div style="flex-direction: column;align-items: flex-end;">
+      <div class="navbar-item ">
+        <span class="icon is-small ">
+          <i class="fas fa-crown" aria-hidden="true" style="color:	hsl(48, 100%, 67%)"></i>
+        </span>
+        <span style="color:	hsl(48, 100%, 67%)">
+           &nbsp; Admin
+        </span>
+      </div>
+    </div>
+    {%endif%}
   </article>
 </div>
