@@ -150,6 +150,17 @@
     <div>
       <!-- Informations puliques -->
       <!-- Début tableau informations publiques -->
+      {%if user['admin']== true%}
+      <div style="flex-direction: column;align-items: flex-end;">
+          <span class="icon is-small ">
+            <i class="fas fa-crown" aria-hidden="true" style="color:	hsl(48, 100%, 67%)"></i>
+          </span>
+          <span style="color:	hsl(48, 100%, 67%)">
+             &nbsp; Admin
+          </span>
+      </div>
+      {%endif%}
+      <br />
       <table class="table is-narrow">
         <tbody>
           <!-- Nom et prénom -->
