@@ -60,6 +60,42 @@
       </footer>
     </div>
   </div>
+  <div class="modal" id="signalisation" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Signaler une demande d'aide</p>
+      </header>
+      <form onsubmit="signaler(event); return false;" id="signalement" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input id='inputRaison' class="input" type="text" placeholder="Pourquoi souhaitez-vous signaler cette demande d'aide ?" autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
+          <input type='hidden' id="idSignalé" name='idSignalé' value="" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Signaler</button>
+          <button onclick="signalisationClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  <div class="modal" id="designalisation" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Retrait de signalement</p>
+      </header>
+      <form onsubmit="designaler(event); return false;" id="designalement" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type='hidden' id="idDesignalé" name='idSignalé' value="" />
+          Etes-vous sûr de vouloir enlever ce signalement ?
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Oui</button>
+          <button onclick="designalisationClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   <div class="modal" id="validationUser" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -78,6 +114,24 @@
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Valider</button>
           <button onclick="validerUserClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+  <div class="modal" id="DemandModif" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Modifier la publication</p>
+      </header>
+      <form onsubmit="DemandModification(event); return false;" id="DemandModification" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input class="input" type="text" id="txtModif" name="txtModif" value="" />
+          <input type='hidden' id="idDemandModif" name='idDemandModif' value="" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Modifier !</button>
+          <button onclick="DemandModificationClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>
     </div>

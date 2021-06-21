@@ -182,7 +182,7 @@ function designalerRep(e) {
 }
 
 function resoudre(idMsg) {
-  fetch(`/resoudre/${idMsg}`, {
+  fetch(`/resoudre/${idMsg}/`, {
     method: 'post',
     headers: {
       'Accept': 'application/json',
