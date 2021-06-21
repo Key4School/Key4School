@@ -17,11 +17,14 @@ def administration():
         if utilisateur['admin'] == True:
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
-                    auteur = utilisateurs[demandes_aide[request.form['idSuppr']].toDict()['idAuteur']]
+                    auteur = utilisateurs[str(demandes_aide[request.form['idSuppr']].toDict()['idAuteur'])]
+                    sanction = auteur.toDict()['Sanctions']
                     demandes_aide[request.form['idSuppr']].delete()
                     del demandes_aide[request.form['idSuppr']]
                     auteur.addXP(-10)
                     auteur.addXpModeration(10)
+                    sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": request.form['motif'], "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
+                    auteur.update()
 
                 elif request.form['demandeBut'] == 'Val':
                     demande = demandes_aide[request.form['idVal']]
@@ -30,6 +33,9 @@ def administration():
                         for content in sign:
                             if "/" not in str(content):
                                 utilisateurs[str(content)].addXpModeration(5)
+                                sanction = utilisateurs[str(content)].toDict()['Sanctions']
+                                sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
+                                utilisateurs[str(content)].update()
                     motif = demande.motif
                     for i in range (len(sign)):
                         if "/" not in str(sign[i]):
@@ -45,6 +51,9 @@ def administration():
                     if request.form['motif'] == "abusif":
                         for content in user.sign:
                             utilisateurs[str(content)].addXpModeration(5)
+                            sanction = utilisateurs[str(content)].toDict()['Sanctions']
+                            sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
+                            utilisateurs[str(content)].update()
                     user.sign = []
                     user.motif = []
                     utilisateurs[request.form['idValidé']].update()
@@ -54,6 +63,9 @@ def administration():
                     auteur = utilisateurs[demandes_aide[request.form['idDemandSuppr']].toDict()['reponsesDict'][request.form['idSuppr']]['id-utilisateur']]
                     auteur.addXpModeration(5)
                     auteur.addXP(-15)
+                    sanction = auteur.toDict()['Sanctions']
+                    sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
+                    auteur.update()
 
                     demande.reponses_associees.pop(request.form['idSuppr'])
                     signDemande = demande.sign

@@ -23,8 +23,9 @@ def profil(idUser):
             return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, xplvl=xplvl, xp=xpgens, niv=niv, user=user, sessionId=ObjectId(session['id']))
 
         else:
-            user = utilisateurs[idUser]
-            profilUtilisateur = user.toDict()
+
+            user = utilisateurs[session['id']]
+            profilUtilisateur = utilisateurs[idUser].toDict()
             niv, xplvl, xpgens = user.recupLevel()
 
             # translate spes/options/lv
@@ -32,7 +33,7 @@ def profil(idUser):
             profilUtilisateur['spes'] = profilUtilisateur['spes-str']
             profilUtilisateur['options'] = profilUtilisateur['options-str']
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], xplvl=xplvl, xp=xpgens, niv=niv, user=profilUtilisateur, sessionId=ObjectId(session['id']))
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], xplvl=xplvl, xp=xpgens, niv=niv, user=user, sessionId=ObjectId(session['id']))
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
@@ -152,4 +153,3 @@ def updateImg():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
-
