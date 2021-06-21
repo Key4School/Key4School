@@ -19,11 +19,11 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Signalement</p>
+        <p class="modal-card-title">Signaler une demande d'aide</p>
       </header>
       <form onsubmit="signaler(event); return false;" id="signalement" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous ce message." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
+          <input id='inputRaison' class="input" type="text" placeholder="Pourquoi souhaitez-vous signaler cette demande d'aide ?" autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
           <input type='hidden' id="idSignalé" name='idSignalé' value="" />
         </section>
         <footer class="modal-card-foot">
@@ -42,7 +42,7 @@
       <form onsubmit="designaler(event); return false;" id="designalement" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <input type='hidden' id="idDesignalé" name='idSignalé' value="" />
-          Etes-vous sûr de vouloir enlever ce signalement
+          Etes-vous sûr de vouloir enlever ce signalement ?
         </section>
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Oui</button>
@@ -63,7 +63,7 @@
           <input type='hidden' id="idDemandModif" name='idDemandModif' value="" />
         </section>
         <footer class="modal-card-foot">
-          <button type="submit" class="button is-success">Modifier</button>
+          <button type="submit" class="button is-success">Modifier !</button>
           <button onclick="DemandModificationClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>
@@ -83,7 +83,7 @@
           <input type='hidden' name="demandeBut" value="Suppr" />
         </section>
         <footer class="modal-card-foot">
-          <button type="submit" class="button is-success">supprimer</button>
+          <button type="submit" class="button is-success">Supprimer</button>
           <button onclick="supprimerClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>

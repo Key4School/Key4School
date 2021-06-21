@@ -268,7 +268,7 @@
                 <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
               </header>
               <section class="modal-card-body">
-                Info Utilisateur : <br />
+                Informations utilisateurs : <br />
                 {%for users in infoUtilisateurs%}
                 <div class="box profil" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;">
                   <article class="media">
@@ -314,7 +314,16 @@
                         </button>
                         {%endif%}
                         {%else%}
-                        {%if users['_id'] in infogroupe['moderateurs']%} admin{%endif%}
+                          {%if users['_id'] in infogroupe['moderateurs']%}
+                            <button class="button is-warning is-outlined">
+                              <span class="icon is-small">
+                                <i class="fas fa-crown" aria-hidden="true"></i>
+                              </span>
+                              <span>
+                                Admin
+                              </span>
+                            </button>
+                          {%endif%}
                         {%endif%}
                       </div>
                     </div>
@@ -463,11 +472,11 @@
             <div class="modal-background"></div>
             <div class="modal-card">
               <header class="modal-card-head">
-                <p class="modal-card-title">Signalement de Msg</p>
+                <p class="modal-card-title">Signaler un message</p>
               </header>
               <form onsubmit="signalerMsg(event); return false;" id="signalementMsg" method="POST" autocomplete="off">
                 <section class="modal-card-body">
-                  <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous cette Msg." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
+                  <input id='inputRaison' class="input" type="text" placeholder="Pourquoi souhaitez-vous signaler ce message ?" autocomplete='off' name="Raison" style="width: 96%;margin-left: 2%;padding:5px;" required />
                   <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
                   <input type='hidden' id="idMsgSignalé" name='idMsgSignalé' value="" />
                 </section>

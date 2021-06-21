@@ -158,11 +158,11 @@
       </header>
       <form onsubmit="DemandModification(event); return false;" id="DemandModification" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type="text" id="txtModif" name="txtModif" value="" />
+          <input class="input" type="text" id="txtModif" name="txtModif" value="" />
           <input type='hidden' id="idDemandModif" name='idDemandModif' value="" />
         </section>
         <footer class="modal-card-foot">
-          <button type="submit" class="button is-success">modifier</button>
+          <button type="submit" class="button is-success">Modifier !</button>
           <button onclick="DemandModificationClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>
@@ -176,12 +176,12 @@
       </header>
       <form onsubmit="CommentModification(event); return false;" id="CommentModification" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type="text" id="txtModif2" name="txtModif" value="" />
+          <input class="input" type="text" id="txtModif2" name="txtModif" value="" />
           <input type='hidden' id="idCommentModif" name='idCommentModif' value="" />
           <input type='hidden' id="idDemandCommentModif" name='idDemandCommentModif' value="" />
         </section>
         <footer class="modal-card-foot">
-          <button type="submit" class="button is-success">modifier</button>
+          <button type="submit" class="button is-success">Modifier !</button>
           <button onclick="CommentModificationClose(); return false;" class="button">Annuler</button>
         </footer>
       </form>
