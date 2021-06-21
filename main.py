@@ -202,7 +202,7 @@ def connexion():
             # on retire l'user des anciens groupe de classe
             oldGroups = [g for g in groupes.values() if g.nom != nomClasse and g.is_class == True and user['_id'] in g.id_utilisateurs]
             for oldGroup in oldGroups:
-                oldGroups.supprUser(user['_id'])
+                oldGroup.supprUser(user['_id'])
 
         if data_plus['email'] != '':
             u.email = data_plus['email']
