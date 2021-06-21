@@ -4,7 +4,7 @@ from flask.json import jsonify
 from bson.objectid import ObjectId
 from difflib import SequenceMatcher
 from db_poo import *
-from routing.functions import recupLevel, addXP, addXpModeration, listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 
 def recherche():
     global utilisateurs

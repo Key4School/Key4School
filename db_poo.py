@@ -220,6 +220,25 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 
 		self.db_table = DB.db_utilisateurs
 
+	def recupLevel(self):
+		niv = int(0.473*self.xp**0.615)
+		xplvl = int((0.473*self.xp**0.615-niv)*100)
+
+		return niv, xplvl, self.xp
+
+	def addXP(self, amount: int) -> None:
+	    """
+	        +10 pour une demande d’aide
+	        +15 pour une réponse
+	        +2 pour chaque like reçu
+	    """
+	    self.xp += amount
+	    return
+
+	def addXpModeration(self, amount: int) -> None:
+	    self.xpModeration += amount
+	    return
+
 	def toDict(self):
 		return {  # on ajoute à la liste ce qui nous interesse
 			'_id': self._id,
@@ -298,12 +317,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 			'admin': self.admin,
 			'savedDemands': self.savedDemands
 		}
-
-	def recupLevel(self):
-		niv = int(0.473*self.xp**0.615)
-		xplvl = int((0.473*self.xp**0.615-niv)*100)
-
-		return niv, xplvl, self.xp
 
 	def getUserSubjects(self):
 		if self.type == "ELEVE":

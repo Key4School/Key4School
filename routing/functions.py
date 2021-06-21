@@ -6,40 +6,6 @@ from db_poo import *
 
 clientsNotif = {}
 
-def recupLevel():
-    global utilisateurs
-
-    user = utilisateurs[session['id']].toDict()
-    xpgens = user['xp']
-    niv = int(0.473*xpgens**0.615)
-    xplvl = int((0.473*xpgens**0.615-niv)*100)
-
-    return niv, xplvl, xpgens
-
-def addXP(userID: str, amount: int) -> None:
-    """
-        +10 pour une demande d’aide
-        +15 pour une réponse
-        +2 pour chaque like reçu
-    """
-
-    user = utilisateurs[userID]
-    user.xp += amount
-
-    utilisateurs[userID].update()
-
-    return
-
-def addXpModeration(userID: str, amount: int) -> None:
-    global utilisateurs
-
-    user = utilisateurs[userID]
-    user.xpModeration += amount
-
-    utilisateurs[userID].update()
-
-    return
-
 listeModeration = []
 with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
     listeModeration = fichierBanWords.read().splitlines()
