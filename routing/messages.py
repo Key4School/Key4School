@@ -58,7 +58,7 @@ def redirectDM(idUser1, idUser2):
             nomGrp = '{} - {}'.format(user1['pseudo'], user2['pseudo'])
 
             _id = ObjectId()
-            groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomGrp, 'id-utilisateurs': participants, 'is_class': True, 'moderateurs': [], 'sign':[], 'motif': []})
+            groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomGrp, 'id-utilisateurs': participants, 'moderateurs': [], 'sign':[], 'motif': []})
             groupes[str(_id)].insert()
 
             return redirect('/messages/' + str(_id))

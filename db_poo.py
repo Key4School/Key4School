@@ -584,7 +584,7 @@ class Groupe(Actions):
 			return
 		elif len(self.moderateurs) == 0 and self.is_class == False:
 			self.moderateurs.append(self.id_utilisateurs[0])
-		groupe.update()
+		self.update()
 
 	def getAllMessages(self):
 		return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe], key = lambda message: message['date-envoi'])
