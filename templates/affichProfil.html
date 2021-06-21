@@ -289,6 +289,14 @@
     <!-- Fin informations -->
     <br />
     <div class="navbar-item" style="display:block;">
+      <a href="/redirectDM/{{sessionId}}/{{user['_id']}}/">
+        <button class="button is-link is-outlined is-small">
+          <span class="icon is-small">
+            <i class="fas fa-comments"></i>
+          </span>
+          <span>Envoyer un message !</span>
+        </button>
+      </a>
       <button  class="button is-warning is-outlined is-small" onClick="signalisationProfil();">
         <span class="icon is-small">
           {% if a_sign %}

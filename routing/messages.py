@@ -45,6 +45,28 @@ def page_messages(idGroupe):
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+def redirectDM(idUser1, idUser2):
+    if 'id' in session:
+        grp = [groupe.toDict() for groupe in groupes.values() if len(groupe.id_utilisateurs) == 2 and ObjectId(idUser1) in groupe.id_utilisateurs and ObjectId(idUser2) in groupe.id_utilisateurs]
+        
+        if grp != []: # DM existing
+            return redirect('/messages/' + str(grp[0]['_id']))
+        else: # create DM
+            participants = [ObjectId(idUser1), ObjectId(idUser2)]
+            user1 = utilisateurs[idUser1].toDict()
+            user2 = utilisateurs[idUser2].toDict()
+            nomGrp = '{} - {}'.format(user1['pseudo'], user2['pseudo'])
+
+            _id = ObjectId()
+            groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomGrp, 'id-utilisateurs': participants, 'is_class': True, 'moderateurs': [], 'sign':[], 'motif': []})
+            groupes[str(_id)].insert()
+
+            return redirect('/messages/' + str(_id))
+
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
 def uploadAudio():
     if 'id' in session:
         nom = "MsgVocal" + request.form['group'] + session['id'] + request.form['date']
