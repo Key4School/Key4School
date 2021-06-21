@@ -70,7 +70,7 @@ def morePost():
 
         if request.form['search'] == '':
             # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-            demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu], key = lambda d: d['date-envoi'], reverse=True)[lastPost:lastPost+10]
+            demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu and not d.id_utilisateur == ObjectId(session['id'])], key = lambda d: d['date-envoi'], reverse=True)[lastPost:lastPost+10]
 
         else:
             search = request.form['search'].lower()
@@ -84,28 +84,36 @@ def morePost():
         for demande in demandes:
             html += render_template("publication.html", d=demande, user=user)
 
-        return {'html': html, 'lastPost': lastPost+10}
+        if len (demandes) > 0:
+            lastPost += demandes.index(demandes[-1]) + 1
+
+        return {'html': html, 'lastPost': lastPost}
 
     else:
         abort(401) # non connecté
 
 def moreUser():
     global utilisateurs
+    if 'id' in session:
+        lastPost = int(request.form['lastPost'])
+        search = request.form['search'].lower()
 
-    lastPost = int(request.form['lastPost'])
-    search = request.form['search'].lower()
+        # on récupère 10 utilisateurs correspondants à la recherche
+        users = sorted(
+            [u.toDict() for u in utilisateurs.values()
+                if SequenceMatcher(None, u.pseudo.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.nom.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.prenom.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.lycee.lower(), search).ratio()>0.7
+                    or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email.lower(), search).ratio()>0.5 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone.lower(), search).ratio()>0.5 )
+            ], key = lambda u: SequenceMatcher(None, u['pseudo'].lower(), search).ratio() + SequenceMatcher(None, u['nom'].lower(), search).ratio() + SequenceMatcher(None, u['prenom'].lower(), search).ratio() + \
+                    SequenceMatcher(None, u['lycee'].lower(), search).ratio() + SequenceMatcher(None, u['email'].lower(), search).ratio() + SequenceMatcher(None, u['telephone'].lower(), search).ratio()
+        )[lastPost:lastPost+10]
 
-    # on récupère 10 utilisateurs correspondants à la recherche
-    users = sorted(
-        [u.toDict() for u in utilisateurs.values()
-            if SequenceMatcher(None, u.pseudo.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.nom.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.prenom.lower(), search).ratio()>0.7 or SequenceMatcher(None, u.lycee.lower(), search).ratio()>0.7
-                or ( 'email' in u.elementPublic and SequenceMatcher(None, u.email.lower(), search).ratio()>0.5 ) or ( 'telephone' in u.elementPublic and SequenceMatcher(None, u.telephone.lower(), search).ratio()>0.5 )
-        ], key = lambda u: SequenceMatcher(None, u['pseudo'].lower(), search).ratio() + SequenceMatcher(None, u['nom'].lower(), search).ratio() + SequenceMatcher(None, u['prenom'].lower(), search).ratio() + \
-                SequenceMatcher(None, u['lycee'].lower(), search).ratio() + SequenceMatcher(None, u['email'].lower(), search).ratio() + SequenceMatcher(None, u['telephone'].lower(), search).ratio()
-    )[lastPost:lastPost+10]
+        html = ''
+        for user in users:
+            html += render_template("apercu_profil.html", u=user, user=utilisateurs[session['id']].toDict())
 
-    html = ''
-    for user in users:
-        html += render_template("apercu_profil.html", u=user, user=utilisateurs[session['id']].toDict())
+        if len (users) > 0:
+            lastPost += users.index(users[-1]) + 1
 
-    return {'html': html, 'lastPost': lastPost+10}
+        return {'html': html, 'lastPost': lastPost}
+    else:
+        abort(401) # non connecté

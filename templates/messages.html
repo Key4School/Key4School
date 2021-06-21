@@ -13,13 +13,7 @@
       max-width: 75%;
       align-self: flex-end;
 
-      border: 2px solid {
-          {
-          session['couleur'][0]
-        }
-      }
-
-      ;
+      border: 2px solid {{session['couleur'][0]}};
       margin-right: 1%;
       margin-bottom: 12px;
       border-radius: 12px;
@@ -41,13 +35,7 @@
       padding-left: 2%;
       padding-right: 2%;
 
-      background-color: {
-          {
-          session['couleur'][1]
-        }
-      }
-
-      ;
+      background-color: {{session['couleur'][1]}};
     }
 
     td:hover {
@@ -56,23 +44,11 @@
     }
 
     .rep {
-      background-color: {
-          {
-          session['couleur'][3]
-        }
-      }
-
-      ;
+      background-color: {{session['couleur'][3]}};
       padding:1%;
       padding-left:2%;
 
-      border-left:4px solid {
-          {
-          session['couleur'][0]
-        }
-      }
-
-      ;
+      border-left:4px solid {{session['couleur'][0]}};
       border-radius:5px;
       margin-top:1%;
       margin-bottom:2%;
@@ -124,39 +100,20 @@
 
     @media screen and (max-width: 700px) {
       #nomgroupe {
-          {
-          % if msgDb==None %
-        }
-
+        {% if msgDb==None %}
         width: calc(100% - 50px);
-
-          {
-          % else %
-        }
-
+        {% else %}
         display: none;
-
-          {
-          % endif %
-        }
+        {% endif %}
       }
 
       #titreetmsg {
-          {
-          % if msgDb==None %
-        }
-
+        {% if msgDb==None %}
         display: none;
-
-          {
-          % else %
-        }
+        {% else %}
 
         display: block;
-
-          {
-          % endif %
-        }
+        {% endif %}
       }
 
       .moimsg,
