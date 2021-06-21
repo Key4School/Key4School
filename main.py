@@ -77,15 +77,15 @@ app.add_url_rule('/help/', 'tuto', tuto)
 app.add_url_rule('/saved/', 'saved', saved)
 app.add_url_rule('/savePost/<postId>/', 'savePost', savePost, methods=['POST'])
 
-
-# route temporaire
-@app.route('/mail/')
-def mail():
-    if 'id' in session:
-        return render_template("mail.html")
-    else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+if 'redirect_uri' not in os.environ: # route de dev
+    # route temporaire
+    @app.route('/mail/')
+    def mail():
+        if 'id' in session:
+            return render_template("mail.html")
+        else:
+            session['redirect'] = request.path
+            return redirect(url_for('login'))
 
 
 # Connection au groupe pour recevoir les nouvelles notif
