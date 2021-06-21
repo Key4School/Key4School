@@ -64,9 +64,9 @@
             </a> -->
         </div>
       </nav>
-    </div>
-    <!-- Signaler -->
+    </div> 
     <div class="boutonPubliOrdi" style="flex-direction: column;align-items: flex-end;">
+      <!-- Signaler -->
       <div class="navbar-item">
         <button class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
           <span class="icon is-small">
@@ -77,6 +77,20 @@
             {% endif %}
           </span>
           <span>Signaler</span>
+        </button>
+        <input type="hidden" />
+      </div>
+      <!-- Sauvegarder -->
+      <div class="navbar-item">
+        <button class="button is-link is-outlined is-small" onClick="save('{{d['idMsg']}}')">
+          <span class="icon is-small">
+            {% if d['a_save'] %}
+            <i id="save_{{d['idMsg']}}" class="fas fa-bookmark" aria-hidden="true"></i>
+            {% else %}
+            <i id="save_{{d['idMsg']}}" class="far fa-bookmark" aria-hidden="true"></i>
+            {% endif %}
+          </span>
+          <span>Enregistrer</span>
         </button>
         <input type="hidden" />
       </div>
@@ -95,15 +109,16 @@
         </button>
         <input type="hidden" />
       </div>
+      <!-- Modifier -->
       <div class="navbar-item">
-      <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['idMsg']}}');">
-        <span class="icon is-small">
-          <i class="fas fa-pen" aria-hidden="true"></i>
-        </span>
-        <span>
-          Modifier
-        </span>
-      </button>
+        <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['idMsg']}}');">
+          <span class="icon is-small">
+            <i class="fas fa-pen" aria-hidden="true"></i>
+          </span>
+          <span>
+            Modifier
+          </span>
+        </button>
       </div>
       {%endif%}
       {%if user['admin']==true%}
@@ -134,6 +149,7 @@
         <a class="navbar-link">
         </a>
         <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;">
+          <!-- Signaler -->
           <div class="navbar-item">
             <button class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
               <span class="icon is-small">
@@ -144,6 +160,20 @@
                 {% endif %}
               </span>
               <span>Signaler</span>
+            </button>
+            <input type="hidden" />
+          </div>
+          <!-- Sauvegarder -->
+          <div class="navbar-item">
+            <button class="button is-link is-outlined is-small" onClick="save('{{d['idMsg']}}')">
+              <span class="icon is-small">
+                {% if d['a_save'] %}
+                <i id="save_{{d['idMsg']}}" class="fas fa-bookmark" aria-hidden="true"></i>
+                {% else %}
+                <i id="save_{{d['idMsg']}}" class="far fa-bookmark" aria-hidden="true"></i>
+                {% endif %}
+              </span>
+              <span>Enregistrer</span>
             </button>
             <input type="hidden" />
           </div>

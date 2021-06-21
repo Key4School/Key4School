@@ -216,6 +216,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 		self.xpModeration = params.get('xpModeration', 0)
 		self.motif = params.get('motif', [])
 		self.admin = params.get('admin', False)
+		self.savedDemands = params.get('savedDemands', [])
 
 		self.db_table = DB.db_utilisateurs
 
@@ -257,7 +258,8 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 			'xpModeration': self.xpModeration,
 			'motif': self.motif,
 			'admin': self.admin,
-			'a_sign': self.aSign()
+			'a_sign': self.aSign(),
+			'savedDemands': self.savedDemands
 		}
 
 	def toDB(self) -> dict:
@@ -293,7 +295,8 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 			'xp': self.xp,
 			'xpModeration': self.xpModeration,
 			'motif': self.motif,
-			'admin': self.admin
+			'admin': self.admin,
+			'savedDemands': self.savedDemands
 		}
 
 	def recupLevel(self):
@@ -404,6 +407,14 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 		else:
 			return False
 
+	def aSave(self):
+		user = utilisateurs[session['id']]
+
+		if self._id in user.savedDemands:
+			return True
+		else:
+			return False
+
 	def toDict(self) -> dict:
 		return {  # on ajoute à la liste ce qui nous interesse
 			'_id': self._id,
@@ -423,6 +434,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 			'reponsesObjects': self.reponses_associees,
 			'a_like': self.aLike(),
 			'a_sign': self.aSign(),
+			'a_save': self.aSave(),
 			'sign': self.sign,
 			'motif': self.motif,
 			'resolu': self.resolu,

@@ -25,12 +25,12 @@ socketio = SocketIO(app)
 DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 
 # Routing
-from routing.accueil import accueil, accueil2
+from routing.accueil import accueil, accueil2, tuto, saved
 from routing.recherche import recherche, recherche_user, morePost, moreUser
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, createGroupe, updateGroupe, virerParticipant, modifRole
 from routing.administration import administration, supprimerMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
 from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
-from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, likePost, likeRep, resoudre
+from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, likePost, likeRep, resoudre, savePost
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
 from routing.functions import recupLevel, addXP, addXpModeration, listeModeration, automoderation, sendNotif, clientsNotif
 
@@ -73,16 +73,19 @@ app.add_url_rule('/signPostProfil/', 'signPostProfil', signPostProfil, methods=[
 app.add_url_rule('/signPostDiscussion/', 'signPostDiscussion', signPostDiscussion, methods=['POST'])
 app.add_url_rule('/signPostMsg/', 'signPostMsg', signPostMsg, methods=['POST'])
 app.add_url_rule('/resoudre/<idPost>/', 'resoudre', resoudre, methods=['POST'])
+app.add_url_rule('/help/', 'tuto', tuto)
+app.add_url_rule('/saved/', 'saved', saved)
+app.add_url_rule('/savePost/<postId>/', 'savePost', savePost, methods=['POST'])
 
-
-# route temporaire
-@app.route('/mail/')
-def mail():
-    if 'id' in session:
-        return render_template("mail.html")
-    else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+if 'redirect_uri' not in os.environ: # route de dev
+    # route temporaire
+    @app.route('/mail/')
+    def mail():
+        if 'id' in session:
+            return render_template("mail.html")
+        else:
+            session['redirect'] = request.path
+            return redirect(url_for('login'))
 
 
 # Connection au groupe pour recevoir les nouvelles notif
