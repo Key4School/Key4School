@@ -70,8 +70,8 @@ def morePost():
 
         if request.form['search'] == '':
             # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-            demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu and not d.id_utilisateur == ObjectId(session['id'])],
-                        key = lambda d: ( len(d['réponses associées']) + len(d['likes']) ), reverse=True)[lastPost:lastPost+10]
+            demandes = demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu and not d.id_utilisateur == ObjectId(session['id'])],
+                        key = lambda d: exp(2 * len(d['likes'])) / exp(len(d['réponses associées'])), reverse=True)[lastPost:lastPost+10]
 
         else:
             search = request.form['search'].lower()
