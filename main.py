@@ -32,7 +32,7 @@ from routing.administration import administration, supprimerMsg, validerMsg, san
 from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
 from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, likePost, likeRep, resoudre, savePost
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
-from routing.functions import recupLevel, addXP, addXpModeration, listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 
 app.add_url_rule('/', 'accueil', accueil)
 app.add_url_rule('/accueil/', 'accueil2', accueil2)

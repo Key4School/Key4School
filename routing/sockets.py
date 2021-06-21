@@ -4,7 +4,7 @@ from datetime import *
 from flask.json import jsonify
 from bson.objectid import ObjectId
 from db_poo import *
-from routing.functions import recupLevel, addXP, addXpModeration, listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 from routing.demandes_aide import likePost, likeRep
 
 # Connection au groupe pour recevoir les nouvelles notif

@@ -3,7 +3,7 @@ from datetime import *
 from flask.json import jsonify
 from bson.objectid import ObjectId
 from db_poo import *
-from routing.functions import recupLevel, addXP, addXpModeration, listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 
 def question():
     global utilisateurs
@@ -34,7 +34,7 @@ def question():
                     DB.cluster.save_file(nom, request.files['file'])
 
                 # add XP
-                addXP(session['id'], 10)
+                utilisateurs[session['id']].addXP(10)
 
                 return redirect('/comments/' + str(_id))
 
@@ -91,7 +91,7 @@ def comments(idMsg):
 
                 # add XP
                 if not ObjectId(session['id']) == msg['idAuteur']:
-                    addXP(session['id'], 15)
+                    utilisateurs[session['id']].addXP(15)
 
             return redirect('/comments/' + idMsg)
     else:
@@ -134,13 +134,13 @@ def likePost(idPost):
 
                 # remove XP
                 if not ObjectId(session['id']) == demande['idAuteur']:
-                    addXP(demande['id-utilisateur'], -2)
+                    utilisateurs[demande['id-utilisateur']].addXP(-2)
             else:
                 likes.append(session['id'])  # on ajoute son like
 
                 # add XP
                 if not ObjectId(session['id']) == demande['idAuteur']:
-                    addXP(demande['id-utilisateur'], 2)
+                    utilisateurs[demande['id-utilisateur']].addXP(2)
 
             # on update dans la DB
             demandes_aide[idPost].update()
@@ -173,13 +173,13 @@ def likeRep(idPost, idRep):
 
                 # remove XP
                 if not ObjectId(session['id']) == demande['idAuteur']:
-                    addXP(demande['id-utilisateur'], -2)
+                    utilisateurs[demande['id-utilisateur']].addXP(-2)
             else:
                 likes.append(session['id'])  # on ajoute son like
 
                 # add XP
                 if not ObjectId(session['id']) == demande['idAuteur']:
-                    addXP(demande['id-utilisateur'], 2)
+                    utilisateurs[demande['id-utilisateur']].addXP(2)
 
             # on update dans la DB
             demandes_aide[idPost].update()

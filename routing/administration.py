@@ -3,7 +3,7 @@ from datetime import *
 from flask.json import jsonify
 from bson.objectid import ObjectId
 from db_poo import *
-from routing.functions import recupLevel, addXP, addXpModeration, listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 
 def administration():
     global utilisateurs
@@ -17,11 +17,11 @@ def administration():
         if utilisateur['admin'] == True:
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
-                    auteur = demandes_aide[request.form['idSuppr']].toDict()['idAuteur']
+                    auteur = utilisateurs[demandes_aide[request.form['idSuppr']].toDict()['idAuteur']]
                     demandes_aide[request.form['idSuppr']].delete()
                     del demandes_aide[request.form['idSuppr']]
-                    addXP(str(auteur), -10)
-                    addXpModeration(str(auteur), 10)
+                    auteur.addXP(-10)
+                    auteur.addXpModeration(10)
 
                 elif request.form['demandeBut'] == 'Val':
                     demande = demandes_aide[request.form['idVal']]
@@ -29,7 +29,7 @@ def administration():
                     if request.form['motif'] == "abusif":
                         for content in sign:
                             if "/" not in str(content):
-                                addXpModeration(str(content), 5)
+                                utilisateurs[str(content)].addXpModeration(5)
                     motif = demande.motif
                     for i in range (len(sign)):
                         if "/" not in str(sign[i]):
@@ -44,16 +44,16 @@ def administration():
                     user = utilisateurs[request.form['idValidé']]
                     if request.form['motif'] == "abusif":
                         for content in user.sign:
-                            addXpModeration(str(content), 5)
+                            utilisateurs[str(content)].addXpModeration(5)
                     user.sign = []
                     user.motif = []
                     utilisateurs[request.form['idValidé']].update()
 
                 elif request.form['demandeBut'] == 'SupprRep':
                     demande = demandes_aide[request.form['idDemandSuppr']]
-                    auteur = demandes_aide[request.form['idDemandSuppr']].toDict()['reponsesDict'][request.form['idSuppr']]['id-utilisateur']
-                    addXpModeration(str(auteur), 5)
-                    addXP(str(auteur), -15)
+                    auteur = utilisateurs[demandes_aide[request.form['idDemandSuppr']].toDict()['reponsesDict'][request.form['idSuppr']]['id-utilisateur']]
+                    auteur.addXpModeration(5)
+                    auteur.addXP(-15)
 
                     demande.reponses_associees.pop(request.form['idSuppr'])
                     signDemande = demande.sign
@@ -74,7 +74,7 @@ def administration():
                     sign =  demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign']
                     if request.form['motif'] == "abusif":
                         for content in sign :
-                                addXpModeration(str(content), 5)
+                                utilisateurs[str(content)].addXpModeration(5)
                     demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign'].clear()
                     demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['motif'].clear()
                     for i in range(len(signDemande)):
@@ -90,7 +90,7 @@ def administration():
                     sign = groupe['sign']
                     motif = groupe['motif']
                     for auteur in groupe['id-utilisateurs'] :
-                        addXpModeration(str(auteur), 10)
+                        utilisateurs[str(auteur)].addXpModeration(10)
 
                     sign.clear()
                     motif.clear()
@@ -107,7 +107,7 @@ def administration():
                     motif = groupe['motif']
                     if request.form['motif'] == "abusif":
                         for content in sign:
-                                addXpModeration(str(content), 5)
+                                utilisateurs[str(content)].addXpModeration(5)
                     # on supprime son signalement
                     sign.clear()
                     motif.clear()
@@ -213,11 +213,11 @@ def sanction():
             if request.form['SanctionType'] == 'Spec' or request.form['SanctionType'] == 'SpecProfil' or request.form['SanctionType'] == 'SpecForum' or request.form['SanctionType'] == 'SpecMsg':
                 user.SanctionEnCour = request.form['SanctionType']
                 user.SanctionDuree = time
-                addXpModeration(request.form['idSanctionné'], 50)
+                utilisateurs[request.form['idSanctionné']].addXpModeration(50)
 
             elif request.form['SanctionType'] == 'ResetProfil':
                 MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
-                addXpModeration(request.form['idSanctionné'], 25)
+                utilisateurs[request.form['idSanctionné']].addXpModeration(25)
                 for a in MyImage:
                     DB.db_files.delete_one({'_id': a['_id']})
                     DB.db_chunks.delete_many({'files_id': a['_id']})
