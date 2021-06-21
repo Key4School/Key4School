@@ -75,15 +75,15 @@ app.add_url_rule('/signPostMsg/', 'signPostMsg', signPostMsg, methods=['POST'])
 app.add_url_rule('/resoudre/<idPost>/', 'resoudre', resoudre, methods=['POST'])
 app.add_url_rule('/help/', 'tuto', tuto)
 
-
-# route temporaire
-@app.route('/mail/')
-def mail():
-    if 'id' in session:
-        return render_template("mail.html")
-    else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+if 'redirect_uri' not in os.environ: # route de dev
+    # route temporaire
+    @app.route('/mail/')
+    def mail():
+        if 'id' in session:
+            return render_template("mail.html")
+        else:
+            session['redirect'] = request.path
+            return redirect(url_for('login'))
 
 
 # Connection au groupe pour recevoir les nouvelles notif
