@@ -229,3 +229,22 @@ def updateComment():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
+def savePost(postId):
+    global utilisateurs
+
+    if 'id' in session:
+        user = utilisateurs[session['id']].toDict()
+        savedPost = user['savedDemands']
+
+        if ObjectId(postId) in savedPost:
+            savedPost.remove(ObjectId(postId))
+        else:
+            savedPost.append(ObjectId(postId))
+
+        utilisateurs[session['id']].update()
+
+        return 'sent'
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))

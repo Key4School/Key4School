@@ -4,8 +4,7 @@
 <head>
   {% include 'head.html' with context %}
   <script type="text/javascript" src="/static/js/filtres.js" defer></script>
-  <script type="text/javascript" src="/static/js/scrollInfini.js" defer></script>
-  <title>Key4School</title>
+  <title>Key4School - Demandes enregistréees</title>
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -93,6 +92,8 @@
 
   <!-- Div pour les filtres -->
   {% include 'filtres.html' with context %}
+
+  <h1 style="font-weight: bolder; font-size: x-large; text-align: center;">Vos demandes enregistrées :</h1>
 
   <!-- debut de la div pour tt les publications -->
   <div id="contentPost" class="columns" style="margin-top: 10px; width:100%; margin: 0;">

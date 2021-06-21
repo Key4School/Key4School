@@ -258,3 +258,20 @@ function CommentModification(e) {
 function CommentModificationClose(){
   $("#CommentModif").removeClass("is-active");
 }
+
+const save = (id) => {
+  selectionsave = document.getElementById(`save_${id}`).className;
+
+  if (selectionsave == "far fa-bookmark") 
+    document.getElementById(`save_${id}`).className = "fas fa-bookmark";
+  else if (selectionsave == "fas fa-bookmark")
+    document.getElementById(`save_${id}`).className = "far fa-bookmark";
+
+  fetch(`/savePost/${id}/`, {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  });
+};
