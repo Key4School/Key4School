@@ -32,7 +32,7 @@ def profil(idUser):
             profilUtilisateur['spes'] = profilUtilisateur['spes-str']
             profilUtilisateur['options'] = profilUtilisateur['options-str']
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], user=utilisateurs[session['id']].toDict())
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], xplvl=xplvl, xp=xpgens, niv=niv, user=profilUtilisateur)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
