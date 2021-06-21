@@ -53,6 +53,16 @@
               <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">&nbsp;{{d['réponses associées']|length}}</i>
             </span>
           </a>&emsp;&ensp;
+          <a class="level-item" style="margin-left:2%;" aria-label="enregistrer" onClick="save('{{d['idMsg']}}')">
+            <span class="icon is-small">
+              {% if d['a_save'] %}
+              <i id="save_{{d['idMsg']}}" style="color:{{session['couleur'][2]}};font-size: 20px;" class="fas fa-bookmark" aria-hidden="true"></i>
+              {% else %}
+              <i id="save_{{d['idMsg']}}" style="color:{{session['couleur'][2]}};font-size: 20px;" class="far fa-bookmark" aria-hidden="true"></i>
+              {% endif %}
+            </span>
+            <span style="color:{{session['couleur'][2]}};font-size: 17px; margin-left: 5px;">Enregistrer</span>
+          </a>
           <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
               <span class="icon is-small">
                 {% if d['a_sign'] %}
@@ -77,20 +87,6 @@
             {% endif %}
           </span>
           <span>Signaler</span>
-        </button>
-        <input type="hidden" />
-      </div>
-      <!-- Sauvegarder -->
-      <div class="navbar-item">
-        <button class="button is-link is-outlined is-small" onClick="save('{{d['idMsg']}}')">
-          <span class="icon is-small">
-            {% if d['a_save'] %}
-            <i id="save_{{d['idMsg']}}" class="fas fa-bookmark" aria-hidden="true"></i>
-            {% else %}
-            <i id="save_{{d['idMsg']}}" class="far fa-bookmark" aria-hidden="true"></i>
-            {% endif %}
-          </span>
-          <span>Enregistrer</span>
         </button>
         <input type="hidden" />
       </div>
@@ -160,20 +156,6 @@
                 {% endif %}
               </span>
               <span>Signaler</span>
-            </button>
-            <input type="hidden" />
-          </div>
-          <!-- Sauvegarder -->
-          <div class="navbar-item">
-            <button class="button is-link is-outlined is-small" onClick="save('{{d['idMsg']}}')">
-              <span class="icon is-small">
-                {% if d['a_save'] %}
-                <i id="save_{{d['idMsg']}}" class="fas fa-bookmark" aria-hidden="true"></i>
-                {% else %}
-                <i id="save_{{d['idMsg']}}" class="far fa-bookmark" aria-hidden="true"></i>
-                {% endif %}
-              </span>
-              <span>Enregistrer</span>
             </button>
             <input type="hidden" />
           </div>
