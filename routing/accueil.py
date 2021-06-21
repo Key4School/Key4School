@@ -26,3 +26,10 @@ def accueil2():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
+def tuto():
+    if 'id' in session:
+        return render_template('tuto.html', user=utilisateurs[session['id']].toDict())
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))

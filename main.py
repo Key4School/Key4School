@@ -25,7 +25,7 @@ socketio = SocketIO(app)
 DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
 
 # Routing
-from routing.accueil import accueil, accueil2
+from routing.accueil import accueil, accueil2, tuto
 from routing.recherche import recherche, recherche_user, morePost, moreUser
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, createGroupe, updateGroupe, virerParticipant, modifRole
 from routing.administration import administration, supprimerMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
@@ -73,6 +73,7 @@ app.add_url_rule('/signPostProfil/', 'signPostProfil', signPostProfil, methods=[
 app.add_url_rule('/signPostDiscussion/', 'signPostDiscussion', signPostDiscussion, methods=['POST'])
 app.add_url_rule('/signPostMsg/', 'signPostMsg', signPostMsg, methods=['POST'])
 app.add_url_rule('/resoudre/<idPost>/', 'resoudre', resoudre, methods=['POST'])
+app.add_url_rule('/help/', 'tuto', tuto)
 
 
 # route temporaire
