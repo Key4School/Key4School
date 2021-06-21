@@ -12,13 +12,14 @@ if (document.location.pathname == '/rechercheUser/') {
   var $content = $('#publis');
 }
 
-var lastPost =  $content.children('div.elem').length;
+var lastPost = 10;
 
 if (search === undefined) {
   var search = "";
 }
 
 $(window).scroll(function() {
+  console.log(lastPost);
   if ($(window).data('ajaxready') == false) return;
 
   if (($(window).scrollTop() + $(window).height()) + 300 >= $(document).height() ||
@@ -33,7 +34,7 @@ $(window).scroll(function() {
         'search': search
       }, // et on envoie nos données
       success: function(json) {
-        lastPost =  $content.children('div.elem').length;
+        lastPost = json.lastPost;
         if (json.html != '') {
           $content.append(json.html);
           $(window).data('ajaxready', true);
