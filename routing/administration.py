@@ -20,6 +20,7 @@ def administration():
                     auteur = demandes_aide[request.form['idSuppr']].toDict()['idAuteur']
                     demandes_aide[request.form['idSuppr']].delete()
                     del demandes_aide[request.form['idSuppr']]
+                    addXP(str(auteur), -10)
                     addXpModeration(str(auteur), 10)
 
                 elif request.form['demandeBut'] == 'Val':
@@ -43,7 +44,7 @@ def administration():
                     user = utilisateurs[request.form['idValidé']]
                     if request.form['motif'] == "abusif":
                         for content in user.sign:
-                                addXpModeration(str(content), 5)
+                            addXpModeration(str(content), 5)
                     user.sign = []
                     user.motif = []
                     utilisateurs[request.form['idValidé']].update()
@@ -52,10 +53,12 @@ def administration():
                     demande = demandes_aide[request.form['idDemandSuppr']]
                     auteur = demandes_aide[request.form['idDemandSuppr']].toDict()['reponsesDict'][request.form['idSuppr']]['id-utilisateur']
                     addXpModeration(str(auteur), 5)
+                    addXP(str(auteur), -15)
+
                     demande.reponses_associees.pop(request.form['idSuppr'])
                     signDemande = demande.sign
                     motifDemande = demande.motif
-                    print (len(signDemande))
+
                     for i in range (len(signDemande)):
                         if str(request.form['idSuppr']+"/") in str(signDemande[i]):
                             del signDemande[i]
@@ -74,10 +77,10 @@ def administration():
                                 addXpModeration(str(content), 5)
                     demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign'].clear()
                     demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['motif'].clear()
-                    for i in range (len(signDemande)):
+                    for i in range(len(signDemande)):
                         if str(request.form['idVal']+"/") in str(signDemande[i]):
                             del signDemande[i]
-                    for a in range (len(motifDemande)):
+                    for a in range(len(motifDemande)):
                         if str(request.form['idVal']+"/") in str(motifDemande[a]):
                             del motifDemande[a]
                     demandes_aide[request.form['idDemandVal']].update()
@@ -105,9 +108,10 @@ def administration():
                     if request.form['motif'] == "abusif":
                         for content in sign:
                                 addXpModeration(str(content), 5)
-                        # on supprime son signalement
+                    # on supprime son signalement
                     sign.clear()
                     motif.clear()
+
                     grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idDiscVal'])]
                     for m in grpMsg:
                         m['motif'].clear()
@@ -132,7 +136,7 @@ def administration():
 def supprimerMsg():
     global messages
     global utilisateurs
-    global Groupe
+    global groupes
 
     if 'id' in session:
         idGroupe = request.form['grp']
@@ -164,9 +168,11 @@ def supprimerMsg():
 def validerMsg():
     global messages
     global groupes
+
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
         idGroupe = request.form['grp']
+
         if user['admin']:
             message = messages[request.form['msgVal']].toDict()
             signMsg = message['sign']
@@ -176,7 +182,6 @@ def validerMsg():
             groupe = groupes[request.form['grp']].toDict()
             sign = groupe['sign']
             motif = groupe['motif']
-            print (sign)
             sign.remove(ObjectId(request.form['msgVal']))
             index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['msgVal'])), -1)
             del motif[index]
