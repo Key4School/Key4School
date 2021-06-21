@@ -260,16 +260,18 @@
                 </button>
                 <input type="hidden" />
               </div>
-              <div class="navbar-item">
-                <button class="button is-danger is-outlined is-small" onClick="CommentModificationOpen('{{r['idRep']}}', '{{d['idMsg']}}')">
-                  <span class="icon is-small">
-                    <i class="fas fa-times"></i>
-                  </span>
-                  <span>Modifier </span>
-                </button>
-                <input type="hidden" />
+              {% if r['id-utilisateur'] == user['_id'] %}
+                <div class="navbar-item">
+                  <button class="button is-danger is-outlined is-small" onClick="CommentModificationOpen('{{r['idRep']}}', '{{d['idMsg']}}')">
+                    <span class="icon is-small">
+                      <i class="fas fa-times"></i>
+                    </span>
+                    <span>Modifier </span>
+                  </button>
+                  <input type="hidden" />
+                </div>
               </div>
-            </div>
+            {% endif %}
             <div class="boutonPubliTel">
               <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">
