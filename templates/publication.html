@@ -107,26 +107,26 @@
       </div>
       {%endif%}
       {%if user['admin']==true%}
-      <div class="navbar-item">
-        <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
-          <span class="icon is-small">
-            <i class="fas fa-times"></i>
-          </span>
-          <span>Supprimer </span>
-        </button>
-        <input type="hidden" />
-      </div>
-      {%if d['sign'] != []%}
-      <div class="navbar-item">
-        <button class="button is-success is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
-          <span class="icon is-small">
-            <i class="fas fa-check"></i>
-          </span>
-          <span>Valider le signalement</span>
-        </button>
-        <input type="hidden" />
-      </div>
-      {%endif%}
+        <div class="navbar-item">
+          <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
+            <span class="icon is-small">
+              <i class="fas fa-times"></i>
+            </span>
+            <span>Supprimer </span>
+          </button>
+          <input type="hidden" />
+        </div>
+        {%if d['sign'] != []%}
+          <div class="navbar-item">
+            <button class="button is-success is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
+              <span class="icon is-small">
+                <i class="fas fa-check"></i>
+              </span>
+              <span>Valider le signalement</span>
+            </button>
+            <input type="hidden" />
+          </div>
+        {%endif%}
       {%endif%}
     </div>
     <div class="boutonPubliTel">
@@ -174,26 +174,26 @@
           </div>
           {% endif %}
           {%if user['admin']==true%}
-          <div class="navbar-item">
-            <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
-              <span class="icon is-small">
-                <i class="fas fa-times"></i>
-              </span>
-              <span>Supprimer </span>
-            </button>
-            <input type="hidden" />
-          </div>
-          {%if d['sign'] != []%}
-          <div class="navbar-item">
-            <button class="button is-success is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
-              <span class="icon is-small">
-                <i class="fas fa-check"></i>
-              </span>
-              <span>Valider le signalement</span>
-            </button>
-            <input type="hidden" />
-          </div>
-          {%endif%}
+            <div class="navbar-item">
+              <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
+                <span class="icon is-small">
+                  <i class="fas fa-times"></i>
+                </span>
+                <span>Supprimer </span>
+              </button>
+              <input type="hidden" />
+            </div>
+            {%if d['sign'] != []%}
+              <div class="navbar-item">
+                <button class="button is-success is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
+                  <span class="icon is-small">
+                    <i class="fas fa-check"></i>
+                  </span>
+                  <span>Valider le signalement</span>
+                </button>
+                <input type="hidden" />
+              </div>
+            {%endif%}
           {%endif%}
         </div>
       </div>
