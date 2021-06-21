@@ -27,7 +27,7 @@ DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9
 # Routing
 from routing.accueil import accueil, accueil2
 from routing.recherche import recherche, recherche_user, morePost, moreUser
-from routing.messages import page_messages, uploadAudio, audio, createGroupe, updateGroupe, virerParticipant, modifRole
+from routing.messages import page_messages, redirectDM, uploadAudio, audio, createGroupe, updateGroupe, virerParticipant, modifRole
 from routing.administration import administration, supprimerMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
 from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
 from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, likePost, likeRep, resoudre
@@ -40,6 +40,7 @@ app.add_url_rule('/morePost/', 'morePost', morePost, methods=['POST'])
 app.add_url_rule('/moreUser/', 'moreUser', moreUser, methods=['POST'])
 app.add_url_rule('/messages/', 'page_messages', page_messages, defaults={'idGroupe': None})
 app.add_url_rule('/messages/<idGroupe>/', 'page_messages', page_messages)
+app.add_url_rule('/redirectDM/<idUser1>/<idUser2>/', 'redirectDM', redirectDM)
 app.add_url_rule('/uploadAudio/', 'uploadAudio', uploadAudio, methods=['POST'])
 app.add_url_rule('/audio/<audioName>/', 'audio', audio)
 app.add_url_rule('/supprimerMsg/', 'supprimerMsg', supprimerMsg, methods=['POST'])
