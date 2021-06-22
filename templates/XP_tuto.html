@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  {% include 'head.html' with context %}
+  <title>Key4School</title>
+</head>
+
+<body style="text-align: center;">
+  <div style="display: flex;align-items: center;justify-content:space-evenly;">
+    <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+      style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
+    <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
+      <!-- Barre de progression -->
+      <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <p>
+        NIV:
+        {{niv}}
+        XP :
+        {{xp}}
+      </p>
+    </div>
+  </div>
+  <br />
+  <div class="ChoixCouleur">
+    <form action="{{url_for('changeTheme')}}" method="POST">
+      <!-- Titre choix couleurs -->
+      <label for"color-select">Choisir une couleur de thème :</label><br />
+      <!-- Couleur 1 -->
+      <label class="radio">
+        <div style="display: flex;align-items: center;justify-content:space-evenly;">
+          <input type="radio" name="couleur" value="0" {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] %}checked{%endif%}>&nbsp;&nbsp;
+          <p id="couleur" style="background-color:#00b7ff;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#a7ceff;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#94e1ff;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+        </div>
+      </label>
+      <br />
+      <!-- Couleur 2 -->
+      <label class="radio" title="Niveau 2 requis">
+        <div style="display: flex;align-items: center;justify-content:space-evenly;">
+          {%if niv < 2%}
+            <i style="opacity: .8;" class="fas fa-lock"></i>
+          {% else %}
+            <input type="radio" name="couleur" value="1" {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}checked{%endif%}>
+          {%endif%}&nbsp;&nbsp;
+          <p id="couleur" style="background-color:#ff0000;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#ffa8a8;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#ff9494;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+        </div>
+      </label>
+      <br />
+      <!-- Couleur 3 -->
+      <label class="radio" title="Niveau 3 requis">
+        <div style="display: flex;align-items: center;justify-content:space-evenly;">
+          {% if niv < 3 %}
+            <i style="opacity: .8;" class="fas fa-lock"></i>
+          {% else %}
+            <input type="radio" name="couleur" value="2" {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}checked{%endif%}>
+          {% endif %}&nbsp;&nbsp;
+          <p id="couleur" style="background-color:#14db14;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#aeffa8;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#a0ff94;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+        </div>
+      </label>
+      <br />
+      <!-- Couleur 4 -->
+      <label class="radio" title="Niveau 4 requis">
+        <div style="display: flex;align-items: center;justify-content:space-evenly;">
+          {% if niv < 4 %}
+            <i style="opacity: .8;" class="fas fa-lock"></i>
+          {% else %}
+            <input type="radio" name="couleur" value="3" {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}checked{%endif%}>
+          {% endif %}&nbsp;&nbsp;
+          <p id="couleur" style="background-color:#ffbb00;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#e8c959;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#ffe294;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+        </div>
+      </label>
+      <br />
+      <!-- Couleur 5 -->
+      <label class="radio" title="Niveau 5 requis">
+        <div style="display: flex;align-items: center;justify-content:space-evenly;">
+          {% if niv < 5 %}
+            <i style="opacity: .8;" class="fas fa-lock"></i>
+          {% else %}
+            <input type="radio" name="couleur" value="4" {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}checked{%endif%}>
+          {% endif %}&nbsp;&nbsp;
+          <p id="couleur" style="background-color:#e6445f;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#f3a6b3;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#afe2e7;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+        </div>
+      </label>
+      <br />
+      <label class="radio" title="Niveau 5 requis">
+        <div style="display: flex;align-items: center;justify-content:space-evenly;">
+          {% if niv < 5 %}
+            <i style="opacity: .8;" class="fas fa-lock"></i>
+          {% else %}
+            <input type="radio" name="couleur" value="5" {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>
+          {% endif %}&nbsp;&nbsp;
+          <p id="couleur" style="background-color:#deb72f;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#e6cf81;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
+          <p id="couleur" style="background-color:#e68181;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>
+        </div>
+      </label>
+      <br />
+      <label class="radio" title="Niveau 5 requis">
+        <div style="display: flex;align-items: center;justify-content:space-evenly;">
+          {% if niv < 5 %}
+            <i style="opacity: .8;" class="fas fa-lock"></i>
+          {% else %}
+            <input type="radio" name="couleur" value="6" {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+              session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+              session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+              session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+              session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+              session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>
+          {% endif %}&nbsp;&nbsp;
+          <input id="couleur" type="color" name="color1" value="{{session['couleur'][0]}}" {% if niv < 5 %} disabled {%endif%} />&nbsp;
+          <input id="couleur" type="color" name="color2" value="{{session['couleur'][1]}}" {% if niv < 5 %} disabled {%endif%} />&nbsp;
+          <input id="couleur" type="color" name="color3" value="{{session['couleur'][2]}}" {% if niv < 5 %} disabled {%endif%} />&nbsp;
+
+        </div>
+      </label>
+      <br />
+      <br />
+      <!-- Bouton pour valider le choix de la couleur -->
+      <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
+        <span class="icon is-small">
+          <i class="fas fa-check"></i>
+        </span>
+        <span>Modifier ma couleur !</span>
+      </button>
+    </form>
+  </div>
+</body>
