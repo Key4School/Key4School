@@ -101,7 +101,7 @@ def morePost():
             search = request.form['search'].lower()
             demandes = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.5 )
+                    if d.matiere in user['matieres'] and is_relevant(d, search)
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[lastPost:lastPost+10]
 
@@ -109,7 +109,7 @@ def morePost():
         for demande in demandes:
             html += render_template("publication.html", d=demande, user=user)
 
-        if len (demandes) > 0:
+        if len(demandes) > 0:
             lastPost += len(demandes)
 
         return {'html': html, 'lastPost': lastPost}
