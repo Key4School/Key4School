@@ -34,8 +34,8 @@ var x = setInterval(function() {
 function suivant() {
   num += 1;
   if (num == imageMax+1) {
-    document.getElementById("next").className = "far fa-check-square logoNext";
-    document.getElementById("next").src = "/";
+    document.getElementById("next").style.display = "none";
+    document.getElementById("fini").style.display = "block";
   }
   document.getElementById("iframTuto").src = lien;
   document.getElementById("texte").innerText = textes;
@@ -47,6 +47,10 @@ function precedent() {
   num -= 1;
   if (num == 0) {
     num = 1;
+  }
+  if (num == imageMax+1) {
+    document.getElementById("next").style.display = "block";
+    document.getElementById("fini").style.display = "none";
   }
   document.getElementById("iframTuto").src = lien;
   document.getElementById("texte").innerText = textes;

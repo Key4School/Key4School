@@ -7,6 +7,7 @@
 		<style>
 			.logoNext{
 				font-size:60px;
+				color:black;
 			}
 			.logoNext:hover{
 				cursor: pointer;
@@ -31,7 +32,8 @@
 			<!-- <img style="width:75%;border: 2px solid {{session['couleur'][0]}};" id="image" src="{{url_for('static',filename='image/tuto/1.png')}}"> -->
 			<iframe scrolling="no" id="iframTuto" style="width:90%;height:500px;" src="{{url_for('accueil')}}"></iframe>
 		</div>
-		<i id="next" class="fas fa-caret-right logoNext" onclick="suivant()"></i>
+		<i id="next" style="display:block;" class="fas fa-caret-right logoNext" onclick="suivant()"></i>
+		<a id="fini" style="display:none;" href="{{url_for('accueil')}}"><i class="far fa-check-square logoNext" ></i></a>
 		</div>
 	</body>
 </html>

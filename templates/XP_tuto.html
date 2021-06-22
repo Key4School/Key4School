@@ -7,12 +7,9 @@
 </head>
 
 <body style="text-align: center;">
-  <div style="display: flex;align-items: center;justify-content:space-evenly;">
-    <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-      style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
     <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
       <!-- Barre de progression -->
-      <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
+      <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;margin:auto;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <p>
         NIV:
@@ -21,9 +18,7 @@
         {{xp}}
       </p>
     </div>
-  </div>
-  <br />
-  <div class="ChoixCouleur">
+  <div class="ChoixCouleur" style="margin-top:0%;margin-right:0%;">
     <form action="{{url_for('changeTheme')}}" method="POST">
       <!-- Titre choix couleurs -->
       <label for"color-select">Choisir une couleur de thème :</label><br />
