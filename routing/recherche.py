@@ -7,12 +7,25 @@ from db_poo import *
 from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 from math import exp
 
+def removeAccents(txt):
+    withAccents = u"àâçéèêëîïôùûüÿ"
+    withoutAccents = u"aaceeeeiiouuuy"
+    s = ""
+
+    for c in txt:
+        i = withAccents.find(c)
+        s += withoutAccents[i] if i>=0 else c
+
+    return s
+
 def is_relevant(demande, search):
+    search = removeAccents(search)
+
     for keyword in search.split():
-        if keyword in demande.titre.lower() or keyword in demande.contenu.lower():
+        if keyword in removeAccents(demande.titre.lower()) or keyword in removeAccents(demande.contenu.lower()):
             return True
         else:
-            for w in demande.titre.split():
+            for w in removeAccents(demande.titre.split()):
                 if SequenceMatcher(None, keyword, w.lower()).ratio()>0.8:
                     print(w)
                     return True
