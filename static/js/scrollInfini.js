@@ -1,5 +1,3 @@
-var deviceAgent = navigator.userAgent.toLowerCase();
-var agentID = deviceAgent.match(/(iphone|ipod|ipad)/);
 $(window).data('ajaxready', true);
 
 if (document.location.pathname == '/rechercheUser/') {
@@ -21,8 +19,7 @@ if (search === undefined) {
 $(window).scroll(function() {
   if ($(window).data('ajaxready') == false) return;
 
-  if (($(window).scrollTop() + $(window).height()) + 300 >= $(document).height() ||
-    agentID && ($(window).scrollTop() + $(window).height()) + 300 > $(document).height()) {
+  if (($(window).scrollTop() + $(window).height()) + 300 >= $(document).height()) {
 
     $(window).data('ajaxready', false);
     $.ajax({
