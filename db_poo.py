@@ -212,8 +212,8 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 		self.Sanctions = params.get('Sanction', [])
 		self.SanctionEnCour = params['SanctionEnCour']
 		self.SanctionDuree = params.get('SanctionDuree', '')
-		self.xp = params['xp']
-		self.xpModeration = params.get('xpModeration', 0)
+		self.xp = max(params['xp'], 0)
+		self.xpModeration = max(params.get('xpModeration', 0), 0)
 		self.motif = params.get('motif', [])
 		self.admin = params.get('admin', False)
 		self.savedDemands = params.get('savedDemands', [])
@@ -233,10 +233,12 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 	        +2 pour chaque like reçu
 	    """
 	    self.xp += amount
+		self.xp = max(self.xp, 0)
 	    return
 
 	def addXpModeration(self, amount: int) -> None:
 	    self.xpModeration += amount
+		self.xpModeration = max(self.xpModeration, 0)
 	    return
 
 	def toDict(self):
