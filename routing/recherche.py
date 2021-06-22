@@ -7,6 +7,16 @@ from db_poo import *
 from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 from math import exp
 
+def is_relevant(demande, search):
+    for keyword in search.split():
+        if keyword in demande.titre.lower() or keyword in demande.contenu.lower():
+            return True
+        else:
+            for w in demande.titre.split():
+                if SequenceMatcher(None, keyword, w.lower()).ratio()>0.8:
+                    print(w)
+                    return True
+
 def recherche():
     global utilisateurs
     global demandes_aide
@@ -20,7 +30,7 @@ def recherche():
             # on récupère les demandes d'aide correspondant à la recherche
             result = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.5 )
+                    if d.matiere in user['matieres'] and is_relevant(d, search)
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[:10]
 
