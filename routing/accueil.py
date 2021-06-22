@@ -36,6 +36,17 @@ def tuto():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+def XP_tuto():
+    if 'id' in session:
+        user = utilisateurs[session['id']]
+        niv, xplvl, xpgens = user.recupLevel()
+
+        return render_template('XP_tuto.html', user=user.toDict(), niv=niv, xplvl=xplvl, xpgens=xpgens)
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
+
 def saved():
     global utilisateurs
     global demandes_aide
