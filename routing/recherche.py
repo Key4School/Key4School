@@ -20,7 +20,7 @@ def recherche():
             # on récupère les demandes d'aide correspondant à la recherche
             result = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.1)
+                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.5 )
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[:10]
 
@@ -78,7 +78,7 @@ def morePost():
             search = request.form['search'].lower()
             demandes = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.1)
+                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.5 )
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[lastPost:lastPost+10]
 
