@@ -145,7 +145,7 @@ def administration():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
-def supprimerMsg():
+def suppressionMsg():
     global messages
     global utilisateurs
     global groupes
