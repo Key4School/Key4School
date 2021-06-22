@@ -26,7 +26,7 @@ def profil(idUser):
 
             user = utilisateurs[session['id']]
             profilUtilisateur = utilisateurs[idUser].toDict()
-            niv, xplvl, xpgens = user.recupLevel()
+            niv, xplvl, xpgens = utilisateurs[idUser].recupLevel()
 
             # translate spes/options/lv
             profilUtilisateur['langues'] = profilUtilisateur['langues-str']
