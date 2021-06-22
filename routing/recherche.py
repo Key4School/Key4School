@@ -87,7 +87,7 @@ def morePost():
             html += render_template("publication.html", d=demande, user=user)
 
         if len (demandes) > 0:
-            lastPost += demandes.index(demandes[-1]) + 1
+            lastPost += len(demandes)
 
         return {'html': html, 'lastPost': lastPost}
 
@@ -114,7 +114,7 @@ def moreUser():
             html += render_template("apercu_profil.html", u=user, user=utilisateurs[session['id']].toDict())
 
         if len (users) > 0:
-            lastPost += users.index(users[-1]) + 1
+            lastPost += len(users)
 
         return {'html': html, 'lastPost': lastPost}
     else:

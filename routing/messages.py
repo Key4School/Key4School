@@ -21,9 +21,11 @@ def page_messages(idGroupe):
             infoUtilisateurs = groupe.toDict()['utilisateurs']
             if ObjectId(session['id']) in groupe.toDict()['id-utilisateurs']: # verif autorization
                 msgDb = groupe.getAllMessages()
+                taille = len(msgDb)
+                msgDb = msgDb[taille-10:taille]
 
             elif user['admin'] == True:
-                msgDb = groupe.getAllMessagesSign()
+                msgDb = groupe.getAllMessagesSign().reverse()[:10].reverse()
 
             else:
                 msgDb = None
@@ -48,7 +50,7 @@ def page_messages(idGroupe):
 def redirectDM(idUser1, idUser2):
     if 'id' in session:
         grp = [groupe.toDict() for groupe in groupes.values() if len(groupe.id_utilisateurs) == 2 and ObjectId(idUser1) in groupe.id_utilisateurs and ObjectId(idUser2) in groupe.id_utilisateurs]
-        
+
         if grp != []: # DM existing
             return redirect('/messages/' + str(grp[0]['_id']))
         else: # create DM
@@ -170,3 +172,28 @@ def modifRole():
     else:
         abort(403) # doit se connecter
 
+
+def moreMsg():
+    global utilisateurs
+    global groupes
+
+    if 'id' in session:
+        idgroupe = request.form['idGroupe']
+        lastMsg = int(request.form['lastMsg'])
+        grp = groupes[idgroupe]
+        groupe = grp.toDict()
+        users = groupe['utilisateurs']
+
+        messages = grp.getAllMessages()
+        messages.reverse()
+        messages = messages[lastMsg:lastMsg+10]
+        messages.reverse()
+
+        html = ''
+        for message in messages:
+            html += render_template("widget_message.html", content=message, sessionId=ObjectId(session['id']), infogroupe=groupe, infoUtilisateurs=users, idgroupe=idgroupe, user=utilisateurs[session['id']].toDict())
+
+        return {'html': html}
+
+    else:
+        abort(401) # non connecté

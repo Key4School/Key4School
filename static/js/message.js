@@ -78,6 +78,7 @@ function envoi(e) {
   scroll();
 }
 
+
 /*function searchUser() {
   var recherche = $('#searchUser').val();
   $.ajax({
@@ -131,6 +132,30 @@ socket.on('newMsg', (data) => {
   }
 });
 
+$(window).data('ajaxready', true);
+
+$('#messages').scroll(function() {
+  if ($(window).data('ajaxready') == false) return;
+
+  if ($('#messages').scrollTop() <= 300) {
+
+    $(window).data('ajaxready', false);
+    $.ajax({
+      url: "/moreMsg/", // on donne l'URL du fichier de traitement
+      type: "POST", // la requête est de type POST
+      data: {
+        'lastMsg': $('#messages > div').length,
+        'idGroupe': idGroupe
+      }, // et on envoie nos données
+      success: function(json) {
+        if (json.html != '') {
+          $('#messages').prepend(json.html);
+          $(window).data('ajaxready', true);
+        }
+      }
+    });
+  }
+});
 
 function reponseMsg(nb) {
   document.getElementById('divrepmsg').style.display = "flex";
