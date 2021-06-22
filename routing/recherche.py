@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 from difflib import SequenceMatcher
 from db_poo import *
 from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
+from math import exp
 
 def recherche():
     global utilisateurs

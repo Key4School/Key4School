@@ -19,7 +19,6 @@ if (search === undefined) {
 }
 
 $(window).scroll(function() {
-  console.log(lastPost);
   if ($(window).data('ajaxready') == false) return;
 
   if (($(window).scrollTop() + $(window).height()) + 300 >= $(document).height() ||
