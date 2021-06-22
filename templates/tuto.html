@@ -3,7 +3,7 @@
 	<head>
 		{% include 'head.html' with context %}
 		<title>Key4School - Aide</title>
-		<script src="{{url_for('static',filename='js/tuto.js')}}" type="text/javascript"></script>
+		<script src="{{url_for('static',filename='js/tuto.js')}}" type="text/javascript" defer></script>
 		<style>
 			.logoNext{
 				font-size:60px;
@@ -15,7 +15,7 @@
 		</style>
 	</head>
 
-	<body style="text-align: center;">
+	<body style="text-align: center;" onkeydown="touche(event)">
 		<!-- Bandeau -->
   		{% include 'bandeau2.html' %}
   		<br /><br/><br />
