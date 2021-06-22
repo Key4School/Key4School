@@ -81,25 +81,31 @@
 
 
  <!-- debut de la div pour tt les publications -->
- <div class="columns" style="margin: 0; margin-top:5%;">
+ <div class="columns" style="margin: 0;">
   <div class="column" style="padding: 0;"></div>
   <div class="column is-three-fifths" id="publis">
-    {%if user|length > 0%}
-      <a href="{{url_for('recherche_user', search=search)}}">Voir plus de profils</a><br />
+    {%if users|length > 0%}
+      {%for u in users%}
+        {% include 'apercu_profil.html' with context %}
+      {%endfor%}
+      <a style="margin-left: 35px;" href="{{url_for('recherche_user', search=search)}}">Voir plus de profils</a>
+      <br /><br />
+      <hr/>
+      <br />
     {%endif%}
-    {%for u in users%}
-      {% include 'apercu_profil.html' with context %}
-    {%endfor%}
 
-    {%for d in results %}
-      <!-- Début publi -->
-      {% include 'publication.html' with context %}
-      <!-- Fin publi -->
-    {%endfor%}
+    {%if results|length > 0%}
+      {%for d in results %}
+        <!-- Début publi -->
+        {% include 'publication.html' with context %}
+        <!-- Fin publi -->
+      {%endfor%}
+    {%else%}
+      <div class="box">
+        <em>Aucun résultat n'a été trouvé...</em>
+      </div>
+    {%endif%} 
   </div>
-  {%if user|length == 0 and results|length == 0%}
-    Aucun résultat
-  {%endif%}
   <div class="column" style="padding: 0;"></div>
 </div>
 
