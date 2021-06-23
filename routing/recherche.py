@@ -7,6 +7,29 @@ from db_poo import *
 from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 from math import exp
 
+def removeAccents(txt):
+    withAccents = u"àâçéèêëîïôùûüÿ"
+    withoutAccents = u"aaceeeeiiouuuy"
+    s = ""
+
+    for c in txt:
+        i = withAccents.find(c)
+        s += withoutAccents[i] if i>=0 else c
+
+    return s
+
+def is_relevant(demande, search):
+    search = removeAccents(search)
+
+    for keyword in search.split():
+        if keyword in removeAccents(demande.titre.lower()) or keyword in removeAccents(demande.contenu.lower()):
+            return True
+        else:
+            for w in removeAccents(demande.titre.split()):
+                if SequenceMatcher(None, keyword, w.lower()).ratio()>0.8:
+                    print(w)
+                    return True
+
 def recherche():
     global utilisateurs
     global demandes_aide
@@ -20,7 +43,7 @@ def recherche():
             # on récupère les demandes d'aide correspondant à la recherche
             result = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.5 )
+                    if d.matiere in user['matieres'] and is_relevant(d, search)
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[:10]
 
@@ -78,7 +101,7 @@ def morePost():
             search = request.form['search'].lower()
             demandes = sorted(
                 [d.toDict() for d in demandes_aide.values()
-                    if d.matiere in user['matieres'] and ( SequenceMatcher(None, d.titre.lower(), search).ratio()>0.5 or SequenceMatcher(None, d.contenu.lower(), search).ratio()>0.5 )
+                    if d.matiere in user['matieres'] and is_relevant(d, search)
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[lastPost:lastPost+10]
 
@@ -86,7 +109,7 @@ def morePost():
         for demande in demandes:
             html += render_template("publication.html", d=demande, user=user)
 
-        if len (demandes) > 0:
+        if len(demandes) > 0:
             lastPost += len(demandes)
 
         return {'html': html, 'lastPost': lastPost}
