@@ -76,7 +76,7 @@ app.add_url_rule('/signPostDiscussion/', 'signPostDiscussion', signPostDiscussio
 app.add_url_rule('/signPostMsg/', 'signPostMsg', signPostMsg, methods=['POST'])
 app.add_url_rule('/resoudre/<idPost>/', 'resoudre', resoudre, methods=['POST'])
 app.add_url_rule('/help/', 'tuto', tuto)
-app.add_url_rule('/XP_tuto', 'XP_tuto', XP_tuto)
+app.add_url_rule('/XP_tuto/', 'XP_tuto', XP_tuto)
 app.add_url_rule('/saved/', 'saved', saved)
 app.add_url_rule('/savePost/<postId>/', 'savePost', savePost, methods=['POST'])
 
