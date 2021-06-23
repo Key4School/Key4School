@@ -172,6 +172,16 @@ def modifRole():
     else:
         abort(403) # doit se connecter
 
+def supprGroupe(idGrp):
+    user = utilisateurs[session['id']]
+    groupe = groupes[idGrp]
+
+    if user.admin or ObjectId(session['id']) in groupe.moderateurs:
+        groupe.supprGroupe()  
+        return 'group deleted', 200 
+    else:
+        abort(401)
+
 
 def moreMsg():
     global utilisateurs

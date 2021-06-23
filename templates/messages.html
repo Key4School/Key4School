@@ -159,7 +159,7 @@
                 <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' required /><br><br>
                 <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
                 <br /><br />
-                <div id="listeuser" style="overflow:auto;">
+                <div id="listeuser" style="overflow:auto; max-height: 500px;">
                   {% for user in users %}
                   {% if not sessionId == user['_id'] %}
                   <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
@@ -294,7 +294,7 @@
                       <div class="navbar-item">
                         {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                         {%if users['_id'] in infogroupe['moderateurs']%}
-                        <button class="button is-warning is-outlined" onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
+                        <button class="button is-warning is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
                           <span class="icon is-small">
                             <i class="fas fa-crown" aria-hidden="true"></i>
                           </span>
@@ -303,7 +303,7 @@
                           </span>
                         </button>
                         {%else%}
-                        <button class="button is-info is-outlined" onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')">
+                        <button class="button is-info is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
                           <span class="icon is-small">
                             <i class="fas fa-users" aria-hidden="true"></i>
                           </span>
@@ -314,7 +314,7 @@
                         {%endif%}
                         {%else%}
                           {%if users['_id'] in infogroupe['moderateurs']%}
-                            <button class="button is-warning is-outlined">
+                            <button class="button is-warning is-outlined" disabled>
                               <span class="icon is-small">
                                 <i class="fas fa-crown" aria-hidden="true"></i>
                               </span>
@@ -345,7 +345,7 @@
                     <span class="icon is-small">
                       <i id="sign" class="fas fa-times" aria-hidden="true"></i>
                     </span>
-                    <span>Supprimer</span>
+                    <span>Supprimer les messages</span>
                   </button>&emsp;
                   {%if infogroupe['sign'] != []%}
                   <button class="button is-success is-outlined is-small" onClick="valDiscOpen();">
@@ -357,16 +357,26 @@
                   {%endif%}
                   {%endif%}
                 </div>
+                <br />
+                <div style="display:flex;">
+                  {%if infogroupe['is_class'] == False%}
+                    <button class="button is-danger is-outlined is-small" type="submit" onclick="quitterGroupeOpen();">
+                      <span class="icon is-small">
+                        <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                      </span>
+                      <span>Quitter le groupe</span>
+                    </button>&emsp;
+                  {%endif%}
+                  {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] %}
+                    <button class="button is-danger is-outlined is-small" type="submit" onclick="supprimerGroupeOpen();">
+                      <span class="icon is-small">
+                        <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                      </span>
+                      <span>Supprimer le groupe</span>
+                    </button>
+                  {%endif%}
+                </div>
                 <br /><br />
-                {%if infogroupe['is_class'] == False%}
-                <button class="button is-danger is-outlined is-small" type="submit" onclick="quitterGroupeOpen();">
-                  <span class="icon is-small">
-                    <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                  </span>
-                  <span>Quitter le groupe</span>
-                </button>
-                {%endif%}
-                <br /><br /><br />
                 {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">
                   <span class="icon is-small">
@@ -525,48 +535,68 @@
             </form>
           </div>
         </div>
+        {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] %}
+          <div class="modal" id="supprimerGroupe" style="overflow:hidden;">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Quitter le groupe</p>
+              </header>
+              <form onsubmit="supprimerGroupe(event); return false;" id="supprimerGroupeForm" method="POST" autocomplete="off">
+                <section class="modal-card-body">
+                  <input type='hidden' id="supprimerGroupeId" name='supprimerGroupeId' value="{{idgroupe}}" />
+                  Etes-vous sûr de vouloir supprimer le groupe ?
+                </section>
+                <footer class="modal-card-foot">
+                  <button type="submit" class="button is-success">Suprrimer le groupe</button>
+                  <button onclick="supprimerGroupeClose(); return false;" class="button">Annuler</button>
+                </footer>
+              </form>
+            </div>
+          </div>
+        {%endif%}
         {%if user['admin']%}
-        <div class="modal" id="supprDisc" style="overflow:hidden;">
-          <div class="modal-background"></div>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Supression de la discussion</p>
-            </header>
-            <form onsubmit="supprDisc(event); return false;" id="supprDiscForm" method="POST" autocomplete="off">
-              <section class="modal-card-body">
-                <input id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
-                <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['_id']}}" />
-                <input type='hidden' name="demandeBut" value="supprDisc" />
-              </section>
-              <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Supprimer</button>
-                <button onclick="supprDiscClose(); return false;" class="button">Annuler</button>
-              </footer>
-            </form>
+          <div class="modal" id="supprDisc" style="overflow:hidden;">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Supression de la discussion</p>
+              </header>
+              <form onsubmit="supprDisc(event); return false;" id="supprDiscForm" method="POST" autocomplete="off">
+                <section class="modal-card-body">
+                  <input id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
+                  <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' name="demandeBut" value="supprDisc" />
+                </section>
+                <footer class="modal-card-foot">
+                  <button type="submit" class="button is-success">Supprimer</button>
+                  <button onclick="supprDiscClose(); return false;" class="button">Annuler</button>
+                </footer>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="modal" id="valDisc" style="overflow:hidden;">
-          <div class="modal-background"></div>
-          <div class="modal-card">
-            <header class="modal-card-head">
-              <p class="modal-card-title">Validation de la discussion</p>
-            </header>
-            <form onsubmit="valDisc(event); return false;" id="valDiscForm" method="POST" autocomplete="off">
-              <section class="modal-card-body">
-                <input type='hidden' id="idDiscVal" name='idDiscVal' value="{{infogroupe['_id']}}" />
-                <select name="motif">
-                  <option value="abusif">Signalement abusif</option>
-                  <option value="justifie">Justifié</option>
-                </select>
-                <input type='hidden' name="demandeBut" value="valDisc" />
-              </section>
-              <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Valider</button>
-                <button onclick="designalisationMsgClose(); return false;" class="button">Annuler</button>
-              </footer>
-            </form>
+          <div class="modal" id="valDisc" style="overflow:hidden;">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Validation de la discussion</p>
+              </header>
+              <form onsubmit="valDisc(event); return false;" id="valDiscForm" method="POST" autocomplete="off">
+                <section class="modal-card-body">
+                  <input type='hidden' id="idDiscVal" name='idDiscVal' value="{{infogroupe['_id']}}" />
+                  <select name="motif">
+                    <option value="abusif">Signalement abusif</option>
+                    <option value="justifie">Justifié</option>
+                  </select>
+                  <input type='hidden' name="demandeBut" value="valDisc" />
+                </section>
+                <footer class="modal-card-foot">
+                  <button type="submit" class="button is-success">Valider</button>
+                  <button onclick="designalisationMsgClose(); return false;" class="button">Annuler</button>
+                </footer>
+              </form>
+            </div>
           </div>
-        </div>
         {%endif%}
         <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
         <div id="messages" style="overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
