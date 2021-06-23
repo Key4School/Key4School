@@ -284,7 +284,7 @@
                 <p class="modal-card-title">Options</p>
                 <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
               </header>
-              <section class="modal-card-body">
+              <section class="modal-card-body" style="overflow: auto; max-height: 700px;">
                 {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                 <div style="display: flex;">
                   <input class="input is-info" type="text" id="newGrpName" placeholder="Renommer le groupe..." value="{{infogroupe['nom']}}" onsubmit="console.log('test');" onkeydown="if(event.key === 'Enter') updateGroupName();" />
@@ -428,14 +428,14 @@
                     <br /><br />
                     <div id="listeuser">
                       {% for user in users %}
-                      {% if not sessionId == user['_id'] and not user['_id'] in infogroupe['id-utilisateurs']%}
-                      <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
-                        data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
-                        <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
-                        <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
-                        <br><br />
-                      </div>
-                      {% endif %}
+                        {% if not sessionId == user['_id'] and not user['_id'] in infogroupe['id-utilisateurs']%}
+                        <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
+                          data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
+                          <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
+                          <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
+                          <br><br />
+                        </div>
+                        {% endif %}
                       {% endfor %}
                       <button class="button is-success is-outlined is-small" type="submit">
                         <span class="icon is-small">
@@ -635,12 +635,12 @@
             </div>
           </div>
         {%endif%}
-        <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
-        <div id="messages" style="overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
+          <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
+          <div id="messages" style="overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
           {% for content in msgDb%}
-          {% include "widget_message.html" %}
+            {% include "widget_message.html" %}
           {%endfor%}
-          {% endif %}
+        {% endif %}
 
         </div>
         <div id="divrepmsg" style="padding:0.5%;width:100%;display:none;align-items: center;width: 100%;">
@@ -650,43 +650,43 @@
           </button>
         </div>
         {%if infogroupe%}
-        {%if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecMsg" %}
-        <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
-        <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
-        <div style="width: 100%; display:flex;align-items: baseline;">
-          <form enctype="multipart/form-data" method="post" style="width: 100%; height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
-            <!-- <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i> -->
-            <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message..." autocomplete='off' name="contenuMessage" style="width: calc(100% - 70px);margin-right: 1%;padding:5px;" />
-            <input type='hidden' name="group" value="{{idgroupe}}" id="idGroupe" />
-            <input type="hidden" name="idUser" id="idUser" value="{{sessionId}}" />
-            <input type='hidden' id='reponse' name='reponse' value="None" />
-            <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
-          </form>
-          <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;" onClick="enregistrerTel()">
-            <i class="fas fa-microphone" style="font-size: 20px;"></i>
-          </button>
-          <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
-          <div style="display:flex;align-items:center;">
-            <div id="buttonAudio1" style="display:none;">
-              <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="stopTel('jeter');">
-                <span class="icon is-small">
-                  <i class="fas fa-times"></i>
-                </span>
-              </button>
+          {%if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecMsg" %}
+          <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
+          <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
+          <div style="width: 100%; display:flex;align-items: baseline;">
+            <form enctype="multipart/form-data" method="post" style="width: 100%; height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
+              <!-- <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i> -->
+              <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message..." autocomplete='off' name="contenuMessage" style="width: calc(100% - 70px);margin-right: 1%;padding:5px;" />
+              <input type='hidden' name="group" value="{{idgroupe}}" id="idGroupe" />
+              <input type="hidden" name="idUser" id="idUser" value="{{sessionId}}" />
+              <input type='hidden' id='reponse' name='reponse' value="None" />
+              <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
+            </form>
+            <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;" onClick="enregistrerTel()">
+              <i class="fas fa-microphone" style="font-size: 20px;"></i>
+            </button>
+            <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
+            <div style="display:flex;align-items:center;">
+              <div id="buttonAudio1" style="display:none;">
+                <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="stopTel('jeter');">
+                  <span class="icon is-small">
+                    <i class="fas fa-times"></i>
+                  </span>
+                </button>
+              </div>
+              &nbsp;&nbsp;
+              <div id="txtAudio">
+              </div>
+              &nbsp;&nbsp;
+              <div id="buttonAudio2" style="display:none;">
+                <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="stopTel('garder');">
+                  <span class="icon is-small">
+                    <i class="fas fa-check"></i>
+                  </span>
+                </button>
+              </div>
             </div>
-            &nbsp;&nbsp;
-            <div id="txtAudio">
-            </div>
-            &nbsp;&nbsp;
-            <div id="buttonAudio2" style="display:none;">
-              <button class="button is-success is-outlined is-rounded" id="sendAudio" onclick="stopTel('garder');">
-                <span class="icon is-small">
-                  <i class="fas fa-check"></i>
-                </span>
-              </button>
-            </div>
-          </div>
-          {%endif%}
+            {%endif%}
           {%endif%}
           <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
         </div>
