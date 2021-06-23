@@ -184,11 +184,11 @@
           <tbody>
             <!-- div pour le groupe -->
             {%for content in grpUtilisateur%}
-            <tr class="listedGrp" data-grpName="{{content['nom']}}"
+            <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['_id']}}"
               data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
               <td>
                 <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
-                  <div class="tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
+                  <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
                     <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
                     {{content['nom']}}
                     <br />
@@ -237,7 +237,7 @@
           <!-- div avec le nom du groupe et les paticipants -->
           <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
             <!-- nom du groupe -->
-            <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>{{infogroupe['nom']}}</p>
+            <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a><span class="grpName">{{infogroupe['nom']}}</span></p>
             <!-- liste des paricipants -->
             <p id="listGroupUsers" style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.2;">
               <!--{% if infogroupe['nbUtilisateurs'] > 8 %}
@@ -266,6 +266,15 @@
                 <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
               </header>
               <section class="modal-card-body">
+                {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] %}
+                <div style="display: flex;">
+                  <input class="input is-info" type="text" id="newGrpName" placeholder="Renommer le groupe..." value="{{infogroupe['nom']}}" onsubmit="console.log('test');" onkeydown="if(event.key === 'Enter') updateGroupName();" />
+                  <i class="fas fa-pen" style="font-size: 28px; position: relative; margin-top: 5px; margin-left: 15px;" onclick="updateGroupName();"></i>
+                </div>
+                {%else%}
+                  <h3 style="font-weight: bolder; font-size: 20px;">{{infogroupe['nom']}}</h3>
+                {%endif%}
+                <hr />
                 Informations utilisateurs : <br />
                 {%for users in infoUtilisateurs%}
                 <div class="box profil" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;">
