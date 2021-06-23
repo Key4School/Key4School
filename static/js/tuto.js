@@ -20,7 +20,7 @@ var data = [
   {
     'texte': "Dans le menu déroulant à droite de votre écran, vous trouverez l'onglet \"Messages privés\". En appuyant sur le \"+\" vous pouvez chercher d'autres utilisateurs afin de débuter une conversation avec eux. Vous pouvez également envoyer des messages vocaux.",
     'titre': "4. Les messages privés",
-    'lien': "/messages/60c5ad88186fbabb20bb2a7e/"
+    'lien': "/messages/"
   },
   {
     'texte': "Sur votre profil vous pouvez renseigner vos informations comme votre pseudo, vos langues vivantes, votre adresse mail, votre numéro de téléphone, bien évidemment vous pouvez choisir de les rendre publiques ou non.",
