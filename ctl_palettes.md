@@ -65,3 +65,9 @@
 * Couleur 2 : ![#e6cf81](https://via.placeholder.com/15/e6cf81/000000?text=+) `#e6cf81`
 * Couleur 3 : ![#e68181](https://via.placeholder.com/15/e68181/000000?text=+) `#e68181`
 * Moyenne: ![#f3e7c0](https://via.placeholder.com/15/f3e7c0/000000?text=+) `#f3e7c0`
+
+**Palette  (nuance de marron clair et gris clair )**
+* Couleur 1 : ![#c1bebe](https://via.placeholder.com/15/14db14/000000?text=+) `#c1bebe`
+* Couleur 2 : ![#aea2a2](https://via.placeholder.com/15/aeffa8/000000?text=+) `#aea2a2`
+* Couleur 3 : ![#dcdbdb](https://via.placeholder.com/15/a0ff94/000000?text=+) `#dcdbdb`
+* Moyenne: ![##d7d1d1](https://via.placeholder.com/15/d6ffd3/000000?text=+) `##d7d1d1`

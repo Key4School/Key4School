@@ -182,6 +182,18 @@ def supprGroupe(idGrp):
     else:
         abort(401)
 
+def updateGrpName(idGrp, newGrpName):
+    user = utilisateurs[session['id']]
+    groupe = groupes[idGrp]
+
+    if user.admin or ObjectId(session['id']) in groupe.moderateurs:
+        groupe.nom = newGrpName
+        groupes[idGrp].update()
+
+        return 'group name edited', 200 
+    else:
+        abort(401)
+
 
 def moreMsg():
     global utilisateurs

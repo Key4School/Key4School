@@ -43,6 +43,8 @@ def sendNotif(type, id_groupe, id_msg, destinataires):
     if ObjectId(session['id']) in destinataires:
         destinataires.remove(ObjectId(session['id']))
 
+    destinataires = list(set(destinataires))
+
     if len(destinataires) > 0:
         _id = ObjectId()
         notifications[str(_id)] = Notification({"_id": _id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
