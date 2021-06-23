@@ -608,6 +608,10 @@ class Groupe(Actions):
         self.db_table = DB.db_groupes
 
     def supprGroupe(self):
+        grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == self._id]
+        for m in grpMsg:
+            messages[str(m['_id'])].suppr()
+
         self.delete()
         groupes.pop(str(self._id))
         return

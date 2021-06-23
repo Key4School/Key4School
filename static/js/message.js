@@ -597,3 +597,24 @@ function quitterGroupeOpen(grpID, userID) {
 function quitterGroupeClose(){
   $("#quitterGroupe").removeClass("is-active");
 }
+
+function supprimerGroupe(e) {
+  const idGrp = document.getElementById('supprimerGroupeId').value;
+
+  fetch(`/supprGroupe/${idGrp}/`, {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  })
+    .then(res => document.location.href = '/messages/');
+}
+
+function supprimerGroupeOpen() {
+  $("#supprimerGroupe").addClass("is-active");
+}
+
+function supprimerGroupeClose(){
+  $("#supprimerGroupe").removeClass("is-active");
+}
