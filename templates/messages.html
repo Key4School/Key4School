@@ -4,9 +4,8 @@
 <head>
   <title>Messages</title>
   {% include 'head.html' with context %}
-  <script src="{{url_for('static',filename='js/message.js')}}" type="text/javascript" defer></script>
-  <script src="{{url_for('static',filename='js/filtres.js')}}" type="text/javascript" defer></script>
-
+  <script src="/static/js/message.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
+  <script src="/static/js/filtres.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
 
   <style type="text/css">
     .moimsg {

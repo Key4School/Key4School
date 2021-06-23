@@ -4,8 +4,8 @@
 <head>
 {% include 'head.html' with context %}
   <title>Recherche</title>
-  <script type="text/javascript" src="/static/js/filtres.js" defer></script>
-  <script type="text/javascript" src="/static/js/scrollInfini.js" defer></script>
+  <script type="text/javascript" src="/static/js/filtres.js?v={{session['cacheRandomKey']}}" defer></script>
+  <script type="text/javascript" src="/static/js/scrollInfini.js?v={{session['cacheRandomKey']}}" defer></script>
   <script type="text/javascript">
     var search = "{{search}}";
   </script>

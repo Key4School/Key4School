@@ -10,6 +10,7 @@ from bson import Binary
 import os
 import gridfs
 import smtplib
+from uuid import uuid4
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from difflib import SequenceMatcher
@@ -184,6 +185,7 @@ def connexion():
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
         session['type'] = user['type']
+        session['cacheRandomKey'] = cacheRandomKey
 
         u = utilisateurs[str(user['_id'])]
         if user['SanctionEnCour'] != "":
@@ -256,6 +258,7 @@ def connexion():
             session['pseudo'] = user['pseudo']
             session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
             session['type'] = user['type']
+            session['cacheRandomKey'] = cacheRandomKey
 
             nomClasse = f"{data['schoolName']}/{classe}"
             group = [g for g in groupes.values() if g.nom == nomClasse and g.is_class == True]
@@ -293,6 +296,7 @@ def connexion():
             session['pseudo'] = user['pseudo']
             session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
             session['type'] = user['type']
+            session['cacheRandomKey'] = cacheRandomKey
 
             return redirect(url_for('profil'))
 
@@ -301,6 +305,8 @@ def connexion():
 
 
 if __name__ == "__main__":
+    cacheRandomKey = uuid4()
+
     # This allows us to use a plain HTTP callback
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
     app.secret_key = os.urandom(24)
