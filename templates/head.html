@@ -23,7 +23,9 @@
 {%if user['admin']==true%}<script src="/static/js/administration.js?v={{session['cacheRandomKey']}}" type="text/javascript"></script>{%endif%}
 <script type="text/javascript" src="/static/js/bandeau.js?v={{session['cacheRandomKey']}}"></script>
 <script src="/static/js/profil.js?v={{session['cacheRandomKey']}}" type="text/javascript"></script>
-<link rel="icon" href="/static/image/logo/favicon.png?v={{session['cacheRandomKey']}}" />
+<link rel="icon" href="/static/image/logo/favicon.png?v={{session['cacheRandomKey']}}" id="favicon"/>
+<script src='https://cdn.rawgit.com/admsev/jquery-play-sound/master/jquery.playSound.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
   .navbarhover:hover{
     background:{{session['couleur'][2]}};
