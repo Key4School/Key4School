@@ -615,6 +615,26 @@ function supprimerGroupeOpen() {
   $("#supprimerGroupe").addClass("is-active");
 }
 
-function supprimerGroupeClose(){
+function supprimerGroupeClose() {
   $("#supprimerGroupe").removeClass("is-active");
+}
+
+function updateGroupName() {
+  const newGrpName = document.getElementById('newGrpName').value.trim();
+  
+  if(newGrpName !== '') {
+    document.querySelector(`.listedGrp[data-grpid="${idGroupe}"] .grpName`).innerHTML = newGrpName;
+    document.querySelector(`.listedGrp[data-grpid="${idGroupe}"]`).dataset.grpname = newGrpName;
+    document.querySelector('#groupTitle > .grpName').innerHTML = newGrpName;
+
+    fetch(`/updateGrpName/${idGroupe}/${newGrpName}/`, {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    });
+
+    divoptionclose();
+  }
 }

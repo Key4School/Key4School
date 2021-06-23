@@ -3,15 +3,16 @@ const favicon = new Favico({
   animation: 'popFade'
 });
 
+var nbNotifs = $('#notifContent > .notif').length;;
 
 function updateNotif() {
-  var nbNotif = $('#notifContent > .notif').length;
+  nbNotif = $('#notifContent > .notif').length;
   if (nbNotif > 0) {
     favicon.badge(nbNotif);
     $('#nbNotif').css({
       'display': "block"
     });
-    $('#nbNotif').html(nbNotif);
+    $('#nbNotif').html(nbNotifs);
     $('#noNotif').css({
       'display': "none"
     });
