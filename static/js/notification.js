@@ -1,13 +1,14 @@
 const socket = io(`${document.location.protocol === 'https:' ? 'wss' : 'ws'}://${document.location.host}`);
-
 const favicon = new Favico({
-  animation: 'popFade',
-  position: 'down'
+  animation: 'popFade'
 });
-let nbNotifs = $('#notifContent > .notif').length;;
+
+var nbNotifs = $('#notifContent > .notif').length;;
 
 function updateNotif() {
-  if (nbNotifs > 0) {
+  nbNotif = $('#notifContent > .notif').length;
+  if (nbNotif > 0) {
+    favicon.badge(nbNotif);
     $('#nbNotif').css({
       'display': "block"
     });
@@ -19,6 +20,7 @@ function updateNotif() {
       'display': "block"
     });
   } else {
+    favicon.reset();
     $('#nbNotif').css({
       'display': "none"
     });
@@ -29,14 +31,11 @@ function updateNotif() {
       'display': "none"
     });
   }
-
-  favicon.badge(nbNotifs);
 }
 
 function supprNotif(id) {
   socket.emit('supprNotif', id);
   $('#' + id).remove();
-  nbNotifs--;
   updateNotif();
 }
 
@@ -44,8 +43,6 @@ function allSuppr() {
   $('#notifContent > .notif').each(function() {
     supprNotif($(this).attr('id'));
   });
-
-  nbNotifs = 0;
 }
 
 updateNotif();
@@ -54,8 +51,13 @@ socket.on('connect', function() {
   socket.emit('connectToNotif');
 });
 
+socket.on('notif', (html) => {
+  $('#notifContent').append(html);
+  updateNotif();
+});
+
 socket.on('newNotif', (html) => {
   $('#notifContent').append(html);
-  nbNotifs++;
   updateNotif();
+  $.playSound('/static/sounds/notif.mp3');
 });

@@ -23,7 +23,7 @@ def connectToNotif():
         toSend.reverse()
         for notif in toSend:
             html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(ObjectId(session['id']))))
-            emit('newNotif', html, to=session['id'])
+            emit('notif', html, to=session['id'])
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
 def disconnect():
