@@ -544,7 +544,22 @@ function modifRole(id, idGrp){
     type: "POST", // la requête est de type POST
     data: ({idModifié :  id, idGrp : idGrp}), // et on envoie nos données
     success: function(response) {
-      document.getElementById("ModifRoleUser"+id).innerHTML=response;
+      if(response === 'participant') {
+        document.getElementById("ModifRoleUser"+id).parentElement.innerHTML= '<span class="icon is-small">' +
+                                                                              '<i class="fas fa-users" aria-hidden="true"></i>' +
+                                                                            '</span>' +
+                                                                            `<span id="ModifRoleUser${id}">Participant</span>`;
+        document.getElementById("ModifRoleUser"+id).parentElement.classList.remove('is-warning');
+        document.getElementById("ModifRoleUser"+id).parentElement.classList.add('is-info');
+      }
+      else if(response === 'admin') {
+        document.getElementById("ModifRoleUser"+id).parentElement.innerHTML= '<span class="icon is-small">' +
+                                                                              '<i class="fas fa-crown" aria-hidden="true"></i>' +
+                                                                            '</span>' +
+                                                                            `<span id="ModifRoleUser${id}">Admin</span>`;
+        document.getElementById("ModifRoleUser"+id).parentElement.classList.remove('is-info');
+        document.getElementById("ModifRoleUser"+id).parentElement.classList.add('is-warning');
+      }
     },
   });
 }
