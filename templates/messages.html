@@ -245,7 +245,18 @@
           <!-- div avec le nom du groupe et les paticipants -->
           <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
             <!-- nom du groupe -->
-            <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a><span class="grpName">{{infogroupe['nom']}}</span></p>
+            <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages/" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>
+            <span class="grpName">
+              {% if not infogroupe['is_DM'] %}
+                {{infogroupe['nom']}}
+              {% else %}
+                {% for u in infogroupe['utilisateurs'] %}
+                  {% if u['_id'] != sessionId %}
+                    » {{u['pseudo']}}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </span></p>
             <!-- liste des paricipants -->
             <p id="listGroupUsers" style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.2;">
               <!--{% if infogroupe['nbUtilisateurs'] > 8 %}
@@ -260,7 +271,7 @@
               {%endfor%}
             {% endif %}-->
               {% for content in infoUtilisateurs %}
-              <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['_id'])}}">{{content['pseudo']}}</a>, </span>
+                <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['_id'])}}">{{content['pseudo']}}</a>, </span>
               {%endfor%}
             </p>
           </div>
@@ -274,13 +285,23 @@
                 <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
               </header>
               <section class="modal-card-body">
-                {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] %}
+                {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                 <div style="display: flex;">
                   <input class="input is-info" type="text" id="newGrpName" placeholder="Renommer le groupe..." value="{{infogroupe['nom']}}" onsubmit="console.log('test');" onkeydown="if(event.key === 'Enter') updateGroupName();" />
                   <i class="fas fa-pen" style="font-size: 28px; position: relative; margin-top: 5px; margin-left: 15px;" onclick="updateGroupName();"></i>
                 </div>
                 {%else%}
-                  <h3 style="font-weight: bolder; font-size: 20px;">{{infogroupe['nom']}}</h3>
+                  <h3 style="font-weight: bolder; font-size: 20px;">
+                    {% if not infogroupe['is_DM'] %}
+                      {{infogroupe['nom']}}
+                    {% else %}
+                      {% for u in infogroupe['utilisateurs'] %}
+                        {% if u['_id'] != sessionId %}
+                          » {{u['pseudo']}}
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </h3>
                 {%endif%}
                 <hr />
                 Informations utilisateurs : <br />
@@ -308,7 +329,7 @@
                     </div>
                     <div style="flex-direction: column;align-items: flex-end;">
                       <div class="navbar-item">
-                        {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
+                        {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                         {%if users['_id'] in infogroupe['moderateurs']%}
                         <button class="button is-warning is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
                           <span class="icon is-small">
@@ -375,7 +396,7 @@
                 </div>
                 <br />
                 <div style="display:flex;">
-                  {%if infogroupe['is_class'] == False%}
+                  {%if not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                     <button class="button is-danger is-outlined is-small" type="submit" onclick="quitterGroupeOpen();">
                       <span class="icon is-small">
                         <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
@@ -383,7 +404,7 @@
                       <span>Quitter le groupe</span>
                     </button>&emsp;
                   {%endif%}
-                  {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] %}
+                  {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                     <button class="button is-danger is-outlined is-small" type="submit" onclick="supprimerGroupeOpen();">
                       <span class="icon is-small">
                         <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
@@ -393,7 +414,7 @@
                   {%endif%}
                 </div>
                 <br /><br />
-                {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
+                {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                 <button class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">
                   <span class="icon is-small">
                     <i class="fas fa-plus" aria-hidden="true"></i>
