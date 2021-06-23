@@ -57,10 +57,10 @@ def redirectDM(idUser1, idUser2):
             participants = [ObjectId(idUser1), ObjectId(idUser2)]
             user1 = utilisateurs[idUser1].toDict()
             user2 = utilisateurs[idUser2].toDict()
-            nomGrp = '{} - {}'.format(user1['pseudo'], user2['pseudo'])
+            nomGrp = '[DM]: {} - {}'.format(user1['pseudo'], user2['pseudo'])
 
             _id = ObjectId()
-            groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomGrp, 'id-utilisateurs': participants, 'moderateurs': [], 'sign':[], 'motif': []})
+            groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomGrp, 'is_DM': True, 'id-utilisateurs': participants, 'moderateurs': [], 'sign':[], 'motif': []})
             groupes[str(_id)].insert()
 
             return redirect('/messages/' + str(_id))
