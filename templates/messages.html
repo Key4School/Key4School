@@ -159,7 +159,7 @@
                 <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' required /><br><br>
                 <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
                 <br /><br />
-                <div id="listeuser" style="overflow:auto;">
+                <div id="listeuser" style="overflow:auto; max-height: 500px;">
                   {% for user in users %}
                   {% if not sessionId == user['_id'] %}
                   <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
@@ -376,7 +376,7 @@
                     </button>
                   {%endif%}
                 </div>
-                <br /><br /><br />
+                <br /><br />
                 {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
                 <button class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">
                   <span class="icon is-small">
