@@ -450,7 +450,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
             'matière': self.translate_matiere_spes_options_lv([self.matiere]),
             'likes': self.likes,
             'nb-likes': len(self.likes),
-            'réponses associées': [r.toDict() for r in self.reponses_associees.values()],
+            'réponses associées': sorted([r.toDict() for r in self.reponses_associees.values()], key=lambda r: r['nb-likes'], reverse=True),
             'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
             'reponsesDict2': {idRep: rep for (idRep, rep) in self.reponses_associees.items()},
             'reponsesObjects': self.reponses_associees,
