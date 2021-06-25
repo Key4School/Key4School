@@ -75,10 +75,14 @@ def uploadAudio():
     if 'id' in session:
         nom = "MsgVocal" + request.form['group'] + session['id'] + request.form['date']
         DB.cluster.save_file(nom, request.files['audio'])
+        if request.form['reponse'] != "None":
+            reponse = ObjectId(request.form['reponse'])
+        else:
+            reponse = "None"
 
         _id = ObjectId()
         messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
-                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": request.form['reponse'], "sign": []})
+                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": reponse, "sign": []})
         messages[str(_id)].insert()
         message = messages[str(_id)].toDict()
 

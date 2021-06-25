@@ -69,7 +69,7 @@ function divoptionclose(e) {
 
 function envoi(e) {
   const contenuMsg = document.getElementById('inputMsg').value || '';
-  const reponse = document.getElementById('reponse').value || '';
+  const reponse = document.getElementById('reponse').value || 'None';
 
   socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, reponse: reponse});
 
@@ -369,9 +369,10 @@ function stopTel(but) {
 function sendAudio() {
   if (estEnregistre = true) {
     var datetime = new Date().toISOString().replace(/Z/, '+00:00');
+    const reponse = document.getElementById('reponse').value || 'None';
     form.append('date', datetime);
     form.append('group', idGroupe);
-    form.append('reponse', "None");
+    form.append('reponse', reponse);
     $.ajax({
       url: "/uploadAudio/",
       type: "POST",
