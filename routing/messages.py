@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
 from datetime import *
 from flask.json import jsonify
+from flask_socketio import emit
 from bson.objectid import ObjectId
 from db_poo import *
 from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
+from __main__ import socketio
 
 def page_messages(idGroupe):
     global utilisateurs
@@ -73,6 +75,23 @@ def uploadAudio():
     if 'id' in session:
         nom = "MsgVocal" + request.form['group'] + session['id'] + request.form['date']
         DB.cluster.save_file(nom, request.files['audio'])
+
+        _id = ObjectId()
+        messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": request.form['reponse'], "sign": []})
+        messages[str(_id)].insert()
+        message = messages[str(_id)].toDict()
+
+        if message:
+            groupe = message['groupe']
+            sendNotif("msg", groupe['_id'], _id, list(groupe['id-utilisateurs']))
+            users = groupe['utilisateurs']
+
+        ownHTML = render_template("widget_message.html", content=message, sessionId=ObjectId(session['id']), infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['_id']), user=utilisateurs[session['id']].toDict())
+        otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['_id']), user=utilisateurs[session['id']].toDict())
+
+        socketio.emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=str(groupe['_id']))
+
         return 'yes'
     else:
         session['redirect'] = request.path
@@ -177,8 +196,8 @@ def supprGroupe(idGrp):
     groupe = groupes[idGrp]
 
     if user.admin or ObjectId(session['id']) in groupe.moderateurs:
-        groupe.supprGroupe()  
-        return 'group deleted', 200 
+        groupe.supprGroupe()
+        return 'group deleted', 200
     else:
         abort(401)
 
@@ -190,7 +209,7 @@ def updateGrpName(idGrp, newGrpName):
         groupe.nom = newGrpName
         groupes[idGrp].update()
 
-        return 'group name edited', 200 
+        return 'group name edited', 200
     else:
         abort(401)
 

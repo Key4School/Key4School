@@ -371,7 +371,7 @@ function sendAudio() {
     var datetime = new Date().toISOString().replace(/Z/, '+00:00');
     form.append('date', datetime);
     form.append('group', idGroupe);
-    console.log(form);
+    form.append('reponse', "None");
     $.ajax({
       url: "/uploadAudio/",
       type: "POST",
@@ -380,7 +380,6 @@ function sendAudio() {
       contentType: false,
       cache: false,
       success: function() {
-        socket.emit('postMsg', {room: idGroupe, reponse: 'None', dateAudio: datetime});
         form = new FormData();
         estEnregistre = false;
         boutonAudioClose();
