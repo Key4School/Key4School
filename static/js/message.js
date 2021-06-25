@@ -368,9 +368,7 @@ function stopTel(but) {
 
 function sendAudio() {
   if (estEnregistre = true) {
-    var datetime = new Date().toISOString().replace(/Z/, '+00:00');
     const reponse = document.getElementById('reponse').value || 'None';
-    form.append('date', datetime);
     form.append('group', idGroupe);
     form.append('reponse', reponse);
     $.ajax({
@@ -384,6 +382,7 @@ function sendAudio() {
         form = new FormData();
         estEnregistre = false;
         boutonAudioClose();
+        enleverRep();
         document.getElementById('txtAudio').innerHTML = "";
         scroll();
       }

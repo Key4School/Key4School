@@ -73,7 +73,7 @@ def redirectDM(idUser1, idUser2):
 
 def uploadAudio():
     if 'id' in session:
-        nom = "MsgVocal" + request.form['group'] + session['id'] + request.form['date']
+        nom = "MsgVocal" + request.form['group'] + session['id'] + str(datetime.now())
         DB.cluster.save_file(nom, request.files['audio'])
         if request.form['reponse'] != "None":
             reponse = ObjectId(request.form['reponse'])
