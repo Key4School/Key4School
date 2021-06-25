@@ -204,6 +204,8 @@
                     <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
                       {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
                       Message Vocal
+                      {%elif content['lastMsg']['image'] != '' %}
+                      <i class="fa-solid fa-image"></i>{{content['lastMsg']['contenu']}}
                       {%else%}
                       {{content['lastMsg']['contenu']}}
                       {%endif%}
@@ -664,6 +666,7 @@
               <input type="hidden" name="idUser" id="idUser" value="{{sessionId}}" />
               <input type='hidden' id='reponse' name='reponse' value="None" />
               <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
+              <input type='file' name="image" id="inputImage" accept="image/*" />
             </form>
             <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;" onClick="enregistrerTel()">
               <i class="fas fa-microphone" style="font-size: 20px;"></i>

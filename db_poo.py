@@ -537,6 +537,7 @@ class Message(Actions):
         self.date_envoi = params['date-envoi']
         self.reponse = params['reponse']
         self.audio = params.get('audio', False)
+        self.image = params.get('image', '')
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
 
@@ -545,6 +546,10 @@ class Message(Actions):
     def suppr(self) -> None:
         if self.audio == 'True':
             MyAudio = DB.db_files.find_one({'filename': self.contenu})
+            DB.db_files.delete_one({'_id': MyAudio['_id']})
+            DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
+        if self.image != '':
+            MyAudio = DB.db_files.find_one({'filename': self.image})
             DB.db_files.delete_one({'_id': MyAudio['_id']})
             DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
         self.delete()
@@ -560,6 +565,7 @@ class Message(Actions):
             'contenu': self.contenu,
             'date-envoi': self.date_envoi,
             'audio': self.audio,
+            'image': self.image
         }
 
     def toDict(self) -> dict:
@@ -578,6 +584,7 @@ class Message(Actions):
             'reponse': self.reponse,
             'rep': rep,
             'audio': self.audio,
+            'image': self.image,
             'sign': self.sign,
             'motif': self.motif
         }
@@ -591,6 +598,7 @@ class Message(Actions):
             'date-envoi': self.date_envoi,
             'reponse': self.reponse,
             'audio': self.audio,
+            'image': self.image,
             'sign': self.sign,
             'motif': self.motif
         }

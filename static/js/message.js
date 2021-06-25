@@ -68,6 +68,10 @@ function divoptionclose(e) {
 }
 
 function envoi(e) {
+  if (document.getElementById('inputImage').files.length > 0){
+    sendImage();
+    return;
+  }
   const contenuMsg = document.getElementById('inputMsg').value || '';
   const reponse = document.getElementById('reponse').value || 'None';
 
@@ -76,6 +80,22 @@ function envoi(e) {
   $('#messageForm').trigger("reset");
   enleverRep();
   scroll();
+}
+
+function sendImage() {
+  var formImage = new FormData(document.getElementById('messageForm'));
+  $.ajax({
+    url: "/uploadImage/",
+    type: "POST",
+    data: formImage,
+    processData: false,
+    contentType: false,
+    cache: false,
+    success: function() {
+      $('#messageForm').trigger("reset");
+      scroll();
+    }
+  });
 }
 
 
@@ -527,8 +547,6 @@ function changeRate(id) {
   //      playIconContainer.innerHTML = "play";
   // });
 // }
-
-
 
 
 function signalisationDiscussion() {

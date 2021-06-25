@@ -193,6 +193,9 @@
              playIconContainer{{content['_id']}}.innerHTML = "play";
         });
       </script>
+      {%elif content['image'] != '' %}
+      <a target="blank" href="{{url_for('image', imageName=content['image'])}}"><img src="{{url_for('image', imageName=content['image'])}}" style="width: 200px; height: auto; "/><br></a>
+      {{content['contenu']}}
       {%else%}
       {{content['contenu']}}
       {%endif%}

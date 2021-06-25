@@ -108,6 +108,43 @@ def audio(audioName):
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+def uploadImage():
+    if 'id' in session:
+        nom = "Image" + request.form['group'] + session['id'] + str(datetime.now())
+        DB.cluster.save_file(nom, request.files['image'])
+        if request.form['reponse'] != "None":
+            reponse = ObjectId(request.form['reponse'])
+        else:
+            reponse = "None"
+
+        _id = ObjectId()
+        messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(request.form['group']), "id-utilisateur": ObjectId(session['id']),
+                    "contenu": request.form['contenuMessage'], "date-envoi": datetime.now(), "image": nom, "reponse": reponse, "sign": []})
+        messages[str(_id)].insert()
+        message = messages[str(_id)].toDict()
+
+        if message:
+            groupe = message['groupe']
+            sendNotif("msg", groupe['_id'], _id, list(groupe['id-utilisateurs']))
+            users = groupe['utilisateurs']
+
+        ownHTML = render_template("widget_message.html", content=message, sessionId=ObjectId(session['id']), infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['_id']), user=utilisateurs[session['id']].toDict())
+        otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['_id']), user=utilisateurs[session['id']].toDict())
+
+        socketio.emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=str(groupe['_id']))
+
+        return 'yes'
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
+def image(imageName):
+    if 'id' in session:
+        return DB.cluster.send_file(imageName)
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
 def createGroupe():
     global groupes
 
