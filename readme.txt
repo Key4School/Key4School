@@ -14,15 +14,15 @@ I Introduction :
 
 II Répartition du site :
 
-page d'accueil : https://key4school.herokuapp.com/
-page de messages privés : https://key4school.herokuapp.com/messages/
-page de profil : https://key4school.herokuapp.com/profil/
-page de demandes enregistrées : https://key4school.herokuapp.com/saved/
-page de tutoriel : https://key4school.herokuapp.com/help/
-page d'administration (accès restreint aux administarteurs du site) : https://key4school.herokuapp.com/administration/
-page de recherche : https://key4school.herokuapp.com/recherche/?search=VotreRecherche
-page de question : https://key4school.herokuapp.com/question/
-page de commentaire : https://key4school.herokuapp.com/comments/idDuGroupe
+	page d'accueil : https://key4school.herokuapp.com/
+	page de messages privés : https://key4school.herokuapp.com/messages/
+	page de profil : https://key4school.herokuapp.com/profil/
+	page de demandes enregistrées : https://key4school.herokuapp.com/saved/
+	page de tutoriel : https://key4school.herokuapp.com/help/
+	page d'administration (accès restreint aux administarteurs du site) : https://key4school.herokuapp.com/administration/
+	page de recherche : https://key4school.herokuapp.com/recherche/?search=VotreRecherche
+	page de question : https://key4school.herokuapp.com/question/
+	page de commentaire : https://key4school.herokuapp.com/comments/idDuGroupe
 
 Fonctionnalités par page :
 
@@ -132,11 +132,13 @@ III Rôles dans le site :
 				Mode Spectateur sur le forum
 				Mode Spectateur sur les messages privés
 				Interdiction de modifier le profil
-				Réinitialisation du profil 
+				Réinitialisation du profil
 
 
 	Rôles scolaires :
-		Elève :
-		Enseignant :
+		Elève : Aucun droit particulier.
+		Enseignant : Dans les discussions privées, ils peuvent supprimer tous les messages des discussions dont ils font parti.
 
 	Rôles dans les discussions privés :
+		participant : aucun droit particulier
+		administrateur d'une discussion : peut ajouter et enlever des participants, changer le rôle des participants, peut supprimer le grp
