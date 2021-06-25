@@ -166,11 +166,6 @@ def suppressionMsg():
                 index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['msgSuppr'])), -1)
                 del motif[index]
             messages[request.form['msgSuppr']].suppr()
-            if request.form['audio'] == 'True':
-                MyAudio = DB.db_files.find_one({'filename': request.form['audioName']})
-                DB.db_files.delete_one({'_id': MyAudio['_id']})
-                DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
-
             groupes[request.form['grp']].update()
 
         return redirect(url_for('page_messages', idGroupe=idGroupe))

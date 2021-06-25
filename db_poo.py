@@ -543,6 +543,10 @@ class Message(Actions):
         self.db_table = DB.db_messages
 
     def suppr(self) -> None:
+        if self.audio == 'True':
+            MyAudio = DB.db_files.find_one({'filename': self.contenu})
+            DB.db_files.delete_one({'_id': MyAudio['_id']})
+            DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
         self.delete()
         messages.pop(str(self._id))
         return
