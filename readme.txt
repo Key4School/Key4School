@@ -1,0 +1,71 @@
+CTL 2021 : Key4School
+
+Répartition du site :
+
+page d'accueil : https://key4school.herokuapp.com/
+page de messages privés : https://key4school.herokuapp.com/messages/
+page de profil : https://key4school.herokuapp.com/profil/
+page de demandes enregistrées : https://key4school.herokuapp.com/saved/
+page de tutoriel : https://key4school.herokuapp.com/help/
+page d'administration (accès restreint aux administarteurs du site) : https://key4school.herokuapp.com/administration/
+page de recherche : https://key4school.herokuapp.com/recherche/?search=VotreRecherche
+page de question : https://key4school.herokuapp.com/question/
+page de commentaire : https://key4school.herokuapp.com/comments/idDuGroupe
+
+Fonctionnalités par page :
+
+	page d'accueil :
+
+		Affichage des demandes d'aides selon leur nombre de like et de commentaires.
+		Filtres des demandes d'aides par matière en haut de la page.
+		Possibilité de liker une demande : icône "pouce vers le haut"
+		Possibilité de signaler une demande : bouton "signaler"
+		Possibilité d'enregistrer une demande : icône "marque page"
+		Possibilité d'accès à la page commentaire : icône "bulle"
+		Système de scroll infini : toutes les demandes ne sont pas chargés d'un seul coup, elle se charge au fur et à mesure du scroll.
+		Demande d'aides : affichage du titre, de l'auteur, de la date de mise en ligne, de la matière, du contenu avec les pièces jointes si besoin,
+			du nombre de likes, de commentaires.
+
+	page de messages privés:
+
+		Affichage de tous les groupes de l'utilisateur.
+		Possibilité de filtrer les groupes.
+		Possibilité de créer un groupe avec filtre des utilisateurs.
+		Affichage des messages :
+			Séparation entre messages de l'utilisateur (à droite, couleur blanche) et autre (à gauche, couleur en fonction du thème de l'utilisateur).
+			Affichage du pseudo de l'utilisateur (lien vers son profil en cliquant dessus).
+			Flèche vers le bas :
+				menu déroulant avec possibilité de signalé un message ou d'y répondre.
+			trois petits points verticaux :
+				Options du groupe pour tous :
+					Aperçu du profil de chaque membre du groupe.
+					Possibilité de signalé le groupe.
+					Possibilité de quitter le groupe.
+				Options administrateur du groupe (par défaut le créateur) :
+					Renommer le groupe.
+					Modifier le rôle dans le groupe de chaque participant.
+					Ajouter des participants.
+					Possibilité de supprimer le groupe.
+			En haut affichage des participants du groupe par pseudo.
+			Barre de saisi de messages :
+				Affichage du message auquel on répond.
+				icône "microphone" : enregistrement de messages vocaux avec possibilité de l'envoyer ou de le supprimer.
+
+	page de profil :
+		page personnelle :
+			Affichage des informations personnelles.
+			Possibilité de modifier sa photo de profil.
+			Possibilité de modifier certains champs : Pseudo, langues vivantes, spécialités, options, Centres d'intérêts, adresse mail, Téléphone, Date de Naissance, Caractère.
+			Possibilité de modifier la visibilité de certaines informations.
+			Choisir ses notifications.
+			Modifier son thème (certains thèmes sont bloqués en fonction de l'xp de l'utilisateur).
+			Aperçu de ses dernières demandes d'aide.
+			Récapitulatif des sanctions de l'utilisateurs.
+			Tous les champs modifiables sont soumis à l'auto-modération.
+		page des autres :
+			Affichage de toutes les informations publiques dont l'xp.
+			Possibilité de Signaler le profil.
+			Possibilité de démarrer une discussion avec la personne.
+			Voir si la personne est Administrateur.
+
+	page de demandes enregistrées :
