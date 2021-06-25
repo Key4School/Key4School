@@ -84,7 +84,115 @@
   {%endif%}
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}
-      <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button>
+      <!-- <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button> -->
+      <div id="audio-player-container{{content['_id']}}" >
+        <p>Audio Player</p>
+        <audio id="audio{{content['_id']}}"  src="{{url_for('audio', audioName = content['contenu'])}}" type="audio/ogg" preload="metadata"></audio>
+
+        <button id="play-icon{{content['_id']}}" >play</button>
+        <span id="current-time{{content['_id']}}" class="time">0:00</span>
+        <input type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
+        <span id="duration{{content['_id']}}" class="time">0:00</span>
+        <button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button>
+      </div>
+      <script>
+        document.getElementById('audio{{content['_id']}}').style.display='block';
+        const playIconContainer{{content['_id']}} = document.getElementById('play-icon{{content['_id']}}');
+        const audioPlayerContainer{{content['_id']}} = document.getElementById('audio-player-container{{content['_id']}}');
+        const seekSlider{{content['_id']}} = document.getElementById('seek-slider{{content['_id']}}');
+        let playState{{content['_id']}} = 'pause';
+
+
+
+        playIconContainer{{content['_id']}}.addEventListener('click', () => {
+            if(playState{{content['_id']}} === 'play') {
+                audio{{content['_id']}}.pause();
+                cancelAnimationFrame(raf{{content['_id']}});
+                playState{{content['_id']}} = 'pause';
+                playIconContainer{{content['_id']}}.innerHTML = "play";
+            } else {
+                audio{{content['_id']}}.play();
+                requestAnimationFrame(whilePlaying{{content['_id']}});
+                playState{{content['_id']}} = 'play';
+                playIconContainer{{content['_id']}}.innerHTML = "pause";
+            }
+        });
+
+
+
+        const showRangeProgress{{content['_id']}} = (rangeInput{{content['_id']}}) => {
+            if(rangeInput{{content['_id']}} === seekSlider{{content['_id']}}) audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', rangeInput{{content['_id']}}.value / rangeInput{{content['_id']}}.max * 100 + '%');
+        }
+
+        seekSlider{{content['_id']}}.addEventListener('input', (e) => {
+            showRangeProgress{{content['_id']}}(e.target);
+        });
+        const audio{{content['_id']}} = document.querySelector('#audio{{content['_id']}}');
+        const durationContainer{{content['_id']}} = document.getElementById('duration{{content['_id']}}');
+        const currentTimeContainer{{content['_id']}} = document.getElementById('current-time{{content['_id']}}');
+        let raf{{content['_id']}} = null;
+
+        const calculateTime{{content['_id']}} = (secs) => {
+            const minutes = Math.floor(secs / 60);
+            const seconds = Math.floor(secs % 60);
+            const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+            return `${minutes}:${returnedSeconds}`;
+        }
+
+        const displayDuration{{content['_id']}} = () => {
+            durationContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(audio{{content['_id']}}.duration);
+        }
+
+        const setSliderMax{{content['_id']}} = () => {
+            seekSlider{{content['_id']}}.max = Math.floor(audio{{content['_id']}}.duration);
+        }
+
+        const displayBufferedAmount{{content['_id']}} = () => {
+            const bufferedAmount{{content['_id']}} = Math.floor(audio{{content['_id']}}.buffered.end(audio{{content['_id']}}.buffered.length - 1));
+            audioPlayerContainer{{content['_id']}}.style.setProperty('--buffered-width', `${(bufferedAmount{{content['_id']}} / seekSlider{{content['_id']}}.max) * 100}%`);
+        }
+
+        const whilePlaying{{content['_id']}} = () => {
+            seekSlider{{content['_id']}}.value = Math.floor(audio{{content['_id']}}.currentTime);
+            currentTimeContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(seekSlider{{content['_id']}}.value);
+            audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', `${seekSlider{{content['_id']}}.value / seekSlider{{content['_id']}}.max * 100}%`);
+            raf{{content['_id']}} = requestAnimationFrame(whilePlaying{{content['_id']}});
+        }
+
+        if (audio{{content['_id']}}.readyState > 0) {
+            displayDuration{{content['_id']}}();
+            setSliderMax{{content['_id']}}();
+            displayBufferedAmount{{content['_id']}}();
+        } else {
+            audio{{content['_id']}}.addEventListener('loadedmetadata', () => {
+                displayDuration{{content['_id']}}();
+                setSliderMax{{content['_id']}}();
+                displayBufferedAmount{{content['_id']}}();
+            });
+        }
+
+        audio{{content['_id']}}.addEventListener('progress', displayBufferedAmount{{content['_id']}});
+
+        seekSlider{{content['_id']}}.addEventListener('input', () => {
+            currentTimeContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(seekSlider.value);
+            if(!audio{{content['_id']}}.paused) {
+                cancelAnimationFrame(raf{{content['_id']}});
+            }
+        });
+
+        seekSlider{{content['_id']}}.addEventListener('change', () => {
+            audio{{content['_id']}}.currentTime = seekSlider{{content['_id']}}.value;
+            if(!audio{{content['_id']}}.paused) {
+                requestAnimationFrame(whilePlaying);
+            }
+        });
+
+        audio{{content['_id']}}.addEventListener("ended", function(){
+             audio{{content['_id']}}.currentTime = 0;
+             playState{{content['_id']}} = 'pause';
+             playIconContainer{{content['_id']}}.innerHTML = "play";
+        });
+      </script>
       {%else%}
       {{content['contenu']}}
       {%endif%}
