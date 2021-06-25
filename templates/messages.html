@@ -335,6 +335,7 @@
                     <div style="flex-direction: column;align-items: flex-end;">
                       <div class="navbar-item">
                         {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                          <button onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">virer</button>
                         {%if users['_id'] in infogroupe['moderateurs']%}
                         <button class="button is-warning is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
                           <span class="icon is-small">
@@ -566,12 +567,14 @@
             </header>
             <form onsubmit="quitterGroupe(event); return false;" id="quitterGroupeForm" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="{{idgroupe}}" />
-                <input type='hidden' id="quitter_idviré" name='idViré' value="{{sessionId}}" />
-                Etes-vous sûr de vouloir quitter le groupe ?
+                <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="" />
+                <input type='hidden' id="quitter_idviré" name='idViré' value="" />
+                <div id="pop up virer">
+                  Etes-vous sûr de vouloir quitter le groupe ?
+                </div>
               </section>
               <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Quitter le groupe</button>
+                <button type="submit" class="button is-success">Valider</button>
                 <button onclick="quitterGroupeClose(); return false;" class="button">Rester</button>
               </footer>
             </form>

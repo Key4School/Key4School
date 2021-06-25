@@ -198,9 +198,9 @@ def virerParticipant():
             groupe.supprUser(ObjectId(request.form['idViré']))
 
             if request.form['idViré'] == session['id']:
-                return redirect(url_for('page_messages'))
+                return 'reload msg'
             else:
-                return redirect(url_for('page_messages', idGroupe=request.form['idViréGrp']))
+                return 'reload grp'
         else:
             return redirect(url_for('page_messages'))
     else:

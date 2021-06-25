@@ -722,15 +722,23 @@ function quitterGroupe(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      document.location.href = '/messages';
+      if (response == 'reload msg'){
+        document.location.href = '/messages';
+      }else {
+        location.reload();
+      }
     },
   });
 }
 
-function quitterGroupeOpen(grpID, userID) {
+function quitterGroupeOpen(grpID, userID, id) {
   $("#quitterGroupe").addClass("is-active");
-
-  document.getElementById('quitter_idviréGrp').value = grpID;
+  if (userID == id){
+    document.getElementById('pop up virer').innerHTML = "Etes-vous sûr de vouloir quitter le groupe ?";
+  } else {
+    document.getElementById('pop up virer').innerHTML = "Etes-vous sûr de vouloir enlever ce participant ?";
+  }
+  document.getElementById('quitter_idViréGrp').value = grpID;
   document.getElementById('quitter_idviré').value = userID;
 }
 
