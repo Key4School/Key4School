@@ -52,7 +52,7 @@ def administration():
                         for content in user.sign:
                             utilisateurs[str(content)].addXpModeration(5)
                             sanction = utilisateurs[str(content)].toDict()['Sanctions']
-                            sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
+                            sanction.append({"SanctionType": "Aucune", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
                             utilisateurs[str(content)].update()
                     user.sign = []
                     user.motif = []
@@ -64,7 +64,7 @@ def administration():
                     auteur.addXpModeration(5)
                     auteur.addXP(-15)
                     sanction = auteur.toDict()['Sanctions']
-                    sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
+                    sanction.append({"SanctionType": "Réponse supprimée", "SanctionMotif": request.form['motif'], "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
                     auteur.update()
 
                     demande.reponses_associees.pop(request.form['idSuppr'])
@@ -86,7 +86,9 @@ def administration():
                     sign =  demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign']
                     if request.form['motif'] == "abusif":
                         for content in sign :
+                                sanction = utilisateurs[str(content)].toDict()['Sanctions']
                                 utilisateurs[str(content)].addXpModeration(5)
+                                sanction.append({"SanctionType": "Aucune", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
                     demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign'].clear()
                     demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['motif'].clear()
                     for i in range(len(signDemande)):

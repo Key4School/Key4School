@@ -92,6 +92,11 @@
 
   <!-- Div pour les filtres -->
   {% include 'filtres.html' with context %}
+  {% if demandes == [] %}
+  <div>
+    test
+  </div>
+  {%else%}
 
   <h1 style="font-weight: bolder; font-size: x-large; text-align: center;">Vos demandes enregistrées :</h1>
 
@@ -107,7 +112,7 @@
     </div>
     <div class="column" style="padding: 0;"></div>
   </div>
-
+  {%endif%}
   <!-- fin de l'espace des publication -->
 
 </body>
