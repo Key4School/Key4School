@@ -1,6 +1,6 @@
-CTL 2021 : Key4School
+# CTL 2021 : Key4School
 
-I Introduction :
+## I Introduction :
 
 Notre volonté est de réunir les lycéens sur un réseau social centré sur l'entre-aide et le partage de la connaissance.
 Pour cela celui-ci est divisé en deux parties : une partie forum destinée à l'échange entre tous les élèves de la région,
@@ -12,7 +12,7 @@ groupe classe permettant une communication plus aisée entre élèves.
 
 
 
-II Répartition du site :
+## II Répartition du site :
 
 * page d'accueil : https://key4school.herokuapp.com/
 * page de messages privés : https://key4school.herokuapp.com/messages/
@@ -117,7 +117,7 @@ Fonctionnalités par page :
 
 
 
-III Rôles dans le site :
+## III Rôles dans le site :
 
 * Rôles principaux:
 	* Utilisateur : Rôles de toute personne lambda, aucun droit particulier.
