@@ -1,6 +1,18 @@
 CTL 2021 : Key4School
 
-Répartition du site :
+I Introduction :
+
+	Notre volonté est de réunir les lycéens sur un réseau social centré sur l'entre-aide et le partage de la connaissance.
+	Pour cela celui-ci est divisé en deux parties : une partie forum destinée à l'échange entre tous les élèves de la région,
+	peut importe le lycée, l'académie ou le département, la seconde, les messages privés, étant plutôt concentrés sur l'échange avec des
+	personnes proches. Notre site se veut cependant concentré sur l'école : les demandes d'aides sont faites par matière et le but et de rester
+	le plus possible sur des sujets en lien avec le lycée. Cependant la partie messages privés et beaucoup plus libre. On peut discuter avec
+	les personnes de son choix sur les thèmes que l'on veut. Le côté scolaire de cette partie du site étant assuré par la création automatique de
+	groupe classe permettant une communication plus aisée entre élèves.
+
+
+
+II Répartition du site :
 
 page d'accueil : https://key4school.herokuapp.com/
 page de messages privés : https://key4school.herokuapp.com/messages/
@@ -52,6 +64,7 @@ Fonctionnalités par page :
 				icône "microphone" : enregistrement de messages vocaux avec possibilité de l'envoyer ou de le supprimer.
 
 	page de profil :
+
 		page personnelle :
 			Affichage des informations personnelles.
 			Possibilité de modifier sa photo de profil.
@@ -69,3 +82,61 @@ Fonctionnalités par page :
 			Voir si la personne est Administrateur.
 
 	page de demandes enregistrées :
+
+		Affichage de toutes les demandes enregistrés par l'utilisateur afin de les retrouver plus vite.
+		Demande d'aides : affichage du titre, de l'auteur, de la date de mise en ligne, de la matière, du contenu avec les pièces jointes si besoin,
+			du nombre de likes, de commentaires.
+
+	page de tutoriel :
+
+		Mini tutoriel en 6 points expliquant rapidement le fonctionnement du site.
+
+	page d'administration :
+
+		Page réservée aux administrateurs du site.
+		Possibilité de visualiser tous les demandes d'aide, les commentaires, les profils, les messages privées, les discussions signalés.
+		Possibilité de valider ou de supprimer chaque signalement.
+
+	page de recherche :
+
+		Accès via la barre de recherche.
+		Affichage de demandes d'aide par pertinance par rapport à la recherche.
+		Affichage de l'aperçu de quelques profils les plus pertinants avec possibilité d'en afficher plus.
+		Demande d'aides : affichage du titre, de l'auteur, de la date de mise en ligne, de la matière, du contenu avec les pièces jointes si besoin,
+			du nombre de likes, de commentaires.
+
+	page de question :
+
+		Page pour publier une demande d'aide.
+		Possibilité de mettre une pièce jointe (image ou pdf).
+		Mise en page de manière à donner un aperçu de la demande.
+
+	page de commentaire :
+
+		Affichage en haut de la demande d'aide avec toutes ses informations.
+		Champ de réponse pour poster un commentaire.
+		Affichage de tous les commentaires par date de publication.
+		Possibilité de liker ou de signaler un commentaire.
+
+
+
+III Rôles dans le site :
+
+	Rôles principaux:
+		Utilisateur : Rôles de toute personne lambda, aucun droit particulier.
+		Administrateur du site : Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié. A accès à la page modération.
+			Peut valider ou supprimer tous les signalements. Peut sanctionner tout utilisateur.
+
+			Sanctions :
+				Mode Spectateur sur tout le site
+				Mode Spectateur sur le forum
+				Mode Spectateur sur les messages privés
+				Interdiction de modifier le profil
+				Réinitialisation du profil 
+
+
+	Rôles scolaires :
+		Elève :
+		Enseignant :
+
+	Rôles dans les discussions privés :
