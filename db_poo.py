@@ -635,9 +635,15 @@ class Groupe(Actions):
         return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe and message.sign != []], key=lambda message: message['date-envoi'])
 
     def getLastMessage(self):
-        l = sorted([message.toDictLast() for id, message in messages.items(
-        ) if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
+        l = sorted([message.toDictLast() for id, message in messages.items()
+        if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
         return l[-1] if len(l) > 0 else None
+
+    def getNbNotif(self, uid):
+        if uid != None:
+            return len([notif for notif in notifications.values() if notif.type == 'msg' and notif.id_groupe == self._id and uid in notif.destinataires])
+        else:
+            return None
 
     def toDict(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
@@ -649,6 +655,7 @@ class Groupe(Actions):
             'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
             'nbUtilisateurs': len(self.id_utilisateurs),
             'lastMsg': self.getLastMessage(),
+            'nbNotif': self.getNbNotif(ObjectId(session['id']) if session != None else None),
             'moderateurs': self.moderateurs,
             'modos': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.moderateurs],
             'sign': self.sign,
