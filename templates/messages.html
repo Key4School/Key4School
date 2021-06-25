@@ -184,37 +184,42 @@
           <tbody>
             <!-- div pour le groupe -->
             {%for content in grpUtilisateur%}
-            <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['_id']}}"
-              data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
-              <td>
-                <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
-                  <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
-                    <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
-                    {% if not content['is_DM'] %}
-                      {{content['nom']}}
-                    {% else %}
-                      {% for u in content['utilisateurs'] %}
-                        {% if u['_id'] != sessionId %}
-                          » {{u['pseudo']}}
-                        {% endif %}
-                      {% endfor %}
-                    {% endif %}
-                    <br />
-                    {%if content['lastMsg']!=None%}
-                    <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
-                      {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
-                      Message Vocal
-                      {%else%}
-                      {{content['lastMsg']['contenu']}}
+              <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['_id']}}"
+                data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
+                <td>
+                  <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
+                    <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px; display: table-row;">
+                      <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
+                      {% if not content['is_DM'] %}
+                        {{content['nom']}}
+                      {% else %}
+                        {% for u in content['utilisateurs'] %}
+                          {% if u['_id'] != sessionId %}
+                            » {{u['pseudo']}}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                      <br />
+                      {%if content['lastMsg']!=None%}
+                      
+                      <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
+                        {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
+                          Message Vocal
+                        {%elif content['lastMsg']['image'] != '' %}
+                          <i class="fas fa-image"></i>{{content['lastMsg']['contenu']}}
+                        {%else%}
+                          {{content['lastMsg']['contenu']}}
+                        {%endif%}
+                      </i>
                       {%endif%}
-                    </i>
-                    {%endif%}
-                    <!-- </span> -->
-                  </div>
-                </a>
-              </td>
-            </tr>
-
+                      <!-- </span> -->
+                      {%if content['nbNotif'] > 0%}
+                        {{content['nbNotif']}}
+                      {%endif%}
+                    </div>
+                  </a>
+                </td>
+              </tr>
             {%endfor%}
         </table>
       </div>
@@ -330,6 +335,7 @@
                     <div style="flex-direction: column;align-items: flex-end;">
                       <div class="navbar-item">
                         {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                          <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">Virer</button>
                         {%if users['_id'] in infogroupe['moderateurs']%}
                         <button class="button is-warning is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
                           <span class="icon is-small">
@@ -561,12 +567,14 @@
             </header>
             <form onsubmit="quitterGroupe(event); return false;" id="quitterGroupeForm" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="{{idgroupe}}" />
-                <input type='hidden' id="quitter_idviré" name='idViré' value="{{sessionId}}" />
-                Etes-vous sûr de vouloir quitter le groupe ?
+                <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="" />
+                <input type='hidden' id="quitter_idviré" name='idViré' value="" />
+                <div id="pop up virer">
+                  Etes-vous sûr de vouloir quitter le groupe ?
+                </div>
               </section>
               <footer class="modal-card-foot">
-                <button type="submit" class="button is-success">Quitter le groupe</button>
+                <button type="submit" class="button is-success">Valider</button>
                 <button onclick="quitterGroupeClose(); return false;" class="button">Rester</button>
               </footer>
             </form>
@@ -643,7 +651,7 @@
         {% endif %}
 
         </div>
-        <div id="divrepmsg" style="padding:0.5%;width:100%;display:none;align-items: center;width: 100%;">
+        <div id="divrepmsg" style="padding:0.5%;width:100%;display:none;align-items: center;width: 100%; position: absolute;">
           <div style="width: 95%;" id='champReponse'></div>&nbsp;&nbsp;
           <button onclick="enleverRep()" id="buttonRep" style="display:none;background-color:{{session['couleur'][3]}};border: 0px solid {{session['couleur'][0]}}" class="icon is-medium logoBouton">
             <i class="fas fa-times"></i>
@@ -660,7 +668,14 @@
               <input type='hidden' name="group" value="{{idgroupe}}" id="idGroupe" />
               <input type="hidden" name="idUser" id="idUser" value="{{sessionId}}" />
               <input type='hidden' id='reponse' name='reponse' value="None" />
-              <button style="background-color:white;border: 0px solid white;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
+              <button style="background-color:white;border: 0px solid white; position: relative;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
+              <div style="position: relative; width: 30px; cursor: pointer;">
+                <div style="position: absolute; width: 30px; height: 30px; overflow: hidden; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                  <i id="uploadImageIcon" class="fas fa-file-image" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer;"></i>
+                  <i id="resetImageIcon" class="fas fa-trash-alt" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; display: none;" onclick="resetImage();"></i>
+                  <input type='file' name="image" id="inputImage" accept="image/*" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;" onchange="imageUploaded();" />
+                </div>
+              </div>
             </form>
             <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;" onClick="enregistrerTel()">
               <i class="fas fa-microphone" style="font-size: 20px;"></i>

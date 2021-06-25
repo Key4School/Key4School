@@ -70,16 +70,7 @@ def postMsg(json):
                     else:
                         reponse = "None"
 
-                    if 'dateAudio' in json:
-                        nom = "MsgVocal" + json['room'] + session['id'] + json['dateAudio']
-
-                        _id = ObjectId()
-                        messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
-                                    "contenu": nom, "date-envoi": datetime.now(), "audio": True, "reponse": reponse, "sign": []})
-                        messages[str(_id)].insert()
-                        message = messages[str(_id)].toDict()
-
-                    elif not json['contenuMessage'] == '':
+                    if not json['contenuMessage'] == '':
                         _id = ObjectId()
                         messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
                                                           "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []})

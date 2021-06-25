@@ -28,7 +28,7 @@ DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9
 # Routing
 from routing.accueil import accueil, accueil2, tuto, XP_tuto, saved
 from routing.recherche import recherche, recherche_user, morePost, moreUser
-from routing.messages import page_messages, redirectDM, uploadAudio, audio, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg
+from routing.messages import page_messages, redirectDM, uploadAudio, audio, uploadImage, image, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
 from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
 from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, likePost, likeRep, resoudre, savePost
@@ -43,6 +43,8 @@ app.add_url_rule('/moreMsg/', 'moreMsg', moreMsg, methods=['POST'])
 app.add_url_rule('/messages/', 'page_messages', page_messages, defaults={'idGroupe': None})
 app.add_url_rule('/messages/<idGroupe>/', 'page_messages', page_messages)
 app.add_url_rule('/redirectDM/<idUser1>/<idUser2>/', 'redirectDM', redirectDM)
+app.add_url_rule('/uploadImage/', 'uploadImage', uploadImage, methods=['POST'])
+app.add_url_rule('/image/<imageName>/', 'image', image)
 app.add_url_rule('/uploadAudio/', 'uploadAudio', uploadAudio, methods=['POST'])
 app.add_url_rule('/audio/<audioName>/', 'audio', audio)
 app.add_url_rule('/suppressionMsg/', 'suppressionMsg', suppressionMsg, methods=['POST'])

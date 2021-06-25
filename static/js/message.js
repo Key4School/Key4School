@@ -68,14 +68,53 @@ function divoptionclose(e) {
 }
 
 function envoi(e) {
+  if (document.getElementById('inputImage').files.length > 0) {
+    sendImage();
+    return;
+  }
+    
   const contenuMsg = document.getElementById('inputMsg').value || '';
-  const reponse = document.getElementById('reponse').value || '';
+  const reponse = document.getElementById('reponse').value || 'None';
 
-  socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, reponse: reponse});
+  if(contenuMsg !== '')
+    socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, reponse: reponse});
 
   $('#messageForm').trigger("reset");
   enleverRep();
+  resetImage();
   scroll();
+}
+
+function imageUploaded() {
+  document.getElementById('inputImage').style.display = 'none';
+  document.getElementById('uploadImageIcon').style.display = 'none';
+  document.getElementById('resetImageIcon').style.display = 'inline-block';
+}
+
+function resetImage() {
+  console.lo
+  document.getElementById('inputImage').value = '';
+  document.getElementById('inputImage').style.display = 'block';
+  document.getElementById('uploadImageIcon').style.display = 'inline-block';
+  document.getElementById('resetImageIcon').style.display = 'none';
+}
+
+function sendImage() {
+  var formImage = new FormData(document.getElementById('messageForm'));
+  $.ajax({
+    url: "/uploadImage/",
+    type: "POST",
+    data: formImage,
+    processData: false,
+    contentType: false,
+    cache: false,
+    success: function() {
+      $('#messageForm').trigger("reset");
+      enleverRep();
+      resetImage();
+      scroll();
+    }
+  });
 }
 
 
@@ -134,10 +173,13 @@ socket.on('newMsg', (data) => {
 
 $(window).data('ajaxready', true);
 
+var lastScrollTop = $('#messages').scrollTop();
 $('#messages').scroll(function() {
   if ($(window).data('ajaxready') == false) return;
 
-  if ($('#messages').scrollTop() <= 300) {
+  var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
+  var scrollTop = $('#messages').scrollTop();
+  if (scrollTop < lastScrollTop) {
 
     $(window).data('ajaxready', false);
     $.ajax({
@@ -155,6 +197,7 @@ $('#messages').scroll(function() {
       }
     });
   }
+  lastScrollTop = scrollTop;
 });
 
 function reponseMsg(nb) {
@@ -163,7 +206,7 @@ function reponseMsg(nb) {
   var pseudo = document.getElementById('user' + nb).value;
   repmsg = document.getElementById('messageForm');
   document.getElementById('divrepmsg').style.backgroundColor = couleur_deux;
-  document.getElementById('messages').style.height = "65%";
+  //document.getElementById('messages').style.height = "65%";
   document.getElementById('champReponse').innerHTML =
   "<div style='background-color:"+ couleur_deux +";padding:0.5%;padding-left:2%;border-left:4px solid "+ couleur_un +";border-radius:7px;'>"
    + pseudo +
@@ -174,12 +217,13 @@ function reponseMsg(nb) {
   idMsg = "None";
   contentMsg = "";
   document.getElementById('buttonRep').style.display = "block";
+  document.getElementById('divrepmsg').style.top = `calc(100% - ${(parseInt(window.getComputedStyle(document.getElementById('nav'), null).getPropertyValue('height').replace(/px/, '')) + 20).toString() + 'px'})`;
   $('#inputMsg').focus();
 }
 
 function enleverRep() {
   document.getElementById('divrepmsg').style.display = "none";
-  document.getElementById('messages').style.height = "80%";
+  //document.getElementById('messages').style.height = "80%";
   document.getElementById('champReponse').innerHTML = "";
   document.getElementById('reponse').value = "None";
   document.getElementById('buttonRep').style.display = "none";
@@ -364,10 +408,9 @@ function stopTel(but) {
 
 function sendAudio() {
   if (estEnregistre = true) {
-    var datetime = new Date().toISOString().replace(/Z/, '+00:00');
-    form.append('date', datetime);
+    const reponse = document.getElementById('reponse').value || 'None';
     form.append('group', idGroupe);
-    console.log(form);
+    form.append('reponse', reponse);
     $.ajax({
       url: "/uploadAudio/",
       type: "POST",
@@ -376,10 +419,10 @@ function sendAudio() {
       contentType: false,
       cache: false,
       success: function() {
-        socket.emit('postMsg', {room: idGroupe, reponse: 'None', dateAudio: datetime});
         form = new FormData();
         estEnregistre = false;
         boutonAudioClose();
+        enleverRep();
         document.getElementById('txtAudio').innerHTML = "";
         scroll();
       }
@@ -408,6 +451,123 @@ function boutonAudioClose() {
     document.getElementById('txtAudio').innerHTML = "";
   }
 }
+
+function changeRate(id) {
+  myaudio=document.getElementById("audio"+id);
+  if (myaudio.playbackRate==2){
+    myaudio.playbackRate=1;
+    document.getElementById("buttonAudio"+id).innerHTML = "1x";
+  }else if(myaudio.playbackRate==1){
+    myaudio.playbackRate=1.5;
+    document.getElementById("buttonAudio"+id).innerHTML = "1.5x";
+  }else if(myaudio.playbackRate==1.5){
+    myaudio.playbackRate=2;
+    document.getElementById("buttonAudio"+id).innerHTML = "2x";
+  }
+}
+
+
+
+
+  // const playIconContainer = document.getElementById('play-icon');
+  // const audioPlayerContainer = document.getElementById('audio-player-container');
+  // const seekSlider = document.getElementById('seek-slider');
+  // const audio = document.querySelector('audio');
+  // let playState = 'pause';
+  //
+  // playIconContainer.removeAttribute('onclick');
+  //
+  //
+  // playIconContainer.addEventListener('click', () => {
+  //     if(playState === 'play') {
+  //         audio.pause();
+  //         cancelAnimationFrame(raf);
+  //         playState = 'pause';
+  //         playIconContainer.innerHTML = "play";
+  //     } else {
+  //         audio.play();
+  //         requestAnimationFrame(whilePlaying);
+  //         playState = 'play';
+  //         playIconContainer.innerHTML = "pause";
+  //     }
+  // });
+  //
+  //
+  //
+  // const showRangeProgress = (rangeInput) => {
+  //     if(rangeInput === seekSlider) audioPlayerContainer.style.setProperty('--seek-before-width', rangeInput.value / rangeInput.max * 100 + '%');
+  // }
+  //
+  // seekSlider.addEventListener('input', (e) => {
+  //     showRangeProgress(e.target);
+  // });
+  //
+  // const durationContainer = document.getElementById('duration');
+  // const currentTimeContainer = document.getElementById('current-time');
+  // let raf = null;
+  //
+  // const calculateTime = (secs) => {
+  //     const minutes = Math.floor(secs / 60);
+  //     const seconds = Math.floor(secs % 60);
+  //     const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+  //     return `${minutes}:${returnedSeconds}`;
+  // }
+  //
+  // const displayDuration = () => {
+  //     durationContainer.textContent = calculateTime(audio.duration);
+  // }
+  //
+  // const setSliderMax = () => {
+  //     seekSlider.max = Math.floor(audio.duration);
+  // }
+  //
+  // const displayBufferedAmount = () => {
+  //     const bufferedAmount = Math.floor(audio.buffered.end(audio.buffered.length - 1));
+  //     audioPlayerContainer.style.setProperty('--buffered-width', `${(bufferedAmount / seekSlider.max) * 100}%`);
+  // }
+  //
+  // const whilePlaying = () => {
+  //     seekSlider.value = Math.floor(audio.currentTime);
+  //     currentTimeContainer.textContent = calculateTime(seekSlider.value);
+  //     audioPlayerContainer.style.setProperty('--seek-before-width', `${seekSlider.value / seekSlider.max * 100}%`);
+  //     raf = requestAnimationFrame(whilePlaying);
+  // }
+  //
+  // if (audio.readyState > 0) {
+  //     displayDuration();
+  //     setSliderMax();
+  //     displayBufferedAmount();
+  // } else {
+  //     audio.addEventListener('loadedmetadata', () => {
+  //         displayDuration();
+  //         setSliderMax();
+  //         displayBufferedAmount();
+  //     });
+  // }
+  //
+  // audio.addEventListener('progress', displayBufferedAmount);
+  //
+  // seekSlider.addEventListener('input', () => {
+  //     currentTimeContainer.textContent = calculateTime(seekSlider.value);
+  //     if(!audio.paused) {
+  //         cancelAnimationFrame(raf);
+  //     }
+  // });
+  //
+  // seekSlider.addEventListener('change', () => {
+  //     audio.currentTime = seekSlider.value;
+  //     if(!audio.paused) {
+  //         requestAnimationFrame(whilePlaying);
+  //     }
+  // });
+  //
+  // audio.addEventListener("ended", function(){
+  //      audio.currentTime = 0;
+  //      playState = 'pause';
+  //      playIconContainer.innerHTML = "play";
+  // });
+// }
+
 
 function signalisationDiscussion() {
   selectionSign = document.getElementById("sign").className
@@ -582,15 +742,23 @@ function quitterGroupe(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      document.location.href = '/messages';
+      if (response == 'reload msg'){
+        document.location.href = '/messages';
+      }else {
+        location.reload();
+      }
     },
   });
 }
 
-function quitterGroupeOpen(grpID, userID) {
+function quitterGroupeOpen(grpID, userID, id) {
   $("#quitterGroupe").addClass("is-active");
-
-  document.getElementById('quitter_idviréGrp').value = grpID;
+  if (userID == id){
+    document.getElementById('pop up virer').innerHTML = "Etes-vous sûr de vouloir quitter le groupe ?";
+  } else {
+    document.getElementById('pop up virer').innerHTML = "Etes-vous sûr de vouloir enlever ce participant ?";
+  }
+  document.getElementById('quitter_idViréGrp').value = grpID;
   document.getElementById('quitter_idviré').value = userID;
 }
 
@@ -621,7 +789,7 @@ function supprimerGroupeClose() {
 
 function updateGroupName() {
   const newGrpName = document.getElementById('newGrpName').value.trim();
-  
+
   if(newGrpName !== '') {
     document.querySelector(`.listedGrp[data-grpid="${idGroupe}"] .grpName`).innerHTML = newGrpName;
     document.querySelector(`.listedGrp[data-grpid="${idGroupe}"]`).dataset.grpname = newGrpName;

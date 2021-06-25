@@ -450,7 +450,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
             'matière': self.translate_matiere_spes_options_lv([self.matiere]),
             'likes': self.likes,
             'nb-likes': len(self.likes),
-            'réponses associées': [r.toDict() for r in self.reponses_associees.values()],
+            'réponses associées': sorted([r.toDict() for r in self.reponses_associees.values()], key=lambda r: r['nb-likes'], reverse=True),
             'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
             'reponsesDict2': {idRep: rep for (idRep, rep) in self.reponses_associees.items()},
             'reponsesObjects': self.reponses_associees,
@@ -537,12 +537,21 @@ class Message(Actions):
         self.date_envoi = params['date-envoi']
         self.reponse = params['reponse']
         self.audio = params.get('audio', False)
+        self.image = params.get('image', '')
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
 
         self.db_table = DB.db_messages
 
     def suppr(self) -> None:
+        if self.audio == 'True':
+            MyAudio = DB.db_files.find_one({'filename': self.contenu})
+            DB.db_files.delete_one({'_id': MyAudio['_id']})
+            DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
+        if self.image != '':
+            MyAudio = DB.db_files.find_one({'filename': self.image})
+            DB.db_files.delete_one({'_id': MyAudio['_id']})
+            DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
         self.delete()
         messages.pop(str(self._id))
         return
@@ -556,6 +565,7 @@ class Message(Actions):
             'contenu': self.contenu,
             'date-envoi': self.date_envoi,
             'audio': self.audio,
+            'image': self.image
         }
 
     def toDict(self) -> dict:
@@ -574,6 +584,7 @@ class Message(Actions):
             'reponse': self.reponse,
             'rep': rep,
             'audio': self.audio,
+            'image': self.image,
             'sign': self.sign,
             'motif': self.motif
         }
@@ -587,6 +598,7 @@ class Message(Actions):
             'date-envoi': self.date_envoi,
             'reponse': self.reponse,
             'audio': self.audio,
+            'image': self.image,
             'sign': self.sign,
             'motif': self.motif
         }
@@ -635,9 +647,15 @@ class Groupe(Actions):
         return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe and message.sign != []], key=lambda message: message['date-envoi'])
 
     def getLastMessage(self):
-        l = sorted([message.toDictLast() for id, message in messages.items(
-        ) if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
+        l = sorted([message.toDictLast() for id, message in messages.items()
+        if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
         return l[-1] if len(l) > 0 else None
+
+    def getNbNotif(self, uid):
+        if uid != None:
+            return len([notif for notif in notifications.values() if notif.type == 'msg' and notif.id_groupe == self._id and uid in notif.destinataires])
+        else:
+            return None
 
     def toDict(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
@@ -649,6 +667,7 @@ class Groupe(Actions):
             'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
             'nbUtilisateurs': len(self.id_utilisateurs),
             'lastMsg': self.getLastMessage(),
+            'nbNotif': self.getNbNotif(ObjectId(session['id']) if session != None else None),
             'moderateurs': self.moderateurs,
             'modos': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.moderateurs],
             'sign': self.sign,
