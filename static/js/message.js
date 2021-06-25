@@ -409,6 +409,20 @@ function boutonAudioClose() {
   }
 }
 
+function changeRate(id) {
+  myaudio=document.getElementById("audio"+id);
+  if (myaudio.playbackRate==2){
+    myaudio.playbackRate=1;
+    document.getElementById("buttonAudio"+id).innerHTML = "1x";
+  }else if(myaudio.playbackRate==1){
+    myaudio.playbackRate=1.5;
+    document.getElementById("buttonAudio"+id).innerHTML = "1.5x";
+  }else if(myaudio.playbackRate==1.5){
+    myaudio.playbackRate=2;
+    document.getElementById("buttonAudio"+id).innerHTML = "2x";
+  }
+}
+
 function signalisationDiscussion() {
   selectionSign = document.getElementById("sign").className
   if (selectionSign == "far fa-flag") {
@@ -621,7 +635,7 @@ function supprimerGroupeClose() {
 
 function updateGroupName() {
   const newGrpName = document.getElementById('newGrpName').value.trim();
-  
+
   if(newGrpName !== '') {
     document.querySelector(`.listedGrp[data-grpid="${idGroupe}"] .grpName`).innerHTML = newGrpName;
     document.querySelector(`.listedGrp[data-grpid="${idGroupe}"]`).dataset.grpname = newGrpName;

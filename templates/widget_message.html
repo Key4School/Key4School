@@ -84,7 +84,7 @@
   {%endif%}
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}
-      <audio controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio>
+      <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button>
       {%else%}
       {{content['contenu']}}
       {%endif%}
