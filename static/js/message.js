@@ -134,10 +134,13 @@ socket.on('newMsg', (data) => {
 
 $(window).data('ajaxready', true);
 
+var lastScrollTop = $('#messages').scrollTop();
 $('#messages').scroll(function() {
   if ($(window).data('ajaxready') == false) return;
 
-  if ($('#messages').scrollTop() <= 300) {
+  var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
+  var scrollTop = $('#messages').scrollTop();
+  if (scrollTop > lastScrollTop && scrollTop < scrollHeight) {
 
     $(window).data('ajaxready', false);
     $.ajax({
@@ -155,6 +158,7 @@ $('#messages').scroll(function() {
       }
     });
   }
+  lastScrollTop = st;
 });
 
 function reponseMsg(nb) {
