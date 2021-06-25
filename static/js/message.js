@@ -68,18 +68,35 @@ function divoptionclose(e) {
 }
 
 function envoi(e) {
-  if (document.getElementById('inputImage').files.length > 0){
+  if (document.getElementById('inputImage').files.length > 0) {
     sendImage();
     return;
   }
+    
   const contenuMsg = document.getElementById('inputMsg').value || '';
   const reponse = document.getElementById('reponse').value || 'None';
 
-  socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, reponse: reponse});
+  if(contenuMsg !== '')
+    socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, reponse: reponse});
 
   $('#messageForm').trigger("reset");
   enleverRep();
+  resetImage();
   scroll();
+}
+
+function imageUploaded() {
+  document.getElementById('inputImage').style.display = 'none';
+  document.getElementById('uploadImageIcon').style.display = 'none';
+  document.getElementById('resetImageIcon').style.display = 'inline-block';
+}
+
+function resetImage() {
+  console.lo
+  document.getElementById('inputImage').value = '';
+  document.getElementById('inputImage').style.display = 'block';
+  document.getElementById('uploadImageIcon').style.display = 'inline-block';
+  document.getElementById('resetImageIcon').style.display = 'none';
 }
 
 function sendImage() {
@@ -93,6 +110,8 @@ function sendImage() {
     cache: false,
     success: function() {
       $('#messageForm').trigger("reset");
+      enleverRep();
+      resetImage();
       scroll();
     }
   });
