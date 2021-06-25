@@ -206,7 +206,7 @@ function reponseMsg(nb) {
   var pseudo = document.getElementById('user' + nb).value;
   repmsg = document.getElementById('messageForm');
   document.getElementById('divrepmsg').style.backgroundColor = couleur_deux;
-  document.getElementById('messages').style.height = "65%";
+  //document.getElementById('messages').style.height = "65%";
   document.getElementById('champReponse').innerHTML =
   "<div style='background-color:"+ couleur_deux +";padding:0.5%;padding-left:2%;border-left:4px solid "+ couleur_un +";border-radius:7px;'>"
    + pseudo +
@@ -217,12 +217,13 @@ function reponseMsg(nb) {
   idMsg = "None";
   contentMsg = "";
   document.getElementById('buttonRep').style.display = "block";
+  document.getElementById('divrepmsg').style.top = `calc(100% - ${(parseInt(window.getComputedStyle(document.getElementById('nav'), null).getPropertyValue('height').replace(/px/, '')) + 20).toString() + 'px'})`;
   $('#inputMsg').focus();
 }
 
 function enleverRep() {
   document.getElementById('divrepmsg').style.display = "none";
-  document.getElementById('messages').style.height = "80%";
+  //document.getElementById('messages').style.height = "80%";
   document.getElementById('champReponse').innerHTML = "";
   document.getElementById('reponse').value = "None";
   document.getElementById('buttonRep').style.display = "none";
