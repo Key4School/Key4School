@@ -193,16 +193,11 @@
         });
       </script>
       {%elif content['image'] != '' %}
-<<<<<<< HEAD
       <a target="blank" href="{{url_for('image', imageName=content['image'])}}"><img src="{{url_for('image', imageName=content['image'])}}" style="width: 300px; height: auto; "/><br></a>
       {{content['contenu']}}
-=======
-        <a target="blank" href="{{url_for('image', imageName=content['image'])}}"><img src="{{url_for('image', imageName=content['image'])}}" style="width: 200px; height: auto; "/><br></a>
-        {{content['contenu']}}
->>>>>>> 48cc521c301629c846dfb0f9f2a6c8adcbf7f0a2
       {%else%}
         {{content['contenu']|safe}}
-      {%endif%}      
+      {%endif%}
       <!--On affiche le contenu du message -->
     </p>
     <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
