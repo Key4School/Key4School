@@ -30,7 +30,7 @@ var data = [
   {
     'texte': "Accessibles en haut à droite de votre écran, elles vous indiquent si vous avez un nouveau message ou si quelqu’un a répondu à une de vos questions / une question que vous avez enregistrée.",
     'titre': "6. Notifications",
-    'lien': "/accueil/"
+    'lien': "/"
   },
   {
     'texte': "Accessible depuis le menu déroulant, il vous permet de renseigner vos informations comme votre pseudo, vos langues vivantes, options et spécialités. Vous pouvez également ajouter une photo de profil ou ajouter des moyens de contact en décidant bien évidemment de les rendre publiques ou non. Vous y retrouverez aussi vos questions posées. Nous vous invitons à le compléter dès votre première visite !",
@@ -45,7 +45,7 @@ var data = [
   {
     'texte': "Afin de profiter d’une expérience agréable sur key4school, nous vous demandons de toujours rester courtois et bienveillant. Sachez qu’il existe un système d’auto-modération qui concerne les questions et leurs réponses, il est également possible de l’activer dans n’importe quel groupe de messages dans les paramètres de celui-ci. Dans tous les cas, si vous remarquez quelque chose qui est déplacé et ne devrait pas se trouvez sur key4school, vous pouvez le signaler et des sanctions peuvent être prises.",
     'titre': "9. Veiller au bon déroulement de votre passage sur key4school",
-    'lien': "/accueil/"
+    'lien': "/"
   }
 ]
 
