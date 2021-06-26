@@ -277,7 +277,7 @@ def connexion():
                 groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
                 groupes[str(_id)].insert()
 
-            return redirect(url_for('profil'))
+            return redirect(url_for('tuto'))
 
         elif data['type'] == 'ENSEIGNANT':
             pseudo = (data['username'].lower()).replace(' ', '_')
@@ -303,7 +303,7 @@ def connexion():
             session['type'] = user['type']
             session['cacheRandomKey'] = cacheRandomKey
 
-            return redirect(url_for('profil'))
+            return redirect(url_for('tuto'))
 
         else:
             return redirect("https://ent.iledefrance.fr/timeline/timeline")
