@@ -121,7 +121,12 @@ groupe classe permettant une communication plus aisée entre élèves.
 
 * Rôles principaux:
 	* Utilisateur : Rôles de toute personne lambda, aucun droit particulier.
-	* Administrateur du site : Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié. A accès à la page modération. Peut valider ou supprimer tous les signalements. Peut sanctionner tout utilisateur.
+	* Administrateur du site : 
+		* Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié. 
+		* A accès à la page modération. 
+		* Peut valider ou supprimer tous les signalements. 
+		* Peut sanctionner tout utilisateur.
+		* A accès au "casier judiciaire" de l'utilisateur ( historique de ses sanctions).
 
 * Sanctions :
 	* Mode Spectateur sur tout le site
@@ -176,9 +181,13 @@ groupe classe permettant une communication plus aisée entre élèves.
 		* Plus de 3000 mots et expressions  bannis.
 		* Effectif sur tout les inputs publiques.
 		* Pas d'implémentation sur les messages privés afin de garder un côté décontracté.
+* Frontend :
 	* Site responsive :
 		* l'entièreté du site est responsive.
 		* Adapté pour téléphone.
+* User Experience :
+	* Système d'xp.
+	* De nombreux thèmes sont à venir (Notamment thème de saison et par matière). Ils seront déblocable par niveau.
 
 
 ## V Probleme technique à régler :
