@@ -8,6 +8,5 @@ pymongo
 python-oauth2
 flask_socketio
 uuid
-threading
 functools
 re
