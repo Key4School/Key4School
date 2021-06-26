@@ -29,13 +29,15 @@
   		<br /><br/><br />
 			<h2 class="title">Comment ça marche ?</h2>
 
-			<progress id="progressTuto" class="progress is-info" value="1" max="6" style="width:60%; margin:auto;"></progress><br />
+			<progress id="progressTuto" class="progress is-info" value="1" max="9" style="width:60%; margin:auto;"></progress><br />
 			<div style="display:flex;align-items:center;justify-content:center;">
 		<i class="fas fa-caret-left logoNext"  onclick="precedent()"></i>
 		<div id="container" style="margin-bottom: 25px;">
-			<h3 id="titre" style="text-align:left;font-size:20px;font-weight:bold;">1. Accueil</h3>
+			<h3 id="titre" style="text-align:left;font-size:20px;font-weight:bold;">1. Présentation</h3>
 			<p id="texte" style="font-size:19px;text-align:left;margin:2% 4%;">
-				Après votre première connexion sur le site vous trouverez, sur la page d'accueil, les dernières questions postées sur le site.
+				Bienvenue sur key4school ! Nous sommes ravis de votre arrivée !
+				key4school est un réseau social développé par 12 lycéens d’Ile de France a destination des lycéens. L’objectif est d’y trouver de l’aide et de s’entraider facilement.
+
 			</p>
 			<!-- <img style="width:75%;border: 2px solid {{session['couleur'][0]}};" id="image" src="{{url_for('static',filename='image/tuto/1.png')}}"> -->
 			<iframe scrolling="yes" id="iframTuto" style="width:90%; height:600px;" src="{{url_for('accueil')}}"></iframe>
