@@ -3,7 +3,7 @@ const favicon = new Favico({
   animation: 'popFade'
 });
 
-var nbNotifs = $('#notifContent > .notif').length;;
+var nbNotif = $('#notifContent > .notif').length;;
 
 function updateNotif() {
   nbNotif = $('#notifContent > .notif').length;
@@ -12,7 +12,7 @@ function updateNotif() {
     $('#nbNotif').css({
       'display': "block"
     });
-    $('#nbNotif').html(nbNotifs);
+    $('#nbNotif').html(nbNotif);
     $('#noNotif').css({
       'display': "none"
     });

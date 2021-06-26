@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
+from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
 from bson.objectid import ObjectId
+import os
 from db_poo import *
-from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif, Interval
 
 def question():
     global utilisateurs
@@ -115,9 +116,13 @@ def updateDemand():
 def file(fileName):
     if 'id' in session:
         return DB.cluster.send_file(fileName)
+
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
+def delete_file(path):
+    return os.remove(path)
 
 def likePost(idPost):
     global demandes_aide

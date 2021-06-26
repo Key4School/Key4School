@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
+from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
 from flask_pymongo import PyMongo
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from datetime import *
@@ -10,6 +10,8 @@ from bson import Binary
 import os
 import gridfs
 import smtplib
+from threading import Timer
+from functools import partial
 from uuid import uuid4
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -32,7 +34,7 @@ from routing.recherche import recherche, recherche_user, morePost, moreUser
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, uploadImage, image, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg, modererGrp
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
 from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
-from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, likePost, likeRep, resoudre, savePost
+from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, DL_file, likePost, likeRep, resoudre, savePost
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
 from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
 
@@ -69,6 +71,7 @@ app.add_url_rule('/comments/<idMsg>/', 'comments', comments, methods=['GET', 'PO
 app.add_url_rule('/updateDemand/', 'updateDemand', updateDemand, methods=['POST'])
 app.add_url_rule('/updateComment/', 'updateComment', updateComment, methods=['POST'])
 app.add_url_rule('/file/<fileName>/', 'file', file)
+app.add_url_rule('/DL_file/<fileName>/<fileType>/', 'DL_file', DL_file)
 app.add_url_rule('/recherche/', 'recherche', recherche)
 app.add_url_rule('/rechercheUser/', 'recherche_user', recherche_user)
 app.add_url_rule('/likePost/<idPost>/', 'likePost', likePost, methods=['POST'])
