@@ -85,11 +85,10 @@
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}
       <!-- <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button> -->
-      <div id="audio-player-container{{content['_id']}}" >
-        <p>Audio Player</p>
+      <div id="audio-player-container{{content['_id']}}" style="" >
         <audio id="audio{{content['_id']}}"  src="{{url_for('audio', audioName = content['contenu'])}}" type="audio/ogg" preload="metadata"></audio>
 
-        <button id="play-icon{{content['_id']}}" >play</button>
+        <button style="font-size:17px;border:transparent;background-color:transparent;" id="play-icon{{content['_id']}}" ><i class="fas fa-play"></i></button>
         <span id="current-time{{content['_id']}}" class="time">0:00</span>
         <input type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
         <span id="duration{{content['_id']}}" class="time">0:00</span>
@@ -100,21 +99,21 @@
         const playIconContainer{{content['_id']}} = document.getElementById('play-icon{{content['_id']}}');
         const audioPlayerContainer{{content['_id']}} = document.getElementById('audio-player-container{{content['_id']}}');
         const seekSlider{{content['_id']}} = document.getElementById('seek-slider{{content['_id']}}');
-        let playState{{content['_id']}} = 'pause';
+        let playState{{content['_id']}} = '<i class="fas fa-pause"></i>';
 
 
 
         playIconContainer{{content['_id']}}.addEventListener('click', () => {
-            if(playState{{content['_id']}} === 'play') {
+            if(playState{{content['_id']}} === '<i class="fas fa-play"></i>') {
                 audio{{content['_id']}}.pause();
                 cancelAnimationFrame(raf{{content['_id']}});
-                playState{{content['_id']}} = 'pause';
-                playIconContainer{{content['_id']}}.innerHTML = "play";
+                playState{{content['_id']}} = '<i class="fas fa-pause"></i>';
+                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play"></i>';
             } else {
                 audio{{content['_id']}}.play();
                 requestAnimationFrame(whilePlaying{{content['_id']}});
-                playState{{content['_id']}} = 'play';
-                playIconContainer{{content['_id']}}.innerHTML = "pause";
+                playState{{content['_id']}} = '<i class="fas fa-play"></i>';
+                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-pause"></i>';
             }
         });
 
@@ -189,12 +188,12 @@
 
         audio{{content['_id']}}.addEventListener("ended", function(){
              audio{{content['_id']}}.currentTime = 0;
-             playState{{content['_id']}} = 'pause';
-             playIconContainer{{content['_id']}}.innerHTML = "play";
+             playState{{content['_id']}} = '<i class="fas fa-pause"></i>';
+             playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play"></i>';
         });
       </script>
       {%elif content['image'] != '' %}
-      <a target="blank" href="{{url_for('image', imageName=content['image'])}}"><img src="{{url_for('image', imageName=content['image'])}}" style="width: 200px; height: auto; "/><br></a>
+      <a target="blank" href="{{url_for('image', imageName=content['image'])}}"><img src="{{url_for('image', imageName=content['image'])}}" style="width: 300px; height: auto; "/><br></a>
       {{content['contenu']}}
       {%else%}
       {{content['contenu']}}
