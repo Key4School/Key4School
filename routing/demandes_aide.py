@@ -121,6 +121,35 @@ def file(fileName):
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+def DL_file(fileName, fileType):
+    if 'id' in session:
+        fileBinaryObj = DB.cluster.send_file(fileName)
+        fileBinaryObj.freeze()
+        fileBinary = fileBinaryObj.get_data()
+
+        if fileType == 'image':
+            with open('static/temp/{}.png'.format(fileName), 'wb') as file:
+                file.write(fileBinary)
+
+            interval = Interval(2, delete_file, args=['static/temp/{}.png'.format(fileName)])
+            interval.start() 
+
+            return send_file('static/temp/{}.png'.format(fileName))
+        elif fileType == 'pdf':
+            with open('static/temp/{}.pdf'.format(fileName), 'wb') as file:
+                file.write(fileBinary)
+
+            interval = Interval(2, delete_file, args=['static/temp/{}.pdf'.format(fileName)])
+            interval.start() 
+
+            return send_file('static/temp/{}.pdf'.format(fileName))
+        else:
+            return ''
+
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
 def delete_file(path):
     return os.remove(path)
 
