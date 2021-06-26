@@ -195,6 +195,7 @@ groupes classes permettant une communication plus aisée entre élèves.
 	* Scroll infini	:
 		* Déploiment sur les discussions des messages privés et sur la page d'accueil et la page recherche pour les demandes d'aide.
 		* Optimisation des temps de chargement.
+	* Référencement 
 * Frontend :
 	* Site responsive :
 		* l'entièreté du site est responsive.
