@@ -7,8 +7,10 @@ const centerFilters = () => {
 		const diff = filtersContainerParent_size - filtersContainer_size;
 		const pos = diff / 2;
 
-		return filtersContainer.style.left = `${pos}px`;
+		filtersContainer.style.left = `${pos}px`;
 	}
+
+	return filtersContainer.style.transition = 'left .5s';
 };
 
 try {
@@ -22,8 +24,12 @@ const filters_slide = (direction) => {
 	const filtersContainer_size = parseInt(window.getComputedStyle(filtersContainer, null).getPropertyValue('width').replace(/px/, ''));
 	const filtersContainerParent_size = parseInt(window.getComputedStyle(filtersContainer.parentElement, null).getPropertyValue('width').replace(/px/, ''));
 
-	if(filtersContainerParent_size > filtersContainer_size)
-		return filtersContainer.style.left = '0px';
+	if(filtersContainerParent_size > filtersContainer_size) {
+		const diff = filtersContainerParent_size - filtersContainer_size;
+		const pos = diff / 2;
+
+		return filtersContainer.style.left = `${pos}px`;
+	}
 
 	if(direction === 'left') {
 		if(pos + 80 > 0)

@@ -24,7 +24,7 @@ groupe classe permettant une communication plus aisée entre élèves.
 * page de question : https://key4school.herokuapp.com/question/
 * page de commentaire : https://key4school.herokuapp.com/comments/idDuGroupe
 
-Fonctionnalités par page :
+### Fonctionnalités par page :
 
 * Page d'accueil :
 
@@ -137,5 +137,5 @@ Fonctionnalités par page :
 	* Enseignant : Dans les discussions privées, ils peuvent supprimer tous les messages des discussions dont ils font parti.
 
 * Rôles dans les discussions privés :
-	* participant : aucun droit particulier
-	* administrateur d'une discussion : peut ajouter et enlever des participants, changer le rôle des participants, peut supprimer le grp
+	* Participant : aucun droit particulier.
+	* Administrateur d'une discussion : peut ajouter et enlever des participants, changer le rôle des participants, peut supprimer le groupe.

@@ -208,7 +208,7 @@
                         {%elif content['lastMsg']['image'] != '' %}
                           <i class="fas fa-image"></i>{{content['lastMsg']['contenu']}}
                         {%else%}
-                          {{content['lastMsg']['contenu']}}
+                          {{content['lastMsg']['original-contenu']}}
                         {%endif%}
                       </i>
                       {%endif%}
@@ -309,6 +309,12 @@
                   </h3>
                 {%endif%}
                 <hr />
+                {% if infogroupe['is_mod'] %}
+                  <button id="infoGrpModeration" class="button is-primary is-light" {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe auto-modéré</button>
+                {% else %}
+                  <button id="infoGrpModeration" class="button is-primary is-light" {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe non auto-modéré</button>
+                {% endif %}
+                <br /><br />
                 Informations utilisateurs : <br />
                 {%for users in infoUtilisateurs%}
                 <div class="box profil" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;">

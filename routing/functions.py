@@ -15,10 +15,10 @@ def automoderation(stringModerer: str) -> str:
     stringModerer2 =stringModerer
     for key in ['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}']:
             stringModerer2 = stringModerer2.replace(key," ")
-            print (stringModerer2)
+            # print (stringModerer2)
     for content in listeModeration:
         strReplace = ""
-        for i in range (len(content)):
+        for i in range(len(content)):
             strReplace += "*"
         if len(content) < 6:
             if stringModerer2[0:len(content)+1] == content+" ":

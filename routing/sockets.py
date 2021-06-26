@@ -72,10 +72,13 @@ def postMsg(json):
 
                     if not json['contenuMessage'] == '':
                         _id = ObjectId()
+                        contenu = automoderation(json['contenuMessage']) if grp['is_mod'] else json['contenuMessage']
+
                         messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
-                                                          "contenu": json['contenuMessage'], "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []})
+                                                          "contenu": contenu, "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []})
                         messages[str(_id)].insert()
                         message = messages[str(_id)].toDict()
+
                     if message:
                         groupe = message['groupe']
                         sendNotif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
