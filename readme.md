@@ -38,7 +38,9 @@ groupe classe permettant une communication plus aisée entre élèves.
 	* Demande d'aides : affichage du titre, de l'auteur, de la date de mise en ligne, de la matière, du contenu avec les pièces jointes si besoin, du nombre de likes, de commentaires.
 
 * Page de messages privés:
-
+	
+	* Chat en direct :
+		* Echange de texte, d'audio et d'image.
 	* Affichage de tous les groupes de l'utilisateur.
 	* Possibilité de filtrer les groupes.
 	* Possibilité de créer un groupe avec filtre des utilisateurs.
@@ -57,6 +59,7 @@ groupe classe permettant une communication plus aisée entre élèves.
 				* Modifier le rôle dans le groupe de chaque participant.
 				* Ajouter des participants.
 				* Possibilité de supprimer le groupe.
+				* Possibilité d'activer ou desactiver l'automoderation sur le chat.
 		* En haut affichage des participants du groupe par pseudo.
 		* Barre de saisi de messages :
 			* Affichage du message auquel on répond.
@@ -64,21 +67,21 @@ groupe classe permettant une communication plus aisée entre élèves.
 
 * Page de profil :
 
-* Page personnelle :
-	* Affichage des informations personnelles.
-	* Possibilité de modifier sa photo de profil.
-	* Possibilité de modifier certains champs : Pseudo, langues vivantes, spécialités, options, Centres d'intérêts, adresse mail, Téléphone, Date de Naissance, Caractère.
-	* Possibilité de modifier la visibilité de certaines informations.
-	* Choisir ses notifications.
-	* Modifier son thème (certains thèmes sont bloqués en fonction de l'xp de l'utilisateur).
-	* Aperçu de ses dernières demandes d'aide.
-	* Récapitulatif des sanctions de l'utilisateurs.
-	* Tous les champs modifiables sont soumis à l'auto-modération.
-* Page des autres :
-	* Affichage de toutes les informations publiques dont l'xp.
-	* Possibilité de Signaler le profil.
-	* Possibilité de démarrer une discussion avec la personne.
-	* Voir si la personne est Administrateur.
+	* Page personnelle :
+		* Affichage des informations personnelles.
+		* Possibilité de modifier sa photo de profil.
+		* Possibilité de modifier certains champs : Pseudo, langues vivantes, spécialités, options, Centres d'intérêts, adresse mail, Téléphone, Date de Naissance, Caractère.
+		* Possibilité de modifier la visibilité de certaines informations.
+		* Choisir ses notifications.
+		* Modifier son thème (certains thèmes sont bloqués en fonction de l'xp de l'utilisateur).
+		* Aperçu de ses dernières demandes d'aide.
+		* Récapitulatif des sanctions de l'utilisateurs.
+		* Tous les champs modifiables sont soumis à l'auto-modération.
+	* Page des autres :
+		* Affichage de toutes les informations publiques dont l'xp.
+		* Possibilité de Signaler le profil.
+		* Possibilité de démarrer une discussion avec la personne.
+		* Voir si la personne est Administrateur.
 
 * Page de demandes enregistrées :
 
@@ -138,11 +141,18 @@ groupe classe permettant une communication plus aisée entre élèves.
 
 * Rôles scolaires :
 	* Elève : Aucun droit particulier.
-	* Enseignant : Dans les discussions privées, ils peuvent supprimer tous les messages des discussions dont ils font parti.
+	* Enseignant : 
+		* Dans les discussions privées :
+			* ils peuvent supprimer tous les messages des discussions dont ils font parti.
+			* Peut activer l'auto modération dans les discussions auxquelles ils appartiennent.
 
 * Rôles dans les discussions privés :
 	* Participant : aucun droit particulier.
-	* Administrateur d'une discussion : peut ajouter et enlever des participants, changer le rôle des participants, peut supprimer le groupe.
+	* Administrateur d'une discussion : 
+		* Peut ajouter et enlever des participants. 
+		* Changer le rôle des participants
+		* Peut supprimer le groupe.
+		* Peut activer l'auto modération dans les discussions auxquelles ils appartiennent.
 
 * Système d'xp :
 	* Chaque utilisateur possède un nombre d'xp.
@@ -152,7 +162,7 @@ groupe classe permettant une communication plus aisée entre élèves.
 		* chaque commentaire qu'il poste.
 	* Plus l'utilisateur a d'xp plus il monte en niveau.
 	* Monter en niveau permet de débloquer :
-		*	De nouvelles palettes.
+		* De nouvelles palettes.
 		* De nouveaux thèmes.
 
 ## VI Notifications :
@@ -181,6 +191,9 @@ groupe classe permettant une communication plus aisée entre élèves.
 		* Plus de 3000 mots et expressions  bannis.
 		* Effectif sur tout les inputs publiques.
 		* Pas d'implémentation sur les messages privés afin de garder un côté décontracté.
+	* Scroll infini	:
+		* Déploiment sur les discussions des messages privés et sur la page d'accueil et la page recherche pour les demandes d'aide.
+		* Optimisation des temps de chargement.
 * Frontend :
 	* Site responsive :
 		* l'entièreté du site est responsive.
