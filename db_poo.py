@@ -613,6 +613,7 @@ class Groupe(Actions):
         self.nom = params['nom']
         self.is_class = params.get('is_class', False)
         self.is_DM = params.get('is_DM', False)
+        self.is_mod = params.get('is_mod', False)
         self.id_utilisateurs = params['id-utilisateurs']
         self.moderateurs = params.get('moderateurs', [])
         self.sign = params.get('sign', [])
@@ -663,6 +664,7 @@ class Groupe(Actions):
             'nom': self.nom,
             'is_class': self.is_class,
             'is_DM': self.is_DM,
+            'is_mod': self.is_mod,
             'id-utilisateurs': self.id_utilisateurs,
             'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
             'nbUtilisateurs': len(self.id_utilisateurs),
@@ -680,6 +682,7 @@ class Groupe(Actions):
             'nom': self.nom,
             'is_class': self.is_class,
             'is_DM': self.is_DM,
+            'is_mod': self.is_mod,
             'id-utilisateurs': self.id_utilisateurs,
             'moderateurs': self.moderateurs,
             'sign': self.sign,

@@ -806,3 +806,20 @@ function updateGroupName() {
     divoptionclose();
   }
 }
+
+function modererGrp(idGrp) {
+  const infoGrpModeration = document.getElementById('infoGrpModeration');
+
+  if(infoGrpModeration.innerHTML === 'Groupe auto-modéré')
+    infoGrpModeration.innerHTML = 'Groupe non auto-modéré';
+  else
+    infoGrpModeration.innerHTML = 'Groupe auto-modéré';
+
+  fetch(`/modererGrp/${idGrp}/`, {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  });
+}
