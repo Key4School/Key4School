@@ -91,7 +91,7 @@
         <span style="margin-right:2%;" id="current-time{{content['_id']}}" class="time">0:00</span>
         <input style="margin-right:2%;" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
         <span style="margin-right:2%;" id="duration{{content['_id']}}" class="time">0:00</span>
-        <button style="font-size:17px;border:transparent;background-color:{{session['couleur'][2]}};margin-right:1%;border-radius: 15px;padding-top: 2%;padding-bottom: 2%;" id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button>
+        <button style="font-size:17px;min-width:42px; border:transparent;background-color:{{session['couleur'][2]}};margin-right:1%;border-radius: 15px;padding-top: 2%;padding-bottom: 2%;" id="buttonAudio{{content['_id']}}" onclick="changeRate('{{content['_id']}}');">1x</button>
       </div>
       <script>
         document.getElementById('audio{{content['_id']}}').style.display='block';
@@ -115,7 +115,8 @@
         });
 
         const showRangeProgress{{content['_id']}} = (rangeInput{{content['_id']}}) => {
-            if(rangeInput{{content['_id']}} === seekSlider{{content['_id']}}) audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', rangeInput{{content['_id']}}.value / rangeInput{{content['_id']}}.max * 100 + '%');
+            if(rangeInput{{content['_id']}} === seekSlider{{content['_id']}}) 
+              audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', rangeInput{{content['_id']}}.value / rangeInput{{content['_id']}}.max * 100 + '%');
         };
 
         seekSlider{{content['_id']}}.addEventListener('input', (e) => {
@@ -127,12 +128,9 @@
         let raf{{content['_id']}} = null;
 
         const calculateTime{{content['_id']}} = (secs) => {
-            console.log(secs);
             const minutes = Math.floor(secs / 60);
             const seconds = Math.floor(secs % 60);
             const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-            console.log(minutes);
-            console.log(returnedSeconds);
             return `${minutes}:${returnedSeconds}`;
         }
 
@@ -145,7 +143,6 @@
         }
 
         const displayBufferedAmount{{content['_id']}} = () => {
-          console.log(Math.floor(audio{{content['_id']}}.buffered.end(audio{{content['_id']}}.buffered.length - 1)));
             const bufferedAmount{{content['_id']}} = Math.floor(audio{{content['_id']}}.buffered.end(audio{{content['_id']}}.buffered.length - 1));
             audioPlayerContainer{{content['_id']}}.style.setProperty('--buffered-width', `${(bufferedAmount{{content['_id']}} / seekSlider{{content['_id']}}.max) * 100}%`);
         }
@@ -162,19 +159,13 @@
             setSliderMax{{content['_id']}}();
             displayBufferedAmount{{content['_id']}}();
         } else {
-            audio{{content['_id']}}.addEventListener('loadedmetadata', () => {
-                if (audio{{content['_id']}}.duration === Infinity) {
-                  // set it to bigger than the actual duration
-                  audio{{content['_id']}}.currentTime = 1e101;
-                  audio{{content['_id']}}.ontimeupdate = function() {
-                    this.ontimeupdate = () => {
-                      return;
-                    }
-                    //log.textContent += ' after workaround: ' + audio{{content['_id']}}.duration;
-                    audio{{content['_id']}}.currentTime = 0;
-                  }
+            audio{{content['_id']}}.addEventListener('loadedmetadata', async () => {
+                // A LAISSER ABSOLUMENT => fix bugs Chrome
+                while(audio{{content['_id']}}.duration === Infinity) {
+                  await new Promise(r => setTimeout(r, 200));
+                  audio{{content['_id']}}.currentTime = 10000000*Math.random();
+                  audio{{content['_id']}}.currentTime = 0;
                 }
-                console.log(audio{{content['_id']}}.duration);
 
                 displayDuration{{content['_id']}}();
                 setSliderMax{{content['_id']}}();
@@ -202,10 +193,13 @@
              audio{{content['_id']}}.currentTime = 0;
              playState{{content['_id']}} = '<i class="fas fa-pause"></i>';
              playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play"></i>';
+             audio{{content['_id']}}.pause();
+             cancelAnimationFrame(raf{{content['_id']}});
+             seekSlider{{content['_id']}}.value = 0;
         });
       </script>
       {%elif content['image'] != '' %}
-      <a target="blank" href="{{url_for('image', imageName=content['image'])}}"><img src="{{url_for('image', imageName=content['image'])}}" style="width: 300px; height: auto; "/><br></a>
+      <a target="blank" href="{{url_for('image', imageName=content['image'])}}"><img src="{{url_for('image', imageName=content['image'])}}" style="height: 250px; width: auto; "/><br></a>
       {{content['contenu']}}
       {%else%}
         {{content['contenu']|safe}}
