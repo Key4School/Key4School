@@ -85,8 +85,8 @@
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}
       <!-- <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button> -->
-
-
+      <div id="audio-player-container{{content['_id']}}">
+        <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata"></audio>
         <button style="font-size:17px;border:transparent;background-color:transparent;margin-right:1%;" id="play-icon{{content['_id']}}" ><i class="fas fa-play"></i></button>
         <span style="margin-right:2%;" id="current-time{{content['_id']}}" class="time">0:00</span>
         <input style="margin-right:2%;" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
