@@ -24,7 +24,7 @@ groupe classe permettant une communication plus aisée entre élèves.
 * page de question : https://key4school.herokuapp.com/question/
 * page de commentaire : https://key4school.herokuapp.com/comments/idDuGroupe
 
-###Fonctionnalités par page :
+##Fonctionnalités par page :
 
 * Page d'accueil :
 
