@@ -114,10 +114,7 @@ def updateDemand():
 
 def file(fileName):
     if 'id' in session:
-        file = DB.cluster.send_file(fileName)
-        file.freeze()
-        # print(file.get_data())
-        return file.get_data()
+        return DB.cluster.send_file(fileName)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
