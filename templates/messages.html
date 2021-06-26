@@ -207,9 +207,9 @@
 
                       <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
                         {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
-                          Message Vocal
+                          <i class="fas fa-volume-up"></i>
                         {%elif content['lastMsg']['image'] != '' %}
-                          <i class="fas fa-image"></i>&nbsp;{{content['lastMsg']['contenu']}}
+                          <i class="fas fa-image"></i>
                         {%else%}
                           {{content['lastMsg']['original-contenu']}}
                         {%endif%}
