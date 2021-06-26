@@ -14,6 +14,7 @@ from uuid import uuid4
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from difflib import SequenceMatcher
+import re
 
 # DB POO
 from db_poo import *

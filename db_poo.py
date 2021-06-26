@@ -2,6 +2,7 @@ from datetime import *
 from bson.objectid import ObjectId
 from flask import session
 from flask_pymongo import PyMongo
+import re
 
 utilisateurs = {}
 demandes_aide = {}
@@ -556,13 +557,22 @@ class Message(Actions):
         messages.pop(str(self._id))
         return
 
+    def convert_links(self) -> bool:
+        contenu = '' 
+        for w in self.contenu.split():
+            contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
+                '<a href="{}" target="_blank">{}</a>'.format(w, w),
+                w)
+
+        return contenu
+
     def toDictLast(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
             '_id': self._id,
             'id-groupe': self.id_groupe,
             'id-utilisateur': self.id_utilisateur,
             'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
-            'contenu': self.contenu,
+            'contenu': self.convert_links(),
             'date-envoi': self.date_envoi,
             'audio': self.audio,
             'image': self.image
@@ -579,7 +589,7 @@ class Message(Actions):
             'groupe': groupes[str(self.id_groupe)].toDict(),
             'id-utilisateur': self.id_utilisateur,
             'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
-            'contenu': self.contenu,
+            'contenu': self.convert_links(),
             'date-envoi': self.date_envoi,
             'reponse': self.reponse,
             'rep': rep,
