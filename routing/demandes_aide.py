@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
+from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
 from bson.objectid import ObjectId
+import os
 from db_poo import *
-from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif, Interval
 
 def question():
     global utilisateurs
@@ -115,9 +116,44 @@ def updateDemand():
 def file(fileName):
     if 'id' in session:
         return DB.cluster.send_file(fileName)
+
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
+def DL_file(fileName, fileType):
+    if 'id' in session:
+        fileBinaryObj = DB.cluster.send_file(fileName)
+        fileBinaryObj.freeze()
+        fileBinary = fileBinaryObj.get_data()
+
+        if fileType == 'image':
+            with open('static/temp/{}.png'.format(fileName), 'wb') as file:
+                file.write(fileBinary)
+
+            interval = Interval(2, delete_file, args=['static/temp/{}.png'.format(fileName)])
+            interval.start() 
+
+            return send_file('static/temp/{}.png'.format(fileName))
+        elif fileType == 'pdf':
+            with open('static/temp/{}.pdf'.format(fileName), 'wb') as file:
+                file.write(fileBinary)
+
+            interval = Interval(2, delete_file, args=['static/temp/{}.pdf'.format(fileName)])
+            interval.start() 
+
+            return send_file('static/temp/{}.pdf'.format(fileName))
+        else:
+            return ''
+
+        # print(fileBinary)
+        # return fileBinary
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
+def delete_file(path):
+    return os.remove(path)
 
 def likePost(idPost):
     global demandes_aide
