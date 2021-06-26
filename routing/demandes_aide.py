@@ -105,7 +105,7 @@ def updateDemand():
     if 'id' in session:
         demand = demandes_aide[request.form['idDemandModif']]
         if ObjectId(session['id']) == demand.id_utilisateur:
-            demand.contenu = request.form['txtModif']
+            demand.contenu = automoderation(request.form['txtModif'])
             demand.update()
         return 'sent'
     else:
@@ -223,7 +223,7 @@ def updateComment():
     if 'id' in session:
         Comment = demandes_aide[request.form['idDemandCommentModif']].toDict()['reponsesDict2'][request.form['idCommentModif']]
         if ObjectId(session['id']) == Comment.id_utilisateur:
-            Comment.contenu = request.form['txtModif']
+            Comment.contenu = automoderation(request.form['txtModif'])
             demandes_aide[request.form['idDemandCommentModif']].update()
         return 'sent'
     else:
