@@ -174,7 +174,7 @@
         audio{{content['_id']}}.addEventListener('progress', displayBufferedAmount{{content['_id']}});
 
         seekSlider{{content['_id']}}.addEventListener('input', () => {
-            currentTimeContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(seekSlider.value);
+            currentTimeContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(seekSlider{{content['_id']}}.value);
             if(!audio{{content['_id']}}.paused) {
                 cancelAnimationFrame(raf{{content['_id']}});
             }
