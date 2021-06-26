@@ -103,7 +103,7 @@ def uploadAudio():
 
 def audio(audioName):
     if 'id' in session:
-        return DB.cluster.send_file(audioName)
+        return DB.cluster.send_file(audioName.strip())
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))

@@ -87,7 +87,7 @@
       <!-- <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button> -->
       <div id="audio-player-container{{content['_id']}}" >
         <p>Audio Player</p>
-        <audio id="audio{{content['_id']}}"  src="{{url_for('audio', audioName = content['contenu'])}}" type="audio/ogg" preload="metadata"></audio>
+        <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata"></audio>
 
         <button id="play-icon{{content['_id']}}" >play</button>
         <span id="current-time{{content['_id']}}" class="time">0:00</span>
@@ -101,8 +101,6 @@
         const audioPlayerContainer{{content['_id']}} = document.getElementById('audio-player-container{{content['_id']}}');
         const seekSlider{{content['_id']}} = document.getElementById('seek-slider{{content['_id']}}');
         let playState{{content['_id']}} = 'pause';
-
-
 
         playIconContainer{{content['_id']}}.addEventListener('click', () => {
             if(playState{{content['_id']}} === 'play') {
@@ -118,11 +116,9 @@
             }
         });
 
-
-
         const showRangeProgress{{content['_id']}} = (rangeInput{{content['_id']}}) => {
             if(rangeInput{{content['_id']}} === seekSlider{{content['_id']}}) audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', rangeInput{{content['_id']}}.value / rangeInput{{content['_id']}}.max * 100 + '%');
-        }
+        };
 
         seekSlider{{content['_id']}}.addEventListener('input', (e) => {
             showRangeProgress{{content['_id']}}(e.target);
@@ -133,9 +129,12 @@
         let raf{{content['_id']}} = null;
 
         const calculateTime{{content['_id']}} = (secs) => {
+            console.log(secs);
             const minutes = Math.floor(secs / 60);
             const seconds = Math.floor(secs % 60);
             const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+            console.log(minutes);
+            console.log(returnedSeconds);
             return `${minutes}:${returnedSeconds}`;
         }
 
@@ -148,6 +147,7 @@
         }
 
         const displayBufferedAmount{{content['_id']}} = () => {
+          console.log(Math.floor(audio{{content['_id']}}.buffered.end(audio{{content['_id']}}.buffered.length - 1)));
             const bufferedAmount{{content['_id']}} = Math.floor(audio{{content['_id']}}.buffered.end(audio{{content['_id']}}.buffered.length - 1));
             audioPlayerContainer{{content['_id']}}.style.setProperty('--buffered-width', `${(bufferedAmount{{content['_id']}} / seekSlider{{content['_id']}}.max) * 100}%`);
         }
@@ -159,12 +159,25 @@
             raf{{content['_id']}} = requestAnimationFrame(whilePlaying{{content['_id']}});
         }
 
-        if (audio{{content['_id']}}.readyState > 0) {
+        if (audio{{content['_id']}}.readyState >= 4) {
             displayDuration{{content['_id']}}();
             setSliderMax{{content['_id']}}();
             displayBufferedAmount{{content['_id']}}();
         } else {
             audio{{content['_id']}}.addEventListener('loadedmetadata', () => {
+                if (audio{{content['_id']}}.duration === Infinity) {
+                  // set it to bigger than the actual duration
+                  audio{{content['_id']}}.currentTime = 1e101;
+                  audio{{content['_id']}}.ontimeupdate = function() {
+                    this.ontimeupdate = () => {
+                      return;
+                    }
+                    //log.textContent += ' after workaround: ' + audio{{content['_id']}}.duration;
+                    audio{{content['_id']}}.currentTime = 0;
+                  }
+                }
+                console.log(audio{{content['_id']}}.duration);
+
                 displayDuration{{content['_id']}}();
                 setSliderMax{{content['_id']}}();
                 displayBufferedAmount{{content['_id']}}();
@@ -183,7 +196,7 @@
         seekSlider{{content['_id']}}.addEventListener('change', () => {
             audio{{content['_id']}}.currentTime = seekSlider{{content['_id']}}.value;
             if(!audio{{content['_id']}}.paused) {
-                requestAnimationFrame(whilePlaying);
+                requestAnimationFrame(whilePlaying{{content['_id']}});
             }
         });
 
