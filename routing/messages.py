@@ -103,7 +103,7 @@ def uploadAudio():
 
 def audio(audioName):
     if 'id' in session:
-        return DB.cluster.send_file(audioName)
+        return DB.cluster.send_file(audioName.strip())
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
@@ -193,6 +193,7 @@ def virerParticipant():
     if 'id' in session:
         groupe = groupes[request.form['idViréGrp']]
         moderateurs = groupe.toDict()['moderateurs']
+        user = utilisateurs[session['id']]
 
         if ObjectId(session['id']) in moderateurs or request.form['idViré'] == session['id']:
             groupe.supprUser(ObjectId(request.form['idViré']))
@@ -279,3 +280,16 @@ def moreMsg():
 
     else:
         abort(401) # non connecté
+
+def modererGrp(idGrp):
+    user = utilisateurs[session['id']]
+    groupe = groupes[idGrp]
+
+    if user.admin or ObjectId(session['id']) in groupe.moderateurs:
+        groupe.is_mod = not groupe.is_mod
+        groupes[idGrp].update()
+
+        return 'group moderation edited', 200
+    else:
+        abort(401)
+

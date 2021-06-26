@@ -24,7 +24,7 @@ groupe classe permettant une communication plus aisée entre élèves.
 * page de question : https://key4school.herokuapp.com/question/
 * page de commentaire : https://key4school.herokuapp.com/comments/idDuGroupe
 
-Fonctionnalités par page :
+### Fonctionnalités par page :
 
 * Page d'accueil :
 
@@ -121,8 +121,7 @@ Fonctionnalités par page :
 
 * Rôles principaux:
 	* Utilisateur : Rôles de toute personne lambda, aucun droit particulier.
-	* Administrateur du site : Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié. A accès à la page modération.
-		Peut valider ou supprimer tous les signalements. Peut sanctionner tout utilisateur.
+	* Administrateur du site : Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié. A accès à la page modération. Peut valider ou supprimer tous les signalements. Peut sanctionner tout utilisateur.
 
 * Sanctions :
 	* Mode Spectateur sur tout le site
@@ -137,5 +136,53 @@ Fonctionnalités par page :
 	* Enseignant : Dans les discussions privées, ils peuvent supprimer tous les messages des discussions dont ils font parti.
 
 * Rôles dans les discussions privés :
-	* participant : aucun droit particulier
-	* administrateur d'une discussion : peut ajouter et enlever des participants, changer le rôle des participants, peut supprimer le grp
+	* Participant : aucun droit particulier.
+	* Administrateur d'une discussion : peut ajouter et enlever des participants, changer le rôle des participants, peut supprimer le groupe.
+
+* Système d'xp :
+	* Chaque utilisateur possède un nombre d'xp.
+	* L'utilisateur gagne de l'xp pour :
+		* chaque like qu'il reçoit.
+		* chaque demande qu'il poste.
+		* chaque commentaire qu'il poste.
+	* Plus l'utilisateur a d'xp plus il monte en niveau.
+	* Monter en niveau permet de débloquer :
+		*	De nouvelles palettes.
+		* De nouveaux thèmes.
+
+## VI Notifications :
+
+	* Notifications pour :
+		* Nouveaux Messages dans un groupe de l'utilisateur.
+		* Commentaire sur une demande de l'utilisateur.
+		* Commentaire sur une demande enregistrée par l'utilisateur.
+	* Notifications :
+		* Sur le bandeau du site icône "cloche" :
+			* Affichage du nombre de notifications plus affichage de toutes les notifications.
+			* Possibilité de tout marquer comme lu.
+		* Par mail (par encore intégré):
+			* Mail personnalisé aux couleurs du site.
+
+
+
+## V Innovation technique :
+
+	* Backend :
+		* Développement en Programmation Orientée Objet :
+			* Alègement du code.
+			* Stockage en cache : réduction des échanges avec la DB : optimisation des temps de chargement.
+		* Utilisation de socket permettant une interaction direct avec le serveur notamment dans les messages privées.
+		* Auto-modération :
+			* Plus de 3000 mots et expressions  bannis.
+			* Effectif sur tout les inputs publiques.
+			* Pas d'implémentation sur les messages privés afin de garder un côté décontracté.
+		* Site responsive :
+			* l'entièreté du site est responsive.
+			* Adapté pour téléphone.
+
+
+## V Probleme technique à régler :
+
+	* Les PDF ne sont pas visualisable sur Heroku.
+	* Notifications par mail en cours de développement (on voulait faire un style perso mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma)
+	*

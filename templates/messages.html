@@ -65,6 +65,9 @@
     .logoBouton:hover {
       cursor: pointer;
     }
+    .boutonFichier:hover {
+      cursor: pointer;
+    }
   </style>
   <style type="text/css">
     /* RESPONSIVE MESSAGES */
@@ -184,42 +187,42 @@
           <tbody>
             <!-- div pour le groupe -->
             {%for content in grpUtilisateur%}
-            <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['_id']}}"
-              data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
-              <td>
-                <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
-                  <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
-                    <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
-                    {% if not content['is_DM'] %}
-                      {{content['nom']}}
-                    {% else %}
-                      {% for u in content['utilisateurs'] %}
-                        {% if u['_id'] != sessionId %}
-                          » {{u['pseudo']}}
-                        {% endif %}
-                      {% endfor %}
-                    {% endif %}
-                    <br />
-                    {%if content['lastMsg']!=None%}
-                    <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
-                      {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
-                      Message Vocal
-                      {%elif content['lastMsg']['image'] != '' %}
-                      <i class="fa-solid fa-image"></i>{{content['lastMsg']['contenu']}}
-                      {%else%}
-                      {{content['lastMsg']['contenu']}}
-                      {%endif%}
-                    </i>
-                    {%endif%}
-                    <!-- </span> -->
-                    {%if content['nbNotif'] > 0%}
-                      {{content['nbNotif']}}
-                    {%endif%}
-                  </div>
-                </a>
-              </td>
-            </tr>
+              <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['_id']}}"
+                data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
+                <td>
+                  <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
+                    <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px; display: table-row;">
+                      <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
+                      {% if not content['is_DM'] %}
+                        {{content['nom']}}
+                      {% else %}
+                        {% for u in content['utilisateurs'] %}
+                          {% if u['_id'] != sessionId %}
+                            » {{u['pseudo']}}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                      <br />
+                      {%if content['lastMsg']!=None%}
 
+                      <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
+                        {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
+                          <i class="fas fa-volume-up"></i>
+                        {%elif content['lastMsg']['image'] != '' %}
+                          <i class="fas fa-image"></i>
+                        {%else%}
+                          {{content['lastMsg']['original-contenu']}}
+                        {%endif%}
+                      </i>
+                      {%endif%}
+                      <!-- </span> -->
+                      {%if content['nbNotif'] > 0%}
+                        {{content['nbNotif']}}
+                      {%endif%}
+                    </div>
+                  </a>
+                </td>
+              </tr>
             {%endfor%}
         </table>
       </div>
@@ -309,6 +312,12 @@
                   </h3>
                 {%endif%}
                 <hr />
+                {% if infogroupe['is_mod'] %}
+                  <button id="infoGrpModeration" class="button is-primary is-light" {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe auto-modéré</button>
+                {% else %}
+                  <button id="infoGrpModeration" class="button is-primary is-light" {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe non auto-modéré</button>
+                {% endif %}
+                <br /><br />
                 Informations utilisateurs : <br />
                 {%for users in infoUtilisateurs%}
                 <div class="box profil" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;">
@@ -335,7 +344,7 @@
                     <div style="flex-direction: column;align-items: flex-end;">
                       <div class="navbar-item">
                         {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
-                          <button onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">virer</button>
+                          <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">Virer</button>
                         {%if users['_id'] in infogroupe['moderateurs']%}
                         <button class="button is-warning is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
                           <span class="icon is-small">
@@ -673,7 +682,7 @@
                 <div style="position: absolute; width: 30px; height: 30px; overflow: hidden; top: 50%; transform: translateY(-50%); cursor: pointer;">
                   <i id="uploadImageIcon" class="fas fa-file-image" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer;"></i>
                   <i id="resetImageIcon" class="fas fa-trash-alt" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; display: none;" onclick="resetImage();"></i>
-                  <input type='file' name="image" id="inputImage" accept="image/*" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;" onchange="imageUploaded();" />
+                  <input class="boutonFichier" type='file' name="image" id="inputImage" accept="image/*" style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;" onchange="imageUploaded();" />
                 </div>
               </div>
             </form>
