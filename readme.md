@@ -207,6 +207,5 @@ groupes classes permettant une communication plus aisée entre élèves.
 
 ## V Problèmes techniques à régler :
 
-* Les PDF ne sont pas visualisables sur Heroku.
 * Notifications par mail en cours de développement (on veut faire un style personnalisé mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma)
 	
