@@ -85,14 +85,14 @@
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}
       <!-- <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button> -->
-      <div id="audio-player-container{{content['_id']}}" style="" >
+      <div id="audio-player-container{{content['_id']}}" style="display: flex;align-items: center;margin-right:2%;" >
         <audio id="audio{{content['_id']}}"  src="{{url_for('audio', audioName = content['contenu'])}}" type="audio/ogg" preload="metadata"></audio>
 
-        <button style="font-size:17px;border:transparent;background-color:transparent;" id="play-icon{{content['_id']}}" ><i class="fas fa-play"></i></button>
-        <span id="current-time{{content['_id']}}" class="time">0:00</span>
-        <input type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
-        <span id="duration{{content['_id']}}" class="time">0:00</span>
-        <button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button>
+        <button style="font-size:17px;border:transparent;background-color:transparent;margin-right:1%;" id="play-icon{{content['_id']}}" ><i class="fas fa-play"></i></button>
+        <span style="margin-right:2%;" id="current-time{{content['_id']}}" class="time">0:00</span>
+        <input style="margin-right:2%;" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
+        <span style="margin-right:2%;" id="duration{{content['_id']}}" class="time">0:00</span>
+        <button style="font-size:17px;border:transparent;background-color:{{session['couleur'][2]}};margin-right:1%;border-radius: 15px;padding-top: 2%;padding-bottom: 2%;" id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button>
       </div>
       <script>
         document.getElementById('audio{{content['_id']}}').style.display='block';
