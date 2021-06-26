@@ -152,37 +152,37 @@ groupe classe permettant une communication plus aisée entre élèves.
 
 ## VI Notifications :
 
-	* Notifications pour :
-		* Nouveaux Messages dans un groupe de l'utilisateur.
-		* Commentaire sur une demande de l'utilisateur.
-		* Commentaire sur une demande enregistrée par l'utilisateur.
-	* Notifications :
-		* Sur le bandeau du site icône "cloche" :
-			* Affichage du nombre de notifications plus affichage de toutes les notifications.
-			* Possibilité de tout marquer comme lu.
-		* Par mail (par encore intégré):
-			* Mail personnalisé aux couleurs du site.
+* Notifications pour :
+	* Nouveaux Messages dans un groupe de l'utilisateur.
+	* Commentaire sur une demande de l'utilisateur.
+	* Commentaire sur une demande enregistrée par l'utilisateur.
+* Notifications :
+	* Sur le bandeau du site icône "cloche" :
+		* Affichage du nombre de notifications plus affichage de toutes les notifications.
+		* Possibilité de tout marquer comme lu.
+	* Par mail (par encore intégré):
+		* Mail personnalisé aux couleurs du site.
 
 
 
 ## V Innovation technique :
 
-	* Backend :
-		* Développement en Programmation Orientée Objet :
-			* Alègement du code.
-			* Stockage en cache : réduction des échanges avec la DB : optimisation des temps de chargement.
-		* Utilisation de socket permettant une interaction direct avec le serveur notamment dans les messages privées.
-		* Auto-modération :
-			* Plus de 3000 mots et expressions  bannis.
-			* Effectif sur tout les inputs publiques.
-			* Pas d'implémentation sur les messages privés afin de garder un côté décontracté.
-		* Site responsive :
-			* l'entièreté du site est responsive.
-			* Adapté pour téléphone.
+* Backend :
+	* Développement en Programmation Orientée Objet :
+		* Alègement du code.
+		* Stockage en cache : réduction des échanges avec la DB : optimisation des temps de chargement.
+	* Utilisation de socket permettant une interaction direct avec le serveur notamment dans les messages privées.
+	* Auto-modération :
+		* Plus de 3000 mots et expressions  bannis.
+		* Effectif sur tout les inputs publiques.
+		* Pas d'implémentation sur les messages privés afin de garder un côté décontracté.
+	* Site responsive :
+		* l'entièreté du site est responsive.
+		* Adapté pour téléphone.
 
 
 ## V Probleme technique à régler :
 
-	* Les PDF ne sont pas visualisable sur Heroku.
-	* Notifications par mail en cours de développement (on voulait faire un style perso mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma)
-	*
+* Les PDF ne sont pas visualisable sur Heroku.
+* Notifications par mail en cours de développement (on voulait faire un style perso mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma)
+	
