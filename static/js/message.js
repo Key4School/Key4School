@@ -778,8 +778,6 @@ function quitterGroupeOpen(grpID, userID, id) {
   } else {
     document.getElementById('pop up virer').innerHTML = "Etes-vous sûr de vouloir enlever ce participant ?";
   }
-  document.getElementById('quitter_idViréGrp').value = grpID;
-  document.getElementById('quitter_idviré').value = userID;
 }
 
 function quitterGroupeClose(){
