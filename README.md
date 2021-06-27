@@ -1,12 +1,12 @@
 # CTL 2021 : Key4School <img src="https://github.com/Key4School/Key4School/blob/main/static/image/logo/favicon.png" width=40 >
 
-## I Introduction :
+## I - Introduction :
 
-Notre volonté est de réunir les lycéens sur un réseau social centré sur l'entre-aide et le partage de la connaissance. Pour cela celui-ci est divisé en deux parties : une partie forum destinée à l'échange entre tous les élèves de la région, peu importe le lycée, l'académie ou le département; la seconde, les messages privés, étant plutôt concentrés sur l'échange avec des personnes proches. Notre site se veut cependant concentré sur le scolaire : les demandes d'aides sont faites par matière et le but est de rester le plus possible sur des sujets en lien avec le lycée. Cependant la partie messages privés est beaucoup plus libre. On peut discuter avec les personnes de son choix sur les thèmes que l'on veut. Le côté scolaire de cette partie du site étant assuré par la création automatique de groupes classes permettant une communication plus aisée entre élèves.
+Notre volonté est de réunir les lycéens sur un réseau social centré sur l'entre-aide et le partage de la connaissance. Pour cela celui-ci est divisé en deux parties : une partie forum destinée à l'échange entre tous les élèves de la région, peu importe le lycée, l'académie ou le département ; la seconde, les messages privés, étant plutôt concentrés sur l'échange avec des personnes proches. Notre site se veut cependant concentré sur le scolaire : les demandes d'aides sont faites par matière et le but est de rester le plus possible sur des sujets en lien avec le lycée. Cependant la partie messages privés est beaucoup plus libre. On peut discuter avec les personnes de son choix sur les thèmes que l'on veut. Le côté scolaire de cette partie du site étant assuré par la création automatique de groupes classes permettant une communication plus aisée entre élèves.
 
 
 
-## II Répartition du site :
+## II - Répartition du site :
 
 * page d'accueil : https://key4school.herokuapp.com/
 * page de messages privés : https://key4school.herokuapp.com/messages/
@@ -55,7 +55,7 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 				* Possibilité de supprimer le groupe.
 				* Possibilité d'activer ou désactiver l'automoderation sur le chat.
 		* En haut affichage des participants du groupe par pseudo.
-		* Barre de saisi de messages :
+		* Barre de saisie de messages :
 			* Affichage du message auquel on répond.
 			* Icône "microphone" : enregistrement de messages vocaux avec possibilité de l'envoyer ou de le supprimer.
 			* Icône "image" : possibilité d'envoyer une image.
@@ -115,7 +115,7 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 
 
 
-## III Rôles dans le site :
+## III - Rôles dans le site :
 
 * Rôles principaux:
 	* Utilisateur : Rôles de toute personne lambda, aucun droit particulier.
@@ -138,8 +138,8 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 	* Elève : Aucun droit particulier.
 	* Enseignant :
 		* Dans les discussions privées :
-			* Peut supprimer tous les messages des discussions dont ils font parti.
-			* Peut activer l'auto modération dans les discussions auxquelles il appartient.
+			* Peut supprimer tous les messages des discussions dont il fait partie.
+			* Peut activer l'auto-modération dans les discussions auxquelles il appartient.
 
 * Rôles dans les discussions privées :
 	* Participant : aucun droit particulier.
@@ -160,7 +160,7 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 		* De nouvelles palettes.
 		* De nouveaux thèmes.
 
-## IV Notifications :
+## IV - Notifications :
 
 * Notifications pour :
 	* Nouveau message dans un groupe de l'utilisateur.
@@ -170,20 +170,20 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 	* Sur le bandeau du site à icône "cloche" :
 		* Affichage du nombre de notifications plus affichage de toutes les notifications.
 		* Possibilité de tout marquer comme lu.
-	* Par mail (par encore intégré):
+	* Par mail *(pas encore intégré)*:
 		* Mail personnalisé aux couleurs du site.
 
 
 
-## V Innovations techniques :
+## V - Innovations techniques :
 
 * Backend :
 
-	* Développement en Programmation Orientée Objet :
+	* Développement en Programmation Orientée Objet (POO) :
 		* Allègement du code.
-		* Stockage en cache : réduction des échanges avec la DB : optimisation des temps de chargement.
+		* Stockage en cache : réduction des échanges avec la DB => optimisation des temps de chargement.
 
-	* Utilisation de socket permettant une interaction direct avec le serveur notamment dans les messages privées.
+	* Utilisation de websockets sécurisés permettant une interaction direct avec le serveur notamment dans les messages privées.
 
 	* Auto-modération :
 		* Plus de 3 000 mots et expressions bannis.
@@ -204,15 +204,15 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 				* Plus une demande a de commentaires, moins elle est mise en avant.
 		* Le référencement n'est pas basé sur la date de publication :
 			* Pour éviter que des questions ne soient jamais répondues.
-			* Pour pas que les utilisateurs posent en boucle la même question si celle-ci n'a pas été répondues.
+			* Pour éviter que les utilisateurs posent en boucle la même question si celle-ci n'a pas été répondues.
 
-	* Site disponible en https pour une sécurité optimale.
+	* Site obligatoirement en HTTPS pour une sécurité optimale.
 
 
 * Frontend :
 	* Site responsive :
 		* l'entièreté du site est responsive.
-		* Adapté pour téléphone.
+		* adapté pour téléphone.
 
 
 * User Experience :
@@ -220,8 +220,8 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 	* De nombreux thèmes sont à venir (notamment thème de saison et par matière). Ils seront déblocables par niveaux.
 
 
-## VI En cours de développement :
+## VI - En cours de développement :
 
-* Notifications par mail en cours de développement (on veut faire un style personnalisé mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma).
+* Notifications par mail en cours de développement (on veut faire un style personnalisé mais nous n'avons pas encore eu le temps puisqu'on ne peut pas utiliser Bulma).
 * De nombreux thèmes devraient arriver dans les prochaines semaines.
 * Ajout d'un leaderbord avec récompense pour ceux ayant gagné le plus d'xp.
