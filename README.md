@@ -2,13 +2,7 @@
 
 ## I Introduction :
 
-Notre volonté est de réunir les lycéens sur un réseau social centré sur l'entre-aide et le partage de la connaissance.
-Pour cela celui-ci est divisé en deux parties : une partie forum destinée à l'échange entre tous les élèves de la région,
-peu importe le lycée, l'académie ou le département; la seconde, les messages privés, étant plutôt concentrés sur l'échange avec des
-personnes proches. Notre site se veut cependant concentré sur le scolaire : les demandes d'aides sont faites par matière et le but est de rester
-le plus possible sur des sujets en lien avec le lycée. Cependant la partie messages privés est beaucoup plus libre. On peut discuter avec
-les personnes de son choix sur les thèmes que l'on veut. Le côté scolaire de cette partie du site étant assuré par la création automatique de
-groupes classes permettant une communication plus aisée entre élèves.
+Notre volonté est de réunir les lycéens sur un réseau social centré sur l'entre-aide et le partage de la connaissance. Pour cela celui-ci est divisé en deux parties : une partie forum destinée à l'échange entre tous les élèves de la région, peu importe le lycée, l'académie ou le département; la seconde, les messages privés, étant plutôt concentrés sur l'échange avec des personnes proches. Notre site se veut cependant concentré sur le scolaire : les demandes d'aides sont faites par matière et le but est de rester le plus possible sur des sujets en lien avec le lycée. Cependant la partie messages privés est beaucoup plus libre. On peut discuter avec les personnes de son choix sur les thèmes que l'on veut. Le côté scolaire de cette partie du site étant assuré par la création automatique de groupes classes permettant une communication plus aisée entre élèves.
 
 
 
@@ -38,7 +32,7 @@ groupes classes permettant une communication plus aisée entre élèves.
 	* Demandes d'aides : affichage du titre, de l'auteur, de la date de mise en ligne, de la matière, du contenu avec les pièces jointes si besoin, du nombre de likes, de commentaires.
 
 * Page de messages privés:
-	
+
 	* Chat en direct :
 		* Echange de texte, d'audio et d'image.
 	* Affichage de tous les groupes de l'utilisateur.
@@ -125,10 +119,10 @@ groupes classes permettant une communication plus aisée entre élèves.
 
 * Rôles principaux:
 	* Utilisateur : Rôles de toute personne lambda, aucun droit particulier.
-	* Administrateur du site : 
-		* Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié. 
-		* A accès à la page modération. 
-		* Peut valider ou supprimer tous les signalements. 
+	* Administrateur du site :
+		* Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié.
+		* A accès à la page modération.
+		* Peut valider ou supprimer tous les signalements.
 		* Peut sanctionner tout utilisateur.
 		* A accès au "casier judiciaire" de l'utilisateur (historique de ses sanctions).
 
@@ -142,15 +136,15 @@ groupes classes permettant une communication plus aisée entre élèves.
 
 * Rôles scolaires :
 	* Elève : Aucun droit particulier.
-	* Enseignant : 
+	* Enseignant :
 		* Dans les discussions privées :
 			* Peut supprimer tous les messages des discussions dont ils font parti.
 			* Peut activer l'auto modération dans les discussions auxquelles il appartient.
 
 * Rôles dans les discussions privées :
 	* Participant : aucun droit particulier.
-	* Administrateur d'une discussion : 
-		* Peut ajouter et enlever des participants. 
+	* Administrateur d'une discussion :
+		* Peut ajouter et enlever des participants.
 		* Changer le rôle des participants.
 		* Peut supprimer le groupe.
 		* Peut activer l'auto modération dans les discussions auxquelles il appartient.
@@ -188,18 +182,18 @@ groupes classes permettant une communication plus aisée entre élèves.
 	* Développement en Programmation Orientée Objet :
 		* Allègement du code.
 		* Stockage en cache : réduction des échanges avec la DB : optimisation des temps de chargement.
-	
+
 	* Utilisation de socket permettant une interaction direct avec le serveur notamment dans les messages privées.
-	
+
 	* Auto-modération :
 		* Plus de 3 000 mots et expressions bannis.
 		* Effective sur toutes les entrées publiques.
 		* Implémentation optionelle sur les messages privés afin de garder un côté décontracté (possibilité de l'ajouter soi-même).
-	
+
 	* Scroll infini	:
 		* Déploiment sur les discussions des messages privés et sur la page d'accueil et la page recherche pour les demandes d'aide.
 		* Optimisation des temps de chargement.
-		
+
 	* Référencement :
 		* Mise en valeur des demandes d'aide par :
 			* le nombre de likes :
@@ -211,7 +205,7 @@ groupes classes permettant une communication plus aisée entre élèves.
 		* Le référencement n'est pas basé sur la date de publication :
 			* Pour éviter que des questions ne soient jamais répondues.
 			* Pour pas que les utilisateurs posent en boucle la même question si celle-ci n'a pas été répondues.
-			
+
 	* Site disponible en https pour une sécurité optimale.
 
 
@@ -226,9 +220,8 @@ groupes classes permettant une communication plus aisée entre élèves.
 	* De nombreux thèmes sont à venir (notamment thème de saison et par matière). Ils seront déblocables par niveaux.
 
 
-## V En cours de développement :
+## VI En cours de développement :
 
 * Notifications par mail en cours de développement (on veut faire un style personnalisé mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma).
 * De nombreux thèmes devraient arriver dans les prochaines semaines.
 * Ajout d'un leaderbord avec récompense pour ceux ayant gagné le plus d'xp.
-	
