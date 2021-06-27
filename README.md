@@ -120,11 +120,11 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 * Rôles principaux:
 	* Utilisateur : Rôles de toute personne lambda, aucun droit particulier.
 	* Administrateur du site :
-		* Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié.
+		* Peut supprimer toute demande, discussion, commentaire ou message qu'il juge inapproprié.
 		* A accès à la page modération.
 		* Peut valider ou supprimer tous les signalements.
 		* Peut sanctionner tout utilisateur.
-		* A accès au "casier judiciaire" de l'utilisateur (historique de ses sanctions).
+		* A accès au "casier judiciaire" de l'utilisateur *(historique de ses sanctions)*.
 
 * Sanctions :
 	* Mode Spectateur sur tout le site
