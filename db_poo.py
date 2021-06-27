@@ -655,13 +655,13 @@ class Groupe(Actions):
         self.update()
 
     def getAllMessages(self):
-        return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
+        return sorted([message.toDict() for id, message in messages.copy().items() if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
 
     def getAllMessagesSign(self):
-        return sorted([message.toDict() for id, message in messages.items() if self._id == message.id_groupe and message.sign != []], key=lambda message: message['date-envoi'])
+        return sorted([message.toDict() for id, message in messages.copy().items() if self._id == message.id_groupe and message.sign != []], key=lambda message: message['date-envoi'])
 
     def getLastMessage(self):
-        l = sorted([message.toDictLast() for id, message in messages.items()
+        l = sorted([message.toDictLast() for id, message in messages.copy().items()
         if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
         return l[-1] if len(l) > 0 else None
 
