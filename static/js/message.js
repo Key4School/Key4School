@@ -75,7 +75,7 @@ function envoi(e) {
     sendImage();
     return;
   }
-    
+
   const contenuMsg = document.getElementById('inputMsg').value || '';
   const reponse = document.getElementById('reponse').value || 'None';
 
@@ -95,7 +95,6 @@ function imageUploaded() {
 }
 
 function resetImage() {
-  console.lo
   document.getElementById('inputImage').value = '';
   document.getElementById('inputImage').style.display = 'block';
   document.getElementById('uploadImageIcon').style.display = 'inline-block';
@@ -201,7 +200,6 @@ $('#messages').scroll(() => {
       }
     });
   }
-
   lastScrollTop = scrollTop;
 });
 
