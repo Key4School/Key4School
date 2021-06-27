@@ -200,11 +200,11 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 				* Plus une demande a de likes, plus il y a de gens qui ont besoin de la même aide.
 				* Plus une demande a de likes, plus elle est mise en avant.
 			* le nombre de commentaires :
-				* Plus une demande a de commentaires, plus il y a de chance qu'un d'eux répondent à la question.
+				* Plus une demande a de commentaires, plus il y a de chances qu'un d'eux répondent à la question.
 				* Plus une demande a de commentaires, moins elle est mise en avant.
 		* Le référencement n'est pas basé sur la date de publication :
 			* Pour éviter que des questions ne soient jamais répondues.
-			* Pour éviter que les utilisateurs posent en boucle la même question si celle-ci n'a pas été répondues.
+			* Pour éviter que les utilisateurs posent en boucle la même question si celle-ci n'a pas été répondue.
 
 	* Site obligatoirement en HTTPS pour une sécurité optimale.
 
