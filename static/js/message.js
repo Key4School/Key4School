@@ -179,7 +179,8 @@ $('#messages').scroll(function() {
 
   var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
   var scrollTop = $('#messages').scrollTop();
-  if (scrollTop < lastScrollTop) {
+
+  if (scrollTop <= lastScrollTop) {
 
     $(window).data('ajaxready', false);
     $.ajax({
@@ -197,6 +198,7 @@ $('#messages').scroll(function() {
       }
     });
   }
+
   lastScrollTop = scrollTop;
 });
 
