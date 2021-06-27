@@ -1,25 +1,19 @@
 # CTL 2021 : Key4School <img src="https://github.com/Key4School/Key4School/blob/main/static/image/logo/favicon.png" width=40 >
 
-## I Introduction :
+## I - Introduction :
 
-Notre volonté est de réunir les lycéens sur un réseau social centré sur l'entre-aide et le partage de la connaissance.
-Pour cela celui-ci est divisé en deux parties : une partie forum destinée à l'échange entre tous les élèves de la région,
-peu importe le lycée, l'académie ou le département; la seconde, les messages privés, étant plutôt concentrés sur l'échange avec des
-personnes proches. Notre site se veut cependant concentré sur le scolaire : les demandes d'aides sont faites par matière et le but est de rester
-le plus possible sur des sujets en lien avec le lycée. Cependant la partie messages privés est beaucoup plus libre. On peut discuter avec
-les personnes de son choix sur les thèmes que l'on veut. Le côté scolaire de cette partie du site étant assuré par la création automatique de
-groupes classes permettant une communication plus aisée entre élèves.
+Notre volonté est de réunir les lycéens sur un réseau social centré sur l'entre-aide et le partage de la connaissance. Pour cela celui-ci est divisé en deux parties : une partie forum destinée à l'échange entre tous les élèves de la région, peu importe le lycée, l'académie ou le département ; la seconde, les messages privés, étant plutôt concentrés sur l'échange avec des personnes proches. Notre site se veut cependant concentré sur le scolaire : les demandes d'aides sont faites par matière et le but est de rester le plus possible sur des sujets en lien avec le lycée. Cependant la partie messages privés est beaucoup plus libre. On peut discuter avec les personnes de son choix sur les thèmes que l'on veut. Le côté scolaire de cette partie du site étant assuré par la création automatique de groupes classes permettant une communication plus aisée entre élèves.
 
 
 
-## II Répartition du site :
+## II - Répartition du site :
 
 * page d'accueil : https://key4school.herokuapp.com/
 * page de messages privés : https://key4school.herokuapp.com/messages/
 * page de profil : https://key4school.herokuapp.com/profil/
 * page de demandes enregistrées : https://key4school.herokuapp.com/saved/
 * page de tutoriel : https://key4school.herokuapp.com/help/
-* page d'administration (accès restreint aux administarteurs du site) : https://key4school.herokuapp.com/administration/
+* page d'administration (accès restreint aux administrateurs du site) : https://key4school.herokuapp.com/administration/
 * page de recherche : https://key4school.herokuapp.com/recherche/?search=VotreRecherche
 * page de question : https://key4school.herokuapp.com/question/
 * page de commentaire : https://key4school.herokuapp.com/comments/idDuGroupe
@@ -28,17 +22,17 @@ groupes classes permettant une communication plus aisée entre élèves.
 
 * Page d'accueil :
 
-	* Affichage des demandes d'aides selon un référencement (nombre de likes et de commentaires).
-	* Filtrage des demandes d'aides par matière en haut de la page.
+	* Affichage des demandes d'aide selon un référencement (nombre de likes et de commentaires).
+	* Filtrage des demandes d'aide par matière en haut de la page.
 	* Possibilité de liker une demande : icône "pouce vers le haut"
 	* Possibilité de signaler une demande : bouton "signaler"
 	* Possibilité d'enregistrer une demande : icône "marque page"
 	* Possibilité d'accès à la page des commentaires/réponses : icône "bulle"
-	* Système de scroll infini : toutes les demandes ne sont pas chargés d'un seul coup, elles se chargent au fur et à mesure du scroll.
+	* Système de scroll infini : toutes les demandes ne sont pas chargées d'un seul coup, elles se chargent au fur et à mesure du scroll.
 	* Demandes d'aides : affichage du titre, de l'auteur, de la date de mise en ligne, de la matière, du contenu avec les pièces jointes si besoin, du nombre de likes, de commentaires.
 
-* Page de messages privés:
-	
+* Page de messages privés :
+
 	* Chat en direct :
 		* Echange de texte, d'audio et d'image.
 	* Affichage de tous les groupes de l'utilisateur.
@@ -61,7 +55,7 @@ groupes classes permettant une communication plus aisée entre élèves.
 				* Possibilité de supprimer le groupe.
 				* Possibilité d'activer ou désactiver l'automoderation sur le chat.
 		* En haut affichage des participants du groupe par pseudo.
-		* Barre de saisi de messages :
+		* Barre de saisie de messages :
 			* Affichage du message auquel on répond.
 			* Icône "microphone" : enregistrement de messages vocaux avec possibilité de l'envoyer ou de le supprimer.
 			* Icône "image" : possibilité d'envoyer une image.
@@ -82,7 +76,7 @@ groupes classes permettant une communication plus aisée entre élèves.
 		* Affichage de toutes les informations publiques dont l'xp.
 		* Possibilité de signaler le profil.
 		* Possibilité de démarrer une discussion avec la personne.
-		* Voir si la personne à le statut d'administrateur.
+		* Voir si la personne a le statut d'administrateur.
 
 * Page de demandes enregistrées :
 
@@ -96,7 +90,7 @@ groupes classes permettant une communication plus aisée entre élèves.
 * Page d'administration :
 
 	* Page réservée aux administrateurs du site.
-	* Possibilité de visualiser tous les demandes d'aide, les commentaires, les profils, les messages privées, les discussions signalés.
+	* Possibilité de visualiser toutes les demandes d'aide, tous les commentaires, les profils, les messages privées, et toutes les discussions signalées.
 	* Possibilité de valider ou de supprimer chaque signalement.
 
 * Page de recherche :
@@ -121,16 +115,16 @@ groupes classes permettant une communication plus aisée entre élèves.
 
 
 
-## III Rôles dans le site :
+## III - Rôles dans le site :
 
 * Rôles principaux:
 	* Utilisateur : Rôles de toute personne lambda, aucun droit particulier.
-	* Administrateur du site : 
-		* Peut supprimer toutes demandes, commentaires, discussion ou message qu'il juge inapproprié. 
-		* A accès à la page modération. 
-		* Peut valider ou supprimer tous les signalements. 
+	* Administrateur du site :
+		* Peut supprimer toute demande, discussion, commentaire ou message qu'il juge inapproprié.
+		* A accès à la page modération.
+		* Peut valider ou supprimer tous les signalements.
 		* Peut sanctionner tout utilisateur.
-		* A accès au "casier judiciaire" de l'utilisateur (historique de ses sanctions).
+		* A accès au "casier judiciaire" de l'utilisateur *(historique de ses sanctions)*.
 
 * Sanctions :
 	* Mode Spectateur sur tout le site
@@ -142,15 +136,15 @@ groupes classes permettant une communication plus aisée entre élèves.
 
 * Rôles scolaires :
 	* Elève : Aucun droit particulier.
-	* Enseignant : 
+	* Enseignant :
 		* Dans les discussions privées :
-			* Peut supprimer tous les messages des discussions dont ils font parti.
-			* Peut activer l'auto modération dans les discussions auxquelles il appartient.
+			* Peut supprimer tous les messages des discussions dont il fait partie.
+			* Peut activer l'auto-modération dans les discussions auxquelles il appartient.
 
 * Rôles dans les discussions privées :
 	* Participant : aucun droit particulier.
-	* Administrateur d'une discussion : 
-		* Peut ajouter et enlever des participants. 
+	* Administrateur d'une discussion :
+		* Peut ajouter et enlever des participants.
 		* Changer le rôle des participants.
 		* Peut supprimer le groupe.
 		* Peut activer l'auto modération dans les discussions auxquelles il appartient.
@@ -166,7 +160,7 @@ groupes classes permettant une communication plus aisée entre élèves.
 		* De nouvelles palettes.
 		* De nouveaux thèmes.
 
-## IV Notifications :
+## IV - Notifications :
 
 * Notifications pour :
 	* Nouveau message dans un groupe de l'utilisateur.
@@ -176,49 +170,49 @@ groupes classes permettant une communication plus aisée entre élèves.
 	* Sur le bandeau du site à icône "cloche" :
 		* Affichage du nombre de notifications plus affichage de toutes les notifications.
 		* Possibilité de tout marquer comme lu.
-	* Par mail (par encore intégré):
+	* Par mail *(pas encore intégré)*:
 		* Mail personnalisé aux couleurs du site.
 
 
 
-## V Innovations techniques :
+## V - Innovations techniques :
 
 * Backend :
 
-	* Développement en Programmation Orientée Objet :
+	* Développement en Programmation Orientée Objet (POO) :
 		* Allègement du code.
-		* Stockage en cache : réduction des échanges avec la DB : optimisation des temps de chargement.
-	
-	* Utilisation de socket permettant une interaction direct avec le serveur notamment dans les messages privées.
-	
+		* Stockage en cache : réduction des échanges avec la DB => optimisation des temps de chargement.
+
+	* Utilisation de websockets sécurisés permettant une interaction direct avec le serveur notamment dans les messages privées.
+
 	* Auto-modération :
 		* Plus de 3 000 mots et expressions bannis.
 		* Effective sur toutes les entrées publiques.
 		* Implémentation optionelle sur les messages privés afin de garder un côté décontracté (possibilité de l'ajouter soi-même).
-	
+
 	* Scroll infini	:
 		* Déploiment sur les discussions des messages privés et sur la page d'accueil et la page recherche pour les demandes d'aide.
 		* Optimisation des temps de chargement.
-		
+
 	* Référencement :
 		* Mise en valeur des demandes d'aide par :
 			* le nombre de likes :
 				* Plus une demande a de likes, plus il y a de gens qui ont besoin de la même aide.
 				* Plus une demande a de likes, plus elle est mise en avant.
 			* le nombre de commentaires :
-				* Plus une demande a de commentaires, plus il y a de chance qu'un d'eux répondent à la question.
+				* Plus une demande a de commentaires, plus il y a de chances qu'un d'eux répondent à la question.
 				* Plus une demande a de commentaires, moins elle est mise en avant.
 		* Le référencement n'est pas basé sur la date de publication :
 			* Pour éviter que des questions ne soient jamais répondues.
-			* Pour pas que les utilisateurs posent en boucle la même question si celle-ci n'a pas été répondues.
-			
-	* Site disponible en https pour une sécurité optimale.
+			* Pour éviter que les utilisateurs posent en boucle la même question si celle-ci n'a pas été répondue.
+
+	* Site obligatoirement en HTTPS pour une sécurité optimale.
 
 
 * Frontend :
 	* Site responsive :
 		* l'entièreté du site est responsive.
-		* Adapté pour téléphone.
+		* adapté pour téléphone.
 
 
 * User Experience :
@@ -226,9 +220,8 @@ groupes classes permettant une communication plus aisée entre élèves.
 	* De nombreux thèmes sont à venir (notamment thème de saison et par matière). Ils seront déblocables par niveaux.
 
 
-## V En cours de développement :
+## VI - En cours de développement :
 
-* Notifications par mail en cours de développement (on veut faire un style personnalisé mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma).
+* Notifications par mail en cours de développement (on veut faire un style personnalisé mais nous n'avons pas encore eu le temps puisqu'on ne peut pas utiliser Bulma).
 * De nombreux thèmes devraient arriver dans les prochaines semaines.
 * Ajout d'un leaderbord avec récompense pour ceux ayant gagné le plus d'xp.
-	

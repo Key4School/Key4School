@@ -46,6 +46,9 @@ def XP_tuto():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+def mail_rendu():
+    return render_template('mail_final.html')
+
 
 def saved():
     global utilisateurs
