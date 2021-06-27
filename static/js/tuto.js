@@ -3,27 +3,27 @@ var imageMax = 8;
 
 var data = [
   {
-    'texte': "Bienvenue sur key4school ! Nous sommes ravis de votre arrivée ! key4school est un réseau social développé par 12 lycéens d’Ile de France a destination des lycéens. L’objectif est d’y trouver de l’aide et de s’entraider facilement.",
+    'texte': "Bienvenue sur <b>Key4School</b> ! Nous sommes ravis de votre arrivée ! Key4School est un réseau social développé par 12 lycéens d’Ile de France a destination des lycéens. L’objectif est d’y <b>trouver de l’aide et de s’entraider facilement</b> !",
     'titre': "1. Présentation", 
     'lien': "/"
   },
   {
-    'texte': "Dès votre arrivée sur le site, vous êtes sur la page d’accueil où se trouvent les toutes dernières questions posées par d’autres membres. Les questions ne concernent uniquement les matières que vous étudiez, pour en sélectionner une en particulier vous pouvez utiliser les filtres en haut de page. Si en défilant vous tombez sur une question à laquelle vous pouvez répondre alors n’hésitez-pas, il vous suffit de cliquer sur la bulle en dessous ! ",
+    'texte': "Dès votre arrivée sur le site, vous êtes sur la <b>page d’accueil</b> où se trouvent les questions posées par d’autres membres les <em>plus likées</em>. Les questions ne concernent <b>uniquement</b> les matières que vous étudiez, pour en sélectionner une en particulier vous pouvez utiliser les <b>filtres</b> en haut de page. Si en défilant vous tombez sur une question à laquelle vous pouvez répondre alors n’hésitez-pas, il vous suffit de <b>cliquer sur la bulle en dessous</b> ! ",
     'titre': "2. Accueil",
     'lien': "/"
   },
   {
-    'texte': 'Quand vous avez une question à poser, vous pouvez dans un premier temps taper les mots-clés dans la barre de recherche et regarder s’il y en a déjà une qui y répond. Si vous ne trouvez pas votre réponse, vous n’avez qu’à cliquer sur « Poser une question » et remplir le formulaire qui vous ai donné. Vous pouvez également joindre un fichier comme un exercice par exemple. Essayez d’être poli et le plus clair possible. Une fois que vous estimez que vous avez obtenu réponse à votre question, vous n’avez plus qu’à la mettre en tant que résolue afin de fermer le sujet.',
+    'texte': 'Quand vous avez une <b>question à poser</b>, vous pouvez dans un premier temps taper les mots-clés dans la <b>barre de recherche</b> et regarder s’il y en a déjà une qui y répond. Si vous ne trouvez pas votre réponse, vous n’avez qu’à cliquer sur <em>« Poser une question »</em> et remplir le <b>formulaire</b> qui vous ait donné. Vous pouvez également joindre un fichier comme un exercice, par exemple. Essayez d’être poli et le plus clair possible. Une fois que vous estimez que vous avez obtenu réponse à votre question, vous n’avez plus qu’à la mettre en tant que <b>résolue</b> afin de fermer le sujet.',
     'titre': "3. Poser une question",
     'lien': "/question/"
   },
   {
-    'texte': "En dessous de chaque question, vous avez la possibilité de l’enregistrer afin de pouvoir la retrouver dans la page correspondante accessible dans le menu en haut à droite. Cela vous permet ainsi soit d’y répondre plus tard soit d’être informé si elle est résolue par quelqu’un. ",
+    'texte': "En dessous de chaque question, vous avez la possibilité de l’<b>enregistrer</b> afin de pouvoir la retrouver dans la page correspondante accessible dans le menu en haut à droite. Cela vous permet ainsi soit d’y répondre plus tard soit d’être informé si elle est résolue par quelqu’un. ",
     'titre': "4. Demandes enregistrées",
     'lien': "/saved/"
   },
   {
-    'texte': "Ils sont accessibles à partir du menu en haut à droite, vous pouvez créer des groupes avec le « + », envoyer des messages, des vocaux et même des images ! Vous retrouverez également de base un groupe avec les gens de votre classe afin d’échanger simplement. ",
+    'texte': "Ils sont accessibles à partir du menu en haut à droite, vous pouvez <b>créer</b> des groupes avec le « + », <b>envoyer des messages, des vocaux et même des images</b> ! Vous retrouverez également de base un <b>groupe avec les gens de votre classe</b> afin d’échanger simplement. ",
     'titre': "5. Messages privés",
     'lien': "/messages/"
   },
@@ -33,26 +33,26 @@ var data = [
     'lien': "/"
   },
   {
-    'texte': "Accessible depuis le menu déroulant, il vous permet de renseigner vos informations comme votre pseudo, vos langues vivantes, options et spécialités. Vous pouvez également ajouter une photo de profil ou ajouter des moyens de contact en décidant bien évidemment de les rendre publiques ou non. Vous y retrouverez aussi vos questions posées. Nous vous invitons à le compléter dès votre première visite !",
+    'texte': "Accessible depuis le menu déroulant, il vous permet de <b>renseigner vos informations</b> comme votre pseudo, vos langues vivantes, options et spécialités. Vous pouvez également ajouter une photo de profil ou ajouter des moyens de contact en décidant bien évidemment de les rendre publiques ou non. Vous y retrouverez aussi <b>vos questions posées</b>. <u><b>Nous vous invitons à le compléter dès votre première visite !</b></u>",
     'titre': "7. Profil",
     'lien': "/profil/"
   },
   {
-    'texte': "Il permet de récompenser votre contribution sur le site. Vous pouvez ainsi débloquer des récompenses uniques en fonction de votre niveau, comme un large choix de thèmes pour le site lui-même. Vos récompenses ainsi que votre niveau apparaissent sur votre page de profil.",
+    'texte': "Il permet de <b>récompenser votre contribution</b> sur le site. Vous pouvez ainsi débloquer des <b>récompenses uniques en fonction de votre niveau</b>, comme un large choix de <b>thèmes</b> pour le site lui-même. Vos récompenses ainsi que votre niveau apparaissent sur votre page de profil.",
     'titre': "8. Système d'XP",
     'lien': "/XP_tuto/"
   },
   {
-    'texte': "Afin de profiter d’une expérience agréable sur key4school, nous vous demandons de toujours rester courtois et bienveillant. Sachez qu’il existe un système d’auto-modération qui concerne les questions et leurs réponses, il est également possible de l’activer dans n’importe quel groupe de messages dans les paramètres de celui-ci. Dans tous les cas, si vous remarquez quelque chose qui est déplacé et ne devrait pas se trouvez sur key4school, vous pouvez le signaler et des sanctions peuvent être prises.",
-    'titre': "9. Veiller au bon déroulement de votre passage sur key4school",
+    'texte': "Afin de profiter d’une expérience agréable sur <b>Key4School</b>, nous vous demandons de toujours <b>rester courtois et bienveillant</b>. Sachez qu’il existe un <b>système d’auto-modération</b> qui concerne les questions et leurs réponses, il est également possible de l’activer dans n’importe quel groupe de messages dans les paramètres de celui-ci. Dans tous les cas, si vous remarquez quelque chose qui est déplacé et ne devrait pas se trouvez sur Key4School, vous pouvez le <u><b>signaler</b></u> et des <b>sanctions</b> peuvent être prises.",
+    'titre': "9. Veillez au bon déroulement de votre passage sur Key4School",
     'lien': "/"
   }
 ]
 
 function update(){
   document.getElementById("iframTuto").src = data[page].lien;
-  document.getElementById("texte").innerText = data[page].texte;
-  document.getElementById("titre").innerText = data[page].titre;
+  document.getElementById("texte").innerHTML = data[page].texte;
+  document.getElementById("titre").innerHTML = data[page].titre;
   document.getElementById("progressTuto").value = page+1;
 }
 

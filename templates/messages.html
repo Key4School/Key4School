@@ -2,7 +2,7 @@
 <html lang="fr" style="overflow:hidden;">
 
 <head>
-  <title>Messages</title>
+  <title>Key4School - Messages</title>
   {% include 'head.html' with context %}
   <script src="/static/js/message.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
   <script src="/static/js/filtres.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
@@ -582,8 +582,8 @@
             </header>
             <form onsubmit="quitterGroupe(event); return false;" id="quitterGroupeForm" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="" />
-                <input type='hidden' id="quitter_idviré" name='idViré' value="" />
+                <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
+                <input type='hidden' id="quitter_idviré" name='idViré' value="{{sessionId}}" />
                 <div id="pop up virer">
                   Etes-vous sûr de vouloir quitter le groupe ?
                 </div>
