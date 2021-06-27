@@ -200,7 +200,6 @@ $('#messages').scroll(() => {
       }
     });
   }
-
   lastScrollTop = scrollTop;
 });
 
