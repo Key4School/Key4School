@@ -8,7 +8,21 @@ $(document).ready(function() {
     height: ($(window).height() - parseInt(window.getComputedStyle(document.getElementById('nav'), null).getPropertyValue('height').replace(/px/, '')) - 90).toString() + 'px',
     //width: (80 / 100 * ($(window).width())).toString() + 'px',
   });
+  $('#divCoteMessage').css({
+    height: ($(window).height() - parseInt(window.getComputedStyle(document.getElementById('nav'), null).getPropertyValue('height').replace(/px/, '')) - 120).toString() + 'px',
+    //width: (80 / 100 * ($(window).width())).toString() + 'px',
+  });
 
+  $('#nomgroupe').css({
+    height: ($(window).height() - parseInt(window.getComputedStyle(document.getElementById('nav'), null).getPropertyValue('height').replace(/px/, '')) - 40).toString() + 'px',
+  });
+  $('#listeuser').css({
+    height: (40 / 100 * ($(window).height())).toString() + 'px',
+  });
+  /*searchUser();
+  $('#searchUser').keyup(function() {
+    searchUser();
+  });*/
   // Affichage nb de participants, en fonction de la taille de l'écran
   const groupTitle_size = parseInt(window.getComputedStyle(document.getElementById('groupTitle'), null).getPropertyValue('height').replace(/px/, ''));
   let listGroupUsers_size = parseInt(window.getComputedStyle(document.getElementById('listGroupUsers'), null).getPropertyValue('height').replace(/px/, ''));
@@ -25,17 +39,6 @@ $(document).ready(function() {
       lastedGroupUsers_count.innerHTML = parseInt(lastedGroupUsers_count.innerHTML) + 1;
     }
   }
-
-  /*$('#nomgroupe').css({
-    height: (80 / 100 * ($(window).height())).toString() + 'px',
-  });*/
-  $('#listeuser').css({
-    height: (40 / 100 * ($(window).height())).toString() + 'px',
-  });
-  /*searchUser();
-  $('#searchUser').keyup(function() {
-    searchUser();
-  });*/
 
   //scroll
   scroll();
@@ -174,13 +177,14 @@ socket.on('newMsg', (data) => {
 $(window).data('ajaxready', true);
 
 var lastScrollTop = $('#messages').scrollTop();
-$('#messages').scroll(function() {
+
+$('#messages').scroll(() => {
   if ($(window).data('ajaxready') == false) return;
 
   var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
   var scrollTop = $('#messages').scrollTop();
-  if (scrollTop < lastScrollTop) {
 
+  if (scrollTop <= lastScrollTop) {
     $(window).data('ajaxready', false);
     $.ajax({
       url: "/moreMsg/", // on donne l'URL du fichier de traitement
@@ -197,6 +201,7 @@ $('#messages').scroll(function() {
       }
     });
   }
+
   lastScrollTop = scrollTop;
 });
 
@@ -823,3 +828,24 @@ function modererGrp(idGrp) {
     },
   });
 }
+
+const goToMess = async (idMsg) => {
+  if(document.getElementById(idMsg) === null) {
+    await $.ajax({
+      url: "/moreMsg/", // on donne l'URL du fichier de traitement
+      type: "POST", // la requête est de type POST
+      data: {
+        'lastMsg': $('#messages > div').length,
+        'idGroupe': idGroupe
+      }, // et on envoie nos données
+      success: function(json) {
+        if (json.html != '') {
+          $('#messages').prepend(json.html);
+        }
+      }
+    });
+    return goToMess(idMsg);
+  }
+
+  return window.location.hash = `#${idMsg}`;
+};

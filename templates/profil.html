@@ -187,9 +187,10 @@
                 &nbsp;&nbsp;Pseudo
               </td>
               <td>
-                <div id="contentpseudo">
+                <div id="contentpseudo" style="display: flex; flex-direction: row;">
                   <input type="hidden" value="{{profilUtilisateur['pseudo']}}" name="pseudo" />
-                  <p {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}</p>
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}</p>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%}></i>
                 </div>
               </td>
             </tr>
@@ -460,10 +461,11 @@
                 &nbsp;&nbsp;{%if element=="email"%}adresse mail{%endif%}{%if element=="telephone"%}Téléphone{%endif%}{%if element=="interets"%}Centres d'intérêts{%endif%}
               </td>
               <td>
-                <div id="content{{element}}">
+                <div id="content{{element}}" style="display: flex; flex-direction: row;">
                   <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
-                  <p id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
                   </p>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}></i>
                 </div>
               </td>
               <td>
@@ -546,10 +548,11 @@
                 &nbsp;&nbsp;{%if element=="email"%}adresse mail{%endif%}{%if element=="birth_date"%}date de naissance{%endif%}{%if element=="telephone"%}Téléphone{%endif%}{%if element=="interets"%}Centres d'intérêts{%endif%}
               </td>
               <td>
-                <div id="content{{element}}">
+                <div id="content{{element}}" style="display: flex; flex-direction: row;">
                   <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
-                  <p id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
                   </p>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}></i>
                 </div>
               </td>
               <td>

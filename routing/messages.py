@@ -24,10 +24,10 @@ def page_messages(idGroupe):
             if ObjectId(session['id']) in groupe.toDict()['id-utilisateurs']: # verif autorization
                 msgDb = groupe.getAllMessages()
                 taille = len(msgDb)
-                msgDb = msgDb[taille-10:taille]
+                msgDb = msgDb[taille-30:taille]
 
             elif user['admin'] == True:
-                msgDb = groupe.getAllMessagesSign().reverse()[:10].reverse()
+                msgDb = groupe.getAllMessagesSign().reverse()[:30].reverse()
 
             else:
                 msgDb = None
@@ -269,7 +269,7 @@ def moreMsg():
 
         messages = grp.getAllMessages()
         messages.reverse()
-        messages = messages[lastMsg:lastMsg+10]
+        messages = messages[lastMsg:lastMsg+30]
         messages.reverse()
 
         html = ''

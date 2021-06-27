@@ -6,6 +6,9 @@
   {% include 'head.html' with context %}
   <script src="/static/js/message.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
   <script src="/static/js/filtres.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
+  <script type="text/javascript">
+    window.location.hash = '';
+  </script>
 
   <style type="text/css">
     .moimsg {
@@ -90,11 +93,11 @@
         display: none;
       }
 
-      .divCoteMessage {
+      #divCoteMessage {
         display: block;
       }
 
-      .divCoteMessage:hover {
+      #divCoteMessage:hover {
         cursor: pointer;
       }
     }
@@ -126,7 +129,7 @@
         display: inline-block;
       }
 
-      .divCoteMessage {
+      #divCoteMessage {
         display: none;
       }
     }
@@ -182,7 +185,6 @@
           </div>
         </div>
 
-
         <table class="table is-narrow">
           <tbody>
             <!-- div pour le groupe -->
@@ -190,7 +192,7 @@
               <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['_id']}}"
                 data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
                 <td>
-                  <a style="text-overflow: ellipsis; overflow: hidden;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
+                  <a style="display: block; text-overflow: ellipsis; overflow: hidden; width: 100%; height: 100%;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
                     <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px; display: table-row;">
                       <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
                       {% if not content['is_DM'] %}
@@ -227,7 +229,7 @@
         </table>
       </div>
       {%if msgDb == none%}
-      <div class="divCoteMessage" style="border: 3px solid {{session['couleur'][0]}};width: 100%;margin: 3% 3%;text-align:center;padding-top:5%;padding-bottom:3%;">
+      <div id="divCoteMessage" style="border: 3px solid {{session['couleur'][0]}};width: 100%;margin: 3% 3%;text-align:center;padding-top:5%;padding-bottom:3%;">
         <i class="fas fa-paper-plane" style="border: 2px solid black;border-radius:50%;padding: 3% 4% 3% 2%;font-size:70px;background-color:#dbdbdb;"></i><br />
         <br />
         <p style="font-size: 20px">
