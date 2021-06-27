@@ -13,7 +13,7 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 * page de profil : https://key4school.herokuapp.com/profil/
 * page de demandes enregistrées : https://key4school.herokuapp.com/saved/
 * page de tutoriel : https://key4school.herokuapp.com/help/
-* page d'administration (accès restreint aux administarteurs du site) : https://key4school.herokuapp.com/administration/
+* page d'administration (accès restreint aux administrateurs du site) : https://key4school.herokuapp.com/administration/
 * page de recherche : https://key4school.herokuapp.com/recherche/?search=VotreRecherche
 * page de question : https://key4school.herokuapp.com/question/
 * page de commentaire : https://key4school.herokuapp.com/comments/idDuGroupe
@@ -76,7 +76,7 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 		* Affichage de toutes les informations publiques dont l'xp.
 		* Possibilité de signaler le profil.
 		* Possibilité de démarrer une discussion avec la personne.
-		* Voir si la personne à le statut d'administrateur.
+		* Voir si la personne a le statut d'administrateur.
 
 * Page de demandes enregistrées :
 
@@ -90,7 +90,7 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 * Page d'administration :
 
 	* Page réservée aux administrateurs du site.
-	* Possibilité de visualiser tous les demandes d'aide, les commentaires, les profils, les messages privées, les discussions signalés.
+	* Possibilité de visualiser toutes les demandes d'aide, tous les commentaires, les profils, les messages privées, et toutes les discussions signalées.
 	* Possibilité de valider ou de supprimer chaque signalement.
 
 * Page de recherche :
