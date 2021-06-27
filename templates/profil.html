@@ -142,9 +142,12 @@
   <br />
   <!-- Espace photo de profil -->
   <div style="display:flex;align-items: center;justify-content:space-evenly;">
-    <img alt="user" onclick="updateImgOpen();"
+    <div style="position: relative;">
+      <img alt="user" onclick="updateImgOpen();"
       src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-      style="width:64px; height:64px;object-fit: cover;border-radius:50%; cursor: pointer;" />
+      style="position: relative; width:64px; height:64px;object-fit: cover;border-radius:50%; cursor: pointer;" />
+      <i class="fas fa-pen" style="font-size: 24px; position: absolute; bottom: 5px; right: -5px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
+    </div>
     <div class="ordiFlexTelBlock" style="align-items:flex-start;justify-content:center;">
       <!-- Barre de progression -->
       <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
