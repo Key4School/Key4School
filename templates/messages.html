@@ -194,6 +194,12 @@
                 <td>
                   <a style="display: block; text-overflow: ellipsis; overflow: hidden; width: 100%; height: 100%;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
                     <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px; display: table-row;">
+                      <!-- Pastille notifs -->
+                      {%if content['nbNotif'] > 0%}
+                        <span style="background-color: {{session['couleur'][0]}}; border-radius: 50%; width: 20px; height: 20px; display: inline-block; position: relative;">
+                          <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">{{content['nbNotif']}}</span>
+                        </span>
+                      {%endif%}
                       <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
                       {% if not content['is_DM'] %}
                         {{content['nom']}}
@@ -218,9 +224,6 @@
                       </i>
                       {%endif%}
                       <!-- </span> -->
-                      {%if content['nbNotif'] > 0%}
-                        {{content['nbNotif']}}
-                      {%endif%}
                     </div>
                   </a>
                 </td>
