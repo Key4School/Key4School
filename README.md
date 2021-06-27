@@ -1,4 +1,4 @@
-# CTL 2021 : Key4School
+# CTL 2021 : Key4School <img src="https://github.com/Key4School/Key4School/blob/main/static/image/logo/favicon.png" width=40 >
 
 ## I Introduction :
 
@@ -166,7 +166,7 @@ groupes classes permettant une communication plus aisée entre élèves.
 		* De nouvelles palettes.
 		* De nouveaux thèmes.
 
-## VI Notifications :
+## IV Notifications :
 
 * Notifications pour :
 	* Nouveau message dans un groupe de l'utilisateur.
@@ -181,25 +181,46 @@ groupes classes permettant une communication plus aisée entre élèves.
 
 
 
-## V Innovation technique :
+## V Innovations techniques :
 
 * Backend :
+
 	* Développement en Programmation Orientée Objet :
 		* Allègement du code.
 		* Stockage en cache : réduction des échanges avec la DB : optimisation des temps de chargement.
+	
 	* Utilisation de socket permettant une interaction direct avec le serveur notamment dans les messages privées.
+	
 	* Auto-modération :
-		* Plus de 3000 mots et expressions bannis.
-		* Effective sur tout les inputs publics.
-		* Pas d'implémentation sur les messages privés afin de garder un côté décontracté (possibilité de l'ajouter soi-même).
+		* Plus de 3 000 mots et expressions bannis.
+		* Effective sur toutes les entrées publiques.
+		* Implémentation optionelle sur les messages privés afin de garder un côté décontracté (possibilité de l'ajouter soi-même).
+	
 	* Scroll infini	:
 		* Déploiment sur les discussions des messages privés et sur la page d'accueil et la page recherche pour les demandes d'aide.
 		* Optimisation des temps de chargement.
-	* Référencement 
+		
+	* Référencement :
+		* Mise en valeur des demandes d'aide par :
+			* le nombre de likes :
+				* Plus une demande a de likes, plus il y a de gens qui ont besoin de la même aide.
+				* Plus une demande a de likes, plus elle est mise en avant.
+			* le nombre de commentaires :
+				* Plus une demande a de commentaires, plus il y a de chance qu'un d'eux répondent à la question.
+				* Plus une demande a de commentaires, moins elle est mise en avant.
+		* Le référencement n'est pas basé sur la date de publication :
+			* Pour éviter que des questions ne soient jamais répondues.
+			* Pour pas que les utilisateurs posent en boucle la même question si celle-ci n'a pas été répondues.
+			
+	* Site disponible en https pour une sécurité optimale.
+
+
 * Frontend :
 	* Site responsive :
 		* l'entièreté du site est responsive.
 		* Adapté pour téléphone.
+
+
 * User Experience :
 	* Système d'xp.
 	* De nombreux thèmes sont à venir (notamment thème de saison et par matière). Ils seront déblocables par niveaux.
