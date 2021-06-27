@@ -22,16 +22,16 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 
 * Page d'accueil :
 
-	* Affichage des demandes d'aides selon un référencement (nombre de likes et de commentaires).
-	* Filtrage des demandes d'aides par matière en haut de la page.
+	* Affichage des demandes d'aide selon un référencement (nombre de likes et de commentaires).
+	* Filtrage des demandes d'aide par matière en haut de la page.
 	* Possibilité de liker une demande : icône "pouce vers le haut"
 	* Possibilité de signaler une demande : bouton "signaler"
 	* Possibilité d'enregistrer une demande : icône "marque page"
 	* Possibilité d'accès à la page des commentaires/réponses : icône "bulle"
-	* Système de scroll infini : toutes les demandes ne sont pas chargés d'un seul coup, elles se chargent au fur et à mesure du scroll.
+	* Système de scroll infini : toutes les demandes ne sont pas chargées d'un seul coup, elles se chargent au fur et à mesure du scroll.
 	* Demandes d'aides : affichage du titre, de l'auteur, de la date de mise en ligne, de la matière, du contenu avec les pièces jointes si besoin, du nombre de likes, de commentaires.
 
-* Page de messages privés:
+* Page de messages privés :
 
 	* Chat en direct :
 		* Echange de texte, d'audio et d'image.
