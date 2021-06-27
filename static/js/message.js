@@ -175,6 +175,23 @@ socket.on('newMsg', (data) => {
 
 $(window).data('ajaxready', true);
 
+// load 40 messages at loading
+for(let i=0 ; i<3 ; i++) {
+  $.ajax({
+    url: "/moreMsg/", // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: {
+      'lastMsg': $('#messages > div').length,
+      'idGroupe': idGroupe
+    }, // et on envoie nos données
+    success: function(json) {
+      if (json.html != '') {
+        $('#messages').prepend(json.html);
+      }
+    }
+  });
+}
+
 var lastScrollTop = $('#messages').scrollTop();
 
 $('#messages').scroll(() => {

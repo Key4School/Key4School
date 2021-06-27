@@ -239,11 +239,13 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         """
         self.xp += amount
         self.xp = max(self.xp, 0)
+        self.update()
         return
 
     def addXpModeration(self, amount: int) -> None:
         self.xpModeration += amount
         self.xpModeration = max(self.xpModeration, 0)
+        self.update()
         return
 
     def toDict(self):
@@ -558,7 +560,7 @@ class Message(Actions):
         return
 
     def convert_links(self) -> bool:
-        contenu = '' 
+        contenu = ''
         for w in self.contenu.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
                 '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),

@@ -226,7 +226,9 @@ groupes classes permettant une communication plus aisée entre élèves.
 	* De nombreux thèmes sont à venir (notamment thème de saison et par matière). Ils seront déblocables par niveaux.
 
 
-## V Problèmes techniques à régler :
+## V En cours de développement :
 
-* Notifications par mail en cours de développement (on veut faire un style personnalisé mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma)
+* Notifications par mail en cours de développement (on veut faire un style personnalisé mais on a pas encore eu le temps puisqu'on ne peut pas utiliser bulma).
+* De nombreux thèmes devraient arriver dans les prochaines semaines.
+* Ajout d'un leaderbord avec récompense pour ceux ayant gagné le plus d'xp.
 	
