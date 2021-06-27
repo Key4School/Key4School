@@ -19,7 +19,7 @@
       {%endif%}
         {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT" or user['admin']== True%}
         <div class="navbar-item">
-          <form method="post" action="/suppressionMsg/" class="supprimer" id="suppressionMsg">
+          <form method="post" action="/suppressionMsg/" class="supprimer">
             <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
             <input type='hidden' name="grp" value="{{idgroupe}}" />
             <input type='hidden' name="audio" value="{{content['audio']}}" />
@@ -77,7 +77,7 @@
   {%if content['rep'] != None%}
   <div class="rep">
     <div style="font-variant: small-caps;" ><a href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['_id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
-    <a href="#msg{{content['rep']['_id']}}" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
+    <a onclick="goToMess('msg{{content['rep']['_id']}}');" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
       {%if content['rep']['audio']==true%}Message Vocal{%else%}{{content['rep']['contenu']}}{%endif%}
     </a>
   </div>

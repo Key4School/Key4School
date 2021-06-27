@@ -177,14 +177,14 @@ socket.on('newMsg', (data) => {
 $(window).data('ajaxready', true);
 
 var lastScrollTop = $('#messages').scrollTop();
-$('#messages').scroll(function() {
+
+$('#messages').scroll(() => {
   if ($(window).data('ajaxready') == false) return;
 
   var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
   var scrollTop = $('#messages').scrollTop();
 
   if (scrollTop <= lastScrollTop) {
-
     $(window).data('ajaxready', false);
     $.ajax({
       url: "/moreMsg/", // on donne l'URL du fichier de traitement
@@ -828,3 +828,24 @@ function modererGrp(idGrp) {
     },
   });
 }
+
+const goToMess = async (idMsg) => {
+  if(document.getElementById(idMsg) === null) {
+    await $.ajax({
+      url: "/moreMsg/", // on donne l'URL du fichier de traitement
+      type: "POST", // la requête est de type POST
+      data: {
+        'lastMsg': $('#messages > div').length,
+        'idGroupe': idGroupe
+      }, // et on envoie nos données
+      success: function(json) {
+        if (json.html != '') {
+          $('#messages').prepend(json.html);
+        }
+      }
+    });
+    return goToMess(idMsg);
+  }
+
+  return window.location.hash = `#${idMsg}`;
+};

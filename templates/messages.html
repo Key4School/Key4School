@@ -6,6 +6,9 @@
   {% include 'head.html' with context %}
   <script src="/static/js/message.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
   <script src="/static/js/filtres.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
+  <script type="text/javascript">
+    window.location.hash = '';
+  </script>
 
   <style type="text/css">
     .moimsg {
