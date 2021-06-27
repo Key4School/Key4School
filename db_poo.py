@@ -221,7 +221,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.xpModeration = max(params.get('xpModeration', 0), 0)
         self.motif = params.get('motif', [])
         self.admin = params.get('admin', False)
-        self.savedDemands = params.get('savedDemands', [])
+        self.savedDemands = params.get('savedDemands', [ObjectId('60d8b3a48a701d9f2cbebf3c')])
 
         self.db_table = DB.db_utilisateurs
 
