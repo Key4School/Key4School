@@ -176,7 +176,7 @@ socket.on('newMsg', (data) => {
 $(window).data('ajaxready', true);
 
 // load 40 messages at loading
-for(let i=0 ; i<3 ; i++) {
+for(let i=0 ; i<2 ; i++) {
   $.ajax({
     url: "/moreMsg/", // on donne l'URL du fichier de traitement
     type: "POST", // la requête est de type POST
