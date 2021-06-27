@@ -87,11 +87,11 @@
       <!-- <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button> -->
       <div id="audio-player-container{{content['_id']}}" style="display: flex; width: 100%; border: 1px solid #000; border-radius: 8px; padding: 5px; margin-top: 5px;">
         <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata"></audio>
-        <button style="font-size:17px;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%;" id="play-icon{{content['_id']}}" ><i class="fas fa-play"></i></button>
+        <button style="font-size:17px;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="fas fa-play"></i></button>
         <span style="margin-right:2%; position: relative; top: 50%; transform: translateY(-35%); height: 100%;" id="current-time{{content['_id']}}" class="time">0:00</span>
         <input style="margin-right:2%; width: 60%; background: transparent;" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
         <span style="margin-right:2%; position: relative; top: 50%; transform: translateY(-35%); height: 100%;" id="duration{{content['_id']}}" class="time">0:00</span>
-        <button style="font-size:17px;min-width:42px; height: 35px; border:transparent;background-color:{{session['couleur'][2]}};margin-right:1%;border-radius: 15px;padding-top: 2%;padding-bottom: 2%; margin-right: 15px; margin-top: 3px;" id="buttonAudio{{content['_id']}}" onclick="changeRate('{{content['_id']}}');">1x</button>
+        <button style="font-size:17px;min-width:42px; height: 35px; border:transparent;background-color:{{session['couleur'][2]}};margin-right:1%;border-radius: 15px;padding-top: 2%;padding-bottom: 2%; margin-right: 15px; margin-top: 3px; cursor: pointer;" id="buttonAudio{{content['_id']}}" onclick="changeRate('{{content['_id']}}');">1x</button>
       </div>
       <script>
         document.getElementById('audio{{content['_id']}}').style.display='block';
