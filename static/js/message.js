@@ -862,5 +862,11 @@ const goToMess = async (idMsg) => {
     return goToMess(idMsg);
   }
 
-  return window.location.hash = `#${idMsg}`;
+  // return window.location.hash = `#${idMsg}`;
+  await document.getElementById(idMsg).scrollIntoView({behavior: "smooth"});
+  setTimeout(() => {
+    document.getElementById(idMsg).scrollIntoView()
+  }, 500);
+  
+  return;
 };
