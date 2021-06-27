@@ -26,9 +26,9 @@ $(document).ready(function() {
     }
   }
 
-  /*$('#nomgroupe').css({
-    height: (80 / 100 * ($(window).height())).toString() + 'px',
-  });*/
+  $('#nomgroupe').css({
+    height: ($(window).height() - parseInt(window.getComputedStyle(document.getElementById('nav'), null).getPropertyValue('height').replace(/px/, '')) - 40).toString() + 'px',
+  });
   $('#listeuser').css({
     height: (40 / 100 * ($(window).height())).toString() + 'px',
   });
