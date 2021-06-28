@@ -258,7 +258,7 @@
               {%if profilUtilisateur['caractere']=="ro"%}Romantique{%endif%}
             </td>
           </tr>
-          {%elif element=="birth_date"%}
+          {%elif element=="birth_date" and profilUtilisateur['birth_date'] != None%}
           <tr>
             <td>
               <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
