@@ -42,8 +42,8 @@ def sendNotif(type, id_groupe, id_msg, destinataires):
     if type == 'demande':
         destinataires += [user._id for user in utilisateurs.values() if id_groupe in user.savedDemands]
 
-    # if ObjectId(session['id']) in destinataires:
-    #     destinataires.remove(ObjectId(session['id']))
+    if ObjectId(session['id']) in destinataires:
+        destinataires.remove(ObjectId(session['id']))
 
     destinataires = list(set(destinataires))
 
