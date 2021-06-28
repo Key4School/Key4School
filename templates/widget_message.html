@@ -115,7 +115,7 @@
         });
 
         const showRangeProgress{{content['_id']}} = (rangeInput{{content['_id']}}) => {
-            if(rangeInput{{content['_id']}} === seekSlider{{content['_id']}}) 
+            if(rangeInput{{content['_id']}} === seekSlider{{content['_id']}})
               audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', rangeInput{{content['_id']}}.value / rangeInput{{content['_id']}}.max * 100 + '%');
         };
 
@@ -202,7 +202,7 @@
         <a download="{{content['image']}}.png" href="/DL_file/{{content['image']}}/image/"><img src="{{url_for('image', imageName=content['image'])}}" style="height: 250px; width: auto; "/><br></a>
         {{content['contenu']}}
       {%else%}
-        {{content['contenu']|safe}}
+        {{content['contenu']}}
       {%endif%}
       <!--On affiche le contenu du message -->
     </p>
