@@ -865,6 +865,6 @@ const goToMess = async (idMsg) => {
   setTimeout(() => {
     document.getElementById(idMsg).scrollIntoView()
   }, 500);
-  
+
   return;
 };

@@ -14,11 +14,15 @@ def page_messages(idGroupe):
     global notifications
 
     if 'id' in session:
-        grp = sorted([groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs], key = lambda groupe: groupe['lastMsg']['date-envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
         user = utilisateurs[session['id']].toDict()
         users = sorted([u.toDict() for u in utilisateurs.values()], key = lambda u: u['pseudo'])
 
-        if idGroupe != None:
+        if idGroupe != None and idGroupe in groupes:
+            for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idGroupe) and notification.type == 'msg' and ObjectId(session['id']) in notification.destinataires]:
+                notif.supprUser(ObjectId(session['id']))
+
+            grp = sorted([groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs], key = lambda groupe: groupe['lastMsg']['date-envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
+
             groupe = groupes[idGroupe]
             infoUtilisateurs = groupe.toDict()['utilisateurs']
             if ObjectId(session['id']) in groupe.toDict()['id-utilisateurs']: # verif autorization
@@ -35,10 +39,8 @@ def page_messages(idGroupe):
                 infoUtilisateurs = None
             groupe = groupe.toDict()
 
-            for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idGroupe) and notification.type == 'msg' and ObjectId(session['id']) in notification.destinataires]:
-                notif.supprUser(ObjectId(session['id']))
-
         else:
+            grp = sorted([groupe.toDict() for idGrp , groupe in groupes.items() if ObjectId(session['id']) in groupe.id_utilisateurs], key = lambda groupe: groupe['lastMsg']['date-envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
             msgDb = None
             groupe = None
             infoUtilisateurs = None
@@ -292,4 +294,3 @@ def modererGrp(idGrp):
         return 'group moderation edited', 200
     else:
         abort(401)
-

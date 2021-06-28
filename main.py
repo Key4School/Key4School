@@ -13,8 +13,6 @@ import smtplib
 from threading import Timer
 from functools import partial
 from uuid import uuid4
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from difflib import SequenceMatcher
 import re
 
