@@ -308,7 +308,31 @@ def connexion():
             return redirect(url_for('tuto'))
 
         else:
-            return redirect("https://ent.iledefrance.fr/timeline/timeline")
+            pseudo = (data['username'].lower()).replace(' ', '_')
+            tel = ''
+            if 'mobile' in data_plus:
+                if data_plus['mobile'] != "":
+                    tel = data_plus['mobile']
+            elif 'homePhone' in data_plus:
+                if data_plus['homePhone'] != "":
+                    tel = data_plus['homePhone']
+
+            _id = ObjectId()
+            utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
+                data['birthDate'], '%Y-%m-%d') if data['birthDate'] != None else None, "lycee": data['schoolName'], 'couleur': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
+                'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0, 'nomImg': ''})
+            utilisateurs[str(_id)].insert()
+
+            user = utilisateurs[str(_id)].toDict()
+
+            session['id'] = str(user['_id'])
+            session['pseudo'] = user['pseudo']
+            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
+            session['type'] = user['type']
+            session['cacheRandomKey'] = cacheRandomKey
+
+            return redirect(url_for('tuto'))
+            # return redirect("https://ent.iledefrance.fr/timeline/timeline")
 
 
 if __name__ == "__main__":
