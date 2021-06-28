@@ -172,6 +172,8 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 		* Possibilité de tout marquer comme lu.
 	* Par mail *(pas encore intégré)*:
 		* Mail personnalisé aux couleurs du site.
+	* Sonore :
+		* Lorsque l'on navigue sur le site.
 
 
 
