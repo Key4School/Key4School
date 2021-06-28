@@ -10,7 +10,7 @@ function supprimer(e) {
       document.getElementById('divDemande_'+id).style.display='None';
       supprimerClose();
       url = window.location.href;
-      if ( url.search("coments")){
+      if ( url.search("comments") > 0){
           location.reload();
       }
     },
