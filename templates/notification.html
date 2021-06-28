@@ -26,11 +26,11 @@
         <p>
           <i>
             {%if 'audio' in notif['message'] and notif['message']['audio'] == true %}
-            Message Vocal
+            <i class="fas fa-volume-up"></i> Message Vocal
             {%elif 'image' in notif['message'] and notif['message']['image'] != '' %}
-            <i class="fa-solid fa-image"></i>{{notif['message']['contenu']}}
+            <i class="fas fa-image"></i> {{notif['message']['original-contenu']}}
             {%else%}
-            {{notif['message']['contenu']}}
+            {{notif['message']['original-contenu']}}
             {%endif%}
             {%if similar == 1%}
             et 1 autre {%if 'titre' in notif['groupe']%}reponse{%elif 'nom' in notif['groupe']%}message{%endif%}

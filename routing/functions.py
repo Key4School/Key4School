@@ -99,28 +99,28 @@ class Interval(object):
         """
         self.interval = interval
         self.function = partial(function, *args, **kwargs)
-        self.running  = False 
-        self._timer   = None 
+        self.running  = False
+        self._timer   = None
 
     def __call__(self):
         """
-        Handler function for calling the partial and continuting. 
+        Handler function for calling the partial and continuting.
         """
         self.running = False  # mark not running
-        self.start()          # reset the timer for the next go 
-        self.function()       # call the partial function 
+        self.start()          # reset the timer for the next go
+        self.function()       # call the partial function
 
     def start(self):
         """
-        Starts the interval and lets it run. 
+        Starts the interval and lets it run.
         """
         if self.running:
-            # Don't start if we're running! 
-            return 
-            
-        # Create the timer object, start and set state. 
+            # Don't start if we're running!
+            return
+
+        # Create the timer object, start and set state.
         self._timer = Timer(self.interval, self)
-        self._timer.start() 
+        self._timer.start()
         self.running = True
 
     def stop(self):
@@ -128,6 +128,6 @@ class Interval(object):
         Cancel the interval (no more function calls).
         """
         if self._timer:
-            self._timer.cancel() 
-        self.running = False 
+            self._timer.cancel()
+        self.running = False
         self._timer  = None
