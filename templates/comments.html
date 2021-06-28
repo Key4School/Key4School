@@ -249,7 +249,7 @@
                   <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}">{{r['user']['nom']}} {{r['user']['prenom']}}</a></strong><br /> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
                 </p>
                 <!-- Texte publication -->
-                <p><div id="contenuComment{{r['idRep']}}">{{r['contenu']}}</div></p>
+                <p><div id="contenuComment{{r['idRep']}}">{{r['contenu']|safe}}</div></p>
               </div>
               <!-- Icons like et commentaire -->
               <nav class="level is-mobile">

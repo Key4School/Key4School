@@ -1,6 +1,6 @@
 from datetime import *
 from bson.objectid import ObjectId
-from flask import session
+from flask import session, escape
 from flask_pymongo import PyMongo
 import re
 
@@ -441,8 +441,9 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
             return False
 
     def convert_links(self) -> str:
+        safe = escape(self.contenu)
         contenu = ''
-        for w in self.contenu.split():
+        for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
                 '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
                 w)
@@ -509,8 +510,9 @@ class Reponse(Demande):
         self.motif = params.get('motif', [])
 
     def convert_links(self) -> str:
+        safe = escape(self.contenu)
         contenu = ''
-        for w in self.contenu.split():
+        for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
                 '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
                 w)
@@ -523,8 +525,9 @@ class Reponse(Demande):
             '_id': self._id,
             'idRep': self._id,
             'id-utilisateur': self.id_utilisateur,
-            'contenu': self.contenu,
-            'date-envoi': self.contenu, # self.convert_links()
+            'original-contenu': self.contenu,
+            'contenu': self.convert_links(),
+            'date-envoi': self.date_envoi,
             'likes': self.likes,
             'nb-likes': len(self.likes),
             'a_like': self.aLike(),
@@ -580,8 +583,9 @@ class Message(Actions):
         return
 
     def convert_links(self) -> str:
+        safe = escape(self.contenu)
         contenu = ''
-        for w in self.contenu.split():
+        for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
                 '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
                 w)
