@@ -72,7 +72,7 @@ def postMsg(json):
 
                     if not json['contenuMessage'] == '':
                         _id = ObjectId()
-                        contenu = automoderation(json['contenuMessage']) if grp['is_mod'] else json['contenuMessage']
+                        contenu = automoderation(escape(json['contenuMessage'])) if grp['is_mod'] else escape(json['contenuMessage'])
 
                         messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
                                                           "contenu": contenu, "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []})

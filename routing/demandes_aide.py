@@ -27,7 +27,7 @@ def question():
                     fileType = 'none'
 
                 _id = ObjectId()
-                demandes_aide[str(_id)] = Demande({"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": automoderation(request.form['titre']), "contenu": automoderation(request.form['demande']), "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
+                demandes_aide[str(_id)] = Demande({"_id": _id, "id-utilisateur": ObjectId(session['id']), "titre": automoderation(escape(request.form['titre'])), "contenu": automoderation(escape(request.form['demande'])), "date-envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
                 demandes_aide[str(_id)].insert()
 
                 if request.files['file'].mimetype != 'application/octet-stream':
@@ -80,7 +80,7 @@ def comments(idMsg):
                 reponses[str(_id)] = Reponse({
                     '_id': ObjectId(_id),
                     'id-utilisateur': ObjectId(session['id']),
-                    'contenu': automoderation(request.form.get('rep')),
+                    'contenu': automoderation(escape(request.form.get('rep'))),
                     'date-envoi': datetime.now(),
                     'likes': [],
                     'sign': [],
@@ -106,7 +106,7 @@ def updateDemand():
     if 'id' in session:
         demand = demandes_aide[request.form['idDemandModif']]
         if ObjectId(session['id']) == demand.id_utilisateur:
-            demand.contenu = automoderation(request.form['txtModif'])
+            demand.contenu = automoderation(escape(request.form['txtModif']))
             demand.update()
         return 'sent'
     else:
@@ -259,7 +259,7 @@ def updateComment():
     if 'id' in session:
         Comment = demandes_aide[request.form['idDemandCommentModif']].toDict()['reponsesDict2'][request.form['idCommentModif']]
         if ObjectId(session['id']) == Comment.id_utilisateur:
-            Comment.contenu = automoderation(request.form['txtModif'])
+            Comment.contenu = automoderation(escape(request.form['txtModif']))
             demandes_aide[request.form['idDemandCommentModif']].update()
         return 'sent'
     else:
