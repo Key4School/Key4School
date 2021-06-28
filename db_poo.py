@@ -456,7 +456,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
             'idMsg': self._id,
             'idAuteur': self.id_utilisateur,
             'titre': self.titre,
-            'contenu': self.contenu, # self.convert_links()
+            'contenu': self.convert_links(),
             'date-envoi': self.date_envoi,
             'temps': self.convertTime(),
             'tag-matière': self.matiere,
@@ -595,7 +595,7 @@ class Message(Actions):
             'id-groupe': self.id_groupe,
             'id-utilisateur': self.id_utilisateur,
             'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
-            'contenu': self.contenu, # self.convert_links()
+            'contenu': self.convert_links(),
             'original-contenu': self.contenu,
             'date-envoi': self.date_envoi,
             'audio': self.audio,
@@ -613,7 +613,7 @@ class Message(Actions):
             'groupe': groupes[str(self.id_groupe)].toDict(),
             'id-utilisateur': self.id_utilisateur,
             'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
-            'contenu': self.contenu, # self.convert_links()
+            'contenu': self.convert_links(),
             'original-contenu': self.contenu,
             'date-envoi': self.date_envoi,
             'reponse': self.reponse,
