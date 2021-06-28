@@ -17,7 +17,7 @@ def page_messages(idGroupe):
         user = utilisateurs[session['id']].toDict()
         users = sorted([u.toDict() for u in utilisateurs.values()], key = lambda u: u['pseudo'])
 
-        if idGroupe != None:
+        if idGroupe != None and idGroupe in groupes:
             for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idGroupe) and notification.type == 'msg' and ObjectId(session['id']) in notification.destinataires]:
                 notif.supprUser(ObjectId(session['id']))
 

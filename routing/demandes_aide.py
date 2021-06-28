@@ -64,35 +64,40 @@ def comments(idMsg):
 
     if 'id' in session:
         if request.method == 'GET':
-            msg = demandes_aide[idMsg].toDict()
+            if idMsg in demandes_aide:
+                msg = demandes_aide[idMsg].toDict()
 
-            for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idMsg) and notification.type == 'demande' and ObjectId(session['id']) in notification.destinataires]:
-                notif.supprUser(ObjectId(session['id']))
+                for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idMsg) and notification.type == 'demande' and ObjectId(session['id']) in notification.destinataires]:
+                    notif.supprUser(ObjectId(session['id']))
 
-            return render_template("comments.html", d=msg, user=utilisateurs[session['id']].toDict())
-
+                return render_template("comments.html", d=msg, user=utilisateurs[session['id']].toDict())
+            else:
+                for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idMsg) and notification.type == 'demande' and ObjectId(session['id']) in notification.destinataires]:
+                    notif.supprUser(ObjectId(session['id']))
+                return redirect('/')
         else:
             if 'rep' in request.form:
-                msg = demandes_aide[idMsg].toDict()
-                reponses = msg['reponsesObjects']
+                if idMsg in demandes_aide:
+                    msg = demandes_aide[idMsg].toDict()
+                    reponses = msg['reponsesObjects']
 
-                _id = ObjectId()
-                reponses[str(_id)] = Reponse({
-                    '_id': ObjectId(_id),
-                    'id-utilisateur': ObjectId(session['id']),
-                    'contenu': automoderation(request.form.get('rep')),
-                    'date-envoi': datetime.now(),
-                    'likes': [],
-                    'sign': [],
-                })
+                    _id = ObjectId()
+                    reponses[str(_id)] = Reponse({
+                        '_id': ObjectId(_id),
+                        'id-utilisateur': ObjectId(session['id']),
+                        'contenu': automoderation(request.form.get('rep')),
+                        'date-envoi': datetime.now(),
+                        'likes': [],
+                        'sign': [],
+                    })
 
-                demandes_aide[idMsg].update()
+                    demandes_aide[idMsg].update()
 
-                sendNotif("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
+                    sendNotif("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
 
-                # add XP
-                if not ObjectId(session['id']) == msg['idAuteur']:
-                    utilisateurs[session['id']].addXP(15)
+                    # add XP
+                    if not ObjectId(session['id']) == msg['idAuteur']:
+                        utilisateurs[session['id']].addXP(15)
 
             return redirect('/comments/' + idMsg)
     else:
@@ -132,7 +137,7 @@ def DL_file(fileName, fileType):
                 file.write(fileBinary)
 
             interval = Interval(2, delete_file, args=['static/temp/{}.png'.format(fileName)])
-            interval.start() 
+            interval.start()
 
             return send_file('static/temp/{}.png'.format(fileName))
         elif fileType == 'pdf':
@@ -140,7 +145,7 @@ def DL_file(fileName, fileType):
                 file.write(fileBinary)
 
             interval = Interval(2, delete_file, args=['static/temp/{}.pdf'.format(fileName)])
-            interval.start() 
+            interval.start()
 
             return send_file('static/temp/{}.pdf'.format(fileName))
         else:
