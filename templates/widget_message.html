@@ -200,9 +200,9 @@
       </script>
       {%elif content['image'] != '' %}
         <a download="{{content['image']}}.png" href="/DL_file/{{content['image']}}/image/"><img src="{{url_for('image', imageName=content['image'])}}" style="height: 250px; width: auto; "/><br></a>
-        {{content['contenu']}}
+        {{content['contenu']|safe}}
       {%else%}
-        {{content['contenu']}}
+        {{content['contenu']|safe}}
       {%endif%}
       <!--On affiche le contenu du message -->
     </p>
