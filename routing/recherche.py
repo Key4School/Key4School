@@ -20,15 +20,43 @@ def removeAccents(txt):
 
 def is_relevant(demande, search):
     search = removeAccents(search)
+    isRelevant = False
+    titre = ''
+    contenu = ''
 
-    for keyword in search.split():
-        if keyword in removeAccents(demande.titre.lower()) or keyword in removeAccents(demande.contenu.lower()):
-            return True
-        else:
-            for w in removeAccents(demande.titre.split()):
-                if SequenceMatcher(None, keyword, w.lower()).ratio()>0.8:
-                    print(w)
-                    return True
+    for keyword in search.split(): 
+        # Titre : 
+        for w in demande['titre'].split():
+            # Occurence pleine :
+            if removeAccents(w.lower()) == keyword:
+                isRelevant = True
+                titre += '<mark>{}</mark>'.format(w)
+            # Occurence partielle
+            elif SequenceMatcher(None, keyword, removeAccents(w.lower())).ratio()>0.8:
+                isRelevant = True
+                titre += '<mark>{}</mark>'.format(w)
+            # Aucune occurence
+            else:
+                titre += w
+            titre += ' '
+
+        # Contenu : 
+        for w in demande['contenu'].split():
+            # Occurence pleine :
+            if removeAccents(w.lower()) == keyword:
+                isRelevant = True
+                contenu += '<mark>{}</mark>'.format(w)
+            # Occurence partielle
+            elif SequenceMatcher(None, keyword, removeAccents(w.lower())).ratio()>0.8:
+                isRelevant = True
+                contenu += '<mark>{}</mark>'.format(w)
+            # Aucune occurence
+            else:
+                contenu += w
+            contenu += ' '
+
+    return {'isRelevant': isRelevant, 'titre': titre, 'contenu': contenu}
+
 
 def recherche():
     global utilisateurs
@@ -41,11 +69,23 @@ def recherche():
             user = utilisateurs[session['id']].toDict()
 
             # on récupère les demandes d'aide correspondant à la recherche
-            result = sorted(
+            result = []
+            for _d in demandes_aide.values():
+                d = _d.toDict().copy()
+                occurences = is_relevant(d, search)
+
+                if occurences['isRelevant']:
+                    d['titre'] = occurences['titre']
+                    d['contenu'] = occurences['contenu']
+                    result.append(d)
+
+            result = sorted(result, key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio() ), reverse=True)[:10]
+
+            """result = sorted(
                 [d.toDict() for d in demandes_aide.values()
                     if d.matiere in user['matieres'] and is_relevant(d, search)
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
-            )[:10]
+            )[:10]"""
 
             # on récupère 3 utilisateurs correspondants à la recherche
             users = sorted(

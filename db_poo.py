@@ -440,13 +440,23 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
         else:
             return False
 
+    def convert_links(self) -> str:
+        contenu = ''
+        for w in self.contenu.split():
+            contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
+                '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
+                w)
+            contenu += ' '
+
+        return contenu
+
     def toDict(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
             '_id': self._id,
             'idMsg': self._id,
             'idAuteur': self.id_utilisateur,
             'titre': self.titre,
-            'contenu': self.contenu,
+            'contenu': self.contenu, # self.convert_links()
             'date-envoi': self.date_envoi,
             'temps': self.convertTime(),
             'tag-matière': self.matiere,
@@ -498,13 +508,23 @@ class Reponse(Demande):
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
 
+    def convert_links(self) -> str:
+        contenu = ''
+        for w in self.contenu.split():
+            contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
+                '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
+                w)
+            contenu += ' '
+
+        return contenu
+
     def toDict(self) -> dict:
         return {
             '_id': self._id,
             'idRep': self._id,
             'id-utilisateur': self.id_utilisateur,
             'contenu': self.contenu,
-            'date-envoi': self.date_envoi,
+            'date-envoi': self.contenu, # self.convert_links()
             'likes': self.likes,
             'nb-likes': len(self.likes),
             'a_like': self.aLike(),
@@ -559,7 +579,7 @@ class Message(Actions):
         messages.pop(str(self._id))
         return
 
-    def convert_links(self) -> bool:
+    def convert_links(self) -> str:
         contenu = ''
         for w in self.contenu.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
@@ -575,7 +595,7 @@ class Message(Actions):
             'id-groupe': self.id_groupe,
             'id-utilisateur': self.id_utilisateur,
             'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
-            'contenu': self.convert_links(),
+            'contenu': self.contenu, # self.convert_links()
             'original-contenu': self.contenu,
             'date-envoi': self.date_envoi,
             'audio': self.audio,
@@ -593,7 +613,7 @@ class Message(Actions):
             'groupe': groupes[str(self.id_groupe)].toDict(),
             'id-utilisateur': self.id_utilisateur,
             'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
-            'contenu': self.convert_links(),
+            'contenu': self.contenu, # self.convert_links()
             'original-contenu': self.contenu,
             'date-envoi': self.date_envoi,
             'reponse': self.reponse,

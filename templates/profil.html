@@ -96,6 +96,25 @@
       </form>
     </div>
   </div>
+  <div class="modal" id="suppression" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Supression</p>
+      </header>
+      <form onsubmit="supprimer(event); return false;" id="supprForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <input type="text" name="motif" placeholder="motif" required />
+          <input type='hidden' id="idSupprimé" name='idSuppr' value="" />
+          <input type='hidden' name="demandeBut" value="Suppr" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Supprimer</button>
+          <button onclick="supprimerClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   <div class="modal" id="validationUser" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -771,7 +790,7 @@
         <ul>
           <li>Motif : {{element['SanctionMotif']}}</li>
           <li>Prochaine Sanction : {{element['SanctionNext']}}</li>
-          <li>{{element['dateSanction']}}</li>
+          <li>le {{element['dateSanction'].day}}/{{element['dateSanction'].month}} à {{element['dateSanction'].hour}}h{{element['dateSanction'].minute}}</li>
         </ul>
       </li>
     </ul>
