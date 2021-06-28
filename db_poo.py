@@ -196,7 +196,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.nomImg = params.get('nomImg')
         self.imgProfile = params.get('imgProfile', '')
         self.dateInscription = params['dateInscription']
-        self.birth_date = params.get('birth_date')
+        self.birth_date = params.get('birth_date', None)
         self.classe = params.get('classe', '')
         self.lycee = params['lycee']
         self.spes = params.get('spes', [])
