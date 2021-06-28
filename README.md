@@ -208,6 +208,12 @@ Notre volonté est de réunir les lycéens sur un réseau social centré sur l'e
 
 	* Site obligatoirement en HTTPS pour une sécurité optimale.
 
+	* Création de groupes classes :
+		* Chaque classe a son groupe dédié. 
+		* A sa première connection l'utilisateur est rattaché automatiquement au groupe de sa classe.
+		* Il est impossible pour l'utilisateur de quitter son groupe classe.
+		* A la première connection si l'utilisateur est le premier de sa classe à se connecter au site, un groupe pour sa classe est automatiquement créé.
+
 
 * Frontend :
 	* Site responsive :
