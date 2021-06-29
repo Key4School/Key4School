@@ -109,10 +109,10 @@
         {{content['user']['prenom']}} {{content['user']['nom']}} </a> :
         <br />
       <br />
-      <a href="{{url_for('comments' ,idMsg=content['_id'])}}"><b>{{content['titre']}}</b></a>
+      <a href="{{url_for('comments' ,idMsg=content['_id'])}}"><b>{{content['titre']|safe}}</b></a>
       <br />
       <br />
-      {{content['contenu']}}
+      {{content['contenu']|safe}}
       <br /><br />
       le : <em>{{content['date-envoi']}}</em><br />
       matière : <b>{{content['matière']}}</b>
