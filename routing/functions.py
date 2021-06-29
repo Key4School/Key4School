@@ -16,7 +16,7 @@ with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
 def automoderation(stringModerer: str) -> str:
     nbMaj = sum(1 for c in stringModerer if c.isupper())
     lenStr = len(stringModerer)
-    if nbMaj/lenStr >= 60/100 :
+    if lenStr != 0 and nbMaj/lenStr >= 60/100 :
         stringModerer=stringModerer.lower()
     stringModerer2 =stringModerer
     for key in ['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}']:
