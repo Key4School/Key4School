@@ -75,6 +75,29 @@
       </form>
     </div>
   </div>
+  <div class="modal" id="validationRep" style="overflow:hidden;">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Validation réponse</p>
+      </header>
+      <form onsubmit="validerRep(event); return false;" id="valRepForm" method="POST" autocomplete="off">
+        <section class="modal-card-body">
+          <select name="motif">
+            <option value="abusif">Signalement abusif</option>
+            <option value="justifie">Justifié</option>
+          </select>
+          <input type='hidden' id="idRepValidé" name='idVal' value="" />
+          <input type='hidden' id="idrepDemandValidé" name='idDemandVal' value="" />
+          <input type='hidden' name="demandeBut" value="ValRep" />
+        </section>
+        <footer class="modal-card-foot">
+          <button type="submit" class="button is-success">Valider</button>
+          <button onclick="validerRepClose(); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   {%endif%}
   <div class="modal" id="signalisation" style="overflow:hidden;">
     <div class="modal-background"></div>
@@ -353,7 +376,7 @@
                     </div>
                     {%if r['sign'] != []%}
                       <div class="navbar-item">
-                        <button class="button is-success is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
+                        <button class="button is-success is-outlined is-small" onClick="validationRep('{{r['idRep']}}','{{d['idMsg']}}')">
                           <span class="icon is-small">
                             <i class="fas fa-check"></i>
                           </span>

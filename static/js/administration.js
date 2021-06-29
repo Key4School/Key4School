@@ -41,9 +41,10 @@ function valider(e) {
     success: function(response) {
       if (document.location.href.indexOf('comments') > -1){
         window.location.reload(false);
-    }else{
+    }else {
       document.getElementById('divDemande_'+id).style.display='None';
-      validerClose();}
+      validerClose();
+    }
     },
   });
 }

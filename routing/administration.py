@@ -60,7 +60,7 @@ def administration():
 
                 elif request.form['demandeBut'] == 'SupprRep':
                     demande = demandes_aide[request.form['idDemandSuppr']]
-                    auteur = utilisateurs[demandes_aide[request.form['idDemandSuppr']].toDict()['reponsesDict'][request.form['idSuppr']]['id-utilisateur']]
+                    auteur = utilisateurs[str(demandes_aide[request.form['idDemandSuppr']].toDict()['reponsesDict'][request.form['idSuppr']]['id-utilisateur'])]
                     auteur.addXpModeration(5)
                     auteur.addXP(-15)
                     sanction = auteur.toDict()['Sanctions']
@@ -84,6 +84,7 @@ def administration():
                     signDemande = demande.sign
                     motifDemande = demande.motif
                     sign =  demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign']
+                    print ('sign')
                     if request.form['motif'] == "abusif":
                         for content in sign :
                                 sanction = utilisateurs[str(content)].toDict()['Sanctions']
