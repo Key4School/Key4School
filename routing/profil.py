@@ -103,6 +103,10 @@ def updateprofile():
             notifs['messages'] = True
         else:
             notifs['messages'] = False
+        if 'notifs_sound' in request.form and request.form['notifs_sound'] == 'on':
+            notifs['sound'] = True
+        else:
+            notifs['sound'] = False
         user.notifs = notifs
 
         utilisateurs[session['id']].update()
