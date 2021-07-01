@@ -818,7 +818,7 @@ class Notification(Actions):
             'date': self.date,
             'temps': self.convertTime(),
             'destinataires': self.destinataires,
-            'userDest': [utilisateurs.get(str(destinataire)).toDict() for destinataire in self.destinataires]
+            'userDest': [utilisateurs.get(str(destinataire)).toDict() for destinataire in self.destinataires if utilisateurs.get(str(destinataire)) != None]
         }
 
     def toDB(self) -> dict:
