@@ -68,7 +68,7 @@ def sendNotif(type, id_groupe, id_msg, destinataires):
 
         for user in notification['userDest']:
             if str(user['_id']) in clientsNotif:
-                emit('newNotif', html, to=str(user['_id']))
+                emit('newNotif', {'html': html, 'sound': str(user['notifs']['sound'])}, to=str(user['_id']))
             # elif user['email'] != "":
             #     # si l'user a autorisé les notifs par mail
             #     if (type == 'msg' and user['notifs']['messages']) or (type == 'demande' and user['notifs']['demandes']):

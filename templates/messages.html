@@ -446,6 +446,12 @@
                   <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
                     <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}" />
                     <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
+                    <button class="button is-success is-outlined is-small" type="submit" style="margin-top:1%;width: 25%;height: 40px;">
+                      <span class="icon is-small">
+                        <i class="fas fa-check" aria-hidden="true"></i>
+                      </span>
+                      <span>Valider</span>
+                    </button>
                     <br /><br />
                     <div id="listeuser">
                       {% for user in users %}
@@ -458,12 +464,6 @@
                         </div>
                         {% endif %}
                       {% endfor %}
-                      <button class="button is-success is-outlined is-small" type="submit">
-                        <span class="icon is-small">
-                          <i class="fas fa-check" aria-hidden="true"></i>
-                        </span>
-                        <span>Valider</span>
-                      </button>
                     </div>
                   </form>
                 </div>

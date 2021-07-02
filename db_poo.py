@@ -212,7 +212,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.interets = params.get('interets', '')
         self.telephone = params.get('telephone', '')
         self.notifs = params.get(
-            'notifs', {'demandes': True, 'messages': True})
+            'notifs', {'demandes': True, 'messages': True, 'sound': True})
         self.sign = params.get('sign', [])
         self.Sanctions = params.get('Sanction', [])
         self.SanctionEnCour = params['SanctionEnCour']
@@ -775,7 +775,8 @@ class Notification(Actions):
 
     def supprNotif(self):
         self.delete()
-        notifications.pop(str(self._id))
+        if str(self._id) in notifications:
+            notifications.pop(str(self._id))
         return
 
     def supprUser(self, uid):
@@ -818,7 +819,7 @@ class Notification(Actions):
             'date': self.date,
             'temps': self.convertTime(),
             'destinataires': self.destinataires,
-            'userDest': [utilisateurs.get(str(destinataire)).toDict() for destinataire in self.destinataires]
+            'userDest': [utilisateurs.get(str(destinataire)).toDict() for destinataire in self.destinataires if utilisateurs.get(str(destinataire)) != None]
         }
 
     def toDB(self) -> dict:

@@ -56,8 +56,10 @@ socket.on('notif', (html) => {
   updateNotif();
 });
 
-socket.on('newNotif', (html) => {
-  $('#notifContent').append(html);
+socket.on('newNotif', (json) => {
+  $('#notifContent').append(json.html);
   updateNotif();
-  $.playSound('/static/sounds/notif.mp3');
+  if (json.sound == 'True'){
+    $.playSound('/static/sounds/notif.mp3');
+  }
 });
