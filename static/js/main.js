@@ -27,3 +27,18 @@ $(".navbar-item.has-dropdown").click(function(e) {
       $(".navbar-item.has-dropdown.is-active").removeClass('is-active');
     }
   });
+
+  function apercuProfil(id){
+    if (! window['divOpen_' + id]){
+    document.getElementById("apercu2profil"+id).style.display = "block";
+    window['divOpen_' + id] = true;
+    }
+  }
+
+  function hideApercuProfil(id) {
+    console.log('test');
+    if ( window['divOpen_' + id]){
+    document.getElementById("apercu2profil"+id).style.display = "none";
+    window['divOpen_' + id] = false;
+    }
+  }
