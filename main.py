@@ -16,12 +16,12 @@ from uuid import uuid4
 from difflib import SequenceMatcher
 import re
 
-# DB POO
-from db_poo import *
-
 # Création de l'application
 app = Flask(__name__)
 socketio = SocketIO(app)
+
+# DB POO
+from db_poo import *
 
 # Création du Cluster de la DB
 DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
@@ -34,7 +34,7 @@ from routing.administration import administration, suppressionMsg, validerMsg, s
 from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
 from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, DL_file, likePost, likeRep, resoudre, savePost
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
-from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif, afficheNotif
 
 app.add_url_rule('/', 'accueil', accueil)
 app.add_url_rule('/accueil/', 'accueil2', accueil2)
@@ -87,16 +87,7 @@ app.add_url_rule('/XP_tuto/', 'XP_tuto', XP_tuto)
 app.add_url_rule('/mail_rendu/', 'mail_rendu', mail_rendu)
 app.add_url_rule('/saved/', 'saved', saved)
 app.add_url_rule('/savePost/<postId>/', 'savePost', savePost, methods=['POST'])
-
-if 'redirect_uri' not in os.environ: # route de dev
-    # route temporaire
-    @app.route('/mail/')
-    def mail():
-        if 'id' in session:
-            return render_template("mail.html")
-        else:
-            session['redirect'] = request.path
-            return redirect(url_for('login'))
+app.add_url_rule('/notif/<userId>/<notifId>/', 'afficheNotif', afficheNotif)
 
 
 # Connection au groupe pour recevoir les nouvelles notif

@@ -17,183 +17,208 @@
   <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
 </head>
 <style>
-  td{
+  td {
     border-color: transparent;
   }
-  .boutonBulma:hover{
-    color:#ffffff;
-    background-color:#3273dc;
+
+  .boutonBulma:hover {
+    color: #ffffff;
+    background-color: #3273dc;
   }
-  .boutonBulma{
-    color:#3273dc;
+
+  .boutonBulma {
+    color: #3273dc;
   }
 </style>
 
 <table border="0" cellspacing="0" style="text-align: center;height:100%;width:90%;margin:0% 5%">
-  <tr  style="padding:2% 0%;background-color:white;height:10%;margin:auto">
+  <tr style="padding:2% 0%;background-color:white;height:10%;margin:auto">
 
-      <td  style="width:45%;">
-        <div style="border-top: 2px solid {{session['couleur'][0]}}"> </div>
-      </td>
-      <td  style="text-decoration: none;">
-        <a href="{{url_for('accueil')}}">
+    <td style="width:45%;">
+      <div style="border-top: 2px solid {{user['couleur'][0]}}"> </div>
+    </td>
+    <td style="text-decoration: none;">
+      <a href="https://key4school.herokuapp.com/" target="_blank">
         <img class="logo" src="
-      {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}
-      {{url_for('static',filename='image/logo/Nuances_bleu.png')}}
+      {%if user['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}
+      https://key4school.herokuapp.com/static/image/logo/Nuances_bleu.png
       {%endif%}
-      {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}
-      {{url_for('static',filename='image/logo/Nuances_rouge.png')}}
+      {%if user['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}
+      https://key4school.herokuapp.com/static/image/logo/Nuances_rouge.png
       {%endif%}
-      {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}
-      {{url_for('static',filename='image/logo/Nuances_vert.png')}}
+      {%if user['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}
+      https://key4school.herokuapp.com/static/image/logo/Nuances_vert.png
       {%endif%}
-      {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}
-      {{url_for('static',filename='image/logo/Nuances_orange.png')}}
+      {%if user['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}
+      https://key4school.herokuapp.com/static/image/logo/Nuances_orange.png
       {%endif%}
-      {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}
-      {{url_for('static',filename='image/logo/Framboise_bleu.png')}}
+      {%if user['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}
+      https://key4school.herokuapp.com/static/image/logo/Framboise_bleu.png
       {%endif%}
-      {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
-      {{url_for('static',filename='image/logo/Moutarde_rose.png')}}
+      {%if user['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+      https://key4school.herokuapp.com/static/image/logo/Moutarde_rose.png
       {%endif%}
-      {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
-      session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
-      session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
-      session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
-      session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
-      session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
-      {{url_for('static',filename='image/logo/cle_blanche.png')}}
+      {%if user['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+      user['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+      user['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+      user['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+      user['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+      user['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+      https://key4school.herokuapp.com/static/image/logo/cle_blanche.png
       {%endif%}
       " style="
-      {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
-      session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
-      session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
-      session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
-      session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
-      session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+      {%if user['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+      user['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+      user['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+      user['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+      user['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+      user['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
 
-      background: linear-gradient(to bottom right, {{session['couleur'][0]}}, {{session['couleur'][1]}}, {{session['couleur'][2]}});{%endif%}
+      background: linear-gradient(to bottom right, {{user['couleur'][0]}}, {{user['couleur'][1]}}, {{user['couleur'][2]}});{%endif%}
       border-radius: 8px;height:50px;width:50px;" />
       </a>
     </td>
-      <td style="color:black;font-weight:bold;">
-            <p style="font-size:30px;font-family: 'Roboto', sans-serif;">Key</p>
-          </td>
+    <td style="color:black;font-weight:bold;">
+      <p style="font-size:30px;font-family: 'Roboto', sans-serif;">Key</p>
+    </td>
 
-          <td>
-            <p style="font-size:30px;font-family: 'M PLUS Rounded 1c', sans-serif;">
-              4
-            </p>
-          </td>
+    <td>
+      <p style="font-size:30px;font-family: 'M PLUS Rounded 1c', sans-serif;">
+        4
+      </p>
+    </td>
 
-          <td>
-            <p style="font-size:30px;font-family: 'Rochester', cursive;">
-              School
-            </p>
-          </td>
+    <td>
+      <p style="font-size:30px;font-family: 'Rochester', cursive;">
+        School
+      </p>
+    </td>
 
-          <td  style="width:45%;">
-            <div style="border-top: 2px solid {{session['couleur'][0]}}"> </div>
-          </td>
+    <td style="width:45%;">
+      <div style="border-top: 2px solid {{user['couleur'][0]}}"> </div>
+    </td>
 
   </tr>
 </table>
 <br /><br /><br />
 <table border="0" cellspacing="0" style="text-align: center;height:100%;width:90%;margin:0% 5%">
-    <tr style="background-color:white;">
-      <td>
-      </td>
-      <td >
-        <p style="color:{{session['couleur'][2]}};">
-          La cloche sonne !
-        </p>
-      </td>
-      <td>
-      </td>
-    </tr>
-    <tr style="background-color:white;">
-      <td>
-      </td>
-      <td >
-        <i style="font-size:80px;color:{{session['couleur'][2]}};margin:auto" class="fas fa-bell"></i>
-      </td>
-      <td>
-      </td>
-    </tr>
-    <tr style="background-color:white;">
-      <td>
-      </td>
-      <td >
-        <p>
-          Bonjour, Utilisateur 1707, vous avez reçu <b>une nouvelle notification :</b>
-        </p>
-      </td>
-      <td>
-      </td>
-    </tr>
-
-    <tr style="background-color:white;margin:auto;align-items:center;">
-      <td>
-      </td>
-      <td   style="border-top: 1px solid #e7f0f2;">
-        <img src="{{url_for('static',filename='image/sans_profil.png')}}" style="border-top: 1px solid #e7f0f2;border-radius: 50%;height:60px;width:60px;object-fit: cover;" />
-      </td>
-      <td  >
-      </td>
-    </tr>
-    <tr style="background-color:white;">
-      <td>
-      </td>
-      <td >
-        <p>
-          <b>Utilisateur 1874</b> vous a envoyé un message :
-        </p>
-      </td>
-      <td>
-      </td>
-    </tr>
-    <tr style="background-color:white;">
-      <td>
-      </td>
-      <td >
-        <p style="color:#3e97ff;">
-          <b>Salut, comment ça va depuis hier ? ...</b>
-        </p>
-      </td>
-      <td>
-      </td>
-    </tr>
-  </table>
-  <br /><br />
-  <table border="0" cellspacing="0" style="text-align: center;height:100%;width:90%;margin:0% 5%">
-  <tr>
+  <tr style="background-color:white;">
     <td>
     </td>
-    <td >
-      <a href="{{url_for('page_messages')}}" class="boutonBulma" style="font-family:Segoe UI;border:1px solid #3273dc;padding: 0.75% 2%;border-radius: 4px;text-decoration: none;">Répondre
-      </a>
-    </td>
     <td>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-    </td>
-    <td >
-      <p style="color:#c6c7c7;">
-        Pour changer vos préférences de notifications, <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/profil/">cliquez ici</a>, si le mail ne s'affiche pas correctement merci de cliquer <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/profil/">ici</a>
+      <p style="color:{{user['couleur'][2]}};">
+        La cloche sonne !
       </p>
     </td>
     <td>
     </td>
   </tr>
+  <tr style="background-color:white;">
+    <td>
+    </td>
+    <td>
+      <i style="font-size:80px;color:{{user['couleur'][2]}};margin:auto" class="fas fa-bell"></i>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr style="background-color:white;">
+    <td>
+    </td>
+    <td>
+      <p>
+        Bonjour {{user['pseudo']}}, vous avez reçu une <b>nouvelle notification :</b>
+      </p>
+    </td>
+    <td>
+    </td>
+  </tr>
+
+  <tr style="background-color:white;margin:auto;align-items:center;">
+    <td>
+    </td>
+    <td style="border-top: 1px solid #e7f0f2;">
+      <img src="
+      {%if 'nomImg' in notif['sender'] and notif['sender']['nomImg'] != "" %}
+      https://key4school.herokuapp.com/userImg/{{notif['sender']['nomImg']}}
+      {%else%}
+      https://key4school.herokuapp.com/static/image/sans_profil.png
+      {%endif%}
+      " style="border-top: 1px solid #e7f0f2;border-radius: 50%;height:60px;width:60px;object-fit: cover;" />
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr style="background-color:white;">
+    <td>
+    </td>
+    <td>
+      <p>
+        {%if notif['type']=='msg'%}
+        <b>{{notif['sender']['pseudo']}}</b> vous a envoyé un message sur le groupe
+        <b>
+          {% if not notif['groupe']['is_DM'] %}
+            {{notif['groupe']['nom']}}
+          {% else %}
+            {% for u in notif['groupe']['utilisateurs'] %}
+              {% if u['_id'] != user['_id'] %}
+                » {{u['pseudo']}}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        </b>:
+        {%elif notif['type']=='demande'%}
+        <b>{{notif['sender']['pseudo']}}</b> a répondu a votre demande d'aide <b>{{notif['groupe']['titre']}}</b>:
+        {%endif%}
+      </p>
+    </td>
+    <td>
+    </td>
+  </tr>
+  <tr style="background-color:white;">
+    <td>
+    </td>
+    <td>
+      <p style="color:#3e97ff;">
+        {%if 'audio' in notif['message'] and notif['message']['audio'] == true %}
+        <i class="fas fa-volume-up"></i> Message Vocal
+        {%elif 'image' in notif['message'] and notif['message']['image'] != '' %}
+        <i class="fas fa-image"></i> {{notif['message']['original-contenu']}}
+        {%else%}
+        {{notif['message']['original-contenu']}}
+        {%endif%}
+      </p>
+    </td>
+    <td>
+    </td>
+  </tr>
+</table>
+<br /><br />
+<table border="0" cellspacing="0" style="text-align: center;height:100%;width:90%;margin:0% 5%">
   <tr>
     <td>
     </td>
-    <td >
-      <p style="color:#c6c7c7;">
+    <td>
+      <a href="
+      {%if notif['type']=='msg'%}
+      https://key4school.herokuapp.com/messages/{{notif['id_groupe']}}
+      {%elif notif['type']=='demande'%}
+      https://key4school.herokuapp.com/comments/{{notif['id_groupe']}}
+      {%endif%}
+      " target="_blank" class="boutonBulma" style="font-family:Segoe UI;border:1px solid #3273dc;padding: 0.75% 2%;border-radius: 4px;text-decoration: none;">Répondre</a>
+    </td>
+    <td>
+    </td>
+  </tr>
 
+  <tr>
+    <td>
+    </td>
+    <td>
+      <p style="color:#c6c7c7;">
+        Pour changer vos préférences de notifications, <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/profil/" target="_blank">cliquez ici</a>
+        <br>
+        Si le mail ne s'affiche pas correctement merci de <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/notif/{{user['_id']}}/{{notif['_id']}}" target="_blank">cliquer ici</a>
       </p>
     </td>
     <td>
