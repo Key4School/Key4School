@@ -24,11 +24,7 @@
           {% if not notif['groupe']['is_DM'] %}
             {{notif['groupe']['nom']}}
           {% else %}
-            {% for u in notif['groupe']['utilisateurs'] %}
-              {% if u['_id'] != notif['destinataires'][0] %}
-                » {{u['pseudo']}}
-              {% endif %}
-            {% endfor %}
+            {{notif['userDest'][0]['pseudo]}}
           {% endif %}
         </a>
         {%endif%} <br>

@@ -811,8 +811,8 @@ class Notification(Actions):
                                             'html', _charset=codage))
 
                         mailserver.sendmail(From, To, msg.as_string())
-        mailserver.quit
-        return
+        
+        return mailserver.quit()
 
     def getSimilar(self, uid):
         '''récupère les notifs du même groupe plus récentes'''
