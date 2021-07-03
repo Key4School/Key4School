@@ -13,7 +13,8 @@
         <p style="margin-bottom: 5px;">
           <!-- Nom utilisateur ; pseudo ; temps -->
         <div style="font-variant: small-caps;">
-          <a href="{{url_for('profil' ,idUser=u['_id'])}}">{{u['nom']}} {{u['prenom']}}</a>
+          {%set varApercuProfil = u%}
+          <a href="{{url_for('profil' ,idUser=u['_id'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{u['nom']}} {{u['prenom']}}{% include 'apercu2profil.html' with context %}</a>
         </div>
         <small><em>@{{u['pseudo']}}</em></small>
         </p>

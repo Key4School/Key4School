@@ -56,43 +56,17 @@ def sendNotif(type, id_groupe, id_msg, destinataires):
         notifications[str(_id)] = Notification({"_id": _id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
                                         "date": datetime.now(), "destinataires": destinataires})
         notifications[str(_id)].insert()
-        notification = notifications[str(_id)].toDict()
+        notifications[str(_id)].send()
+    return
 
-        serveur = 'smtp.gmail.com'
-        port = '465'
-        From = 'key4school@gmail.com'
-        password = 'CtlLemeilleurGroupe'
-        codage = 'utf-8'
 
-        html = render_template("notification.html", notif=notification, similar=0)
-
-        for user in notification['userDest']:
-            if str(user['_id']) in clientsNotif:
-                emit('newNotif', {'html': html, 'sound': str(user['notifs']['sound'])}, to=str(user['_id']))
-            # elif user['email'] != "":
-            #     # si l'user a autorisé les notifs par mail
-            #     if (type == 'msg' and user['notifs']['messages']) or (type == 'demande' and user['notifs']['demandes']):
-            #         # si un mail n'a pas déja été envoyé pour ce groupe
-            #         if (type == 'msg' and len([notif for notif in notifications.values() if notif.id_groupe == id_groupe and notif.type == 'msg' and user in notif.destinataires]) == 0 ) or type == 'demande':
-            #             To = user['email']
-            #             msg = MIMEMultipart()
-            #             msg['From'] = From
-            #             msg['To'] = To
-            #             msg['Subject'] = sujet
-            #             msg['Charset'] = codage
-            #
-            #             # attache message texte
-            #             msg.attach(MIMEText('message'.encode(codage),
-            #                                 'plain', _charset=codage))
-            #             # attache message HTML
-            #             msg.attach(MIMEText('html'.encode(codage),
-            #                                 'html', _charset=codage))
-            #
-            #             mailserver = smtplib.SMTP_SSL(serveur, port)
-            #             mailserver.login(From, password)
-            #             mailserver.sendmail(From, To, msg.as_string())
-            #             mailserver.quit
-
+def afficheNotif(userId, notifId):
+    global utilisateurs
+    global notifications
+    if userId in utilisateurs and notifId in notifications:
+        return render_template("mail.html", user=utilisateurs[userId].toDict(), notif=notifications[notifId].toDict())
+    else:
+        return redirect(url_for('login'))
 
 
 class Interval(object):

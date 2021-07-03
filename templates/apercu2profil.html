@@ -1,0 +1,36 @@
+<div id="apercu2profil{{varApercuProfil['_id']}}" class="box profil elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 41%;display:None;position: absolute;
+    z-index: 1;">
+  <article class="media">
+    <div class="media-left">
+      <!-- Image photo de profil-->
+      <figure class="image is-64x64">
+        <img alt="user" src="{%if 'nomImg' in varApercuProfil and varApercuProfil['nomImg'] != "" %}{{url_for('userImg', profilImg = varApercuProfil['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+          style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
+      </figure>
+    </div>
+    <!-- Contenu publication -->
+    <div class="media-content">
+      <div class="content">
+          <!-- Nom utilisateur ; pseudo ; temps -->
+        <div style="font-variant: small-caps;">
+          <a href="{{url_for('profil' ,idUser=varApercuProfil['_id'])}}">{{varApercuProfil['nom']}} {{varApercuProfil['prenom']}}</a>
+        </div>
+        <small><em>@{{varApercuProfil['pseudo']}}</em></small><br />
+    <b>XP : </b>{{varApercuProfil['xp']}}<br />
+    <b>Classe : </b>{{varApercuProfil['classe']}}/{{varApercuProfil['lycee']}}
+  </div>
+</div>
+    <div style="flex-direction: column;align-items: flex-end;">
+      <div class="navbar-item ">
+        {%if varApercuProfil['admin']== true%}
+            <span class="icon is-small ">
+              <i class="fas fa-crown" aria-hidden="true" style="color:	hsl(48, 100%, 67%)"></i>
+            </span>
+            <span style="color:	hsl(48, 100%, 67%);margin-bottom: 37%;margin-left: 10%;">
+               &nbsp; Admin
+            </span>
+        {%endif%}
+      </div>
+    </div>
+  </article>
+</div>

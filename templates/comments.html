@@ -269,7 +269,8 @@
               <div class="content">
                 <p style="margin-bottom: 5px;">
                   <!-- Nom utilisateur ; pseudo ; temps -->
-                  <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}">{{r['user']['nom']}} {{r['user']['prenom']}}</a></strong><br /> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
+                  {%set varApercuProfil = r['user']%}
+                  <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{r['user']['nom']}} {{r['user']['prenom']}}{% include 'apercu2profil.html' with context %}</a></strong><br /> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
                 </p>
                 <!-- Texte publication -->
                 <p><div id="contenuComment{{r['idRep']}}">{{r['contenu']|safe}}</div></p>
@@ -307,7 +308,7 @@
                   <div class="navbar-item">
                     <button class="button is-link is-outlined is-small" onClick="CommentModificationOpen('{{r['idRep']}}', '{{d['idMsg']}}')">
                       <span class="icon is-small">
-                        <i class="fas fa-times"></i>
+                        <i class="fas fa-pen"></i>
                       </span>
                       <span>Modifier </span>
                     </button>

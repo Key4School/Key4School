@@ -17,10 +17,16 @@
         </div>
         <br>
         Sur
-        {%if 'titre' in notif['groupe']%}
+        {%if notif['type'] == 'demande'%}
         la demande d'aide <a onclick="supprNotif('{{notif['_id']}}')" href="{{url_for('comments', idMsg = notif['id_groupe'])}}">{{notif['groupe']['titre']}}</a>
-        {%elif 'nom' in notif['groupe']%}
-        le groupe <a onclick="supprNotif('{{notif['_id']}}')" href="{{url_for('page_messages', idGroupe = notif['id_groupe'])}}">{{notif['groupe']['nom']}}</a>
+        {%elif notif['type'] == 'msg'%}
+        le groupe <a onclick="supprNotif('{{notif['_id']}}')" href="{{url_for('page_messages', idGroupe = notif['id_groupe'])}}">
+          {% if not notif['groupe']['is_DM'] %}
+            {{notif['groupe']['nom']}}
+          {% else %}
+            {{notif['userDest'][0]['pseudo]}}
+          {% endif %}
+        </a>
         {%endif%} <br>
         <!-- Texte publication -->
         <p>

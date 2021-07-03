@@ -81,7 +81,6 @@ def postMsg(json):
 
                     if message:
                         groupe = message['groupe']
-                        sendNotif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
 
                         users = groupe['utilisateurs']
 
@@ -89,7 +88,8 @@ def postMsg(json):
                         otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
 
                         emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=json['room'])
-
+                        sendNotif("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
+                        
 
 def postLike(json):
 	print('hey')

@@ -1,8 +1,12 @@
 from datetime import *
 from bson.objectid import ObjectId
-from flask import session, escape
+from flask import session, escape, render_template
 from flask_pymongo import PyMongo
 import re
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from __main__ import socketio
 
 utilisateurs = {}
 demandes_aide = {}
@@ -708,7 +712,7 @@ class Groupe(Actions):
             'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
             'nbUtilisateurs': len(self.id_utilisateurs),
             'lastMsg': self.getLastMessage(),
-            'nbNotif': self.getNbNotif(ObjectId(session['id']) if session != None else None),
+            'nbNotif': self.getNbNotif(ObjectId(session['id']) if session != None and 'id' in session else None),
             'moderateurs': self.moderateurs,
             'modos': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.moderateurs],
             'sign': self.sign,
@@ -731,6 +735,7 @@ class Groupe(Actions):
     def __str__(self):
         return str(self.toDict())
 
+clientsNotif = {}
 
 class Notification(Actions):
     def __init__(self, params: dict):
@@ -768,6 +773,46 @@ class Notification(Actions):
             tempsStr = '{}min'.format(diffTemps // 60)
 
         return tempsStr
+
+    def send(self):
+        serveur = 'smtp.gmail.com'
+        port = '465'
+        From = 'key4school@gmail.com'
+        password = 'CtlLemeilleurGroupe'
+        codage = 'utf-8'
+        mailserver = smtplib.SMTP_SSL(serveur, port)
+        mailserver.login(From, password)
+
+        notification = self.toDict()
+        html = render_template("notification.html", notif=notification, similar=0)
+
+        for user in notification['userDest']:
+            # if str(user['_id']) in clientsNotif:
+            #     socketio.emit('newNotif', html, to=str(user['_id']))
+            if user['email'] != "" or user['emailENT'] != "":
+                # si l'user a autorisé les notifs par mail
+                if (self.type == 'msg' and user['notifs']['messages']) or (self.type == 'demande' and user['notifs']['demandes']):
+                    # si un mail n'a pas déja été envoyé pour ce groupe
+                    if (self.type == 'msg' and len([notif for notif in notifications.values() if notif.id_groupe == self.id_groupe and notif.type == 'msg' and user['_id'] in notif.destinataires]) == 1) or self.type == 'demande':
+                        if user['email'] != "":
+                            To = user['email']
+                        elif user['emailENT'] != "":
+                            To = user['emailENT']
+
+                        msg = MIMEMultipart()
+                        msg['From'] = From
+                        msg['To'] = To
+                        msg['Subject'] = 'Key4School - Nouvelle notification'
+                        msg['Charset'] = codage
+
+                        htmlMail = render_template('mail.html', notif=notification, user=user)
+                        # attache message HTML
+                        msg.attach(MIMEText(htmlMail.encode(codage),
+                                            'html', _charset=codage))
+
+                        mailserver.sendmail(From, To, msg.as_string())
+        
+        return mailserver.quit()
 
     def getSimilar(self, uid):
         '''récupère les notifs du même groupe plus récentes'''
