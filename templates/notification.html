@@ -31,7 +31,7 @@
         <!-- Texte publication -->
         <p>
           <i>
-            {%if 'audio' in notif['message'] and notif['message']['audio'] == true %}
+            {%if 'audio' in notif['message'] and notif['message']['audio'] == true%}
             <i class="fas fa-volume-up"></i> Message Vocal
             {%elif 'image' in notif['message'] and notif['message']['image'] != '' %}
             <i class="fas fa-image"></i> {{notif['message']['original-contenu']}}
