@@ -285,8 +285,7 @@
               {%endfor%}
             {% endif %}-->
               {% for content in infoUtilisateurs %}
-              {%set varApercuProfil = content%}
-                <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['_id'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{content['pseudo']}}</a>, </span>{% include 'apercu2profil.html' with context %}
+                <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['_id'])}}">{{content['pseudo']}}</a>, </span>
               {%endfor%}
             </p>
           </div>
@@ -342,8 +341,7 @@
                         <p style="margin-bottom: 5px;">
                           <!-- Nom utilisateur ; pseudo ; temps -->
                         <div style="font-variant: small-caps;">
-                          {%set varApercuProfil = users%}
-                          <a href="{{url_for('profil' ,idUser=users['_id'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{users['nom']}} {{users['prenom']}}{% include 'apercu2profil.html' with context %}</a>
+                          <a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['nom']}} {{users['prenom']}}</a>
                         </div>
                         <small><em>@{{users['pseudo']}}</em></small>
                         </p>
