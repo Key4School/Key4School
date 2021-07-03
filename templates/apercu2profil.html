@@ -1,4 +1,5 @@
-<div id="apercu2profil{{varApercuProfil['_id']}}" class="box profil elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;display:None">
+<div id="apercu2profil{{varApercuProfil['_id']}}" class="box profil elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 41%;display:None;position: absolute;
+    z-index: 1;">
   <article class="media">
     <div class="media-left">
       <!-- Image photo de profil-->
@@ -10,31 +11,26 @@
     <!-- Contenu publication -->
     <div class="media-content">
       <div class="content">
-        <p style="margin-bottom: 5px;">
           <!-- Nom utilisateur ; pseudo ; temps -->
         <div style="font-variant: small-caps;">
           <a href="{{url_for('profil' ,idUser=varApercuProfil['_id'])}}">{{varApercuProfil['nom']}} {{varApercuProfil['prenom']}}</a>
         </div>
-        <small><em>@{{varApercuProfil['pseudo']}}</em></small>
-        </p>
-      </div>
-    </div>
-    {%if varApercuProfil['admin']== true%}
+        <small><em>@{{varApercuProfil['pseudo']}}</em></small><br />
+    <b>XP : </b>{{varApercuProfil['xp']}}<br />
+    <b>Classe : </b>{{varApercuProfil['classe']}}/{{varApercuProfil['lycee']}}
+  </div>
+</div>
     <div style="flex-direction: column;align-items: flex-end;">
       <div class="navbar-item ">
-        <span class="icon is-small ">
-          <i class="fas fa-crown" aria-hidden="true" style="color:	hsl(48, 100%, 67%)"></i>
-        </span>
-        <span style="color:	hsl(48, 100%, 67%)">
-           &nbsp; Admin
-        </span>
+        {%if varApercuProfil['admin']== true%}
+            <span class="icon is-small ">
+              <i class="fas fa-crown" aria-hidden="true" style="color:	hsl(48, 100%, 67%)"></i>
+            </span>
+            <span style="color:	hsl(48, 100%, 67%);margin-bottom: 37%;margin-left: 10%;">
+               &nbsp; Admin
+            </span>
+        {%endif%}
       </div>
     </div>
-    {%endif%}
-    XP : {{varApercuProfil['xp']}}
-    Classe : {{varApercuProfil['classe']}}/{{varApercuProfil['lycee']}}
-    spécialité : {{varApercuProfil['spes-str']}}
-    options : {{varApercuProfil['options-str']}}
-    langues :{{varApercuProfil['langues-str']}}
   </article>
 </div>

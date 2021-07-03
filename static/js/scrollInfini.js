@@ -38,7 +38,7 @@ $(window).scroll(function() {
           if (search != '') {
             $content.append("<p>Aucun autre résultat</p>");
           } else {
-            $content.append("<p>Aucune nouvelle demande d'aide</p>");
+            $content.append("<p style='text-align:center;'>Aucune nouvelle demande d'aide</p>");
           }
         }
       },
