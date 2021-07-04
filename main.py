@@ -31,7 +31,7 @@ from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved
 from routing.recherche import recherche, recherche_user, morePost, moreUser
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, uploadImage, image, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg, modererGrp
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
-from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg
+from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg, otherSubject
 from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, DL_file, likePost, likeRep, resoudre, savePost
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
 from routing.functions import listeModeration, automoderation, clientsNotif, afficheNotif
@@ -61,6 +61,7 @@ app.add_url_rule('/changeTheme/', 'changeTheme', changeTheme, methods=['POST'])
 app.add_url_rule('/profil/', 'profil', profil, methods=['POST', 'GET'], defaults={'idUser': None})
 app.add_url_rule('/profil/<idUser>/', 'profil', profil, methods=['POST', 'GET'])
 app.add_url_rule('/updateprofile/', 'updateprofile', updateprofile, methods=['POST'])
+app.add_url_rule('/otherSubject/', 'otherSubject', otherSubject, methods=['POST'])
 app.add_url_rule('/userImg/<profilImg>/', 'userImg', userImg)
 app.add_url_rule('/updateImg/', 'updateImg', updateImg, methods=['POST'])
 app.add_url_rule('/question/', 'question', question, methods=['POST', 'GET'])
@@ -298,6 +299,9 @@ def connexion():
 
             return redirect(url_for('tuto'))
 
+        # elif data['type'] == 'PARENT':
+        #     # return redirect("https://ent.iledefrance.fr/timeline/timeline")
+
         else:
             pseudo = (data['username'].lower()).replace(' ', '_')
             tel = ''
@@ -323,7 +327,6 @@ def connexion():
             session['cacheRandomKey'] = cacheRandomKey
 
             return redirect(url_for('tuto'))
-            # return redirect("https://ent.iledefrance.fr/timeline/timeline")
 
 
 if __name__ == "__main__":

@@ -2,26 +2,36 @@
 <html class="has-navbar-fixed-top" lang="fr">
 
 <head>
-{% include 'head.html' with context %}
+  {% include 'head.html' with context %}
   <title>Key4School - Profil</title>
   <!-- importation du JS pour afficher et enlever les div -->
   <style>
     .logoBouton:hover {
       cursor: pointer;
     }
-    @media screen and (max-width:1023px){
-      table, thead, tbody, th, td, tr {
+
+    @media screen and (max-width:1023px) {
+
+      table,
+      thead,
+      tbody,
+      th,
+      td,
+      tr {
         display: block;
       }
+
       thead tr {
         position: absolute;
         top: -9999px;
         left: -9999px;
       }
+
       tr {
         border: 1px solid #ccc;
         margin-bottom: 5%;
       }
+
       td {
         border: none;
         border-bottom: 1px solid #eee;
@@ -29,20 +39,25 @@
         padding-left: 200px;
       }
     }
+    .survolSubject:hover{
+      cursor: pointer;
+    }
     .switch {
       position: relative;
       display: inline-block;
       width: 60px;
       height: 34px;
     }
+
     .switch input {
       opacity: 0;
       width: 0;
       height: 0;
     }
+
     .slider {
       height: 34px;
-      width:60px;
+      width: 60px;
       position: absolute;
       cursor: pointer;
       left: 5%;
@@ -50,6 +65,7 @@
       -webkit-transition: .4s;
       transition: .4s;
     }
+
     .slider:before {
       position: absolute;
       content: "";
@@ -61,17 +77,21 @@
       -webkit-transition: .4s;
       transition: .4s;
     }
-    input:checked + .slider {
+
+    input:checked+.slider {
       background-color: #00a609;
     }
-    input:focus + .slider {
+
+    input:focus+.slider {
       box-shadow: 0 0 1px #00a609;
     }
-    input:checked + .slider:before {
+
+    input:checked+.slider:before {
       -webkit-transform: translateX(26px);
       -ms-transform: translateX(26px);
       transform: translateX(26px);
     }
+
     .slider.round {
       border-radius: 34px;
     }
@@ -213,8 +233,8 @@
   <div style="display:flex;align-items: center;justify-content:space-evenly;">
     <div style="position: relative;">
       <img alt="user" onclick="updateImgOpen();"
-      src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-      style="position: relative; width:64px; height:64px;object-fit: cover;border-radius:50%; cursor: pointer;" />
+        src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        style="position: relative; width:64px; height:64px;object-fit: cover;border-radius:50%; cursor: pointer;" />
       <i class="fas fa-pen" style="font-size: 24px; position: absolute; bottom: 5px; right: -5px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
     </div>
     <div class="ordiFlexTelBlock" style="align-items:flex-start;justify-content:center;">
@@ -261,7 +281,8 @@
               <td>
                 <div id="contentpseudo" style="display: flex; flex-direction: row;">
                   <input type="hidden" value="{{profilUtilisateur['pseudo']}}" name="pseudo" />
-                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}</p>
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}
+                  </p>
                   <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%}></i>
                 </div>
               </td>
@@ -270,13 +291,14 @@
             <tr>
               <td>
                 <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
-                &nbsp;&nbsp;Lycée/Classe
+                &nbsp;&nbsp;Lycée{%if profilUtilisateur['type'] == 'ELEVE'%}/Classe{%endif%}
               </td>
               <td>
-                {{profilUtilisateur['lycee']}}/{{profilUtilisateur['classe']}}
+                {{profilUtilisateur['lycee']}}{%if profilUtilisateur['type'] == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
               </td>
             </tr>
             <!-- Langues -->
+            {%if profilUtilisateur['type'] == 'ELEVE'%}
             <tr>
               <td>
                 <i class="fas fa-globe" style="font-size:25px;"></i>
@@ -475,6 +497,77 @@
                 </div>
               </td>
             </tr>
+            {%elif profilUtilisateur['type'] == 'ENSEIGNANT'%}
+            <tr>
+              <td>
+                <i class="fas fa-book" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Votre matière
+              <td>
+                <div id="contentSubject">
+                  <div class="select" class="selectProfil">
+                    <select name="matiere">
+                      <option value="none" {%if profilUtilisateur['matiere']=="none"%}selected{%endif%}>Non renseignée...</option>
+                      <option value="fr" {%if profilUtilisateur['matiere']=="fr"%}selected{%endif%}>Français</option>
+                      <option value="hg" {%if profilUtilisateur['matiere']=="hg"%}selected{%endif%}>Histoire Géographie</option>
+                      <option value="emc" {%if profilUtilisateur['matiere']=="emc"%}selected{%endif%}>EMC</option>
+                      <option value="maths" {%if profilUtilisateur['matiere']=="maths"%}selected{%endif%}>Mathématiques</option>
+                      <option value="pc" {%if profilUtilisateur['matiere']=="pc"%}selected{%endif%}>Physique Chimie</option>
+                      <option value="svt" {%if profilUtilisateur['matiere']=="svt"%}selected{%endif%}>SVT</option>
+                      <option value="snt" {%if profilUtilisateur['matiere']=="snt"%}selected{%endif%}>SNT</option>
+                      <option value="ses" {%if profilUtilisateur['matiere']=="ses"%}selected{%endif%}>SES</option>
+                      <option value="philo" {%if profilUtilisateur['matiere']=="philo"%}selected{%endif%}>Philosophie</option>
+                      <option value="eps" {%if profilUtilisateur['matiere']=="eps"%}selected{%endif%}>EPS</option>
+                      <option value="ang" {%if profilUtilisateur['matiere']=="ang"%}selected{%endif%}>Anglais</option>
+                      <option value="esp" {%if profilUtilisateur['matiere']=="esp"%}selected{%endif%}>Espagnol</option>
+                      <option value="all" {%if profilUtilisateur['matiere']=="all"%}selected{%endif%}>Allemand</option>
+                      <option value="it" {%if profilUtilisateur['matiere']=="it"%}selected{%endif%}>Italien</option>
+                      <option value="chi" {%if profilUtilisateur['matiere']=="chi"%}selected{%endif%}>Chinois</option>
+                      <option value="fr" {%if profilUtilisateur['matiere']=="fr"%}selected{%endif%}>Français</option>
+                      <option value="ru" {%if profilUtilisateur['matiere']=="ru"%}selected{%endif%}>Russe</option>
+                      <option value="por" {%if profilUtilisateur['matiere']=="por"%}selected{%endif%}>Portugais</option>
+                      <option value="ara" {%if profilUtilisateur['matiere']=="ara"%}selected{%endif%}>Arabe</option>
+                      <option value="art" {%if profilUtilisateur['matiere']=="art"%}selected{%endif%}>Art</option>
+                      <option value="spe-nsi" {%if profilUtilisateur['matiere']=="spe-nsi"%}selected{%endif%}>NSI</option>
+                      <option value="si" {%if profilUtilisateur['matiere']=="si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
+                      <option value="lca-latin" {%if profilUtilisateur['matiere']=="lca-latin"%}selected{%endif%}>LCA Latin</option>
+                      <option value="lca-grec" {%if profilUtilisateur['matiere']=="lca-grec"%}selected{%endif%}>LCA Grec</option>
+                      <option value="spe-bio-eco" {%if profilUtilisateur['matiere']=="spe-bio-eco"%}selected{%endif%}>Spécialité Biologie-écologie</option>
+                      <option value="opt-mg" {%if profilUtilisateur['matiere']=="opt-mg"%}selected{%endif%}>Option Management et Gestion</option>
+                      <option value="opt-ss" {%if profilUtilisateur['matiere']=="opt-ss"%}selected{%endif%}>Option Santé et Social</option>
+                      <option value="opt-biotech" {%if profilUtilisateur['matiere']=="opt-biotech"%}selected{%endif%}>Option Biotechnologies</option>
+                      <option value="opt-sl" {%if profilUtilisateur['matiere']=="opt-sl"%}selected{%endif%}>Option Sciences et Laboratoire</option>
+                      <option value="opt-cit" {%if profilUtilisateur['matiere']=="opt-cit"%}selected{%endif%}>Option Création et innovations technologiques</option>
+                      <option value="opt-ccd" {%if profilUtilisateur['matiere']=="opt-ccd"%}selected{%endif%}>Option Cration et culture - design</option>
+                      <option value="opt-equit" {%if profilUtilisateur['matiere']=="opt-equit"%}selected{%endif%}>Option Hippologie et équitation</option>
+                      <option value="opt-aet" {%if profilUtilisateur['matiere']=="opt-aet"%}selected{%endif%}>Option Agronomie-économie-territoires</option>
+                      <option value="opt-psc" {%if profilUtilisateur['matiere']=="opt-psc"%}selected{%endif%}>Option Pratiques sociales et culturelles</option>
+                    </select>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i class="fas fa-book-open" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Autre(s) matière(s) enseignée(s)
+              <td>
+                <div id="contentSubject">
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="divsubjectopen()" {%endif%}></i>
+                </div>
+              </td>
+            </tr>
+            {%else%}
+            <tr>
+              <td>
+                <i class="fas fa-book-open" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Votre(s) matière(s)
+              <td>
+                <div id="contentSubject">
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="divsubjectopen()" {%endif%}></i>
+                </div>
+              </td>
+            </tr>
+            {%endif%}
             {%for element in profilUtilisateur['elementPublic']%}
             {%if element=="caractere"%}
             <tr>
@@ -535,7 +628,8 @@
               <td>
                 <div id="content{{element}}" style="display: flex; flex-direction: row;">
                   <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
-                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>
+                    {{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
                   </p>
                   <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}></i>
                 </div>
@@ -622,7 +716,8 @@
               <td>
                 <div id="content{{element}}" style="display: flex; flex-direction: row;">
                   <input type="hidden" name="{{element}}" type="{{element}}" value="{{profilUtilisateur[element]}}" />
-                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>
+                    {{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}
                   </p>
                   <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}></i>
                 </div>
@@ -723,9 +818,9 @@
         <label class="radio" title="Niveau 2 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {%if niv < 2%}
-              <i style="opacity: .8;" class="fas fa-lock"></i>
+            <i style="opacity: .8;" class="fas fa-lock"></i>
             {% else %}
-              <input type="radio" name="couleur" value="1" {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}checked{%endif%}>
+            <input type="radio" name="couleur" value="1" {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}checked{%endif%}>
             {%endif%}&nbsp;&nbsp;
             <p id="couleur" style="background-color:#ff0000;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#ffa8a8;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
@@ -737,9 +832,9 @@
         <label class="radio" title="Niveau 3 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {% if niv < 3 %}
-              <i style="opacity: .8;" class="fas fa-lock"></i>
+            <i style="opacity: .8;" class="fas fa-lock"></i>
             {% else %}
-              <input type="radio" name="couleur" value="2" {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}checked{%endif%}>
+            <input type="radio" name="couleur" value="2" {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}checked{%endif%}>
             {% endif %}&nbsp;&nbsp;
             <p id="couleur" style="background-color:#14db14;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#aeffa8;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
@@ -751,9 +846,9 @@
         <label class="radio" title="Niveau 4 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {% if niv < 4 %}
-              <i style="opacity: .8;" class="fas fa-lock"></i>
+            <i style="opacity: .8;" class="fas fa-lock"></i>
             {% else %}
-              <input type="radio" name="couleur" value="3" {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}checked{%endif%}>
+            <input type="radio" name="couleur" value="3" {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}checked{%endif%}>
             {% endif %}&nbsp;&nbsp;
             <p id="couleur" style="background-color:#ffbb00;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#e8c959;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
@@ -765,9 +860,9 @@
         <label class="radio" title="Niveau 5 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {% if niv < 5 %}
-              <i style="opacity: .8;" class="fas fa-lock"></i>
+            <i style="opacity: .8;" class="fas fa-lock"></i>
             {% else %}
-              <input type="radio" name="couleur" value="4" {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}checked{%endif%}>
+            <input type="radio" name="couleur" value="4" {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}checked{%endif%}>
             {% endif %}&nbsp;&nbsp;
             <p id="couleur" style="background-color:#e6445f;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#f3a6b3;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
@@ -778,9 +873,9 @@
         <label class="radio" title="Niveau 5 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {% if niv < 5 %}
-              <i style="opacity: .8;" class="fas fa-lock"></i>
+            <i style="opacity: .8;" class="fas fa-lock"></i>
             {% else %}
-              <input type="radio" name="couleur" value="5" {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>
+            <input type="radio" name="couleur" value="5" {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>
             {% endif %}&nbsp;&nbsp;
             <p id="couleur" style="background-color:#deb72f;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
             <p id="couleur" style="background-color:#e6cf81;border-color:black;border-radius:50%;width: 15px;height: 15px;"></p>&nbsp;
@@ -791,9 +886,9 @@
         <label class="radio" title="Niveau 5 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {% if niv < 5 %}
-              <i style="opacity: .8;" class="fas fa-lock"></i>
+            <i style="opacity: .8;" class="fas fa-lock"></i>
             {% else %}
-              <input type="radio" name="couleur" value="6" {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+            <input type="radio" name="couleur" value="6" {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
                 session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
                 session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
                 session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
@@ -835,10 +930,10 @@
     {% endif %}
     {%for d in demandes %}
     <!-- Début publi -->
-{% include 'publication.html' with context %}
-  <!-- Fin publi -->
-  <br />
-  {%endfor%}
+    {% include 'publication.html' with context %}
+    <!-- Fin publi -->
+    <br />
+    {%endfor%}
   </div>
   <!-- Sanctions -->
   <!-- STYLE A FAIRE !!! -->
@@ -857,6 +952,61 @@
       </li>
     </ul>
     {%endfor%}
+  </div>
+  {%endif%}
+  {%if profilUtilisateur['type'] != 'ELEVE'%}
+  <div class="modal" id="subjects" style="overflow:auto;">
+    <div class="modal-background"></div>
+    <div class="modal-card" style="height: 89%;margin-top: 3%;overflow:auto;">
+      <header class="modal-card-head">
+        <p class="modal-card-title"><i class="fas fa-book-open" style="font-size:25px;"></i>
+        &nbsp;&nbsp;{%if profilUtilisateur['type'] == 'ENSEIGNANT'%}Autre(s) matière(s) enseignée(s){%else%}Votre(s) matière(s){%endif%}</p>
+        <button onclick="divsubjectclose(); return false;" class="delete" aria-label="close"></button>
+      </header>
+      <form action="{{url_for('otherSubject')}}" method="POST" autocomplete="off" id="formSubject">
+        <section class="modal-card-body">
+          <div id="listeuser" style="position: relative;overflow:auto; max-height: 500px;">
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="fr" {%if "fr" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'fr'%}checked disabled{%endif%} {%if profilUtilisateur['matiere'] == 'fr'%}checked disabled{%endif%} /> Français</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="hg" {%if "hg" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'hg'%}checked disabled{%endif%} /> Histoire Géographie</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="emc" {%if "emc" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'emc'%}checked disabled{%endif%} /> EMC</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="maths" {%if "maths" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'maths'%}checked disabled{%endif%} /> Mathématiques</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="pc" {%if "pc" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'pc'%}checked disabled{%endif%} /> Physique Chimie</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="svt" {%if "svt" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'svt'%}checked disabled{%endif%} /> SVT</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="snt" {%if "snt" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'snt'%}checked disabled{%endif%} /> SNT</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="ses" {%if "ses" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'ses'%}checked disabled{%endif%} /> SES</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="philo" {%if "philo" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'philo'%}checked disabled{%endif%} /> Philosophie</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="eps" {%if "eps" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'eps'%}checked disabled{%endif%} /> EPS</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="ang" {%if "ang" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'ang'%}checked disabled{%endif%} /> Anglais</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="esp" {%if "esp" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'esp'%}checked disabled{%endif%} /> Espagnol</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="all" {%if "all" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'all'%}checked disabled{%endif%} /> Allemand</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="it" {%if "it" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'it'%}checked disabled{%endif%} /> Italien</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="chi" {%if "chi" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'chi'%}checked disabled{%endif%} /> Chinois</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="ru" {%if "ru" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'ru'%}checked disabled{%endif%} /> Russe</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="por" {%if "por" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'por'%}checked disabled{%endif%} /> Portugais</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="ara" {%if "ara" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'ara'%}checked disabled{%endif%} /> Arabe</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="art" {%if "pc" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'art'%}checked disabled{%endif%} /> Art</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="spe-nsi" {%if "spe-nsi" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'nsi'%}checked disabled{%endif%} /> NSI</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="si" {%if "si" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'si'%}checked disabled{%endif%} /> Sciences de l'Ingénieur</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="lca-latin" {%if "lca-latin" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'lca-latin'%}checked disabled{%endif%} /> LCA Latin</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="lca-grec" {%if "lca-grec" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'lca-grec'%}checked disabled{%endif%} /> LCA Grec</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="spe-bio-eco" {%if "spe-bio-eco" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'spe-bio-eco'%}checked disabled{%endif%} /> Spécialité Biologie-écologie</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-mg" {%if "opt-mg" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-mg'%}checked disabled{%endif%} /> Option Management et Gestion</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-ss" {%if "opt-ss" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-ss'%}checked disabled{%endif%} /> Option Santé et Social</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-biotech" {%if "opt-biotech" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-biotech'%}checked disabled{%endif%} /> Option Biotechnologies</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-sl" {%if "opt-sl" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-sl'%}checked disabled{%endif%} /> Option Sciences et Laboratoire</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-cit" {%if "opt-cit" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-cit'%}checked disabled{%endif%} /> Option Création et innovations technologiques</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-ccd" {%if "opt-ccd" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-ccd'%}checked disabled{%endif%} /> Option Cration et culture - design</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-equit" {%if "opt-equit" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-equit'%}checked disabled{%endif%} /> Option Hippologie et équitation</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-aet" {%if "opt-aet" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-aet'%}checked disabled{%endif%} /> Option Agronomie-économie-territoires</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-psc" {%if "opt-psc" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-psc'%}checked disabled{%endif%} /> Option Pratiques sociales et culturelles</label></div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button onclick="submitSubject(); return false;" class="button is-success">Valider</button>
+          <button onclick="divsubjectclose(event); return false;" class="button">Annuler</button>
+        </footer>
+      </form>
+    </div>
   </div>
   {%endif%}
   <!-- fin de la page -->

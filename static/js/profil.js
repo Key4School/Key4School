@@ -73,3 +73,15 @@ function designalerProfil(e) {
     },
   });
 }
+
+function divsubjectopen() {
+  $("#subjects").addClass("is-active");
+}
+
+function divsubjectclose(e) {
+  $("#subjects").removeClass("is-active");
+}
+
+function submitSubject() {
+  $("#formSubject").submit();
+}
