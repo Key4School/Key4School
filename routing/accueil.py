@@ -3,7 +3,7 @@ from datetime import *
 from flask.json import jsonify
 from bson.objectid import ObjectId
 from db_poo import *
-from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, clientsNotif
 from math import exp
 
 def accueil():
