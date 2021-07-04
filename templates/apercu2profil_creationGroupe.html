@@ -1,11 +1,11 @@
-<div id="apercu2profil{{varApercuProfil['_id']}}" class="box profil elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 41%;display:None;position: absolute;
+<div id="apercu2profil{{varApercuProfil['_id']}}" class="box profil elem" style="border-radius: 20px; width: 100%;display:None;position: absolute;font-size:13px;
     z-index: 1;">
   <article class="media">
     <div class="media-left">
       <!-- Image photo de profil-->
-      <figure class="image is-64x64">
+      <figure class="image is-32x32">
         <img alt="user" src="{%if 'nomImg' in varApercuProfil and varApercuProfil['nomImg'] != "" %}{{url_for('userImg', profilImg = varApercuProfil['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-          style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
+          style="width:32px; height:32px;border-radius: 50%;object-fit: cover;" />
       </figure>
     </div>
     <!-- Contenu publication -->

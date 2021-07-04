@@ -188,16 +188,30 @@
               </div>
             </td>
           </tr>
+          <tr>
+            <td>
+              <i class="fas fa-user-graduate" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Statut
+            </td>
+            <td>
+              <div id="contentspe">
+                <p id="spe">
+                  {{profilUtilisateur['type']}}
+                </p>
+              </div>
+            </td>
+          </tr>
           <!-- Lycée et classe -->
           <tr>
             <td>
               <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
-              &nbsp;&nbsp;Lycée/Classe
+              &nbsp;&nbsp;Lycée{%if profilUtilisateur['type'] == 'ELEVE'%}/Classe{%endif%}
             </td>
             <td>
-              {{profilUtilisateur['lycee']}}/{{profilUtilisateur['classe']}}
+              {{profilUtilisateur['lycee']}}{%if profilUtilisateur['type'] == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
             </td>
           </tr>
+          {%if profilUtilisateur['type'] == 'ELEVE'%}
           <!-- Langues -->
           <tr>
             <td>
@@ -237,6 +251,52 @@
               </div>
             </td>
           </tr>
+          {%elif profilUtilisateur['type'] == 'ENSEIGNANT'%}
+          <tr>
+            <td>
+              <i class="fas fa-book" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Matière
+            </td>
+            <td>
+              <div id="contentspe">
+                <p id="spe">
+                  {{profilUtilisateur['matiere-str']}}{%if profilUtilisateur['matiere-str']==""%}Non-renseigné{%endif%}
+                </p>
+              </div>
+            </td>
+          </tr>
+          {%if profilUtilisateur['matiere_autre']|length != 0%}
+          <tr>
+            <td>
+              <i class="fas fa-book-open" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Autre(s) matière(s) enseignée(s)
+            </td>
+            <td>
+              <div id="contentspe">
+                <p id="spe">
+                  {{profilUtilisateur['matiere_autre-str']}}{%if profilUtilisateur['matiere_autre-str']==""%}Non-renseigné{%endif%}
+                </p>
+              </div>
+            </td>
+          </tr>
+          {%endif%}
+          {%else%}
+          {%if profilUtilisateur['matiere_autre']|length != 0%}
+          <tr>
+            <td>
+              <i class="fas fa-book-open" style="font-size:25px;"></i>
+              &nbsp;&nbsp;Matière(s)
+            </td>
+            <td>
+              <div id="contentspe">
+                <p id="spe">
+                  {{profilUtilisateur['matiere_autre-str']}}{%if profilUtilisateur['matiere_autre-str']==""%}Non-renseigné{%endif%}
+                </p>
+              </div>
+            </td>
+          </tr>
+          {%endif%}
+          {%endif%}
           {%for element in profilUtilisateur['elementPublic']%}
           {%if element=="caractere"%}
           <tr>

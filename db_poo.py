@@ -8,6 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from __main__ import socketio
 from threading import Thread
+from matieresDict import translations
 
 utilisateurs = {}
 demandes_aide = {}
@@ -92,101 +93,13 @@ class Actions:
 class Translate_matiere_spes_options_lv:
     def translate_matiere_spes_options_lv(self, toTranslate):
         translated = ''
-        translations = {
-            # Matières tronc commun
-            'fr': 'Français',
-            'maths': 'Mathématiques',
-            'hg': 'Histoire-Géographie',
-            'snt': 'SNT',
-            'pc': 'Physique-Chimie',
-            'svt': 'SVT',
-            'emc': 'EMC',
-            'ses': 'SES',
-            'philo': 'Philosophie',
-            'eps': 'EPS',
-            # Langues
-            'ang': 'Anglais',
-            'esp': 'Espagnol',
-            'all': 'Allemand',
-            'por': 'Portugais',
-            'it': 'Italien',
-            'chi': 'Chinois',
-            'ru': 'Russe',
-            'ara': 'Arabe',
-            # LV1
-            'lv1-ang': 'LV1 Anglais',
-            'lv1-ang-euro': 'LV1 Anglais Euro',
-            'lv1-esp': 'LV1 Espagnol',
-            'lv1-esp-euro': 'LV1 Espagnol Euro',
-            'lv1-all': 'LV1 Allemand',
-            'lv1-all-euro': 'LV1 Allemand Euro',
-            'lv1-por': 'LV1 Portugais',
-            'lv1-por-euro': 'LV1 Portugais Euro',
-            'lv1-it': 'LV1 Itlien',
-            'lv1-it-euro': 'LV1 Itlien Euro',
-            'lv1-chi': 'LV1 Chinois',
-            'lv1-ru': 'LV1 Russe',
-            'lv1-ara': 'LV1 Arabe',
-            # LV2
-            'lv2-ang': 'LV2 Anglais',
-            'lv2-esp': 'LV2 Espagnol',
-            'lv2-all': 'LV2 Allemand',
-            'lv2-por': 'LV2 Portugais',
-            'lv2-it': 'LV2 Italien',
-            'lv2-chi': 'LV2 Chinois',
-            'lv2-ru': 'LV2 Russe',
-            'lv2-ara': 'LV2 Arabe',
-            # Spés
-            'spe-art': 'Spé Arts',
-            'spe-hggsp': 'Spé HGGSP',
-            'spe-hlp': 'Spé HLP',
-            'spe-ses': 'Spé SES',
-            'spe-maths': 'Spé Mathématiques',
-            'spe-pc': 'Spé Physique-Chimie',
-            'spe-svt': 'Spé SVT',
-            'spe-nsi': 'Spé NSI',
-            'spe-si': 'Spé Sciences de l\'Ingénieur',
-            'spe-lca': 'Spé LCA',
-            'spe-llcer-ang': 'Spé LLCER Anglais',
-            'spe-llcer-esp': 'Spé LLCER Espagnol',
-            'spe-llcer-all': 'Spé LLCER Allemand',
-            'spe-llcer-it': 'Spé LLCER Italien',
-            'spe-bio-eco': 'Spé Biologie-écologie',
-            # Options
-            'opt-lca-latin': 'LCA Latin',
-            'opt-lca-grec': 'LCA Grec',
-            'opt-lv3-ang': 'LV3 Anglais',
-            'opt-lv3-esp': 'LV3 Espagnol',
-            'opt-lv3-all': 'LV3 Allemand',
-            'opt-lv3-por': 'LV3 Portugais',
-            'opt-lv3-it': 'LV3 Italien',
-            'opt-lv3-ru': 'LV3 Russe',
-            'opt-lv3-ara': 'LV3 Arabe',
-            'opt-lv3-chi': 'LV3 Chinois',
-            'opt-eps': 'Option EPS',
-            'opt-arts': 'Option Arts',
-            'opt-musique': 'Option Musique',
-            'opt-mg': 'Option Management et Gestion',
-            'opt-ss': 'Option Santé et Social',
-            'opt-biotech': 'Option Biotechnologies',
-            'opt-sl': 'Option Sciences et laboratoire',
-            'opt-si': 'Option Sciences de l\'Ingénieur',
-            'opt-cit': 'Option Création et culture technologiques',
-            'opt-ccd': 'Option Création et culture - design',
-            'opt-equit': 'Option Hippologie et équitation',
-            'opt-aet': 'Option Agranomie-économie-territoires',
-            'opt-psc': 'Option Pratiques sociales et culturelles',
-            'opt-maths-comp': 'Option Maths Complémentaires',
-            'opt-maths-exp': 'Option Maths Expertes',
-            'opt-dgemc': 'Option Droits et grands enjeux du monde contemporain',
-            #
-            'none': ''
-        }
-
-        for a in toTranslate:
-            if translated != '' and a != 'none':
-                translated += ' / '
-            translated += translations[a]
+        if type(toTranslate) == list:
+            for a in toTranslate:
+                if translated != '' and a != 'none':
+                    translated += ' / '
+                translated += translations[a]
+        elif toTranslate != '':
+            translated = translations[toTranslate]
 
         return translated
 
@@ -207,6 +120,8 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.spes = params.get('spes', [])
         self.langues = params.get('langues', [])
         self.options = params.get('options', [])
+        self.matiere = params.get('matiere', '') # pour les profs
+        self.matiere_autre = params.get('matiere_autre', []) # pour les profs
         self.couleur = params['couleur']
         self.type = params['type']
         self.elementPublic = params['elementPublic']
@@ -272,6 +187,10 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'langues-str': self.translate_matiere_spes_options_lv(self.langues),
             'options': self.options,
             'options-str': self.translate_matiere_spes_options_lv(self.options),
+            'matiere': self.matiere, # pour les profs
+            'matiere-str': self.translate_matiere_spes_options_lv(self.matiere),
+            'matiere_autre': self.matiere_autre, # pour les profs
+            'matiere_autre-str': self.translate_matiere_spes_options_lv(self.matiere_autre),
             'matieres': self.getUserSubjects(),
             'couleur': self.couleur,
             'type': self.type,
@@ -311,6 +230,8 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'spes': self.spes,
             'langues': self.langues,
             'options': self.options,
+            'matiere': self.matiere, # pour les profs
+            'matiere_autre': self.matiere_autre, # pour les profs
             'couleur': self.couleur,
             'type': self.type,
             'elementPublic': self.elementPublic,
@@ -341,6 +262,8 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             if self.classe[0] == '2':
                 subjects.append('maths')
                 subjects.append('pc')
+                subjects.append('svt')
+                subjects.append('snt')
                 subjects.append('ses')
             if self.classe[0] == 'T':
                 subjects.append('philo')
@@ -365,8 +288,12 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             subjects += self.spes
             subjects += self.options
         else:
-            subjects = []
-
+            if self.matiere != '':
+                subjects = [self.matiere]
+                subjects += [self.matiere_autre]
+            else:
+                subjects = ['ang', 'esp', 'all', 'it', 'chi', 'ru', 'por', 'ara']
+                subjects += [key for key, value in translations.items() if not 'lv'in key]
         return subjects
 
     def aSign(self):

@@ -159,6 +159,9 @@ input[type=range]:focus::-ms-fill-upper {
   .maillogoNom{
     margin-right: 23%;
   }
+  .contentPublicationTaille{
+    max-width:65%;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){

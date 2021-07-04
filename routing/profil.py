@@ -88,9 +88,12 @@ def updateprofile():
         user.telephone = automoderation(request.form['telephone'])
         user.interets = automoderation(request.form['interets'])
         user.caractere = request.form['caractere']
-        user.langues = [request.form['lv1'], request.form['lv2']]
-        user.options = [request.form['option1'], request.form['option2']]
-        user.spes = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
+        if user.type == 'ELEVE':
+            user.langues = [request.form['lv1'], request.form['lv2']]
+            user.options = [request.form['option1'], request.form['option2']]
+            user.spes = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
+        elif user.type == 'ENSEIGNANT':
+            user.matiere = request.form['matiere']
         user.elementPrive = elementPrive
         user.elementPublic = elementPublic
 
@@ -111,6 +114,21 @@ def updateprofile():
 
         utilisateurs[session['id']].update()
 
+        return redirect(url_for('profil'))
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
+def otherSubject():
+    global utilisateurs
+    if 'id' in session and session['type'] != 'ELEVE':  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
+        subjects = []
+        for key, value in request.form.items():
+            if value == 'on':
+                subjects.append(key)
+        print(subjects)
+        utilisateurs[session['id']].matiere_autre = subjects
+        utilisateurs[session['id']].update()
         return redirect(url_for('profil'))
     else:
         session['redirect'] = request.path

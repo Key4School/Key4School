@@ -125,6 +125,9 @@
         {% include 'publication.html' with context %}
         <!-- Fin publi -->
       {%endfor%}
+      {%if demandes|length == 0%}
+      <p style='text-align:center;'>Aucune demande d'aide pour le moment. Vous pouvez repasser plus tard</p>
+      {%endif%}
     </div>
     <div class="column" style="padding: 0;"></div>
   </div>

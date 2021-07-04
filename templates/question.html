@@ -39,6 +39,7 @@
                   <div style="margin-left: 40px;" class="control has-icons-left selectMatiereOrdi">
                     <div class="select">
                       <select name="matiere" required>
+                        {%if user['type'] == 'ELEVE'%}
                         <!-- Tronc commun -->
                         {% if profilUtilisateur['classe'][0]=='2' or profilUtilisateur['classe'][0]=='1' %}
                         <option value="fr">Français</option>
@@ -174,6 +175,57 @@
                         <option value="opt-psc">Option Pratiques sociales et culturelles</option>
                         {% endif %}
                         <option value="eps">EPS</option>
+                        {%else%}
+                        <option value="fr">Français</option>
+                        <option value="hg">Histoire-Géographie</option>
+                        <option value="emc">EMC</option>
+                        <option value="maths">Mathématiques</option>
+                        <option value="pc">Physiques-chimie</option>
+                        <option value="ses">SES</option>
+                        <option value="philo">Philosophie</option>
+                        <!-- Langues -->
+                        <option value="ang">Anglais</option>
+                        <option value="esp">Espagnol</option>
+                        <option value="all">Allemand</option>
+                        <option value="it">Italien</option>
+                        <option value="chi">Chinois</option>
+                        <option value="ru">Russe</option>
+                        <option value="por">Portugais</option>
+                        <option value="ara">Arabe</option>
+                        <!-- Spés -->
+                        <option value="spe-art">Spé Arts</option>
+                        <option value="spe-hggsp">Spé HGGSP</option>
+                        <option value="spe-hlp">Spé HLP</option>
+                        <option value="spe-ses">Spé SES</option>
+                        <option value="spe-maths">Spé Mathématiques</option>
+                        <option value="spe-pc">Spé Physique-Chimie</option>
+                        <option value="spe-svt">Spé SVT</option>
+                        <option value="spe-nsi">Spé NSI</option>
+                        <option value="spe-si">Spé Sciences de l'Ingénieur</option>
+                        <option value="spe-lca">Spé LCA</option>
+                        <option value="spe-llcer-ang">Spé LLCER Anglais</option>
+                        <option value="spe-llcer-esp">Spé LLCER Espagnol</option>
+                        <option value="spe-llcer-all">Spé LLCER Allemand</option>
+                        <option value="spe-llcer-it">Spé LLCER Italien</option>
+                        <option value="spe-bio-eco">Spé Biologie-écologie</option>
+                        <!-- Options -->
+                        <option value="opt-lca-latin">Option LCA Latin</option>
+                        <option value="opt-lca-grec">Option LCA Grec</option>
+                        <option value="opt-arts">Option Arts</option>
+                        <option value="opt-mg">Option Management et Gestion</option>
+                        <option value="opt-ss">Option Santé et Social</option>
+                        <option value="opt-biotech">Option Biotechnologies</option>
+                        <option value="opt-sl">Option Sciences et Laboratoire</option>
+                        <option value="opt-si">Option Sciences de l'Ingénieur</option>
+                        <option value="opt-cit">Option Création et innovations technologiques</option>
+                        <option value="opt-ccd">Option Création et culture - design</option>
+                        <option value="opt-maths-comp">Option Maths complémentaires</option>
+                        <option value="opt-maths-exp">Option Maths expertes</option>
+                        <option value="opt-equit">Option Hippologie et équitation</option>
+                        <option value="opt-aet">Option Agronomie-économie-territoires</option>
+                        <option value="opt-psc">Option Pratiques sociales et culturelles</option>
+                        <option value="eps">EPS</option>
+                        {%endif%}
                       </select>
                     </div>
                     <span class="icon is-left">
@@ -181,7 +233,7 @@
                     </span>
                   </div>
                 </div>
-                <small><em>@{{user['pseudo']}}</em></small> <small>1min</small>
+                <small><em>@{{user['pseudo']}}</em></small> <small>0min</small>
                 </p>
                 <div class="control has-icons-left selectMatiereTel">
                   <div class="select">
