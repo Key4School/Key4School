@@ -172,7 +172,7 @@
                     data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
                     <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
                     <label class="survolPseudoCreationGroupe" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');" for="user_{{user['_id']}}">{{user['pseudo']}}{% include 'apercu2profil_creationGroupe.html' with context %}</label>
-                    <br><br />
+                    <br>
                   </div>
                   {% endif %}
                   {% endfor %}
