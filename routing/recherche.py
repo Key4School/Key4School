@@ -16,6 +16,7 @@ def removeAccents(txt):
         i = withAccents.find(c)
         s += withoutAccents[i] if i>=0 else c
 
+    # s = s.replace("'","&#39;")
     return s
 
 def is_relevant(demande, search):
