@@ -1,12 +1,13 @@
 from datetime import *
 from bson.objectid import ObjectId
 from flask import session, escape, render_template
-from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo, ObjectId
 import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from __main__ import socketio
+from threading import Thread
 
 utilisateurs = {}
 demandes_aide = {}
@@ -449,7 +450,7 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
         contenu = ''
         for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
-                '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
+                '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
                 w)
             contenu += ' '
 
@@ -518,7 +519,7 @@ class Reponse(Demande):
         contenu = ''
         for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
-                '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
+                '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
                 w)
             contenu += ' '
 
@@ -591,7 +592,7 @@ class Message(Actions):
         contenu = ''
         for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
-                '<a href="//{}" target="_blank">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
+                '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
                 w)
             contenu += ' '
 
@@ -747,6 +748,23 @@ class Notification(Actions):
         self.destinataires = params['destinataires']
         self.db_table = DB.db_notif
 
+    def create(type, id_groupe, id_msg, destinataires):
+        if type == 'demande':
+            destinataires += [user._id for user in utilisateurs.values() if id_groupe in user.savedDemands]
+
+        if ObjectId(session['id']) in destinataires:
+            destinataires.remove(ObjectId(session['id']))
+
+        destinataires = list(set(destinataires))
+
+        if len(destinataires) > 0:
+            _id = ObjectId()
+            notifications[str(_id)] = Notification({"_id": _id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
+                                            "date": datetime.now(), "destinataires": destinataires})
+            notifications[str(_id)].insert()
+            notifications[str(_id)].send()
+        return
+
     def diffTemps(self):
         diff_temps = int((datetime.now() - self.date).total_seconds())
         return diff_temps
@@ -775,21 +793,13 @@ class Notification(Actions):
         return tempsStr
 
     def send(self):
-        serveur = 'smtp.gmail.com'
-        port = '465'
-        From = 'key4school@gmail.com'
-        password = 'CtlLemeilleurGroupe'
-        codage = 'utf-8'
-        mailserver = smtplib.SMTP_SSL(serveur, port)
-        mailserver.login(From, password)
-
         notification = self.toDict()
         html = render_template("notification.html", notif=notification, similar=0)
 
         for user in notification['userDest']:
-            # if str(user['_id']) in clientsNotif:
-            #     socketio.emit('newNotif', html, to=str(user['_id']))
-            if user['email'] != "" or user['emailENT'] != "":
+            if str(user['_id']) in clientsNotif:
+                socketio.emit('newNotif', html, to=str(user['_id']))
+            elif user['email'] != "" or user['emailENT'] != "":
                 # si l'user a autorisé les notifs par mail
                 if (self.type == 'msg' and user['notifs']['messages']) or (self.type == 'demande' and user['notifs']['demandes']):
                     # si un mail n'a pas déja été envoyé pour ce groupe
@@ -798,21 +808,36 @@ class Notification(Actions):
                             To = user['email']
                         elif user['emailENT'] != "":
                             To = user['emailENT']
-
-                        msg = MIMEMultipart()
-                        msg['From'] = From
-                        msg['To'] = To
-                        msg['Subject'] = 'Key4School - Nouvelle notification'
-                        msg['Charset'] = codage
-
+                        else:
+                            pass
                         htmlMail = render_template('mail.html', notif=notification, user=user)
-                        # attache message HTML
-                        msg.attach(MIMEText(htmlMail.encode(codage),
-                                            'html', _charset=codage))
+                        envoi = Thread(target=self.sendMail, args=(To, htmlMail))
+                        envoi.start()
+        return
 
-                        mailserver.sendmail(From, To, msg.as_string())
-        
-        return mailserver.quit()
+
+
+    def sendMail(self, To, htmlMail):
+        serveur = 'smtp.gmail.com'
+        port = '465'
+        From = 'key4school@gmail.com'
+        password = 'CtlLemeilleurGroupe'
+        codage = 'utf-8'
+        with smtplib.SMTP_SSL(serveur, port) as mailserver:
+            mailserver.login(From, password)
+
+            msg = MIMEMultipart()
+            msg['From'] = From
+            msg['To'] = To
+            msg['Subject'] = 'Key4School - Nouvelle notification'
+            msg['Charset'] = codage
+
+            # attache message HTML
+            msg.attach(MIMEText(htmlMail.encode(codage),
+                                'html', _charset=codage))
+
+            mailserver.sendmail(From, To, msg.as_string())
+        return
 
     def getSimilar(self, uid):
         '''récupère les notifs du même groupe plus récentes'''

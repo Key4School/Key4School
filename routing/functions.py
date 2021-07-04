@@ -39,26 +39,6 @@ def automoderation(stringModerer: str) -> str:
 
     return stringModerer
 
-def sendNotif(type, id_groupe, id_msg, destinataires):
-    global notifications
-    global utilisateurs
-
-    if type == 'demande':
-        destinataires += [user._id for user in utilisateurs.values() if id_groupe in user.savedDemands]
-
-    if ObjectId(session['id']) in destinataires:
-        destinataires.remove(ObjectId(session['id']))
-
-    destinataires = list(set(destinataires))
-
-    if len(destinataires) > 0:
-        _id = ObjectId()
-        notifications[str(_id)] = Notification({"_id": _id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
-                                        "date": datetime.now(), "destinataires": destinataires})
-        notifications[str(_id)].insert()
-        notifications[str(_id)].send()
-    return
-
 
 def afficheNotif(userId, notifId):
     global utilisateurs

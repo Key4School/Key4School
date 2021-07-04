@@ -4,7 +4,7 @@ from flask.json import jsonify
 from flask_socketio import emit
 from bson.objectid import ObjectId
 from db_poo import *
-from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif
+from routing.functions import listeModeration, automoderation, clientsNotif
 from __main__ import socketio
 
 def page_messages(idGroupe):
@@ -96,7 +96,7 @@ def uploadAudio():
             otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['_id']), user=utilisateurs[session['id']].toDict())
 
             socketio.emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=str(groupe['_id']))
-            sendNotif("msg", groupe['_id'], _id, list(groupe['id-utilisateurs']))
+            Notification.create("msg", groupe['_id'], _id, list(groupe['id-utilisateurs']))
             return 'yes'
     else:
         session['redirect'] = request.path
@@ -132,7 +132,7 @@ def uploadImage():
             otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['_id']), user=utilisateurs[session['id']].toDict())
 
             socketio.emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=str(groupe['_id']))
-            sendNotif("msg", groupe['_id'], _id, list(groupe['id-utilisateurs']))
+            Notification.create("msg", groupe['_id'], _id, list(groupe['id-utilisateurs']))
             return 'yes'
     else:
         session['redirect'] = request.path
