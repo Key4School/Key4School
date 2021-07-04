@@ -43,6 +43,7 @@
 * Page d'accueil :
   * passage rapide (le jury connait)
   * likes, commentaires, signalement, apercu de profil, enregistrement.
+  * filtre par matière.
 
 * Page poser une question :
   * passage rapide (le jury connait)
@@ -75,3 +76,55 @@
         * fermer le grp.
         * ajouter des participants.
   * filtre des grp par nom et utilisateurs.
+
+* page de profil :
+  * passage rapide (le jury connait).
+  * modifier infos perso, visibilité, photo de profil, thème.
+  * affichage de l'xp.
+  * choix des notifications.
+  * affichage des demandes d'aides.
+  * casier judiciaire.
+
+  * autre utilisateur :
+    * affichage de l'xp, de toutes les info publiques.
+    * Si admin affichage du casier judiciaire.
+    * possibilité de démarrer un conversation privée avec cet utilisateur.
+
+* page de tuto :
+  * passage rapide (le jury connait).
+
+* responsive :
+  * demo du responsive avec l'outils dev du navigateur.
+
+**diapo 4** (retour au ppt)
+
+Titre : administration
+
+**diapo 5**
+
+Titre : notifications
+
+**diapo 6**
+
+Titre : Programmation Orientée Objet.
+
+**diapo 7**
+
+Titre : Référencement.
+
+**diapo 8**
+
+* Titre : Autres solutions Technique.
+
+* Websocket.
+* Scroll infini
+* https
+* création de groupe classe.
+
+**diapo 9**
+
+* Titre : A venir prochainement dans Key4School :
+
+* De nombreux nouveaux thèmes : (mettre les screenshots d'Estelle).
+* Leaderboard.
+* développement du site en version appli mobile et desktop.
