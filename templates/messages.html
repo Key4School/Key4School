@@ -164,7 +164,7 @@
                 <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' required /><br><br>
                 <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
                 <br /><br />
-                <div id="listeuser" style="overflow:auto; max-height: 500px;">
+                <div id="listeuser" style="position: relative;overflow:auto; max-height: 500px;">
                   {% for user in users %}
                   {% if not sessionId == user['_id'] %}
                   {%set varApercuProfil = user%}
