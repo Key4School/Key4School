@@ -168,10 +168,12 @@
                 <div id="listeuser" style="overflow:auto; max-height: 500px;">
                   {% for user in users %}
                   {% if not sessionId == user['_id'] %}
-                  <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
+                  {%set varApercuProfil = user%}
+                  <div onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');"
+                  class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
                     data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
                     <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
-                    <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
+                    <label for="user_{{user['_id']}}">{{user['pseudo']}}{% include 'apercu2profil.html' with context %}</label>
                     <br><br />
                   </div>
                   {% endif %}
