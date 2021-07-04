@@ -4,7 +4,7 @@ from flask.json import jsonify
 from bson.objectid import ObjectId
 import os
 from db_poo import *
-from routing.functions import listeModeration, automoderation, sendNotif, clientsNotif, Interval
+from routing.functions import listeModeration, automoderation, clientsNotif, Interval
 
 def question():
     global utilisateurs
@@ -93,7 +93,7 @@ def comments(idMsg):
 
                     demandes_aide[idMsg].update()
 
-                    sendNotif("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
+                    Notification.create("demande", ObjectId(idMsg), _id, [msg['idAuteur']])
 
                     # add XP
                     if not ObjectId(session['id']) == msg['idAuteur']:
