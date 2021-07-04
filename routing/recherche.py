@@ -21,39 +21,31 @@ def removeAccents(txt):
 def is_relevant(demande, search):
     search = removeAccents(search)
     isRelevant = False
-    titre = ''
-    contenu = ''
+    titre = demande['titre']
+    contenu = demande['contenu']
 
-    for keyword in search.split(): 
-        # Titre : 
+    for keyword in search.split():
+        # Titre :
         for w in demande['titre'].split():
             # Occurence pleine :
             if removeAccents(w.lower()) == keyword:
                 isRelevant = True
-                titre += '<mark>{}</mark>'.format(w)
+                titre = titre.replace(w,'<mark>{}</mark>'.format(w))
             # Occurence partielle
             elif SequenceMatcher(None, keyword, removeAccents(w.lower())).ratio()>0.8:
                 isRelevant = True
-                titre += '<mark>{}</mark>'.format(w)
-            # Aucune occurence
-            else:
-                titre += w
-            titre += ' '
+                titre = titre.replace(w,'<mark>{}</mark>'.format(w))
 
-        # Contenu : 
+        # Contenu :
         for w in demande['contenu'].split():
             # Occurence pleine :
             if removeAccents(w.lower()) == keyword:
                 isRelevant = True
-                contenu += '<mark>{}</mark>'.format(w)
+                contenu = contenu.replace(w,'<mark>{}</mark>'.format(w))
             # Occurence partielle
             elif SequenceMatcher(None, keyword, removeAccents(w.lower())).ratio()>0.8:
                 isRelevant = True
-                contenu += '<mark>{}</mark>'.format(w)
-            # Aucune occurence
-            else:
-                contenu += w
-            contenu += ' '
+                contenu = contenu.replace(w,'<mark>{}</mark>'.format(w))
 
     return {'isRelevant': isRelevant, 'titre': titre, 'contenu': contenu}
 
