@@ -55,8 +55,6 @@
       margin-top:1%;
       margin-bottom:2%;
     }
-  </style>
-  <style>
     .liengroupe {
       color: black;
       text-decoration: none;
@@ -72,8 +70,9 @@
     .boutonFichier:hover {
       cursor: pointer;
     }
-  </style>
-  <style type="text/css">
+    .survolPseudoCreationGroupe:hover{
+      cursor: pointer;
+    }
     /* RESPONSIVE MESSAGES */
 
     @media screen and (min-width: 700px) {
@@ -169,11 +168,10 @@
                   {% for user in users %}
                   {% if not sessionId == user['_id'] %}
                   {%set varApercuProfil = user%}
-                  <div onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');"
-                  class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
+                  <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
                     data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
                     <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
-                    <label for="user_{{user['_id']}}">{{user['pseudo']}}{% include 'apercu2profil.html' with context %}</label>
+                    <label class="survolPseudoCreationGroupe" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');" for="user_{{user['_id']}}">{{user['pseudo']}}{% include 'apercu2profil_creationGroupe.html' with context %}</label>
                     <br><br />
                   </div>
                   {% endif %}
