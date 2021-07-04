@@ -25,7 +25,7 @@
         <!-- Titre -->
         <h4 style="margin-top: 0;"><a href="/comments/{{d['idMsg']}}">{{d['titre']|safe}}</a></h4>
         <!-- Texte publication -->
-        <p style="word-wrap:break-word;"><div id="contenu{{d['idMsg']}}">{{d['contenu']|safe}}</div></p>
+        <p style="word-wrap:break-word;"><div id="contenu{{d['idMsg']}}" style="max-width: 80%;">{{d['contenu']|safe}}</div></p>
         </p>
         {% if d['fileType'] == 'image' %}
         <a href="/DL_file/DemandeFile_{{d['idMsg']}}/image/" download="Fichier demande d'aide {{d['idMsg']}}.png">
