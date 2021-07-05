@@ -256,7 +256,7 @@
     <!-- Début informations -->
     <div>
       <!-- Informations puliques -->
-      <form method="POST" action="/updateprofile/">
+      <form method="POST" action="/updateprofile/" id="updateProfil">
         <div style="font-weight: bold; font-size:large;">Informations publiques :</div>
         <br />
         <!-- Début tableau informations publiques -->
@@ -551,8 +551,10 @@
                 <i class="fas fa-book-open" style="font-size:25px;"></i>
                 &nbsp;&nbsp;Autre(s) matière(s) enseignée(s)
               <td>
-                <div id="contentSubject">
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="divsubjectopen()" {%endif%}></i>
+                <div id="contentSubject" style="display: flex; flex-direction: row;">
+                  <p style="width: calc(100% - 35px); max-width:500px; margin-right: 15px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" onClick="divsubjectopen()">{{profilUtilisateur['matiere_autre-str']}}
+                  </p>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" onClick="divsubjectopen()"></i>
                 </div>
               </td>
             </tr>
@@ -562,8 +564,10 @@
                 <i class="fas fa-book-open" style="font-size:25px;"></i>
                 &nbsp;&nbsp;Votre(s) matière(s)
               <td>
-                <div id="contentSubject">
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="divsubjectopen()" {%endif%}></i>
+                <div id="contentSubject" style="display: flex; flex-direction: row;">
+                  <p style="width: calc(100% - 35px); max-width:500px; margin-right: 15px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" onClick="divsubjectopen()">{{profilUtilisateur['matiere_autre-str']}}
+                  </p>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" onClick="divsubjectopen()"></i>
                 </div>
               </td>
             </tr>
@@ -963,7 +967,7 @@
         &nbsp;&nbsp;{%if profilUtilisateur['type'] == 'ENSEIGNANT'%}Autre(s) matière(s) enseignée(s){%else%}Votre(s) matière(s){%endif%}</p>
         <button onclick="divsubjectclose(); return false;" class="delete" aria-label="close"></button>
       </header>
-      <form action="{{url_for('otherSubject')}}" method="POST" autocomplete="off" id="formSubject">
+      <form action="{{url_for('otherSubject')}}" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <div id="listeuser" style="position: relative;overflow:auto; max-height: 500px;">
             <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="fr" {%if "fr" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'fr'%}checked disabled{%endif%} {%if profilUtilisateur['matiere'] == 'fr'%}checked disabled{%endif%} /> Français</label></div>
@@ -1002,7 +1006,7 @@
           </div>
         </section>
         <footer class="modal-card-foot">
-          <button onclick="submitSubject(); return false;" class="button is-success">Valider</button>
+          <button type="submit" class="button is-success">Valider</button>
           <button onclick="divsubjectclose(event); return false;" class="button">Annuler</button>
         </footer>
       </form>
