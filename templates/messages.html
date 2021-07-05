@@ -350,7 +350,14 @@
                     <div style="flex-direction: column;align-items: flex-end;">
                       <div class="navbar-item">
                         {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] and sessionId != users['_id'] %}
-                          <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">Virer</button>
+                          <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">
+                            <span class="icon is-small">
+                              <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                            </span>
+                            <span>
+                              Virer
+                            </span>
+                          </button>
                         {%if users['_id'] in infogroupe['moderateurs']%}
                         <button class="button is-warning is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
                           <span class="icon is-small">
