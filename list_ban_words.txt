@@ -1561,17 +1561,6 @@ guindoul3
 guindoule
 imbécil3
 imbécile
-m!53r@bl3
-m!53rabl3
-m!5er@ble
-m!5erabl3
-m!5erable
-m!s3r@bl3
-m!s3rabl3
-m!ser@bl3
-m!ser@ble
-m!serabl3
-m!serable
 m@uv!3tt3
 m@uv!ette
 m@uv13tt3
@@ -1590,18 +1579,6 @@ m0in@ill3
 m0in@ille
 m0inaill3
 m0inaille
-m153r@bl3
-m153rabl3
-m15er@bl3
-m15er@ble
-m15erabl3
-m15erable
-m1s3r@bl3
-m1s3rabl3
-m1ser@bl3
-m1ser@ble
-m1serabl3
-m1serable
 m3rd@!ll3
 m3rd@1ll3
 m3rd@ill3
@@ -1620,18 +1597,6 @@ merd@ille
 merda!lle
 merda1lle
 merdaille
-mi53r@bl3
-mi53rabl3
-mi5er@bl3
-mi5er@ble
-mi5erabl3
-mi5erable
-mis3r@bl3
-mis3rabl3
-miser@bl3
-miser@ble
-miserabl3
-miserable
 mo!n@!ll3
 mo!n@!lle
 mo!na!ll3
@@ -2226,7 +2191,6 @@ zguègue
 à chier
 astiquer
 baisable
-baptême
 biétaze
 bon coup
 bonnasse
@@ -2244,7 +2208,6 @@ chagasse
 chagatte
 chiasser
 chiottes
-chocolat
 conchier
 connarde
 connasse
@@ -2253,7 +2216,6 @@ culbuter
 de merde
 déculer
 dégager
-drouille
 duconnot
 éburné
 emmerdé
@@ -3163,7 +3125,6 @@ chieur
 chitte
 choper
 choune
-christ
 clille
 conaud
 crisse
