@@ -3,7 +3,7 @@
   <div style="align-self: flex-end;">
   {%else%}
   <!-- Messages des autres -->
-  <div class="participantmsg" style="word-break: break-word;overflow:hidden;" id="msg{{content['_id']}}">
+  <div class="participantmsg" style="word-break: break-word;" id="msg{{content['_id']}}">
     <div style="display: flex;align-items: center;justify-content:space-between;">
   {%endif%}
     {%if content['id-utilisateur']!=sessionId%}
