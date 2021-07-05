@@ -4,7 +4,7 @@ from flask.json import jsonify
 from bson.objectid import ObjectId
 import os
 from db_poo import *
-from routing.functions import listeModeration, automoderation, clientsNotif, Interval
+from routing.functions import listeModeration, automoderation, Interval
 
 def question():
     global utilisateurs

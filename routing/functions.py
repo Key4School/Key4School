@@ -7,8 +7,6 @@ from threading import Timer
 from functools import partial
 from db_poo import *
 
-clientsNotif = {}
-
 listeModeration = []
 with open("list_ban_words.txt", "r", encoding='cp1252') as fichierBanWords:
     listeModeration = fichierBanWords.read().splitlines()

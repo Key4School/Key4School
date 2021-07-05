@@ -4,7 +4,7 @@ from flask.json import jsonify
 from flask_socketio import emit
 from bson.objectid import ObjectId
 from db_poo import *
-from routing.functions import listeModeration, automoderation, clientsNotif
+from routing.functions import listeModeration, automoderation
 from __main__ import socketio
 
 def page_messages(idGroupe):
