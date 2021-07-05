@@ -752,13 +752,13 @@ class Notification(Actions):
                         else:
                             pass
                         htmlMail = render_template('mail.html', notif=notification, user=user)
-                        envoi = Thread(target=self.sendMail, args=(To, htmlMail))
+                        envoi = Thread(target=self.sendMail, args=(To, htmlMail, notification['sender']['pseudo']))
                         envoi.start()
         return
 
 
 
-    def sendMail(self, To, htmlMail):
+    def sendMail(self, To, htmlMail, pseudo):
         serveur = 'smtp.gmail.com'
         port = '465'
         From = 'key4school@gmail.com'
@@ -770,7 +770,7 @@ class Notification(Actions):
             msg = MIMEMultipart()
             msg['From'] = From
             msg['To'] = To
-            msg['Subject'] = 'Key4School - Nouvelle notification'
+            msg['Subject'] = f'Key4School - Nouvelle notification de {pseudo}'
             msg['Charset'] = codage
 
             # attache message HTML
