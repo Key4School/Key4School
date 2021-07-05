@@ -739,7 +739,7 @@ class Notification(Actions):
 
         for user in notification['userDest']:
             if str(user['_id']) in clientsNotif:
-                socketio.emit('newNotif', html, to=str(user['_id']))
+                socketio.emit('newNotif', {'html': html, 'sound': str(user['notifs']['sound'])}, to=str(user['_id']))
             elif user['email'] != "" or user['emailENT'] != "":
                 # si l'user a autorisé les notifs par mail
                 if (self.type == 'msg' and user['notifs']['messages']) or (self.type == 'demande' and user['notifs']['demandes']):
