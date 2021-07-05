@@ -1,4 +1,4 @@
-**diapo 1** (équipe de style)
+**diapo 1** (équipe d'UX)
 
 * Logo Key4school avec nom du site. On peut rajouter les noms des peronnes du groupe.
 
