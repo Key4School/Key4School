@@ -156,16 +156,20 @@
   * présenter à l'utilisateur les demandes auxquelles il sera le plus apte à répondre et qui auront besoin le plus de réponse.
   * affichage sur l'écran d'accueil d'uniquement les demandes d'aide des autres.
   * affichage uniquement des demandes d'aide sur les matières de l'utilisateur.
-  * algorithme de tri basé sur le nombre de like et de commentaire.
+  * algorithme de tri basé sur le nombre de likes et de commentaire.
 
 **diapo 8**
 
 * Titre : Autres solutions Technique.
 
-* Websocket.
-* Scroll infini
-* https
-* création de groupe classe.
+* Websocket :
+  * échanges direct avec le serveur.
+* Scroll infini :
+  * optimisation des temps de chargement.
+* https :
+  * une sécurité accrue.
+* création de groupe classe :
+  * afin de retrouver facilement les personnes de son entourage.
 
 **diapo 9**
 
