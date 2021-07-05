@@ -147,6 +147,9 @@
   * accès plus rapide.
   * réduction des temps de chargement.
   * limitation des échanges avec la db.
+* maintenance :
+  * changement de db possible facilement (vers sql par exemple)
+  * ajout de fonctions très facile.
 
 **diapo 7**
 

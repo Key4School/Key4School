@@ -4,7 +4,7 @@ from datetime import *
 from flask.json import jsonify
 from bson.objectid import ObjectId
 from db_poo import *
-from routing.functions import listeModeration, automoderation, clientsNotif
+from routing.functions import listeModeration, automoderation
 from routing.demandes_aide import likePost, likeRep
 
 # Connection au groupe pour recevoir les nouvelles notif
@@ -89,7 +89,7 @@ def postMsg(json):
 
                         emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=json['room'])
                         Notification.create("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
-                        
+
 
 def postLike(json):
 	print('hey')
