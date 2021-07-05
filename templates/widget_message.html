@@ -4,7 +4,7 @@
   {%else%}
   <!-- Messages des autres -->
   <div class="participantmsg" style="word-break: break-word;" id="msg{{content['_id']}}">
-    <div style="display: flex;align-items: center;justify-content:space-between;">
+    <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
   {%endif%}
     {%if content['id-utilisateur']!=sessionId%}
     <p style="font-weight: bold; font-variant:small-caps;margin:0px"><a href="{{url_for('profil' ,idUser=content['utilisateur']['_id'])}}">{{content['utilisateur']['pseudo']}}</a></p>
