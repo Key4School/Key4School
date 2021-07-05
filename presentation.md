@@ -93,6 +93,17 @@
 * page de tuto :
   * passage rapide (le jury connait).
 
+* Titre : notifications
+
+* forme de notifications :
+  * onglet notification dans le bandeau du site.
+  * notifications sonore quand l'utilisateur est sur le site (au choix de l'utilisateur).
+  * notification par mail (au choix de l'utilisateur).. (inclure un screenshot d'un exemple de mail)
+  * modification de l'icône du site.
+* Notifications pour :
+  * nouveaux messages privés.
+  * commentaire sur une demande de l'utilisateur ou enregistrée.
+
 * responsive :
   * demo du responsive avec l'outils dev du navigateur.
 
@@ -117,22 +128,8 @@
   * pas de ban définitif.
 
 
+
 **diapo 5**
-
-* Titre : notifications
-
-* forme de notifications :
-  * onglet notification dans le bandeau du site.
-  * notifications sonore quand l'utilisateur est sur le site (au choix de l'utilisateur).
-  * notification par mail (au choix de l'utilisateur).. (inclure un screenshot d'un exemple de mail)
-  * modification de l'icône du site.
-* Notifications pour :
-  * nouveaux messages privés.
-  * commentaire sur une demande de l'utilisateur ou enregistrée.
-
-
-
-**diapo 6**
 
 * Titre : Programmation Orientée Objet.
 
@@ -151,7 +148,7 @@
   * changement de db possible facilement (vers sql par exemple)
   * ajout de fonctions très facile.
 
-**diapo 7**
+**diapo 6**
 
 * Titre : Référencement et algorithme de tri.
 
@@ -161,7 +158,7 @@
   * affichage uniquement des demandes d'aide sur les matières de l'utilisateur.
   * algorithme de tri basé sur le nombre de likes et de commentaire.
 
-**diapo 8**
+**diapo 7**
 
 * Titre : Autres solutions Technique.
 
@@ -174,7 +171,7 @@
 * création de groupe classe :
   * afin de retrouver facilement les personnes de son entourage.
 
-**diapo 9**
+**diapo 8**
 
 * Titre : A venir prochainement dans Key4School :
 
