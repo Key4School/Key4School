@@ -1,4 +1,4 @@
-**diapo 1**
+**diapo 1** (équipe de style)
 
 * Logo Key4school avec nom du site. On peut rajouter les noms des peronnes du groupe.
 
@@ -38,7 +38,7 @@
     * récompenses.
     * thèmes pour le site.
 
-**Démonstration sur le site** ( on quitte le ppt)
+**Démonstration sur le site** ( on quitte le ppt) (thibault présentateur, tout le monde peut parler si il a qq chose à dire)
 
 * Page d'accueil :
   * passage rapide (le jury connait)
@@ -84,30 +84,28 @@
   * choix des notifications.
   * affichage des demandes d'aides.
   * casier judiciaire.
-
   * autre utilisateur :
-    * affichage de l'xp, de toutes les info publiques.
-    * Si admin affichage du casier judiciaire.
-    * possibilité de démarrer un conversation privée avec cet utilisateur.
+     * affichage de l'xp, de toutes les info publiques.
+     * Si admin affichage du casier judiciaire.
+     * possibilité de démarrer un conversation privée avec cet utilisateur.
 
 * page de tuto :
   * passage rapide (le jury connait).
 
-* Titre : notifications
+* notifications
+ * forme de notifications :
+    * onglet notification dans le bandeau du site.
+    * notifications sonore quand l'utilisateur est sur le site (au choix de l'utilisateur).
+    * notification par mail (au choix de l'utilisateur).. (inclure un screenshot d'un exemple de mail)
+    * modification de l'icône du site.
+ * Notifications pour :
+    * nouveaux messages privés.
+    * commentaire sur une demande de l'utilisateur ou enregistrée.
 
-* forme de notifications :
-  * onglet notification dans le bandeau du site.
-  * notifications sonore quand l'utilisateur est sur le site (au choix de l'utilisateur).
-  * notification par mail (au choix de l'utilisateur).. (inclure un screenshot d'un exemple de mail)
-  * modification de l'icône du site.
-* Notifications pour :
-  * nouveaux messages privés.
-  * commentaire sur une demande de l'utilisateur ou enregistrée.
-
-* responsive :
+* responsive : (démo avec flavien)
   * demo du responsive avec l'outils dev du navigateur.
 
-**diapo 4** (retour au ppt)
+**diapo 4** (retour au ppt) (thibault)
 
 * Titre : administration
 
@@ -131,7 +129,7 @@
 
 **diapo 5**
 
-* Titre : Programmation Orientée Objet.
+* Titre : Programmation Orientée Objet. (julien)
 
 (mettre un sreenshot du code)
 
@@ -146,9 +144,9 @@
   * limitation des échanges avec la db.
 * maintenance :
   * changement de db possible facilement (vers sql par exemple)
-  * ajout de fonctions très facile.
+  * ajout de nouvelles fonctions très facile.
 
-**diapo 6**
+**diapo 6** (ludovic)
 
 * Titre : Référencement et algorithme de tri.
 
@@ -158,7 +156,7 @@
   * affichage uniquement des demandes d'aide sur les matières de l'utilisateur.
   * algorithme de tri basé sur le nombre de likes et de commentaire.
 
-**diapo 7**
+**diapo 7** (baptiste)
 
 * Titre : Autres solutions Technique.
 
@@ -171,7 +169,7 @@
 * création de groupe classe :
   * afin de retrouver facilement les personnes de son entourage.
 
-**diapo 8**
+**diapo 8** (jade et flavien)
 
 * Titre : A venir prochainement dans Key4School :
 
