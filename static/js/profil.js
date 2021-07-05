@@ -75,13 +75,17 @@ function designalerProfil(e) {
 }
 
 function divsubjectopen() {
-  $("#subjects").addClass("is-active");
+  var donnees = $('#updateProfil').serialize();
+  $.ajax({
+    url: '/updateprofile/', // on donne l'URL du fichier de traitement
+    type: "POST", // la requête est de type POST
+    data: donnees, // et on envoie nos données
+    success: function(response) {
+      $("#subjects").addClass("is-active");
+    },
+  });
 }
 
 function divsubjectclose(e) {
   $("#subjects").removeClass("is-active");
-}
-
-function submitSubject() {
-  $("#formSubject").submit();
 }
