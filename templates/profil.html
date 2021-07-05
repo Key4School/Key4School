@@ -114,7 +114,22 @@
       </header>
       <form action="{{url_for('updateImg')}}" enctype='multipart/form-data' id="updatePhoto" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type="file" accept="image/png, image/jpeg" name="Newpicture" required />
+          <div class="file has-name">
+            <label class="file-label">
+              <input class="file-input" type="file" accept="image/png, image/jpeg" name="Newpicture" required>
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Trouver une photo
+                </span>
+              </span>
+              <span class="file-name">
+                photo_de_profil.png
+              </span>
+            </label>
+          </div>
           <input type="hidden" name="but" value="replace" required />
         </section>
         <footer class="modal-card-foot">
