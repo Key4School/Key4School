@@ -78,7 +78,13 @@
   <div class="rep">
     <div style="font-variant: small-caps;" ><a href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['_id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
     <a onclick="goToMess('msg{{content['rep']['_id']}}');" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
-      {%if content['rep']['audio']==true%}Message Vocal{%else%}{{content['rep']['contenu']}}{%endif%}
+      {%if 'audio' in content['rep'] and content['rep']['audio'] == True %}
+      <i class="fas fa-volume-up"></i> Message Vocal
+      {%elif 'image' in content['rep'] and content['rep']['image'] != '' %}
+      <i class="fas fa-image"></i> {{content['rep']['original-contenu']}}
+      {%else%}
+      {{content['rep']['original-contenu']}}
+      {%endif%}
     </a>
   </div>
   {%endif%}
