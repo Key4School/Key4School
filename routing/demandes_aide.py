@@ -127,12 +127,12 @@ def file(fileName):
         return redirect(url_for('login'))
 
 def DL_file(fileName, fileType):
-    if 'id' in session:
+    if 'id' in session or fileType == 'img':
         fileBinaryObj = DB.cluster.send_file(fileName)
         fileBinaryObj.freeze()
         fileBinary = fileBinaryObj.get_data()
 
-        if fileType == 'image':
+        if fileType == 'image' or fileType == 'img':
             with open('static/temp/{}.png'.format(fileName), 'wb') as file:
                 file.write(fileBinary)
 
