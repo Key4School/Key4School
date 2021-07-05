@@ -150,7 +150,13 @@
 
 **diapo 7**
 
-Titre : Référencement.
+* Titre : Référencement et algorithme de tri.
+
+* But :
+  * présenter à l'utilisateur les demandes auxquelles il sera le plus apte à répondre et qui auront besoin le plus de réponse.
+  * affichage sur l'écran d'accueil d'uniquement les demandes d'aide des autres.
+  * affichage uniquement des demandes d'aide sur les matières de l'utilisateur.
+  * algorithme de tri basé sur le nombre de like et de commentaire.
 
 **diapo 8**
 
@@ -166,5 +172,5 @@ Titre : Référencement.
 * Titre : A venir prochainement dans Key4School :
 
 * De nombreux nouveaux thèmes : (mettre les screenshots d'Estelle).
-* Leaderboard.
+* Leaderboard des meilleurs xp.
 * développement du site en version appli mobile et desktop.
