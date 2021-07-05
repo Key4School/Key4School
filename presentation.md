@@ -125,12 +125,28 @@
   * onglet notification dans le bandeau du site.
   * notifications sonore quand l'utilisateur est sur le site (au choix de l'utilisateur).
   * notification par mail (au choix de l'utilisateur).. (inclure un screenshot d'un exemple de mail)
+  * modification de l'icône du site.
+* Notifications pour :
+  * nouveaux messages privés.
+  * commentaire sur une demande de l'utilisateur ou enregistrée.
 
 
 
 **diapo 6**
 
-Titre : Programmation Orientée Objet.
+* Titre : Programmation Orientée Objet.
+
+(mettre un sreenshot du code)
+
+* allègement du code :
+  * un code plus esthétique.
+  * attributs et méthodes permettant de simplifier le reste du code.
+  * utilisation d'objets pour tous les éléments stockés dans la db.
+* optimisation :
+  * stockage des objets en cache.
+  * accès plus rapide.
+  * réduction des temps de chargement.
+  * limitation des échanges avec la db.
 
 **diapo 7**
 
