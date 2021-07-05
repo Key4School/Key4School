@@ -151,8 +151,6 @@ def DL_file(fileName, fileType):
         else:
             return ''
 
-        # print(fileBinary)
-        # return fileBinary
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
