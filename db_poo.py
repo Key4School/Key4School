@@ -8,7 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from __main__ import socketio
 from threading import Thread
-from matieresDict import translations
+from matieresDict import translations, translateProf
 
 utilisateurs = {}
 demandes_aide = {}
@@ -288,9 +288,23 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             subjects += self.spes
             subjects += self.options
         else:
+            subjects = []
             if self.matiere != '':
-                subjects = [self.matiere]
-                subjects += [self.matiere_autre]
+                if self.matiere in translateProf:
+                    subjects += translateProf[self.matiere]
+                else:
+                    subjects += [self.matiere]
+                for subject in self.matiere_autre:
+                    if subject in translateProf:
+                        subjects += translateProf[subject]
+                    else:
+                        subjects += [subject]
+            elif len(self.matiere_autre) > 0:
+                for subject in self.matiere_autre:
+                    if subject in translateProf:
+                        subjects += translateProf[subject]
+                    else:
+                        subjects += [subject]
             else:
                 subjects = ['ang', 'esp', 'all', 'it', 'chi', 'ru', 'por', 'ara']
                 subjects += [key for key, value in translations.items() if not 'lv'in key]

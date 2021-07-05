@@ -2,10 +2,8 @@
   <article class="media">
     <div class="media-left">
       <!-- Image photo de profil-->
-      <figure class="image is-64x64">
-        <img alt="user" src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-          style="width:64px;object-fit: cover; height:64px;border-radius: 50%;" />
-      </figure>
+        <img alt="user" class="ImagePublication" src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+          style="object-fit: cover;border-radius: 50%;" />
     </div>
     <!-- Contenu publication -->
     <div class="media-content contentPublicationTaille">
@@ -25,7 +23,7 @@
         <!-- Titre -->
         <h4 style="margin-top: 0;"><a href="/comments/{{d['idMsg']}}">{{d['titre']|safe}}</a></h4>
         <!-- Texte publication -->
-        <p style="word-wrap:break-word;"><div id="contenu{{d['idMsg']}}" style="max-width: 80%;">{{d['contenu']|safe}}</div></p>
+        <p style="word-wrap:break-word;"><div id="contenu{{d['idMsg']}}">{{d['contenu']|safe}}</div></p>
         </p>
         {% if d['fileType'] == 'image' %}
         <a href="/DL_file/DemandeFile_{{d['idMsg']}}/image/" download="Fichier demande d'aide {{d['idMsg']}}.png">

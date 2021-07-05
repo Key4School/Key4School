@@ -162,6 +162,10 @@ input[type=range]:focus::-ms-fill-upper {
   .contentPublicationTaille{
     max-width:65%;
   }
+  .ImagePublication{
+    height:40px;
+    width:40px;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
@@ -198,5 +202,9 @@ input[type=range]:focus::-ms-fill-upper {
   }
   .listeMatiereFiltre{
      width: calc(100% - 100px);
+  }
+  .ImagePublication{
+    height:64px;
+    width:64px;
   }
 }

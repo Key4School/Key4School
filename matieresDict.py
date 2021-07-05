@@ -93,3 +93,24 @@ translations = {
     #
     'none': ''
 }
+
+translateProf = {
+    'fr': ['fr', 'spe-hlp'],
+    'hg': ['hg', 'spe-hggsp', 'opt-dgemc'],
+    'maths': ['maths', 'spe-maths', 'opt-maths-comp', 'opt-maths-exp'],
+    'pc': ['pc', 'spe-pc'],
+    'svt': ['svt', 'spe-svt'],
+    'spe-nsi': ['spe-nsi', 'snt'],
+    'snt': ['spe-nsi', 'snt'],
+    'si': ['spe-si', 'opt-si'],
+    'ses': ['ses', 'spe-ses', 'opt-dgemc'],
+    'philo': ['philo', 'spe-hlp'],
+    'lca-latin': ['spe-lca', 'opt-lca-latin'],
+    'lca-grec': ['spe-lca', 'opt-lca-grec'],
+    'ang': ['ang', 'spe-llcer-ang'],
+    'esp': ['esp', 'spe-llcer-esp'],
+    'all': ['all', 'spe-llcer-all'],
+    'it': ['it', 'spe-llcer-it'],
+    'art': ['spe-art', 'opt-arts'],
+
+}

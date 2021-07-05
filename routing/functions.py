@@ -64,9 +64,9 @@ class Interval(object):
         """
         Handler function for calling the partial and continuting.
         """
-        self.running = False  # mark not running
         self.start()          # reset the timer for the next go
         self.function()       # call the partial function
+        self.running = False  # mark not running
 
     def start(self):
         """
