@@ -98,11 +98,35 @@
 
 **diapo 4** (retour au ppt)
 
-Titre : administration
+* Titre : administration
+
+* auto-moderation :
+  * + de 3500 mots et expression bannis.
+  * appliquée sur toutes les entrées publiques du site.
+  * possibilité de l'appliquer sur les messages privés (au choix des administrateurs de la discussion)
+* administrateurs :
+  * page réservé.
+  * peuvent voir toutes les demandes d'aides, les utilisateurs, et les discussions signalés.
+  * peuvent valider ou supprimer tous signalement.
+  * peuvent sanctionner les utilisateurs.
+* casier judiciaire :
+  * l'historique des sanctions d'un utilisateur est conservé.
+  * affiché sur la page profil et visible par l'utilisateur et les administrateurs.
+* sanction :
+  * du simple avertissement au mode spectateur.
+  * pas de ban définitif.
+
 
 **diapo 5**
 
-Titre : notifications
+* Titre : notifications
+
+* forme de notifications :
+  * onglet notification dans le bandeau du site.
+  * notifications sonore quand l'utilisateur est sur le site (au choix de l'utilisateur).
+  * notification par mail (au choix de l'utilisateur).. (inclure un screenshot d'un exemple de mail)
+
+
 
 **diapo 6**
 
