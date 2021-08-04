@@ -759,10 +759,10 @@ class Notification(Actions):
 
 
     def sendMail(self, To, htmlMail, pseudo):
-        serveur = 'smtp.gmail.com'
+        serveur = 'key4school.com'
         port = '465'
-        From = 'key4school@gmail.com'
-        password = 'CtlLemeilleurGroupe'
+        From = 'no-reply@key4school.com'
+        password = os.environ['SMTP_password']
         codage = 'utf-8'
         with smtplib.SMTP_SSL(serveur, port) as mailserver:
             mailserver.login(From, password)
