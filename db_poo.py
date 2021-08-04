@@ -6,7 +6,7 @@ import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from __main__ import socketio
+from main import socketio
 from threading import Thread
 from matieresDict import translations, translateProf
 
