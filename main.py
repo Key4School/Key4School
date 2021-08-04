@@ -7,6 +7,7 @@ from flask_session import Session
 from flask.json import jsonify
 from bson.objectid import ObjectId
 from bson import Binary
+import sys
 import os
 import gridfs
 import smtplib
@@ -17,8 +18,10 @@ from difflib import SequenceMatcher
 import re
 
 # Création de l'application
+sys.path.insert(0, os.path.dirname(__file__))
 app = Flask(__name__)
 socketio = SocketIO(app)
+application = app
 
 # DB POO
 from db_poo import *
