@@ -352,7 +352,8 @@ if __name__ == "__main__":
 
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         # app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
-        socketio.run(app, host='0.0.0.0', port=os.environ.get("PORT", 3000), debug=True)
+        # socketio.run(app, host='0.0.0.0', port=os.environ.get("PORT", 3000), debug=True)
+        socketio.run(app)
 
     else:
         # Le client secret est le code secret de l'application
