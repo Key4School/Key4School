@@ -21,7 +21,7 @@ import re
 sys.path.insert(0, os.path.dirname(__file__))
 app = Flask(__name__)
 socketio = SocketIO(app)
-application = app
+application = socketio
 
 # DB POO
 from db_poo import *
