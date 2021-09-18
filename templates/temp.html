@@ -1,30 +1,31 @@
 <!DOCTYPE html>
+
 <head>
-<!-- language utf8 pour indiquer l'encodage -->
-<meta charset="UTF-8">
-<!-- pour l'adapter plus ou moins bien sur telephone -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-<link rel="stylesheet" type="text/css" href="../static/styles/style.css">
-<link rel="stylesheet" type="text/css" href="../static/styles/style_soon.css">
-<!-- importation de la bibliotheque j query qui est requise pour faire marcher le js-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
-<link rel="icon" href="../static/image/logo/favicon.png" id="favicon" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer">
-</script>
-<title>Coming Soon</title>
+  <!-- language utf8 pour indiquer l'encodage -->
+  <meta charset="UTF-8">
+  <!-- pour l'adapter plus ou moins bien sur telephone -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+  <link rel="stylesheet" type="text/css" href="../static/styles/style_soon.css">
+  <!-- importation de la bibliotheque j query qui est requise pour faire marcher le js-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
+  <link rel="icon" href="../static/image/logo/favicon.png" id="favicon" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  </script>
+  <title>Coming Soon</title>
 </head>
+
 <body>
   <!-- Début menu déroulant -->
-  <div style="text-align:center;align-items:center;display:flex;margin:auto;width:10%;margin-top:2%;">
-    <img class="logo" src="../static/image/logo/favicon.png" style="height:40px;width:auto;" />
+  <div class="titre">
+    <img class="logo" src="../static/image/logo/favicon.png" style="height:30px;width:auto;" />
     <span class="key4schoolNavbar" style="display:flex;color:black;font-weight:bold;margin-left:1%;font-size:30px;">
       <p style="font-family: 'Roboto', sans-serif;">
         Key
@@ -42,30 +43,56 @@
     Coming Soon...
   </p>
   <br />
-  <p class="txt_presentation">
-    Notre site se base sur l'entraide entre lycéens. C'est un genre de forum d'aide aux devoirs mais qui serait entièrement fait pour les lycéens par des lycéens et qui serait une plateforme beaucoup plus fiable que les forums lambda que l'on trouve
-    généralement.
-    Nous avons tout un tas de fonctionnalités et d'idées à implémenter. Par exemple, nous avons un fil d'actualité en page d'accueil où les élèves pourraient proposer des réponses, nous avons un système de messages privés où il serait facile de
-    contacter n'importe quel camarade même d'un lycée différent. L'utilisateur peut également chercher des réponses à ses questions ou bien créer une demande d'aide si sa question n'a pas encore été posée.
-  </p>
-  <br />
-  <br />
-  <p style="margin:auto;width:17%;">
-    Etre avertit lors du lancement
-    </p>
-  <div class="control has-icons-left has-icons-right" style="width:20%;margin:auto;">
-    <input class="input" type="email" placeholder="Email">
-    <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
+  <div class="description">
+    <div class="text">
+      <p class="txt_presentation">
+        <span class="titre_paragraphe">Un système de messages privés pour contacter n'importe quel élève.</span><br />
+        Cette messagerie permet de contacter l'élève de son choix.
+        Il est possible de créer des groupes de classe par exemple.
+        Le créateur de chaque groupe de conversation aura la possibilité de rendre le chat modéré, avec certaines expressions ou mots bannis.
+        Il est également possible de signaler un message, à pour éviter tout risque d'harcèlement.
+      </p>
+      <img src="../static/image/imgvide.png" alt="img illustration" class="img_description">
+    </div>
+    <div class="text">
+      <p class="txt_presentation">
+        <span class="titre_paragraphe">Le premier réseau social conçu et créé entièrement par des lycéens.</span><br />
+        Nous sommes une équipe de 12 lycéens et travaillons sur ce projet depuis bientôt un an,
+        dans l'espoir de voir ce réseau social satisfaire vos besoins et vos envies.
+        Nous avons conçu ce réseau ainsi que ses différentes fonctionnalités et les avons rendues fonctionnelles
+        pour qu'il réponde à vos attentes de lycéens, qui sont proches des nôtres en tant qu'élèves.
+      </p>
+      <img src="../static/image/imgvide.png" alt="img illustration" class="img_description">
+    </div>
+    <div class="text">
+      <p class="txt_presentation">
+        <span class="titre_paragraphe">Un forum d'entraide entre les élèves à travers toute la France.</span><br />
+        Sur le réseau, vous retrouverez des questions de certains élèves qui, comme vous peut-être,
+        ont besoin d'aide dans un domaine ou un autre.
+        L'objectif est de les aider du mieux que vous pouvez, afin de lutter contre l'isolement des lycéens en difficulté scolaire,
+        mais aussi de faire profiter les autres lycéens de vos facilités dans certaines matières.
+      </p>
+      <img src="../static/image/imgvide.png" alt="img illustration" class="img_description">
+    </div>
   </div>
+  <br />
+  <br />
+    <br />
+  <br />
+  <br />
   <div class="contact">
+    <div title="Entrez vortre adresse mail" class="control has-icons-left has-icons-right" style="margin-right: 1%;">
+      <input class="input" type="email" placeholder="Etre avertit lors du lancement" style="width: 18.5rem;">
+      <span class="icon is-small is-left">
+        <i class="fas fa-envelope"></i>
+      </span>
+      <span class="icon is-small is-right">
+        <i class="fas fa-check"></i>
+      </span>
+    </div>
     <a href="https://www.instagram.com/key4school/"><i style="font-size:1.5em;" class="fab fa-instagram"></i></a>
     <a href="https://twitter.com/key4school/"><i style="font-size:1.5em;" class="fab fa-twitter"></i></a>
     <a href="mailto:contact@key4school.com"><i style="font-size:1.5em;" class="far fa-envelope"></i></a>
-    </div>
+  </div>
 
 </body>
