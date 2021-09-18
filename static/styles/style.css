@@ -208,18 +208,3 @@ input[type=range]:focus::-ms-fill-upper {
     width:64px;
   }
 }
-.txt_presentation{
-  margin:auto;
-  width: 95%;
-  font-size: 15px;
-}
-.soon{
-  font-weight: bold;
-  text-align:center;
-  font-size:65px;
-  margin:auto;
-  width:50%;
-  background: -webkit-linear-gradient(left top, #008df7, #e124fe, #ff2700, #ffe600, #06ff5f);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
