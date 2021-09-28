@@ -1,3 +1,90 @@
+/* style scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+@media (prefers-color-scheme: dark) {
+:root {
+--page-background: #212121;
+--text-color: #ededed;
+--placeholder-color: #b1b1b1;
+--scrollbar-track: #00000000;
+--scrollbar-thumb: #484e51aa;
+--scrollbar-thumb-hover: #313639aa;
+
+}
+}
+@media (prefers-color-scheme: light) {
+  :root {
+  --page-background: #ffffff;
+  --text-color: #4a4a4a;
+  --placeholder-color: #dbdbdb;
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-thumb-hover: #727272;
+  }
+}
+html{
+  background-color: var(--page-background);
+  color: var(--text-color);
+
+}
+body{
+  background-color: var(--page-background);
+  color: var(--text-color);
+
+}
+
+.color_input::placeholder {
+  color: var(--placeholder-color);
+}
+.color_input{
+  background-color: var(--page-background);
+  color: var(--text-color);
+}
+.titre{
+  z-index: 20;
+  justify-content: center;
+  position: fixed;
+  align-items: center;
+  display: flex;
+  margin: auto;
+  width: 100%;
+  padding: 2%;
+  background-color: var(--page-background);
+}
+.key4schoolNavbar{
+  display:flex;
+  color: var(--text-color);
+  font-weight:bold;
+  margin-left:1%;
+  font-size:30px;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.button_inscription{
+  margin-left:auto;
+  margin-right:auto;
+  width: 10%;
+}
 @media screen and (max-width: 700px) {
   .saveCaption {
     display: none;
@@ -166,6 +253,10 @@ input[type=range]:focus::-ms-fill-upper {
     height:40px;
     width:40px;
   }
+  .input_inscription{
+    width: 90%;
+    margin:auto;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
@@ -206,5 +297,10 @@ input[type=range]:focus::-ms-fill-upper {
   .ImagePublication{
     height:64px;
     width:64px;
+  }
+  .input_inscription{
+    width: 45%;
+    margin:auto;
+
   }
 }
