@@ -1,4 +1,25 @@
 /*! bulma.io v0.9.0 | MIT License | github.com/jgthms/bulma */
+@media (prefers-color-scheme: dark) {
+:root {
+--page-background: #212121;
+--text-color: #ededed;
+--placeholder-color: #b1b1b1;
+--scrollbar-track: #00000000;
+--scrollbar-thumb: #484e51aa;
+--scrollbar-thumb-hover: #313639aa;
+
+}
+}
+@media (prefers-color-scheme: light) {
+  :root {
+  --page-background: #ffffff;
+  --text-color: #4a4a4a;
+  --placeholder-color: #dbdbdb;
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-thumb-hover: #727272;
+  }
+}
 @-webkit-keyframes spinAround {
   from {
     transform: rotate(0)
@@ -367,10 +388,10 @@ a.box:active {
 }
 
 .button {
-  background-color: #fff;
+  background-color: var(--page-background);
   border-color: #dbdbdb;
   border-width: 1px;
-  color: #363636;
+  color: var(--text-color);
   cursor: pointer;
   justify-content: center;
   padding-bottom: calc(.5em - 1px);
@@ -3008,26 +3029,26 @@ a.tag:hover {
 }
 
 .input, .select select, .textarea {
-  background-color: #fff;
+  background-color: var(--page-background);
   border-color: #dbdbdb;
   border-radius: 4px;
-  color: #363636
+  color: var(--text-color);
 }
 
 .input::-moz-placeholder, .select select::-moz-placeholder, .textarea::-moz-placeholder {
-  color: rgba(54, 54, 54, .3)
+  color: var(--placeholder-color);
 }
 
 .input::-webkit-input-placeholder, .select select::-webkit-input-placeholder, .textarea::-webkit-input-placeholder {
-  color: rgba(54, 54, 54, .3)
+  color: var(--placeholder-color);
 }
 
 .input:-moz-placeholder, .select select:-moz-placeholder, .textarea:-moz-placeholder {
-  color: rgba(54, 54, 54, .3)
+  color: var(--placeholder-color);
 }
 
 .input:-ms-input-placeholder, .select select:-ms-input-placeholder, .textarea:-ms-input-placeholder {
-  color: rgba(54, 54, 54, .3)
+  color: var(--placeholder-color);
 }
 
 .input:hover, .is-hovered.input, .is-hovered.textarea, .select select.is-hovered, .select select:hover, .textarea:hover {
@@ -3047,19 +3068,19 @@ a.tag:hover {
 }
 
 .input[disabled]::-moz-placeholder, .select fieldset[disabled] select::-moz-placeholder, .select select[disabled]::-moz-placeholder, .textarea[disabled]::-moz-placeholder, fieldset[disabled] .input::-moz-placeholder, fieldset[disabled] .select select::-moz-placeholder, fieldset[disabled] .textarea::-moz-placeholder {
-  color: rgba(122, 122, 122, .3)
+  color: var(--placeholder-color);
 }
 
 .input[disabled]::-webkit-input-placeholder, .select fieldset[disabled] select::-webkit-input-placeholder, .select select[disabled]::-webkit-input-placeholder, .textarea[disabled]::-webkit-input-placeholder, fieldset[disabled] .input::-webkit-input-placeholder, fieldset[disabled] .select select::-webkit-input-placeholder, fieldset[disabled] .textarea::-webkit-input-placeholder {
-  color: rgba(122, 122, 122, .3)
+  color: var(--placeholder-color);
 }
 
 .input[disabled]:-moz-placeholder, .select fieldset[disabled] select:-moz-placeholder, .select select[disabled]:-moz-placeholder, .textarea[disabled]:-moz-placeholder, fieldset[disabled] .input:-moz-placeholder, fieldset[disabled] .select select:-moz-placeholder, fieldset[disabled] .textarea:-moz-placeholder {
-  color: rgba(122, 122, 122, .3)
+  color: var(--placeholder-color);
 }
 
 .input[disabled]:-ms-input-placeholder, .select fieldset[disabled] select:-ms-input-placeholder, .select select[disabled]:-ms-input-placeholder, .textarea[disabled]:-ms-input-placeholder, fieldset[disabled] .input:-ms-input-placeholder, fieldset[disabled] .select select:-ms-input-placeholder, fieldset[disabled] .textarea:-ms-input-placeholder {
-  color: rgba(122, 122, 122, .3)
+  color: var(--placeholder-color);
 }
 
 .input, .textarea {
