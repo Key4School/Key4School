@@ -18,8 +18,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link rel="icon" href="../static/image/logo/favicon.png?v=2" id="favicon"/>
   <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
+  <link rel="icon" href="../static/image/logo/favicon.png?v=2" id="favicon" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   </script>
 
@@ -46,10 +46,11 @@
   <h1>Inscription</h1><br>
   <br>
   <br>
+  <br>
   <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" placeholder="Prénom">
+    <input class="color_input input" type="tel" placeholder="Téléphone">
     <span class="icon is-small is-left">
-      <i class="fas fa-user-alt"></i>
+      <i class="fas fa-phone-alt"></i>
     </span>
     <span class="icon is-small is-right">
       <i class="fas fa-check"></i>
@@ -57,9 +58,9 @@
   </div>
   <br />
   <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" placeholder="Nom">
+    <input class="color_input input" type="date" placeholder="Date de naissance">
     <span class="icon is-small is-left">
-      <i class="fas fa-user-alt"></i>
+      <i class="fas fa-birthday-cake"></i>
     </span>
     <span class="icon is-small is-right">
       <i class="fas fa-check"></i>
@@ -67,61 +68,72 @@
   </div>
   <br />
   <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" type="text" placeholder="Pseudo">
+    <input class="color_input input" type="text" placeholder="Lycée" @keyup="fonction">
     <span class="icon is-small is-left">
-      <i class="far fa-smile-wink"></i>
+      <i class="fas fa-school"></i>
     </span>
     <span class="icon is-small is-right">
       <i class="fas fa-check"></i>
     </span>
   </div>
-  <br />
+  <datalist id="id_datalist">
+    <option>Lycée 1</option>
+    <option>Lycée 2</option>
+    <option>lycee 3</option>
+  </datalist>
+  <br>
+
   <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" type="text" placeholder="Email">
+    <input class="color_input input" type="text" placeholder="Niveau" @keyup="fonction">
     <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
+      <i class="fas fa-graduation-cap"></i>
     </span>
     <span class="icon is-small is-right">
       <i class="fas fa-check"></i>
     </span>
   </div>
+  <datalist id="id_datalist">
+    <option>2nd</option>
+    <option>1ère</option>
+    <option>Tle</option>
+  </datalist>
   <br />
   <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" type="password" placeholder="Mot de passe">
+    <input class="color_input input" type="text" placeholder="LVA" @keyup="fonction">
     <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
+      <i class="fas fa-globe"></i>
     </span>
     <span class="icon is-small is-right">
       <i class="fas fa-check"></i>
     </span>
+  </div>
+  <datalist id="id_datalist">
+    <option>Anglais</option>
+    <option>Espagnol</option>
+    <option>Allemand</option>
+  </datalist>
+  <br />
+  <div class="input_inscription control has-icons-left has-icons-right">
+    <input class="color_input input" type="text" placeholder="LVB" @keyup="fonction">
+    <span class="icon is-small is-left">
+      <i class="fas fa-globe"></i>
+    </span>
+    <span class="icon is-small is-right">
+      <i class="fas fa-check"></i>
+    </span>
+  </div>
+  <datalist id="id_datalist">
+    <option>Anglais</option>
+    <option>Espagnol</option>
+    <option>Allemand</option>
+  </datalist>
+  <br />
+  <br>
+  <div class="button_inscription">
+    <button type="submit" class="button">Next</button>
   </div>
 
-  <div class="progressBar">
-    <div class="progress-done"></div>
-  </div>
-  <ul>
-    <li id="taille-mdp"></li>
-    <li id="min-mdp"></li>
-    <li id="maj-mdp"></li>
-    <li id="chiffre-mdp"></li>
-  </ul>
-  <br />
-  <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" type="password" placeholder="Confirmation mot de passe">
-    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </div>
-<br />
-    <br>
-    <div class="button_inscription">
-      <button type="submit" class="button">Next</button>
-    </div>
-
-    <br>
+  <br>
   </form>
 </body>
 
