@@ -92,9 +92,6 @@ p{
 .txt_right{
   text-align: right;
 }
-.form_connexion{
-  padding-top: 15%;
-}
 @media screen and (max-width: 700px) {
   .saveCaption {
     display: none;
@@ -267,6 +264,9 @@ input[type=range]:focus::-ms-fill-upper {
     width: 90%;
     margin:auto;
   }
+  .form_connexion{
+    padding-top: 30%;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
@@ -311,6 +311,8 @@ input[type=range]:focus::-ms-fill-upper {
   .input_inscription{
     width: 45%;
     margin:auto;
-
+  }
+  .form_connexion{
+    padding-top: 15%;
   }
 }
