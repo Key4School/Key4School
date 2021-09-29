@@ -248,7 +248,7 @@ td:not([align]), th:not([align]) {
 }
 
 html {
-  background-color: #fff;
+  background-color:  var(--page-background);
   font-size: 16px;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -2902,7 +2902,7 @@ a.tag:hover {
 }
 
 .title {
-  color: #363636;
+  color: var(--text-color);
   font-size: 2rem;
   font-weight: 600;
   line-height: 1.125

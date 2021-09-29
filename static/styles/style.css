@@ -47,7 +47,9 @@ html{
 body{
   background-color: var(--page-background);
   color: var(--text-color);
-
+}
+p{
+  color: var(--text-color);
 }
 
 .color_input::placeholder {
@@ -86,7 +88,12 @@ body{
 }
 .txt_centre{
   text-align: center;
-  color:var(--text-color);
+}
+.txt_right{
+  text-align: right;
+}
+.form_connexion{
+  padding-top: 15%;
 }
 @media screen and (max-width: 700px) {
   .saveCaption {
