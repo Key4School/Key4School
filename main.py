@@ -28,6 +28,7 @@ from db_poo import *
 
 # Création du Cluster de la DB
 DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
+# nouvau mdp mongodb+srv://les-codeurs-lbp:ezEwMi2KBaCkzT4@cluster0.bggb1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 # Routing
 from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved
