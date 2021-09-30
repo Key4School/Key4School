@@ -26,6 +26,7 @@
 --scrollbar-track: #00000000;
 --scrollbar-thumb: #484e51aa;
 --scrollbar-thumb-hover: #313639aa;
+--text-multicolor:-webkit-linear-gradient(left top, #008df7, #e124fe, #ff2700, #ffe600, #06ff5f);
 
 }
 }
@@ -37,6 +38,7 @@
   --scrollbar-track: #f1f1f1;
   --scrollbar-thumb: #c1c1c1;
   --scrollbar-thumb-hover: #727272;
+  --text-multicolor:white;
   }
 }
 html{
@@ -52,6 +54,9 @@ p{
   color: var(--text-color);
 }
 
+.BlackOrWhite{
+  color: var(--text-color);
+}
 .color_input::placeholder {
   color: var(--placeholder-color);
 }
@@ -72,10 +77,12 @@ p{
 }
 .key4schoolNavbar{
   display:flex;
-  color: var(--text-color);
   font-weight:bold;
   margin-left:1%;
   font-size:30px;
+  background:var(--text-multicolor);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 *{
   margin: 0;
