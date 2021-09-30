@@ -7,6 +7,8 @@
 --scrollbar-track: #00000000;
 --scrollbar-thumb: #484e51aa;
 --scrollbar-thumb-hover: #313639aa;
+--background-box:#1e1e1e;
+--shadow-box:0 0.5em 0.5em -0.125em #2196f3c4, 0 0 0 1px #03a9f400;
 
 }
 }
@@ -18,6 +20,8 @@
   --scrollbar-track: #f1f1f1;
   --scrollbar-thumb: #c1c1c1;
   --scrollbar-thumb-hover: #727272;
+  --background-box:#fff;
+  --shadow-box:0 .5em 1em -.125em rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .02);
   }
 }
 @-webkit-keyframes spinAround {
@@ -368,15 +372,6 @@ table td:not([align]), table th:not([align]) {
 
 table th {
   color: #363636
-}
-
-.box {
-  background-color: #fff;
-  border-radius: 6px;
-  box-shadow: 0 .5em 1em -.125em rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .02);
-  color: #4a4a4a;
-  display: block;
-  padding: 1.25rem
 }
 
 a.box:focus, a.box:hover {
