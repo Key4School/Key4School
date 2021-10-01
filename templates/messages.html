@@ -38,12 +38,13 @@
       display: flex;
       flex-direction:column;
       align-items: flex-start;
-      background-color: {{session['couleur'][1]}};
+      background-color: var(--message-color);
     }
 
     td:hover {
-      background-color: #f5f5f5;
+      background-color: var(--background-hover);
       cursor: pointer;
+      color:var(--text-color-hover);
     }
 
     .rep {
@@ -56,7 +57,7 @@
       margin-bottom:2%;
     }
     .liengroupe {
-      color: black;
+      color: var(--text-color);
       text-decoration: none;
     }
 
@@ -148,7 +149,7 @@
       <!-- div pour afficher tout les groupes -->
       <div id="nomgroupe" style="/*width: 15%;*/margin-left: 25px;overflow-y:auto;overflow-x: hidden;margin-bottom:5%;">
         <div class="liengroupe" style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-          <i onclick="divnewgroupopen()" class="fas fa-plus-circle" style="font-size:30px;margin-bottom:5%; cursor: pointer;"></i>
+          <i onclick="divnewgroupopen()" class="fas fa-plus-circle BlackOrWhite" style="font-size:30px;margin-bottom:5%; cursor: pointer;"></i>
           <input class="input is-info" type="text" placeholder="Rechercher..." style="display: inline-block; width: calc(100% - 40px); height: 50%;" oninput="grp_filter(this.value);" />
         </div>
 
@@ -234,7 +235,7 @@
       </div>
       {%if msgDb == none%}
       <div id="divCoteMessage" style="border: 3px solid {{session['couleur'][0]}};width: 100%;margin: 3% 3%;text-align:center;padding-top:3%;padding-bottom:3%;">
-        <i class="fas fa-paper-plane" style="border: 2px solid black;border-radius:50%;padding: 3% 4% 3% 2%;font-size:70px;background-color:#dbdbdb;"></i><br />
+        <i class="fas fa-paper-plane" style="border: 2px solid var(--background-hover);border-radius:50%;padding: 3% 4% 3% 2%;font-size:70px;background-color:var(--background-hover)"></i><br />
         <br />
         <p style="font-size: 20px">
           <b>Messages privés</b>
@@ -244,7 +245,7 @@
           Vous pouvez discuter avec vos ami.e.s, avec vos camarades de classe ou d'autre personnes de la communauté !
         </p>
         <br /><br />
-        <span onclick="divnewgroupopen()" style="background-color:#dbdbdb;border-radius:9%;padding:1%;">
+        <span onclick="divnewgroupopen()" style="background-color:var(--background-hover);border-radius:9%;padding:1%;">
           Lancer une conversation
         </span>
       </div>
@@ -690,7 +691,7 @@
               <input type='hidden' name="group" value="{{idgroupe}}" id="idGroupe" />
               <input type="hidden" name="idUser" id="idUser" value="{{sessionId}}" />
               <input type='hidden' id='reponse' name='reponse' value="None" />
-              <button style="background-color:white;border: 0px solid white; position: relative;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
+              <button style="color:var(--NetB);background-color:var(--page-background);border: 0px solid var(--page-background); position: relative;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
               <div style="position: relative; width: 30px; cursor: pointer;">
                 <div style="position: absolute; width: 30px; height: 30px; overflow: hidden; top: 50%; transform: translateY(-50%); cursor: pointer;">
                   <i id="uploadImageIcon" class="fas fa-file-image" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer;"></i>
@@ -699,7 +700,7 @@
                 </div>
               </div>
             </form>
-            <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;" onClick="enregistrerTel()">
+            <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;color:var(--NetB)" onClick="enregistrerTel()">
               <i class="fas fa-microphone" style="font-size: 20px;"></i>
             </button>
             <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
