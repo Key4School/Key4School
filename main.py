@@ -256,7 +256,7 @@ def connexion():
             user = utilisateurs[str(_id)].toDict()
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
-            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
+            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1']
             session['type'] = user['type']
             session['cacheRandomKey'] = cacheRandomKey
 
@@ -294,7 +294,7 @@ def connexion():
 
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
-            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
+            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1']
             session['type'] = user['type']
             session['cacheRandomKey'] = cacheRandomKey
 
@@ -323,7 +323,7 @@ def connexion():
 
             session['id'] = str(user['_id'])
             session['pseudo'] = user['pseudo']
-            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']
+            session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1']
             session['type'] = user['type']
             session['cacheRandomKey'] = cacheRandomKey
 
