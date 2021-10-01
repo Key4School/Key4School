@@ -34,7 +34,7 @@
 
       <!-- Recherche -->
       <form class="formOrdi" action="{{url_for('recherche')}}" method="GET" style="margin-left:5%;margin-top: 0.5%; width: 40%;align-items:center;">
-        <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;background-color:var(--barreSearch);color:var(--text-color)" {%if search != None%}value="{{search}}"{%endif%}/>
+        <input type="text" name="search" placeholder="Recherche..." style="margin-left: 2%;width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;background-color:var(--barreSearch);color:var(--text-color)" {%if search != None%}value="{{search}}"{%endif%}/>
         <button type="submit" style="background-color:var(--bandeau-color);padding-left: 1%;border: 1px solid var(--bandeau-color);font-size: 20px;margin-right:10%;"><i class="fas fa-search logoBouton logosearch" ></i></button>
       </form>
       <button onclick="recherche()" class="telRecherche" style="background-color:var(--bandeau-color); border: 1px solid var(--bandeau-color);font-size: 20px;margin:auto;"><i class="fas fa-search logoBouton logosearch" ></i></button>
