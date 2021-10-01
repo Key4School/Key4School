@@ -34,7 +34,7 @@
 @media (prefers-color-scheme: light) {
   :root {
   --page-background: #ffffff;
-  --text-color: #4a4a4a;
+  --text-color: black;
   --placeholder-color: #dbdbdb;
   --scrollbar-track: #f1f1f1;
   --scrollbar-thumb: #c1c1c1;
