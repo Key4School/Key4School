@@ -17,7 +17,7 @@
         background: linear-gradient(to bottom right, {{session['couleur'][0]}}, {{session['couleur'][1]}}, {{session['couleur'][2]}});{%endif%}border-radius: 8px;
         "
          />
-        <span class="key4schoolNavbar" style="font-weight:bold;font-size:30px;margin:auto; position: absolute; left: 50px; top: 50%; transform: translateY(-50%);">
+        <span class="key4schoolNavbar" style="margin-left: 1%;font-weight:bold;font-size:30px;margin:auto; position: absolute; left: 50px; top: 50%; transform: translateY(-50%);">
           <p style="font-family: 'Roboto', sans-serif;">
             Key
           </p>
@@ -35,9 +35,9 @@
       <!-- Recherche -->
       <form class="formOrdi" action="{{url_for('recherche')}}" method="GET" style="margin-left:5%;margin-top: 0.5%; width: 40%;align-items:center;">
         <input type="text" name="search" placeholder="Recherche..." style="width: 80%; height: 80%; border-radius: 3px; border: none; outline: none; padding-left: 8px;background-color:var(--barreSearch);color:var(--text-color)" {%if search != None%}value="{{search}}"{%endif%}/>
-        <button type="submit" style="background-color:var(--bandeau-color); border: 1px solid var(--bandeau-color);font-size: 20px;margin-right:10%;"><i class="fas fa-search logoBouton logosearch" ></i></button>
+        <button type="submit" style="background-color:var(--bandeau-color);padding-left: 1%;border: 1px solid var(--bandeau-color);font-size: 20px;margin-right:10%;"><i class="fas fa-search logoBouton logosearch" ></i></button>
       </form>
-      <button onclick="recherche()" class="telRecherche" style="background-color:var(--bandeau-color); border: 1px solid var(--bandeau-color);font-size: 20px;margin:auto;"><i class="fas fa-search logoBouton" ></i></button>
+      <button onclick="recherche()" class="telRecherche" style="background-color:var(--bandeau-color); border: 1px solid var(--bandeau-color);font-size: 20px;margin:auto;"><i class="fas fa-search logoBouton logosearch" ></i></button>
       {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;margin-top: 1%;">mode spectateur</div>{%endif%}
       <!-- Profil -->
       <!-- <a href="{{url_for('profil')}}">
@@ -49,7 +49,7 @@
       <!-- Partie droite de la barre de navigation -->
       {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
       <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%; transition: all .5s; border-radius: 4px;" >
-        <a class="navbar-item" href="{{url_for('question')}}">
+        <a class="navbar-item " href="{{url_for('question')}}">
           <i style=" font-size:20px;" class="fas fa-question"></i>
           &nbsp;&nbsp;Poser une question
         </a>
@@ -58,7 +58,7 @@
       {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
       <div class="navbarhover questionNavbarTel" style="margin:auto;padding:0.5%;" >
         <a class="navbar-item" href="{{url_for('question')}}">
-        <i style=" font-size:20px;" class="fas fa-question"></i>
+        <i style=" font-size:20px;" class="BlackOrWhite fas fa-question"></i>
         </a>
       </div>
       {%endif%}
@@ -67,7 +67,7 @@
       <!-- Début notifications -->
       <div class="navbar-item has-dropdown is-hoverable navbarhover" style="transition: all .1s;">
         <a class="navbar-link">
-          <i style=" font-size:30px;" class="fas fa-bell"></i>
+          <i style=" font-size:30px;" class="fas fa-bell BlackOrWhite"></i>
           <p id="nbNotif" style="color:black;margin-left: -17%;border-radius: 50%;padding-left: 8px;padding-right: 8px;background-color: red;"></p>
         </a>
         <!-- Notifications -->
@@ -85,41 +85,41 @@
       </div>
       <div class="navbar-item has-dropdown is-hoverable navbarhover" style="transition: all .1s;">
         <a class="navbar-link">
-          <i style=" font-size:30px;" class="fas fa-bars"></i>
+          <i style=" font-size:30px;" class="fas fa-bars BlackOrWhite"></i>
         </a>
         <!-- Pages du menu -->
         <div class="navbar-dropdown is-boxed is-right">
           <!-- Accueil -->
           <a class="navbar-item" href="{{url_for('accueil')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-home"></i>
+            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-home BlackOrWhite"></i>
             &nbsp;&nbsp;Accueil
           </a>
           <!-- Messages privés -->
           <a class="navbar-item" href="{{url_for('page_messages')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-envelope"></i>
+            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-envelope BlackOrWhite"></i>
             &nbsp;&nbsp;Messages privés
           </a>
           <!-- Demandes d'aide enregistrées -->
           <a class="navbar-item" href="{{url_for('saved')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-bookmark"></i>
+            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-bookmark BlackOrWhite"></i>
             &nbsp;&nbsp;Demandes enregistrées
           </a>
           {%if user['admin']== true%}
           <a class="navbar-item" href="{{url_for('administration')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-user-shield"></i>
+            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-user-shield BlackOrWhite"></i>
             &nbsp;&nbsp;Administration
           </a>
           {%endif%}
           <!-- Profil + Préférences -->
           <a class="navbar-item" href="{{url_for('profil')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-user-circle"></i>
+            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-user-circle BlackOrWhite"></i>
             &nbsp;&nbsp;Profil et préférences
           </a>
           <!-- Barre de division -->
           <hr class="navbar-divider">
           <!-- Help -->
           <a class="navbar-item" href="{{url_for('tuto')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-question-circle"></i>
+            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-question-circle BlackOrWhite"></i>
             &nbsp;&nbsp;Aide
           </a>
         </div>
