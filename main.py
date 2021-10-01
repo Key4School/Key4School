@@ -7,6 +7,7 @@ from flask_session import Session
 from flask.json import jsonify
 from bson.objectid import ObjectId
 from bson import Binary
+import sys
 import os
 import gridfs
 import smtplib
@@ -17,8 +18,10 @@ from difflib import SequenceMatcher
 import re
 
 # Création de l'application
+sys.path.insert(0, os.path.dirname(__file__))
 app = Flask(__name__)
 socketio = SocketIO(app)
+application = socketio
 
 # DB POO
 from db_poo import *
@@ -350,7 +353,8 @@ if __name__ == "__main__":
 
         # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
         # app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
-        socketio.run(app, host='0.0.0.0', port=os.environ.get("PORT", 3000), debug=True)
+        # socketio.run(app, host='0.0.0.0', port=os.environ.get("PORT", 3000), debug=True)
+        socketio.run(app)
 
     else:
         # Le client secret est le code secret de l'application
