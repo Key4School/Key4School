@@ -94,13 +94,13 @@
   {% include 'filtres.html' with context %}
   {% if demandes == [] %}
   <div style="border: 3px solid {{session['couleur'][0]}};margin: 0% 3%;height:75%;text-align:center;padding-top:3%;padding-bottom:3%;">
-    <i class="fas fa-question" style="border: 2px solid black;border-radius:50%;padding: 3% 4% 3% 3%;;font-size:70px;background-color:#dbdbdb;"></i><br />
+    <i class="fas fa-question" style="border: 2px solid var(--background-hover);border-radius:50%;padding: 3% 4% 3% 3%;;font-size:70px;background-color:var(--background-hover);"></i><br />
     <br />
     <p style="font-size: 20px;margin: 0% 31%;">
       Vous n'avez enregistré aucune demande. Vous pouvez en enregistrer en cliquant sur l'icône <i class="far fa-bookmark"></i> qui se trouve sous chaque demande d'aide.
     </p>
     <br /><br />
-    <a href="{{url_for('accueil')}}" style="background-color:#dbdbdb;border-radius:9%;padding:1%;color:black;">
+    <a href="{{url_for('accueil')}}" style="background-color:var(--background-hover);border-radius:9%;padding:1%;color:var(--text-color);">
       Retourner à l'accueil
     </a>
   </div>

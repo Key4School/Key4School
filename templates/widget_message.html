@@ -13,9 +13,9 @@
       <div class="navbar-link">
       </div>
       {%if content['id-utilisateur']==sessionId%}
-      <div class="navbar-dropdown is-right">
+      <div class="navbar-dropdown is-right" style="z-index: 20;">
       {%else%}
-      <div class="navbar-dropdown">
+      <div class="navbar-dropdown" style="z-index: 20;">
       {%endif%}
         {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or user['type']== "ENSEIGNANT" or user['admin']== True%}
         <div class="navbar-item">
