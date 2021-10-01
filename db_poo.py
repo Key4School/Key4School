@@ -6,7 +6,6 @@ import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from main import socketio
 from threading import Thread
 from matieresDict import translations, translateProf
 
@@ -20,7 +19,7 @@ DB = None
 
 class DB_Manager:
     def __init__(self, app, cluster_url):
-        self.cluster = PyMongo(app, cluster_url)
+        self.cluster = PyMongo(app, cluster_url, tls=True, tlsAllowInvalidCertificates=True)
         self.db_utilisateurs = self.cluster.db.utilisateurs
         self.db_demande_aide = self.cluster.db.demande_aide
         self.db_messages = self.cluster.db.messages
@@ -734,6 +733,7 @@ class Notification(Actions):
         return tempsStr
 
     def send(self):
+        from main import socketio
         notification = self.toDict()
         html = render_template("notification.html", notif=notification, similar=0)
 
