@@ -48,12 +48,12 @@ def changeTheme():
             couleurs = [request.form['color1'], request.form['color2'], request.form['color3'], moyenne]
 
         else:
-            listColor = [['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'],
-                        ['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'],
-                        ['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'],
-                        ['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'],
-                        ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'],
-                        ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']]
+            listColor = [['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1'],
+                        ['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3', '#ab3333'],
+                        ['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3', '#5ab953'],
+                        ['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac', '#c5a73c'],
+                        ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9', '#cd7d8b'],
+                        ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0', '#9f8f57']]
             couleurs = listColor[int(request.form['couleur'])]
 
         user = utilisateurs[session['id']]
