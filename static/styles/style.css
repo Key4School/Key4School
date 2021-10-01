@@ -26,6 +26,7 @@
 --scrollbar-track: #00000000;
 --scrollbar-thumb: #484e51aa;
 --scrollbar-thumb-hover: #313639aa;
+--NetB:white;
 --text-multicolor:-webkit-linear-gradient(left top, #008df7, #e124fe, #ff2700, #ffe600, #06ff5f);
 
 }
@@ -39,6 +40,7 @@
   --scrollbar-thumb: #c1c1c1;
   --scrollbar-thumb-hover: #727272;
   --text-multicolor:white;
+  --NetB:black;
   }
 }
 html{
@@ -55,7 +57,7 @@ p{
 }
 
 .BlackOrWhite{
-  color: var(--text-color);
+  color: var(--NetB);
 }
 .color_input::placeholder {
   color: var(--placeholder-color);
