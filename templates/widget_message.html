@@ -93,7 +93,7 @@
       <!-- <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button> -->
       <div id="audio-player-container{{content['_id']}}" style="display: flex; width: 100%; border: 1px solid #000; border-radius: 8px; padding: 5px; margin-top: 5px;">
         <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
-        <button style="font-size:17px;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="fas fa-play"></i></button>
+        <button style="font-size:17px;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="BlackOrWhite fas fa-play"></i></button>
         <span style="margin-right:2%; position: relative; top: 50%; transform: translateY(-35%); height: 100%;" id="current-time{{content['_id']}}" class="time">0:00</span>
         <input style="margin-right:2%; width: 60%; background: transparent;" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
         <span style="margin-right:2%; position: relative; top: 50%; transform: translateY(-35%); height: 100%;" id="duration{{content['_id']}}" class="time">0:00</span>
@@ -104,19 +104,19 @@
         const playIconContainer{{content['_id']}} = document.getElementById('play-icon{{content['_id']}}');
         const audioPlayerContainer{{content['_id']}} = document.getElementById('audio-player-container{{content['_id']}}');
         const seekSlider{{content['_id']}} = document.getElementById('seek-slider{{content['_id']}}');
-        let playState{{content['_id']}} = '<i class="fas fa-pause"></i>';
+        let playState{{content['_id']}} = '<i class="fas fa-pause BlackOrWhite"></i>';
 
         playIconContainer{{content['_id']}}.addEventListener('click', () => {
-            if(playState{{content['_id']}} === '<i class="fas fa-play"></i>') {
+            if(playState{{content['_id']}} === '<i class="fas fa-play BlackOrWhite"></i>') {
                 audio{{content['_id']}}.pause();
                 cancelAnimationFrame(raf{{content['_id']}});
-                playState{{content['_id']}} = '<i class="fas fa-pause"></i>';
-                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play"></i>';
+                playState{{content['_id']}} = '<i class="fas fa-pause BlackOrWhite"></i>';
+                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play BlackOrWhite"></i>';
             } else {
                 audio{{content['_id']}}.play();
                 requestAnimationFrame(whilePlaying{{content['_id']}});
-                playState{{content['_id']}} = '<i class="fas fa-play"></i>';
-                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-pause"></i>';
+                playState{{content['_id']}} = '<i class="fas fa-play BlackOrWhite"></i>';
+                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-pause BlackOrWhite"></i>';
             }
         });
 
@@ -197,8 +197,8 @@
 
         audio{{content['_id']}}.addEventListener("ended", function(){
              audio{{content['_id']}}.currentTime = 0;
-             playState{{content['_id']}} = '<i class="fas fa-pause"></i>';
-             playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play"></i>';
+             playState{{content['_id']}} = '<i class="fas fa-pause BlackOrWhite"></i>';
+             playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play BlackOrWhite"></i>';
              audio{{content['_id']}}.pause();
              cancelAnimationFrame(raf{{content['_id']}});
              seekSlider{{content['_id']}}.value = 0;
