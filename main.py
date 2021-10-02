@@ -27,8 +27,10 @@ application = socketio
 from db_poo import *
 
 # Création du Cluster de la DB
-DB = DB_Manager.createCluster(app, "mongodb+srv://les-codeurs-lbp:ezEwMi2KBaCkzT4@cluster0.bggb1.mongodb.net/key4schoolBDD?retryWrites=true&w=majority")
-# nouvau mdp
+# acienne DB
+DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
+# New DB
+# DB = DB_Manager.createCluster(app, "mongodb+srv://les-codeurs-lbp:ezEwMi2KBaCkzT4@cluster0.bggb1.mongodb.net/key4schoolBDD?retryWrites=true&w=majority")
 
 # Routing
 from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved
