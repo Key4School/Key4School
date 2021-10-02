@@ -18,7 +18,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link rel="icon" href="../static/image/logo/favicon.png?v=2" id="favicon"/>
+  <link rel="icon" href="../static/image/logo/favicon.png?v=2" id="favicon" />
+  <script src="../static/js/inscription.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   </script>
@@ -29,7 +30,7 @@
 <body>
   <div class="titre">
     <img src="../static/image/logo/favicon.png" style="height:30px;width:auto;" />
-    <span class="key4schoolNavbar">
+    <span class="key4schoolNavbar_Connexion">
       <p style="font-family: 'Roboto', sans-serif;">
         Key
       </p>
@@ -47,76 +48,86 @@
   <br>
   <br>
   <form>
-  <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" placeholder="Prénom">
-    <span class="icon is-small is-left">
-      <i class="fas fa-user-alt"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </div>
-  <br />
-  <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" placeholder="Nom">
-    <span class="icon is-small is-left">
-      <i class="fas fa-user-alt"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </div>
-  <br />
-  <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" type="text" placeholder="Pseudo">
-    <span class="icon is-small is-left">
-      <i class="far fa-smile-wink"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </div>
-  <br />
-  <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" type="text" placeholder="Email">
-    <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </div>
-  <br />
-  <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" type="password" placeholder="Mot de passe">
-    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </div>
+    <div class="input_inscription control has-icons-left has-icons-right">
+      <input class="color_input input" placeholder="Prénom" name="prenom" id="prenom">
+      <span class="icon is-small is-left">
+        <i class="fas fa-user-alt"></i>
+      </span>
+      <span class="icon is-small is-right">
+        <i class="fas fa-check" id="name_check"></i>
+      </span>
+    </div>
+    <br />
+    <div class="input_inscription control has-icons-left has-icons-right">
+      <input class="color_input input" placeholder="Nom" name="nom" id="nom">
+      <span class="icon is-small is-left">
+        <i class="fas fa-user-alt"></i>
+      </span>
+      <span class="icon is-small is-right">
+        <i class="fas fa-check" id="familyName_check"></i>
+      </span>
+    </div>
+    <br />
+    <div class="input_inscription control has-icons-left has-icons-right">
+      <input class="color_input input" type="text" placeholder="Pseudo" name="pseudo" id="pseudo">
+      <span class="icon is-small is-left">
+        <i class="far fa-smile-wink"></i>
+      </span>
+      <span class="icon is-small is-right">
+        <i class="fas fa-check" id="pseudo_check"></i>
+      </span>
+    </div>
+    <br />
+    <div class="input_inscription control has-icons-left has-icons-right">
+      <input class="color_input input" type="text" placeholder="Email" name="email" id="email">
+      <span class="icon is-small is-left">
+        <i class="fas fa-envelope"></i>
+      </span>
+      <span class="icon is-small is-right">
+        <i class="fas fa-check" id="email_check"></i>
+      </span>
+    </div>
+    <br />
+    <div class="content_mdp">
+      <div class="control has-icons-left has-icons-right" style="width: 100%;">
+        <input class="color_input input" type="password" placeholder="Mot de passe" name="mdp" id="mdp">
+        <span class="icon is-small is-left">
+          <i class="fas fa-lock"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fas fa-check" id="password_check"></i>
+        </span>
+      </div>
+      <div class="oeil" onclick="voir(1)">
+        <i id="oeilid" class="fas fa-eye oeil"></i>
+      </div>
+    </div>
 
-  <div class="progressBar">
-    <div class="progress-done"></div>
-  </div>
-  <ul>
-    <li id="taille-mdp"></li>
-    <li id="min-mdp"></li>
-    <li id="maj-mdp"></li>
-    <li id="chiffre-mdp"></li>
-  </ul>
-  <br />
-  <div class="input_inscription control has-icons-left has-icons-right">
-    <input class="color_input input" type="password" placeholder="Confirmation mot de passe">
-    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </div>
-<br />
+    <div class="progressBar">
+      <div class="progress-done"></div>
+    </div>
+    <ul id="indiq_verif" class="txt_centre">
+      <li id="taille-mdp"></li>
+      <li id="min-mdp"></li>
+      <li id="maj-mdp"></li>
+      <li id="chiffre-mdp"></li>
+    </ul>
+    <br />
+    <div class="content_mdp">
+      <div class="control has-icons-left has-icons-right" style="width: 100%;">
+        <input class="color_input input" type="password" placeholder="Confirmation mot de passe" name="confmdp" id="confmdp">
+        <span class="icon is-small is-left">
+          <i class="fas fa-lock"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fas fa-check" id="confPassword_check"></i>
+        </span>
+      </div>
+      <div class="oeil" onclick="voir(2)">
+        <i id="oeilid2" class="fas fa-eye oeil"></i>
+      </div>
+    </div>
+    <br />
     <br>
 
     <center>
@@ -126,9 +137,9 @@
     <br>
   </form>
   <br />
-<p class="txt_centre">
-  Vous avez deja un compte ? <a href="connexion.html">connectez vous !</a>
-</p>
+  <p class="txt_centre">
+    Vous avez deja un compte ? <a href="connexion.html">connectez vous !</a>
+  </p>
   <br>
   <br />
 </body>

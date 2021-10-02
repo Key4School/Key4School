@@ -86,6 +86,15 @@ p{
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.key4schoolNavbar_Connexion{
+  display:flex;
+  font-weight:bold;
+  margin-left:1%;
+  font-size:30px;
+  background:var(--text-multicolor);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 *{
   margin: 0;
   padding: 0;
@@ -224,12 +233,15 @@ input[type=range]:focus::-ms-fill-upper {
     border: none;
     border-radius: 100%;
 }
+.oeil{
+  padding:1%;
+}
 /* Pour telephone */
 @media screen and (max-width:1023px){
-  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel{
+  .flex_connexion, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel{
     display:block;
   }
-  .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre{
+  .img_connexion, .connexion_txt, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre{
     display:none;
   }
   .selectProfil{
@@ -273,11 +285,18 @@ input[type=range]:focus::-ms-fill-upper {
     width: 90%;
     margin:auto;
   }
+  .content_mdp{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    margin:auto;
+  }
   .form_connexion{
     padding-top: 30%;
   }
   .flex_connexion{
-    display:block;
+    padding-top: 30%;
   }
 }
 /* Pour ordinateur */
@@ -324,6 +343,13 @@ input[type=range]:focus::-ms-fill-upper {
     width: 45%;
     margin:auto;
   }
+  .content_mdp{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45%;
+    margin:auto;
+  }
   .form_connexion{
     padding-top: 5%;
     width: 40%;
@@ -335,6 +361,7 @@ input[type=range]:focus::-ms-fill-upper {
     padding-top: 10%;
   }
   .connexion_txt{
+    display: block;
     padding-bottom: 15%;
     font-size:2rem;
     background: var(--text-multicolor);
@@ -344,5 +371,6 @@ input[type=range]:focus::-ms-fill-upper {
   .img_connexion{
     width: 25%;
     height: auto;
+    display: block;
   }
 }
