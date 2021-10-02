@@ -3,7 +3,7 @@ var numMax=1;//nombre d'image a faire defilé +1
 
 
 function photo(){
-  $("#img_connexion").attr('src','../static/image/publication/pub'+num+'.png');
+  $("#img_connexion").attr('src','../static/image/connexion/pub'+num+'.png');
   num+=1;
   if (num==numMax){
     num=0
