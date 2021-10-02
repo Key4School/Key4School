@@ -39,7 +39,7 @@
   --scrollbar-track: #f1f1f1;
   --scrollbar-thumb: #c1c1c1;
   --scrollbar-thumb-hover: #727272;
-  --text-multicolor:white;
+  --text-multicolor:black;
   --NetB:black;
   }
 }
@@ -276,6 +276,9 @@ input[type=range]:focus::-ms-fill-upper {
   .form_connexion{
     padding-top: 30%;
   }
+  .flex_connexion{
+    display:block;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
@@ -322,6 +325,24 @@ input[type=range]:focus::-ms-fill-upper {
     margin:auto;
   }
   .form_connexion{
-    padding-top: 15%;
+    padding-top: 5%;
+    width: 40%;
+  }
+  .flex_connexion{
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 10%;
+  }
+  .connexion_txt{
+    padding-bottom: 15%;
+    font-size:2rem;
+    background: var(--text-multicolor);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .img_connexion{
+    width: 25%;
+    height: auto;
   }
 }
