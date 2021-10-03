@@ -11,11 +11,7 @@ $(document).ready(function() {
     $confmdp = $('#confmdp'),
     $confPassword_check= $('#confPassword_check'),
     $email = $('#email'),
-    $email_check= $('#email_check'),
-    $erreur = $('#erreurText'),
-    $envoi = $('#envoi'),
-    $form = $('#formIncription'),
-    $champ = $('.champ');
+    $email_check= $('#email_check');
 
   var pourcent = 0;
   var boul1 = false;
@@ -64,7 +60,6 @@ $(document).ready(function() {
       $name_check.css({ // on rend le champ rouge
         color: 'green',
       });
-      return true;
     }
   }
 
@@ -138,12 +133,12 @@ $(document).ready(function() {
       pourcent += 72;
       boul1 = true;
       taille.append('<span style="color: green;"><i class="fas fa-check-circle is-font-primary"></i></span> Au moins 8 caractères. (' + $mdp.val().length + '/8)');
-      $('#indiq_verif').css("padding", "2%");
+      $('.indiq_verif').addClass('add');
     } else {
       pourcent += ($mdp.val().length) / 8 * 72;
       boul1 = false;
       taille.append('<span style="color: red;"><i class="fas fa-times-circle is-font-danger"></i></span> Au moins 8 caractères. (' + $mdp.val().length + '/8)');
-      $('#indiq_verif').css("padding", "2%");
+      $('.indiq_verif').addClass('add');
     }
     //Vérification du chiffre
     if (/^(?=.*\d)/.test($mdp.val())) {
@@ -173,6 +168,7 @@ $(document).ready(function() {
       maj.append('<span style="color: red;"><i class="fas fa-times-circle is-font-danger"></i></span> Au moins 1 caractère en majuscule.');
     }
     document.querySelector('.progressBar').style.display = 'block';
+    console.log(pourcent);
     var rouge = (100 - pourcent) / 100 * 255;
     var vert = pourcent / 100 * 255;
     progress.style.width = pourcent + '%';

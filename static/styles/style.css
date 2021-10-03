@@ -69,14 +69,19 @@ p{
 .titre{
   z-index: 20;
   justify-content: center;
-  position: fixed;
+  /* position: fixed; */
   align-items: center;
   display: flex;
   margin: auto;
   width: 100%;
   padding: 2%;
   background-color: var(--page-background);
+  height: 10%;
 }
+
+/* .first_top{
+  padding-top:30%
+} */
 .key4schoolNavbar{
   display:flex;
   font-weight:bold;
@@ -298,6 +303,28 @@ input[type=range]:focus::-ms-fill-upper {
   .flex_connexion{
     padding-top: 30%;
   }
+  .progressBar {
+    background-color: #d8d8d8;
+    border-radius: 20px;
+    margin-top: 5%;
+    height: 20px;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .progress-done {
+    position: relative;
+    align-self: left;
+    border-radius: 20px;
+    height: 100%;
+    width: 0;
+    opacity: 1;
+    transition: 1s ease 0.3s;
+  }
+  .indiq_verif.add{
+    padding-top:5%;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1023px){
@@ -372,5 +399,27 @@ input[type=range]:focus::-ms-fill-upper {
     width: 25%;
     height: auto;
     display: block;
+  }
+  .progressBar {
+    background-color: #d8d8d8;
+    border-radius: 20px;
+    margin-top: 2%;
+    height: 20px;
+    width: 35%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .progress-done {
+    position: relative;
+    align-self: left;
+    border-radius: 20px;
+    height: 100%;
+    width: 0;
+    opacity: 1;
+    transition: 1s ease 0.3s;
+  }
+  .indiq_verif.add{
+    padding-top:2%;
   }
 }
