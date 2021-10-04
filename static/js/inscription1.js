@@ -98,73 +98,58 @@ $(document).ready(function() {
 
 
   function verifSchool() {
-    var querytemp = $school.val();
-    var tab = querytemp.split(" ");
-    var query = tab.join('%20');
-    var response = "";
-    console.log(query);
+    var querytemp = $school.val(),
+      tab = querytemp.split(" "),
+      query = tab.join('%20'),
+      response = "",
+      lycee = [],
+      lyceeFinal = [];
     $.ajax({
-      url: 'https://data.education.gouv.fr/api/records/1.0/search/?dataset=fr-en-annuaire-education&rows=1&facet=nom_etablissement&facet=nom_commune&refine.type_etablissement=Lycée',
+      url: 'https://data.education.gouv.fr/api/records/1.0/search/?dataset=fr-en-annuaire-education&facet=nom_etablissement&facet=nom_commune&refine.type_etablissement=Lycée',
       dataType: 'json',
       data: {
         q: $('#school').val()
       },
-
       success: function(donnee) {
-        console.log(donnee);
+        $('#datalist_school').empty();
+        lycee = [];
         $.map(donnee, function() {
-          console.log(donnee["records"].length);
           for (let i = 0; i < donnee["records"].length; i++) {
-            console.log("records i", donnee["records"][i]);
-            console.log("records i", donnee["records"][i]["fields"]["nom_etablissement"]);
-            console.log($('#datalist_school option[datalisted=datalisted]').val());
-            $('#datalist_school').append('<option>' + donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"] + '</option>');
+            if (lycee.length <= 9) {
+              lycee.push(donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"]);
+            } else {}
+          }
+        });
+        for (let j = 0; j < lycee.length; j++) {
+          $('#datalist_school').append('<option>' + lycee[j] + '</option>');
 
+          if (lycee.indexOf($school.val()) === -1) {
+            $school.css({ // on rend le champ rouge
+              border: '3px solid red',
+            });
+            $school_check.removeClass("fas fa-check");
+            $school_check.addClass("fas fa-times");
+            $school_check.css({ // on rend le champ rouge
+              color: 'red',
+            });
+            // return false;
+          } else {
+            $school.css({ // si tout est bon, on le rend vert
+              border: '3px solid green',
+            });
+            $school_check.removeClass("fas fa-times");
+            $school_check.addClass("fas fa-check");
+            $school_check.css({ // on rend le champ rouge
+              color: 'green',
+            });
+            // return true;
           }
 
-        });
+
+        }
       }
     });
-    // var endpoint = "https://data.education.gouv.fr/api/v1/console/datasets/1.0/search/";
-    // $.ajax({
-    //   type: "GET",
-    //   url: endpoint,
-    //   params: {
-    //     "dataset": "fr-en-annuaire-education",
-    //     "q": query,
-    //     "facet": "nom_etablissement"
-    //   },
-    //   dataType: "json",
-    //   success: function(result, status, xhr) {
-    //     console.log(result, status, xhr);
-    //     console.log(result["fields"]);
-    //   }
-    // });
 
-
-
-
-    if ($school.val().length < 3) { // si la chaîne de caractères est inférieure à 5
-      $school.css({ // on rend le champ rouge
-        border: '3px solid red',
-      });
-      $school_check.removeClass("fas fa-check");
-      $school_check.addClass("fas fa-times");
-      $school_check.css({ // on rend le champ rouge
-        color: 'red',
-      });
-      return false;
-    } else {
-      $school.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
-      });
-      $school_check.removeClass("fas fa-times");
-      $school_check.addClass("fas fa-check");
-      $school_check.css({ // on rend le champ rouge
-        color: 'green',
-      });
-      return true;
-    }
   }
 
   function verifGrade() {
