@@ -52,7 +52,7 @@ def question():
                 return redirect(url_for('accueil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def redirect_comments():
     return redirect('/')
@@ -102,7 +102,7 @@ def comments(idMsg):
             return redirect('/comments/' + idMsg)
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def updateDemand():
     global utilisateurs
@@ -116,7 +116,7 @@ def updateDemand():
         return 'sent'
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def file(fileName):
     if 'id' in session:
@@ -124,7 +124,7 @@ def file(fileName):
 
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def DL_file(fileName, fileType):
     if 'id' in session or fileType == 'img':
@@ -153,7 +153,7 @@ def DL_file(fileName, fileType):
 
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def delete_file(path):
     return os.remove(path)
@@ -267,7 +267,7 @@ def updateComment():
         return 'sent'
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def savePost(postId):
     global utilisateurs
@@ -286,4 +286,4 @@ def savePost(postId):
         return 'sent'
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))

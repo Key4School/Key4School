@@ -146,7 +146,7 @@ def administration():
             return redirect(url_for('accueil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def suppressionMsg():
     global messages
@@ -173,7 +173,7 @@ def suppressionMsg():
 
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def validerMsg():
     global messages
@@ -203,7 +203,7 @@ def validerMsg():
 
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def sanction():
     global utilisateurs
@@ -247,7 +247,7 @@ def sanction():
             return redirect(url_for('accueil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def signPost():
     global demandes_aide

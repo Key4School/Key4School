@@ -49,7 +49,7 @@ def page_messages(idGroupe):
 
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def redirectDM(idUser1, idUser2):
     if 'id' in session:
@@ -71,7 +71,7 @@ def redirectDM(idUser1, idUser2):
 
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def uploadAudio():
     if 'id' in session:
@@ -100,14 +100,14 @@ def uploadAudio():
             return 'yes'
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def audio(audioName):
     if 'id' in session:
         return DB.cluster.send_file(audioName.strip())
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def uploadImage():
     if 'id' in session:
@@ -136,14 +136,14 @@ def uploadImage():
             return 'yes'
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def image(imageName):
     if 'id' in session:
         return DB.cluster.send_file(imageName)
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def createGroupe():
     global groupes
@@ -163,7 +163,7 @@ def createGroupe():
         return redirect(url_for('page_messages', idGroupe=str(_id)))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def updateGroupe():
     global groupes
@@ -184,7 +184,7 @@ def updateGroupe():
         return redirect(url_for('page_messages', idGroupe=request.form['IdGroupe']))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def virerParticipant():
     global utilisateurs
@@ -206,7 +206,7 @@ def virerParticipant():
             return redirect(url_for('page_messages'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def modifRole():
     if 'id' in session:

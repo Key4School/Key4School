@@ -20,21 +20,21 @@ def accueil():
         return render_template("index.html", demandes=demandes, user=user)
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def accueil2():
     if 'id' in session:
         return redirect(url_for('accueil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def tuto():
     if 'id' in session:
         return render_template('tuto.html', user=utilisateurs[session['id']].toDict())
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def XP_tuto():
     if 'id' in session:
@@ -44,7 +44,7 @@ def XP_tuto():
         return render_template('XP_tuto.html', user=user.toDict(), niv=niv, xplvl=xplvl, xpgens=xpgens)
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
 
 def mail_rendu():
     return render_template('mail_final.html')
@@ -63,4 +63,4 @@ def saved():
         return render_template("saved.html", demandes=demandes, user=user)
     else:
         session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return redirect(url_for('sign-in'))
