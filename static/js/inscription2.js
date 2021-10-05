@@ -1,22 +1,25 @@
 $(document).ready(function() {
 
   var $spe1 = $('#spe1'),
-    $spe1_check= $('#spe1_check'),
+    $spe1_check = $('#spe1_check'),
     $spe2 = $('#spe2'),
-    $spe2_check= $('#spe2_check'),
+    $spe2_check = $('#spe2_check'),
     $spe3 = $('#spe3'),
-    $spe3_check= $('#spe3_check'),
+    $spe3_check = $('#spe3_check'),
     $option1 = $('#option1'),
-    $option1_check= $('#option1_check'),
+    $option1_check = $('#option1_check'),
     $option2 = $('#option2'),
-    $option2_check= $('#option2_check'),
+    $option2_check = $('#option2_check'),
     $option3 = $('#option3'),
-    $option3_check= $('#option3_check'),
-    $spes=["Non renseignée...", "Spé Arts", "Spé HGGSP", "Spé HLP", "Spé SES", "Spé Mathématiques", "Spé Physique-Chimie", "Spé SVT", "Spé NSI", "Spé Sciences de l'Ingénieur", "Spé LCA", "Spé LLCER Anglais", "Spé LLCER Espagnol", "Spé LLCER Allemand", "Spé LLCER Italien", "Spé Biologie-écologie"],
-    $options=["Non renseignée...", "LCA Latin", "LCA Grec", "LV3 Anglais", "LV3 Espagnol", "LV3 Allemand", "LV3 Portugais", "LV3 Italien", "LV3 Russe", "LV3 Arabe", "LV3 Chinois", "EPS", "Arts", "Musique", "Management et gestion", "Santé et social", "Biotechnologies", "Sciences et laboratoire", "Sciences de l'Ingénieur", "Création et innovation technologiques", "Création et culture - design", "Maths complémentaires", "Maths expertes", "Droits et grands enjeux du monde contemporain", "Hippologie et équitation", "Agronomie-économie-territoires", "Pratiques sociales et culturelles"],
-    envoi = $('#envoi'),
-    $form = $('#formIncription'),
-    $champ = $('.champ'); 
+    $option3_check = $('#option3_check'),
+    $spes = ["Non renseignée...", "Spé Arts", "Spé HGGSP", "Spé HLP", "Spé SES", "Spé Mathématiques", "Spé Physique-Chimie", "Spé SVT", "Spé NSI", "Spé Sciences de l'Ingénieur", "Spé LCA", "Spé LLCER Anglais", "Spé LLCER Espagnol", "Spé LLCER Allemand", "Spé LLCER Italien", "Spé Biologie-écologie"],
+    $options = ["Non renseignée...", "LCA Latin", "LCA Grec", "LV3 Anglais", "LV3 Espagnol", "LV3 Allemand", "LV3 Portugais", "LV3 Italien", "LV3 Russe", "LV3 Arabe", "LV3 Chinois", "EPS", "Arts", "Musique", "Management et gestion", "Santé et social", "Biotechnologies", "Sciences et laboratoire", "Sciences de l'Ingénieur", "Création et innovation technologiques", "Création et culture - design", "Maths complémentaires", "Maths expertes", "Droits et grands enjeux du monde contemporain", "Hippologie et équitation", "Agronomie-économie-territoires", "Pratiques sociales et culturelles"],
+    $form = $('#form'),
+    $erreur = $('#erreur');
+
+  $erreur.css({ // on rend le champ rouge
+    display: 'block',
+  });
 
   $spe1.keyup(function() {
     verifSpe1();
@@ -132,6 +135,7 @@ $(document).ready(function() {
       return true;
     }
   }
+
   function verifOption2() {
     if ($options.indexOf($option1.val()) === -1) {
       $option2.css({ // on rend le champ rouge
@@ -155,6 +159,7 @@ $(document).ready(function() {
       return true;
     }
   }
+
   function verifOption3() {
     if ($options.indexOf($option3.val()) === -1) {
       $option3.css({ // on rend le champ rouge
@@ -179,23 +184,15 @@ $(document).ready(function() {
     }
   }
 
-    $envoi.click(function(e) {
-       e.preventDefault(); // on annule la fonction par défaut du bouton d'envoi
-       // on verifie que le pseudo et l'email n'existe pas encore
-       var json;
-       $.ajax({
-         url: "recupPseudoEmail.php",
-         type: "GET",
-         dataType: 'json',
-         async: false,
-         success: function(out) {
-           json = out;
-         }
-       });
-        if (verifSpe1() && verifSpe2() && verifSpe3() && verifOption1() && verifOption2() && verifOption3()) {
-          $form.submit();
-        }else {
-          $erreur.html("Vous n'avez pas rempli correctement les champs du formulaire !");// on affiche le message d'erreur
-        }
-    });
+  $form.on('submit', function(e) {
+    if (verifSpe1() && verifSpe2() && verifSpe3() && verifOption1() && verifOption2() && verifOption3()) {
+      $form.submit();
+      return true;
+    } else {
+      $erreur.css({
+        display: 'block',
+      });
+      return false;
+    }
+  });
 });

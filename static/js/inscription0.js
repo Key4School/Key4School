@@ -11,7 +11,9 @@ $(document).ready(function() {
     $confmdp = $('#confmdp'),
     $confPassword_check= $('#confPassword_check'),
     $email = $('#email'),
-    $email_check= $('#email_check');
+    $email_check= $('#email_check'),
+    $form = $('#form'),
+    $erreur = $('#erreur');
 
   var pourcent = 0;
   var boul1 = false;
@@ -60,6 +62,7 @@ $(document).ready(function() {
       $name_check.css({ // on rend le champ rouge
         color: 'green',
       });
+      return true;
     }
   }
 
@@ -249,28 +252,15 @@ $(document).ready(function() {
     }
   }
 
-  //   $envoi.click(function(e) {
-  //      e.preventDefault(); // on annule la fonction par défaut du bouton d'envoi
-  //      // on verifie que le pseudo et l'email n'existe pas encore
-  //      var json;
-  //      $.ajax({
-  //        url: "recupPseudoEmail.php",
-  //        type: "GET",
-  //        dataType: 'json',
-  //        async: false,
-  //        success: function(out) {
-  //          json = out;
-  //        }
-  //      });
-  //     if (!json.pseudo.includes($pseudo.val()) && !json.email.includes($email.val())) {
-  //       // puis on lance la fonction de vérification sur tous les champs :
-  //       if (verifPrenom() && verifPseudo() && verifNom() && verifMdp() && verifConfMdp() && verifEmail()) {
-  //         $form.submit();
-  //       }else {
-  //         $erreur.html("Vous n'avez pas rempli correctement les champs du formulaire !");// on affiche le message d'erreur
-  //       }
-  //     }else{
-  //         $erreur.html("Ce pseudo ou cette email est déjà utilisé !");// on affiche le message d'erreur
-  //     }
-  //   });
+  $form.on('submit', function(e) {
+    if (verifNom() && verifPrenom() && verifPseudo() && verifMdp() && verifConfMdp() && verifEmail()) {
+      $form.submit();
+      return true;
+    } else {
+      $erreur.css({
+        display: 'block',
+      });
+      return false;
+    }
+  });
 });
