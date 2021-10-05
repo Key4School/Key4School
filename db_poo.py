@@ -8,6 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from threading import Thread
 from matieresDict import translations, translateProf
+from datetime import *
 
 utilisateurs = {}
 demandes_aide = {}
@@ -106,41 +107,50 @@ class Translate_matiere_spes_options_lv:
 class Utilisateur(Translate_matiere_spes_options_lv, Actions):
     def __init__(self, params: dict):
         self._id = params['_id']
-        self.idENT = params['idENT']
         self.nom = params['nom']
         self.prenom = params['prenom']
         self.pseudo = params['pseudo']
-        self.nomImg = params.get('nomImg')
-        self.imgProfile = params.get('imgProfile', '')
-        self.dateInscription = params['dateInscription']
-        self.birth_date = params.get('birth_date', None)
-        self.classe = params.get('classe', '')
-        self.lycee = params['lycee']
-        self.spes = params.get('spes', [])
+        self.email = params['email']
+        self.mdp = params['mdp']
+        self.dateInscription = params.get('dateInscription', datetime.now())
+
+        self.birth_date = params.get('birth_date')
+        self.classe = params.get('classe')
+        self.telephone = params.get('telephone', '')
+        self.lycee = params.get('lycee')
         self.langues = params.get('langues', [])
+
         self.options = params.get('options', [])
+        self.spes = params.get('spes', [])
         self.matiere = params.get('matiere', '') # pour les profs
         self.matiere_autre = params.get('matiere_autre', []) # pour les profs
-        self.couleur = params['couleur']
-        self.type = params['type']
-        self.elementPublic = params['elementPublic']
-        self.elementPrive = params['elementPrive']
+
+        self.nomImg = params.get('nomImg', '')
+        self.imgProfile = params.get('imgProfile', '')
+
+        self.couleur = params.get('couleur', ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'])
+
+        self.elementPublic = params.get('elementPublic', [])
+        self.elementPrive = params.get('elementPrive', ['email', 'telephone', 'interets', 'birth_date', 'caractere'])
+
         self.caractere = params.get('caractere')
-        self.email = params.get('email', '')
-        self.emailENT = params.get('emailENT', '')
         self.interets = params.get('interets', '')
-        self.telephone = params.get('telephone', '')
+
         self.notifs = params.get(
             'notifs', {'demandes': True, 'messages': True, 'sound': True})
+
         self.sign = params.get('sign', [])
         self.Sanctions = params.get('Sanction', [])
-        self.SanctionEnCour = params['SanctionEnCour']
+        self.SanctionEnCour = params.egt('SanctionEnCour', '')
         self.SanctionDuree = params.get('SanctionDuree', '')
-        self.xp = max(params['xp'], 0)
+
+        self.xp = max(params.get('xp', 0), 0)
         self.xpModeration = max(params.get('xpModeration', 0), 0)
         self.motif = params.get('motif', [])
+
         self.admin = params.get('admin', False)
-        self.savedDemands = params.get('savedDemands', [ObjectId('60d8b3a48a701d9f2cbebf3c')])
+
+        self.savedDemands = params.get('savedDemands', [])
 
         self.db_table = DB.db_utilisateurs
 
@@ -170,10 +180,10 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
     def toDict(self):
         return {  # on ajoute à la liste ce qui nous interesse
             '_id': self._id,
-            'idENT': self.idENT,
             'nom': self.nom,
             'prenom': self.prenom,
             'pseudo': self.pseudo,
+            'mdp': self.mdp,
             'nomImg': self.nomImg,
             'imgProfile': self.imgProfile,
             'dateInscription': self.dateInscription,
@@ -192,12 +202,10 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'matiere_autre-str': self.translate_matiere_spes_options_lv(self.matiere_autre),
             'matieres': self.getUserSubjects(),
             'couleur': self.couleur,
-            'type': self.type,
             'elementPublic': self.elementPublic,
             'elementPrive': self.elementPrive,
             'caractere': self.caractere,
             'email': self.email,
-            'emailENT': self.emailENT,
             'interets': self.interets,
             'telephone': self.telephone,
             'notifs': self.notifs,
@@ -216,10 +224,10 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
     def toDB(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
             '_id': self._id,
-            'idENT': self.idENT,
             'nom': self.nom,
             'prenom': self.prenom,
             'pseudo': self.pseudo,
+            'mdp': self.mdp,
             'nomImg': self.nomImg,
             'imgProfile': self.imgProfile,
             'dateInscription': self.dateInscription,
@@ -232,12 +240,10 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'matiere': self.matiere, # pour les profs
             'matiere_autre': self.matiere_autre, # pour les profs
             'couleur': self.couleur,
-            'type': self.type,
             'elementPublic': self.elementPublic,
             'elementPrive': self.elementPrive,
             'caractere': self.caractere,
             'email': self.email,
-            'emailENT': self.emailENT,
             'interets': self.interets,
             'telephone': self.telephone,
             'notifs': self.notifs,

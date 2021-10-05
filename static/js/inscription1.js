@@ -20,7 +20,7 @@ $(document).ready(function() {
     $erreur = $('#erreur');
 
     $erreur.css({ // on rend le champ rouge
-      display: 'block',
+      display: 'none',
     });
 
   $phone.keyup(function() {

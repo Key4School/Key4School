@@ -44,7 +44,7 @@ def afficheNotif(userId, notifId):
     if userId in utilisateurs and notifId in notifications:
         return render_template("mail.html", user=utilisateurs[userId].toDict(), notif=notifications[notifId].toDict())
     else:
-        return redirect(url_for('sign-in'))
+        return redirect(url_for('signIn'))
 
 
 class Interval(object):
