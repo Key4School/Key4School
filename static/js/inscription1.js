@@ -201,7 +201,7 @@ function verifLva() {
     }, document.createDocumentFragment());
     results.appendChild(set);
   });
-  var lang = ["Allemand", "Anglais", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Espagnol", "Hébreu", "Kanak", "Portugais", "Russe"];
+  var lang = ["Allemand", "Allemand Euro", "Anglais", "Anglais Euro", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Italien", "Italien Euro", "Espagnol", "Espagnol Euro", "Hébreu", "Kanak", "Portugais", "Portugais Euro", "Russe"];
   if (lang.indexOf($lva.val()) === -1) {
     $lva.css({ // on rend le champ rouge
       border: '3px solid red',
