@@ -15,6 +15,10 @@ $(document).ready(function() {
     $form = $('#form'),
     $erreur = $('#erreur');
 
+  $erreur.css({
+    display: 'none',
+  });
+
   var pourcent = 0;
   var boul1 = false;
   var boul2 = false;
@@ -252,9 +256,8 @@ $(document).ready(function() {
     }
   }
 
-  $form.on('submit', function(e) {
+  $form.on('submit', function() {
     if (verifNom() && verifPrenom() && verifPseudo() && verifMdp() && verifConfMdp() && verifEmail()) {
-      $form.submit();
       return true;
     } else {
       $erreur.css({
