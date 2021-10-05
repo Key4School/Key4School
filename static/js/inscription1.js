@@ -104,6 +104,7 @@ $(document).ready(function() {
       response = "",
       lycee = [],
       lyceeFinal = [];
+
     $.ajax({
       url: 'https://data.education.gouv.fr/api/records/1.0/search/?dataset=fr-en-annuaire-education&facet=nom_etablissement&facet=nom_commune&refine.type_etablissement=Lycée',
       dataType: 'json',
@@ -121,8 +122,14 @@ $(document).ready(function() {
           }
         });
         for (let j = 0; j < lycee.length; j++) {
-          $('#datalist_school').append('<option>' + lycee[j] + '</option>');
-
+          // $('#datalist_school').append('<option>' + lycee[j] + '</option>');
+          $('#school').autocomplete({
+            autoFocus: true,
+            source: function(request, response){
+              response(lycee);
+            },
+            minLength:0
+          });
           if (lycee.indexOf($school.val()) === -1) {
             $school.css({ // on rend le champ rouge
               border: '3px solid red',
@@ -149,137 +156,136 @@ $(document).ready(function() {
         }
       }
     });
-
   }
 
-  function verifGrade() {
-    var gradeNone = "--Niveau--";
+function verifGrade() {
+  var gradeNone = "--Niveau--";
 
-    var gradeVal = $grade.val();
-    console.log(gradeVal);
+  var gradeVal = $grade.val();
+  console.log(gradeVal);
 
-    if (gradeVal == gradeNone) {
-      $grade.css({ // on rend le champ rouge
-        border: '3px solid red',
-      });
-      $grade_check.removeClass("fas fa-check");
-      $grade_check.addClass("fas fa-times");
-      $grade_check.css({ // on rend le champ rouge
-        color: 'red',
-      });
-      return false;
-    } else {
-      $grade.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
-      });
-      $grade_check.removeClass("fas fa-times");
-      $grade_check.addClass("fas fa-check");
-      $grade_check.css({ // on rend le champ rouge
-        color: 'green',
-      });
-      return true;
-    }
-  }
-
-  function verifLva() {
-    var search = document.querySelector('#LVA');
-    var results = document.querySelector('#datalist_lva');
-    var templateContent = document.querySelector('#template_lva').content;
-    search.addEventListener('keyup', function handler(event) {
-      while (results.children.length) results.removeChild(results.firstChild);
-      var inputVal = new RegExp(search.value.trim(), 'i');
-      var clonedOptions = templateContent.cloneNode(true);
-      var set = Array.prototype.reduce.call(clonedOptions.children, function searchFilter(frag, el) {
-        if (inputVal.test(el.textContent) && frag.children.length < 5) frag.appendChild(el);
-        return frag;
-      }, document.createDocumentFragment());
-      results.appendChild(set);
+  if (gradeVal == gradeNone) {
+    $grade.css({ // on rend le champ rouge
+      border: '3px solid red',
     });
-    var lang = ["Allemand", "Anglais", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Espagnol", "Hébreu", "Kanak", "Portugais", "Russe"];
-    if (lang.indexOf($lva.val()) === -1) {
-      $lva.css({ // on rend le champ rouge
-        border: '3px solid red',
-      });
-      $lva_check.removeClass("fas fa-check");
-      $lva_check.addClass("fas fa-times");
-      $lva_check.css({ // on rend le champ rouge
-        color: 'red',
-      });
-      return false;
-    } else {
-      $lva.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
-      });
-      $lva_check.removeClass("fas fa-times");
-      $lva_check.addClass("fas fa-check");
-      $lva_check.css({ // on rend le champ rouge
-        color: 'green',
-      });
-      return true;
-    }
-  }
-
-  function verifLvb() {
-    var search = document.querySelector('#LVB');
-    var results = document.querySelector('#datalist_lvb');
-    var templateContent = document.querySelector('#template_lvb').content;
-    search.addEventListener('keyup', function handler(event) {
-      while (results.children.length) results.removeChild(results.firstChild);
-      var inputVal = new RegExp(search.value.trim(), 'i');
-      var clonedOptions = templateContent.cloneNode(true);
-      var set = Array.prototype.reduce.call(clonedOptions.children, function searchFilter(frag, el) {
-        if (inputVal.test(el.textContent) && frag.children.length < 5) frag.appendChild(el);
-        return frag;
-      }, document.createDocumentFragment());
-      results.appendChild(set);
+    $grade_check.removeClass("fas fa-check");
+    $grade_check.addClass("fas fa-times");
+    $grade_check.css({ // on rend le champ rouge
+      color: 'red',
     });
-    var lang = ["Allemand", "Anglais", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Espagnol", "Hébreu", "Kanak", "Portugais", "Russe"];
-    if (lang.indexOf($lva.val()) === -1) {
-      $lvb.css({ // on rend le champ rouge
-        border: '3px solid red',
-      });
-      $lvb_check.removeClass("fas fa-check");
-      $lvb_check.addClass("fas fa-times");
-      $lvb_check.css({ // on rend le champ rouge
-        color: 'red',
-      });
-      return false;
-    } else {
-      $lvb.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
-      });
-      $lvb_check.removeClass("fas fa-times");
-      $lvb_check.addClass("fas fa-check");
-      $lvb_check.css({ // on rend le champ rouge
-        color: 'green',
-      });
-      return true;
-    }
+    return false;
+  } else {
+    $grade.css({ // si tout est bon, on le rend vert
+      border: '3px solid green',
+    });
+    $grade_check.removeClass("fas fa-times");
+    $grade_check.addClass("fas fa-check");
+    $grade_check.css({ // on rend le champ rouge
+      color: 'green',
+    });
+    return true;
   }
+}
+
+function verifLva() {
+  var search = document.querySelector('#LVA');
+  var results = document.querySelector('#datalist_lva');
+  var templateContent = document.querySelector('#template_lva').content;
+  search.addEventListener('keyup', function handler(event) {
+    while (results.children.length) results.removeChild(results.firstChild);
+    var inputVal = new RegExp(search.value.trim(), 'i');
+    var clonedOptions = templateContent.cloneNode(true);
+    var set = Array.prototype.reduce.call(clonedOptions.children, function searchFilter(frag, el) {
+      if (inputVal.test(el.textContent) && frag.children.length < 5) frag.appendChild(el);
+      return frag;
+    }, document.createDocumentFragment());
+    results.appendChild(set);
+  });
+  var lang = ["Allemand", "Anglais", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Espagnol", "Hébreu", "Kanak", "Portugais", "Russe"];
+  if (lang.indexOf($lva.val()) === -1) {
+    $lva.css({ // on rend le champ rouge
+      border: '3px solid red',
+    });
+    $lva_check.removeClass("fas fa-check");
+    $lva_check.addClass("fas fa-times");
+    $lva_check.css({ // on rend le champ rouge
+      color: 'red',
+    });
+    return false;
+  } else {
+    $lva.css({ // si tout est bon, on le rend vert
+      border: '3px solid green',
+    });
+    $lva_check.removeClass("fas fa-times");
+    $lva_check.addClass("fas fa-check");
+    $lva_check.css({ // on rend le champ rouge
+      color: 'green',
+    });
+    return true;
+  }
+}
+
+function verifLvb() {
+  var search = document.querySelector('#LVB');
+  var results = document.querySelector('#datalist_lvb');
+  var templateContent = document.querySelector('#template_lvb').content;
+  search.addEventListener('keyup', function handler(event) {
+    while (results.children.length) results.removeChild(results.firstChild);
+    var inputVal = new RegExp(search.value.trim(), 'i');
+    var clonedOptions = templateContent.cloneNode(true);
+    var set = Array.prototype.reduce.call(clonedOptions.children, function searchFilter(frag, el) {
+      if (inputVal.test(el.textContent) && frag.children.length < 5) frag.appendChild(el);
+      return frag;
+    }, document.createDocumentFragment());
+    results.appendChild(set);
+  });
+  var lang = ["Allemand", "Anglais", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Espagnol", "Hébreu", "Kanak", "Portugais", "Russe"];
+  if (lang.indexOf($lva.val()) === -1) {
+    $lvb.css({ // on rend le champ rouge
+      border: '3px solid red',
+    });
+    $lvb_check.removeClass("fas fa-check");
+    $lvb_check.addClass("fas fa-times");
+    $lvb_check.css({ // on rend le champ rouge
+      color: 'red',
+    });
+    return false;
+  } else {
+    $lvb.css({ // si tout est bon, on le rend vert
+      border: '3px solid green',
+    });
+    $lvb_check.removeClass("fas fa-times");
+    $lvb_check.addClass("fas fa-check");
+    $lvb_check.css({ // on rend le champ rouge
+      color: 'green',
+    });
+    return true;
+  }
+}
 
 
-  //   $envoi.click(function(e) {
-  //      e.preventDefault(); // on annule la fonction par défaut du bouton d'envoi
-  //      // on verifie que le pseudo et l'email n'existe pas encore
-  //      var json;
-  //      $.ajax({
-  //        url: "recupPseudoEmail.php",
-  //        type: "GET",
-  //        dataType: 'json',
-  //        async: false,
-  //        success: function(out) {
-  //          json = out;
-  //        }
-  //      });
-  //     if (!json.pseudo.includes($pseudo.val()) && !json.email.includes($email.val())) {
-  //       // puis on lance la fonction de vérification sur tous les champs :
-  //       if (verifPrenom() && verifPseudo() && verifNom() && verifMdp() && verifConfMdp() && verifEmail()) {
-  //         $form.submit();
-  //       }else {
-  //         $erreur.html("Vous n'avez pas rempli correctement les champs du formulaire !");// on affiche le message d'erreur
-  //       }
-  //     }else{
-  //         $erreur.html("Ce pseudo ou cette email est déjà utilisé !");// on affiche le message d'erreur
-  //     }
-  //   });
+//   $envoi.click(function(e) {
+//      e.preventDefault(); // on annule la fonction par défaut du bouton d'envoi
+//      // on verifie que le pseudo et l'email n'existe pas encore
+//      var json;
+//      $.ajax({
+//        url: "recupPseudoEmail.php",
+//        type: "GET",
+//        dataType: 'json',
+//        async: false,
+//        success: function(out) {
+//          json = out;
+//        }
+//      });
+//     if (!json.pseudo.includes($pseudo.val()) && !json.email.includes($email.val())) {
+//       // puis on lance la fonction de vérification sur tous les champs :
+//       if (verifPrenom() && verifPseudo() && verifNom() && verifMdp() && verifConfMdp() && verifEmail()) {
+//         $form.submit();
+//       }else {
+//         $erreur.html("Vous n'avez pas rempli correctement les champs du formulaire !");// on affiche le message d'erreur
+//       }
+//     }else{
+//         $erreur.html("Ce pseudo ou cette email est déjà utilisé !");// on affiche le message d'erreur
+//     }
+//   });
 });

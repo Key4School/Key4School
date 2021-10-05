@@ -241,6 +241,9 @@ input[type=range]:focus::-ms-fill-upper {
 .oeil{
   padding:1%;
 }
+.oeil:hover{
+  cursor: pointer;
+}
 /* Pour telephone */
 @media screen and (max-width:1023px){
   .flex_connexion, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel{
