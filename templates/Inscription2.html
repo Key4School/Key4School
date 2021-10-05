@@ -42,71 +42,37 @@
       </p>
     </span>
   </nav>
-  <form>
+  <form id="form">
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_spe1" class="color_input input" type="text" placeholder="Spécialité 1" >
+      <input list="datalist_spe" class="color_input input" type="text" placeholder="Spécialité 1" name="spe1" id="spe1">
       <span class="icon is-small is-left">
         <i class="fas fa-book-open"></i>
       </span>
       <span class="icon is-small is-right">
-        <i class="fas fa-check"></i>
+        <i class="fas fa-check" id="spe1_check"></i>
       </span>
     </div>
-    <datalist id="datalist_spe1">
-      <option art">Spé Arts</option>
-      <option hggsp">Spé HGGSP</option>
-      <option hlp">Spé HLP</option>
-      <option ses">Spé SES</option>
-      <option maths">Spé Mathématiques</option>
-      <option pc">Spé Physique-Chimie</option>
-      <option svt">Spé SVT</option>
-      <option>Spé NSI</option>
-      <option>Spé Sciences de l'Ingénieur</option>
-      <option>Spé LCA</option>
-      <option>Spé LLCER Anglais</option>
-      <option>Spé LLCER Espagnol</option>
-      <option>Spé LLCER Allemand</option>
-      <option>Spé LLCER Italien</option>
-      <option>Spé Biologie-écologie</option>
-    </datalist>
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_spe2" class="color_input input" type="text" placeholder="Spécialité 2" >
+      <input list="datalist_spe" name="spe2" id="spe2" class="color_input input" type="text" placeholder="Spécialité 2" >
       <span class="icon is-small is-left">
         <i class="fas fa-book-open"></i>
       </span>
       <span class="icon is-small is-right">
-        <i class="fas fa-check"></i>
+        <i class="fas fa-check" id="spe2_check"></i>
       </span>
     </div>
-    <datalist id="datalist_spe2">
-      <option art">Spé Arts</option>
-      <option hggsp">Spé HGGSP</option>
-      <option hlp">Spé HLP</option>
-      <option ses">Spé SES</option>
-      <option maths">Spé Mathématiques</option>
-      <option pc">Spé Physique-Chimie</option>
-      <option svt">Spé SVT</option>
-      <option>Spé NSI</option>
-      <option>Spé Sciences de l'Ingénieur</option>
-      <option>Spé LCA</option>
-      <option>Spé LLCER Anglais</option>
-      <option>Spé LLCER Espagnol</option>
-      <option>Spé LLCER Allemand</option>
-      <option>Spé LLCER Italien</option>
-      <option>Spé Biologie-écologie</option>
-    </datalist>
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_spe3" class="color_input input" type="text" placeholder="Spécialité 3" >
+      <input list="datalist_spe" name="spe3" id="spe3" class="color_input input" type="text" placeholder="Spécialité 3" >
       <span class="icon is-small is-left">
         <i class="fas fa-book-open"></i>
       </span>
       <span class="icon is-small is-right">
-        <i class="fas fa-check"></i>
+        <i class="fas fa-check" id="spe3_check"></i>
       </span>
     </div>
-    <datalist id="datalist_spe3">
+    <datalist id="datalist_spe">
       <option>Non renseignée...</option>
       <option>Spé Arts</option>
       <option>Spé HGGSP</option>
@@ -126,15 +92,15 @@
     </datalist>
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_option2" class="color_input input" type="text" placeholder="option 1" >
+      <input list="datalist_option" id="option1" name="option1" class="color_input input" type="text" placeholder="option 1" >
       <span class="icon is-small is-left">
         <i class="fas fa-book"></i>
       </span>
       <span class="icon is-small is-right">
-        <i class="fas fa-check"></i>
+        <i class="fas fa-check" id="option1_check"></i>
       </span>
     </div>
-    <datalist id="datalist_option2">
+    <datalist id="datalist_option">
       <option >Non renseignée...</option>
       <option>LCA Latin</option>
       <option>LCA Grec</option>
@@ -165,89 +131,37 @@
     </datalist>
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_option2" class="color_input input" type="text" placeholder="option 2" >
+      <input list="datalist_option" id="option2" name="option2" class="color_input input" type="text" placeholder="option 2" >
       <span class="icon is-small is-left">
         <i class="fas fa-book"></i>
       </span>
       <span class="icon is-small is-right">
-        <i class="fas fa-check"></i>
+        <i class="fas fa-check" id="option2_check"></i>
       </span>
     </div>
-    <datalist id="datalist_option2">
-      <option >Non renseignée...</option>
-      <option>LCA Latin</option>
-      <option>LCA Grec</option>
-      <option>LV3 Anglais</option>
-      <option>LV3 Espagnol</option>
-      <option>LV3 Allemand</option>
-      <option>LV3 Portugais</option>
-      <option>LV3 Italien</option>
-      <option>LV3 Russe</option>
-      <option>LV3 Arabe</option>
-      <option>LV3 Chinois</option>
-      <option>EPS</option>
-      <option>Arts</option>
-      <option>Musique</option>
-      <option>Management et gestion</option>
-      <option>Santé et social</option>
-      <option>Biotechnologies</option>
-      <option>Sciences et laboratoire</option>
-      <option>Sciences de l'Ingénieur</option>
-      <option>Création et innovation technologiques</option>
-      <option>Création et culture - design</option>
-      <option>Maths complémentaires</option>
-      <option>Maths expertes</option>
-      <option>Droits et grands enjeux du monde contemporain</option>
-      <option>Hippologie et équitation</option>
-      <option>Agronomie-économie-territoires</option>
-      <option>Pratiques sociales et culturelles</option>
-    </datalist>
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_option3" class="color_input input" type="text" placeholder="option 3" >
+      <input list="datalist_option" id="option3" name="option3" class="color_input input" type="text" placeholder="option 3" >
       <span class="icon is-small is-left">
         <i class="fas fa-book"></i>
       </span>
       <span class="icon is-small is-right">
-        <i class="fas fa-check"></i>
+        <i class="fas fa-check" id="option3_check"></i>
       </span>
     </div>
-    <datalist id="datalist_option3">
-      <option >Non renseignée...</option>
-      <option>LCA Latin</option>
-      <option>LCA Grec</option>
-      <option>LV3 Anglais</option>
-      <option>LV3 Espagnol</option>
-      <option>LV3 Allemand</option>
-      <option>LV3 Portugais</option>
-      <option>LV3 Italien</option>
-      <option>LV3 Russe</option>
-      <option>LV3 Arabe</option>
-      <option>LV3 Chinois</option>
-      <option>EPS</option>
-      <option>Arts</option>
-      <option>Musique</option>
-      <option>Management et gestion</option>
-      <option>Santé et social</option>
-      <option>Biotechnologies</option>
-      <option>Sciences et laboratoire</option>
-      <option>Sciences de l'Ingénieur</option>
-      <option>Création et innovation technologiques</option>
-      <option>Création et culture - design</option>
-      <option>Maths complémentaires</option>
-      <option>Maths expertes</option>
-      <option>Droits et grands enjeux du monde contemporain</option>
-      <option>Hippologie et équitation</option>
-      <option>Agronomie-économie-territoires</option>
-      <option>Pratiques sociales et culturelles</option>
-    </datalist>
+    <div id="erreur">
+      <br /><br />
+      <p>
+        Vous n'avez pas rempli correctement les champs du formulaire !
+      </p>
+    </div>
     <br />
     <br>
     <p class="txt_centre">Notre politique de confidentialité <a href="credits.html">En savoir plus</a></p>
     <br>
     <br>
     <center>
-      <button type="submit" class="button">Inscription</button>
+      <button type="submit" id="envoi" class="button">Inscription</button>
     </center>
     <br>
   </form>
