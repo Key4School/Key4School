@@ -126,7 +126,7 @@ def handleEvent_postMsg(json):
 def handleEvent_postLike(json):
     postLike(json)
 
-@app.route('/signIn/', methods=['GET', 'POST'])
+@app.route('/sign-in/0/', methods=['GET', 'POST'])
 def signIn():
     if request.method == 'POST':
         hash = hashing.hash_value(request.form['mdp'], salt=cle)
@@ -140,28 +140,33 @@ def signIn():
         user = utilisateurs[str(_id)].toDict()
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
-        session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1']
-        session['type'] = user['type']
+        session['couleur'] = user['couleur']
+        session['type'] = 'ELEVE'
         session['cacheRandomKey'] = cacheRandomKey
-
-        nomClasse = f"{data['schoolName']}/{classe}"
-        group = [g for g in groupes.values() if g.nom == nomClasse and g.is_class == True]
-        if len(group) > 0:
-            group = group[0]
-            if user['_id'] not in group.id_utilisateurs:
-                group.id_utilisateurs.append(user['_id'])
-                group.update()
-        else:
-            _id = ObjectId()
-            groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
-            groupes[str(_id)].insert()
-
-        return redirect(url_for('tuto'))
-
-        return 'ok'
+        return redirect(url_for('signIn1'))
     else:
         return render_template('inscription0.html')
 
+@app.route('/sign-in/1/', methods=['GET', 'POST'])
+def signIn1():
+    if request.method == 'POST':
+        # hash = hashing.hash_value(request.form['mdp'], salt=cle)
+        #
+        # pseudo = (request.form['pseudo'].lower()).replace(' ', '_')
+        #
+        # _id = ObjectId()
+        # utilisateurs[str(_id)] = Utilisateur({"_id": _id, "nom": request.form['nom'], "prenom": request.form['prenom'], "pseudo": request.form['pseudo'], "email" : request.form['email'], 'mdp': hash})
+        # utilisateurs[str(_id)].insert()
+        #
+        # user = utilisateurs[str(_id)].toDict()
+        # session['id'] = str(user['_id'])
+        # session['pseudo'] = user['pseudo']
+        # session['couleur'] = user['couleur']
+        # session['type'] = 'ELEVE'
+        # session['cacheRandomKey'] = cacheRandomKey
+        return redirect(url_for('signIn1'))
+    else:
+        return render_template('inscription0.html')
 
 # # Fonction de test pour afficher ce que l'on récupère
 # @app.route("/connexion/", methods=["GET"])
