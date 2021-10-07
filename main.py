@@ -138,6 +138,8 @@ def login():
             session['cacheRandomKey'] = cacheRandomKey
 
             if user['etapeInscription'] is not None:
+                session.pop('id')
+                session['idInscri'] = str(user['_id'])
                 session['etapeInscription'] = user['etapeInscription']
                 return redirect(url_for(f"signIn{session['etapeInscription']}"))
             elif 'redirect' in session:
@@ -170,10 +172,7 @@ def signIn0():
             utilisateurs[str(_id)].insert()
 
             user = utilisateurs[str(_id)].toDict()
-            session['id'] = str(user['_id'])
-            session['pseudo'] = user['pseudo']
-            session['couleur'] = user['couleur']
-            session['type'] = 'ELEVE'
+            session['idInscri'] = str(user['_id'])
             session['cacheRandomKey'] = cacheRandomKey
             session['etapeInscription'] = 1
             return redirect(url_for('signIn1'))
@@ -185,7 +184,7 @@ def signIn0():
 
 @app.route('/sign-in/1/', methods=['GET', 'POST'])
 def signIn1():
-    if 'etapeInscription' not in session or 'id' not in session:
+    if 'etapeInscription' not in session or 'idInscri' not in session:
         return redirect(url_for('login'))
     if session['etapeInscription'] != 1:
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
@@ -198,12 +197,13 @@ def signIn1():
 
 @app.route('/sign-in/2/', methods=['GET', 'POST'])
 def signIn2():
-    if 'etapeInscription' not in session or 'id' not in session:
+    if 'etapeInscription' not in session or 'idInscri' not in session:
         return redirect(url_for('login'))
     if session['etapeInscription'] != 2:
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
 
     if request.method == 'POST':
+        # SESSION ID INSCRIT POP
         return redirect(url_for('tuto'))
     else:
         session['cacheRandomKey'] = cacheRandomKey
