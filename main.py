@@ -139,7 +139,7 @@ def login():
 
             if user['etapeInscription'] is not None:
                 session['etapeInscription'] = user['etapeInscription']
-                return redirect(url_for(f"signIn{session['etapeInscription']+1}"))
+                return redirect(url_for(f"signIn{session['etapeInscription']}"))
             elif 'redirect' in session:
                 path = session['redirect']
                 session.pop('redirect')
