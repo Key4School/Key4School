@@ -1,15 +1,15 @@
 <div id="divDemande_{{d['idMsg']}}" class="box demande elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;" data-subject="{{d['tag-matière']}}">
   <article class="media">
     <div class="media-left">
-      <!-- Image photo de profil-->
+      
         <img alt="user" class="ImagePublication" src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
           style="object-fit: cover;border-radius: 50%;" />
     </div>
-    <!-- Contenu publication -->
+    
     <div class="media-content contentPublicationTaille">
       <div class="content">
         <p style="margin-bottom: 5px;">
-          <!-- Nom utilisateur ; pseudo ; temps -->
+          
         <div style="font-variant: small-caps;">
           {%set varApercuProfil = d['user']%}
           <a href="{{url_for('profil' ,idUser=d['user']['_id'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{d['user']['nom']}} {{d['user']['prenom']}}{% include 'apercu2profil.html' with context %}</a>
@@ -20,9 +20,9 @@
         </div>
         <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
         </p>
-        <!-- Titre -->
+        
         <h4 style="margin-top: 0;"><a href="/comments/{{d['idMsg']}}">{{d['titre']|safe}}</a></h4>
-        <!-- Texte publication -->
+        
         <p style="word-wrap:break-word;"><div id="contenu{{d['idMsg']}}">{{d['contenu']|safe}}</div></p>
         </p>
         {% if d['fileType'] == 'image' %}
@@ -35,7 +35,7 @@
         </a>
         {% endif %}
       </div>
-      <!-- Icons like et commentaire -->
+      
       <nav class="level is-mobile">
         <div class="level-left">
           <a class="level-item" aria-label="like" onClick="like('{{d['idMsg']}}')">
@@ -75,7 +75,7 @@
       </nav>
     </div>
     <div class="boutonPubliOrdi" style="flex-direction: column;align-items: flex-end;">
-      <!-- Signaler -->
+      
       <div class="navbar-item">
         <button class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
           <span class="icon is-small">
@@ -89,7 +89,7 @@
         </button>
         <input type="hidden" />
       </div>
-      <!-- Résolu -->
+      
       {% if d['idAuteur'] == user['_id'] %}
       <div class="navbar-item">
         <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['idMsg']}}')">
@@ -104,7 +104,7 @@
         </button>
         <input type="hidden" />
       </div>
-      <!-- Modifier -->
+      
       <div class="navbar-item">
         <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['idMsg']}}');">
           <span class="icon is-small">
@@ -144,7 +144,7 @@
         <a class="navbar-link">
         </a>
         <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;">
-          <!-- Signaler -->
+          
           <div class="navbar-item">
             <button class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
               <span class="icon is-small">
@@ -158,7 +158,7 @@
             </button>
             <input type="hidden" />
           </div>
-          <!-- Résolu -->
+          
           {% if d['idAuteur'] == user['_id'] %}
           <div class="navbar-item">
             <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['idMsg']}}')">

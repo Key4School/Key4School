@@ -76,11 +76,11 @@
   </div>
   {%endif%}
 
-  <!-- Div pour les filtres -->
+  
   {% include 'filtres.html' with context %}
 
 
- <!-- debut de la div pour tt les publications -->
+ 
  <div class="columns" style="margin: 0;">
   <div class="column" style="padding: 0;"></div>
   <div class="column is-three-fifths" id="publis">
@@ -96,9 +96,9 @@
 
     {%if results|length > 0%}
       {%for d in results %}
-        <!-- Début publi -->
+        
         {% include 'publication.html' with context %}
-        <!-- Fin publi -->
+        
       {%endfor%}
     {%else%}
       <div class="box">
@@ -109,7 +109,7 @@
   <div class="column" style="padding: 0;"></div>
 </div>
 
-<!-- fin de l'espace des publication -->
+
 
 </body>
 

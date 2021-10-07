@@ -2,16 +2,16 @@
     z-index: 1;">
   <article class="media">
     <div class="media-left">
-      <!-- Image photo de profil-->
+      
       <figure class="image is-64x64">
         <img alt="user" src="{%if 'nomImg' in varApercuProfil and varApercuProfil['nomImg'] != "" %}{{url_for('userImg', profilImg = varApercuProfil['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
           style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
       </figure>
     </div>
-    <!-- Contenu publication -->
+    
     <div class="media-content">
       <div class="content">
-          <!-- Nom utilisateur ; pseudo ; temps -->
+          
         <div style="font-variant: small-caps;">
           <a href="{{url_for('profil' ,idUser=varApercuProfil['_id'])}}">{{varApercuProfil['nom']}} {{varApercuProfil['prenom']}}</a>
         </div>

@@ -1,17 +1,17 @@
 <div class="box profil elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;">
   <article class="media">
     <div class="media-left">
-      <!-- Image photo de profil-->
+      
       <figure class="image is-64x64">
         <img alt="user" src="{%if 'nomImg' in u and u['nomImg'] != "" %}{{url_for('userImg', profilImg = u['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
           style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
       </figure>
     </div>
-    <!-- Contenu publication -->
+    
     <div class="media-content">
       <div class="content">
         <p style="margin-bottom: 5px;">
-          <!-- Nom utilisateur ; pseudo ; temps -->
+          
         <div style="font-variant: small-caps;">
           {%set varApercuProfil = u%}
           <a href="{{url_for('profil' ,idUser=u['_id'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{u['nom']}} {{u['prenom']}}{% include 'apercu2profil.html' with context %}</a>

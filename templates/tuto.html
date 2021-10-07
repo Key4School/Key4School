@@ -24,7 +24,7 @@
 	</head>
 
 	<body style="text-align: center;" onkeydown="touche(event)">
-		<!-- Bandeau -->
+		
   		{% include 'bandeau2.html' %}
   		<br /><br/><br />
 			<h2 class="title">Comment ça marche ?</h2>
@@ -39,7 +39,7 @@
 				Key4School est un réseau social développé par 12 lycéens d’Ile de France a destination des lycéens. L’objectif est d’y <b>trouver de l’aide et de s’entraider facilement</b> !
 
 			</p>
-			<!-- <img style="width:75%;border: 2px solid {{session['couleur'][0]}};" id="image" src="{{url_for('static',filename='image/tuto/1.png')}}"> -->
+			
 			<iframe scrolling="yes" id="iframTuto" style="width:90%; height:600px;" src="{{url_for('accueil')}}"></iframe>
 		</div>
 		<i id="next" style="display:block;" class="fas fa-caret-right logoNext" onclick="suivant()"></i>

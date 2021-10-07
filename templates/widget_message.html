@@ -2,7 +2,7 @@
 <div class="moimsg" id="msg{{content['_id']}}">
   <div style="align-self: flex-end;">
   {%else%}
-  <!-- Messages des autres -->
+  
   <div class="participantmsg" style="word-break: break-word;" id="msg{{content['_id']}}">
     <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
   {%endif%}
@@ -90,7 +90,7 @@
   {%endif%}
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}
-      <!-- <audio id="audio{{content['_id']}}" controls src="{{url_for('audio', audioName = content['contenu'])}}" 'type' : 'audio/ogg; codecs=opus'></audio><button id="buttonAudio{{content['_id']}}"onclick="changeRate('{{content['_id']}}');">1x</button> -->
+      
       <div id="audio-player-container{{content['_id']}}" style="display: flex; width: 100%; border: 1px solid #000; border-radius: 8px; padding: 5px; margin-top: 5px;">
         <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
         <button style="font-size:17px;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="BlackOrWhite fas fa-play"></i></button>
@@ -210,7 +210,7 @@
       {%else%}
         {{content['contenu']|safe}}
       {%endif%}
-      <!--On affiche le contenu du message -->
+      
     </p>
     <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
   </div>

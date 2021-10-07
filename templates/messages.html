@@ -138,15 +138,15 @@
 </head>
 
 
-<!-- overflow est la barre pour baisser la page, on l enleve pour en mettre que une dans les messages -->
+
 
 <body style="overflow:auto;">
-  <!-- onkeydown="enregistrer(event)" onkeyup="stop(event)"-->
+  
   {% include 'bandeau2.html' %}
-  <!-- div qui contient tt le reste de la page avec les messages et l'affichage des groupe -->
+  
   <div style=" position: fixed; margin-top: 55px; width: 100%;">
     <div style="display: flex;height:95%;margin-top:15px;">
-      <!-- div pour afficher tout les groupes -->
+      
       <div id="nomgroupe" style="/*width: 15%;*/margin-left: 25px;overflow-y:auto;overflow-x: hidden;margin-bottom:5%;">
         <div class="liengroupe" style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
           <i onclick="divnewgroupopen()" class="fas fa-plus-circle BlackOrWhite" style="font-size:30px;margin-bottom:5%; cursor: pointer;"></i>
@@ -189,20 +189,20 @@
 
         <table class="table is-narrow">
           <tbody>
-            <!-- div pour le groupe -->
+            
             {%for content in grpUtilisateur%}
               <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['_id']}}"
                 data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
                 <td>
                   <a style="display: block; text-overflow: ellipsis; overflow: hidden; width: 100%; height: 100%;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
                     <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px; display: table-row;">
-                      <!-- Pastille notifs -->
+                      
                       {%if content['nbNotif'] > 0%}
                         <span style="background-color: red; border-radius: 50%; width: 20px; height: 20px; display: inline-block; position: relative;">
                           <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">{{content['nbNotif']}}</span>
                         </span>
                       {%endif%}
-                      <!-- <span class="tag" style="position: relative; width: 60%; text-overflow: ellipsis; overflow: hidden; font-size: 15px;"> -->
+                      
                       {% if not content['is_DM'] %}
                         {{content['nom']}}
                       {% else %}
@@ -225,7 +225,7 @@
                         {%endif%}
                       </i>
                       {%endif%}
-                      <!-- </span> -->
+                      
                     </div>
                   </a>
                 </td>
@@ -249,17 +249,17 @@
           Lancer une conversation
         </span>
       </div>
-      <!-- DIV A NE PAS SUPPRIMER (POUR LE STYLE) -->
+      
       {%endif%}
-      <!-- fin de la div pour les noms de tt les groupes -->
+      
       {% if msgDb != None %}
-      <!-- debut de la div pour la partie de droite avec le nom du groupe ouvert avec les messages -->
+      
       <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative; width: 100%;">
-        <!-- debut de la div pour la partie haute a droite -->
+        
         <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:10px;height: 100px; border-bottom: none;">
-          <!-- div avec le nom du groupe et les paticipants -->
+          
           <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
-            <!-- nom du groupe -->
+            
             <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages/" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>
             <span class="grpName">
               {% if not infogroupe['is_DM'] %}
@@ -272,7 +272,7 @@
                 {% endfor %}
               {% endif %}
             </span></p>
-            <!-- liste des paricipants -->
+            
             <p id="listGroupUsers" style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.2;">
               <!--{% if infogroupe['nbUtilisateurs'] > 8 %}
               {% for i in range(8) %}
@@ -290,7 +290,7 @@
               {%endfor%}
             </p>
           </div>
-          <!-- Bouton trois petits points -->
+          
           <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:{{session['couleur'][0]}};font-size: 20px;"></i>
           <div class="modal" id="option">
             <div class="modal-background"></div>
@@ -330,17 +330,17 @@
                 <div class="box profil" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;">
                   <article class="media">
                     <div class="media-left">
-                      <!-- Image photo de profil-->
+                      
                       <figure class="image is-64x64">
                         <img alt="user" src="{%if 'nomImg' in users and users['nomImg'] != "" %}{{url_for('userImg', profilImg = users['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
                           style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
                       </figure>
                     </div>
-                    <!-- Contenu publication -->
+                    
                     <div class="media-content">
                       <div class="content">
                         <p style="margin-bottom: 5px;">
-                          <!-- Nom utilisateur ; pseudo ; temps -->
+                          
                         <div style="font-variant: small-caps;">
                           <a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['nom']}} {{users['prenom']}}</a>
                         </div>
@@ -666,7 +666,7 @@
             </div>
           </div>
         {%endif%}
-          <!-- div avec les messages, l'overflow est activé pour pouvoir defiler tt les msg -->
+          
           <div id="messages" style="overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
           {% for content in msgDb%}
             {% include "widget_message.html" %}
@@ -682,11 +682,11 @@
         </div>
         {%if infogroupe%}
           {%if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecMsg" %}
-          <!--div dans laquel on affiche le message auquel on répond ne supprimer svp-->
-          <!-- <button onclick="enleverRep()" id='buttonRep' style="display:none;"></button> -->
+          
+          
           <div style="width: 100%; display:flex;align-items: baseline;">
             <form enctype="multipart/form-data" method="post" style="width: 100%; height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
-              <!-- <i class="fas fa-camera logoBouton" style="font-size: 20px;"></i> -->
+              
               <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message..." autocomplete='off' name="contenuMessage" style="width: calc(100% - 70px);margin-right: 1%;padding:5px;" />
               <input type='hidden' name="group" value="{{idgroupe}}" id="idGroupe" />
               <input type="hidden" name="idUser" id="idUser" value="{{sessionId}}" />
@@ -703,7 +703,7 @@
             <button title="pressez P pour enregistrer un msg vocal ou maintenez ce bouton appuyer" class="logoBouton" style="outline: none; background: transparent; border: none;color:var(--NetB)" onClick="enregistrerTel()">
               <i class="fas fa-microphone" style="font-size: 20px;"></i>
             </button>
-            <!-- ne pas supprimer cette div "txtAudio", elle sert pour le js, le texte explicatif peut être enlever, il sert pour les personnes qui découvrent  -->
+            
             <div style="display:flex;align-items:center;">
               <div id="buttonAudio1" style="display:none;">
                 <button class="button is-danger is-outlined is-rounded" id="deleteAudio" onclick="stopTel('jeter');">
@@ -726,7 +726,7 @@
             </div>
             {%endif%}
           {%endif%}
-          <!-- fin de la div pour tt ce qui concerne le msg (tt sauf la barre du haut) -->
+          
         </div>
       </div>
     </div>

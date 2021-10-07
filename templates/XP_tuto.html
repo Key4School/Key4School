@@ -8,7 +8,7 @@
 
 <body style="text-align: center;">
     <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
-      <!-- Barre de progression -->
+      
       <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;margin:auto;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <p>
@@ -20,9 +20,9 @@
     </div>
   <div class="ChoixCouleur" style="margin-top:0%;margin-right:0%;">
     <form action="{{url_for('changeTheme')}}" method="POST">
-      <!-- Titre choix couleurs -->
+      
       <label for"color-select">Choisir une couleur de thème :</label><br />
-      <!-- Couleur 1 -->
+      
       <label class="radio">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
           <input type="radio" name="couleur" value="0" {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] %}checked{%endif%}>&nbsp;&nbsp;
@@ -32,7 +32,7 @@
         </div>
       </label>
       <br />
-      <!-- Couleur 2 -->
+      
       <label class="radio" title="Niveau 2 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
           {%if niv < 2%}
@@ -46,7 +46,7 @@
         </div>
       </label>
       <br />
-      <!-- Couleur 3 -->
+      
       <label class="radio" title="Niveau 3 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
           {% if niv < 3 %}
@@ -60,7 +60,7 @@
         </div>
       </label>
       <br />
-      <!-- Couleur 4 -->
+      
       <label class="radio" title="Niveau 4 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
           {% if niv < 4 %}
@@ -74,7 +74,7 @@
         </div>
       </label>
       <br />
-      <!-- Couleur 5 -->
+      
       <label class="radio" title="Niveau 5 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
           {% if niv < 5 %}
@@ -121,7 +121,7 @@
       </label>
       <br />
       <br />
-      <!-- Bouton pour valider le choix de la couleur -->
+      
       <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
         <span class="icon is-small">
           <i class="fas fa-check"></i>

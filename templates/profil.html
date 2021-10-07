@@ -4,7 +4,7 @@
 <head>
   {% include 'head.html' with context %}
   <title>Key4School - Profil</title>
-  <!-- importation du JS pour afficher et enlever les div -->
+  
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -103,9 +103,9 @@
 </head>
 
 <body>
-  <!-- Bandeau -->
+  
   {% include 'bandeau2.html' %}
-  <!-- Photo de profil -->
+  
   <div class="modal" id="replaceImg" style="overflow:hidden;">
     <div class="modal-background"></div>
     <div class="modal-card">
@@ -240,11 +240,11 @@
       </form>
     </div>
   </div>
-  <!-- Début de la div pour la page avec les infos -->
+  
   <div class="page"></div>
   <br />
   <br />
-  <!-- Espace photo de profil -->
+  
   <div style="display:flex;align-items: center;justify-content:space-evenly;">
     <div style="position: relative;">
       <img alt="user" onclick="updateImgOpen();"
@@ -253,7 +253,7 @@
       <i class="fas fa-pen" style="font-size: 24px; position: absolute; bottom: 5px; right: -5px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
     </div>
     <div class="ordiFlexTelBlock" style="align-items:flex-start;justify-content:center;">
-      <!-- Barre de progression -->
+      
       <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <p>
@@ -268,16 +268,16 @@
   <br />
   <br />
   <div class="ordiFlexTelBlock" style="align-items: center;justify-content:space-evenly;margin:0% 2%;">
-    <!-- Début informations -->
+    
     <div>
-      <!-- Informations puliques -->
+      
       <form method="POST" action="/updateprofile/" id="updateProfil">
         <div style="font-weight: bold; font-size:large;">Informations publiques :</div>
         <br />
-        <!-- Début tableau informations publiques -->
+        
         <table class="table is-narrow">
           <tbody>
-            <!-- Nom et prénom -->
+            
             <tr>
               <td>
                 <i class="fas fa-user-alt" style="font-size:25px;"></i>
@@ -287,7 +287,7 @@
                 {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
               </td>
             </tr>
-            <!-- Pseudo -->
+            
             <tr>
               <td>
                 <i class="far fa-smile-wink" style="font-size:25px;"></i>
@@ -302,7 +302,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Lycée et classe -->
+            
             <tr>
               <td>
                 <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
@@ -312,7 +312,7 @@
                 {{profilUtilisateur['lycee']}}{%if profilUtilisateur['type'] == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
               </td>
             </tr>
-            <!-- Langues -->
+            
             {%if profilUtilisateur['type'] == 'ELEVE'%}
             <tr>
               <td>
@@ -320,7 +320,7 @@
                 &nbsp;&nbsp;Langue(s) vivante(s)
               <td>
                 <div id="contentlangues">
-                  <!-- LV1 -->
+                  
                   <div class="select" class="selectProfil">
                     <select name="lv1">
                       <option value="none" {%if profilUtilisateur['langues'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
@@ -339,7 +339,7 @@
                       <option value="lv1-ara" {%if profilUtilisateur['langues'][0]=="lv1-ara"%}selected{%endif%}>LV1 Arabe</option>
                     </select>
                   </div>
-                  <!-- LV2 -->
+                  
                   <div class="select" class="selectProfil">
                     <select name="lv2">
                       <option value="none" {%if profilUtilisateur['langues'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
@@ -356,7 +356,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Options -->
+            
             <tr>
               <td>
                 <i class="fas fa-book" style="font-size:25px;"></i>
@@ -364,7 +364,7 @@
               </td>
               <td>
                 <div id="contentoptions">
-                  <!-- Option 1 -->
+                  
                   <div class="select" class="selectProfil">
                     <select name="option1">
                       <option value="none" {%if profilUtilisateur['options'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
@@ -400,7 +400,7 @@
                       <option value="opt-psc" {%if profilUtilisateur['options'][0]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
                     </select>
                   </div>
-                  <!-- Option 2 -->
+                  
                   <div class="select" class="selectProfil">
                     <select name="option2">
                       <option value="none" {%if profilUtilisateur['options'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
@@ -438,7 +438,7 @@
                 </div>
               </td>
             </tr>
-            <!-- Spécialités -->
+            
             <tr {% if profilUtilisateur['classe']=='2GT' %} style="display: none;" {% endif %}>
               <td>
                 <i class="fas fa-book-open" style="font-size:25px;"></i>
@@ -446,7 +446,7 @@
               </td>
               <td>
                 <div id="contentspes">
-                  <!-- Spé 1 -->
+                  
                   <div class="select" class="selectProfil">
                     <select name="spe1">
                       <option value="none" {%if profilUtilisateur['spes'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
@@ -467,7 +467,7 @@
                       <option value="spe-bio-eco" {%if profilUtilisateur['spes'][0]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
                     </select>
                   </div>
-                  <!-- Spé 2 -->
+                  
                   <div class="select" class="selectProfil">
                     <select name="spe2">
                       <option value="none" {%if profilUtilisateur['spes'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
@@ -488,7 +488,7 @@
                       <option value="spe-bio-eco" {%if profilUtilisateur['spes'][1]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
                     </select>
                   </div>
-                  <!-- Spé 3 -->
+                  
                   <div class="select" {% if profilUtilisateur['classe']=='TG' %} style="display: none;" {% endif %}>
                     <select name="spe3">
                       <option value="none" {%if profilUtilisateur['spes'][2]=="none"%}selected{%endif%}>Non renseignée...</option>
@@ -666,13 +666,13 @@
             {%endfor%}
           </tbody>
         </table>
-        <!-- Fin tableau informations publiques -->
-        <!-- Informations privées -->
+        
+        
         {% if profilUtilisateur['elementPrive'] != [] %}
         <div style="font-weight: bold; font-size:large;">Informations privées :</div>
         <br />
         {% endif %}
-        <!-- Début tableau informations privées -->
+        
         <table class="table is-narrow">
           <tbody>
             {%for element in profilUtilisateur['elementPrive']%}
@@ -754,8 +754,8 @@
             {%endfor%}
           </tbody>
         </table>
-        <!-- Fin tableau informations privées -->
-        <!-- Préférences -->
+        
+        
         <div style="font-weight: bold; font-size:large;">Notifications par email :</div>
         <br />
         <table class="table is-narrow">
@@ -800,7 +800,7 @@
                 </label>
               </td>
             </tr>
-            <!-- Bouton pour valider les informations -->
+            
             <tr>
               <td>
                 <br /><br />
@@ -817,13 +817,13 @@
         </table>
       </form>
     </div>
-    <!-- Fin informations -->
-    <!-- Début choix couleurs -->
+    
+    
     <div class="ChoixCouleur">
       <form action="{{url_for('changeTheme')}}" method="POST">
-        <!-- Titre choix couleurs -->
+        
         <label for"color-select">Choisir une couleur de thème :</label><br />
-        <!-- Couleur 1 -->
+        
         <label class="radio">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             <input type="radio" name="couleur" value="0" {%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] %}checked{%endif%}>&nbsp;&nbsp;
@@ -833,7 +833,7 @@
           </div>
         </label>
         <br />
-        <!-- Couleur 2 -->
+        
         <label class="radio" title="Niveau 2 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {%if niv < 2%}
@@ -847,7 +847,7 @@
           </div>
         </label>
         <br />
-        <!-- Couleur 3 -->
+        
         <label class="radio" title="Niveau 3 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {% if niv < 3 %}
@@ -861,7 +861,7 @@
           </div>
         </label>
         <br />
-        <!-- Couleur 4 -->
+        
         <label class="radio" title="Niveau 4 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {% if niv < 4 %}
@@ -875,7 +875,7 @@
           </div>
         </label>
         <br />
-        <!-- Couleur 5 -->
+        
         <label class="radio" title="Niveau 5 requis">
           <div style="display: flex;align-items: center;justify-content:space-evenly;">
             {% if niv < 5 %}
@@ -922,7 +922,7 @@
         </label>
         <br />
         <br />
-        <!-- Bouton pour valider le choix de la couleur -->
+        
         <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
           <span class="icon is-small">
             <i class="fas fa-check"></i>
@@ -931,7 +931,7 @@
         </button>
       </form>
     </div>
-    <!-- Fin choix couleurs -->
+    
   </div>
   {%if user['admin']==true and profilUtilisateur['sign'] != []%}
   <button class="button  is-danger is-outlined is-small" onClick="validationUser();">
@@ -941,21 +941,21 @@
     <span>Valider</span>
   </button>
   {%endif%}
-  <!-- Mes demandes d'aide -->
+  
   {% if demandes != [] %}
   <div style="margin-left: 15%;display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly; width: 70%;">
     <div style="font-weight: bold; font-size:large; margin-top: 15px;">Mes demandes d'aide :</div>
     <br />
     {% endif %}
     {%for d in demandes %}
-    <!-- Début publi -->
+    
     {% include 'publication.html' with context %}
-    <!-- Fin publi -->
+    
     <br />
     {%endfor%}
   </div>
-  <!-- Sanctions -->
-  <!-- STYLE A FAIRE !!! -->
+  
+  
   {%if profilUtilisateur['Sanctions'] %}<div style="margin-left:2%;">
     <div style="font-weight: bold; font-size:large;">Mes sanctions :</div>
     <br />
@@ -1028,7 +1028,7 @@
     </div>
   </div>
   {%endif%}
-  <!-- fin de la page -->
+  
 </body>
 
 </html>

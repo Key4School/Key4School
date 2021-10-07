@@ -4,7 +4,7 @@
 <head>
   {% include 'head.html' with context %}
   <title>Key4School - Profil</title>
-  <!-- importation du JS pour afficher et enlever les div -->
+  
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -33,7 +33,7 @@
 </head>
 
 <body>
-  <!-- Bandeau -->
+  
   {% include 'bandeau2.html' %}
   <div class="modal" id="signalisationProfil" style="overflow:hidden;">
     <div class="modal-background"></div>
@@ -132,11 +132,11 @@
   <br />
   <br />
   <br />
-  <!-- Espace photo de profil -->
+  
     <div style="display: flex;align-items: center;justify-content:space-evenly;">
         <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
       <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
-        <!-- Barre de progression -->
+        
           <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <p>
@@ -149,10 +149,10 @@
   </div>
   <br /><br /><br />
   <div align="center" style="margin:0% 2%;">
-    <!-- Début informations -->
+    
     <div>
-      <!-- Informations puliques -->
-      <!-- Début tableau informations publiques -->
+      
+      
       {%if profilUtilisateur['admin']== true%}
       <div style="flex-direction: column;align-items: flex-end;">
           <span class="icon is-small ">
@@ -166,7 +166,7 @@
       <br />
       <table class="table is-narrow">
         <tbody>
-          <!-- Nom et prénom -->
+          
           <tr>
             <td>
               <i class="fas fa-user-alt" style="font-size:25px;"></i>
@@ -176,7 +176,7 @@
               {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
             </td>
           </tr>
-          <!-- Pseudo -->
+          
           <tr>
             <td>
               <i class="far fa-smile-wink" style="font-size:25px;"></i>
@@ -201,7 +201,7 @@
               </div>
             </td>
           </tr>
-          <!-- Lycée et classe -->
+          
           <tr>
             <td>
               <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
@@ -212,7 +212,7 @@
             </td>
           </tr>
           {%if profilUtilisateur['type'] == 'ELEVE'%}
-          <!-- Langues -->
+          
           <tr>
             <td>
               <i class="fas fa-globe" style="font-size:25px;"></i>
@@ -223,7 +223,7 @@
               </div>
             </td>
           </tr>
-          <!-- Options -->
+          
           <tr>
             <td>
               <i class="fas fa-book" style="font-size:25px;"></i>
@@ -237,7 +237,7 @@
               </div>
             </td>
           </tr>
-          <!-- Spécialités -->
+          
           <tr {% if profilUtilisateur['classe']=='2GT' %} style="display: none;" {% endif %}>
             <td>
               <i class="fas fa-book-open" style="font-size:25px;"></i>
@@ -344,9 +344,9 @@
           {%endfor%}
         </tbody>
       </table>
-      <!-- Fin tableau informations publiques -->
+      
     </div>
-    <!-- Fin informations -->
+    
     <br />
     <div class="navbar-item" style="display:block;">
       <a href="/redirectDM/{{sessionId}}/{{profilUtilisateur['_id']}}/">
@@ -404,10 +404,10 @@
       {%endif%}
       <input type="hidden" />
 
-  <!-- </div> -->
+  
 
   </div>
-  <!-- fin de la page -->
+  
 </body>
 
 </html>

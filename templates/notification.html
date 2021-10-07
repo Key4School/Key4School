@@ -1,16 +1,16 @@
-<!-- Début publication 1 -->
+
 <div class="box notif" id="{{notif['_id']}}">
   <article class="media">
     <div class="media-left">
-      <!-- Image profil utilisateur -->
+      
       <figure class="image is-32x32">
         <img class="is-rounded" src="{%if 'nomImg' in notif['sender'] and notif['sender']['nomImg'] != "" %}{{url_for('userImg', profilImg = notif['sender']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}">
       </figure>
     </div>
-    <!-- Contenu publication -->
+    
     <div class="media-content">
       <div class="content">
-          <!-- Nom ; pseudo ; temps -->
+          
           <div style="font-size: 11px;font-variant: small-caps;">{{notif['sender']['nom']}} {{notif['sender']['prenom']}}</div>
         <div style="display: inline-flex; align-content: space-between;">
           <div style="font-size: 11px;font-style: italic;">@{{notif['sender']['pseudo']}}</div>&nbsp&nbsp&nbsp<small>{{notif['temps']}}</small>
@@ -28,7 +28,7 @@
           {% endif %}
         </a>
         {%endif%} <br>
-        <!-- Texte publication -->
+        
         <p>
           <i>
             {%if 'audio' in notif['message'] and notif['message']['audio'] == True %}
@@ -52,4 +52,4 @@
     </div>
   </article>
 </div>
-<!-- Fin publication 1 -->
+

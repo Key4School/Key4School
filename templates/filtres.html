@@ -10,7 +10,7 @@
         <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Toutes</button>
       </div>
       {% if user['type']=='ELEVE'%}
-        <!-- Tronc commun -->
+        
         {% if user['classe'][0]=='2' or user['classe'][0]=='1' %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="fr">
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Français</button>
@@ -44,7 +44,7 @@
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Philosophie</button>
           </div>
         {% endif %}
-        <!-- Langues -->
+        
         {% if 'lv1-ang' in user['langues'] or 'lv1-ang-euro' in user['langues'] or 'lv2-ang' in user['langues'] or 'opt-lv3-ang' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ang">
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Anglais</button>
@@ -85,7 +85,7 @@
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Arabe</button>
           </div>
         {% endif %}
-        <!-- Spés -->
+        
         {% if 'spe-art' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-art">
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Arts</button>
@@ -161,7 +161,7 @@
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Biologie-écologie</button>
           </div>
         {% endif %}
-        <!-- Options -->
+        
         {% if 'opt-lca-latin' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-lca-latin">
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option LCA Latin</button>
@@ -246,7 +246,7 @@
           <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">EPS</button>
         </div>
       {%else%}
-        <!-- Tronc commun -->
+        
         {% if user['matiere'] == 'fr' or 'fr' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="fr">
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Français</button>
@@ -292,7 +292,7 @@
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Philosophie</button>
           </div>
         {% endif %}
-        <!-- Langues -->
+        
         {% if user['matiere'] == 'ang' or 'ang' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ang">
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Anglais</button>
@@ -333,7 +333,7 @@
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Arabe</button>
           </div>
         {% endif %}
-        <!-- Spés -->
+        
         {% if user['matiere'] == 'art' or 'art' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-art">
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Arts</button>
@@ -409,7 +409,7 @@
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Biologie-écologie</button>
           </div>
         {% endif %}
-        <!-- Options -->
+        
         {% if user['matiere'] == 'lca-latin' or 'lca-latin' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-lca-latin">
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option LCA Latin</button>
