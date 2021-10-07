@@ -7,20 +7,20 @@
   <!-- pour l'adapter plus ou moins bien sur telephone -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- page de style -->
-  <link rel="stylesheet" type="text/css" href="../static/styles/style.css">
+  <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
   <!-- importation de la bibliotheque j query qui est requise pour faire marcher le js-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="../static/css/mystyles.css">
+  <link rel="stylesheet" href="/static/css/mystyles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link rel="icon" href="../static/image/logo/favicon.png?v=2" id="favicon" />
-  <script src="../static/js/inscription0.js"></script>
-  <script src="../static/js/voir_mdp.js"></script>
+  <link rel="icon" href="/static/image/logo/favicon.png?v=2" id="favicon" />
+  <script src="/static/js/inscription0.js"></script>
+  <script src="/static/js/voir_mdp.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   </script>
@@ -30,7 +30,7 @@
 
 <body>
   <nav class="titre">
-    <img src="../static/image/logo/favicon.png" style="height:30px;width:auto;" />
+    <img src="/static/image/logo/favicon.png" style="height:30px;width:auto;" />
     <span class="key4schoolNavbar_Connexion">
       <p style="font-family: 'Roboto', sans-serif;">
         Key
@@ -86,7 +86,7 @@
     <br />
     <div class="content_mdp">
       <div class="control has-icons-left has-icons-right" style="width: 100%;">
-        <input class="color_input input" type="password" placeholder="Mot de passe" name="mdp" id="mdp">
+        <input class="color_input input" type="password" placeholder="Mot de passe" name="password" id="mdp">
         <span class="icon is-small is-left">
           <i class="fas fa-lock"></i>
         </span>
@@ -139,8 +139,9 @@
     </p>
     <br /><br />
   </div>
+  <p>{{erreur}}</p>
   <p class="txt_centre">
-    Vous avez deja un compte ? <a href="connexion.html">connectez vous !</a>
+    Vous avez deja un compte ? <a href="{{url_for('login')}}">connectez vous !</a>
   </p>
   <br>
   <br />

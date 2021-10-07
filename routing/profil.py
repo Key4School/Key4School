@@ -36,7 +36,7 @@ def profil(idUser):
             return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], xplvl=xplvl, xp=xpgens, niv=niv, user=user, sessionId=ObjectId(session['id']))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('signIn'))
+        return redirect(url_for('login'))
 
 def changeTheme():
     global utilisateurs
@@ -66,7 +66,7 @@ def changeTheme():
         return redirect(url_for('profil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('signIn'))
+        return redirect(url_for('login'))
 
 def updateprofile():
     global utilisateurs
@@ -117,7 +117,7 @@ def updateprofile():
         return redirect(url_for('profil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('signIn'))
+        return redirect(url_for('login'))
 
 def otherSubject():
     global utilisateurs
@@ -132,14 +132,14 @@ def otherSubject():
         return redirect(url_for('profil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('signIn'))
+        return redirect(url_for('login'))
 
 def userImg(profilImg):
     if 'id' in session:
         return DB.cluster.send_file(profilImg)
     else:
         session['redirect'] = request.path
-        return redirect(url_for('signIn'))
+        return redirect(url_for('login'))
 
 def updateImg():
     global utilisateurs
@@ -174,4 +174,4 @@ def updateImg():
         return redirect(url_for('profil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('signIn'))
+        return redirect(url_for('login'))

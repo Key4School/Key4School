@@ -113,6 +113,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.email = params['email']
         self.mdp = params['mdp']
         self.dateInscription = params.get('dateInscription', datetime.now())
+        self.etapeInscription = params.get('etapeInscription', 1)
 
         self.birth_date = params.get('birth_date')
         self.classe = params.get('classe')

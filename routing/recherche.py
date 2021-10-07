@@ -95,7 +95,7 @@ def recherche():
             return redirect(url_for('accueil'))
     else:
         session['redirect'] = request.path
-        return redirect(url_for('signIn'))
+        return redirect(url_for('login'))
 
 def recherche_user():
     global utilisateurs
@@ -115,7 +115,7 @@ def recherche_user():
         return render_template('rechercheUser.html', users=users, user = utilisateurs[session['id']].toDict(), search=search)
     else:
         session['redirect'] = request.path
-        return redirect(url_for('signIn'))
+        return redirect(url_for('login'))
 
 def morePost():
     global utilisateurs
