@@ -9,7 +9,7 @@
   <!-- page de style -->
   <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
   <!-- importation de la bibliotheque j query qui est requise pour faire marcher le js-->
-  <link rel ="stylesheet" href="../static/styles/jquery.css" />
+  <link rel ="stylesheet" href="/static/styles/jquery.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <link rel ="stylesheet" href="http://jqueryui.com/ressources/demos/style.css" />
@@ -45,7 +45,7 @@
       </p>
     </span>
   </nav>
-  <form action="./" method="post" id="form">
+  <form class="form_inscription" action="./" method="post" id="form">
     <div class="input_inscription control has-icons-left has-icons-right">
       <input class="color_input input" type="tel" placeholder="(Téléphone) facultatif" name="phone" id="phone">
       <span class="icon is-small is-left">
@@ -157,7 +157,7 @@
     <br />
     <div id="erreur" class="txt_centre">
       <br />
-      <p>
+      <p class="erreurP">
         Vous n'avez pas rempli correctement les champs du formulaire !
       </p>
       <br />
