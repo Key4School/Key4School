@@ -29,7 +29,7 @@ $(document).ready(function() {
   $birthday.keyup(function() {
     verifBirthday();
   });
-  $school.keyup(function() {
+  $school.on('change keyup focus', function() {
     verifSchool();
   });
   $grade.change(function() {
@@ -117,7 +117,9 @@ $(document).ready(function() {
         $.map(donnee, function() {
           for (let i = 0; i < donnee["records"].length; i++) {
             if (lycee.length <= 9) {
-              lycee.push(donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"]);
+              if (lycee.indexOf(donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"]) === -1) {
+                lycee.push(donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"]);
+              }
             } else {}
           }
         });
@@ -162,7 +164,6 @@ function verifGrade() {
   var gradeNone = "--Niveau--";
 
   var gradeVal = $grade.val();
-  console.log(gradeVal);
 
   if (gradeVal == gradeNone) {
     $grade.css({ // on rend le champ rouge
