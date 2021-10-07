@@ -26,7 +26,9 @@
 --scrollbar-track: #00000000;
 --scrollbar-thumb: #484e51aa;
 --scrollbar-thumb-hover: #313639aa;
+--border-box:#212121;
 --NetB:white;
+--background-form:#212121;
 --text-multicolor:-webkit-linear-gradient(left top, #008df7, #e124fe, #ff2700, #ffe600, #06ff5f);
 
 }
@@ -39,8 +41,10 @@
   --scrollbar-track: #f1f1f1;
   --scrollbar-thumb: #c1c1c1;
   --scrollbar-thumb-hover: #727272;
+  --border-box:#e3e3e3;
   --text-multicolor:black;
   --NetB:black;
+  --background-form:#fafafa;
   }
 }
 html{
@@ -230,7 +234,13 @@ input[type=range]:focus::-ms-fill-upper {
     outline: none;
     -webkit-appearance: none;
 }
-
+#erreur{
+  color:red;
+  text-align: center;
+}
+.erreurP{
+  color:red;
+}
 #couleur::-webkit-color-swatch-wrapper {
     padding: 0;
 }
@@ -289,15 +299,16 @@ input[type=range]:focus::-ms-fill-upper {
     height:40px;
     width:40px;
   }
-  .input_inscription{
+  .form_inscription{
     width: 90%;
     margin:auto;
+    border: 1px solid var(--border-box);
+    padding: 2%;
   }
   .content_mdp{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90%;
     margin:auto;
   }
   .form_connexion{
@@ -369,20 +380,25 @@ input[type=range]:focus::-ms-fill-upper {
     height:64px;
     width:64px;
   }
-  .input_inscription{
+  .form_inscription{
     width: 45%;
     margin:auto;
+    background-color:var(--background-form);
+    border: 1px solid var(--border-box);
+    padding: 2%;
   }
   .content_mdp{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 45%;
     margin:auto;
   }
   .form_connexion{
     padding-top: 5%;
     width: 40%;
+    background-color:var(--background-form);
+    border: 1px solid var(--scrollbar-thumb-hover);
+    padding: 2%;
   }
   .flex_connexion{
     display:flex;
@@ -408,7 +424,7 @@ input[type=range]:focus::-ms-fill-upper {
     border-radius: 20px;
     margin-top: 2%;
     height: 20px;
-    width: 35%;
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
   }
