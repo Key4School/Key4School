@@ -19,11 +19,10 @@ from difflib import SequenceMatcher
 import re
 
 # Création de l'application
-sys.path.insert(0, os.path.dirname(__file__))
+# sys.path.insert(0, os.path.dirname(__file__))
 app = Flask(__name__)
-socketio = SocketIO(app)
-application = socketio
 hashing = Hashing(app)
+socketio = SocketIO(app)
 
 # DB POO
 from db_poo import *
@@ -126,47 +125,89 @@ def handleEvent_postMsg(json):
 def handleEvent_postLike(json):
     postLike(json)
 
-@app.route('/sign-in/0/', methods=['GET', 'POST'])
-def signIn():
+@app.route('/login/', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
-        hash = hashing.hash_value(request.form['mdp'], salt=cle)
+        user = [utilisateur for id, utilisateur in utilisateurs.items() if utilisateur.email == request.form['username'] or utilisateur.pseudo == request.form['username']]
+        if len(user) > 0 or hashing.check_value(user[0].mdp, request.form['password'], salt=cle):
+            user = user[0].toDict()
+            session['id'] = str(user['_id'])
+            session['pseudo'] = user['pseudo']
+            session['couleur'] = user['couleur']
+            session['type'] = 'ELEVE'
+            session['cacheRandomKey'] = cacheRandomKey
+
+            if user['etapeInscription'] is not None:
+                session['etapeInscription'] = user['etapeInscription']
+                return redirect(url_for(f"signIn{session['etapeInscription']+1}"))
+            elif 'redirect' in session:
+                path = session['redirect']
+                session.pop('redirect')
+                return redirect(path)
+            else:
+                return redirect(url_for('accueil'))
+        else:
+            return render_template('connexion.html', erreur='Identifiant ou mot de passe incorrect')
+    else:
+        session['cacheRandomKey'] = cacheRandomKey
+        return render_template('connexion.html')
+
+@app.route('/sign-in/0/', methods=['GET', 'POST'])
+def signIn0():
+    global utilisateurs
+    if 'etapeInscription' in session:
+        return redirect(url_for(f"signIn{session['etapeInscription']}"))
+
+    if request.method == 'POST':
+        hash = hashing.hash_value(request.form['password'], salt=cle)
 
         pseudo = (request.form['pseudo'].lower()).replace(' ', '_')
+        notUse = True if len([utilisateur for id, utilisateur in utilisateurs.items() if utilisateur.email == request.form['email'] or utilisateur.pseudo == pseudo]) == 0 else False
+        if notUse:
+            _id = ObjectId()
+            utilisateurs[str(_id)] = Utilisateur({"_id": _id, "nom": request.form['nom'], "prenom": request.form['prenom'],
+                            "pseudo": request.form['pseudo'], "email" : request.form['email'], 'mdp': hash, 'etapeInscription': 1})
+            utilisateurs[str(_id)].insert()
 
-        _id = ObjectId()
-        utilisateurs[str(_id)] = Utilisateur({"_id": _id, "nom": request.form['nom'], "prenom": request.form['prenom'], "pseudo": request.form['pseudo'], "email" : request.form['email'], 'mdp': hash})
-        utilisateurs[str(_id)].insert()
-
-        user = utilisateurs[str(_id)].toDict()
-        session['id'] = str(user['_id'])
-        session['pseudo'] = user['pseudo']
-        session['couleur'] = user['couleur']
-        session['type'] = 'ELEVE'
-        session['cacheRandomKey'] = cacheRandomKey
-        return redirect(url_for('signIn1'))
+            user = utilisateurs[str(_id)].toDict()
+            session['id'] = str(user['_id'])
+            session['pseudo'] = user['pseudo']
+            session['couleur'] = user['couleur']
+            session['type'] = 'ELEVE'
+            session['cacheRandomKey'] = cacheRandomKey
+            session['etapeInscription'] = 1
+            return redirect(url_for('signIn1'))
+        else:
+            return render_template('inscription0.html', erreur='Pseudo ou email déjà utilisé')
     else:
+        session['cacheRandomKey'] = cacheRandomKey
         return render_template('inscription0.html')
 
 @app.route('/sign-in/1/', methods=['GET', 'POST'])
 def signIn1():
+    if 'etapeInscription' not in session or 'id' not in session:
+        return redirect(url_for('login'))
+    if session['etapeInscription'] != 1:
+        return redirect(url_for(f"signIn{session['etapeInscription']}"))
+
     if request.method == 'POST':
-        # hash = hashing.hash_value(request.form['mdp'], salt=cle)
-        #
-        # pseudo = (request.form['pseudo'].lower()).replace(' ', '_')
-        #
-        # _id = ObjectId()
-        # utilisateurs[str(_id)] = Utilisateur({"_id": _id, "nom": request.form['nom'], "prenom": request.form['prenom'], "pseudo": request.form['pseudo'], "email" : request.form['email'], 'mdp': hash})
-        # utilisateurs[str(_id)].insert()
-        #
-        # user = utilisateurs[str(_id)].toDict()
-        # session['id'] = str(user['_id'])
-        # session['pseudo'] = user['pseudo']
-        # session['couleur'] = user['couleur']
-        # session['type'] = 'ELEVE'
-        # session['cacheRandomKey'] = cacheRandomKey
-        return redirect(url_for('signIn1'))
+        return redirect(url_for('signIn2'))
     else:
-        return render_template('inscription0.html')
+        session['cacheRandomKey'] = cacheRandomKey
+        return render_template('inscription1.html')
+
+@app.route('/sign-in/2/', methods=['GET', 'POST'])
+def signIn2():
+    if 'etapeInscription' not in session or 'id' not in session:
+        return redirect(url_for('login'))
+    if session['etapeInscription'] != 2:
+        return redirect(url_for(f"signIn{session['etapeInscription']}"))
+
+    if request.method == 'POST':
+        return redirect(url_for('tuto'))
+    else:
+        session['cacheRandomKey'] = cacheRandomKey
+        return render_template('inscription1.html')
 
 # # Fonction de test pour afficher ce que l'on récupère
 # @app.route("/connexion/", methods=["GET"])
@@ -340,17 +381,8 @@ if __name__ == "__main__":
     cacheRandomKey = uuid4()
 
     # This allows us to use a plain HTTP callback
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = "1"
     app.secret_key = os.urandom(24)
     cle = 'hqZcPsAkTaMIRHco1L1BhCxXo4LWwBBBRvGcydjH0Vb85uXB3ZQ1lfmvfg7laldlaosg21Ri8uPvDgxLYyUoAPVXaQbNvpvpcvuyIv7ckVGGS6Ro5tmh8TlphoG25Z13RftlviLXggzJ4LXVJFjZ3xtUQ27zUJzQZAoI9JOAxXAV3VBdATqX'
-
-    if 'redirect_uri' in os.environ:
-        # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-        # app.run(host='0.0.0.0', port=os.environ.get("PORT", 3000))
-        # socketio.run(app, host='0.0.0.0', port=os.environ.get("PORT", 3000), debug=True)
-        socketio.run(app)
-
-    else:
-        # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
-        # app.run(host="127.0.0.1", port=3000, debug=True)
-        socketio.run(app, host='127.0.0.1', port=3000, debug=True)
+    # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
+    # app.run(host="127.0.0.1", port=3000, debug=True)
+    socketio.run(app, host='127.0.0.1', port=3000, debug=True)

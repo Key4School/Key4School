@@ -113,6 +113,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.email = params['email']
         self.mdp = params['mdp']
         self.dateInscription = params.get('dateInscription', datetime.now())
+        self.etapeInscription = params.get('etapeInscription', 1)
 
         self.birth_date = params.get('birth_date')
         self.classe = params.get('classe')
@@ -141,7 +142,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 
         self.sign = params.get('sign', [])
         self.Sanctions = params.get('Sanction', [])
-        self.SanctionEnCour = params.egt('SanctionEnCour', '')
+        self.SanctionEnCour = params.get('SanctionEnCour', '')
         self.SanctionDuree = params.get('SanctionDuree', '')
 
         self.xp = max(params.get('xp', 0), 0)
@@ -187,6 +188,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'nomImg': self.nomImg,
             'imgProfile': self.imgProfile,
             'dateInscription': self.dateInscription,
+            'etapeInscription': self.etapeInscription,
             'birth_date': self.birth_date,
             'classe': self.classe,
             'lycee': self.lycee,
@@ -231,6 +233,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'nomImg': self.nomImg,
             'imgProfile': self.imgProfile,
             'dateInscription': self.dateInscription,
+            'etapeInscription': self.etapeInscription,
             'birth_date': self.birth_date,
             'classe': self.classe,
             'lycee': self.lycee,
@@ -259,6 +262,8 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         }
 
     def getUserSubjects(self):
+        # A REFAIRE
+        return []
         if self.type == "ELEVE":
             subjects = ['hg', 'emc', 'eps']
             # Tronc commun
