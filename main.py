@@ -128,7 +128,7 @@ def handleEvent_postLike(json):
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = [utilisateur for utilisateur in utilisateurs if utilisateur.email == request.form['username'] or utilisateur.pseudo == request.form['username']]
+        user = [utilisateur for id, utilisateur in utilisateurs.items() if utilisateur.email == request.form['username'] or utilisateur.pseudo == request.form['username']]
         if len(user) > 0 or hashing.check_value(user[0].mdp, request.form['password'], salt=cle):
             user = user[0].toDict()
             session['id'] = str(user['_id'])
@@ -138,7 +138,7 @@ def login():
             session['cacheRandomKey'] = cacheRandomKey
 
             if user['etapeInscription'] is not None:
-                session['etapeInscription'] = 0
+                session['etapeInscription'] = user['etapeInscription']
                 return redirect(url_for(f"signIn{session['etapeInscription']+1}"))
             elif 'redirect' in session:
                 path = session['redirect']
@@ -162,8 +162,8 @@ def signIn0():
         hash = hashing.hash_value(request.form['password'], salt=cle)
 
         pseudo = (request.form['pseudo'].lower()).replace(' ', '_')
-        test = True if len([utilisateur for utilisateur in utilisateurs if utilisateur.email == request.form['email'] or utilisateur.pseudo == pseudo]) else False
-        if not test:
+        notUse = True if len([utilisateur for id, utilisateur in utilisateurs.items() if utilisateur.email == request.form['email'] or utilisateur.pseudo == pseudo]) == 0 else False
+        if notUse:
             _id = ObjectId()
             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "nom": request.form['nom'], "prenom": request.form['prenom'],
                             "pseudo": request.form['pseudo'], "email" : request.form['email'], 'mdp': hash, 'etapeInscription': 1})
@@ -185,7 +185,7 @@ def signIn0():
 
 @app.route('/sign-in/1/', methods=['GET', 'POST'])
 def signIn1():
-    if 'etapeInscription' not in session:
+    if 'etapeInscription' not in session or 'id' not in session:
         return redirect(url_for('login'))
     if session['etapeInscription'] != 1:
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
@@ -198,7 +198,7 @@ def signIn1():
 
 @app.route('/sign-in/2/', methods=['GET', 'POST'])
 def signIn2():
-    if 'etapeInscription' not in session:
+    if 'etapeInscription' not in session or 'id' not in session:
         return redirect(url_for('login'))
     if session['etapeInscription'] != 2:
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
@@ -383,7 +383,6 @@ if __name__ == "__main__":
     # This allows us to use a plain HTTP callback
     app.secret_key = os.urandom(24)
     cle = 'hqZcPsAkTaMIRHco1L1BhCxXo4LWwBBBRvGcydjH0Vb85uXB3ZQ1lfmvfg7laldlaosg21Ri8uPvDgxLYyUoAPVXaQbNvpvpcvuyIv7ckVGGS6Ro5tmh8TlphoG25Z13RftlviLXggzJ4LXVJFjZ3xtUQ27zUJzQZAoI9JOAxXAV3VBdATqX'
-
     # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
     # app.run(host="127.0.0.1", port=3000, debug=True)
     socketio.run(app, host='127.0.0.1', port=3000, debug=True)
