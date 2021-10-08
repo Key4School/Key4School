@@ -119,6 +119,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.classe = params.get('classe')
         self.telephone = params.get('telephone', '')
         self.lycee = params.get('lycee')
+        self.lyceeId = params.get('lyceeId')
         self.langues = params.get('langues', [])
 
         self.options = params.get('options', [])
@@ -154,6 +155,17 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.savedDemands = params.get('savedDemands', [])
 
         self.db_table = DB.db_utilisateurs
+
+    def signIn1(self, phone, birthday, school, classe, langues):
+        self.telephone = phone
+        self.birth_date = birthday
+        self.lycee = school['nomVille']
+        self.lyceeId = school['id']
+        self.classe = classe
+        self.langues = langues
+
+        self.etapeInscription = 2
+        self.update()
 
     def recupLevel(self):
         niv = int(0.473*self.xp**0.615)
@@ -192,6 +204,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'birth_date': self.birth_date,
             'classe': self.classe,
             'lycee': self.lycee,
+            'lyceeId': self.lyceeId,
             'spes': self.spes,
             'spes-str': self.translate_matiere_spes_options_lv(self.spes),
             'langues': self.langues,
@@ -237,6 +250,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'birth_date': self.birth_date,
             'classe': self.classe,
             'lycee': self.lycee,
+            'lyceeId': self.lyceeId,
             'spes': self.spes,
             'langues': self.langues,
             'options': self.options,

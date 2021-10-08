@@ -140,7 +140,9 @@
     </p>
     <br /><br />
   </div>
-  <p>{{erreur}}</p>
+  {%if erreur%}
+  <p class="erreurP">{{erreur}}</p>
+  {%endif%}
   <p class="txt_centre">
     Vous avez deja un compte ? <a href="{{url_for('login')}}">connectez vous !</a>
   </p>

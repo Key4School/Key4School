@@ -73,12 +73,16 @@
   <br>
   <center>
     <button type="submit" class="button">Connexion</button>
-</center>
+  </center>
+  {%if erreur%}
+  <br>
+  <p class="erreurP">{{erreur}}</p>
+  {%endif%}
 </form>
 <br />
-
 </div>
-  <br /><br /><br />
+
+<br><br>
 <p class="txt_centre">
   Vous n'avez pas de compte ? <a href="{{url_for('signIn0')}}">Inscrivez vous !</a>
 </p>

@@ -3,19 +3,13 @@ from flask_pymongo import PyMongo
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_hashing import Hashing
 from datetime import *
-from requests_oauthlib import OAuth2Session
 from flask_session import Session
 from flask.json import jsonify
 from bson.objectid import ObjectId
-from bson import Binary
+import json
 import sys
 import os
-import gridfs
-import smtplib
-from threading import Timer
-from functools import partial
 from uuid import uuid4
-from difflib import SequenceMatcher
 import re
 
 # Création de l'application
@@ -128,28 +122,29 @@ def handleEvent_postLike(json):
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        if 'password' not in request.form or 'username' not in request.form:
+            return render_template('connexion.html', erreur='Veuillez compléter tous les champs')
         user = [utilisateur for id, utilisateur in utilisateurs.items() if utilisateur.email == request.form['username'] or utilisateur.pseudo == request.form['username']]
-        if len(user) > 0 or hashing.check_value(user[0].mdp, request.form['password'], salt=cle):
-            user = user[0].toDict()
-            session['id'] = str(user['_id'])
-            session['pseudo'] = user['pseudo']
-            session['couleur'] = user['couleur']
-            session['type'] = 'ELEVE'
-            session['cacheRandomKey'] = cacheRandomKey
-
-            if user['etapeInscription'] is not None:
-                session.pop('id')
-                session['idInscri'] = str(user['_id'])
-                session['etapeInscription'] = user['etapeInscription']
-                return redirect(url_for(f"signIn{session['etapeInscription']}"))
-            elif 'redirect' in session:
-                path = session['redirect']
-                session.pop('redirect')
-                return redirect(path)
-            else:
-                return redirect(url_for('accueil'))
-        else:
+        if len(user) == 0 or not hashing.check_value(user[0].mdp, request.form['password'], salt=cle):
             return render_template('connexion.html', erreur='Identifiant ou mot de passe incorrect')
+        user = user[0].toDict()
+        session['id'] = str(user['_id'])
+        session['pseudo'] = user['pseudo']
+        session['couleur'] = user['couleur']
+        session['type'] = 'ELEVE'
+        session['cacheRandomKey'] = cacheRandomKey
+
+        if user['etapeInscription'] is not None:
+            session.pop('id')
+            session['idInscri'] = str(user['_id'])
+            session['etapeInscription'] = user['etapeInscription']
+            return redirect(url_for(f"signIn{session['etapeInscription']}"))
+        elif 'redirect' in session:
+            path = session['redirect']
+            session.pop('redirect')
+            return redirect(path)
+        else:
+            return redirect(url_for('accueil'))
     else:
         session['cacheRandomKey'] = cacheRandomKey
         return render_template('connexion.html')
@@ -184,12 +179,20 @@ def signIn0():
 
 @app.route('/sign-in/1/', methods=['GET', 'POST'])
 def signIn1():
+    global utilisateurs
     if 'etapeInscription' not in session or 'idInscri' not in session:
         return redirect(url_for('login'))
     if session['etapeInscription'] != 1:
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
 
     if request.method == 'POST':
+        user = [utilisateur for id, utilisateur in utilisateurs.items() if str(utilisateur._id) == session['idInscri']][0]
+        user.signIn1(request.form['phone'],
+                    datetime.strptime(request.form['birthday'], '%Y-%m-%d'),
+                    json.loads(request.form['school']),
+                    request.form['classe'],
+                    [request.form['lva'], request.form['lvb']])
+        session['etapeInscription'] = user.etapeInscription
         return redirect(url_for('signIn2'))
     else:
         session['cacheRandomKey'] = cacheRandomKey
@@ -207,7 +210,7 @@ def signIn2():
         return redirect(url_for('tuto'))
     else:
         session['cacheRandomKey'] = cacheRandomKey
-        return render_template('inscription1.html')
+        return render_template('inscription2.html')
 
 # # Fonction de test pour afficher ce que l'on récupère
 # @app.route("/connexion/", methods=["GET"])

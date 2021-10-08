@@ -68,9 +68,7 @@
     </div>
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input  autocomplete="off" class="color_input input" type="text" placeholder="Lycée"  name="school" id="school">
-      <datalist id="datalist_school">
-      </datalist>
+      <input autocomplete="off" class="color_input input" type="text" placeholder="Lycée" id="school">
       <span class="icon is-small is-left">
         <i class="fas fa-school"></i>
       </span>
@@ -78,12 +76,12 @@
         <i class="fas fa-check" id="school_check"></i>
       </span>
     </div>
-
+    <input type="hidden" name="school" id="schoolValue">
     <br>
 
-    <div class="input_inscription control has-icons-left">
+    <div class="input_inscription control has-icons-left has-icons-right">
       <div class="select color_input" style="width:100%;">
-        <select name="grade" id="grade" style="width:100%;">
+        <select name="classe" id="classe" style="width:100%;">
           <option selected>--Niveau--</option>
           <option>2nd</option>
           <option>1ère</option>
@@ -93,11 +91,14 @@
       <span class="icon is-small is-left">
         <i class="fas fa-graduation-cap"></i>
       </span>
+      <span class="icon is-small is-right">
+        <i class="fas fa-check" id="classe_check"></i>
+      </span>
     </div>
     <br />
 
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input autocomplete="off" list="datalist_lva" class="color_input input" type="text" placeholder="LVA" name="LVA" id="LVA">
+      <input autocomplete="off" list="datalist_lva" class="color_input input" type="text" placeholder="LVA" id="LVA">
       <datalist id="datalist_lva">
       </datalist>
       <template id="template_lva">
@@ -127,24 +128,31 @@
         <i class="fas fa-check" id="LVA_check"></i>
       </span>
     </div>
+    <input type="hidden" name="lva" id="lvaValue">
 
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_lvb" class="color_input input" type="text" placeholder="LVB" name="LVB" id="LVB">
+      <input list="datalist_lvb" class="color_input input" type="text" placeholder="LVB" id="LVB">
       <datalist autocomplete="off" id="datalist_lvb">
       </datalist>
       <template id="template_lvb">
         <option>Allemand</option>
+        <option>Allemand Euro</option>
         <option>Anglais</option>
+        <option>Anglais Euro</option>
         <option>Arabe</option>
         <option>Basque</option>
         <option>Catalan</option>
         <option>Chinois</option>
         <option>Créole</option>
+        <option>Italien</option>
+        <option>Italien Euro</option>
         <option>Espagnol</option>
+        <option>Espagnol Euro</option>
         <option>Hébreu</option>
         <option>Kanak</option>
         <option>Portugais</option>
+        <option>Portugais Euro</option>
         <option>Russe</option>
       </template>
       <span class="icon is-small is-left">
@@ -154,6 +162,7 @@
         <i class="fas fa-check" id="LVB_check"></i>
       </span>
     </div>
+    <input type="hidden" name="lvb" id="lvbValue">
 
     <br />
     <div id="erreur" class="txt_centre">

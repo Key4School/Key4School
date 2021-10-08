@@ -6,22 +6,41 @@ $(document).ready(function() {
     $birthday_check = $('#birthday_check'),
     $school = $('#school'),
     $school_check = $('#school_check'),
-    $grade = $('#grade'),
-    $grade_check = $('#grade_check'),
+    $classe = $('#classe'),
+    $classe_check = $('#classe_check'),
     $lva = $('#LVA'),
     $lva_check = $('#LVA_check'),
-    $lva_list = $('#datalist_lva'),
     $lva_template = $('#template_lva'),
     $lvb = $('#LVB'),
     $lvb_check = $('#LVB_check'),
-    $lvb_list = $('#datalist_lvb'),
     $lvb_template = $('#template_lvb'),
     $form = $('#form'),
     $erreur = $('#erreur');
 
-    $erreur.css({ // on rend le champ rouge
-      display: 'none',
-    });
+  var langValue = {
+    "Anglais": "-ang",
+    "Anglais Euro": "-ang-euro",
+    "Espagnol": "-esp",
+    "Espagnol Euro": "-esp-euro",
+    "Allemand": "-all",
+    "Allemand Euro": "-all-euro",
+    "Portugais": "-por",
+    "Portugais Euro": "-por-euro",
+    "Itlien": "-it",
+    "Itlien Euro": "-it-euro",
+    "Chinois": "-chi",
+    "Russe": "-ru",
+    "Arabe": "-ara",
+    "Basque": "-bas",
+    "Catalan": "-cat",
+    "Créole": "-cre",
+    "Hébreu": "-heb",
+    "Kanak": "-kan"
+  }
+
+  $erreur.css({ // on rend le champ rouge
+    display: 'none',
+  });
 
   $phone.keyup(function() {
     verifPhone();
@@ -30,10 +49,10 @@ $(document).ready(function() {
     verifBirthday();
   });
   $school.on('change keyup focus', function() {
-    verifSchool();
+    verifSchool(true);
   });
-  $grade.change(function() {
-    verifGrade();
+  $classe.change(function() {
+    verifClasse();
   });
   $lva.keyup(function() {
     verifLva();
@@ -46,7 +65,7 @@ $(document).ready(function() {
     var phoneReg = /^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$/;
     var phoneVal = $phone.val();
 
-    if (!phoneReg.test(phoneVal) || phoneVal == '') {
+    if (!phoneReg.test(phoneVal) & phoneVal != '') {
       $phone.css({ // si tout est bon, on le rend vert
         border: '3px solid red',
       });
@@ -97,91 +116,87 @@ $(document).ready(function() {
   }
 
 
-  function verifSchool() {
-    var querytemp = $school.val(),
-      tab = querytemp.split(" "),
-      query = tab.join('%20'),
-      response = "",
-      lycee = [],
-      lyceeFinal = [];
+  function verifSchool(asynch) {
+    var retour;
 
     $.ajax({
       url: 'https://data.education.gouv.fr/api/records/1.0/search/?dataset=fr-en-annuaire-education&facet=nom_etablissement&facet=nom_commune&refine.type_etablissement=Lycée',
       dataType: 'json',
+      async: asynch,
       data: {
         q: $('#school').val()
       },
       success: function(donnee) {
-        $('#datalist_school').empty();
         lycee = [];
+        lyceesValues = {};
         $.map(donnee, function() {
           for (let i = 0; i < donnee["records"].length; i++) {
-            if (lycee.length <= 9) {
-              if (lycee.indexOf(donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"]) === -1) {
-                lycee.push(donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"]);
+            if (lycee.length <= 10) {
+              var nomVille = donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"];
+              var lyceeVal = JSON.stringify({'nomVille': nomVille, 'id': donnee["records"][i]["fields"]["identifiant_de_l_etablissement"]});
+              if (lycee.indexOf(nomVille) === -1) {
+                lycee.push(nomVille);
+                lyceesValues[nomVille] = lyceeVal;
               }
-            } else {}
+            }
           }
         });
-        for (let j = 0; j < lycee.length; j++) {
-          // $('#datalist_school').append('<option>' + lycee[j] + '</option>');
-          $('#school').autocomplete({
-            autoFocus: true,
-            source: function(request, response){
-              response(lycee);
-            },
-            minLength:0
+
+        $('#school').autocomplete({
+          autoFocus: true,
+          source: lycee,
+          minLength:0
+        });
+
+        if (lycee.indexOf($school.val()) === -1) {
+          $school.css({ // on rend le champ rouge
+            border: '3px solid red',
           });
-          if (lycee.indexOf($school.val()) === -1) {
-            $school.css({ // on rend le champ rouge
-              border: '3px solid red',
-            });
-            $school_check.removeClass("fas fa-check");
-            $school_check.addClass("fas fa-times");
-            $school_check.css({ // on rend le champ rouge
-              color: 'red',
-            });
-            return false;
-          } else {
-            $school.css({ // si tout est bon, on le rend vert
-              border: '3px solid green',
-            });
-            $school_check.removeClass("fas fa-times");
-            $school_check.addClass("fas fa-check");
-            $school_check.css({ // on rend le champ rouge
-              color: 'green',
-            });
-            return true;
-          }
-
-
+          $school_check.removeClass("fas fa-check");
+          $school_check.addClass("fas fa-times");
+          $school_check.css({ // on rend le champ rouge
+            color: 'red',
+          });
+          retour = false;
+        } else {
+          $school.css({ // si tout est bon, on le rend vert
+            border: '3px solid green',
+          });
+          $school_check.removeClass("fas fa-times");
+          $school_check.addClass("fas fa-check");
+          $school_check.css({ // on rend le champ rouge
+            color: 'green',
+          });
+          $('#schoolValue').val(lyceesValues[$school.val()]);
+          retour = true;
         }
       }
     });
+    return retour;
   }
 
-function verifGrade() {
-  var gradeNone = "--Niveau--";
+function verifClasse() {
+  var classeNone = "--Niveau--";
 
-  var gradeVal = $grade.val();
+  var classeVal = $classe.val();
 
-  if (gradeVal == gradeNone) {
-    $grade.css({ // on rend le champ rouge
+  if (classeVal == classeNone) {
+    $classe.css({ // on rend le champ rouge
       border: '3px solid red',
     });
-    $grade_check.removeClass("fas fa-check");
-    $grade_check.addClass("fas fa-times");
-    $grade_check.css({ // on rend le champ rouge
+    $classe_check.removeClass("fas fa-check");
+    $classe_check.addClass("fas fa-times");
+    $classe_check.css({ // on rend le champ rouge
       color: 'red',
     });
     return false;
   } else {
-    $grade.css({ // si tout est bon, on le rend vert
+    $classe.css({ // si tout est bon, on le rend vert
       border: '3px solid green',
     });
-    $grade_check.removeClass("fas fa-times");
-    $grade_check.addClass("fas fa-check");
-    $grade_check.css({ // on rend le champ rouge
+    $classe_check.removeClass("fas fa-times");
+    $classe_check.addClass("fas fa-check");
+    $classe_check.css({ // on rend le champ rouge
       color: 'green',
     });
     return true;
@@ -222,6 +237,7 @@ function verifLva() {
     $lva_check.css({ // on rend le champ rouge
       color: 'green',
     });
+    $('#lvaValue').val('lv1'+langValue[$lva.val()]);
     return true;
   }
 }
@@ -241,7 +257,7 @@ function verifLvb() {
     results.appendChild(set);
   });
   var lang = ["Allemand", "Anglais", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Espagnol", "Hébreu", "Kanak", "Portugais", "Russe"];
-  if (lang.indexOf($lva.val()) === -1) {
+  if (lang.indexOf($lvb.val()) === -1) {
     $lvb.css({ // on rend le champ rouge
       border: '3px solid red',
     });
@@ -260,14 +276,14 @@ function verifLvb() {
     $lvb_check.css({ // on rend le champ rouge
       color: 'green',
     });
+    $('#lvbValue').val('lv2'+langValue[$lvb.val()]);
     return true;
   }
 }
 
 
 $form.on('submit', function(e) {
-  if (verifPhone() && verifBirthday() && verifGrade() && verifSchool() && verifLva() && verifLvb()) {
-    $form.submit();
+  if (verifPhone() && verifBirthday() && verifClasse() && verifSchool(false) && verifLva() && verifLvb()) {
     return true;
   } else {
     $erreur.css({
