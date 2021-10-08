@@ -206,11 +206,28 @@ def signIn2():
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
 
     if request.method == 'POST':
-        # SESSION ID INSCRIT POP
+        user = [utilisateur for id, utilisateur in utilisateurs.items() if str(utilisateur._id) == session['idInscri']][0]
+        spes = []
+        if 'spe1' in request.form:
+            spes.append(request.form['spe1'])
+            spes.append(request.form['spe2'])
+            if 'spe3' in request.form:
+                spes.append(request.form['spe3'])
+        options = list(filter(lambda opt: opt != '', [request.form['option1'], request.form['option2'], request.form['option3']]))
+        user.signIn2(spes, options)
+
+        session.pop('idInscri')
+        user = user.toDict()
+        session['id'] = str(user['_id'])
+        session['pseudo'] = user['pseudo']
+        session['couleur'] = user['couleur']
+        session['type'] = 'ELEVE'
+        session['cacheRandomKey'] = cacheRandomKey
         return redirect(url_for('tuto'))
     else:
         session['cacheRandomKey'] = cacheRandomKey
-        return render_template('inscription2.html')
+        user = [utilisateur for id, utilisateur in utilisateurs.items() if str(utilisateur._id) == session['idInscri']][0].toDict()
+        return render_template('inscription2.html', user=user)
 
 # # Fonction de test pour afficher ce que l'on récupère
 # @app.route("/connexion/", methods=["GET"])

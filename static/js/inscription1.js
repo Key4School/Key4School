@@ -218,7 +218,7 @@ function verifLva() {
     results.appendChild(set);
   });
   var lang = ["Allemand", "Allemand Euro", "Anglais", "Anglais Euro", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Italien", "Italien Euro", "Espagnol", "Espagnol Euro", "Hébreu", "Kanak", "Portugais", "Portugais Euro", "Russe"];
-  if (lang.indexOf($lva.val()) === -1) {
+  if (lang.indexOf($lva.val()) === -1 || $lva.val() == $lvb.val()) {
     $lva.css({ // on rend le champ rouge
       border: '3px solid red',
     });
@@ -257,7 +257,7 @@ function verifLvb() {
     results.appendChild(set);
   });
   var lang = ["Allemand", "Anglais", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Espagnol", "Hébreu", "Kanak", "Portugais", "Russe"];
-  if (lang.indexOf($lvb.val()) === -1) {
+  if (lang.indexOf($lvb.val()) === -1 || $lva.val() == $lvb.val()) {
     $lvb.css({ // on rend le champ rouge
       border: '3px solid red',
     });

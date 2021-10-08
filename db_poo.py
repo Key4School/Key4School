@@ -167,6 +167,13 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.etapeInscription = 2
         self.update()
 
+    def signIn2(self, spes, options):
+        self.spes = spes
+        self.options = options
+
+        self.etapeInscription = None
+        self.update()
+
     def recupLevel(self):
         niv = int(0.473*self.xp**0.615)
         xplvl = int((0.473*self.xp**0.615-niv)*100)

@@ -44,8 +44,9 @@
     </span>
   </nav>
   <form class="form_inscription" action="./" method="post" id="form">
+    {%if user['classe'] == '1ère' or user['classe'] == 'Tle'%}
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_spe" class="color_input input" type="text" placeholder="Spécialité 1" name="spe1" id="spe1">
+      <input list="datalist_spe" class="color_input input" type="text" placeholder="Spécialité 1" id="spe1">
       <span class="icon is-small is-left">
         <i class="fas fa-book-open"></i>
       </span>
@@ -53,9 +54,10 @@
         <i class="fas fa-check" id="spe1_check"></i>
       </span>
     </div>
+    <input type="hidden" name="spe1" value="" id="spe1Value">
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_spe" name="spe2" id="spe2" class="color_input input" type="text" placeholder="Spécialité 2" >
+      <input list="datalist_spe" id="spe2" class="color_input input" type="text" placeholder="Spécialité 2" >
       <span class="icon is-small is-left">
         <i class="fas fa-book-open"></i>
       </span>
@@ -63,9 +65,11 @@
         <i class="fas fa-check" id="spe2_check"></i>
       </span>
     </div>
+    <input type="hidden" name="spe2" value="" id="spe2Value">
+    {%if user['classe'] == '1ère'%}
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_spe" name="spe3" id="spe3" class="color_input input" type="text" placeholder="Spécialité 3" >
+      <input list="datalist_spe" id="spe3" class="color_input input" type="text" placeholder="Spécialité 3" >
       <span class="icon is-small is-left">
         <i class="fas fa-book-open"></i>
       </span>
@@ -73,6 +77,8 @@
         <i class="fas fa-check" id="spe3_check"></i>
       </span>
     </div>
+    <input type="hidden" name="spe3" value="" id="spe3Value">
+    {%endif%}
     <datalist id="datalist_spe">
       <option>Non renseignée.</option>
       <option>Spé Arts</option>
@@ -92,8 +98,9 @@
       <option>Spé Biologie-écologie</option>
     </datalist>
     <br />
+    {%endif%}
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_option" id="option1" name="option1" class="color_input input" type="text" placeholder="option 1" >
+      <input list="datalist_option" id="option1" class="color_input input" type="text" placeholder="option 1" >
       <span class="icon is-small is-left">
         <i class="fas fa-book"></i>
       </span>
@@ -101,6 +108,7 @@
         <i class="fas fa-check" id="option1_check"></i>
       </span>
     </div>
+    <input type="hidden" name="option1" value="" id="option1Value">
     <datalist id="datalist_option">
       <option >Non renseignée.</option>
       <option>LCA Latin</option>
@@ -132,7 +140,7 @@
     </datalist>
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_option" id="option2" name="option2" class="color_input input" type="text" placeholder="option 2" >
+      <input list="datalist_option" id="option2" class="color_input input" type="text" placeholder="option 2" >
       <span class="icon is-small is-left">
         <i class="fas fa-book"></i>
       </span>
@@ -140,9 +148,10 @@
         <i class="fas fa-check" id="option2_check"></i>
       </span>
     </div>
+    <input type="hidden" name="option2" value="" id="option2Value">
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
-      <input list="datalist_option" id="option3" name="option3" class="color_input input" type="text" placeholder="option 3" >
+      <input list="datalist_option" id="option3" class="color_input input" type="text" placeholder="option 3" >
       <span class="icon is-small is-left">
         <i class="fas fa-book"></i>
       </span>
@@ -150,6 +159,7 @@
         <i class="fas fa-check" id="option3_check"></i>
       </span>
     </div>
+    <input type="hidden" name="option3" value="" id="option3Value">
     <div id="erreur">
       <br /><br />
       <p class="erreurP">
