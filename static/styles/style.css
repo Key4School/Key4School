@@ -312,7 +312,9 @@ input[type=range]:focus::-ms-fill-upper {
     margin:auto;
   }
   .form_connexion{
-    padding-top: 30%;
+    width: 90%;
+    padding:2%;
+    margin:auto;
   }
   .flex_connexion{
     padding-top: 30%;
@@ -404,7 +406,7 @@ input[type=range]:focus::-ms-fill-upper {
     display:flex;
     justify-content: space-evenly;
     align-items: center;
-    padding-top: 10%;
+    padding-top: 2%;
   }
   .connexion_txt{
     display: block;
