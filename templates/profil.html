@@ -822,13 +822,20 @@
       <p>
         Chosir le thème principal :
       </p>
-      <div class="container_theme" onclick="themefct();">
-        <div class="sun">
+      <div class="container_theme" >
+        <div class="sun" onclick="themefct();">
           <i class="fas fa-sun"></i>
         </div>
-        <div class="moon">
+        <div class="moon" onclick="themefct();">
           <i class="fas fa-moon"></i>
         </div>
+        <button class="button is-outlined is-small" onclick="themeSysteme();">
+          <span>Thème de l'appareil</span>
+          <span class="icon is-small">
+            <i class="fas fa-laptop"></i>
+          </span>
+        </button>
+
       </div>
       <form action="{{url_for('changeTheme')}}" method="POST">
 

@@ -116,8 +116,14 @@ p{
 .txt_right{
   text-align: right;
 }
+.container_theme:hover{
+  cursor:pointer;
+}
 .container_theme{
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .sun, .moon{
   font-size: 3rem;

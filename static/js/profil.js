@@ -24,6 +24,24 @@ function themefct() {
   }
 }
 
+function themeSysteme() {
+  if(window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    localStorage.setItem('theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
+    $(".sun").addClass("sun-logo");
+    $(".moon").addClass("moon-logo");
+    $(".sun").removeClass("animate-sun");
+     $(".moon").removeClass("animate-moon");
+  }
+  else {
+    localStorage.setItem('theme', 'light');
+    document.documentElement.setAttribute('data-theme', 'light');
+    $(".sun").removeClass("sun-logo");
+    $(".moon").removeClass("moon-logo");
+    $(".sun").addClass("animate-sun");
+     $(".moon").addClass("animate-moon");
+  }
+}
 
 function input(type){
   if($('#'+ type)!==undefined){
