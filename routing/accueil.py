@@ -64,3 +64,6 @@ def saved():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
+def about():
+    return render_template('about.html')

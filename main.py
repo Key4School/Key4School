@@ -28,7 +28,7 @@ from db_poo import *
 DB = DB_Manager.createCluster(app, "mongodb+srv://les-codeurs-lbp:ezEwMi2KBaCkzT4@cluster0.bggb1.mongodb.net/key4schoolBDD?retryWrites=true&w=majority")
 
 # Routing
-from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved
+from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved, about
 from routing.recherche import recherche, recherche_user, morePost, moreUser
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, uploadImage, image, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg, modererGrp
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
@@ -37,6 +37,7 @@ from routing.demandes_aide import question, redirect_comments, comments, updateD
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
 from routing.functions import listeModeration, automoderation, afficheNotif
 
+# A TRIER PAR CATEGORIES
 app.add_url_rule('/', 'accueil', accueil)
 app.add_url_rule('/accueil/', 'accueil2', accueil2)
 app.add_url_rule('/morePost/', 'morePost', morePost, methods=['POST'])
@@ -90,6 +91,7 @@ app.add_url_rule('/mail_rendu/', 'mail_rendu', mail_rendu)
 app.add_url_rule('/saved/', 'saved', saved)
 app.add_url_rule('/savePost/<postId>/', 'savePost', savePost, methods=['POST'])
 app.add_url_rule('/notif/<userId>/<notifId>/', 'afficheNotif', afficheNotif)
+app.add_url_rule('/about/', 'about', about)
 
 # Connection au groupe pour recevoir les nouvelles notif
 @socketio.on('connectToNotif')
@@ -228,173 +230,6 @@ def signIn2():
         session['cacheRandomKey'] = cacheRandomKey
         user = [utilisateur for id, utilisateur in utilisateurs.items() if str(utilisateur._id) == session['idInscri']][0].toDict()
         return render_template('inscription2.html', user=user)
-
-# # Fonction de test pour afficher ce que l'on récupère
-# @app.route("/connexion/", methods=["GET"])
-# def connexion():
-#     global utilisateurs
-#     global groupes
-#
-#     """Fetching a protected resource using an OAuth 2 token.
-#     """
-#     ENT_reply = OAuth2Session(client_id, token=session['oauth_token'])
-#     data = ENT_reply.get('https://ent.iledefrance.fr/auth/oauth2/userinfo').json()
-#     data_plus = ENT_reply.get('https://ent.iledefrance.fr/directory/myinfos').json()
-#
-#     user = [u.toDict() for u in utilisateurs.values() if u.idENT == data['userId']]
-#     if len(user) > 0:
-#         user = user[0]
-#     else:
-#         user = None
-#
-#     if user != None:
-#         session['id'] = str(user['_id'])
-#         session['pseudo'] = user['pseudo']
-#         session['couleur'] = user['couleur']
-#         session['type'] = user['type']
-#         session['cacheRandomKey'] = cacheRandomKey
-#
-#         u = utilisateurs[str(user['_id'])]
-#         if user['SanctionEnCour'] != "":
-#             if user['SanctionDuree'] < datetime.now():
-#                 u.SanctionEnCour = ''
-#                 u.SanctionDuree = ''
-#
-#         if u.type == "ELEVE":
-#             classe = data_plus['classes'][0].split('$')[1]
-#             u.classe = classe
-#             nomClasse = f"{user['lycee']}/{classe}"
-#             group = [g for g in groupes.values() if g.nom == nomClasse and g.is_class == True]
-#             if len(group) > 0:
-#                 group = group[0]
-#                 if user['_id'] not in group.id_utilisateurs:
-#                     group.id_utilisateurs.append(user['_id'])
-#                     group.update()
-#             else:
-#                 _id = ObjectId()
-#                 groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
-#                 groupes[str(_id)].insert()
-#             # on retire l'user des anciens groupe de classe
-#             oldGroups = [g for g in groupes.values() if g.nom != nomClasse and g.is_class == True and user['_id'] in g.id_utilisateurs]
-#             for oldGroup in oldGroups:
-#                 oldGroup.supprUser(user['_id'])
-#
-#         if data_plus['email'] != '':
-#             u.email = data_plus['email']
-#
-#         if 'mobile' in data_plus:
-#             if data_plus['mobile'] != "":
-#                 u.telephone = data_plus['mobile']
-#         elif 'homePhone' in data_plus:
-#             if data_plus['homePhone'] != "":
-#                 u.telephone = data_plus['homePhone']
-#
-#         if data_plus['emailInternal'] != '':
-#             u.emailENT = data_plus['emailInternal']
-#
-#         utilisateurs[str(user['_id'])].update()
-#
-#         if 'redirect' in session:
-#             path = session['redirect']
-#             session.pop('redirect')
-#             return redirect(path)
-#         else:
-#             return redirect(url_for('accueil'))
-#
-#     else:
-#         if data['type'] == "ELEVE":
-#             classe = data_plus['classes'][0].split('$')[1]
-#             pseudo = (request.form['pseudo'].lower()).replace(' ', '_')
-#             tel = ''
-#             if 'mobile' in data_plus:
-#                 if data_plus['mobile'] != "":
-#                     tel = data_plus['mobile']
-#             elif 'homePhone' in data_plus:
-#                 if data_plus['homePhone'] != "":
-#                     tel = data_plus['homePhone']
-#
-#             _id = ObjectId()
-#             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, 'nomImg': '', "dateInscription": datetime.now(),
-#                                         "birth_date": datetime.strptime(data['birthDate'], '%Y-%m-%d') if data['birthDate'] != None else None, "classe": classe, "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'],
-#                                         "lycee": data['schoolName'], 'spes': [], 'langues': [], 'options': [], 'couleur': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'], 'type': data['type'], 'elementPublic': [],
-#                                         'elementPrive': ['email', 'telephone', 'interets', 'birth_date', 'caractere'], "sign": [], "SanctionEnCour": "", 'xp': 0})
-#             utilisateurs[str(_id)].insert()
-#
-#             user = utilisateurs[str(_id)].toDict()
-#             session['id'] = str(user['_id'])
-#             session['pseudo'] = user['pseudo']
-#             session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1']
-#             session['type'] = user['type']
-#             session['cacheRandomKey'] = cacheRandomKey
-#
-#             nomClasse = f"{data['schoolName']}/{classe}"
-#             group = [g for g in groupes.values() if g.nom == nomClasse and g.is_class == True]
-#             if len(group) > 0:
-#                 group = group[0]
-#                 if user['_id'] not in group.id_utilisateurs:
-#                     group.id_utilisateurs.append(user['_id'])
-#                     group.update()
-#             else:
-#                 _id = ObjectId()
-#                 groupes[str(_id)] = Groupe({'_id': _id, 'nom': nomClasse, 'is_class': True, 'id-utilisateurs': [user['_id']]})
-#                 groupes[str(_id)].insert()
-#
-#             return redirect(url_for('tuto'))
-#
-#         elif data['type'] == 'ENSEIGNANT':
-#             pseudo = (request.form['pseudo'].lower()).replace(' ', '_')
-#             tel = ''
-#             if 'mobile' in data_plus:
-#                 if data_plus['mobile'] != "":
-#                     tel = data_plus['mobile']
-#             elif 'homePhone' in data_plus:
-#                 if data_plus['homePhone'] != "":
-#                     tel = data_plus['homePhone']
-#
-#             _id = ObjectId()
-#             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-#                 data['birthDate'], '%Y-%m-%d') if data['birthDate'] != None else None, "lycee": data['schoolName'], 'couleur': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
-#                 'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0, 'nomImg': ''})
-#             utilisateurs[str(_id)].insert()
-#
-#             user = utilisateurs[str(_id)].toDict()
-#
-#             session['id'] = str(user['_id'])
-#             session['pseudo'] = user['pseudo']
-#             session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1']
-#             session['type'] = user['type']
-#             session['cacheRandomKey'] = cacheRandomKey
-#
-#             return redirect(url_for('tuto'))
-#
-#         # elif data['type'] == 'PARENT':
-#         #     # return redirect("https://ent.iledefrance.fr/timeline/timeline")
-#
-#         else:
-#             pseudo = (request.form['pseudo'].lower()).replace(' ', '_')
-#             tel = ''
-#             if 'mobile' in data_plus:
-#                 if data_plus['mobile'] != "":
-#                     tel = data_plus['mobile']
-#             elif 'homePhone' in data_plus:
-#                 if data_plus['homePhone'] != "":
-#                     tel = data_plus['homePhone']
-#
-#             _id = ObjectId()
-#             utilisateurs[str(_id)] = Utilisateur({"_id": _id, "idENT": data['userId'], "nom": data['lastName'], "prenom": data['firstName'], "pseudo": pseudo, "dateInscription": datetime.now(), "birth_date": datetime.strptime(
-#                 data['birthDate'], '%Y-%m-%d') if data['birthDate'] != None else None, "lycee": data['schoolName'], 'couleur': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'], 'type': data['type'], 'elementPublic': [], 'elementPrive': ['email', 'telephone', 'interets',
-#                 'birth_date', 'caractere'], "email" : data_plus['email'], "telephone": tel, "emailENT": data_plus['emailInternal'], "sign": [], "SanctionEnCour": "", 'xp': 0, 'nomImg': ''})
-#             utilisateurs[str(_id)].insert()
-#
-#             user = utilisateurs[str(_id)].toDict()
-#
-#             session['id'] = str(user['_id'])
-#             session['pseudo'] = user['pseudo']
-#             session['couleur'] = ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1']
-#             session['type'] = user['type']
-#             session['cacheRandomKey'] = cacheRandomKey
-#
-#             return redirect(url_for('tuto'))
 
 
 if __name__ == "__main__":
