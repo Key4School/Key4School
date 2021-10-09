@@ -7,8 +7,7 @@
 /* Layout helpers
 ----------------------------------*/
 
-@media (prefers-color-scheme: dark) {
-:root {
+[data-theme="dark"] {
 --page-background: #212121;
 --background-hover:#383737;
 --text-color: #ededed;
@@ -21,8 +20,7 @@
 --shadow-box:0 0.5em 0.5em -0.125em #2196f3c4, 0 0 0 1px #03a9f400;
 
 }
-}
-@media (prefers-color-scheme: light) {
+[data-theme="dark"] {
   :root {
   --text-color-hover:#3273dc;
   --background-hover:#f5f5f5;

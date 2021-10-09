@@ -1,3 +1,30 @@
+$(document).ready(function() {
+  if (document.documentElement.getAttribute("data-theme") == "dark"){
+    $(".sun").addClass("sun-logo");
+    $(".moon").addClass("moon-logo");
+  }
+  if (document.documentElement.getAttribute("data-theme") == "light"){
+    $(".sun").addClass("animate-sun");
+    $(".moon").addClass("animate-moon");
+  }
+});
+
+function themefct() {
+  document.querySelector(".sun").classList.toggle("animate-sun");
+  document.querySelector(".moon").classList.toggle("animate-moon");
+  document.querySelector(".sun").classList.toggle("sun-logo");
+  document.querySelector(".moon").classList.toggle("moon-logo");
+  if (document.documentElement.getAttribute("data-theme") == "light"){
+    localStorage.setItem('theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+  else{
+    localStorage.setItem('theme', 'light');
+    document.documentElement.setAttribute('data-theme', 'light');
+  }
+}
+
+
 function input(type){
   if($('#'+ type)!==undefined){
     var contenu= $('#'+ type).html().trim(); // renvoie le texte contenu à l'intérieur du paragraphe

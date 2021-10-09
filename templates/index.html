@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top" lang="fr">
+<html class="has-navbar-fixed-top" lang="fr" data-theme="light">
 
 <head>
   {% include 'head.html' with context %}
@@ -113,17 +113,17 @@
   </div>
   {%endif%}
 
-  
+
   {% include 'filtres.html' with context %}
 
-  
+
   <div id="contentPost" class="columns" style="margin-top: 10px; width:100%; margin: 0;">
     <div class="column" style="padding: 0;"></div>
     <div class="column is-three-fifths" id="publis">
       {%for d in demandes %}
-        
+
         {% include 'publication.html' with context %}
-        
+
       {%endfor%}
       {%if demandes|length == 0%}
       <p style='text-align:center;'>Aucune demande d'aide pour le moment. Vous pouvez repasser plus tard</p>
@@ -132,7 +132,7 @@
     <div class="column" style="padding: 0;"></div>
   </div>
 
-  
+
 
 </body>
 

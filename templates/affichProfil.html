@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top" lang="fr">
+<html class="has-navbar-fixed-top" lang="fr" data-theme="light">
 
 <head>
   {% include 'head.html' with context %}
   <title>Key4School - Profil</title>
-  
+
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -33,7 +33,7 @@
 </head>
 
 <body>
-  
+
   {% include 'bandeau2.html' %}
   <div class="modal" id="signalisationProfil" style="overflow:hidden;">
     <div class="modal-background"></div>
@@ -132,11 +132,11 @@
   <br />
   <br />
   <br />
-  
+
     <div style="display: flex;align-items: center;justify-content:space-evenly;">
         <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
       <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
-        
+
           <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <p>
@@ -149,10 +149,10 @@
   </div>
   <br /><br /><br />
   <div align="center" style="margin:0% 2%;">
-    
+
     <div>
-      
-      
+
+
       {%if profilUtilisateur['admin']== true%}
       <div style="flex-direction: column;align-items: flex-end;">
           <span class="icon is-small ">
@@ -166,7 +166,7 @@
       <br />
       <table class="table is-narrow">
         <tbody>
-          
+
           <tr>
             <td>
               <i class="fas fa-user-alt" style="font-size:25px;"></i>
@@ -176,7 +176,7 @@
               {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
             </td>
           </tr>
-          
+
           <tr>
             <td>
               <i class="far fa-smile-wink" style="font-size:25px;"></i>
@@ -201,7 +201,7 @@
               </div>
             </td>
           </tr>
-          
+
           <tr>
             <td>
               <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
@@ -212,7 +212,7 @@
             </td>
           </tr>
           {%if profilUtilisateur['type'] == 'ELEVE'%}
-          
+
           <tr>
             <td>
               <i class="fas fa-globe" style="font-size:25px;"></i>
@@ -223,7 +223,7 @@
               </div>
             </td>
           </tr>
-          
+
           <tr>
             <td>
               <i class="fas fa-book" style="font-size:25px;"></i>
@@ -237,7 +237,7 @@
               </div>
             </td>
           </tr>
-          
+
           <tr {% if profilUtilisateur['classe']=='2GT' %} style="display: none;" {% endif %}>
             <td>
               <i class="fas fa-book-open" style="font-size:25px;"></i>
@@ -344,9 +344,9 @@
           {%endfor%}
         </tbody>
       </table>
-      
+
     </div>
-    
+
     <br />
     <div class="navbar-item" style="display:block;">
       <a href="/redirectDM/{{sessionId}}/{{profilUtilisateur['_id']}}/">
@@ -404,10 +404,10 @@
       {%endif%}
       <input type="hidden" />
 
-  
+
 
   </div>
-  
+
 </body>
 
 </html>

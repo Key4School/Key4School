@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top" lang="fr">
+<html class="has-navbar-fixed-top" lang="fr" data-theme="light">
 
 <head>
   {% include 'head.html' with context %}
@@ -210,13 +210,13 @@
       </form>
     </div>
   </div>
-  
+
   <div class="columns" style="margin-top:5%;">
     <div class="column"></div>
     <div class="column is-three-fifths">
-      
+
       {% include 'publication.html' with context %}
-      
+
     </div>
     <div class="column"></div>
   </div>
@@ -264,18 +264,18 @@
       {% for r in d['réponses associées'] %}
         <div class="box" id="divRep_{{r['_id']}}">
           <article class="media">
-            
+
             <div class="media-content">
               <div class="content">
                 <p style="margin-bottom: 5px;">
-                  
+
                   {%set varApercuProfil = r['user']%}
                   <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{r['user']['nom']}} {{r['user']['prenom']}}{% include 'apercu2profil.html' with context %}</a></strong><br /> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
                 </p>
-                
+
                 <p><div id="contenuComment{{r['idRep']}}">{{r['contenu']|safe}}</div></p>
               </div>
-              
+
               <nav class="level is-mobile">
                 <div class="level-left">
                   <a class="level-item" aria-label="like" onClick="like_rep('{{d['idMsg']}}', '{{r['idRep']}}')">
@@ -399,7 +399,7 @@
   </div>
 
 
-  
+
 
 </body>
 

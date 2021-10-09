@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top" lang="fr">
+<html class="has-navbar-fixed-top" lang="fr" data-theme="light">
 
 <head>
 {% include 'head.html' with context %}
@@ -76,11 +76,11 @@
   </div>
   {%endif%}
 
-  
+
   {% include 'filtres.html' with context %}
 
 
- 
+
  <div class="columns" style="margin: 0;">
   <div class="column" style="padding: 0;"></div>
   <div class="column is-three-fifths" id="publis">
@@ -96,15 +96,15 @@
 
     {%if results|length > 0%}
       {%for d in results %}
-        
+
         {% include 'publication.html' with context %}
-        
+
       {%endfor%}
     {%else%}
       <div class="box">
         <em>Aucun résultat n'a été trouvé...</em>
       </div>
-    {%endif%} 
+    {%endif%}
   </div>
   <div class="column" style="padding: 0;"></div>
 </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top" lang="fr">
+<html class="has-navbar-fixed-top" lang="fr" data-theme="light">
 
 <head>
   {% include 'head.html' with context %}
@@ -90,7 +90,7 @@
   </div>
   {%endif%}
 
-  
+
   {% include 'filtres.html' with context %}
   {% if demandes == [] %}
   <div style="border: 3px solid {{session['couleur'][0]}};margin: 0% 3%;height:75%;text-align:center;padding-top:3%;padding-bottom:3%;">
@@ -108,20 +108,20 @@
 
   <h1 style="font-weight: bolder; font-size: x-large; text-align: center;">Vos demandes enregistrées :</h1>
 
-  
+
   <div id="contentPost" class="columns" style="margin-top: 10px; width:100%; margin: 0;">
     <div class="column" style="padding: 0;"></div>
     <div class="column is-three-fifths" id="publis">
       {%for d in demandes %}
-        
+
         {% include 'publication.html' with context %}
-        
+
       {%endfor%}
     </div>
     <div class="column" style="padding: 0;"></div>
   </div>
   {%endif%}
-  
+
 
 </body>
 
