@@ -1,11 +1,24 @@
 $(document).ready(function() {
-  if (document.documentElement.getAttribute("data-theme") == "dark"){
+  if (document.documentElement.getAttribute("data-theme") == "dark") {
     $(".sun").addClass("sun-logo");
     $(".moon").addClass("moon-logo");
   }
-  if (document.documentElement.getAttribute("data-theme") == "light"){
+  if (document.documentElement.getAttribute("data-theme") == "light") {
     $(".sun").addClass("animate-sun");
     $(".moon").addClass("animate-moon");
+  }
+  if (document.documentElement.getAttribute("data-theme") == "system") {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      $(".sun").addClass("sun-logo");
+      $(".moon").addClass("moon-logo");
+      $(".sun").removeClass("animate-sun");
+      $(".moon").removeClass("animate-moon");
+    } else {
+      $(".sun").removeClass("sun-logo");
+      $(".moon").removeClass("moon-logo");
+      $(".sun").addClass("animate-sun");
+      $(".moon").addClass("animate-moon");
+    }
   }
 });
 
@@ -14,42 +27,38 @@ function themefct() {
   document.querySelector(".moon").classList.toggle("animate-moon");
   document.querySelector(".sun").classList.toggle("sun-logo");
   document.querySelector(".moon").classList.toggle("moon-logo");
-  if (document.documentElement.getAttribute("data-theme") == "light"){
+  if (document.documentElement.getAttribute("data-theme") == "light") {
     localStorage.setItem('theme', 'dark');
     document.documentElement.setAttribute('data-theme', 'dark');
-  }
-  else{
+  } else {
     localStorage.setItem('theme', 'light');
     document.documentElement.setAttribute('data-theme', 'light');
   }
 }
 
 function themeSysteme() {
-  if(window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    localStorage.setItem('theme', 'dark');
-    document.documentElement.setAttribute('data-theme', 'dark');
+  localStorage.setItem('theme', 'system');
+  document.documentElement.setAttribute('data-theme', 'system');
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
     $(".sun").addClass("sun-logo");
     $(".moon").addClass("moon-logo");
     $(".sun").removeClass("animate-sun");
-     $(".moon").removeClass("animate-moon");
-  }
-  else {
-    localStorage.setItem('theme', 'light');
-    document.documentElement.setAttribute('data-theme', 'light');
+    $(".moon").removeClass("animate-moon");
+  } else {
     $(".sun").removeClass("sun-logo");
     $(".moon").removeClass("moon-logo");
     $(".sun").addClass("animate-sun");
-     $(".moon").addClass("animate-moon");
+    $(".moon").addClass("animate-moon");
   }
 }
 
-function input(type){
-  if($('#'+ type)!==undefined){
-    var contenu= $('#'+ type).html().trim(); // renvoie le texte contenu à l'intérieur du paragraphe
-    if (!contenu.includes('Non-renseigné')){
-      $('#content' + type).html('<input onfocus="this.select();" onclick="this.select();" class="input" name="'+type+'" id="input'+type+'" type="text" value="'+ contenu + '"/>'); // remplace le code HTML actuel par celui-ci
-    }else{
-      $('#content' + type).html('<input onfocus="this.select();" onclick="this.select();" class="input" name="'+type+'" id="input'+type+'" type="text" placeholder="Non-renseigné"/>'); // remplace le code HTML actuel par celui-ci
+function input(type) {
+  if ($('#' + type) !== undefined) {
+    var contenu = $('#' + type).html().trim(); // renvoie le texte contenu à l'intérieur du paragraphe
+    if (!contenu.includes('Non-renseigné')) {
+      $('#content' + type).html('<input onfocus="this.select();" onclick="this.select();" class="input" name="' + type + '" id="input' + type + '" type="text" value="' + contenu + '"/>'); // remplace le code HTML actuel par celui-ci
+    } else {
+      $('#content' + type).html('<input onfocus="this.select();" onclick="this.select();" class="input" name="' + type + '" id="input' + type + '" type="text" placeholder="Non-renseigné"/>'); // remplace le code HTML actuel par celui-ci
     }
   }
 }
@@ -62,14 +71,14 @@ function updateImgClose() {
   $("#replaceImg").removeClass("is-active");
 }
 
-function signalisationProfil(){
+function signalisationProfil() {
   selectionSign = document.getElementById("signProfil").className
   if (selectionSign == "far fa-flag") {
     signalisationProfilOpen();
 
 
   }
-  if (selectionSign == "fas fa-flag"){
+  if (selectionSign == "fas fa-flag") {
     designalisationProfilOpen();
   }
 }
