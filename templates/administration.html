@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="fr" data-theme="light">
 
 <head>
   {% include 'head.html' with context %}
@@ -106,9 +107,9 @@
   <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['_id']}}'>
     <div>
       {%set varApercuProfil = content['user']%}
-      <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
+      <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
         {{content['user']['prenom']}} {{content['user']['nom']}} {% include 'apercu2profil.html' with context %}</a> :
-        <br />
+      <br />
       <br />
       <a href="{{url_for('comments' ,idMsg=content['_id'])}}"><b>{{content['titre']|safe}}</b></a>
       <br />
@@ -136,20 +137,20 @@
     {%if element['sign']!=[]%}
     <div id="divRep_{{element['_id']}}">
       {{element['contenu']}}
-    <button onclick="validationRep('{{element['_id']}}','{{content['_id']}}')" class="button is-success is-outlined">
-      <span>Valider</span>
-      <span class="icon is-small">
-        <i class="fas fa-check"></i>
-      </span>
-    </button>
-    <button onclick="suppressionRep('{{element['_id']}}','{{content['_id']}}')" class="button is-danger is-outlined">
-      <span>Supprimer</span>
-      <span class="icon is-small">
-        <i class="fas fa-times"></i>
-      </span>
-    </button>
-  </div>
-      {%endif%}
+      <button onclick="validationRep('{{element['_id']}}','{{content['_id']}}')" class="button is-success is-outlined">
+        <span>Valider</span>
+        <span class="icon is-small">
+          <i class="fas fa-check"></i>
+        </span>
+      </button>
+      <button onclick="suppressionRep('{{element['_id']}}','{{content['_id']}}')" class="button is-danger is-outlined">
+        <span>Supprimer</span>
+        <span class="icon is-small">
+          <i class="fas fa-times"></i>
+        </span>
+      </button>
+    </div>
+    {%endif%}
     {%endfor%}
 
     <br />
@@ -173,7 +174,7 @@
   <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
     <div>
       {%set varApercuProfil = content%}
-      <a href="{{url_for('profil' ,idUser=content['_id'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
+      <a href="{{url_for('profil' ,idUser=content['_id'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
         {{content['nom']}} {% include 'apercu2profil.html' with context %}
       </a>
     </div>
@@ -227,3 +228,5 @@
     <button  type="submit">valider</button>
   </form>
 </div> -->
+
+</html>

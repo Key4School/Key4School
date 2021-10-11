@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr" data-theme="light">
 
 <head>
 {% include 'head.html' with context %}
@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  
+
   {% include 'bandeau2.html' %}
   <br /><br /><br />
   <div class="columns">
@@ -22,16 +22,16 @@
         <div class="box demande" style="border-radius: 20px; margin-bottom: 0.8rem;" data-subject="Tag matiere">
           <article class="media">
             <div class="media-left">
-              
+
               <figure class="image is-64x64">
                 <img alt="user" src="{%if 'nomImg' in user and user['nomImg'] != "" %}{{url_for('userImg', profilImg = user['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
               </figure>
             </div>
-            
+
             <div class="media-content">
               <div class="content">
                 <p style="margin-bottom: 5px;">
-                  
+
                 <div style="font-variant: small-caps;display:flex;">
 
                   <a>{{user['nom']}} {{user['prenom']}}</a>
@@ -40,7 +40,7 @@
                     <div class="select">
                       <select name="matiere" required>
                         {%if user['type'] == 'ELEVE'%}
-                        
+
                         {% if profilUtilisateur['classe'][0]=='2' or profilUtilisateur['classe'][0]=='1' %}
                         <option value="fr">Français</option>
                         {% endif %}
@@ -54,7 +54,7 @@
                         {% if profilUtilisateur['classe'][0]=='T' %}
                         <option value="philo">Philosophie</option>
                         {% endif %}
-                        
+
                         {% if 'lv1-ang' in profilUtilisateur['langues'] or 'lv1-ang-euro' in profilUtilisateur['langues'] or 'lv2-ang' in profilUtilisateur['langues'] or 'opt-lv3-ang' in profilUtilisateur['options'] %}
                         <option value="ang">Anglais</option>
                         {% endif %}
@@ -79,7 +79,7 @@
                         {% if 'lv1-ara' in profilUtilisateur['langues'] or 'lv2-ara' in profilUtilisateur['langues'] or 'opt-lv3-ara' in profilUtilisateur['options'] %}
                         <option value="ara">Arabe</option>
                         {% endif %}
-                        
+
                         {% if 'spe-art' in profilUtilisateur['spes'] %}
                         <option value="spe-art">Spé Arts</option>
                         {% endif %}
@@ -125,7 +125,7 @@
                         {% if 'spe-bio-eco' in profilUtilisateur['spes'] %}
                         <option value="spe-bio-eco">Spé Biologie-écologie</option>
                         {% endif %}
-                        
+
                         {% if 'opt-lca-latin' in profilUtilisateur['options'] %}
                         <option value="opt-lca-latin">Option LCA Latin</option>
                         {% endif %}
@@ -183,7 +183,7 @@
                         <option value="pc">Physiques-chimie</option>
                         <option value="ses">SES</option>
                         <option value="philo">Philosophie</option>
-                        
+
                         <option value="ang">Anglais</option>
                         <option value="esp">Espagnol</option>
                         <option value="all">Allemand</option>
@@ -192,7 +192,7 @@
                         <option value="ru">Russe</option>
                         <option value="por">Portugais</option>
                         <option value="ara">Arabe</option>
-                        
+
                         <option value="spe-art">Spé Arts</option>
                         <option value="spe-hggsp">Spé HGGSP</option>
                         <option value="spe-hlp">Spé HLP</option>
@@ -208,7 +208,7 @@
                         <option value="spe-llcer-all">Spé LLCER Allemand</option>
                         <option value="spe-llcer-it">Spé LLCER Italien</option>
                         <option value="spe-bio-eco">Spé Biologie-écologie</option>
-                        
+
                         <option value="opt-lca-latin">Option LCA Latin</option>
                         <option value="opt-lca-grec">Option LCA Grec</option>
                         <option value="opt-arts">Option Arts</option>
@@ -238,7 +238,7 @@
                 <div class="control has-icons-left selectMatiereTel">
                   <div class="select">
                     <select name="matiere" required>
-                      
+
                       {% if profilUtilisateur['classe'][0]=='2' or profilUtilisateur['classe'][0]=='1' %}
                       <option value="fr">Français</option>
                       {% endif %}
@@ -252,7 +252,7 @@
                       {% if profilUtilisateur['classe'][0]=='T' %}
                       <option value="philo">Philosophie</option>
                       {% endif %}
-                      
+
                       {% if 'lv1-ang' in profilUtilisateur['langues'] or 'lv1-ang-euro' in profilUtilisateur['langues'] or 'lv2-ang' in profilUtilisateur['langues'] or 'opt-lv3-ang' in profilUtilisateur['options'] %}
                       <option value="ang">Anglais</option>
                       {% endif %}
@@ -277,7 +277,7 @@
                       {% if 'lv1-ara' in profilUtilisateur['langues'] or 'lv2-ara' in profilUtilisateur['langues'] or 'opt-lv3-ara' in profilUtilisateur['options'] %}
                       <option value="ara">Arabe</option>
                       {% endif %}
-                      
+
                       {% if 'spe-art' in profilUtilisateur['spes'] %}
                       <option value="spe-art">Spé Arts</option>
                       {% endif %}
@@ -323,7 +323,7 @@
                       {% if 'spe-bio-eco' in profilUtilisateur['spes'] %}
                       <option value="spe-bio-eco">Spé Biologie-écologie</option>
                       {% endif %}
-                      
+
                       {% if 'opt-lca-latin' in profilUtilisateur['options'] %}
                       <option value="opt-lca-latin">Option LCA Latin</option>
                       {% endif %}
@@ -380,17 +380,17 @@
                   </span>
                   <br /><br />
                 </div>
-                
+
                 <h4 style="margin-top: 0;">
                   <input placeholder="Titre" type="text" class="input" name="titre" required />
                 </h4>
-                
+
                 <p style="word-wrap:break-word;">
                   <textarea placeholder="Ma Demande" class="textarea" placeholder="Tapez-ici" type="text" name="demande"></textarea>
                 </p>
                 </p>
               </div>
-              
+
               <div class="inputfileAndLikeOrdi" style="justify-content: space-between; width: 100%;">
                 <nav class="level is-mobile">
                   <div class="level-left">
