@@ -284,8 +284,9 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 
     def getUserSubjects(self):
         # A REFAIRE
-        return []
-        if self.type == "ELEVE":
+        if self.etapeInscription:
+            return []
+        if 'ELEVE' == "ELEVE":
             subjects = ['hg', 'emc', 'eps']
             # Tronc commun
             if self.classe[0] == '2' or self.classe[0] == '1':
@@ -315,6 +316,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
                 subjects.append('por')
             if 'lv1-ara' in self.langues or 'lv2-ara' in self.langues or 'opt-lv3-ara' in self.options:
                 subjects.append('ara')
+            # AJOUTER LES NOUVELLES LANGUES
             # Spés + options
             subjects += self.spes
             subjects += self.options
