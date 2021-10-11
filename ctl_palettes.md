@@ -49,3 +49,8 @@
 * Couleur 3 : ![#e68181](https://via.placeholder.com/15/e68181/000000?text=+) `#e68181`
 * Moyenne: ![#f3e7c0](https://via.placeholder.com/15/f3e7c0/000000?text=+) `#f3e7c0`
 * darktheme: ![#9f8f57](https://via.placeholder.com/15/6595d1/000000?text=+) `#9f8f57`
+
+**Palette 6 (violet)**
+* Couleur 1 : ![#7a08fa](https://via.placeholder.com/15/7a08fa/000000?text=+) `#7a08fa`
+* Couleur 2 : ![#a82ffc](https://via.placeholder.com/15/a82ffc/000000?text=+) `#a82ffc`
+* Couleur 3 : ![#d189ff](https://via.placeholder.com/15/e68181/000000?text=+) `#d189ff`

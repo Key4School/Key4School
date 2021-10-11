@@ -19,12 +19,110 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link rel="icon" href="/static/image/logo/favicon.png?v=2" id="favicon"/>
+  <link rel="icon" href="/static/image/logo/favicon.png?v=2" id="favicon" />
   <script src="/static/js/connexion.js"></script>
   <script src="/static/js/voir_mdp.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   </script>
+  <style>
+    @media screen and (min-width:1023px) {
+      .contact {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.5s ease-in-out;
+        /* left: 0;
+      top: 0; */
+      }
+
+      .contact.scroll {
+        position: fixed;
+        /* transition: all 0.5s ease-in-out; */
+        right: 2%;
+        bottom: 2%;
+      }
+    }
+
+    @media screen and (max-width:1023px) {
+      .contact {
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        right: 2%;
+        bottom: 2%;
+        transition: all 0.5s ease-in-out;
+      }
+    }
+
+    .lienReseau {
+      position: relative;
+      width: 45px;
+      height: 45px;
+      background: var(--page-background);
+      ;
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      margin: 0.75em;
+      border-radius: 15%;
+      transition: all .4s;
+    }
+
+    .lienReseau::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #c32aa3;
+      border-radius: 15%;
+      transform: scale(1.1);
+      z-index: -1;
+      transition: all .4s;
+    }
+
+    .lienReseau:nth-child(2)::before {
+      background: #0055b4;
+    }
+
+    .lienReseau:nth-child(3)::before {
+      background: #1da1f2;
+    }
+
+    .lienReseau:nth-child(4)::before {
+      background: #7289da;
+    }
+
+    .lienReseau:hover::before {
+      transform: translateY(7.5px) scaleX(0.45) scaleY(0.6);
+      filter: blur(7.5px);
+    }
+
+    .lienReseau:hover:nth-child(1) {
+      color: #c32aa3;
+      text-shadow: 0 0 22.5px #c32aa3;
+    }
+
+    .lienReseau:hover:nth-child(2) {
+      color: #0055b4;
+      text-shadow: 0 0 22.5px #0055b4;
+    }
+
+    .lienReseau:hover:nth-child(3) {
+      color: #1da1f2;
+      text-shadow: 0 0 22.5px #1da1f2;
+    }
+
+    .lienReseau:hover:nth-child(4) {
+      color: #7289da;
+      text-shadow: 0 0 22.5px #7289da;
+    }
+  </style>
 
 
 </head>
@@ -45,52 +143,58 @@
     </span>
   </nav>
   <div class="flex_connexion">
-  <img id="img_connexion" class="img_connexion" src="/static/image/connexion/everywhere.png" alt="apercu du site" />
-  <form class="form_connexion" action="./" method="post">
-  <p class="connexion_txt txt_centre">
-    Connexion
-  </p>
-  <div class="control has-icons-left has-icons-right">
-    <input class="color_input input" type="text" placeholder="Pseudo ou Email" name="username">
-    <span class="icon is-small is-left">
-      <i class="far fa-smile-wink"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
+    <img id="img_connexion" class="img_connexion" src="/static/image/connexion/Entraide.gif" alt="apercu du site" />
+    <form class="form_connexion" action="./" method="post">
+      <p class="connexion_txt txt_centre">
+        Connexion
+      </p>
+      <div class="control has-icons-left has-icons-right">
+        <input class="color_input input" type="text" placeholder="Pseudo ou Email" name="username">
+        <span class="icon is-small is-left">
+          <i class="far fa-smile-wink"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fas fa-check"></i>
+        </span>
+      </div>
+      <br />
+      <div class="content_mdp">
+        <div class="control has-icons-left has-icons-right" style="width: 100%;">
+          <input class="color_input input" type="password" id="mdp" placeholder="Mot de passe" name="password">
+          <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
+          <span class="icon is-small is-right">
+            <i class="fas fa-check"></i>
+          </span>
+        </div>
+        <div class="oeil" onclick="voir(1)">
+          <i id="oeilid" class="fas fa-eye oeil"></i>
+        </div>
+      </div>
+      <br>
+      <center>
+        <button type="submit" class="button">Connexion</button>
+      </center>
+      {%if erreur%}
+      <br>
+      <p class="erreurP">{{erreur}}</p>
+      {%endif%}
+    </form>
+    <br />
   </div>
-  <br />
-<div class="content_mdp">
-  <div class="control has-icons-left has-icons-right" style="width: 100%;">
-    <input class="color_input input" type="password" id="mdp" placeholder="Mot de passe" name="password">
-    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-    <span class="icon is-small is-right">
-      <i class="fas fa-check"></i>
-    </span>
-  </div>
-  <div class="oeil" onclick="voir(1)">
-    <i id="oeilid" class="fas fa-eye oeil"></i>
-  </div>
-</div>
-  <br>
-  <center>
-    <button type="submit" class="button">Connexion</button>
-  </center>
-  {%if erreur%}
-  <br>
-  <p class="erreurP">{{erreur}}</p>
-  {%endif%}
-</form>
-<br />
-</div>
 
-<br><br>
-<p class="txt_centre">
-  Vous n'avez pas de compte ? <a href="{{url_for('signIn0')}}">Inscrivez vous !</a>
-</p>
+  <br><br>
+  <p class="txt_centre">
+    Vous n'avez pas de compte ? <a href="{{url_for('signIn0')}}">Inscrivez vous !</a>
+  </p>
   <br>
+  <div class="contact scroll">
+    <a class="lienReseau" href="https://www.instagram.com/key4school/" target="_blank"><i style="font-size:1.5em;" class="fab fa-instagram"></i></a>
+    <a class="lienReseau" href="https://www.facebook.com/Key4School" target="_blank"><i style="font-size:1.5em;" class="fab fa-facebook-f"></i></a>
+    <a class="lienReseau" href="https://twitter.com/key4school/" target="_blank"><i style="font-size:1.5em;" class="fab fa-twitter"></i></a>
+    <a class="lienReseau" href="mailto:key4school@gmail.com" target="_blank"><i style="font-size:1.5em;" class="far fa-envelope"></i></a>
+  </div>
 </body>
 
 </html>
