@@ -4,7 +4,10 @@
 <head>
   {% include 'head.html' with context %}
   <title>Key4School - Profil</title>
-
+  <link rel ="stylesheet" href="/static/styles/jquery.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link rel ="stylesheet" href="http://jqueryui.com/ressources/demos/style.css" />
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -280,10 +283,31 @@
             <tr>
               <td>
                 <i class="fas fa-user-alt" style="font-size:25px;"></i>
-                &nbsp;&nbsp;Nom et Prenom
+                &nbsp;&nbsp;Nom
               </td>
               <td>
-                {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
+                <div id="contentnom" style="display: flex; flex-direction: row;">
+                  <input type="hidden" value="{{profilUtilisateur['nom']}}" name="nom" />
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputNom()" {%endif%} id="nom">{{profilUtilisateur['nom']}}
+                  </p>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputNom()" {%endif%}></i>
+                </div>
+
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i class="fas fa-user-alt" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Prenom
+              </td>
+              <td>
+                <div id="contentnom" style="display: flex; flex-direction: row;">
+                  <input type="hidden" value="{{profilUtilisateur['prenom']}}" name="nom" />
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPrenom()" {%endif%} id="prenom">{{profilUtilisateur['prenom']}}
+                  </p>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPrenom()" {%endif%}></i>
+                </div>
+
               </td>
             </tr>
 
@@ -295,9 +319,9 @@
               <td>
                 <div id="contentpseudo" style="display: flex; flex-direction: row;">
                   <input type="hidden" value="{{profilUtilisateur['pseudo']}}" name="pseudo" />
-                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPseudo()" {%endif%} id="pseudo">{{profilUtilisateur['pseudo']}}
                   </p>
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('pseudo')" {%endif%}></i>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPseudo()" {%endif%}></i>
                 </div>
               </td>
             </tr>
@@ -308,7 +332,13 @@
                 &nbsp;&nbsp;Lycée{%if profilUtilisateur['type'] == 'ELEVE'%}/Classe{%endif%}
               </td>
               <td>
-                {{profilUtilisateur['lycee']}}{%if profilUtilisateur['type'] == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
+                <div id="contentlycee" style="display: flex; flex-direction: row;">
+                  <input type="hidden" value="{{profilUtilisateur['lycee']}}" name="lycee" />
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%} id="lycee">{{profilUtilisateur['lycee']}}{%if profilUtilisateur['type'] == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
+                  </p>
+                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%}></i>
+                </div>
+
               </td>
             </tr>
 
