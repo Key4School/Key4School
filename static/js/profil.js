@@ -8,6 +8,7 @@ $(document).ready(function() {
     $(".moon").addClass("animate-moon");
   }
   if (document.documentElement.getAttribute("data-theme") == "system") {
+    $("#systemTheme").prop('checked', true);
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
       $(".sun").addClass("sun-logo");
       $(".moon").addClass("moon-logo");
@@ -22,23 +23,39 @@ $(document).ready(function() {
   }
 });
 
+function themeRequest(theme){
+  $.ajax({
+    url: '/theme/', // on donne l'URL du fichier de traitement
+    timeout: 5000,
+    type: "POST", // la requête est de type POST
+    data: {"theme": theme}, // et on envoie nos données
+    error: function(xhr, textStatus, errorThrown) {
+      location.reload();
+    }
+  });
+}
+
 function themefct() {
   document.querySelector(".sun").classList.toggle("animate-sun");
   document.querySelector(".moon").classList.toggle("animate-moon");
   document.querySelector(".sun").classList.toggle("sun-logo");
   document.querySelector(".moon").classList.toggle("moon-logo");
+  $("#systemTheme").prop('checked', false);
   if (document.documentElement.getAttribute("data-theme") == "light") {
     localStorage.setItem('theme', 'dark');
     document.documentElement.setAttribute('data-theme', 'dark');
+    themeRequest('dark');
   } else {
     localStorage.setItem('theme', 'light');
     document.documentElement.setAttribute('data-theme', 'light');
+    themeRequest('light');
   }
 }
 
 function themeSysteme() {
   localStorage.setItem('theme', 'system');
   document.documentElement.setAttribute('data-theme', 'system');
+  themeRequest('system');
   if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
     $(".sun").addClass("sun-logo");
     $(".moon").addClass("moon-logo");

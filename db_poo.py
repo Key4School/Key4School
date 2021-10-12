@@ -131,6 +131,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.imgProfile = params.get('imgProfile', '')
 
         self.couleur = params.get('couleur', ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'])
+        self.theme = params.get('theme', 'system')
 
         self.elementPublic = params.get('elementPublic', [])
         self.elementPrive = params.get('elementPrive', ['email', 'telephone', 'interets', 'birth_date', 'caractere'])
@@ -224,6 +225,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'matiere_autre-str': self.translate_matiere_spes_options_lv(self.matiere_autre),
             'matieres': self.getUserSubjects(),
             'couleur': self.couleur,
+            'theme': self.theme,
             'elementPublic': self.elementPublic,
             'elementPrive': self.elementPrive,
             'caractere': self.caractere,
@@ -264,6 +266,7 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'matiere': self.matiere, # pour les profs
             'matiere_autre': self.matiere_autre, # pour les profs
             'couleur': self.couleur,
+            'theme': self.theme,
             'elementPublic': self.elementPublic,
             'elementPrive': self.elementPrive,
             'caractere': self.caractere,

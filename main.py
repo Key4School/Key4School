@@ -32,7 +32,7 @@ from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved,
 from routing.recherche import recherche, recherche_user, morePost, moreUser
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, uploadImage, image, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg, modererGrp
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
-from routing.profil import profil, changeTheme, updateprofile, userImg, updateImg, otherSubject
+from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject
 from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, DL_file, likePost, likeRep, resoudre, savePost
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
 from routing.functions import listeModeration, automoderation, afficheNotif
@@ -60,6 +60,7 @@ app.add_url_rule('/modifRole/', 'modifRole', modifRole, methods=['POST'])
 app.add_url_rule('/supprGroupe/<idGrp>/', 'supprGroupe', supprGroupe, methods=['POST'])
 app.add_url_rule('/updateGrpName/<idGrp>/<newGrpName>/', 'updateGrpName', updateGrpName, methods=['POST'])
 app.add_url_rule('/changeTheme/', 'changeTheme', changeTheme, methods=['POST'])
+app.add_url_rule('/theme/', 'theme', theme, methods=['POST'])
 app.add_url_rule('/profil/', 'profil', profil, methods=['POST', 'GET'], defaults={'idUser': None})
 app.add_url_rule('/profil/<idUser>/', 'profil', profil, methods=['POST', 'GET'])
 app.add_url_rule('/updateprofile/', 'updateprofile', updateprofile, methods=['POST'])
@@ -133,6 +134,7 @@ def login():
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
+        session['theme'] = user['theme']
         session['type'] = 'ELEVE'
         session['cacheRandomKey'] = cacheRandomKey
 
@@ -223,6 +225,7 @@ def signIn2():
         session['id'] = str(user['_id'])
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
+        session['theme'] = user['theme']
         session['type'] = 'ELEVE'
         session['cacheRandomKey'] = cacheRandomKey
         return redirect(url_for('tuto'))

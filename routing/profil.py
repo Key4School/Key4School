@@ -68,6 +68,17 @@ def changeTheme():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+def theme():
+    if not 'id' in session:
+        return 'error'
+    
+    user = utilisateurs[session['id']]
+    user.theme = request.form['theme']
+    session['theme'] = user.theme
+
+    utilisateurs[session['id']].update()
+    return 'ok'
+
 def updateprofile():
     global utilisateurs
 

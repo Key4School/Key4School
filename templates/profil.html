@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="has-navbar-fixed-top" data-theme="system" lang="fr">
+<html class="has-navbar-fixed-top" data-theme="{{session['theme']}}" lang="fr">
 
 <head>
   {% include 'head.html' with context %}
@@ -829,12 +829,14 @@
         <div class="moon" onclick="themefct();">
           <i class="fas fa-moon"></i>
         </div>
-        <button class="button is-outlined is-small" onclick="themeSysteme();">
+        &nbsp;&nbsp;&nbsp;
+        <label class="checkbox">
+          <input type="checkbox" onchange="themeSysteme();" id="systemTheme">
           <span>Thème de l'appareil</span>
           <span class="icon is-small">
             <i class="fas fa-laptop"></i>
           </span>
-        </button>
+        </label>
 
       </div>
       <form action="{{url_for('changeTheme')}}" method="POST">
