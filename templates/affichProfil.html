@@ -196,7 +196,7 @@
             <td>
               <div id="contentspe">
                 <p id="spe">
-                  {{profilUtilisateur['type']}}
+                  {{'ELEVE'}}
                 </p>
               </div>
             </td>
@@ -205,13 +205,13 @@
           <tr>
             <td>
               <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
-              &nbsp;&nbsp;Lycée{%if profilUtilisateur['type'] == 'ELEVE'%}/Classe{%endif%}
+              &nbsp;&nbsp;Lycée{%if 'ELEVE' == 'ELEVE'%}/Classe{%endif%}
             </td>
             <td>
-              {{profilUtilisateur['lycee']}}{%if profilUtilisateur['type'] == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
+              {{profilUtilisateur['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
             </td>
           </tr>
-          {%if profilUtilisateur['type'] == 'ELEVE'%}
+          {%if 'ELEVE' == 'ELEVE'%}
 
           <tr>
             <td>
@@ -251,7 +251,7 @@
               </div>
             </td>
           </tr>
-          {%elif profilUtilisateur['type'] == 'ENSEIGNANT'%}
+          {%elif 'ELEVE' == 'ENSEIGNANT'%}
           <tr>
             <td>
               <i class="fas fa-book" style="font-size:25px;"></i>

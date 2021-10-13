@@ -39,7 +39,7 @@
                   <div style="margin-left: 40px;" class="control has-icons-left selectMatiereOrdi">
                     <div class="select">
                       <select name="matiere" required>
-                        {%if user['type'] == 'ELEVE'%}
+                        {%if 'ELEVE' == 'ELEVE'%}
 
                         {% if profilUtilisateur['classe'][0]=='2' or profilUtilisateur['classe'][0]=='1' %}
                         <option value="fr">Français</option>

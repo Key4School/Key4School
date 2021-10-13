@@ -16,8 +16,8 @@
           <a href="{{url_for('profil' ,idUser=varApercuProfil['_id'])}}">{{varApercuProfil['nom']}} {{varApercuProfil['prenom']}}</a>
         </div>
     <b>XP : </b>{{varApercuProfil['xp']}}<br />
-    <b>Lycée{%if varApercuProfil['type'] == 'ELEVE'%}/Classe{%endif%} : </b>{{varApercuProfil['lycee']}}{%if varApercuProfil['type'] == 'ELEVE'%}/{{varApercuProfil['classe']}}{%endif%}<br />
-    <i>{{varApercuProfil['type']}}</i>
+    <b>Lycée{%if 'ELEVE' == 'ELEVE'%}/Classe{%endif%} : </b>{{varApercuProfil['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{{varApercuProfil['classe']}}{%endif%}<br />
+    <i>{{'ELEVE'}}</i>
   </div>
 </div>
     <div style="flex-direction: column;align-items: flex-end;">

@@ -9,7 +9,7 @@
       <div class="filter" style="position: relative; height: 100%; margin-right: 20px;" data-subject="everything">
         <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Toutes</button>
       </div>
-      {% if user['type']=='ELEVE'%}
+      {% if 'ELEVE'=='ELEVE'%}
         
         {% if user['classe'][0]=='2' or user['classe'][0]=='1' %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="fr">

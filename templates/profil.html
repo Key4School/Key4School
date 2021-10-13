@@ -305,14 +305,14 @@
             <tr>
               <td>
                 <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
-                &nbsp;&nbsp;Lycée{%if profilUtilisateur['type'] == 'ELEVE'%}/Classe{%endif%}
+                &nbsp;&nbsp;Lycée{%if 'ELEVE' == 'ELEVE'%}/Classe{%endif%}
               </td>
               <td>
-                {{profilUtilisateur['lycee']}}{%if profilUtilisateur['type'] == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
+                {{profilUtilisateur['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
               </td>
             </tr>
 
-            {%if profilUtilisateur['type'] == 'ELEVE'%}
+            {%if 'ELEVE' == 'ELEVE'%}
             <tr>
               <td>
                 <i class="fas fa-globe" style="font-size:25px;"></i>
@@ -511,7 +511,7 @@
                 </div>
               </td>
             </tr>
-            {%elif profilUtilisateur['type'] == 'ENSEIGNANT'%}
+            {%elif 'ELEVE' == 'ENSEIGNANT'%}
             <tr>
               <td>
                 <i class="fas fa-book" style="font-size:25px;"></i>
@@ -992,13 +992,13 @@
     {%endfor%}
   </div>
   {%endif%}
-  {%if profilUtilisateur['type'] != 'ELEVE'%}
+  {%if 'ELEVE' != 'ELEVE'%}
   <div class="modal" id="subjects" style="overflow:auto;">
     <div class="modal-background"></div>
     <div class="modal-card" style="height: 89%;margin-top: 3%;overflow:auto;">
       <header class="modal-card-head">
         <p class="modal-card-title"><i class="fas fa-book-open" style="font-size:25px;"></i>
-        &nbsp;&nbsp;{%if profilUtilisateur['type'] == 'ENSEIGNANT'%}Autre(s) matière(s) enseignée(s){%else%}Votre(s) matière(s){%endif%}</p>
+        &nbsp;&nbsp;{%if 'ELEVE' == 'ENSEIGNANT'%}Autre(s) matière(s) enseignée(s){%else%}Votre(s) matière(s){%endif%}</p>
         <button onclick="divsubjectclose(); return false;" class="delete" aria-label="close"></button>
       </header>
       <form action="{{url_for('otherSubject')}}" method="POST" autocomplete="off">
