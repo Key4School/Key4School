@@ -134,9 +134,8 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.theme = params.get('theme', 'system')
 
         self.elementPublic = params.get('elementPublic', [])
-        self.elementPrive = params.get('elementPrive', ['email', 'telephone', 'interets', 'birth_date', 'caractere'])
+        self.elementPrive = params.get('elementPrive', ['email', 'telephone', 'interets', 'birth_date'])
 
-        self.caractere = params.get('caractere')
         self.interets = params.get('interets', '')
 
         self.notifs = params.get(
@@ -228,7 +227,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'theme': self.theme,
             'elementPublic': self.elementPublic,
             'elementPrive': self.elementPrive,
-            'caractere': self.caractere,
             'email': self.email,
             'interets': self.interets,
             'telephone': self.telephone,
@@ -269,7 +267,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
             'theme': self.theme,
             'elementPublic': self.elementPublic,
             'elementPrive': self.elementPrive,
-            'caractere': self.caractere,
             'email': self.email,
             'interets': self.interets,
             'telephone': self.telephone,
