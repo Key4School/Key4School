@@ -617,39 +617,7 @@
             </tr>
             {%endif%}
             {%for element in profilUtilisateur['elementPublic']%}
-            {%if element=="caractere"%}
-            <tr>
-              <td>
-                <i class="fas fa-user" style="font-size:25px;"></i>
-                &nbsp;&nbsp;Caractère
-              </td>
-              <td>
-                <div class="select">
-                  <select name="caractere">
-                    <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
-                    <option value="tr" {%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
-                    <option value="det" {%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
-                    <option value="fat" {%if profilUtilisateur['caractere']=="fat"%}selected{%endif%}>Fatigué.e</option>
-                    <option value="dro" {%if profilUtilisateur['caractere']=="dro"%}selected{%endif%}>Drôle</option>
-                    <option value="ti" {%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}>Timide</option>
-                    <option value="crea" {%if profilUtilisateur['caractere']=="crea"%}selected{%endif%}>Créatif.ve</option>
-                    <option value="ser" {%if profilUtilisateur['caractere']=="ser"%}selected{%endif%}>Sérieux.se</option>
-                    <option value="op" {%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
-                    <option value="pe" {%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
-                    <option value="ro" {%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
-                  </select>
-                </div>
-              </td>
-              <td>
-                <div class="select">
-                  <select name="caractereVisibilite">
-                    <option value="pv">privé</option>
-                    <option value="pb" selected>public</option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-            {%elif element=="birth_date" and profilUtilisateur['birth_date'] != None%}
+            {%if element=="birth_date" and profilUtilisateur['birth_date'] != None%}
             <tr>
               <td>
                 <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
@@ -705,39 +673,7 @@
         <table class="table is-narrow">
           <tbody>
             {%for element in profilUtilisateur['elementPrive']%}
-            {%if element=="caractere"%}
-            <tr>
-              <td>
-                <i class="fas fa-user" style="font-size:25px;"></i>
-                &nbsp;&nbsp;Caractère
-              </td>
-              <td>
-                <div class="select">
-                  <select name="caractere">
-                    <option value="joy" {%if profilUtilisateur['caractere']=="joy"%}selected{%endif%}>Joyeux.se</option>
-                    <option value="tr" {%if profilUtilisateur['caractere']=="tr"%}selected{%endif%}>Triste</option>
-                    <option value="det" {%if profilUtilisateur['caractere']=="det"%}selected{%endif%}>Déterminé.e</option>
-                    <option value="fat" {%if profilUtilisateur['caractere']=="fat"%}selected{%endif%}>Fatigué.e</option>
-                    <option value="dro" {%if profilUtilisateur['caractere']=="dro"%}selected{%endif%}>Drôle</option>
-                    <option value="ti" {%if profilUtilisateur['caractere']=="ti"%}selected{%endif%}>Timide</option>
-                    <option value="crea" {%if profilUtilisateur['caractere']=="crea"%}selected{%endif%}>Créatif.ve</option>
-                    <option value="ser" {%if profilUtilisateur['caractere']=="ser"%}selected{%endif%}>Sérieux.se</option>
-                    <option value="op" {%if profilUtilisateur['caractere']=="op"%}selected{%endif%}>Optimiste</option>
-                    <option value="pe" {%if profilUtilisateur['caractere']=="pe"%}selected{%endif%}>Pessimiste</option>
-                    <option value="ro" {%if profilUtilisateur['caractere']=="ro"%}selected{%endif%}>Romantique</option>
-                  </select>
-                </div>
-              </td>
-              <td>
-                <div class="select">
-                  <select name="caractereVisibilite">
-                    <option value="pv" selected>privé</option>
-                    <option value="pb">public</option>
-                  </select>
-                </div>
-              </td>
-            </tr>
-            {%elif element=="birth_date" and profilUtilisateur['birth_date'] != None%}
+            {%if element=="birth_date" and profilUtilisateur['birth_date'] != None%}
             <tr>
               <td>
                 <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
