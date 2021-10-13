@@ -92,6 +92,14 @@ function imageUploaded() {
   document.getElementById('inputImage').style.display = 'none';
   document.getElementById('uploadImageIcon').style.display = 'none';
   document.getElementById('resetImageIcon').style.display = 'inline-block';
+  document.getElementById('messages').style.display = 'none';
+  document.getElementById('divImgTmp').style.display = 'block';
+}
+
+function suppTmpMsg(){
+  document.getElementById("image").src = "";
+  document.getElementById('messages').style.display = 'flex'
+  document.getElementById('divImgTmp').style.display = 'none';
 }
 
 function resetImage() {
@@ -99,6 +107,7 @@ function resetImage() {
   document.getElementById('inputImage').style.display = 'block';
   document.getElementById('uploadImageIcon').style.display = 'inline-block';
   document.getElementById('resetImageIcon').style.display = 'none';
+  suppTmpMsg()
 }
 
 function sendImage() {
@@ -869,4 +878,16 @@ const goToMess = async (idMsg) => {
   }, 500);
 
   return;
+};
+
+document.getElementById("inputImage").onchange = function () {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        // get loaded data and render thumbnail.
+        document.getElementById("image").src = e.target.result;
+    };
+
+    // read the image file as a data URL.
+    reader.readAsDataURL(this.files[0]);
 };
