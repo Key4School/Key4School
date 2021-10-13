@@ -2,7 +2,7 @@
 <div class="moimsg" id="msg{{content['_id']}}">
   <div style="align-self: flex-end;">
   {%else%}
-  
+
   <div class="participantmsg" style="word-break: break-word;" id="msg{{content['_id']}}">
     <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
   {%endif%}
@@ -57,7 +57,15 @@
             <span>Répondre</span>
           </button>
           <input type="hidden" id="user{{content['_id']}}" value="{{content['utilisateur']['pseudo']}}" />
-          <input type="hidden" id="contenu{{content['_id']}}" value="{{content['contenu']}}" />
+          <input type="hidden" id="contenu{{content['_id']}}" value="
+          {%if 'audio' in content and content['audio'] == True %}
+          <i class='fas fa-volume-up'></i> Message Vocal
+          {%elif 'image' in content and content['image'] != '' %}
+          <i class='fas fa-image'></i> {{content['original-contenu']}}
+          {%else%}
+          {{content['original-contenu']}}
+          {%endif%}
+          " />
         </div>
         <div class="navbar-item">
         <button  class="button is-warning is-outlined is-small" onClick="signalisationMsg('{{content['_id']}}');">
@@ -90,7 +98,7 @@
   {%endif%}
     <p style="margin:0px;word-wrap:break-word;">
       {%if 'audio' in content and content['audio'] == true %}
-      
+
       <div id="audio-player-container{{content['_id']}}" style="display: flex; width: 100%; border: 1px solid #000; border-radius: 8px; padding: 5px; margin-top: 5px;">
         <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
         <button style="font-size:17px;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="BlackOrWhite fas fa-play"></i></button>
@@ -210,7 +218,7 @@
       {%else%}
         {{content['contenu']|safe}}
       {%endif%}
-      
+
     </p>
     <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
   </div>

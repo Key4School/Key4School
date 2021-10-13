@@ -224,6 +224,7 @@ $('#messages').scroll(() => {
 function reponseMsg(nb) {
   document.getElementById('divrepmsg').style.display = "flex";
   var contentMsg = document.getElementById('contenu' + nb).value;
+  console.log(contentMsg);
   var pseudo = document.getElementById('user' + nb).value;
   repmsg = document.getElementById('messageForm');
   document.getElementById('divrepmsg').style.backgroundColor = couleur_deux;

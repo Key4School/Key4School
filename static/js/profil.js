@@ -233,7 +233,7 @@ function verifSchool(asynch) {
   });
   return retour;
 }
-$form.on('submit', function() {
+$('#form').on('submit', function() {
   if (verifNom() && verifPrenom() && verifPseudo() && verifSchool(false)) {
     return true;
   } else {
