@@ -298,27 +298,7 @@
           {%endif%}
           {%endif%}
           {%for element in profilUtilisateur['elementPublic']%}
-          {%if element=="caractere"%}
-          <tr>
-            <td>
-              <i class="fas fa-user" style="font-size:25px;"></i>
-              &nbsp;&nbsp;Caractère
-            </td>
-            <td>
-              {%if profilUtilisateur['caractere']=="joy"%}Joyeux.se{%endif%}
-              {%if profilUtilisateur['caractere']=="tr"%}Triste{%endif%}
-              {%if profilUtilisateur['caractere']=="det"%}Déterminé.e{%endif%}
-              {%if profilUtilisateur['caractere']=="fat"%}Fatigué.e{%endif%}
-              {%if profilUtilisateur['caractere']=="dro"%}Drôle{%endif%}
-              {%if profilUtilisateur['caractere']=="ti"%}Timide{%endif%}
-              {%if profilUtilisateur['caractere']=="crea"%}Créatif.ve{%endif%}
-              {%if profilUtilisateur['caractere']=="ser"%}Sérieux.se{%endif%}
-              {%if profilUtilisateur['caractere']=="op"%}Optimiste{%endif%}
-              {%if profilUtilisateur['caractere']=="pe"%}Pessimiste{%endif%}
-              {%if profilUtilisateur['caractere']=="ro"%}Romantique{%endif%}
-            </td>
-          </tr>
-          {%elif element=="birth_date" and profilUtilisateur['birth_date'] != None%}
+          {%if element=="birth_date" and profilUtilisateur['birth_date'] != None%}
           <tr>
             <td>
               <i class="fas fa-birthday-cake" style="font-size:25px;"></i>

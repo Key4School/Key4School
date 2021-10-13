@@ -71,7 +71,7 @@ def changeTheme():
 def theme():
     if not 'id' in session:
         return 'error'
-    
+
     user = utilisateurs[session['id']]
     user.theme = request.form['theme']
     session['theme'] = user.theme
@@ -98,7 +98,6 @@ def updateprofile():
         user.email = automoderation(request.form['email'])
         user.telephone = automoderation(request.form['telephone'])
         user.interets = automoderation(request.form['interets'])
-        user.caractere = request.form['caractere']
         if user.type == 'ELEVE':
             user.langues = [request.form['lv1'], request.form['lv2']]
             user.options = [request.form['option1'], request.form['option2']]
