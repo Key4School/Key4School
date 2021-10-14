@@ -11,6 +11,29 @@
   </script>
 
   <style type="text/css">
+    #messages{
+      overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);
+      border: 3px solid {{session['couleur'][0]}};
+      padding-top:2%;
+      display: flex;
+      flex-direction:column;
+      align-items: flex-start;
+    }
+    #messages.dragover{
+      border: 3px dashed {{session['couleur'][0]}};
+    }
+    #divDansTitregroupe{
+      display: flex;
+      align-items:baseline;
+      justify-content:space-between;
+      border: 3px solid {{session['couleur'][0]}};
+      padding:10px;
+      height: 100px;
+      border-bottom: none;
+    }
+    #divDansTitregroupe.dragover{
+      border: 3px dashed {{session['couleur'][0]}};
+    }
     .moimsg {
       max-width: 75%;
       align-self: flex-end;
@@ -244,9 +267,9 @@
 
       {% if msgDb != None %}
 
-      <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative; width: 100%;">
+      <div id="titreetmsg" draggable="true" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative; width: 100%;">
 
-        <div style="display: flex; align-items:baseline;justify-content:space-between;border: 3px solid {{session['couleur'][0]}};padding:10px;height: 100px; border-bottom: none;">
+        <div id="divDansTitregroupe">
 
           <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
 
@@ -659,12 +682,12 @@
           <div id="divImgTmp" style="position:relative;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display:none;text-align:center;">
             <div style="position: relative; width: 30px; cursor: pointer;padding:1%">
               <div style="position: absolute; width: 30px; height: 30px; overflow: hidden; top: 50%; transform: translateY(-50%); cursor: pointer;">
-                <i id="resetImageIcon" class="fas fa-trash-alt" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; display: none;" onclick="resetImage();"></i>
+                <i id="resetImageIcon1" class="fas fa-trash-alt" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; display: none;" onclick="resetImage();"></i>
               </div>
             </div>
             <img style="height: auto;max-height:80%;max-width:80%;bottom: 0;right: calc(50% - 100px);" id="image" />
           </div>
-          <div id="messages" style="overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display: flex;flex-direction:column;align-items: flex-start;">
+          <div id="messages" draggable="true">
           {% for content in msgDb%}
             {% include "widget_message.html" %}
           {%endfor%}
@@ -684,7 +707,7 @@
           <div style="width: 100%; display:flex;align-items: baseline;">
             <form enctype="multipart/form-data" method="post" style="width: 100%; height:10%;display: flex;align-items: center;justify-content:center;margin-top:1%;" id="messageForm" onsubmit="envoi(event); return false;">
 
-              <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message..." autocomplete='off' name="contenuMessage" style="width: calc(100% - 70px);margin-right: 1%;padding:5px;" />
+              <input draggable="true" id='inputMsg' class="input" type="text" placeholder="Envoyer un message..." autocomplete='off' name="contenuMessage" style="width: calc(100% - 70px);margin-right: 1%;padding:5px;" />
               <input type='hidden' name="group" value="{{idgroupe}}" id="idGroupe" />
               <input type="hidden" name="idUser" id="idUser" value="{{sessionId}}" />
               <input type='hidden' id='reponse' name='reponse' value="None" />
@@ -692,7 +715,7 @@
               <div style="position: relative; width: 30px; cursor: pointer;">
                 <div style="position: absolute; width: 30px; height: 30px; overflow: hidden; top: 50%; transform: translateY(-50%); cursor: pointer;">
                   <i id="uploadImageIcon" class="fas fa-file-image" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer;"></i>
-                  <i id="resetImageIcon" class="fas fa-trash-alt" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; display: none;" onclick="resetImage();"></i>
+                  <i id="resetImageIcon2" class="fas fa-trash-alt" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; display: none;" onclick="resetImage();"></i>
                   <input class="boutonFichier" type='file' name="image" id="inputImage" accept="image/*" style="cursor:pointer;position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer;" onclick="imageUploaded();" />
                 </div>
               </div>

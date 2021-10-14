@@ -88,10 +88,56 @@ function envoi(e) {
   scroll();
 }
 
+// $('#messages').ondragover = $('#messages').ondragenter = function(evt) {
+//   evt.preventDefault();
+// };
+//
+// $('#messages').ondrop = function(evt) {
+//   // pretty simple -- but not for IE :(
+//   $('#inputImage').files = evt.dataTransfer.files;
+//
+//   // If you want to use some of the dropped files
+//   const dT = new DataTransfer();
+//   dT.items.add(evt.dataTransfer.files[0]);
+//   dT.items.add(evt.dataTransfer.files[3]);
+//   $('#inputImage').files = dT.files;
+//
+//   evt.preventDefault();
+// };
+
+
+var $dropzone = document.querySelector('#titreetmsg');
+
+$dropzone.ondragover = function (e) {
+  e.preventDefault();
+  $('#messages').addClass('dragover');
+  $('#divDansTitregroupe').addClass('dragover');
+};
+$dropzone.ondragleave = function (e) {
+    e.preventDefault();
+    $('#messages').removeClass('dragover');
+    $('#divDansTitregroupe').removeClass('dragover');
+    resetImage();
+};
+$dropzone.ondrop = function (e) {
+  e.preventDefault();
+  $('#messages').removeClass('dragover');
+  $('#divDansTitregroupe').removeClass('dragover');
+  document.getElementById('inputImage').files = e.dataTransfer.files;
+  var fichier = e.dataTransfer.files;
+  var reader = new FileReader();
+  reader.onload = function (event) {
+      $('#image').attr('src', event.target.result);
+  }
+  reader.readAsDataURL(fichier[0]);
+  imageUploaded();
+}
+
 function imageUploaded() {
   document.getElementById('inputImage').style.display = 'none';
   document.getElementById('uploadImageIcon').style.display = 'none';
-  document.getElementById('resetImageIcon').style.display = 'inline-block';
+  document.getElementById('resetImageIcon1').style.display = 'inline-block';
+  document.getElementById('resetImageIcon2').style.display = 'inline-block';
   document.getElementById('messages').style.display = 'none';
   document.getElementById('divImgTmp').style.display = 'block';
 }
@@ -106,7 +152,8 @@ function resetImage() {
   document.getElementById('inputImage').value = '';
   document.getElementById('inputImage').style.display = 'block';
   document.getElementById('uploadImageIcon').style.display = 'inline-block';
-  document.getElementById('resetImageIcon').style.display = 'none';
+  document.getElementById('resetImageIcon1').style.display = 'none';
+  document.getElementById('resetImageIcon2').style.display = 'none';
   suppTmpMsg()
 }
 
