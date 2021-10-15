@@ -1,75 +1,162 @@
 <!DOCTYPE html>
-  <html lang="fr" data-theme="{{session['theme']}}">
-      <head>
-        <meta charset="UTF-8">
-        <title>Key4School - Crédits</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
-        <link rel ="stylesheet" href="http://jqueryui.com/ressources/demos/style.css" />
-        <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="/static/css/mystyles.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
-        <link rel="icon" href="/static/image/logo/favicon.png?v=2" id="favicon" />
-        <script src="/static/js/inscription1.js"></script>
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer">
-        </script>
-      </head>
-      <body>
-        <nav class="titre">
-          <img src="/static/image/logo/favicon.png" style="height:30px;width:auto;" />
-          <span class="key4schoolNavbar_Connexion">
-            <p style="font-family: 'Roboto', sans-serif;">
-              Key
-            </p>
-            <p style="font-family: 'M PLUS Rounded 1c', sans-serif;">
-              4
-            </p>
-            <p style="font-family: 'Rochester', cursive;">
-              School
-            </p>
-          </span>
-        </nav>
-        <h1 style="margin-left:30%;margin-right:30%;"> Crédits de Key4School</h1>
-        <br /><br /><br />
-        <div class="contentcredit">
-          <div class="createur">
-          <p class="titrecredit">
-            <i class="fas fa-pen"></i>&nbsp;Créateurs
-          </p>
-          <div class="txtcreateur">
-            Baptiste Drouillet, <b>Bapt5</b>, <br />
-            Flavien Mathieu, <b>Mflavien01</b>, <br />
-            Thibault Chaudouard, <b>Tib500</b>.
-            </div>
-          </div>
-          <div class="contact">
-            <p class="titrecredit">
-              <i class="fas fa-phone-alt"></i>&nbsp;Nous contacter
-            </p>
-            <div class="txtcontact">
-              Mail professionel :<a class="emaillien" href="mailto:key4school@gmail.com">&nbsp; key4school@gmail.com</a>. <br>
-            </div>
-          </div>
-          <br />
-          <div class="RGPD">
-          <p class="titrecredit">
-            <i class="fas fa-database"></i>&nbsp;Utilisations des données
-          </p>
-          <div class="txtRGPD">
-            Toutes les données sont collectées à des fins <b>strictement légitimes</b>.
-            Nous ne collectons de données personnelles que celles que vous renseignez lors de votre inscription et que vous pouvez modifier à tous moments.
-            Celles-ci seront <b>supprimés</b> si vous souhaitez supprimer votre compte.
-            Nous n'utilisons des cookies que pour assurer <b>le bon fonctionnement du site</b> et afin de vous assurer <b>la meilleur expérience possible</b>.
-            De plus <b>vos mots de passe sont Hashés</b> pour vous assurer <b>une sécurité optimale</b> : personne n'y a accès.
-          </div>
-          </div>
+<html lang="fr" data-theme="{{session['theme']}}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Key4School - Crédits</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
+  <link rel="stylesheet" href="http://jqueryui.com/ressources/demos/style.css" />
+  <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/static/css/mystyles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rochester&display=swap" rel="stylesheet">
+  <link rel="icon" href="/static/image/logo/favicon.png?v=2" id="favicon" />
+  <script src="/static/js/inscription1.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  </script>
+  <style>
+    .contact {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.5s ease-in-out;
+      /* left: 0;
+    top: 0; */
+    }
+
+    .lienReseau {
+      position: relative;
+      width: 45px;
+      height: 45px;
+      background: var(--page-background);
+      ;
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      margin: 0.75em;
+      border-radius: 15%;
+      transition: all .4s;
+    }
+
+    .lienReseau::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #c32aa3;
+      border-radius: 15%;
+      transform: scale(1.1);
+      z-index: -1;
+      transition: all .4s;
+    }
+
+    .lienReseau:nth-child(2)::before {
+      background: #0055b4;
+    }
+
+    .lienReseau:nth-child(3)::before {
+      background: #1da1f2;
+    }
+
+    .lienReseau:nth-child(4)::before {
+      background: #7289da;
+    }
+
+    .lienReseau:hover::before {
+      transform: translateY(7.5px) scaleX(0.45) scaleY(0.6);
+      filter: blur(7.5px);
+    }
+
+    .lienReseau:hover:nth-child(1) {
+      color: #c32aa3;
+      text-shadow: 0 0 22.5px #c32aa3;
+    }
+
+    .lienReseau:hover:nth-child(2) {
+      color: #0055b4;
+      text-shadow: 0 0 22.5px #0055b4;
+    }
+
+    .lienReseau:hover:nth-child(3) {
+      color: #1da1f2;
+      text-shadow: 0 0 22.5px #1da1f2;
+    }
+
+    .lienReseau:hover:nth-child(4) {
+      color: #7289da;
+      text-shadow: 0 0 22.5px #7289da;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="{{url_for('accueil')}}">
+  <nav class="titre">
+
+    <img src="/static/image/logo/favicon.png" style="height:30px;width:auto;" />
+    <span class="key4schoolNavbar_Connexion">
+      <p style="font-family: 'Roboto', sans-serif;">
+        Key
+      </p>
+      <p style="font-family: 'M PLUS Rounded 1c', sans-serif;">
+        4
+      </p>
+      <p style="font-family: 'Rochester', cursive;">
+        School
+      </p>
+    </span>
+
+  </nav>
+  </a>
+  <br />
+  <div class="contentcredit">
+    <div class="bloc">
+      <p class="titrecredit">
+        <i class="iconeAbout fas fa-pen"></i>Créateurs
+      </p>
+      <div class="txtcreateur">
+        Baptiste Drouillet, <b>Bapt5</b>, <br />
+        Flavien Mathieu, <b>Mflavien01</b>, <br />
+        Thibault Chaudouard, <b>Tib500</b>.
+      </div>
+    </div>
+    <div class="bloc">
+      <p class="titrecredit">
+        <i class="iconeAbout fas fa-phone-alt"></i>Nous contacter
+      </p>
+      <div class="txtcontact">
+        <div class="contact scroll">
+          <a class="lienReseau" href="https://www.instagram.com/key4school/" target="_blank"><i style="font-size:1.5em;" class="fab fa-instagram"></i></a>
+          <a class="lienReseau" href="https://www.facebook.com/Key4School" target="_blank"><i style="font-size:1.5em;" class="fab fa-facebook-f"></i></a>
+          <a class="lienReseau" href="https://twitter.com/key4school/" target="_blank"><i style="font-size:1.5em;" class="fab fa-twitter"></i></a>
+          <a class="lienReseau" href="mailto:key4school@gmail.com" target="_blank"><i style="font-size:1.5em;" class="far fa-envelope"></i></a>
         </div>
-      </body>
-  </html>
+      </div>
+    </div>
+    <div class="bloc">
+      <p class="titrecredit">
+        <i class="iconeAbout fas fa-database"></i>Utilisations des données
+      </p>
+      <div class="txtRGPD">
+        Toutes les données sont collectées à des fins <b>strictement légitimes</b>.
+        Nous ne collectons de données personnelles que celles que vous renseignez lors de votre inscription et que vous pouvez modifier à tous moments.
+        Celles-ci seront <b>supprimés</b> si vous souhaitez supprimer votre compte.
+        Nous n'utilisons des cookies que pour assurer <b>le bon fonctionnement du site</b> et afin de vous assurer <b>la meilleur expérience possible</b>.
+        De plus <b>vos mots de passe sont Hashés</b> pour vous assurer <b>une sécurité optimale</b> : personne n'y a accès. Toute donnée (publications, messages, informations personnelles) supprimée par votre action sera également supprimée de nos bases de données.
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

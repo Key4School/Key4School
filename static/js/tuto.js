@@ -4,7 +4,7 @@ var imageMax = 8;
 var data = [
   {
     'texte': "Bienvenue sur <b>Key4School</b> ! Nous sommes ravis de votre arrivée ! Key4School est un réseau social développé par 12 lycéens d’Ile de France a destination des lycéens. L’objectif est d’y <b>trouver de l’aide et de s’entraider facilement</b> !",
-    'titre': "1. Présentation", 
+    'titre': "1. Présentation",
     'lien': "/"
   },
   {
@@ -23,7 +23,7 @@ var data = [
     'lien': "/saved/"
   },
   {
-    'texte': "Ils sont accessibles à partir du menu en haut à droite, vous pouvez <b>créer</b> des groupes avec le « + », <b>envoyer des messages, des vocaux et même des images</b> ! Vous retrouverez également de base un <b>groupe avec les gens de votre classe</b> afin d’échanger simplement. ",
+    'texte': "Ils sont accessibles à partir du menu en haut à droite, vous pouvez <b>créer</b> des groupes avec le « + », <b>envoyer des messages, des vocaux et même des images</b> !",
     'titre': "5. Messages privés",
     'lien': "/messages/"
   },

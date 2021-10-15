@@ -21,6 +21,7 @@
 
 [data-theme="dark"] {
   --page-background: #212121;
+  --block-background: #3c3c3c;
   --text-color: #ededed;
   --placeholder-color: #b1b1b1;
   --scrollbar-track: #00000000;
@@ -34,6 +35,7 @@
 
 [data-theme="light"] {
   --page-background: #ffffff;
+  --block-background: #cccccc;
   --text-color: black;
   --placeholder-color: #dbdbdb;
   --scrollbar-track: #f1f1f1;
@@ -48,6 +50,7 @@
 @media (prefers-color-scheme: dark) {
   [data-theme="system"] {
     --page-background: #212121;
+    --block-background: #3c3c3c;
     --text-color: #ededed;
     --placeholder-color: #b1b1b1;
     --scrollbar-track: #00000000;
@@ -63,6 +66,7 @@
 @media (prefers-color-scheme: light) {
   [data-theme="system"] {
     --page-background: #ffffff;
+    --block-background: #cccccc;
     --text-color: black;
     --placeholder-color: #dbdbdb;
     --scrollbar-track: #f1f1f1;
@@ -362,17 +366,30 @@ input[type=range]:focus::-ms-fill-upper {
 .oeil:hover {
   cursor: pointer;
 }
+.titrecredit{
+  text-decoration: underline;
+}
+.iconeAbout{
+  margin-right: 2%;
+}
 
 /* Pour telephone */
 @media screen and (max-width:1023px) {
-  .flex_connexion, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .flex_connexion, .contentcredit, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
 
   .img_connexion, .connexion_txt, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
-
+  .bloc{
+    background-color:var(--block-background);
+    border-radius: 10% 10% 10% 10%;
+    border:1px solid black;
+    padding:5%;
+    width: 90%;
+    margin: auto auto 4%;
+  }
   .selectProfil {
     max-width: 50%;
   }
@@ -475,7 +492,7 @@ input[type=range]:focus::-ms-fill-upper {
     display: none;
   }
 
-  .formOrdi, .boutonPubliOrdi, .inputfileAndLikeOrdi, .ordiFlexTelBlock, .key4schoolNavbar {
+  .formOrdi, .boutonPubliOrdi, .contentcredit, .inputfileAndLikeOrdi, .ordiFlexTelBlock, .key4schoolNavbar {
     display: flex;
   }
 
@@ -533,7 +550,20 @@ input[type=range]:focus::-ms-fill-upper {
     justify-content: center;
     margin: auto;
   }
-
+  .contentcredit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: auto;
+  }
+  .bloc{
+    background-color:var(--block-background);
+    border-radius: 10% 10% 10% 10%;
+    border:1px solid black;
+    padding:2%;
+    margin:2%;
+    width: 30%;
+  }
   .form_connexion {
     padding-top: 5%;
     width: 40%;
