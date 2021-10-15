@@ -361,54 +361,66 @@
                         </p>
                       </div>
                     </div>
-                    <div style="flex-direction: column;align-items: flex-end;">
-                      <div class="navbar-item">
-                        {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] and sessionId != users['_id'] %}
-                          <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">
-                            <span class="icon is-small">
-                              <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                            </span>
-                            <span>
-                              Virer
-                            </span>
-                          </button>
-                        {%if users['_id'] in infogroupe['moderateurs']%}
-                        <button class="button is-warning is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
-                          <span class="icon is-small">
-                            <i class="fas fa-crown" aria-hidden="true"></i>
-                          </span>
-                          <span id="ModifRoleUser{{users['_id']}}">
-                            Admin
-                          </span>
-                        </button>
-                        {%else%}
-                        <button class="button is-info is-outlined" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
-                          <span class="icon is-small">
-                            <i class="fas fa-users" aria-hidden="true"></i>
-                          </span>
-                          <span id="ModifRoleUser{{users['_id']}}">
-                            Participant
-                          </span>
-                        </button>
-                        {%endif%}
-                        {%else%}
-                          {%if users['_id'] in infogroupe['moderateurs']%}
-                            <button class="button is-warning is-outlined" disabled>
+                    <div class="navbar-item has-dropdown is-hoverable">
+                      <a class="navbar-link">
+                      </a>
+                      <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;">
+                        <div class="navbar-item">
+                          {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] and sessionId != users['_id'] %}
+                            <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">
                               <span class="icon is-small">
-                                <i class="fas fa-crown" aria-hidden="true"></i>
+                                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                               </span>
                               <span>
-                                Admin
+                                Virer
                               </span>
                             </button>
+                          </div>
+                          <div class="navbar-item">
+                          {%if users['_id'] in infogroupe['moderateurs']%}
+                          <button class="button is-warning is-outlined is-small" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
+                            <span class="icon is-small">
+                              <i class="fas fa-crown" aria-hidden="true"></i>
+                            </span>
+                            <span id="ModifRoleUser{{users['_id']}}">
+                              Admin
+                            </span>
+                          </button>
+                          {%else%}
+                          <button class="button is-info is-outlined is-small" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
+                            <span class="icon is-small">
+                              <i class="fas fa-users" aria-hidden="true"></i>
+                            </span>
+                            <span id="ModifRoleUser{{users['_id']}}">
+                              Participant
+                            </span>
+                          </button>
                           {%endif%}
-                        {%endif%}
+                          {%else%}
+                            {%if users['_id'] in infogroupe['moderateurs']%}
+                              <button class="button is-warning is-outlined is-small" disabled>
+                                <span class="icon is-small">
+                                  <i class="fas fa-crown" aria-hidden="true"></i>
+                                </span>
+                                <span>
+                                  Admin
+                                </span>
+                              </button>
+                            {%endif%}
+                          {%endif%}
+                        </div>
                       </div>
                     </div>
-                  </article>
-                </div>
-                {%endfor%}<br /><br />
-                <div style="display:flex;">
+                </article>
+              </div>
+              {%endfor%}<br /><br />
+              <div class="navbar-item has-dropdown is-hoverable">
+                  <a style="font-size:1.125rem;padding: .5rem .75rem;">
+                  Plus d'option...
+                </a>
+                  <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;background-color:var(--page-background);">
+
+                  <div class="navbar-item">
                   <button class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
                     <span class="icon is-small">
                       {% if sessionId in infogroupe['sign'] %}
@@ -419,50 +431,60 @@
                     </span>
                     <span>Signaler</span>
                   </button>&emsp;
+                </div>
+
                   {%if user['admin']%}
+                  <div class="navbar-item">
                   <button class="button is-danger is-outlined is-small" onClick="supprDiscOpen();">
                     <span class="icon is-small">
                       <i id="sign" class="fas fa-times" aria-hidden="true"></i>
                     </span>
                     <span>Supprimer les messages</span>
                   </button>&emsp;
+                </div>
                   {%if infogroupe['sign'] != []%}
+                  <div class="navbar-item">
                   <button class="button is-success is-outlined is-small" onClick="valDiscOpen();">
                     <span class="icon is-small">
                       <i id="sign" class="fas fa-check" aria-hidden="true"></i>
                     </span>
                     <span>Valider</span>
                   </button>
-                  {%endif%}
-                  {%endif%}
                 </div>
-                <br />
-                <div style="display:flex;">
+                  {%endif%}
+                  {%endif%}
+
                   {%if not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                  <div class="navbar-item">
                     <button class="button is-danger is-outlined is-small" type="submit" onclick="quitterGroupeOpen();">
                       <span class="icon is-small">
                         <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
                       </span>
                       <span>Quitter le groupe</span>
                     </button>&emsp;
+                  </div>
                   {%endif%}
                   {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                    <div class="navbar-item">
                     <button class="button is-danger is-outlined is-small" type="submit" onclick="supprimerGroupeOpen();">
                       <span class="icon is-small">
                         <i id="sign" class="fas fa-sign-out-alt" aria-hidden="true"></i>
                       </span>
                       <span>Supprimer le groupe</span>
                     </button>
+                  </div>
                   {%endif%}
                 </div>
-                <br /><br />
+              </div>
                 {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                <div class="navbar-item">
                 <button class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">
                   <span class="icon is-small">
                     <i class="fas fa-plus" aria-hidden="true"></i>
                   </span>
                   <span>Ajouter des participants</span>
-                </button><br />
+                </button>
+              </div>
                 <div id="ajouterParticipant" style="display:none;">
                   <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
                     <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}" />

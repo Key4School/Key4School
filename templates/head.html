@@ -1,11 +1,10 @@
 
 <meta charset="UTF-8">
-<meta name="author" content="Flavien Mathieu - Baptiste Drouillet - Thibault Chaudouard"
+<meta name="author" content="Flavien Mathieu - Baptiste Drouillet - Thibault Chaudouard" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="{{session['couleur'][0]}}">
 
 <link rel="stylesheet" type="text/css" href="/static/styles/style.css?v={{session['cacheRandomKey']}}">
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
 <link rel="stylesheet" href="/static/css/mystyles.css?v={{session['cacheRandomKey']}}">
@@ -31,6 +30,7 @@
 [data-theme="dark"] {
   --shadow-box:0 0.5em 0.5em -0.125em {{session['couleur'][0]}}, 0 0 0 1px #03a9f400;
   --text-color: #ededed;
+  --page-background: #212121;
   --bandeau-color:#1e1e1e;
   --color-items-bandeau:{{session['couleur'][0]}};
   --logo:url("{{url_for('static',filename='image/logo/favicon.png')}}");
@@ -47,6 +47,7 @@
     --varlogosearch:black;
     --NetBinverse:white;
     --barreSearch:white;
+    --page-background: #ffffff;
     --background-hover:#f5f5f5;
     --background-hover:#f5f5f5;
     --message-color:{{session['couleur'][1]}};
@@ -58,6 +59,7 @@
     [data-theme="{{session['theme']}}"] {
       --shadow-box:0 0.5em 0.5em -0.125em {{session['couleur'][0]}}, 0 0 0 1px #03a9f400;
       --text-color: #ededed;
+      --page-background: #212121;
       --bandeau-color:#1e1e1e;
       --color-items-bandeau:{{session['couleur'][0]}};
       --logo:url("{{url_for('static',filename='image/logo/favicon.png')}}");
@@ -75,6 +77,7 @@
       --shadow-box:0 .5em 1em -.125em rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .02);
       --text-color: #4a4a4a;
       --varlogosearch:black;
+      --page-background: #ffffff;
       --NetBinverse:white;
       --barreSearch:white;
       --background-hover:#f5f5f5;
