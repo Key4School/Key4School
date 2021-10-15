@@ -133,28 +133,12 @@
   <br />
   <br />
 
-    <div style="display: flex;align-items: center;justify-content:space-evenly;">
-        <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
-      <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
-
-          <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <p>
-            NIV:
-            {{niv}}
-            XP :
-            {{xp}}
-          </p>
-    </div>
-  </div>
-  <br /><br /><br />
-  <div align="center" style="margin:0% 2%;">
-
-    <div>
-
-
+  <div style="align-items: center;text-align: center;width:20%;margin:auto;">
+    <p style="font-size:1.5rem;">
+    </p>
       {%if profilUtilisateur['admin']== true%}
-      <div style="flex-direction: column;align-items: flex-end;">
+      <div style="flex-direction: column;align-items: flex-end;font-size:1.5rem;">
+        {{profilUtilisateur['pseudo']}}&nbsp;&nbsp;&nbsp;&nbsp;
           <span class="icon is-small ">
             <i class="fas fa-crown" aria-hidden="true" style="color:	hsl(48, 100%, 67%)"></i>
           </span>
@@ -162,7 +146,30 @@
              &nbsp; Admin
           </span>
       </div>
+      {%else%}
+      <p style="font-size:1.5rem;">
+        {{profilUtilisateur['pseudo']}}
+      </p>
       {%endif%}
+    <div style="position:relative;">
+      <img alt="user" onclick="updateImgOpen();"
+        src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        style="position: relative;margin-top:5%;width:100px; height:100px;object-fit: cover;border-radius:50%; cursor: pointer;" />
+      <i class="fas fa-pen" style="font-size: 1.5rem; position: absolute; bottom: 30px; right: 30px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
+    </div>
+    <div style="display:flex;align-items: center;justify-content:space-between">
+      <p style="font-size:1.125rem;">NIV {{niv}}</p>
+      <p style="font-size:1.125rem;">{{xp}} / ???</p>
+    </div>
+      <progress class="progress is-info" value={{xplvl}} max="100" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
+<br />
+  </div>
+  <div align="center" style="margin:0% 2%;">
+
+    <div>
+
+
+
       <br />
       <table class="table is-narrow">
         <tbody>

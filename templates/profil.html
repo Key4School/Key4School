@@ -248,27 +248,24 @@
   <br />
   <br />
 
-  <div style="display:flex;align-items: center;justify-content:space-evenly;">
-    <div style="position: relative;">
+  <div style="align-items: center;text-align: center;width:20%;margin:auto;">
+    <p style="font-size:1.5rem;">
+      {{profilUtilisateur['pseudo']}}
+    </p>
+    <div style="position:relative;">
       <img alt="user" onclick="updateImgOpen();"
         src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-        style="position: relative; width:64px; height:64px;object-fit: cover;border-radius:50%; cursor: pointer;" />
-      <i class="fas fa-pen" style="font-size: 24px; position: absolute; bottom: 5px; right: -5px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
+        style="position: relative;margin-top:5%;width:100px; height:100px;object-fit: cover;border-radius:50%; cursor: pointer;" />
+      <i class="fas fa-pen" style="font-size: 1.5rem; position: absolute; bottom: 30px; right: 30px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
     </div>
-    <div class="ordiFlexTelBlock" style="align-items:flex-start;justify-content:center;">
-
-      <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
+    <div style="display:flex;align-items: center;justify-content:space-between">
+      <p style="font-size:1.125rem;">NIV {{niv}}</p>
+      <p style="font-size:1.125rem;">{{xp}} / ???</p>
+    </div>
+      <progress class="progress is-info" value={{xplvl}} max="100" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
-      <p>
-        NIV:
-        {{niv}}
-        XP :
-        {{xp}}
-      </p>
-    </div>
+
   </div>
-  <br />
-  <br />
   <br />
   <div class="ordiFlexTelBlock" style="align-items: center;justify-content:space-evenly;margin:0% 2%;">
 
