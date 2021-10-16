@@ -155,7 +155,7 @@
 
 <body style="overflow:auto;">
 
-  {% include 'bandeau2.html' %}
+  {% include 'bandeau.html' %}
 
   <div style=" position: fixed; margin-top: 55px; width: 100%;">
     <div style="display: flex;height:95%;margin-top:15px;">
@@ -273,7 +273,7 @@
 
           <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
 
-            <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages/" id="backButton" style="margin-right: 12px; color: #000;"><i class="fas fa-chevron-circle-left"></i></a>
+            <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages/" id="backButton" style="margin-right: 12px; color: var(--text-color);"><i class="fas fa-chevron-circle-left"></i></a>
             <span class="grpName">
               {% if not infogroupe['is_DM'] %}
                 {{infogroupe['nom']}}
@@ -316,7 +316,7 @@
                 {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                 <div style="display: flex;">
                   <input class="input is-info" type="text" id="newGrpName" placeholder="Renommer le groupe..." value="{{infogroupe['nom']}}" onsubmit="console.log('test');" onkeydown="if(event.key === 'Enter') updateGroupName();" />
-                  <i class="fas fa-pen" style="font-size: 28px; position: relative; margin-top: 5px; margin-left: 15px;" onclick="updateGroupName();"></i>
+                  <i class="fas fa-pen" style="font-size:1.125rem; position: relative; margin-top: 5px; margin-left: 15px;" onclick="updateGroupName();"></i>
                 </div>
                 {%else%}
                   <h3 style="font-weight: bolder; font-size: 20px;">
@@ -333,9 +333,9 @@
                 {%endif%}
                 <hr />
                 {% if infogroupe['is_mod'] %}
-                  <button id="infoGrpModeration" class="button is-primary is-light" {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe auto-modéré</button>
+                  <button id="infoGrpModeration" class="button is-outlined is-info " {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe auto-modéré</button>
                 {% else %}
-                  <button id="infoGrpModeration" class="button is-primary is-light" {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe non auto-modéré</button>
+                  <button id="infoGrpModeration" class="button is-info" {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe non auto-modéré</button>
                 {% endif %}
                 <br /><br />
                 Informations utilisateurs : <br />
@@ -414,11 +414,12 @@
                 </article>
               </div>
               {%endfor%}<br /><br />
+              <div style="display:flex;align-items:center;justify-content:space-between;">
               <div class="navbar-item has-dropdown is-hoverable">
                   <a style="font-size:1.125rem;padding: .5rem .75rem;">
                   Plus d'option...
                 </a>
-                  <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;background-color:var(--page-background);">
+                  <div class="navbar-dropdown is-boxed is-left" style="align-items: flex-end;background-color:var(--page-background);">
 
                   <div class="navbar-item">
                   <button class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
@@ -477,19 +478,24 @@
                 </div>
               </div>
                 {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
-                <div class="navbar-item">
-                <button class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipant">
+                <button class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipantOpen">
                   <span class="icon is-small">
                     <i class="fas fa-plus" aria-hidden="true"></i>
                   </span>
                   <span>Ajouter des participants</span>
+                </button>
+                <button style="display:none;" class="button is-danger is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipantClose">
+                  <span class="icon is-small">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                  </span>
+                  <span>Fermer l'ajout de participant</span>
                 </button>
               </div>
                 <div id="ajouterParticipant" style="display:none;">
                   <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
                     <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}" />
                     <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
-                    <button class="button is-success is-outlined is-small" type="submit" style="margin-top:1%;width: 25%;height: 40px;">
+                    <button class="button is-success is-outlined is-small" type="submit" style="margin-top:1%;height: 40px;">
                       <span class="icon is-small">
                         <i class="fas fa-check" aria-hidden="true"></i>
                       </span>

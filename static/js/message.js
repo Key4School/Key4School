@@ -805,10 +805,13 @@ function modifRole(id, idGrp){
 function ajouterParticipantVoir(){
   if (document.getElementById("ajouterParticipant").style.display== "none"){
     document.getElementById("ajouterParticipant").style.display= "block";
-    document.getElementById("buttonAjouterParticipant").innerHTML = "fermer l'ajout de participant";
+    document.getElementById("buttonAjouterParticipantOpen").style.display= "none";
+    document.getElementById("buttonAjouterParticipantClose").style.display= "block";
   }else{
     document.getElementById("ajouterParticipant").style.display= "none";
-    document.getElementById("buttonAjouterParticipant").innerHTML = "ajouter un participant";
+    document.getElementById("buttonAjouterParticipantOpen").style.display= "block"
+    document.getElementById("buttonAjouterParticipantClose").style.display= "none";
+
   }
 }
 
