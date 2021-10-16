@@ -484,6 +484,9 @@ input[type=range]:focus::-ms-fill-upper {
   .indiq_verif.add {
     padding-top: 5%;
   }
+  .container_profile{
+    width: 90%;
+  }
 }
 
 /* Pour ordinateur */
@@ -616,5 +619,8 @@ input[type=range]:focus::-ms-fill-upper {
 
   .indiq_verif.add {
     padding-top: 2%;
+  }
+  .container_profile{
+    width: 20%;
   }
 }
