@@ -262,7 +262,7 @@
   <div class="columns" style="margin-left:2%;">
     <div class="column">
       {% for r in d['réponses associées'] %}
-        <div class="box" id="divRep_{{r['_id']}}">
+        <div class="box" id="divRep_{{r['id']}}">
           <article class="media">
 
             <div class="media-content">
@@ -270,10 +270,10 @@
                 <p style="margin-bottom: 5px;">
 
                   {%set varApercuProfil = r['user']%}
-                  <strong><a href="{{url_for('profil' ,idUser=r['user']['_id'])}}"onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{r['user']['nom']}} {{r['user']['prenom']}}{% include 'apercu2profil.html' with context %}</a></strong><br /> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
+                  <strong><a href="{{url_for('profil' ,idUser=r['user']['id'])}}"onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');">{{r['user']['nom']}} {{r['user']['prenom']}}{% include 'apercu2profil.html' with context %}</a></strong><br /> <small><em>@{{r['user']['pseudo']}}</em></small> <small>{{r['temps']}}</small>
                 </p>
 
-                <p><div id="contenuComment{{r['idRep']}}">{{r['contenu']|safe}}</div></p>
+                <p><div id="contenuComment{{r['idRep']}}">{{r['contenuLink']|safe}}</div></p>
               </div>
 
               <nav class="level is-mobile">
@@ -281,9 +281,9 @@
                   <a class="level-item" aria-label="like" onClick="like_rep('{{d['idMsg']}}', '{{r['idRep']}}')">
                     <span class="icon is-small">
                       {% if r['a_like'] %}
-                        <i id="like_{{r['idRep']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb-likes']}}</i>
+                        <i id="like_{{r['idRep']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb_likes']}}</i>
                       {% else %}
-                        <i id="like_{{r['idRep']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb-likes']}}</i>
+                        <i id="like_{{r['idRep']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb_likes']}}</i>
                       {% endif %}
                     </span>
                   </a>
@@ -304,7 +304,7 @@
                   </button>
                   <input type="hidden" />
                 </div>
-                {% if r['id-utilisateur'] == user['_id'] %}
+                {% if r['id-utilisateur'] == user['id'] %}
                   <div class="navbar-item">
                     <button class="button is-link is-outlined is-small" onClick="CommentModificationOpen('{{r['idRep']}}', '{{d['idMsg']}}')">
                       <span class="icon is-small">

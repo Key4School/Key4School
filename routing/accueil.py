@@ -6,22 +6,23 @@ from db_poo import *
 from routing.functions import listeModeration, automoderation
 from math import exp
 
+@db_session
 def accueil():
-    global utilisateurs
     global demandes_aide
 
     if 'id' in session:
-        user = utilisateurs[session['id']].toDict()
+        user = User.get(filter="cls.id == session['id']", limit=1)
         # subjects = getUserSubjects(user)
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-        demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu and not d.id_utilisateur == ObjectId(session['id'])],
-                    key = lambda d: exp(2 * len(d['likes'])) / exp(len(d['réponses associées'])), reverse=True)[:10]
+        demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu and not d.id_utilisateur == session['id']],
+                    key = lambda d: exp(2 * d['nb_likes']) / exp(d['nb_comment']), reverse=True)[:10]
 
         return render_template("index.html", demandes=demandes, user=user)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def accueil2():
     if 'id' in session:
         return redirect(url_for('accueil'))
@@ -29,19 +30,20 @@ def accueil2():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def tuto():
     if 'id' in session:
-        return render_template('tuto.html', user=utilisateurs[session['id']].toDict())
+        return render_template('tuto.html', user=User.get(filter="cls.id == session['id']", limit=1))
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def XP_tuto():
     if 'id' in session:
-        user = utilisateurs[session['id']]
-        niv, xplvl, xpgens = user.recupLevel()
+        user = User.get(filter="cls.id == session['id']", limit=1)
 
-        return render_template('XP_tuto.html', user=user.toDict(), niv=niv, xplvl=xplvl, xpgens=xpgens)
+        return render_template('XP_tuto.html', user=user)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
@@ -50,15 +52,15 @@ def mail_rendu():
     return render_template('mail_final.html')
 
 
+@db_session
 def saved():
-    global utilisateurs
     global demandes_aide
 
     if 'id' in session:
-        user = utilisateurs[session['id']].toDict()
+        user = User.get(filter="cls.id == session['id']", limit=1)
         # subjects = getUserSubjects(user)
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-        demandes = sorted([d.toDict() for d in demandes_aide.values() if d._id in user['savedDemands']], key = lambda d: ( len(d['réponses associées']) + len(d['likes']) ), reverse=True)
+        demandes = sorted([d.toDict() for d in demandes_aide.values() if d.id in user['savedDemands']], key = lambda d: (d['nb_comment']) + d['nb_likes']), reverse=True)
 
         return render_template("saved.html", demandes=demandes, user=user)
     else:

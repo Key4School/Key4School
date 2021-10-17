@@ -1,7 +1,12 @@
 from datetime import *
-from bson.objectid import ObjectId
 from flask import session, escape, render_template
-from flask_pymongo import PyMongo, ObjectId
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from contextlib import contextmanager
+from functools import wraps
 import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -9,85 +14,79 @@ from email.mime.text import MIMEText
 from threading import Thread
 from matieresDict import translations, translateProf
 from datetime import *
+import inspect
 
-utilisateurs = {}
-demandes_aide = {}
-messages = {}
-groupes = {}
-notifications = {}
-DB = None
+Base = declarative_base()
 
+# gestionnaire de session
+@contextmanager
+def session_scope():
+    session = dbSession()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
-class DB_Manager:
-    def __init__(self, app, cluster_url):
-        self.cluster = PyMongo(app, cluster_url, tls=True, tlsAllowInvalidCertificates=True)
-        self.db_utilisateurs = self.cluster.db.utilisateurs
-        self.db_demande_aide = self.cluster.db.demande_aide
-        self.db_messages = self.cluster.db.messages
-        self.db_groupes = self.cluster.db.groupes
-        self.db_files = self.cluster.db.fs.files
-        self.db_chunks = self.cluster.db.fs.chunks
-        self.db_notif = self.cluster.db.notifications
+# decorateur -> creer session et la ferme a la fin
+def db_session(func):
+    @wraps(func) # permet de garder le nom de la fonction pour Flask
+    def return_func(*param, **param2):
+        with session_scope() as s:
+            func.__globals__.update({'s': s})
+            return_value = func(*param, **param2)
+        return return_value
 
-    @staticmethod
-    def createCluster(app, cluster_url):
-        global DB
-        global utilisateurs
-        global demandes_aide
-        global messages
-        global groupes
-        global notifications
+    return return_func
 
-        # create DB
-        DB = DB_Manager(app, cluster_url)
+def get_context(func):
+    @wraps(func)
+    def return_func(*param, **param2):
+        func.__globals__.update(inspect.currentframe().f_back.f_locals | inspect.currentframe().f_back.f_globals)
+        return_value = func(*param, **param2)
+        return return_value
 
-        # save DB
-
-        all_utilisateurs = DB.db_utilisateurs.find()
-        for u in all_utilisateurs:
-            utilisateurs[str(u['_id'])] = Utilisateur(u)
-
-        all_demandes_aide = DB.db_demande_aide.find()
-        for d in all_demandes_aide:
-            demandes_aide[str(d['_id'])] = Demande(d)
-
-        all_groupes = DB.db_groupes.find()
-        for g in all_groupes:
-            groupes[str(g['_id'])] = Groupe(g)
-
-        all_messages = DB.db_messages.find()
-        for m in all_messages:
-            messages[str(m['_id'])] = Message(m)
-
-        all_notifications = DB.db_notif.find()
-        for n in all_notifications:
-            notifications[str(n['_id'])] = Notification(n)
-
-        # return DB
-        return DB
-
-    def update(self, db_table, data):
-        db_table.update_one(
-            {'_id': data['_id']},
-            {'$set': data}
-        )
-
-    def insert(self, db_table, data):
-        db_table.insert_one(data)
-
-    def delete(self, db_table, _id):
-        db_table.delete_one({'_id': _id})
+    return return_func
 
 
 class Actions:
+    @get_context
     def insert(self):
-        DB.insert(self.db_table, self.toDB())
+        s.add(self)
+        s.commit()
 
+    @classmethod
+    @get_context
+    def get(cls, filter=None, limit=None, order_by=None, desc=False):
+        query = s.query(cls)
+        if filter:
+            query = query.filter(eval(filter))
+        if query.count() == 0:
+            return None
+        if limit == 1:
+            query = query.one()
+        elif limit:
+            query = query.limit(limit)
+        else:
+            query = query.all()
+        if order_by:
+            if desc:
+                query = query.order_by(eval(order_by).desc())
+            else:
+                query = query.order_by(eval(order_by))
+        return query
+
+    @get_context
     def update(self):
-        DB.update(self.db_table, self.toDB())
+        s.commit()
 
+    @get_context
     def delete(self):
-        DB.delete(self.db_table, self._id)
+        self.delete()
+        s.commit()
 
 
 class Translate_matiere_spes_options_lv:
@@ -104,14 +103,64 @@ class Translate_matiere_spes_options_lv:
         return translated
 
 
-class Utilisateur(Translate_matiere_spes_options_lv, Actions):
-    def __init__(self, params: dict):
-        self._id = params['_id']
+class User(Translate_matiere_spes_options_lv, Actions, Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    nom = Column(String)
+    prenom = Column(String)
+    pseudo = Column(String)
+    email = Column(String)
+    mdp = Column(String)
+    type = Column(String)
+    dateInscription = Column(DateTime)
+    etapeInscription = Column(Integer)
+
+    birth_date = Column(DateTime)
+    classe = Column(String)
+    telephone = Column(String)
+    lycee = Column(String)
+    lyceeId = Column(String)
+    langues = Column(JSONB)
+
+    options = Column(JSONB)
+    spes = Column(JSONB)
+    matiere = Column(String)
+    matiere_autre = Column(JSONB)
+
+    nomImg = Column(String)
+    imgProfile = Column(String)
+
+    couleur = Column(JSONB)
+    theme = Column(String)
+
+    elementPublic = Column(JSONB)
+    elementPrive = Column(JSONB)
+
+    interets = Column(String)
+
+    notifs = Column(JSONB)
+
+    sign = Column(JSONB)
+    Sanctions = Column(JSONB)
+    SanctionEnCour = Column(String)
+    SanctionDuree = Column(String)
+
+    xp = Column(Integer)
+    xpModeration = Column(Integer)
+    motif = Column(JSONB)
+
+    admin = Column(Boolean)
+
+    savedDemands = Column(JSONB)
+
+    def __init__(self, **params):
         self.nom = params['nom']
         self.prenom = params['prenom']
         self.pseudo = params['pseudo']
         self.email = params['email']
         self.mdp = params['mdp']
+        self.type = 'ELEVE'
         self.dateInscription = params.get('dateInscription', datetime.now())
         self.etapeInscription = params.get('etapeInscription', 1)
 
@@ -154,8 +203,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
 
         self.savedDemands = params.get('savedDemands', [])
 
-        self.db_table = DB.db_utilisateurs
-
     def signIn1(self, phone, birthday, school, classe, langues):
         self.telephone = phone
         self.birth_date = birthday
@@ -174,12 +221,6 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.etapeInscription = None
         self.update()
 
-    def recupLevel(self):
-        niv = int(0.473*self.xp**0.615)
-        xplvl = int((0.473*self.xp**0.615-niv)*100)
-
-        return niv, xplvl, self.xp
-
     def addXP(self, amount: int) -> None:
         """
             +10 pour une demande d’aide
@@ -197,92 +238,16 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
         self.update()
         return
 
-    def toDict(self):
-        return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
-            'nom': self.nom,
-            'prenom': self.prenom,
-            'pseudo': self.pseudo,
-            'mdp': self.mdp,
-            'nomImg': self.nomImg,
-            'imgProfile': self.imgProfile,
-            'dateInscription': self.dateInscription,
-            'etapeInscription': self.etapeInscription,
-            'birth_date': self.birth_date,
-            'classe': self.classe,
-            'lycee': self.lycee,
-            'lyceeId': self.lyceeId,
-            'spes': self.spes,
-            'spes-str': self.translate_matiere_spes_options_lv(self.spes),
-            'langues': self.langues,
-            'langues-str': self.translate_matiere_spes_options_lv(self.langues),
-            'options': self.options,
-            'options-str': self.translate_matiere_spes_options_lv(self.options),
-            'matiere': self.matiere, # pour les profs
-            'matiere-str': self.translate_matiere_spes_options_lv(self.matiere),
-            'matiere_autre': self.matiere_autre, # pour les profs
-            'matiere_autre-str': self.translate_matiere_spes_options_lv(self.matiere_autre),
-            'matieres': self.getUserSubjects(),
-            'couleur': self.couleur,
-            'theme': self.theme,
-            'elementPublic': self.elementPublic,
-            'elementPrive': self.elementPrive,
-            'email': self.email,
-            'interets': self.interets,
-            'telephone': self.telephone,
-            'notifs': self.notifs,
-            'sign': self.sign,
-            'Sanctions': self.Sanctions,
-            'SanctionEnCour': self.SanctionEnCour,
-            'SanctionDuree': self.SanctionDuree,
-            'xp': self.xp,
-            'xpModeration': self.xpModeration,
-            'motif': self.motif,
-            'admin': self.admin,
-            'a_sign': self.aSign(),
-            'savedDemands': self.savedDemands
-        }
+    @property
+    def niv(self):
+        return int(0.473*self.xp**0.615)
 
-    def toDB(self) -> dict:
-        return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
-            'nom': self.nom,
-            'prenom': self.prenom,
-            'pseudo': self.pseudo,
-            'mdp': self.mdp,
-            'nomImg': self.nomImg,
-            'imgProfile': self.imgProfile,
-            'dateInscription': self.dateInscription,
-            'etapeInscription': self.etapeInscription,
-            'birth_date': self.birth_date,
-            'classe': self.classe,
-            'lycee': self.lycee,
-            'lyceeId': self.lyceeId,
-            'spes': self.spes,
-            'langues': self.langues,
-            'options': self.options,
-            'matiere': self.matiere, # pour les profs
-            'matiere_autre': self.matiere_autre, # pour les profs
-            'couleur': self.couleur,
-            'theme': self.theme,
-            'elementPublic': self.elementPublic,
-            'elementPrive': self.elementPrive,
-            'email': self.email,
-            'interets': self.interets,
-            'telephone': self.telephone,
-            'notifs': self.notifs,
-            'sign': self.sign,
-            'Sanction': self.Sanctions,
-            'SanctionEnCour': self.SanctionEnCour,
-            'SanctionDuree': self.SanctionDuree,
-            'xp': self.xp,
-            'xpModeration': self.xpModeration,
-            'motif': self.motif,
-            'admin': self.admin,
-            'savedDemands': self.savedDemands
-        }
+    @property
+    def xplvl(self):
+        return int((0.473*self.xp**0.615-niv)*100)
 
-    def getUserSubjects(self):
+    @property
+    def matieres(self):
         # A REFAIRE
         if self.etapeInscription:
             return []
@@ -343,40 +308,68 @@ class Utilisateur(Translate_matiere_spes_options_lv, Actions):
                 subjects += [key for key, value in translations.items() if not 'lv'in key]
         return subjects
 
-    def aSign(self):
+    @property
+    def a_sign(self):
         if ObjectId(session.get('id')) in self.sign:
             return True
         else:
             return False
 
-    def __str__(self):
-        return str(self.toDict())
+    def __setitem__(self, key, value):
+          setattr(self, key, value)
+
+    def __getitem__(self, key):
+        methods = {
+            'spes-str': (self.translate_matiere_spes_options_lv, self.spes),
+            'langues-str': (self.translate_matiere_spes_options_lv, self.langues),
+            'options-str':(self.translate_matiere_spes_options_lv, self.options),
+            'matiere-str': (self.translate_matiere_spes_options_lv, self.matiere),
+            'matiere_autre-str': (self.translate_matiere_spes_options_lv, self.matiere_autre)
+        }
+        if key in methods:
+            return methods[key][0](methods[key][1])
+        else:
+            return getattr(self, key)
+
+    def __repr__(self):
+        return f'<User id={self.id}, pseudo={self.pseudo}>'
 
 
-class Demande(Translate_matiere_spes_options_lv, Actions):
-    def __init__(self, params: dict):
-        self._id = params['_id']
+class Request(Translate_matiere_spes_options_lv, Actions, Base):
+    __tablename__ = 'help_requests'
+
+    id = Column(Integer, primary_key=True)
+    id_utilisateur = Column(Integer)
+    titre = Column(String)
+    contenu = Column(String)
+    date_envoi = Column(DateTime)
+    matiere = Column(String)
+    reponses_associees = Column(JSONB)
+    likes = Column(JSONB)
+    sign = Column(JSONB)
+    motif = Column(JSONB)
+    resolu = Column(Boolean)
+    fileType = Column(String)
+
+    def __init__(self, **params):
         self.id_utilisateur = params['id-utilisateur']
         self.titre = params['titre']
         self.contenu = params['contenu']
-        self.date_envoi = params['date-envoi']
+        self.date_envoi = params.get('date_envoi', datetime.now())
         self.matiere = params['matière']
-        self.reponses_associees = {}
-        for (idRep, rep) in params['réponses associées'].items():
-            self.reponses_associees[idRep] = Reponse(rep)
-        self.likes = params['likes']
+        self.reponses_associees = params.get('reponses_associees', [])
+        self.likes = params.get('likes', [])
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
-        self.resolu = params['resolu']
-        self.fileType = params['fileType']
-
-        self.db_table = DB.db_demande_aide
+        self.resolu = params.get('resolu', False)
+        self.fileType = params.get('fileType', 'none')
 
     def diffTemps(self):
         diff_temps = int((datetime.now() - self.date_envoi).total_seconds())
         return diff_temps
 
-    def convertTime(self):
+    @property
+    def temps(self):
         tempsStr = ''
         diffTemps = self.diffTemps()
         # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
@@ -399,27 +392,31 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 
         return tempsStr
 
+    @property
     def aLike(self):
         if session['id'] in self.likes:
             return True
         else:
             return False
 
+    @property
     def aSign(self):
-        if ObjectId(session['id']) in self.sign:
+        if session['id'] in self.sign:
             return True
         else:
             return False
 
+    @property
     def aSave(self):
-        user = utilisateurs[session['id']]
+        user = User.get(filter="cls.id == session['id']", limit=1)
 
-        if self._id in user.savedDemands:
+        if self.id in user.savedDemands:
             return True
         else:
             return False
 
-    def convert_links(self) -> str:
+    @property
+    def contenuLink(self) -> str:
         safe = escape(self.contenu)
         contenu = ''
         for w in safe.split():
@@ -430,65 +427,61 @@ class Demande(Translate_matiere_spes_options_lv, Actions):
 
         return contenu
 
-    def toDict(self) -> dict:
-        return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
-            'idMsg': self._id,
-            'idAuteur': self.id_utilisateur,
-            'titre': self.titre,
-            'contenu': self.convert_links(),
-            'date-envoi': self.date_envoi,
-            'temps': self.convertTime(),
-            'tag-matière': self.matiere,
-            'matière': self.translate_matiere_spes_options_lv([self.matiere]),
-            'likes': self.likes,
-            'nb-likes': len(self.likes),
-            'réponses associées': sorted([r.toDict() for r in self.reponses_associees.values()], key=lambda r: r['nb-likes'], reverse=True),
-            'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
-            'reponsesDict2': {idRep: rep for (idRep, rep) in self.reponses_associees.items()},
-            'reponsesObjects': self.reponses_associees,
-            'a_like': self.aLike(),
-            'a_sign': self.aSign(),
-            'a_save': self.aSave(),
-            'sign': self.sign,
-            'motif': self.motif,
-            'resolu': self.resolu,
-            'fileType': self.fileType,
-            # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-            'user': utilisateurs.get(str(self.id_utilisateur)).toDict()
+    @property
+    def nb_likes(self):
+        return len(self.likes)
+
+    @property
+    def nb_comment(self):
+        return len(reponses_associees)
+
+    @property
+    def user(self):
+        return User.get(filter="cls.id == self.id_utilisateur", limit=1)
+
+    # def toDict(self) -> dict:
+    #     return {  # on ajoute à la liste ce qui nous interesse
+    #         'réponses associées': sorted([r.toDict() for r in self.reponses_associees.values()], key=lambda r: r['nb_likes'], reverse=True),
+    #         'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
+    #         'reponsesDict2': {idRep: rep for (idRep, rep) in self.reponses_associees.items()}
+    #     }
+
+    def __setitem__(self, key, value):
+          setattr(self, key, value)
+
+    def __getitem__(self, key):
+        methods = {
+            'matière': (self.translate_matiere_spes_options_lv, [self.matiere])
         }
+        if key in methods:
+            return methods[key][0](methods[key][1])
+        else:
+            return getattr(self, key)
 
-    def toDB(self) -> dict:
-        return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
-            'id-utilisateur': self.id_utilisateur,
-            'titre': self.titre,
-            'contenu': self.contenu,
-            'date-envoi': self.date_envoi,
-            'matière': self.matiere,
-            'réponses associées': {idRep: rep.toDB() for (idRep, rep) in self.reponses_associees.items()},
-            'likes': self.likes,
-            'sign': self.sign,
-            'motif': self.motif,
-            'resolu': self.resolu,
-            'fileType': self.fileType
-        }
-
-    def __str__(self):
-        return str(self.toDict())
+    def __repr__(self):
+        return f'<User id={self.id}, pseudo={self.titre}>'
 
 
-class Reponse(Demande):
-    def __init__(self, params: dict):
-        self._id = params['_id']
+class Response(Request, Actions, Base):
+    __tablename__ = 'help_reponse'
+
+    id = Column(Integer, primary_key=True)
+    id_utilisateur = Column(Integer)
+    contenu = Column(String)
+    date_envoi = Column(DateTime)
+    likes = Column(JSONB)
+    sign = Column(JSONB)
+    motif = Column(JSONB)
+
+    def __init__(self, **params):
         self.id_utilisateur = params['id-utilisateur']
         self.contenu = params['contenu']
-        self.date_envoi = params['date-envoi']
-        self.likes = params['likes']
+        self.date_envoi = params.get('date_envoi', datetime.now())
+        self.likes = params.get('likes', [])
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
 
-    def convert_links(self) -> str:
+    def contenuLink(self) -> str:
         safe = escape(self.contenu)
         contenu = ''
         for w in safe.split():
@@ -499,47 +492,23 @@ class Reponse(Demande):
 
         return contenu
 
-    def toDict(self) -> dict:
-        return {
-            '_id': self._id,
-            'idRep': self._id,
-            'id-utilisateur': self.id_utilisateur,
-            'original-contenu': self.contenu,
-            'contenu': self.convert_links(),
-            'date-envoi': self.date_envoi,
-            'likes': self.likes,
-            'nb-likes': len(self.likes),
-            'a_like': self.aLike(),
-            'a_sign': self.aSign(),
-            'temps': self.convertTime(),
-            'sign': self.sign,
-            'motif': self.motif,
-            # on récupère en plus l'utilisateur pour prochainement afficher son nom/prenom/pseudo
-            'user': utilisateurs.get(str(self.id_utilisateur)).toDict()
-        }
+    def __setitem__(self, key, value):
+          setattr(self, key, value)
 
-    def toDB(self) -> dict:
-        return {
-            '_id': self._id,
-            'id-utilisateur': self.id_utilisateur,
-            'contenu': self.contenu,
-            'date-envoi': self.date_envoi,
-            'likes': self.likes,
-            'sign': self.sign,
-            'motif': self.motif
-        }
+    def __getitem__(self, key):
+        return getattr(self, key)
 
-    def __str__(self):
-        return str(self.toDict())
+    def __repr__(self):
+        return f'<User id={self.id}, pseudo={self.titre}>'
 
 
 class Message(Actions):
     def __init__(self, params: dict):
-        self._id = params['_id']
+        self.id = params['id']
         self.id_groupe = params['id-groupe']
         self.id_utilisateur = params['id-utilisateur']
         self.contenu = params['contenu']
-        self.date_envoi = params['date-envoi']
+        self.date_envoi = params['date_envoi']
         self.reponse = params['reponse']
         self.audio = params.get('audio', False)
         self.image = params.get('image', '')
@@ -551,14 +520,14 @@ class Message(Actions):
     def suppr(self) -> None:
         if self.audio == 'True':
             MyAudio = DB.db_files.find_one({'filename': self.contenu})
-            DB.db_files.delete_one({'_id': MyAudio['_id']})
-            DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
+            DB.db_files.delete_one({'id': MyAudio['id']})
+            DB.db_chunks.delete_many({'filesid': MyAudio['id']})
         if self.image != '':
             MyAudio = DB.db_files.find_one({'filename': self.image})
-            DB.db_files.delete_one({'_id': MyAudio['_id']})
-            DB.db_chunks.delete_many({'files_id': MyAudio['_id']})
+            DB.db_files.delete_one({'id': MyAudio['id']})
+            DB.db_chunks.delete_many({'filesid': MyAudio['id']})
         self.delete()
-        messages.pop(str(self._id))
+        messages.pop(str(self.id))
         return
 
     def convert_links(self) -> str:
@@ -574,13 +543,13 @@ class Message(Actions):
 
     def toDictLast(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
+            'id': self.id,
             'id-groupe': self.id_groupe,
             'id-utilisateur': self.id_utilisateur,
-            'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
+            'utilisateur': User.get(filter="cls.id == self.id_utilisateur", limit=1),
             'contenu': self.convert_links(),
             'original-contenu': self.contenu,
-            'date-envoi': self.date_envoi,
+            'date_envoi': self.date_envoi,
             'audio': self.audio,
             'image': self.image
         }
@@ -591,14 +560,14 @@ class Message(Actions):
         else:
             rep = None
         return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
+            'id': self.id,
             'id-groupe': self.id_groupe,
             'groupe': groupes[str(self.id_groupe)].toDict(),
             'id-utilisateur': self.id_utilisateur,
-            'utilisateur': utilisateurs[str(self.id_utilisateur)].toDict(),
+            'utilisateur': User.get(filter="cls.id == self.id_utilisateur", limit=1),
             'contenu': self.convert_links(),
             'original-contenu': self.contenu,
-            'date-envoi': self.date_envoi,
+            'date_envoi': self.date_envoi,
             'reponse': self.reponse,
             'rep': rep,
             'audio': self.audio,
@@ -609,11 +578,11 @@ class Message(Actions):
 
     def toDB(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
+            'id': self.id,
             'id-groupe': self.id_groupe,
             'id-utilisateur': self.id_utilisateur,
             'contenu': self.contenu,
-            'date-envoi': self.date_envoi,
+            'date_envoi': self.date_envoi,
             'reponse': self.reponse,
             'audio': self.audio,
             'image': self.image,
@@ -627,7 +596,7 @@ class Message(Actions):
 
 class Groupe(Actions):
     def __init__(self, params: dict):
-        self._id = params['_id']
+        self.id = params['id']
         self.nom = params['nom']
         self.is_class = params.get('is_class', False)
         self.is_DM = params.get('is_DM', False)
@@ -640,12 +609,12 @@ class Groupe(Actions):
         self.db_table = DB.db_groupes
 
     def supprGroupe(self):
-        grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == self._id]
+        grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == self.id]
         for m in grpMsg:
-            messages[str(m['_id'])].suppr()
+            messages[str(m['id'])].suppr()
 
         self.delete()
-        groupes.pop(str(self._id))
+        groupes.pop(str(self.id))
         return
 
     def supprUser(self, uid):
@@ -660,43 +629,43 @@ class Groupe(Actions):
         self.update()
 
     def getAllMessages(self):
-        return sorted([message.toDict() for id, message in messages.copy().items() if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
+        return sorted([message.toDict() for id, message in messages.copy().items() if self.id == message.id_groupe], key=lambda message: message['date_envoi'])
 
     def getAllMessagesSign(self):
-        return sorted([message.toDict() for id, message in messages.copy().items() if self._id == message.id_groupe and message.sign != []], key=lambda message: message['date-envoi'])
+        return sorted([message.toDict() for id, message in messages.copy().items() if self.id == message.id_groupe and message.sign != []], key=lambda message: message['date_envoi'])
 
     def getLastMessage(self):
         l = sorted([message.toDictLast() for id, message in messages.copy().items()
-        if self._id == message.id_groupe], key=lambda message: message['date-envoi'])
+        if self.id == message.id_groupe], key=lambda message: message['date_envoi'])
         return l[-1] if len(l) > 0 else None
 
     def getNbNotif(self, uid):
         if uid != None:
-            return len([notif for notif in notifications.values() if notif.type == 'msg' and notif.id_groupe == self._id and uid in notif.destinataires])
+            return len([notif for notif in notifications.values() if notif.type == 'msg' and notif.id_groupe == self.id and uid in notif.destinataires])
         else:
             return None
 
     def toDict(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
+            'id': self.id,
             'nom': self.nom,
             'is_class': self.is_class,
             'is_DM': self.is_DM,
             'is_mod': self.is_mod,
             'id-utilisateurs': self.id_utilisateurs,
-            'utilisateurs': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.id_utilisateurs],
+            'utilisateurs': User.get(filter="cls.id.comparator.contains_by(self.id_utilisateurs)"),
             'nbUtilisateurs': len(self.id_utilisateurs),
             'lastMsg': self.getLastMessage(),
-            'nbNotif': self.getNbNotif(ObjectId(session['id']) if session != None and 'id' in session else None),
+            'nbNotif': self.getNbNotif(session['id'] if session != None and 'id' in session else None),
             'moderateurs': self.moderateurs,
-            'modos': [user.toDict() for id, user in utilisateurs.items() if ObjectId(id) in self.moderateurs],
+            'modos': User.get(filter="cls.id.comparator.contains_by(self.moderateurs)"),
             'sign': self.sign,
             'motif': self.motif
         }
 
     def toDB(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
+            'id': self.id,
             'nom': self.nom,
             'is_class': self.is_class,
             'is_DM': self.is_DM,
@@ -714,7 +683,7 @@ clientsNotif = {}
 
 class Notification(Actions):
     def __init__(self, params: dict):
-        self._id = params['_id']
+        self.id = params['id']
         self.type = params['type']
         self.id_groupe = params['id_groupe']
         self.id_msg = params['id_msg']
@@ -724,19 +693,19 @@ class Notification(Actions):
 
     def create(type, id_groupe, id_msg, destinataires):
         if type == 'demande':
-            destinataires += [user._id for user in utilisateurs.values() if id_groupe in user.savedDemands]
+            destinataires += User.get(filter="cls.savedDemands.comparator.has(id_groupe)")
 
-        if ObjectId(session['id']) in destinataires:
-            destinataires.remove(ObjectId(session['id']))
+        if session['id'] in destinataires:
+            destinataires.remove(session['id'])
 
         destinataires = list(set(destinataires))
 
         if len(destinataires) > 0:
-            _id = ObjectId()
-            notifications[str(_id)] = Notification({"_id": _id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
+            id = ObjectId()
+            notifications[str(id)] = Notification({"id": id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
                                             "date": datetime.now(), "destinataires": destinataires})
-            notifications[str(_id)].insert()
-            notifications[str(_id)].send()
+            notifications[str(id)].insert()
+            notifications[str(id)].send()
         return
 
     def diffTemps(self):
@@ -766,19 +735,19 @@ class Notification(Actions):
 
         return tempsStr
 
+    @get_context
     def send(self):
-        from main import socketio
         notification = self.toDict()
         html = render_template("notification.html", notif=notification, similar=0)
 
         for user in notification['userDest']:
-            if str(user['_id']) in clientsNotif:
-                socketio.emit('newNotif', {'html': html, 'sound': str(user['notifs']['sound'])}, to=str(user['_id']))
+            if str(user['id']) in clientsNotif:
+                socketio.emit('newNotif', {'html': html, 'sound': str(user['notifs']['sound'])}, to=str(user['id']))
             elif user['email'] != "" or user['emailENT'] != "":
                 # si l'user a autorisé les notifs par mail
                 if (self.type == 'msg' and user['notifs']['messages']) or (self.type == 'demande' and user['notifs']['demandes']):
                     # si un mail n'a pas déja été envoyé pour ce groupe
-                    if (self.type == 'msg' and len([notif for notif in notifications.values() if notif.id_groupe == self.id_groupe and notif.type == 'msg' and user['_id'] in notif.destinataires]) == 1) or self.type == 'demande':
+                    if (self.type == 'msg' and len([notif for notif in notifications.values() if notif.id_groupe == self.id_groupe and notif.type == 'msg' and user['id'] in notif.destinataires]) == 1) or self.type == 'demande':
                         if user['email'] != "":
                             To = user['email']
                         elif user['emailENT'] != "":
@@ -816,12 +785,12 @@ class Notification(Actions):
 
     def getSimilar(self, uid):
         '''récupère les notifs du même groupe plus récentes'''
-        return [notification for notification in notifications.values() if notification.id_groupe == self.id_groupe and notification.date >= self.date and notification._id != self._id and uid in notification.destinataires]
+        return [notification for notification in notifications.values() if notification.id_groupe == self.id_groupe and notification.date >= self.date and notification.id != self.id and uid in notification.destinataires]
 
     def supprNotif(self):
         self.delete()
-        if str(self._id) in notifications:
-            notifications.pop(str(self._id))
+        if str(self.id) in notifications:
+            notifications.pop(str(self.id))
         return
 
     def supprUser(self, uid):
@@ -852,9 +821,9 @@ class Notification(Actions):
             else:
                 self.supprNotif()
                 return
-        sender = utilisateurs[str(msg['id-utilisateur'])].toDict()
+        sender = User.get(filter="cls.id == msg['id-utilisateur']", limit=1)
         return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
+            'id': self.id,
             'type': self.type,
             'id_groupe': self.id_groupe,
             'groupe': grp,
@@ -864,12 +833,12 @@ class Notification(Actions):
             'date': self.date,
             'temps': self.convertTime(),
             'destinataires': self.destinataires,
-            'userDest': [utilisateurs.get(str(destinataire)).toDict() for destinataire in self.destinataires if utilisateurs.get(str(destinataire)) != None]
+            'userDest': User.get(filter="cls.id.comparator.contains_by(self.destinataires)")
         }
 
     def toDB(self) -> dict:
         return {  # on ajoute à la liste ce qui nous interesse
-            '_id': self._id,
+            'id': self.id,
             'type': self.type,
             'id_groupe': self.id_groupe,
             'id_msg': self.id_msg,
@@ -879,3 +848,14 @@ class Notification(Actions):
 
     def __str__(self):
         return str(self.toDict())
+
+# configuration de la database
+DATABASE_URI = 'postgresql://rxtmhycolmbxky:d66072b10150c9b7dbe86a026cc7e08f670b8fcf6a45ff71160863069c896ec2@ec2-52-210-120-210.eu-west-1.compute.amazonaws.com:5432/d3vkha7h4hsf16'
+engine = create_engine(DATABASE_URI)
+if __name__ == "__main__":
+    # vider la DB
+    if input('Voulez vous reset la base de donnée ? (Y/n)') == 'Y':
+        Base.metadata.drop_all(engine)
+else:
+    Base.metadata.create_all(engine)
+dbSession = sessionmaker(bind=engine)

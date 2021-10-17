@@ -1,17 +1,15 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
-from flask_pymongo import PyMongo
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from flask_hashing import Hashing
 from datetime import *
 from flask_session import Session
 from flask.json import jsonify
-from bson.objectid import ObjectId
 import json
 import sys
 import os
 from uuid import uuid4
 import re
- 
+
 # Création de l'application
 # sys.path.insert(0, os.path.dirname(__file__))
 app = Flask(__name__)
@@ -20,12 +18,6 @@ socketio = SocketIO(app)
 
 # DB POO
 from db_poo import *
-
-# Création du Cluster de la DB
-# acienne DB
-# DB = DB_Manager.createCluster(app, "mongodb+srv://CTLadmin:ctlADMIN@ctlbdd.etzx9.mongodb.net/CTLBDD?retryWrites=true&w=majority")
-# New DB
-DB = DB_Manager.createCluster(app, "mongodb+srv://les-codeurs-lbp:ezEwMi2KBaCkzT4@cluster0.bggb1.mongodb.net/key4schoolBDD?retryWrites=true&w=majority")
 
 # Routing
 from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved, about
@@ -123,24 +115,24 @@ def handleEvent_postLike(json):
     postLike(json)
 
 @app.route('/login/', methods=['GET', 'POST'])
+@db_session
 def login():
     if request.method == 'POST':
         if 'password' not in request.form or 'username' not in request.form:
             return render_template('connexion.html', erreur='Veuillez compléter tous les champs')
-        user = [utilisateur for id, utilisateur in utilisateurs.items() if utilisateur.email == request.form['username'] or utilisateur.pseudo == request.form['username']]
-        if len(user) == 0 or not hashing.check_value(user[0].mdp, request.form['password'], salt=cle):
+        user = User.get(filter="cls.email == request.form['username'] or cls.pseudo == request.form['username']", limit=1)
+        if not user or not hashing.check_value(user['mdp'], request.form['password'], salt=cle):
             return render_template('connexion.html', erreur='Identifiant ou mot de passe incorrect')
-        user = user[0].toDict()
-        session['id'] = str(user['_id'])
+        session['id'] = user['id']
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
         session['theme'] = user['theme']
-        session['type'] = 'ELEVE'
+        session['type'] = user['type']
         session['cacheRandomKey'] = cacheRandomKey
 
         if user['etapeInscription'] is not None:
             session.pop('id')
-            session['idInscri'] = str(user['_id'])
+            session['idInscri'] = user['id']
             session['etapeInscription'] = user['etapeInscription']
             return redirect(url_for(f"signIn{session['etapeInscription']}"))
         elif 'redirect' in session:
@@ -154,25 +146,22 @@ def login():
         return render_template('connexion.html')
 
 @app.route('/sign-in/0/', methods=['GET', 'POST'])
+@db_session
 def signIn0():
-    global utilisateurs
     if 'etapeInscription' in session:
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
 
     if request.method == 'POST':
-        hash = hashing.hash_value(request.form['password'], salt=cle)
-
-        pseudo = (request.form['pseudo'].lower()).replace(' ', '_')
-        notUse = True if len([utilisateur for id, utilisateur in utilisateurs.items() if utilisateur.email == request.form['email'] or utilisateur.pseudo == pseudo]) == 0 else False
+        notUse = False if User.get(filter="cls.email == request.form['email'] or cls.pseudo == request.form['pseudo']", limit=1) else True
         if notUse:
-            _id = ObjectId()
-            utilisateurs[str(_id)] = Utilisateur({"_id": _id, "nom": request.form['nom'], "prenom": request.form['prenom'],
-                            "pseudo": request.form['pseudo'], "email" : request.form['email'], 'mdp': hash, 'etapeInscription': 1})
-            utilisateurs[str(_id)].insert()
+            hash = hashing.hash_value(request.form['password'], salt=cle)
+            user = User(nom=request.form['nom'], prenom=request.form['prenom'],
+                            pseudo=request.form['pseudo'], email=request.form['email'], mdp=hash, etapeInscription=1)
+            user.insert()
 
-            user = utilisateurs[str(_id)].toDict()
-            session['idInscri'] = str(user['_id'])
+            session['idInscri'] = user['id']
             session['cacheRandomKey'] = cacheRandomKey
+            session['theme'] = user['theme']
             session['etapeInscription'] = 1
             return redirect(url_for('signIn1'))
         else:
@@ -182,27 +171,28 @@ def signIn0():
         return render_template('inscription0.html')
 
 @app.route('/sign-in/1/', methods=['GET', 'POST'])
+@db_session
 def signIn1():
-    global utilisateurs
     if 'etapeInscription' not in session or 'idInscri' not in session:
         return redirect(url_for('login'))
     if session['etapeInscription'] != 1:
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
 
     if request.method == 'POST':
-        user = [utilisateur for id, utilisateur in utilisateurs.items() if str(utilisateur._id) == session['idInscri']][0]
+        user = User.get(filter="cls.id == session['idInscri']", limit=1)
         user.signIn1(request.form['phone'],
                     datetime.strptime(request.form['birthday'], '%Y-%m-%d'),
                     json.loads(request.form['school']),
                     request.form['classe'],
                     [request.form['lva'], request.form['lvb']])
-        session['etapeInscription'] = user.etapeInscription
+        session['etapeInscription'] = user['etapeInscription']
         return redirect(url_for('signIn2'))
     else:
         session['cacheRandomKey'] = cacheRandomKey
         return render_template('inscription1.html')
 
 @app.route('/sign-in/2/', methods=['GET', 'POST'])
+@db_session
 def signIn2():
     if 'etapeInscription' not in session or 'idInscri' not in session:
         return redirect(url_for('login'))
@@ -210,7 +200,7 @@ def signIn2():
         return redirect(url_for(f"signIn{session['etapeInscription']}"))
 
     if request.method == 'POST':
-        user = [utilisateur for id, utilisateur in utilisateurs.items() if str(utilisateur._id) == session['idInscri']][0]
+        user = User.get(filter="cls.id == session['idInscri']", limit=1)
         spes = []
         if 'spe1' in request.form:
             spes.append(request.form['spe1'])
@@ -221,17 +211,16 @@ def signIn2():
         user.signIn2(spes, options)
 
         session.pop('idInscri')
-        user = user.toDict()
-        session['id'] = str(user['_id'])
+        session['id'] = user['id']
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
         session['theme'] = user['theme']
-        session['type'] = 'ELEVE'
+        session['type'] = user['type']
         session['cacheRandomKey'] = cacheRandomKey
         return redirect(url_for('tuto'))
     else:
         session['cacheRandomKey'] = cacheRandomKey
-        user = [utilisateur for id, utilisateur in utilisateurs.items() if str(utilisateur._id) == session['idInscri']][0].toDict()
+        user = User.get(filter="cls.id == session['idInscri']", limit=1)
         return render_template('inscription2.html', user=user)
 
 

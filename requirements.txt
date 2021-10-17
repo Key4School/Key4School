@@ -1,11 +1,9 @@
 bson
 flask
-Flask-PyMongo
 Flask-Session
-requests-oauthlib
-dnspython
-pymongo
-python-oauth2
 flask_socketio
 uuid
 flask-hashing
+Flask-Migrate
+SQLAlchemy
+alembic

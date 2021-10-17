@@ -37,12 +37,12 @@ def automoderation(stringModerer: str) -> str:
 
     return stringModerer
 
-
+@db_session
 def afficheNotif(userId, notifId):
-    global utilisateurs
     global notifications
-    if userId in utilisateurs and notifId in notifications:
-        return render_template("mail.html", user=utilisateurs[userId].toDict(), notif=notifications[notifId].toDict())
+    user = User.get(filter="cls.id == userId", limit=1)
+    if user and notifId in notifications:
+        return render_template("mail.html", user=user, notif=notifications[notifId].toDict())
     else:
         return redirect(url_for('login'))
 

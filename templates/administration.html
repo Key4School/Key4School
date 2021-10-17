@@ -104,19 +104,19 @@
   <br /><br />
   <div style="font-weight: bold; font-size:large;">Publications signalées : </div>
   {%for content in demandeSignale%}
-  <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['_id']}}'>
+  <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['id']}}'>
     <div>
       {%set varApercuProfil = content['user']%}
-      <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
+      <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}" onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');">
         {{content['user']['prenom']}} {{content['user']['nom']}} {% include 'apercu2profil.html' with context %}</a> :
       <br />
       <br />
-      <a href="{{url_for('comments' ,idMsg=content['_id'])}}"><b>{{content['titre']|safe}}</b></a>
+      <a href="{{url_for('comments' ,idMsg=content['id'])}}"><b>{{content['titre']|safe}}</b></a>
       <br />
       <br />
-      {{content['contenu']|safe}}
+      {{content['contenuLink']|safe}}
       <br /><br />
-      le : <em>{{content['date-envoi']}}</em><br />
+      le : <em>{{content['date_envoi']}}</em><br />
       matière : <b>{{content['matière']}}</b>
     </div>
     <br />
@@ -135,15 +135,15 @@
     </ul>
     {%for element in content['réponses associées']%}
     {%if element['sign']!=[]%}
-    <div id="divRep_{{element['_id']}}">
-      {{element['contenu']}}
-      <button onclick="validationRep('{{element['_id']}}','{{content['_id']}}')" class="button is-success is-outlined">
+    <div id="divRep_{{element['id']}}">
+      {{element['contenuLink']}}
+      <button onclick="validationRep('{{element['id']}}','{{content['id']}}')" class="button is-success is-outlined">
         <span>Valider</span>
         <span class="icon is-small">
           <i class="fas fa-check"></i>
         </span>
       </button>
-      <button onclick="suppressionRep('{{element['_id']}}','{{content['_id']}}')" class="button is-danger is-outlined">
+      <button onclick="suppressionRep('{{element['id']}}','{{content['id']}}')" class="button is-danger is-outlined">
         <span>Supprimer</span>
         <span class="icon is-small">
           <i class="fas fa-times"></i>
@@ -154,13 +154,13 @@
     {%endfor%}
 
     <br />
-    <button onclick="validation('{{content['_id']}}')" class="button is-success is-outlined">
+    <button onclick="validation('{{content['id']}}')" class="button is-success is-outlined">
       <span>Valider</span>
       <span class="icon is-small">
         <i class="fas fa-check"></i>
       </span>
     </button>
-    <button onclick="suppression('{{content['_id']}}')" class="button is-danger is-outlined">
+    <button onclick="suppression('{{content['id']}}')" class="button is-danger is-outlined">
       <span>Supprimer</span>
       <span class="icon is-small">
         <i class="fas fa-times"></i>
@@ -174,7 +174,7 @@
   <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
     <div>
       {%set varApercuProfil = content%}
-      <a href="{{url_for('profil' ,idUser=content['_id'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
+      <a href="{{url_for('profil' ,idUser=content['id'])}}" onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');">
         {{content['nom']}} {% include 'apercu2profil.html' with context %}
       </a>
     </div>
@@ -197,7 +197,7 @@
   <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
 
     {%for content in discussionSignale%}
-    <a href="{{url_for('page_messages', idGroupe=content['_id'])}}">{{content['nom']}}</a>
+    <a href="{{url_for('page_messages', idGroupe=content['id'])}}">{{content['nom']}}</a>
     <ul class="menu-list">
       <li><u>Motif :</u></li>
       <li>

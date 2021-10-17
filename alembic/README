@@ -1,0 +1,9 @@
+Generic single-database configuration.
+
+Init
+* `$ alembic stamp head`
+
+Commit
+* `$ alembic revision --autogenerate -m "description"`
+* close all session
+* `$ alembic upgrade head`

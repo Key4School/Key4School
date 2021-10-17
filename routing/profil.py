@@ -5,41 +5,33 @@ from bson.objectid import ObjectId
 from db_poo import *
 from routing.functions import listeModeration, automoderation
 
+@db_session
 def profil(idUser):
-    global utilisateurs
     global demandes_aide
 
     if 'id' in session:
         if idUser == None or idUser == session['id']:
-            toutesDemandes = sorted([d for d in demandes_aide.values() if d.id_utilisateur == ObjectId(session['id'])], key = lambda d: d.date_envoi, reverse=True)
+            toutesDemandes = sorted([d for d in demandes_aide.values() if d.id_utilisateur == session['id']], key = lambda d: d.date_envoi, reverse=True)
 
             demandes = []
             for d in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
                 demandes.append(d.toDict())
 
-            user = utilisateurs[session['id']]
-            profilUtilisateur = user.toDict()
-            niv, xplvl, xpgens = user.recupLevel()
-            return render_template("profil.html", profilUtilisateur=profilUtilisateur, demandes=demandes, xplvl=xplvl, xp=xpgens, niv=niv, user=user, sessionId=ObjectId(session['id']))
+            user = User.get(filter="cls.id == session['id']", limit=1)
+            return render_template("profil.html", demandes=demandes, user=user)
 
         else:
 
-            user = utilisateurs[session['id']]
-            profilUtilisateur = utilisateurs[idUser].toDict()
-            niv, xplvl, xpgens = utilisateurs[idUser].recupLevel()
+            user = User.get(filter="cls.id == session['id']", limit=1)
+            profilUtilisateur = User.get(filter="cls.id == idUser", limit=1)
 
-            # translate spes/options/lv
-            profilUtilisateur['langues'] = profilUtilisateur['langues-str']
-            profilUtilisateur['spes'] = profilUtilisateur['spes-str']
-            profilUtilisateur['options'] = profilUtilisateur['options-str']
-
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], xplvl=xplvl, xp=xpgens, niv=niv, user=user, sessionId=ObjectId(session['id']))
+            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], user=user)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def changeTheme():
-    global utilisateurs
 
     if 'id' in session:
         if int(request.form['couleur']) == 6:
@@ -56,10 +48,10 @@ def changeTheme():
                         ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0', '#9f8f57']]
             couleurs = listColor[int(request.form['couleur'])]
 
-        user = utilisateurs[session['id']]
-        user.couleur = couleurs
+        user = User.get(filter="cls.id == session['id']", limit=1)
+        user['couleur'] = couleurs
 
-        utilisateurs[session['id']].update()
+        user.update()
 
         session['couleur'] = couleurs
 
@@ -68,19 +60,20 @@ def changeTheme():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def theme():
     if not 'id' in session:
         return 'error'
 
-    user = utilisateurs[session['id']]
-    user.theme = request.form['theme']
+    user = User.get(filter="cls.id == session['id']", limit=1)
+    user['theme'] = request.form['theme']
     session['theme'] = user.theme
 
-    utilisateurs[session['id']].update()
+    user.update()
     return 'ok'
 
+@db_session
 def updateprofile():
-    global utilisateurs
 
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
@@ -92,20 +85,20 @@ def updateprofile():
             elif request.form[content] == "pb":
                 elementPublic.append(content.replace('Visibilite', ''))
 
-        user = utilisateurs[session['id']]
+        user = User.get(filter="cls.id == session['id']", limit=1)
 
-        user.pseudo = automoderation(request.form['pseudo'])
-        user.email = automoderation(request.form['email'])
-        user.telephone = automoderation(request.form['telephone'])
-        user.interets = automoderation(request.form['interets'])
-        if user.type == 'ELEVE':
-            user.langues = [request.form['lv1'], request.form['lv2']]
-            user.options = [request.form['option1'], request.form['option2']]
-            user.spes = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
-        elif user.type == 'ENSEIGNANT':
-            user.matiere = request.form['matiere']
-        user.elementPrive = elementPrive
-        user.elementPublic = elementPublic
+        user['pseudo'] = automoderation(request.form['pseudo'])
+        user['email'] = automoderation(request.form['email'])
+        user['telephone'] = automoderation(request.form['telephone'])
+        user['interets'] = automoderation(request.form['interets'])
+        if user['type'] == 'ELEVE':
+            user['langues'] = [request.form['lv1'], request.form['lv2']]
+            user['options'] = [request.form['option1'], request.form['option2']]
+            user['spes'] = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
+        elif user['type'] == 'ENSEIGNANT':
+            user['matiere'] = request.form['matiere']
+        user['elementPrive'] = elementPrive
+        user['elementPublic'] = elementPublic
 
         notifs = {}
         if request.form['notifs_demandes'] == 'yes':
@@ -120,30 +113,31 @@ def updateprofile():
             notifs['sound'] = True
         else:
             notifs['sound'] = False
-        user.notifs = notifs
+        user['notifs'] = notifs
 
-        utilisateurs[session['id']].update()
+        user.update()
 
         return redirect(url_for('profil'))
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def otherSubject():
-    global utilisateurs
     if 'id' in session and session['type'] != 'ELEVE':  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         subjects = []
         for key, value in request.form.items():
             if value == 'on':
                 subjects.append(key)
-        print(subjects)
-        utilisateurs[session['id']].matiere_autre = subjects
-        utilisateurs[session['id']].update()
+        user = User.get(filter="cls.id == session['id']", limit=1)
+        user['matiere_autre'] = subjects
+        user.update()
         return redirect(url_for('profil'))
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def userImg(profilImg):
     if 'id' in session:
         return DB.cluster.send_file(profilImg)
@@ -151,35 +145,35 @@ def userImg(profilImg):
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def updateImg():
-    global utilisateurs
 
     if 'id' in session:
         if request.form['but'] == "remove":
             MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
-                DB.db_files.delete_one({'_id': a['_id']})
-                DB.db_chunks.delete_many({'files_id': a['_id']})
+                DB.db_files.delete_one({'id': a['id']})
+                DB.db_chunks.delete_many({'filesid': a['id']})
 
-            user = utilisateurs[session['id']]
-            user.nomImg = ''
-            user.imgProfile = ''
-            utilisateurs[session['id']].update()
+            user = User.get(filter="cls.id == session['id']", limit=1)
+            user['nomImg'] = ''
+            user['imgProfile'] = ''
+            user.update()
 
         elif request.form['but'] == "replace":
             ImgNom = request.files['Newpicture'].filename + 'imgProfile' + session['id']
             MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
             for a in MyImage:
-                DB.db_files.delete_one({'_id': a['_id']})
-                DB.db_chunks.delete_many({'files_id': a['_id']})
+                DB.db_files.delete_one({'id': a['id']})
+                DB.db_chunks.delete_many({'filesid': a['id']})
 
             DB.cluster.save_file(ImgNom, request.files['Newpicture'])
             image = DB.db_files.find_one({'filename': ImgNom})
 
-            user = utilisateurs[session['id']]
-            user.imgProfile = image['_id']
-            user.nomImg = ImgNom
-            utilisateurs[session['id']].update()
+            user = User.get(filter="cls.id == session['id']", limit=1)
+            user['imgProfile'] = image['id']
+            user['nomImg'] = ImgNom
+            user.update()
 
         return redirect(url_for('profil'))
     else:

@@ -1,5 +1,5 @@
 
-<div class="box notif" id="{{notif['_id']}}">
+<div class="box notif" id="{{notif['id']}}">
   <article class="media">
     <div class="media-left">
       
@@ -18,9 +18,9 @@
         <br>
         Sur
         {%if notif['type'] == 'demande'%}
-        la demande d'aide <a onclick="supprNotif('{{notif['_id']}}')" href="{{url_for('comments', idMsg = notif['id_groupe'])}}">{{notif['groupe']['titre']}}</a>
+        la demande d'aide <a onclick="supprNotif('{{notif['id']}}')" href="{{url_for('comments', idMsg = notif['id_groupe'])}}">{{notif['groupe']['titre']}}</a>
         {%elif notif['type'] == 'msg'%}
-        le groupe <a onclick="supprNotif('{{notif['_id']}}')" href="{{url_for('page_messages', idGroupe = notif['id_groupe'])}}">
+        le groupe <a onclick="supprNotif('{{notif['id']}}')" href="{{url_for('page_messages', idGroupe = notif['id_groupe'])}}">
           {% if not notif['groupe']['is_DM'] %}
             {{notif['groupe']['nom']}}
           {% else %}
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div style="display:flex; flex-direction:column;">
-          <button onclick="supprNotif('{{notif['_id']}}')" class="delete" aria-label="delete"></button>
+          <button onclick="supprNotif('{{notif['id']}}')" class="delete" aria-label="delete"></button>
     </div>
   </article>
 </div>

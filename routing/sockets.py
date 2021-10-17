@@ -14,7 +14,7 @@ def connectToNotif():
         join_room(session['id'])
 
         alreadySend = []
-        notifs = [notif for id, notif in notifications.copy().items() if ObjectId(session['id']) in notif.destinataires and notif.toDict() != None]
+        notifs = [notif for id, notif in notifications.copy().items() if session['id'] in notif.destinataires and notif.toDict() != None]
         toSend = []
         for notif in notifs:
             if notif.id_groupe not in alreadySend:
@@ -22,7 +22,7 @@ def connectToNotif():
                 toSend.append(notif)
         toSend.reverse()
         for notif in toSend:
-            html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(ObjectId(session['id']))))
+            html = render_template("notification.html", notif=notif.toDict(), similar=len(notif.getSimilar(session['id'])))
             emit('notif', html, to=session['id'])
 
 # Deconnexion au groupe pour recevoir les nouvelles notif
@@ -32,16 +32,18 @@ def disconnect():
             clientsNotif.pop(session['id'])
             leave_room(session['id'])
 
+@db_session
 def supprNotif(id):
     global notifications
 
     if 'id' in session:
         notification = notifications[id]
-        for notif in notification.getSimilar(ObjectId(session['id'])):
-            notif.supprUser(ObjectId(session['id']))
-        notification.supprUser(ObjectId(session['id']))
+        for notif in notification.getSimilar(session['id']):
+            notif.supprUser(session['id'])
+        notification.supprUser(session['id'])
 
 # Connection au groupe pour recevoir les nouveaux messages par la suite
+@db_session
 def connectToGroup(json):
     global groupes
 
@@ -51,11 +53,11 @@ def connectToGroup(json):
                 # Check authorized
                 grp = groupes[json['room']].toDict()
                 if grp != None:
-                    if session['id'] in str(grp['id-utilisateurs']): # authorized
+                    if session['id'] in grp['id-utilisateurs']: # authorized
                         join_room(json['room'])
 
+@db_session
 def postMsg(json):
-    global utilisateurs
     global messages
     global groupes
 
@@ -64,35 +66,34 @@ def postMsg(json):
             # Check authorized
             grp = groupes[json['room']].toDict()
             if grp != None:
-                if ObjectId(session['id']) in grp['id-utilisateurs']: # authorized
+                if session['id'] in grp['id-utilisateurs']: # authorized
                     if json['reponse'] != "None":
-                        reponse = ObjectId(json['reponse'])
+                        reponse = json['reponse']
                     else:
                         reponse = "None"
 
                     if not json['contenuMessage'] == '':
-                        _id = ObjectId()
+                        id = ObjectId()
                         contenu = automoderation(json['contenuMessage']) if grp['is_mod'] else json['contenuMessage']
 
-                        messages[str(_id)] = Message({"_id": _id, "id-groupe": ObjectId(json['room']), "id-utilisateur": ObjectId(session['id']),
-                                                          "contenu": contenu, "date-envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []})
-                        messages[str(_id)].insert()
-                        message = messages[str(_id)].toDict()
+                        messages[str(id)] = Message({"id": id, "id-groupe": ObjectId(json['room']), "id-utilisateur": session['id'],
+                                                          "contenu": contenu, "date_envoi": datetime.now(), "audio": False, "reponse": reponse, "sign": []})
+                        messages[str(id)].insert()
+                        message = messages[str(id)].toDict()
 
                     if message:
                         groupe = message['groupe']
 
                         users = groupe['utilisateurs']
 
-                        ownHTML = render_template("widget_message.html", content=message, sessionId=ObjectId(session['id']), infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
-                        otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=utilisateurs[session['id']].toDict())
+                        ownHTML = render_template("widget_message.html", content=message, sessionId=session['id'], infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=User.get(filter="cls.id == session['id']", limit=1))
+                        otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=User.get(filter="cls.id == session['id']", limit=1))
 
                         emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=json['room'])
-                        Notification.create("msg", ObjectId(json['room']), _id, list(groupe['id-utilisateurs']))
+                        Notification.create("msg", ObjectId(json['room']), id, list(groupe['id-utilisateurs']))
 
 
 def postLike(json):
-	print('hey')
 	if 'id' in session:
 		if 'type' in json:
 			if json['type'] == 'post':

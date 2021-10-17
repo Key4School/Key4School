@@ -44,7 +44,7 @@
       <form onsubmit="signalerProfil(event); return false;" id="signalementProfil" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous ce profil." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
-          <input type='hidden' id="idSignalé" name='idSignalé' value="{{profilUtilisateur['_id']}}" />
+          <input type='hidden' id="idSignalé" name='idSignalé' value="{{profilUtilisateur['id']}}" />
         </section>
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Signaler</button>
@@ -61,7 +61,7 @@
       </header>
       <form onsubmit="designalerProfil(event); return false;" id="designalementProfil" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type='hidden' id="idDesignalé" name='idSignalé' value="{{profilUtilisateur['_id']}}" />
+          <input type='hidden' id="idDesignalé" name='idSignalé' value="{{profilUtilisateur['id']}}" />
           Etes-vous sûr de vouloir enlever ce signalement
         </section>
         <footer class="modal-card-foot">
@@ -80,7 +80,7 @@
         </header>
         <form onsubmit="sanctionner(event); return false;" id="SancForm" method="POST" autocomplete="off">
           <section class="modal-card-body">
-            <input type='hidden' id="idSanctionné" name='idSanctionné' value="{{profilUtilisateur['_id']}}" />
+            <input type='hidden' id="idSanctionné" name='idSanctionné' value="{{profilUtilisateur['id']}}" />
             <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Sanctionnez vous ce profil." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
             <input id='inputSanction' class="input" type="text" placeholder="Quellle sanction mettez vous." autocomplete='off' name="Sanction" style="width: 75%;margin-left: 2%;padding:5px;"required/>
             <select name="SanctionType">
@@ -113,7 +113,7 @@
       </header>
       <form onsubmit="validerUser(event); return false;" id="ValUserForm" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type='hidden' id="idValidé" name='idValidé' value="{{profilUtilisateur['_id']}}" />
+          <input type='hidden' id="idValidé" name='idValidé' value="{{profilUtilisateur['id']}}" />
           <input type='hidden' name="demandeBut" value="ValUser" />
           <select name="motif">
             <option value="abusif">Signalement abusif</option>
@@ -137,13 +137,13 @@
         <img alt="user" src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
       <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
 
-          <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;">70%</progress>
+          <progress class="progress is-info" value={{profilUtilisateur['xplvl']}} max="100" style="width:250px;">70%</progress>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <p>
             NIV:
-            {{niv}}
+            {{profilUtilisateur['niv']}}
             XP :
-            {{xp}}
+            {{profilUtilisateur['xp']}}
           </p>
     </div>
   </div>
@@ -219,7 +219,7 @@
               &nbsp;&nbsp;Langue(s) vivante(s)
             <td>
               <div id="contentlangues">
-                <p id="langues">{{profilUtilisateur['langues']}}{%if profilUtilisateur['langues']==""%}Non-renseigné{%endif%}</p>
+                <p id="langues">{{profilUtilisateur['langues-str']}}{%if profilUtilisateur['langues-str']==""%}Non-renseigné{%endif%}</p>
               </div>
             </td>
           </tr>
@@ -232,7 +232,7 @@
             <td>
               <div id="contentoptions">
                 <p id="options">
-                  {{profilUtilisateur['options']}}{%if profilUtilisateur['options']==""%}Non-renseigné{%endif%}
+                  {{profilUtilisateur['options-str']}}{%if profilUtilisateur['options-str']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
@@ -246,7 +246,7 @@
             <td>
               <div id="contentspe">
                 <p id="spe">
-                  {{profilUtilisateur['spes']}}{%if profilUtilisateur['spe']==""%}Non-renseigné{%endif%}
+                  {{profilUtilisateur['spes-str']}}{%if profilUtilisateur['spe']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
@@ -329,7 +329,7 @@
 
     <br />
     <div class="navbar-item" style="display:block;">
-      <a href="/redirectDM/{{sessionId}}/{{profilUtilisateur['_id']}}/">
+      <a href="/redirectDM/{{session['id']}}/{{profilUtilisateur['id']}}/">
         <button class="button is-link is-outlined is-small">
           <span class="icon is-small">
             <i class="fas fa-comments"></i>
