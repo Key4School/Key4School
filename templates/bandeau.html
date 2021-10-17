@@ -4,7 +4,7 @@
 
     <div class="navbar-start navbarStart" >
 
-      <a href="{{url_for('accueil')}}" style="display:flex;">
+      <a href="{{url_for('accueil')}}" style="display:flex;align-items:center;">
         <img class="logo logochange"
         style="
         {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
@@ -91,35 +91,39 @@
         <div class="navbar-dropdown is-boxed is-right">
 
           <a class="navbar-item" href="{{url_for('accueil')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-home BlackOrWhite"></i>
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-home BlackOrWhite"></i>
             &nbsp;&nbsp;Accueil
           </a>
 
           <a class="navbar-item" href="{{url_for('page_messages')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-envelope BlackOrWhite"></i>
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-envelope BlackOrWhite"></i>
             &nbsp;&nbsp;Messages privés
           </a>
 
           <a class="navbar-item" href="{{url_for('saved')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-bookmark BlackOrWhite"></i>
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-bookmark BlackOrWhite"></i>
             &nbsp;&nbsp;Demandes enregistrées
           </a>
           {%if user['admin']== true%}
           <a class="navbar-item" href="{{url_for('administration')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-user-shield BlackOrWhite"></i>
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-user-shield BlackOrWhite"></i>
             &nbsp;&nbsp;Administration
           </a>
           {%endif%}
 
           <a class="navbar-item" href="{{url_for('profil')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-user-circle BlackOrWhite"></i>
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-user-circle BlackOrWhite"></i>
             &nbsp;&nbsp;Profil et préférences
+          </a>
+          <a class="navbar-item" href="{{url_for('profil')}}">
+            <i style="font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-sign-out-alt BlackOrWhite"></i>
+            &nbsp;&nbsp;Déconnexion
           </a>
 
           <hr class="navbar-divider">
 
           <a class="navbar-item" href="{{url_for('tuto')}}">
-            <i style=" font-size:20px; width: 20px; margin-right: 5px;" class="fas fa-question-circle BlackOrWhite"></i>
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-question-circle BlackOrWhite"></i>
             &nbsp;&nbsp;Aide
           </a>
         </div>
