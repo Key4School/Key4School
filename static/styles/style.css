@@ -372,6 +372,14 @@ input[type=range]:focus::-ms-fill-upper {
 .iconeAbout{
   margin-right: 2%;
 }
+.connexion_txt {
+  display: block;
+  padding-bottom: 15%;
+  font-size: 2rem;
+  background: var(--text-multicolor);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 /* Pour telephone */
 @media screen and (max-width:1023px) {
@@ -379,7 +387,7 @@ input[type=range]:focus::-ms-fill-upper {
     display: block;
   }
 
-  .img_connexion, .connexion_txt, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .img_connexion, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -455,6 +463,11 @@ input[type=range]:focus::-ms-fill-upper {
     width: 90%;
     padding: 2%;
     margin: auto;
+  }
+  .form_mdp_forgotten {
+    width: 90%;
+    padding: 2%;
+    margin: 25% auto auto;
   }
 
   .flex_connexion {
@@ -574,7 +587,14 @@ input[type=range]:focus::-ms-fill-upper {
     border: 1px solid var(--scrollbar-thumb-hover);
     padding: 2%;
   }
-
+  .form_mdp_forgotten {
+    padding-top: 5%;
+    width: 40%;
+    margin: 5% auto auto;
+    background-color: var(--background-form);
+    border: 1px solid var(--scrollbar-thumb-hover);
+    padding: 2%;
+  }
   .flex_connexion {
     display: flex;
     justify-content: space-evenly;
@@ -582,14 +602,6 @@ input[type=range]:focus::-ms-fill-upper {
     padding-top: 2%;
   }
 
-  .connexion_txt {
-    display: block;
-    padding-bottom: 15%;
-    font-size: 2rem;
-    background: var(--text-multicolor);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
 
   .img_connexion {
     width: 25%;

@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" type="text/css" href="/static/styles/style.css">
-  
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/static/css/mystyles.css">
@@ -176,7 +176,12 @@
       <center>
         <button type="submit" class="button">Connexion</button>
       </center>
+      <br>
+      <p class="txt_centre">
+        <a href="">Mot de passe oublié ?</a>
+      </p>
       {%if erreur%}
+
       <br>
       <p class="erreurP">{{erreur}}</p>
       {%endif%}
@@ -184,11 +189,13 @@
     <br />
   </div>
 
+
   <br><br>
   <p class="txt_centre">
     Vous n'avez pas de compte ? <a href="{{url_for('signIn0')}}">Inscrivez vous !</a>
   </p>
   <br>
+
   <div class="contact scroll">
     <a class="lienReseau" href="https://www.instagram.com/key4school/" target="_blank"><i style="font-size:1.5em;" class="fab fa-instagram"></i></a>
     <a class="lienReseau" href="https://www.facebook.com/Key4School" target="_blank"><i style="font-size:1.5em;" class="fab fa-facebook-f"></i></a>
