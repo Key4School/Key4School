@@ -166,6 +166,154 @@ function verifPseudo() {
   }
 }
 
+
+function inputMdp(){
+  $('#contentmdp').removeClass('contentmdp');
+  $('#logoModifieMdp').removeClass('fas fa-pen');
+  $('#contentmdp').addClass('contentmdpOn');
+  var contenu = $('#mdp').html().trim();
+  $('#mdp').replaceWith('<div class="content_mdp"><div class="control has-icons-left has-icons-right" style="width: 100%;"><input class="color_input input" type="password" placeholder="Mot de passe" name="password" id="mdp"><span class="icon is-small is-left"><i class="fas fa-lock"></i></span><span class="icon is-small is-right"><i class="fas fa-check" id="password_check"></i></span></div><div class="oeil" onclick="voir(1)"><i id="oeilid" class="fas fa-eye oeil"></i></div></div><div class="progressBar"><div class="progress-done"></div></div><ul id="indiq_verif" class="txt_centre indiq_verif"><li id="taille-mdp"></li><li id="min-mdp"></li><li id="maj-mdp"></li><li id="chiffre-mdp"></li></ul><br /><div class="content_mdp"><div class="control has-icons-left has-icons-right" style="width: 100%;"><input class="color_input input" type="password" placeholder="Confirmation mot de passe" name="confmdp" id="confmdp"><span class="icon is-small is-left"><i class="fas fa-lock"></i></span><span class="icon is-small is-right"><i class="fas fa-check" id="confPassword_check"></i></span></div><div class="oeil" onclick="voir(2)"><i id="oeilid2" class="fas fa-eye oeil"></i></div></div>'); // remplace le code HTML actuel par celui-ci
+  $('#mdp').keyup(function() {
+    verifMdp() ;
+  });
+  $('#confmdp').keyup(function() {
+    verifConfMdp() ;
+  });
+}
+
+  function verifMdp() {
+    var $pseudo_check=  $mdp = $('#mdp'),
+      $password_check= $('#password_check'),
+      $confmdp = $('#confmdp'),
+      $confPassword_check= $('#confPassword_check'),
+      $erreur = $('#erreur');
+    var pourcent = 0;
+    var boul1 = false;
+    var boul2 = false;
+    var boul3 = false;
+    var boul4 = false;
+    const progress = document.querySelector('.progress-done');
+    document.querySelector('.progressBar').style.display = 'none';
+    pourcent = 0;
+    let barre = $("#barre-mdp");
+    barre.children().remove();
+    barre.text("");
+    let taille = $("#taille-mdp");
+    taille.children().remove();
+    taille.text("");
+    let min = $("#min-mdp");
+    min.children().remove();
+    min.text("");
+    let maj = $("#maj-mdp");
+    maj.children().remove();
+    maj.text("");
+    let digit = $("#chiffre-mdp");
+    digit.children().remove();
+    digit.text("");
+    //Vérifie qu'il y a au moins 8 caractères
+    if (/^(.{8,})/.test($mdp.val())) {
+      pourcent += 72;
+      boul1 = true;
+      taille.append('<span style="color: green;"><i class="fas fa-check-circle is-font-primary"></i></span> Au moins 8 caractères. (' + $mdp.val().length + '/8)');
+      $('.indiq_verif').addClass('add');
+    } else {
+      pourcent += ($mdp.val().length) / 8 * 72;
+      boul1 = false;
+      taille.append('<span style="color: red;"><i class="fas fa-times-circle is-font-danger"></i></span> Au moins 8 caractères. (' + $mdp.val().length + '/8)');
+      $('.indiq_verif').addClass('add');
+    }
+    //Vérification du chiffre
+    if (/^(?=.*\d)/.test($mdp.val())) {
+      boul2 = true;
+      pourcent += 9.4;
+      digit.append('<span style="color: green;"><i class="fas fa-check-circle is-font-primary"></i></span> Au moins 1 chiffre.');
+    } else {
+      boul2 = false;
+      digit.append('<span style="color: red;"><i class="fas fa-times-circle is-font-danger"></i></span> Au moins 1 chiffre.');
+    }
+    //Vérification de la minuscule
+    if (/^(?=.*[a-z])/.test($mdp.val())) {
+      boul3 = true;
+      pourcent += 9.3;
+      min.append('<span style="color: green;"><i class="fas fa-check-circle is-font-primary"></i></span> Au moins 1 caractère en minuscule.');
+    } else {
+      boul3 = false;
+      min.append('<span style="color: red;"><i class="fas fa-times-circle is-font-danger"></i></span> Au moins 1 caractère en minuscule.');
+    }
+    //Vérification de la majuscule
+    if (/^(?=.*[A-Z])/.test($mdp.val())) {
+      boul4 = true;
+      pourcent += 9.3;
+      maj.append('<span style="color: green;"><i class="fas fa-check-circle is-font-primary"></i></span> Au moins 1 caractère en majuscule.');
+    } else {
+      boul4 = false;
+      maj.append('<span style="color: red;"><i class="fas fa-times-circle is-font-danger"></i></span> Au moins 1 caractère en majuscule.');
+    }
+    document.querySelector('.progressBar').style.display = 'block';
+    console.log(pourcent);
+    var rouge = (100 - pourcent) / 100 * 255;
+    var vert = pourcent / 100 * 255;
+    progress.style.width = pourcent + '%';
+    progress.style.backgroundColor = 'rgb(' + rouge + ',' + vert + ',0)';
+
+    if (boul1 == true && boul2 == true && boul3 == true && boul4 == true) {
+      $mdp.css({ // on rend le champ rouge
+        border: '3px solid green',
+      });
+      $password_check.removeClass("fas fa-times");
+      $password_check.addClass("fas fa-check");
+      $password_check.css({ // on rend le champ rouge
+        color: 'green',
+      });
+      return true;
+    } else {
+      $mdp.css({ // on rend le champ rouge
+        border: '3px solid red',
+      });
+      $password_check.removeClass("fas fa-check");
+      $password_check.addClass("fas fa-times");
+      $password_check.css({ // on rend le champ rouge
+        color: 'red',
+      });
+      return false;
+    }
+  }
+
+  function verifConfMdp() {
+    var $pseudo_check=  $mdp = $('#mdp'),
+      $password_check= $('#password_check'),
+      $confmdp = $('#confmdp'),
+      $confPassword_check= $('#confPassword_check'),
+      $erreur = $('#erreur');
+    if ($confmdp.val() != $mdp.val() || $confmdp.val() == '') { // si la confirmation est différente du mot de passe
+      $confmdp.css({ // on rend le champ rouge
+        border: '3px solid red',
+      });
+      $confPassword_check.removeClass("fas fa-check");
+      $confPassword_check.addClass("fas fa-times");
+      $confPassword_check.css({ // on rend le champ rouge
+        color: 'red',
+      });
+      return false;
+    } else {
+      $confmdp.css({ // si tout est bon, on le rend vert
+        border: '3px solid green',
+      });
+      $confPassword_check.removeClass("fas fa-times");
+      $confPassword_check.addClass("fas fa-check");
+      $confPassword_check.css({ // on rend le champ rouge
+        color: 'green',
+      });
+      return true;
+    }
+  }
+
+
+
+
+
+
+
 function inputLycee(){
   var contenu = $('#lycee').html().trim();
   $('#lycee').replaceWith('<div style="width:95%;width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" class="input_inscription control has-icons-left has-icons-right"><input autocomplete="off" class="color_input input" type="text" placeholder="Lycée" id="school" value="' + contenu +'"><span class="icon is-small is-left"><i class="fas fa-school"></i></span><span class="icon is-small is-right"><i class="fas fa-check" id="school_check"></i></span></div><input type="hidden" name="school" id="schoolValue">'); // remplace le code HTML actuel par celui-ci
@@ -234,7 +382,7 @@ function verifSchool(asynch) {
   return retour;
 }
 $('#form').on('submit', function() {
-  if (verifNom() && verifPrenom() && verifPseudo() && verifSchool(false)) {
+  if (verifNom() && verifPrenom() && verifPseudo() && verifSchool(false) && verifMdp() &&  verifConfMdp()) {
     return true;
   } else {
     return false;

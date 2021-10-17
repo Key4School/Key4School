@@ -8,6 +8,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <link rel ="stylesheet" href="http://jqueryui.com/ressources/demos/style.css" />
+  <script src="../static/js/voir_mdp.js"></script>
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -322,7 +323,20 @@
                 </div>
               </td>
             </tr>
-
+            <tr>
+              <td>
+                <i class="fas fa-lock" style="font-size:25px;"></i>
+                &nbsp;&nbsp;Mot de passe
+              </td>
+              <td>
+                <div id="contentmdp" class="contentmdp" >
+                  <input type="hidden" value="••••••••" name="mdp" />
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputMdp()" {%endif%} id="mdp">••••••••
+                  </p>
+                  <i id="logoModifieMdp" class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputMdp()" {%endif%}></i>
+                </div>
+              </td>
+            </tr>
             <tr>
               <td>
                 <i class="fas fa-graduation-cap" style="font-size:25px;"></i>

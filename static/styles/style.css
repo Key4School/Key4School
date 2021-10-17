@@ -380,7 +380,13 @@ input[type=range]:focus::-ms-fill-upper {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
+.contentmdp{
+  display: flex;
+  flex-direction: row;
+}
+.contentmdpOn{
+  display: block;
+}
 /* Pour telephone */
 @media screen and (max-width:1023px) {
   .flex_connexion, .contentcredit, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
@@ -458,7 +464,6 @@ input[type=range]:focus::-ms-fill-upper {
     justify-content: center;
     margin: auto;
   }
-
   .form_connexion {
     width: 90%;
     padding: 2%;

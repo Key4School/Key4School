@@ -1,7 +1,6 @@
 $(document).ready(function() {
 
-  var $pseudo_check= $('#pseudo_check'),
-    $mdp = $('#mdp'),
+  var $pseudo_check= $mdp = $('#mdp'),
     $password_check= $('#password_check'),
     $confmdp = $('#confmdp'),
     $confPassword_check= $('#confPassword_check'),
