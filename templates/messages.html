@@ -673,7 +673,7 @@
               </header>
               <form onsubmit="supprDisc(event); return false;" id="supprDiscForm" method="POST" autocomplete="off">
                 <section class="modal-card-body">
-                  <input id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
+                  <input class="input" id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
                   <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['_id']}}" />
                   <input type='hidden' name="demandeBut" value="supprDisc" />
                 </section>

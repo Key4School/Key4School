@@ -59,7 +59,7 @@
       </header>
       <form onsubmit="DemandModification(event); return false;" id="DemandModification" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input class="input" type="text" id="txtModif" name="txtModif" value="" />
+          <textarea class="input" type="text" style="min-height: 10em;" id="txtModif" name="txtModif" value="" ></textarea>
           <input type='hidden' id="idDemandModif" name='idDemandModif' value="" />
         </section>
         <footer class="modal-card-foot">
@@ -78,7 +78,7 @@
       </header>
       <form onsubmit="supprimer(event); return false;" id="supprForm" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type="text" name="motif" placeholder="motif" required />
+          <input class="input" type="text" name="motif" placeholder="motif" required />
           <input type='hidden' id="idSupprimé" name='idSuppr' value="" />
           <input type='hidden' name="demandeBut" value="Suppr" />
         </section>

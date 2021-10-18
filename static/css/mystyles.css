@@ -4632,7 +4632,7 @@ a.dropdown-item.is-active, button.dropdown-item.is-active {
 }
 
 .media .media {
-  border-top: 1px solid rgba(219, 219, 219, .5);
+  /* border-top: 1px solid rgba(219, 219, 219, .5); */
   display: flex;
   padding-top: .75rem
 }
