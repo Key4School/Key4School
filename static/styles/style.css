@@ -215,19 +215,19 @@ p {
 
 /* style scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: white;
+  background:var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E3E4E3;
+  background: var(--scrollbar-thumb);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #e9ebe9;
+  background: var(--scrollbar-thumb-hover);
 }
 
 input[type=range] {

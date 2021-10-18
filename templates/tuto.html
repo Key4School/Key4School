@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="{{session['theme']}}">
+<html lang="fr" data-theme="{{session['theme']}}" style="height:100%;">
 	<head>
 		{% include 'head.html' with context %}
 		<title>Key4School - Aide</title>
@@ -23,27 +23,28 @@
 		</style>
 	</head>
 
-	<body style="text-align: center;" onkeydown="touche(event)">
-
-  		{% include 'bandeau.html' %}
-  		<br /><br/><br />
+	<body style="text-align: center;height:93%;" onkeydown="touche(event)">
+		<div style="height:12%;margin-top:3%;">
 			<h2 class="title">Comment ça marche ?</h2>
-
 			<progress id="progressTuto" class="progress is-info" value="1" max="9" style="width:60%; margin:auto;"></progress><br />
-			<div style="display:flex;align-items:center;justify-content:center;">
-		<i class="fas fa-caret-left logoNext"  onclick="precedent()"></i>
-		<div id="container" style="margin-bottom: 25px;">
-			<h3 id="titre" style="text-align:left;font-size:20px;font-weight:bold;">1. Présentation</h3>
-			<p id="texte" style="font-size:19px;text-align:left;margin:2% 4%;">
-				Bienvenue sur <b>Key4School</b> ! Nous sommes ravis de votre arrivée !
-				Key4School est un réseau social développé par 3 lycéens d’Ile de France a destination des lycéens. L’objectif est d’y <b>trouver de l’aide et de s’entraider facilement</b> !
-
-			</p>
-
-			<iframe scrolling="yes" id="iframTuto" style="width:90%; height:600px;" src="{{url_for('accueil')}}"></iframe>
 		</div>
-		<i id="next" style="display:block;" class="fas fa-caret-right logoNext" onclick="suivant()"></i>
-		<a id="fini" style="display:none;" href="{{url_for('accueil')}}"><i class="far fa-check-square logoNext" ></i></a>
+		<div style="display:flex;align-items:center;justify-content:center;height:80%;padding-top:3%;">
+		<i class="fas fa-caret-left logoNext"  onclick="precedent()"></i>
+		<div id="container" style="display:flex;align-items:center;justify-content:space-between;margin:auto;height:100%;padding:0 3%;">
+			<div style="width:40%;">
+				<h3 id="titre" style="text-align:left;font-size:1.5rem;font-weight:bold;">1. Présentation</h3>
+				<p id="texte" style="font-size:19px;text-align:left;margin:2% 4%;">
+					Bienvenue sur <b>Key4School</b> ! Nous sommes ravis de votre arrivée !
+					Key4School est un réseau social développé par 3 lycéens d’Ile de France a destination des lycéens. L’objectif est d’y <b>trouver de l’aide et de s’entraider facilement</b> !
+
+				</p>
+			</div>
+			<iframe scrolling="yes" id="iframTuto" width="50%" height="100%"  src="{{url_for('accueil')}}"></iframe>
+		</div>
+		<div>
+			<i id="next" class="fas fa-caret-right logoNext" onclick="suivant()"></i><br /><br /><br />
+			<a id="fini" href="{{url_for('accueil')}}"><i class="far fa-check-square logoNext" ></i></a>
+		</div>
 		</div>
 	</body>
 </html>

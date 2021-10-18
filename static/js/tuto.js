@@ -63,7 +63,6 @@ function suivant() {
   }
   if (page == imageMax) {
     document.getElementById("next").style.display = "none";
-    document.getElementById("fini").style.display = "block";
   }
   update();
 }
@@ -75,7 +74,6 @@ function precedent() {
   }
   if (page == imageMax-1) {
     document.getElementById("next").style.display = "block";
-    document.getElementById("fini").style.display = "none";
   }
   update();
 }
