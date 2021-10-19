@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="system">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Key4School - Leader Board</title>
+{% include 'head.html' with context %}
+<style>
+</style>
+</head>
+<body>
+  {% include 'bandeau.html' %}
+  <h1 class="title">Leaderboard</h1>
+  <br />
+  <div style="width:50%;margin:auto;">
+  <div class="tabs is-toggle is-toggle-rounded">
+  <ul style="    justify-content: center;">
+    <li class="is-active">
+      <a>
+        <span>All Time</span>
+      </a>
+    </li>
+    <li>
+      <a>
+        <span>This Week</span>
+      </a>
+    </li>
+    <li>
+      <a>
+        <span>This Month</span>
+      </a>
+    </li>
+  </ul>
+</div>
+  <br />
+  <div style="display:flex;align-items:center;justify-content:space-evenly;">
+    <div style="align-items:center;display: flex;flex-direction: column;">
+      <p>
+          <i style="font-size:1.5rem;color:#c0c0c0" class="fas fa-medal"></i>
+      </p>
+      <img style="height:70px;width:70px;object-fit: cover;border-radius:50%;" src="/static/image/sans_profil.png"/>
+      <p style="font-size:1rem;">
+        XP
+      </p>
+      <p style="font-size:1rem;">
+        pseudo
+      </p>
+    </div>
+    <div style="align-items:center;display: flex;flex-direction: column;">
+      <p>
+          <i style="font-size:1.75rem;color:hsl(48, 100%, 67%);" class="fas fa-crown"></i>
+      </p>
+      <img style="height:100px;width:100px;object-fit: cover;border-radius:50%;" src="/static/image/sans_profil.png"/>
+      <p style="font-size:1.5rem;">
+        XP
+      </p>
+      <p style="font-size:1.5rem;">
+        pseudo
+      </p>
+    </div>
+    <div style="align-items:center;display: flex;flex-direction: column;">
+      <p>
+          <i style="font-size:1.5rem;color:#614e1a" class="fas fa-medal"></i>
+      </p>
+      <img style="height:70px;width:70px;object-fit: cover;border-radius:50%;" src="/static/image/sans_profil.png"/>
+      <p style="font-size:1rem;">
+        XP
+      </p>
+      <p style="font-size:1rem;">
+        pseudo
+      </p>
+    </div>
+  </div>
+  <br /><br />
+  <div style="width:100%;">
+    {%for utilisateur in users%}
+    <div style="display:flex;width:75%;margin: 1% auto 3% auto;align-items:center;justify-content:space-between;border:2px solid {%if utilisateur['_id']==sessionId%}{{session['couleur'][1]}}{%else%}gray{%endif%};padding:1% 2%;border-radius: 10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <p>
+            4
+          </p>
+          <img style="margin: 0 10% 0 40%;height:40px;width:40px;object-fit: cover;border-radius:50%;" src="{%if utilisateur['nomImg'] != '' %}{{url_for('userImg', profilImg = utilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+          <p>
+            {{utilisateur['pseudo']}}
+          </p>
+        </div>
+        <p>
+          {{utilisateur['xp']}}
+        </p>
+    </div>
+    {%endfor%}
+
+  </div>
+
+</div>
+</body>
+</html>

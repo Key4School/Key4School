@@ -28,7 +28,7 @@ from db_poo import *
 DB = DB_Manager.createCluster(app, "mongodb+srv://les-codeurs-lbp:ezEwMi2KBaCkzT4@cluster0.bggb1.mongodb.net/key4schoolBDD?retryWrites=true&w=majority")
 
 # Routing
-from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved, about
+from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved, about, leaderboard
 from routing.recherche import recherche, recherche_user, morePost, moreUser
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, uploadImage, image, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg, modererGrp
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
@@ -90,6 +90,7 @@ app.add_url_rule('/help/', 'tuto', tuto)
 app.add_url_rule('/XP_tuto/', 'XP_tuto', XP_tuto)
 app.add_url_rule('/mail_rendu/', 'mail_rendu', mail_rendu)
 app.add_url_rule('/saved/', 'saved', saved)
+app.add_url_rule('/leaderboard/', 'leaderboard', leaderboard)
 app.add_url_rule('/savePost/<postId>/', 'savePost', savePost, methods=['POST'])
 app.add_url_rule('/notif/<userId>/<notifId>/', 'afficheNotif', afficheNotif)
 app.add_url_rule('/about/', 'about', about)

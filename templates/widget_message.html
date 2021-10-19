@@ -1,9 +1,21 @@
 {%if content['id-utilisateur']==sessionId%}
-<div class="moimsg" id="msg{{content['_id']}}">
+<div class="moimsg" style="
+{%if 'audio' in content and content['audio'] == true %}
+width: 30%;
+{%else%}
+min-width: 20%;
+{%endif%}
+" id="msg{{content['_id']}}">
   <div style="align-self: flex-end;">
   {%else%}
 
-  <div class="participantmsg" style="word-break: break-word;" id="msg{{content['_id']}}">
+  <div class="participantmsg" style="word-break: break-word;
+  {%if 'audio' in content and content['audio'] == true %}
+  width: 30%;
+  {%else%}
+  min-width: 20%;
+  {%endif%}
+  " id="msg{{content['_id']}}">
     <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
   {%endif%}
     {%if content['id-utilisateur']!=sessionId%}
@@ -101,23 +113,26 @@
 
       <div id="audio-player-container{{content['_id']}}" style="display: flex;justify-content:space-evenly;align-items: center;width: 100%;margin-top: 5px;">
         <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
-        <button style="font-size:17px;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="BlackOrWhite fas fa-play"></i></button>
-        <input style="margin-right:2%; width: 60%; background: transparent;" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
+        <button style="font-size:1.25rem;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="color_audio fas fa-play"></i></button>
+        <input style="margin-right:2%; width: 60%; background: transparent;padding:0 2% 0 2%;" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
         <img id="img_msg_audio{{content['_id']}}" style="margin:0px;" class="img_msg_audio block" src="{%if 'nomImg' in content['utilisateur'] and content['utilisateur']['nomImg'] != '' %}{{url_for('userImg', profilImg = content['utilisateur']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" alt="photo de profile" />
-        <button class="none" style="font-size:17px;min-width:42px; height: 35px; border:transparent;background-color:{{session['couleur'][2]}};margin-right:1%;border-radius: 15px;padding-top: 2%;padding-bottom: 2%; margin-right: 15px; margin-top: 3px; cursor: pointer;" id="buttonAudio{{content['_id']}}" onclick="changeRate('{{content['_id']}}');">1x</button>
+        <button class="none" style="font-size:1rem;min-width:42px; height: 35px; border:transparent;background-color:{{session['couleur'][2]}};border-radius: 15px;padding-top: 2%;padding-bottom: 2%; margin-right: 15px; margin-top: 5px;margin-bottom:5px; cursor: pointer;" id="buttonAudio{{content['_id']}}" onclick="changeRate('{{content['_id']}}');">1x</button>
       </div>
-      <span class="none" style="margin:0px;" id="current-time{{content['_id']}}" class="time">0:00</span>
-      <span class="block" style="margin:0px;" id="duration{{content['_id']}}" class="time">0:00</span>
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <span class="none" style="margin:0px;" id="current-time{{content['_id']}}" class="time">0:00</span>
+        <span class="block" style="margin:0px;" id="duration{{content['_id']}}" class="time">0:00</span>
+        <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+      </div>
       <script>
         document.getElementById('audio{{content['_id']}}').style.display='block';
         const playIconContainer{{content['_id']}} = document.getElementById('play-icon{{content['_id']}}');
         const buttonAudio{{content['_id']}} = document.getElementById('buttonAudio{{content['_id']}}');
         const audioPlayerContainer{{content['_id']}} = document.getElementById('audio-player-container{{content['_id']}}');
         const seekSlider{{content['_id']}} = document.getElementById('seek-slider{{content['_id']}}');
-        let playState{{content['_id']}} = '<i class="fas fa-pause BlackOrWhite"></i>';
+        let playState{{content['_id']}} = '<i class="fas fa-pause  color_audio"></i>';
 
         playIconContainer{{content['_id']}}.addEventListener('click', () => {
-            if(playState{{content['_id']}} === '<i class="fas fa-play BlackOrWhite"></i>') {
+            if(playState{{content['_id']}} === '<i class="fas fa-play  color_audio"></i>') {
                 audio{{content['_id']}}.pause();
                 cancelAnimationFrame(raf{{content['_id']}});
                 console.log($('img_msg_audio{{content['_id']}}'));
@@ -129,8 +144,8 @@
                 $('#current-time{{content['_id']}}').addClass('none');
                 $('#duration{{content['_id']}}').removeClass('none');
                 $('#duration{{content['_id']}}').addClass('block');
-                playState{{content['_id']}} = '<i class="fas fa-pause BlackOrWhite"></i>';
-                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play BlackOrWhite"></i>';
+                playState{{content['_id']}} = '<i class="fas fa-pause  color_audio"></i>';
+                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play  color_audio"></i>';
             } else {
                 audio{{content['_id']}}.play();
                 requestAnimationFrame(whilePlaying{{content['_id']}});
@@ -142,8 +157,8 @@
                 $('#current-time{{content['_id']}}').addClass('block');
                 $('#duration{{content['_id']}}').removeClass('block');
                 $('#duration{{content['_id']}}').addClass('none');
-                playState{{content['_id']}} = '<i class="fas fa-play BlackOrWhite"></i>';
-                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-pause BlackOrWhite"></i>';
+                playState{{content['_id']}} = '<i class="fas fa-play  color_audio"></i>';
+                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-pause  color_audio"></i>';
             }
         });
 
@@ -224,8 +239,8 @@
 
         audio{{content['_id']}}.addEventListener("ended", function(){
              audio{{content['_id']}}.currentTime = 0;
-             playState{{content['_id']}} = '<i class="fas fa-pause BlackOrWhite"></i>';
-             playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play BlackOrWhite"></i>';
+             playState{{content['_id']}} = '<i class="fas fa-pause  color_audio"></i>';
+             playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play  color_audio"></i>';
              audio{{content['_id']}}.pause();
              cancelAnimationFrame(raf{{content['_id']}});
              seekSlider{{content['_id']}}.value = 0;
@@ -240,5 +255,7 @@
     {%if 'audio' in content and content['audio'] == false %}
     </p>
     {%endif%}
+    {%if 'audio' in content and content['audio'] == false %}
     <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+    {%endif%}
   </div>

@@ -67,3 +67,12 @@ def saved():
 
 def about():
     return render_template('about.html')
+
+def leaderboard():
+    if 'id' in session:
+        user = utilisateurs[session['id']].toDict()
+        users = utilisateurs.values()
+        return render_template("leaderboard.html", users=users, user=user, sessionId=ObjectId(session['id']))
+    else:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
