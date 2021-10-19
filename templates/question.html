@@ -15,14 +15,11 @@
 
   {% include 'bandeau.html' %}
   <br /><br /><br />
-  <div class="columns">
-    <div class="column"></div>
-    <div class="column is-three-fifths divQuestion">
+    <div class="divQuestion">
       <form action="{{url_for('question')}}" method="post" enctype="multipart/form-data">
         <div class="box demande" style="border-radius: 20px; margin-bottom: 0.8rem;" data-subject="Tag matiere">
           <article class="media">
-            <div class="media-left">
-
+            <div class="media-left img_Pub_question_Ordi">
               <figure class="image is-64x64">
                 <img alt="user" src="{%if 'nomImg' in user and user['nomImg'] != "" %}{{url_for('userImg', profilImg = user['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
               </figure>
@@ -32,10 +29,16 @@
               <div class="content">
                 <p style="margin-bottom: 5px;">
 
-                <div style="font-variant: small-caps;display:flex;">
-
-                  <a>{{user['nom']}} {{user['prenom']}}</a>
-
+                <div style="display:flex;">
+                  <div style="font-variant: small-caps;">
+                    <a>{{user['nom']}} {{user['prenom']}}</a><br />
+                    <small><em>@{{user['pseudo']}}</em></small> <small>0min</small>
+                  </div>
+                  <div class="media-left img_Pub_question_Tel">
+                    <figure class="image is-64x64">
+                      <img alt="user" src="{%if 'nomImg' in user and user['nomImg'] != "" %}{{url_for('userImg', profilImg = user['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
+                    </figure>
+                  </div>
                   <div style="margin-left: 40px;" class="control has-icons-left selectMatiereOrdi">
                     <div class="select">
                       <select name="matiere" required>
@@ -232,8 +235,7 @@
                       <i class="fas fa-book"></i>
                     </span>
                   </div>
-                </div>
-                <small><em>@{{user['pseudo']}}</em></small> <small>0min</small>
+              </div>
                 </p>
                 <div class="control has-icons-left selectMatiereTel">
                   <div class="select">
@@ -476,7 +478,6 @@
         </div>
     </div>
     </form>
-    <div class="column"></div>
   </div>
 </body>
 

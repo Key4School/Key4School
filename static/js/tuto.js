@@ -8,7 +8,7 @@ var data = [
     'lien': "/"
   },
   {
-    'texte': "Dès votre arrivée sur le site, vous êtes sur la <b>page d’accueil</b> où se trouvent les questions posées par d’autres membres les <em>plus likées</em>. Les questions ne concernent <b>uniquement</b> les matières que vous étudiez, pour en sélectionner une en particulier vous pouvez utiliser les <b>filtres</b> en haut de page. Si en défilant vous tombez sur une question à laquelle vous pouvez répondre alors n’hésitez-pas, il vous suffit de <b>cliquer sur la bulle en dessous</b> ! ",
+    'texte': "Dès votre arrivée sur le site, vous êtes sur la <b>page d’accueil</b> où se trouvent les questions posées par d’autres membres les <em>plus likées</em>. Les questions ne concernent <b> pas uniquement</b> les matières que vous étudiez, pour en sélectionner une en particulier vous pouvez utiliser les <b>filtres</b> en haut de page. Si en défilant vous tombez sur une question à laquelle vous pouvez répondre alors n’hésitez-pas, il vous suffit de <b>cliquer sur la bulle en dessous</b> ! ",
     'titre': "2. Accueil",
     'lien': "/"
   },
@@ -33,7 +33,7 @@ var data = [
     'lien': "/"
   },
   {
-    'texte': "Accessible depuis le menu déroulant, il vous permet de <b>renseigner vos informations</b> comme votre pseudo, vos langues vivantes, options et spécialités. Vous pouvez également ajouter une photo de profil ou ajouter des moyens de contact en décidant bien évidemment de les rendre publiques ou non. Vous y retrouverez aussi <b>vos questions posées</b>. <u><b>Nous vous invitons à le compléter dès votre première visite !</b></u>",
+    'texte': "Accessible depuis le menu déroulant, il sert à indiquer vos <b>informations personelles</b> comme votre pseudo, vos langues vivantes, options et spécialités. Vous pouvez également ajouter une photo de profil ou ajouter des moyens de contact en décidant bien évidemment de les rendre publiques ou non. Vous y retrouverez aussi <b>vos questions posées</b>. <u><b>Nous vous invitons à le compléter dès votre première visite !</b></u>",
     'titre': "7. Profil",
     'lien': "/profil/"
   },

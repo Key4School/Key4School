@@ -401,11 +401,11 @@ input[type=range]:focus::-ms-fill-upper {
 }
 /* Pour telephone */
 @media screen and (max-width:1023px) {
-  .flex_connexion, .contentcredit, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
 
-  .img_connexion, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -423,10 +423,6 @@ input[type=range]:focus::-ms-fill-upper {
   .boxAdmin {
     padding: 3%;
     margin-right: 2%;
-  }
-
-  .divQuestion {
-    margin: 0% 2%;
   }
 
   .logo {
@@ -517,11 +513,15 @@ input[type=range]:focus::-ms-fill-upper {
   .container_profile{
     width: 90%;
   }
+  .divQuestion {
+    margin:auto;
+    width: 90%;
+  }
 }
 
 /* Pour ordinateur */
 @media screen and (min-width:1023px) {
-  .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
+  .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
     display: none;
   }
 
@@ -529,7 +529,7 @@ input[type=range]:focus::-ms-fill-upper {
     display: flex;
   }
 
-  .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre {
+  .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
     display: block;
   }
 
@@ -651,5 +651,9 @@ input[type=range]:focus::-ms-fill-upper {
   }
   .container_profile{
     width: 20%;
+  }
+  .divQuestion {
+    margin:auto;
+    width: 60%;
   }
 }
