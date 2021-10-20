@@ -1,14 +1,12 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
-from bson.objectid import ObjectId
 import os
 from db_poo import *
 from routing.functions import listeModeration, automoderation, Interval
 
 @db_session
 def question():
-    global demandes_aide
 
     if 'id' in session:
         if request.method == 'POST':
@@ -26,18 +24,17 @@ def question():
                 else:
                     fileType = 'none'
 
-                id = ObjectId()
-                demandes_aide[str(id)] = Demande({"id": id, "id-utilisateur": session['id'], "titre": automoderation(escape(request.form['titre'])), "contenu": automoderation(request.form['demande']), "date_envoi": datetime.now(), "matière": request.form['matiere'], "réponses associées": {}, "likes": [], "sign": [], "resolu": False, "fileType": fileType})
-                demandes_aide[str(id)].insert()
+                demande = Request(id_utilisateur=session['id'], titre=automoderation(escape(request.form['titre'])), contenu=automoderation(request.form['demande']), matière=request.form['matiere'], fileType=fileType)
+                demande.insert()
 
                 if request.files['file'].mimetype != 'application/octet-stream':
-                    nom = "DemandeFile_" + str(id)
+                    nom = "DemandeFile_" + demande['id']
                     DB.cluster.save_file(nom, request.files['file'])
 
                 # add XP
                 user.addXP(10)
 
-                return redirect('/comments/' + str(id))
+                return redirect('/comments/' + demande['id'])
 
             else:
                 return redirect(url_for('accueil'))
@@ -59,41 +56,30 @@ def redirect_comments():
 
 @db_session
 def comments(idMsg):
-    global demandes_aide
-    global notifications
 
     if 'id' in session:
+        msg = Request.get(filter="cls.id == idMsg", limit=1)
         if request.method == 'GET':
-            if idMsg in demandes_aide:
-                msg = demandes_aide[idMsg].toDict()
-
-                for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idMsg) and notification.type == 'demande' and session['id'] in notification.destinataires]:
+            if msg:
+                for notif in Notification.get(filter="cls.id_groupe == idMsg and cls.type == 'demande' and cls.destinataires.comparator.has(session['id'])"):
                     notif.supprUser(session['id'])
-
                 return render_template("comments.html", d=msg, user=User.get(filter="cls.id == session['id']", limit=1))
             else:
-                for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idMsg) and notification.type == 'demande' and session['id'] in notification.destinataires]:
-                    notif.supprUser(session['id'])
+                for notif in Notification.get(filter="cls.id_groupe == idMsg and cls.type == 'demande'"):
+                    notif.supprNotif()
                 return redirect('/')
         else:
             if 'rep' in request.form:
-                if idMsg in demandes_aide:
-                    msg = demandes_aide[idMsg].toDict()
+                if msg:
                     reponses = msg['reponses_associees']
 
-                    id = ObjectId()
-                    reponses[str(id)] = Reponse({
-                        'id': ObjectId(id),
-                        'id-utilisateur': session['id'],
-                        'contenu': automoderation(request.form.get('rep')),
-                        'date_envoi': datetime.now(),
-                        'likes': [],
-                        'sign': [],
-                    })
+                    reponse = Response(id_utilisateur=session['id'], contenu=automoderation(request.form.get('rep')))
+                    reponse.insert()
 
-                    demandes_aide[idMsg].update()
+                    reponses.append(reponse['id'])
+                    msg.update()
 
-                    Notification.create("demande", ObjectId(idMsg), id, [msg['idAuteur']])
+                    Notification.create("demande", idMsg, id, [msg['idAuteur']])
 
                     # add XP
                     if not session['id'] == msg['idAuteur']:
@@ -106,12 +92,11 @@ def comments(idMsg):
 
 @db_session
 def updateDemand():
-    global demandes_aide
 
     if 'id' in session:
-        demand = demandes_aide[request.form['idDemandModif']]
+        demand = Request.get(filter="cls.id  == request.form['idDemandModif']", limit=1)
         if session['id'] == demand.id_utilisateur:
-            demand.contenu = automoderation(request.form['txtModif'])
+            demand['contenu'] = automoderation(request.form['txtModif'])
             demand.update()
         return 'sent'
     else:
@@ -162,12 +147,11 @@ def delete_file(path):
 
 @db_session
 def likePost(idPost):
-    global demandes_aide
 
     if 'id' in session:
         if 'idPost' != None:
             # on récupère les likes de la demande d'aide
-            demande = demandes_aide[idPost].toDict()
+            demande = Request.get(filter="cls.id == idPost")
             likes = demande['likes']
 
             # on check mtn si l'utilisateur a déjà liké la demande
@@ -185,7 +169,7 @@ def likePost(idPost):
                     User.get(filter="cls.id == session['id']", limit=1).addXP(2)
 
             # on update dans la DB
-            demandes_aide[idPost].update()
+            demande.update()
 
             # on retourne enfin le nouveau nb de likes
             return {'newNbLikes': len(likes)}, 200
@@ -196,17 +180,13 @@ def likePost(idPost):
         abort(401)  # non autorisé
 
 @db_session
-def likeRep(idPost, idRep):
-    global demandes_aide
+def likeRep(idRep):
 
     if 'id' in session:
-        if 'idPost' != None and 'idRep' != None:
-            # on récupère les likes de la demande d'aide
-            demande = demandes_aide[idPost].toDict()
-            reponses = demande['reponsesDict']
-            if not idRep in reponses:
+        if idRep != None:
+            reponse = Response.get(filter="cls.id == idRep", limit=1)
+            if not reponse:
                 return abort(400)
-            reponse = reponses[idRep]
 
             likes = reponse['likes']
 
@@ -225,7 +205,7 @@ def likeRep(idPost, idRep):
                     User.get(filter="cls.id == session['id']", limit=1).addXP(2)
 
             # on update dans la DB
-            demandes_aide[idPost].update()
+            reponse.update()
 
             # on retourne enfin le nouveau nb de likes
             return {'newNbLikes': len(likes)}, 200
@@ -237,18 +217,17 @@ def likeRep(idPost, idRep):
 
 @db_session
 def resoudre(idPost):
-    global demandes_aide
 
     if 'id' in session:
-        if 'idPost' != None:
-            demande = demandes_aide[idPost]
+        if idPost != None:
+            demande = Request.get(filter="cls.id == idPost", limit=1)
 
             # on check mtn si l'utilisateur a déjà liké la demande
-            if demande.id_utilisateur == session['id']:
+            if demande['id_utilisateur'] == session['id']:
                 # on update dans la DB
                 demande.resolu = True
 
-                demandes_aide[idPost].update()
+                demande.update()
 
                 return "ok", 200
             else:
@@ -262,13 +241,12 @@ def resoudre(idPost):
 
 @db_session
 def updateComment():
-    global demandes_aide
 
     if 'id' in session:
-        Comment = demandes_aide[request.form['idDemandCommentModif']].toDict()['reponsesDict2'][request.form['idCommentModif']]
-        if session['id'] == Comment.id_utilisateur:
-            Comment.contenu = automoderation(request.form['txtModif'])
-            demandes_aide[request.form['idDemandCommentModif']].update()
+        comment = Response.get(filter="cls.id == request.form['idCommentModif']", limit=1)
+        if session['id'] == comment['id_utilisateur']:
+            comment[contenu] = automoderation(request.form['txtModif'])
+            comment.update()
         return 'sent'
     else:
         session['redirect'] = request.path
@@ -281,10 +259,10 @@ def savePost(postId):
         user = User.get(filter="cls.id == session['id']", limit=1)
         savedPost = user['savedDemands']
 
-        if ObjectId(postId) in savedPost:
-            savedPost.remove(ObjectId(postId))
+        if postId in savedPost:
+            savedPost.remove(postId)
         else:
-            savedPost.append(ObjectId(postId))
+            savedPost.append(postId)
 
         user.update()
 

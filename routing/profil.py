@@ -1,21 +1,15 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
 from datetime import *
 from flask.json import jsonify
-from bson.objectid import ObjectId
 from db_poo import *
 from routing.functions import listeModeration, automoderation
 
 @db_session
 def profil(idUser):
-    global demandes_aide
 
     if 'id' in session:
         if idUser == None or idUser == session['id']:
-            toutesDemandes = sorted([d for d in demandes_aide.values() if d.id_utilisateur == session['id']], key = lambda d: d.date_envoi, reverse=True)
-
-            demandes = []
-            for d in toutesDemandes:  # pour chaque demande, on va l'ajouter dans une liste qui sera donnée à la page HTML
-                demandes.append(d.toDict())
+            demandes = Request.get(filter="cls.id_utilisateur == session['id']", order_by="cls.date_envoi", desc=True)
 
             user = User.get(filter="cls.id == session['id']", limit=1)
             return render_template("profil.html", demandes=demandes, user=user)

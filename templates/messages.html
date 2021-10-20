@@ -193,7 +193,7 @@
               <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['id']}}"
                 data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
                 <td>
-                  <a style="display: block; text-overflow: ellipsis; overflow: hidden; width: 100%; height: 100%;" class="liengroupe {%if content['id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['id'])}}">
+                  <a style="display: block; text-overflow: ellipsis; overflow: hidden; width: 100%; height: 100%;" class="liengroupe {%if content['id']==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['id'])}}">
                     <div class="grpName tags has-addons is-medium" style="position: relative; width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px; display: table-row;">
 
                       {%if content['nbNotif'] > 0%}

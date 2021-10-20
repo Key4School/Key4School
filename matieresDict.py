@@ -38,7 +38,7 @@ translations = {
     'lv1-chi': 'LV1 Chinois',
     'lv1-ru': 'LV1 Russe',
     'lv1-ara': 'LV1 Arabe',
-    # A RAJOUTER DANS LE FILTRE ET LES DEMANDES
+    '''A RAJOUTER DANS LE FILTRE ET LES DEMANDES'''
     'lv1-bas': 'LV1 Basque',
     'lv1-cat': 'LV1 Catalan',
     'lv1-cre': 'LV1 Créole',
@@ -53,7 +53,7 @@ translations = {
     'lv2-chi': 'LV2 Chinois',
     'lv2-ru': 'LV2 Russe',
     'lv2-ara': 'LV2 Arabe',
-    # A RAJOUTER DANS LE FILTRE ET LES DEMANDES
+    '''A RAJOUTER DANS LE FILTRE ET LES DEMANDES'''
     'lv2-bas': 'LV2 Basque',
     'lv2-cat': 'LV2 Catalan',
     'lv2-cre': 'LV2 Créole',

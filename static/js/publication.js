@@ -48,14 +48,6 @@ function like_rep(idMsg, idRep){
     document.getElementById(`like_${idRep}`).innerHTML = parseInt(document.getElementById(`like_${idRep}`).innerHTML) - 1; // on enlève 1 au nb de likes
   }
 
-  /*fetch(`/likeRep/${idMsg}/${idRep}`, {
-    method: 'post',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-  });*/
-
   socket.emit('postLike', {type: 'rep', idPost: idMsg, idRep: idRep});
 }
 
@@ -231,10 +223,9 @@ function DemandModificationClose(){
   $("#DemandModif").removeClass("is-active");
 }
 
-function CommentModificationOpen(id, idDemand) {
+function CommentModificationOpen(id) {
   document.getElementById('txtModif2').value = document.getElementById('contenuComment'+id).innerHTML;
   document.getElementById('idCommentModif').value = id;
-  document.getElementById('idDemandCommentModif').value = idDemand;
   $("#CommentModif").addClass("is-active");
 }
 
@@ -262,7 +253,7 @@ function CommentModificationClose(){
 const save = (id) => {
   selectionsave = document.getElementById(`save_${id}`).className;
 
-  if (selectionsave == "far fa-bookmark") 
+  if (selectionsave == "far fa-bookmark")
     document.getElementById(`save_${id}`).className = "fas fa-bookmark";
   else if (selectionsave == "fas fa-bookmark")
     document.getElementById(`save_${id}`).className = "far fa-bookmark";

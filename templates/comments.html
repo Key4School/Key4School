@@ -145,7 +145,7 @@
         <section class="modal-card-body">
           <input id='inputRepRaison' class="input" type="text" placeholder="Pourquoi Signalez vous ce message." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
           <input type='hidden' id="idRepSignalé" name='idSignalé' value="" />
-          <input type='hidden' id="idDemandSignalé" name='idDemandSignalé' value="{{d['idMsg']}}" />
+          <input type='hidden' id="idDemandSignalé" name='idDemandSignalé' value="{{d['id']}}" />
         </section>
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Signaler</button>
@@ -163,7 +163,7 @@
       <form onsubmit="designalerRep(event); return false;" id="designalementRep" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <input type='hidden' id="idRepDesignalé" name='idSignalé' value="" />
-          <input type='hidden' id="idDemandDesignalé" name='idDemandSignalé' value="{{d['idMsg']}}" />
+          <input type='hidden' id="idDemandDesignalé" name='idDemandSignalé' value="{{d['id']}}" />
           Etes-vous sûr de vouloir enlever ce signalement
         </section>
         <footer class="modal-card-foot">
@@ -201,7 +201,6 @@
         <section class="modal-card-body">
           <input class="input" type="text" id="txtModif2" name="txtModif" value="" />
           <input type='hidden' id="idCommentModif" name='idCommentModif' value="" />
-          <input type='hidden' id="idDemandCommentModif" name='idDemandCommentModif' value="" />
         </section>
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Modifier !</button>
@@ -261,7 +260,7 @@
 
   <div class="columns" style="margin-left:2%;">
     <div class="column">
-      {% for r in d['réponses associées'] %}
+      {% for r in d['rep'] %}
         <div class="box" id="divRep_{{r['id']}}">
           <article class="media">
 
@@ -278,7 +277,7 @@
 
               <nav class="level is-mobile">
                 <div class="level-left">
-                  <a class="level-item" aria-label="like" onClick="like_rep('{{d['idMsg']}}', '{{r['idRep']}}')">
+                  <a class="level-item" aria-label="like" onClick="like_rep('{{d['id']}}', '{{r['idRep']}}')">
                     <span class="icon is-small">
                       {% if r['a_like'] %}
                         <i id="like_{{r['idRep']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb_likes']}}</i>
@@ -306,7 +305,7 @@
                 </div>
                 {% if r['id-utilisateur'] == user['id'] %}
                   <div class="navbar-item">
-                    <button class="button is-link is-outlined is-small" onClick="CommentModificationOpen('{{r['idRep']}}', '{{d['idMsg']}}')">
+                    <button class="button is-link is-outlined is-small" onClick="CommentModificationOpen('{{r['idRep']}}')">
                       <span class="icon is-small">
                         <i class="fas fa-pen"></i>
                       </span>
@@ -317,7 +316,7 @@
                 {% endif %}
                 {%if user['admin']==true%}
                   <div class="navbar-item">
-                    <button class="button is-danger is-outlined is-small" onClick="suppressionRep('{{r['idRep']}}', '{{d['idMsg']}}')">
+                    <button class="button is-danger is-outlined is-small" onClick="suppressionRep('{{r['idRep']}}', '{{d['id']}}')">
                       <span class="icon is-small">
                         <i class="fas fa-times"></i>
                       </span>
@@ -327,7 +326,7 @@
                   </div>
                   {%if r['sign'] != []%}
                     <div class="navbar-item">
-                      <button class="button is-success is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
+                      <button class="button is-success is-outlined is-small" onClick="validation('{{d['id']}}')">
                         <span class="icon is-small">
                           <i class="fas fa-check"></i>
                         </span>
@@ -357,7 +356,7 @@
                     <input type="hidden" />
                   </div>
                   <div class="navbar-item">
-                    <button class="button is-link is-outlined is-small" onClick="CommentModificationOpen('{{r['idRep']}}', '{{d['idMsg']}}')">
+                    <button class="button is-link is-outlined is-small" onClick="CommentModificationOpen('{{r['idRep']}}')">
                       <span class="icon is-small">
                         <i class="fas fa-times"></i>
                       </span>
@@ -367,7 +366,7 @@
                   </div>
                   {%if user['admin']==true%}
                     <div class="navbar-item">
-                      <button class="button is-danger is-outlined is-small" onClick="suppressionRep('{{r['idRep']}}', '{{d['idMsg']}}')">
+                      <button class="button is-danger is-outlined is-small" onClick="suppressionRep('{{r['idRep']}}', '{{d['id']}}')">
                         <span class="icon is-small">
                           <i class="fas fa-times"></i>
                         </span>
@@ -377,7 +376,7 @@
                     </div>
                     {%if r['sign'] != []%}
                       <div class="navbar-item">
-                        <button class="button is-success is-outlined is-small" onClick="validationRep('{{r['idRep']}}','{{d['idMsg']}}')">
+                        <button class="button is-success is-outlined is-small" onClick="validationRep('{{r['idRep']}}','{{d['id']}}')">
                           <span class="icon is-small">
                             <i class="fas fa-check"></i>
                           </span>

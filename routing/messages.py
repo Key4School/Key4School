@@ -2,29 +2,25 @@ from flask import Flask, render_template, request, redirect, session, url_for, a
 from datetime import *
 from flask.json import jsonify
 from flask_socketio import emit
-from bson.objectid import ObjectId
 from db_poo import *
 from routing.functions import listeModeration, automoderation
 
 @db_session
 def page_messages(idGroupe):
-    global messages
-    global groupes
-    global notifications
 
     if 'id' in session:
         user = User.get(filter="cls.id == session['id']", limit=1)
         users = User.get(order_by="cls.pseudo")
 
-        if idGroupe != None and idGroupe in groupes:
-            for notif in [notification for notification in notifications.values() if notification.id_groupe == ObjectId(idGroupe) and notification.type == 'msg' and session['id'] in notification.destinataires]:
+        groupe = Group.get(filter="cls.id == idGroupe", limit=1)
+        grp = sorted(Group.get(filter="cls.id_utilisateurs.comparator.has(session['id'])"), key = lambda groupe: groupe['lastMsg']['date_envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
+        if idGroupe != None and groupe:
+            for notif in Notification.get(filter="cls.id_groupe == idGroupe and cls.type == 'msg' and cls.destinataires.comparator.has(session['id'])"):
                 notif.supprUser(session['id'])
 
-            grp = sorted([groupe.toDict() for idGrp , groupe in groupes.items() if session['id'] in groupe.id_utilisateurs], key = lambda groupe: groupe['lastMsg']['date_envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
-
-            groupe = groupes[idGroupe]
-            infoUtilisateurs = groupe.toDict()['utilisateurs']
-            if session['id'] in groupe.toDict()['id-utilisateurs']: # verif autorization
+            infoUtilisateurs = groupe['utilisateurs']
+            if session['id'] in groupe['id_utilisateurs']: # verif autorization
+                '''A REFAIRE PAS OPTI'''
                 msgDb = groupe.getAllMessages()
                 taille = len(msgDb)
                 msgDb = msgDb[taille-20:taille]
@@ -36,10 +32,8 @@ def page_messages(idGroupe):
                 msgDb = None
                 groupe = None
                 infoUtilisateurs = None
-            groupe = groupe.toDict()
 
         else:
-            grp = sorted([groupe.toDict() for idGrp , groupe in groupes.items() if session['id'] in groupe.id_utilisateurs], key = lambda groupe: groupe['lastMsg']['date_envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
             msgDb = None
             groupe = None
             infoUtilisateurs = None
@@ -53,21 +47,20 @@ def page_messages(idGroupe):
 @db_session
 def redirectDM(idUser1, idUser2):
     if 'id' in session:
-        grp = [groupe.toDict() for groupe in groupes.values() if len(groupe.id_utilisateurs) == 2 and ObjectId(idUser1) in groupe.id_utilisateurs and ObjectId(idUser2) in groupe.id_utilisateurs]
+        grp = Group.get(filter="cls.is_DM == True and cls.id_utilisateurs.comparator.has(idUser1) and cls.id_utilisateurs.comparator.has(idUser2)", limit=1)
 
-        if grp != []: # DM existing
-            return redirect('/messages/' + str(grp[0]['id']))
+        if grp: # DM existing
+            return redirect('/messages/' + grp['id'])
         else: # create DM
-            participants = [ObjectId(idUser1), ObjectId(idUser2)]
+            participants = [idUser1, idUser2]
             user1 = User.get(filter="cls.id == idUser1", limit=1)
             user2 = User.get(filter="cls.id == idUser2", limit=1)
             nomGrp = '[DM]: {} - {}'.format(user1['pseudo'], user2['pseudo'])
 
-            id = ObjectId()
-            groupes[str(id)] = Groupe({'id': id, 'nom': nomGrp, 'is_DM': True, 'id-utilisateurs': participants, 'moderateurs': [], 'sign':[], 'motif': []})
-            groupes[str(id)].insert()
+            groupe = Groupe(nom=nomGrp, is_DM=True, id_utilisateurs=participants)
+            groupe.insert()
 
-            return redirect('/messages/' + str(id))
+            return redirect('/messages/' + id)
 
     else:
         session['redirect'] = request.path
@@ -80,25 +73,22 @@ def uploadAudio():
         nom = "MsgVocal" + request.form['group'] + session['id'] + str(datetime.now())
         DB.cluster.save_file(nom, request.files['audio'])
         if request.form['reponse'] != "None":
-            reponse = ObjectId(request.form['reponse'])
+            reponse = request.form['reponse']
         else:
             reponse = "None"
 
-        id = ObjectId()
-        messages[str(id)] = Message({"id": id, "id-groupe": ObjectId(request.form['group']), "id-utilisateur": session['id'],
-                    "contenu": nom, "date_envoi": datetime.now(), "audio": True, "reponse": reponse, "sign": []})
-        messages[str(id)].insert()
-        message = messages[str(id)].toDict()
+        message = Message(id_groupe=request.form['group'], id_utilisateur=session['id'], contenu=nom, audio=True, reponse=reponse)
+        message.insert()
 
         if message:
             groupe = message['groupe']
             users = groupe['utilisateurs']
 
-            ownHTML = render_template("widget_message.html", content=message, sessionId=session['id'], infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['id']), user=User.get(filter="cls.id == session['id']", limit=1))
-            otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['id']), user=User.get(filter="cls.id == session['id']", limit=1))
+            ownHTML = render_template("widget_message.html", content=message, sessionId=session['id'], infogroupe=groupe, infoUtilisateurs=users, idgroupe=groupe['id'], user=User.get(filter="cls.id == session['id']", limit=1))
+            otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=groupe['id'], user=User.get(filter="cls.id == session['id']", limit=1))
 
-            socketio.emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=str(groupe['id']))
-            Notification.create("msg", groupe['id'], id, list(groupe['id-utilisateurs']))
+            socketio.emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=groupe['id'])
+            Notification.create("msg", groupe['id'], id, list(groupe['id_utilisateurs']))
             return 'yes'
     else:
         session['redirect'] = request.path
@@ -119,25 +109,22 @@ def uploadImage():
         nom = "Image" + request.form['group'] + session['id'] + str(datetime.now())
         DB.cluster.save_file(nom, request.files['image'])
         if request.form['reponse'] != "None":
-            reponse = ObjectId(request.form['reponse'])
+            reponse = request.form['reponse']
         else:
             reponse = "None"
 
-        id = ObjectId()
-        messages[str(id)] = Message({"id": id, "id-groupe": ObjectId(request.form['group']), "id-utilisateur": session['id'],
-                    "contenu": request.form['contenuMessage'], "date_envoi": datetime.now(), "image": nom, "reponse": reponse, "sign": []})
-        messages[str(id)].insert()
-        message = messages[str(id)].toDict()
+        message = Message(id_groupe=request.form['group'], id_utilisateur=session['id'], contenu=request.form['contenuMessage'], image=nom, reponse=reponse)
+        message.insert()
 
         if message:
             groupe = message['groupe']
             users = groupe['utilisateurs']
 
-            ownHTML = render_template("widget_message.html", content=message, sessionId=session['id'], infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['id']), user=User.get(filter="cls.id == session['id']", limit=1))
-            otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=str(groupe['id']), user=User.get(filter="cls.id == session['id']", limit=1))
+            ownHTML = render_template("widget_message.html", content=message, sessionId=session['id'], infogroupe=groupe, infoUtilisateurs=users, idgroupe=groupe['id'], user=User.get(filter="cls.id == session['id']", limit=1))
+            otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe, infoUtilisateurs=users, idgroupe=groupe['id'], user=User.get(filter="cls.id == session['id']", limit=1))
 
-            socketio.emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=str(groupe['id']))
-            Notification.create("msg", groupe['id'], id, list(groupe['id-utilisateurs']))
+            socketio.emit('newMsg', {'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=groupe['id'])
+            Notification.create("msg", groupe['id'], id, list(groupe['id_utilisateurs']))
             return 'yes'
     else:
         session['redirect'] = request.path
@@ -153,39 +140,34 @@ def image(imageName):
 
 @db_session
 def createGroupe():
-    global groupes
-
     if 'id' in session:
         participants = [session['id']]
         for name, value in request.form.items():
             if name == 'nomnewgroupe':
                 pass
             else:
-                participants.append(ObjectId(name))
+                participants.append(name)
 
-        id = ObjectId()
-        groupes[str(id)] = Groupe({'id': id, 'nom': request.form['nomnewgroupe'], 'id-utilisateurs': participants, 'moderateurs': [session['id']], 'sign':[], 'motif': []})
-        groupes[str(id)].insert()
+        groupe = Groupe(nom=request.form['nomnewgroupe'], id_utilisateurs=participants)
+        groupe.insert()
 
-        return redirect(url_for('page_messages', idGroupe=str(id)))
+        return redirect(url_for('page_messages', idGroupe=id))
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @db_session
 def updateGroupe():
-    global groupes
-
     if 'id' in session:
-        groupe = groupes[request.form['IdGroupe']]
-        participants = groupe.toDict()['id-utilisateurs']
+        groupe = Group.get(filter="cls.id == request.form['IdGroupe']", limit=1)
+        participants = groupe['id_utilisateurs']
 
-        if session['id'] in participants and session['id'] in groupe.toDict()['moderateurs']:
+        if session['id'] in participants and session['id'] in groupe['moderateurs']:
             for name, value in request.form.items():
                 if name == 'IdGroupe':
                     pass
                 else:
-                    participants.append(ObjectId(name))
+                    participants.append(name)
             groupe.id_utilisateurs = participants
             groupe.update()
 
@@ -196,14 +178,12 @@ def updateGroupe():
 
 @db_session
 def virerParticipant():
-    global groupes
-
     if 'id' in session:
-        groupe = groupes[request.form['idViréGrp']]
-        moderateurs = groupe.toDict()['moderateurs']
+        groupe = Group.get(filter="cls.id == request.form['idViréGrp']", limit=1)
+        moderateurs = groupe['moderateurs']
 
         if session['id'] in moderateurs or request.form['idViré'] == session['id']:
-            groupe.supprUser(ObjectId(request.form['idViré']))
+            groupe.supprUser(request.form['idViré'])
 
             if request.form['idViré'] == session['id']:
                 return 'reload msg'
@@ -218,20 +198,19 @@ def virerParticipant():
 @db_session
 def modifRole():
     if 'id' in session:
-        grp = groupes[request.form['idGrp']]
-        modos = grp.toDict()['moderateurs']
-        participants = grp.toDict()['id-utilisateurs']
+        grp = Group.get(filter="cls.id == request.form['idGrp']", limit=1)
+        modos = grp['moderateurs']
+        participants = grp['id_utilisateurs']
 
-        if session['id'] in modos and ObjectId(request.form['idModifié']) in participants:
-            if ObjectId(request.form['idModifié']) in modos:
-                modos.remove(ObjectId(request.form['idModifié']))
+        if session['id'] in modos and request.form['idModifié'] in participants:
+            if request.form['idModifié'] in modos:
+                modos.remove(request.form['idModifié'])
                 grp.moderateurs = modos
                 grp.update()
 
                 return 'participant'
-
             else:
-                modos.append(ObjectId(request.form['idModifié']))
+                modos.append(request.form['idModifié'])
                 grp.moderateurs = modos
                 grp.update()
 
@@ -244,9 +223,9 @@ def modifRole():
 @db_session
 def supprGroupe(idGrp):
     user = User.get(filter="cls.id == session['id']", limit=1)
-    groupe = groupes[idGrp]
+    groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
-    if user.admin or session['id'] in groupe.moderateurs:
+    if user['admin'] or session['id'] in groupe['moderateurs']:
         groupe.supprGroupe()
         return 'group deleted', 200
     else:
@@ -255,11 +234,11 @@ def supprGroupe(idGrp):
 @db_session
 def updateGrpName(idGrp, newGrpName):
     user = User.get(filter="cls.id == session['id']", limit=1)
-    groupe = groupes[idGrp]
+    groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
-    if user.admin or session['id'] in groupe.moderateurs:
-        groupe.nom = newGrpName
-        groupes[idGrp].update()
+    if user['admin'] or session['id'] in groupe['moderateurs']:
+        groupe['nom'] = newGrpName
+        groupe.update()
 
         return 'group name edited', 200
     else:
@@ -267,23 +246,21 @@ def updateGrpName(idGrp, newGrpName):
 
 @db_session
 def moreMsg():
-    global groupes
 
     if 'id' in session:
-        idgroupe = request.form['idGroupe']
         lastMsg = int(request.form['lastMsg'])
-        grp = groupes[idgroupe]
-        groupe = grp.toDict()
+        groupe = Group.get(filter="cls.id == request.form['idGroupe']", limit=1)
         users = groupe['utilisateurs']
 
-        messages = grp.getAllMessages()
+        '''A REFAIRE PAS OPTI'''
+        messages = groupe.getAllMessages()
         messages.reverse()
         messages = messages[lastMsg:lastMsg+10]
         messages.reverse()
 
         html = ''
         for message in messages:
-            html += render_template("widget_message.html", content=message, sessionId=session['id'], infogroupe=groupe, infoUtilisateurs=users, idgroupe=idgroupe, user=User.get(filter="cls.id == session['id']", limit=1))
+            html += render_template("widget_message.html", content=message, sessionId=session['id'], infogroupe=groupe, infoUtilisateurs=users, idgroupe=request.form['idGroupe'], user=User.get(filter="cls.id == session['id']", limit=1))
 
         return {'html': html}
 
@@ -293,11 +270,11 @@ def moreMsg():
 @db_session
 def modererGrp(idGrp):
     user = User.get(filter="cls.id == session['id']", limit=1)
-    groupe = groupes[idGrp]
+    groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
-    if user.admin or session['id'] in groupe.moderateurs:
-        groupe.is_mod = not groupe.is_mod
-        groupes[idGrp].update()
+    if user['admin'] or session['id'] in groupe['moderateurs']:
+        groupe['is_mod'] = not groupe['is_mod']
+        groupe.update()
 
         return 'group moderation edited', 200
     else:

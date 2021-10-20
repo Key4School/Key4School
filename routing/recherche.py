@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
 from datetime import *
 from flask.json import jsonify
-from bson.objectid import ObjectId
 from difflib import SequenceMatcher
 from db_poo import *
 from routing.functions import listeModeration, automoderation
@@ -52,7 +51,6 @@ def is_relevant(demande, search):
 
 @db_session
 def recherche():
-    global demandes_aide
 
     if 'id' in session:
         if 'search' in request.args and not request.args['search'] == '':
@@ -61,9 +59,10 @@ def recherche():
             user = User.get(filter="cls.id == session['id']", limit=1)
 
             # on récupère les demandes d'aide correspondant à la recherche
+            '''TROP LONG A REVOIR'''
             result = []
-            for _d in demandes_aide.values():
-                d = _d.toDict().copy()
+            for _d in Request.get():
+                d = _d.copy()
                 occurences = is_relevant(d, search)
 
                 if occurences['isRelevant']:
@@ -112,7 +111,6 @@ def recherche_user():
 
 @db_session
 def morePost():
-    global demandes_aide
 
     if 'id' in session:
         user = User.get(filter="cls.id == session['id']", limit=1)
@@ -120,13 +118,14 @@ def morePost():
 
         if request.form['search'] == '':
             # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-            demandes = demandes = sorted([d.toDict() for d in demandes_aide.values() if d.matiere in user['matieres'] and not d.resolu and not d.id_utilisateur == session['id']],
-                        key = lambda d: exp(2 * d['nb_likes']) / exp(d['nb_comment'])), reverse=True)[lastPost:lastPost+10]
+            demandes = sorted(Request.get("cls.matiere in user['matieres'] and cls.resolu == False and d.id_utilisateur != session['id']"),
+                            key = lambda d: exp(2 * d['nb_likes']) / exp(d['nb_comment']), reverse=True)[lastPost:lastPost+10]
 
         else:
+            '''A REFAIRE PAS OPTI'''
             search = request.form['search'].lower()
             demandes = sorted(
-                [d.toDict() for d in demandes_aide.values()
+                [d for d in Request.get()
                     if d.matiere in user['matieres'] and is_relevant(d, search)
                 ], key = lambda d: ( SequenceMatcher(None, d['titre'].lower(), search).ratio() + SequenceMatcher(None, d['contenu'].lower(), search).ratio()), reverse=True
             )[lastPost:lastPost+10]

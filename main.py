@@ -29,7 +29,7 @@ from routing.demandes_aide import question, redirect_comments, comments, updateD
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
 from routing.functions import listeModeration, automoderation, afficheNotif
 
-# A TRIER PAR CATEGORIES
+'''A TRIER PAR CATEGORIES'''
 app.add_url_rule('/', 'accueil', accueil)
 app.add_url_rule('/accueil/', 'accueil2', accueil2)
 app.add_url_rule('/morePost/', 'morePost', morePost, methods=['POST'])
@@ -69,7 +69,7 @@ app.add_url_rule('/DL_file/<fileName>/<fileType>/', 'DL_file', DL_file)
 app.add_url_rule('/recherche/', 'recherche', recherche)
 app.add_url_rule('/rechercheUser/', 'recherche_user', recherche_user)
 app.add_url_rule('/likePost/<idPost>/', 'likePost', likePost, methods=['POST'])
-app.add_url_rule('/likeRep/<idPost>/<idRep>/', 'likeRep', likeRep, methods=['POST'])
+app.add_url_rule('/likeRep/<idRep>/', 'likeRep', likeRep, methods=['POST'])
 app.add_url_rule('/administration/', 'administration', administration, methods=['POST', 'GET'])
 app.add_url_rule('/sanction/', 'sanction', sanction, methods=['POST'])
 app.add_url_rule('/signPost/', 'signPost', signPost, methods=['POST'])

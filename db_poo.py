@@ -2,7 +2,8 @@ from datetime import *
 from flask import session, escape, render_template
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, UUID
+from uuid import uuid4
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
@@ -64,19 +65,24 @@ class Actions:
         query = s.query(cls)
         if filter:
             query = query.filter(eval(filter))
-        if query.count() == 0:
-            return None
-        if limit == 1:
-            query = query.one()
-        elif limit:
-            query = query.limit(limit)
-        else:
-            query = query.all()
+
         if order_by:
             if desc:
                 query = query.order_by(eval(order_by).desc())
             else:
                 query = query.order_by(eval(order_by))
+
+        if limit == 1:
+            if query.count() == 0:
+                return None
+            query = query.one()
+        elif limit:
+            if query.count() == 0:
+                return []
+            query = query.limit(limit).all()
+        else:
+            query = query.all()
+
         return query
 
     @get_context
@@ -106,7 +112,7 @@ class Translate_matiere_spes_options_lv:
 class User(Translate_matiere_spes_options_lv, Actions, Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
     nom = Column(String)
     prenom = Column(String)
     pseudo = Column(String)
@@ -244,11 +250,15 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 
     @property
     def xplvl(self):
-        return int((0.473*self.xp**0.615-niv)*100)
+        return int((0.473*self.xp**0.615-self.niv)*100)
+
+    @property
+    def xplvlMax(self):
+        return int((100*self.xp)/self.xplvl)
 
     @property
     def matieres(self):
-        # A REFAIRE
+        '''A REFAIRE'''
         if self.etapeInscription:
             return []
         if 'ELEVE' == "ELEVE":
@@ -281,7 +291,7 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
                 subjects.append('por')
             if 'lv1-ara' in self.langues or 'lv2-ara' in self.langues or 'opt-lv3-ara' in self.options:
                 subjects.append('ara')
-            # AJOUTER LES NOUVELLES LANGUES
+            '''AJOUTER LES NOUVELLES LANGUES'''
             # Spés + options
             subjects += self.spes
             subjects += self.options
@@ -310,13 +320,13 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 
     @property
     def a_sign(self):
-        if ObjectId(session.get('id')) in self.sign:
+        if session.get('id') in self.sign:
             return True
         else:
             return False
 
     def __setitem__(self, key, value):
-          setattr(self, key, value)
+        return setattr(self, key, value)
 
     def __getitem__(self, key):
         methods = {
@@ -331,6 +341,19 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         else:
             return getattr(self, key)
 
+    def __contains__(self, key):
+        methods = {
+            'spes-str': (self.translate_matiere_spes_options_lv, self.spes),
+            'langues-str': (self.translate_matiere_spes_options_lv, self.langues),
+            'options-str':(self.translate_matiere_spes_options_lv, self.options),
+            'matiere-str': (self.translate_matiere_spes_options_lv, self.matiere),
+            'matiere_autre-str': (self.translate_matiere_spes_options_lv, self.matiere_autre)
+        }
+        if key in methods:
+            return True
+        else:
+            return hasattr(self, key)
+
     def __repr__(self):
         return f'<User id={self.id}, pseudo={self.pseudo}>'
 
@@ -338,8 +361,8 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 class Request(Translate_matiere_spes_options_lv, Actions, Base):
     __tablename__ = 'help_requests'
 
-    id = Column(Integer, primary_key=True)
-    id_utilisateur = Column(Integer)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    id_utilisateur = Column(UUID(as_uuid=True))
     titre = Column(String)
     contenu = Column(String)
     date_envoi = Column(DateTime)
@@ -352,7 +375,7 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
     fileType = Column(String)
 
     def __init__(self, **params):
-        self.id_utilisateur = params['id-utilisateur']
+        self.id_utilisateur = params['id_utilisateur']
         self.titre = params['titre']
         self.contenu = params['contenu']
         self.date_envoi = params.get('date_envoi', datetime.now())
@@ -428,26 +451,23 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
         return contenu
 
     @property
+    def rep(self):
+        return Response.get(filter="cls.id in self.reponses_associees")
+
+    @property
     def nb_likes(self):
         return len(self.likes)
 
     @property
     def nb_comment(self):
-        return len(reponses_associees)
+        return len(self.reponses_associees)
 
     @property
     def user(self):
         return User.get(filter="cls.id == self.id_utilisateur", limit=1)
 
-    # def toDict(self) -> dict:
-    #     return {  # on ajoute à la liste ce qui nous interesse
-    #         'réponses associées': sorted([r.toDict() for r in self.reponses_associees.values()], key=lambda r: r['nb_likes'], reverse=True),
-    #         'reponsesDict': {idRep: rep.toDict() for (idRep, rep) in self.reponses_associees.items()},
-    #         'reponsesDict2': {idRep: rep for (idRep, rep) in self.reponses_associees.items()}
-    #     }
-
     def __setitem__(self, key, value):
-          setattr(self, key, value)
+        return setattr(self, key, value)
 
     def __getitem__(self, key):
         methods = {
@@ -458,15 +478,24 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
         else:
             return getattr(self, key)
 
+    def __contains__(self, key):
+        methods = {
+            'matière': (self.translate_matiere_spes_options_lv, [self.matiere])
+        }
+        if key in methods:
+            return True
+        else:
+            return hasattr(self, key)
+
     def __repr__(self):
-        return f'<User id={self.id}, pseudo={self.titre}>'
+        return f'<Request id={self.id}, title={self.titre}>'
 
 
-class Response(Request, Actions, Base):
-    __tablename__ = 'help_reponse'
+class Response(Actions, Base):
+    __tablename__ = 'help_responses'
 
-    id = Column(Integer, primary_key=True)
-    id_utilisateur = Column(Integer)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    id_utilisateur = Column(UUID(as_uuid=True))
     contenu = Column(String)
     date_envoi = Column(DateTime)
     likes = Column(JSONB)
@@ -474,13 +503,49 @@ class Response(Request, Actions, Base):
     motif = Column(JSONB)
 
     def __init__(self, **params):
-        self.id_utilisateur = params['id-utilisateur']
+        self.id_utilisateur = params['id_utilisateur']
         self.contenu = params['contenu']
         self.date_envoi = params.get('date_envoi', datetime.now())
         self.likes = params.get('likes', [])
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
 
+    def diffTemps(self):
+        diff_temps = int((datetime.now() - self.date_envoi).total_seconds())
+        return diff_temps
+
+    @property
+    def temps(self):
+        tempsStr = ''
+        diffTemps = self.diffTemps()
+        # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
+        if diffTemps // (60 * 60 * 24 * 7):  # semaines
+            tempsStr += '{}sem '.format(diffTemps // (60 * 60 * 24 * 7))
+            if (diffTemps % (60 * 60 * 24 * 7)) // (60 * 60 * 24):  # jours
+                tempsStr += '{}j '.format((diffTemps %
+                                           (60 * 60 * 24 * 7)) // (60 * 60 * 24))
+        elif diffTemps // (60 * 60 * 24):  # jours
+            tempsStr += '{}j '.format(diffTemps // (60 * 60 * 24))
+            if (diffTemps % (60 * 60 * 24)) // (60 * 60):  # heures
+                tempsStr += '{}h '.format((diffTemps %
+                                           (60 * 60 * 24)) // (60 * 60))
+        elif diffTemps // (60 * 60):  # heures
+            tempsStr += '{}h '.format(diffTemps // (60 * 60))
+            if (diffTemps % (60 * 60)) // 60:  # minutes
+                tempsStr += '{}min '.format(diffTemps % (60 * 60) // 60)
+        else:
+            tempsStr = '{}min'.format(diffTemps // 60)
+
+        return tempsStr
+
+    @property
+    def aLike(self):
+        if session['id'] in self.likes:
+            return True
+        else:
+            return False
+
+    @property
     def contenuLink(self) -> str:
         safe = escape(self.contenu)
         contenu = ''
@@ -492,30 +557,51 @@ class Response(Request, Actions, Base):
 
         return contenu
 
+    @property
+    def nb_likes(self):
+        return len(self.likes)
+
+    @property
+    def user(self):
+        return User.get(filter="cls.id == self.id_utilisateur", limit=1)
+
     def __setitem__(self, key, value):
-          setattr(self, key, value)
+        return setattr(self, key, value)
 
     def __getitem__(self, key):
         return getattr(self, key)
 
+    def __contains__(self, key):
+        return hasattr(self, key)
+
     def __repr__(self):
-        return f'<User id={self.id}, pseudo={self.titre}>'
+        return f'<Response id={self.id}, content={self.contenu[0:15]}>'
 
 
-class Message(Actions):
-    def __init__(self, params: dict):
-        self.id = params['id']
-        self.id_groupe = params['id-groupe']
-        self.id_utilisateur = params['id-utilisateur']
+class Message(Actions, Base):
+    __tablename__ = 'messages'
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    id_groupe = Column(UUID(as_uuid=True))
+    id_utilisateur = Column(UUID(as_uuid=True))
+    contenu = Column(String)
+    date_envoi = Column(DateTime)
+    reponse = Column(UUID(as_uuid=True))
+    audio = Column(Boolean)
+    image = Column(String)
+    sign = Column(JSONB)
+    motif = Column(JSONB)
+
+    def __init__(self, **params):
+        self.id_groupe = params['id_groupe']
+        self.id_utilisateur = params['id_utilisateur']
         self.contenu = params['contenu']
-        self.date_envoi = params['date_envoi']
+        self.date_envoi = params.get('date_envoi', datetime.now())
         self.reponse = params['reponse']
         self.audio = params.get('audio', False)
         self.image = params.get('image', '')
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
-
-        self.db_table = DB.db_messages
 
     def suppr(self) -> None:
         if self.audio == 'True':
@@ -527,10 +613,10 @@ class Message(Actions):
             DB.db_files.delete_one({'id': MyAudio['id']})
             DB.db_chunks.delete_many({'filesid': MyAudio['id']})
         self.delete()
-        messages.pop(str(self.id))
         return
 
-    def convert_links(self) -> str:
+    @property
+    def contentLink(self) -> str:
         safe = escape(self.contenu)
         contenu = ''
         for w in safe.split():
@@ -541,80 +627,64 @@ class Message(Actions):
 
         return contenu
 
-    def toDictLast(self) -> dict:
-        return {  # on ajoute à la liste ce qui nous interesse
-            'id': self.id,
-            'id-groupe': self.id_groupe,
-            'id-utilisateur': self.id_utilisateur,
-            'utilisateur': User.get(filter="cls.id == self.id_utilisateur", limit=1),
-            'contenu': self.convert_links(),
-            'original-contenu': self.contenu,
-            'date_envoi': self.date_envoi,
-            'audio': self.audio,
-            'image': self.image
-        }
+    @property
+    def utilisateur(self):
+        return User.get(filter="cls.id == self.id_utilisateur", limit=1)
 
-    def toDict(self) -> dict:
-        if self.reponse != "None" and str(self.reponse) in messages:
-            rep = messages[str(self.reponse)].toDict()
+    @property
+    def groupe(self):
+        return Groupe.get(filter="cls.id == self.id_groupe", limit=1)
+
+    @property
+    def rep(self):
+        if self.reponse != "None":
+            rep = Message.get(filter="cls.id == self.reponse", limit=1)
         else:
             rep = None
-        return {  # on ajoute à la liste ce qui nous interesse
-            'id': self.id,
-            'id-groupe': self.id_groupe,
-            'groupe': groupes[str(self.id_groupe)].toDict(),
-            'id-utilisateur': self.id_utilisateur,
-            'utilisateur': User.get(filter="cls.id == self.id_utilisateur", limit=1),
-            'contenu': self.convert_links(),
-            'original-contenu': self.contenu,
-            'date_envoi': self.date_envoi,
-            'reponse': self.reponse,
-            'rep': rep,
-            'audio': self.audio,
-            'image': self.image,
-            'sign': self.sign,
-            'motif': self.motif
-        }
+        return rep
 
-    def toDB(self) -> dict:
-        return {  # on ajoute à la liste ce qui nous interesse
-            'id': self.id,
-            'id-groupe': self.id_groupe,
-            'id-utilisateur': self.id_utilisateur,
-            'contenu': self.contenu,
-            'date_envoi': self.date_envoi,
-            'reponse': self.reponse,
-            'audio': self.audio,
-            'image': self.image,
-            'sign': self.sign,
-            'motif': self.motif
-        }
+    def __setitem__(self, key, value):
+        return setattr(self, key, value)
 
-    def __str__(self):
-        return str(self.toDict())
+    def __getitem__(self, key):
+        return getattr(self, key)
+
+    def __contains__(self, key):
+        return hasattr(self, key)
+
+    def __repr__(self):
+        return f'<Message id={self.id}, content={self.contenu[0:15]}>'
 
 
-class Groupe(Actions):
-    def __init__(self, params: dict):
-        self.id = params['id']
+class Group(Actions, Base):
+    __tablename__ = 'groups'
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    nom = Column(String)
+    is_class = Column(Boolean)
+    is_DM = Column(Boolean)
+    is_mod = Column(Boolean)
+    id_utilisateurs = Column(JSONB)
+    moderateurs = Column(JSONB)
+    sign = Column(JSONB)
+    motif = Column(JSONB)
+
+    def __init__(self, **params):
         self.nom = params['nom']
         self.is_class = params.get('is_class', False)
         self.is_DM = params.get('is_DM', False)
         self.is_mod = params.get('is_mod', False)
-        self.id_utilisateurs = params['id-utilisateurs']
+        self.id_utilisateurs = params['id_utilisateurs']
         self.moderateurs = params.get('moderateurs', [])
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
 
-        self.db_table = DB.db_groupes
-
     def supprGroupe(self):
-        grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == self.id]
+        grpMsg = Message.get(filter="cls.id_groupe == self.id")
         for m in grpMsg:
-            messages[str(m['id'])].suppr()
+            m.suppr()
 
         self.delete()
-        groupes.pop(str(self.id))
         return
 
     def supprUser(self, uid):
@@ -628,70 +698,74 @@ class Groupe(Actions):
             self.moderateurs.append(self.id_utilisateurs[0])
         self.update()
 
+    @property
     def getAllMessages(self):
-        return sorted([message.toDict() for id, message in messages.copy().items() if self.id == message.id_groupe], key=lambda message: message['date_envoi'])
+        return Message.get(filter="cls.id_groupe == self.id", order_by="cls.date_envoi")
 
+    @property
     def getAllMessagesSign(self):
-        return sorted([message.toDict() for id, message in messages.copy().items() if self.id == message.id_groupe and message.sign != []], key=lambda message: message['date_envoi'])
+        return Message.get(filter="cls.id_groupe == self.id and cls.sign != '[]'", order_by="cls.date_envoi")
 
-    def getLastMessage(self):
-        l = sorted([message.toDictLast() for id, message in messages.copy().items()
-        if self.id == message.id_groupe], key=lambda message: message['date_envoi'])
+    @property
+    def lastMsg(self):
+        l = Message.get(filter="cls.id_groupe == self.id", order_by="cls.date_envoi")
         return l[-1] if len(l) > 0 else None
 
-    def getNbNotif(self, uid):
+    @property
+    def nbNotif(self, uid=None):
+        if uid == None:
+            uid = session['id'] if session != None and 'id' in session else None
         if uid != None:
-            return len([notif for notif in notifications.values() if notif.type == 'msg' and notif.id_groupe == self.id and uid in notif.destinataires])
+            return len(Notification.get(filter="cls.type == 'msg' and cls.id_groupe == self.id and cls.destinataires.comparator.has(uid)"))
         else:
             return None
 
-    def toDict(self) -> dict:
-        return {  # on ajoute à la liste ce qui nous interesse
-            'id': self.id,
-            'nom': self.nom,
-            'is_class': self.is_class,
-            'is_DM': self.is_DM,
-            'is_mod': self.is_mod,
-            'id-utilisateurs': self.id_utilisateurs,
-            'utilisateurs': User.get(filter="cls.id.comparator.contains_by(self.id_utilisateurs)"),
-            'nbUtilisateurs': len(self.id_utilisateurs),
-            'lastMsg': self.getLastMessage(),
-            'nbNotif': self.getNbNotif(session['id'] if session != None and 'id' in session else None),
-            'moderateurs': self.moderateurs,
-            'modos': User.get(filter="cls.id.comparator.contains_by(self.moderateurs)"),
-            'sign': self.sign,
-            'motif': self.motif
-        }
+    @property
+    def nbUtilisateurs(self):
+        return len(self.id_utilisateurs)
 
-    def toDB(self) -> dict:
-        return {  # on ajoute à la liste ce qui nous interesse
-            'id': self.id,
-            'nom': self.nom,
-            'is_class': self.is_class,
-            'is_DM': self.is_DM,
-            'is_mod': self.is_mod,
-            'id-utilisateurs': self.id_utilisateurs,
-            'moderateurs': self.moderateurs,
-            'sign': self.sign,
-            'motif': self.motif
-        }
+    @property
+    def utilisateurs(self):
+        return User.get(filter="cls.id in self.id_utilisateurs")
 
-    def __str__(self):
-        return str(self.toDict())
+    @property
+    def modos(self):
+        return User.get(filter="cls.id in self.moderateurs")
+
+    def __setitem__(self, key, value):
+        return setattr(self, key, value)
+
+    def __getitem__(self, key):
+        return getattr(self, key)
+
+    def __contains__(self, key):
+        return hasattr(self, key)
+
+    def __repr__(self):
+        return f'<Group id={self.id}, nom={self.nom}>'
 
 clientsNotif = {}
 
-class Notification(Actions):
-    def __init__(self, params: dict):
+class Notification(Actions, Base):
+    __tablename__ = 'notifications'
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    type = Column(String)
+    id_groupe = Column(UUID(as_uuid=True))
+    id_msg = Column(UUID(as_uuid=True))
+    date = Column(DateTime)
+    destinataires = Column(JSONB)
+
+    def __init__(self, **params):
         self.id = params['id']
         self.type = params['type']
         self.id_groupe = params['id_groupe']
         self.id_msg = params['id_msg']
-        self.date = params['date']
+        self.date = params.get('date', datetime.now())
         self.destinataires = params['destinataires']
-        self.db_table = DB.db_notif
 
-    def create(type, id_groupe, id_msg, destinataires):
+    @classmethod
+    def create(cls, type, id_groupe, id_msg, destinataires):
         if type == 'demande':
             destinataires += User.get(filter="cls.savedDemands.comparator.has(id_groupe)")
 
@@ -701,18 +775,17 @@ class Notification(Actions):
         destinataires = list(set(destinataires))
 
         if len(destinataires) > 0:
-            id = ObjectId()
-            notifications[str(id)] = Notification({"id": id, "type": type, "id_groupe": id_groupe, "id_msg": id_msg,
-                                            "date": datetime.now(), "destinataires": destinataires})
-            notifications[str(id)].insert()
-            notifications[str(id)].send()
-        return
+            notification = Notification(type=type, id_groupe=id_groupe, id_msg=id_msg, destinataires=destinataires)
+            notification.insert()
+            notification.send()
+        return notification
 
     def diffTemps(self):
         diff_temps = int((datetime.now() - self.date).total_seconds())
         return diff_temps
 
-    def convertTime(self):
+    @property
+    def temps(self):
         tempsStr = ''
         diffTemps = self.diffTemps()
         # puis on se fait chier à trouver le délai entre le poste et aujourd'hui
@@ -737,29 +810,25 @@ class Notification(Actions):
 
     @get_context
     def send(self):
-        notification = self.toDict()
+        notification = self
         html = render_template("notification.html", notif=notification, similar=0)
 
         for user in notification['userDest']:
-            if str(user['id']) in clientsNotif:
-                socketio.emit('newNotif', {'html': html, 'sound': str(user['notifs']['sound'])}, to=str(user['id']))
-            elif user['email'] != "" or user['emailENT'] != "":
+            if user['id'] in clientsNotif:
+                socketio.emit('newNotif', {'html': html, 'sound': user['notifs']['sound']}, to=user['id'])
+            elif user['email'] != "":
                 # si l'user a autorisé les notifs par mail
                 if (self.type == 'msg' and user['notifs']['messages']) or (self.type == 'demande' and user['notifs']['demandes']):
                     # si un mail n'a pas déja été envoyé pour ce groupe
-                    if (self.type == 'msg' and len([notif for notif in notifications.values() if notif.id_groupe == self.id_groupe and notif.type == 'msg' and user['id'] in notif.destinataires]) == 1) or self.type == 'demande':
+                    if (self.type == 'msg' and len(Notification.get(filter="cls.type == 'msg' and cls.id_groupe == self.id and cls.destinataires.comparator.has(user['id'])")) == 1) or self.type == 'demande':
                         if user['email'] != "":
                             To = user['email']
-                        elif user['emailENT'] != "":
-                            To = user['emailENT']
                         else:
                             pass
                         htmlMail = render_template('mail.html', notif=notification, user=user)
                         envoi = Thread(target=self.sendMail, args=(To, htmlMail, notification['sender']['pseudo']))
                         envoi.start()
         return
-
-
 
     def sendMail(self, To, htmlMail, pseudo):
         serveur = 'key4school.com'
@@ -785,12 +854,10 @@ class Notification(Actions):
 
     def getSimilar(self, uid):
         '''récupère les notifs du même groupe plus récentes'''
-        return [notification for notification in notifications.values() if notification.id_groupe == self.id_groupe and notification.date >= self.date and notification.id != self.id and uid in notification.destinataires]
+        return Notification.get(filter="cls.id_groupe == self.id_groupe and cls.date >= self.date and cls.id != self.id and cls.destinataires.comparator.has(uid)")
 
     def supprNotif(self):
         self.delete()
-        if str(self.id) in notifications:
-            notifications.pop(str(self.id))
         return
 
     def supprUser(self, uid):
@@ -802,52 +869,57 @@ class Notification(Actions):
             self.supprNotif()
         return
 
-    def toDict(self) -> dict:
+    def verifNotif(self):
         if self.type == 'msg':
-            if str(self.id_groupe) in groupes and str(self.id_msg) in messages:
-                grp = groupes[str(self.id_groupe)].toDict()
-                msg = messages[str(self.id_msg)].toDict()
-            else:
+            if not Group.get(filter="cls.id == self.id_groupe", limit=1) and not Message.get(filter="cls.id == self.id_msg", limit=1):
                 self.supprNotif()
-                return
+                return True
         elif self.type == 'demande':
-            if str(self.id_groupe) in demandes_aide:
-                grp = demandes_aide[str(self.id_groupe)].toDict()
-                if str(self.id_msg) in grp['reponsesDict']:
-                    msg = grp['reponsesDict'][str(self.id_msg)]
-                else:
+            if Request.get(filter="cls.id == self.id_groupe", limit=1):
+                if not Response.get(filter="cls.id == self.id_msg", limit=1):
                     self.supprNotif()
-                    return
+                    return True
             else:
                 self.supprNotif()
-                return
-        sender = User.get(filter="cls.id == msg['id-utilisateur']", limit=1)
-        return {  # on ajoute à la liste ce qui nous interesse
-            'id': self.id,
-            'type': self.type,
-            'id_groupe': self.id_groupe,
-            'groupe': grp,
-            'id_msg': self.id_msg,
-            'message': msg,
-            "sender": sender,
-            'date': self.date,
-            'temps': self.convertTime(),
-            'destinataires': self.destinataires,
-            'userDest': User.get(filter="cls.id.comparator.contains_by(self.destinataires)")
-        }
+                return True
 
-    def toDB(self) -> dict:
-        return {  # on ajoute à la liste ce qui nous interesse
-            'id': self.id,
-            'type': self.type,
-            'id_groupe': self.id_groupe,
-            'id_msg': self.id_msg,
-            'date': self.date,
-            'destinataires': self.destinataires
-        }
+    @property
+    def groupe(self):
+        if self.type == 'msg':
+            return Group.get(filter="cls.id == self.id_groupe", limit=1)
+        elif self.type == 'demande':
+            return Request.get(filter="cls.id == self.id_groupe", limit=1)
 
-    def __str__(self):
-        return str(self.toDict())
+    @property
+    def message(self):
+        if self.type == 'msg':
+            return Message.get(filter="cls.id == self.id_msg", limit=1)
+        elif self.type == 'demande':
+            return Response.get(filter="cls.id == self.id_msg", limit=1)
+
+    @property
+    def sender(self):
+        return User.get(filter="cls.id == msg['id_utilisateur']", limit=1)
+
+    @property
+    def userDest(self):
+        return User.get(filter="cls.id in self.destinataires")
+
+    def __setitem__(self, key, value):
+        if self.verifNotif():
+            return
+        return setattr(self, key, value)
+
+    def __getitem__(self, key):
+        if self.verifNotif():
+            return
+        return getattr(self, key)
+
+    def __contains__(self, key):
+        return hasattr(self, key)
+
+    def __repr__(self):
+        return f'<Notification id={self.id}, type={self.type}>'
 
 # configuration de la database
 DATABASE_URI = 'postgresql://rxtmhycolmbxky:d66072b10150c9b7dbe86a026cc7e08f670b8fcf6a45ff71160863069c896ec2@ec2-52-210-120-210.eu-west-1.compute.amazonaws.com:5432/d3vkha7h4hsf16'

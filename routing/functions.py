@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, session, url_for, a
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from datetime import *
 from flask.json import jsonify
-from bson.objectid import ObjectId
 from threading import Timer
 from functools import partial
 from db_poo import *
@@ -39,10 +38,10 @@ def automoderation(stringModerer: str) -> str:
 
 @db_session
 def afficheNotif(userId, notifId):
-    global notifications
     user = User.get(filter="cls.id == userId", limit=1)
-    if user and notifId in notifications:
-        return render_template("mail.html", user=user, notif=notifications[notifId].toDict())
+    notif = Notification.get(filter="cls.id == notifId", limit=1)
+    if user and notif:
+        return render_template("mail.html", user=user, notif=notif)
     else:
         return redirect(url_for('login'))
 
