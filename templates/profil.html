@@ -345,7 +345,7 @@
               <td>
                 <div id="contentlycee" style="display: flex; flex-direction: row;">
                   <input type="hidden" value="{{profilUtilisateur['lycee']}}" name="lycee" />
-                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%} id="lycee">{{profilUtilisateur['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%} id="lycee">{{profilUtilisateur['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{%if profilUtilisateur['classe']=='2nd'%}Seconde{%endif%}{%if profilUtilisateur['classe']=='1e'%}Première{%endif%}{%if profilUtilisateur['classe']=='Tle'%}Terminale{%endif%}{%endif%}
                   </p>
                   <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%}></i>
                 </div>
@@ -421,7 +421,7 @@
                       <option value="opt-eps" {%if profilUtilisateur['options'][0]=="opt-eps"%}selected{%endif%}>EPS</option>
                       <option value="opt-arts" {%if profilUtilisateur['options'][0]=="opt-arts"%}selected{%endif%}>Arts</option>
                       <option value="opt-musique" {%if profilUtilisateur['options'][0]=="opt-musique"%}selected{%endif%}>Musique</option>
-                      {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
+                      {% if profilUtilisateur['classe']!='1e' and profilUtilisateur['classe']!='Tle' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
                       <option value="opt-mg" {%if profilUtilisateur['options'][0]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
                       <option value="opt-ss" {%if profilUtilisateur['options'][0]=="opt-ss"%}selected{%endif%}>Santé et social</option>
                       <option value="opt-biotech" {%if profilUtilisateur['options'][0]=="opt-biotech"%}selected{%endif%}>Biotechnologies</option>
@@ -456,7 +456,7 @@
                       <option value="opt-lv3-chi" {%if profilUtilisateur['options'][1]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
                       <option value="opt-eps" {%if profilUtilisateur['options'][1]=="opt-eps"%}selected{%endif%}>EPS</option>
                       <option value="opt-arts" {%if profilUtilisateur['options'][1]=="opt-arts"%}selected{%endif%}>Arts</option>
-                      {% if profilUtilisateur['classe']!='1G' and profilUtilisateur['classe']!='TG' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
+                      {% if profilUtilisateur['classe']!='1e' and profilUtilisateur['classe']!='Tle' and profilUtilisateur['classe']!='1STMG' and profilUtilisateur['classe']!='TSTMG' %}
                       <option value="opt-mg" {%if profilUtilisateur['options'][1]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
                       <option value="opt-ss" {%if profilUtilisateur['options'][1]=="opt-ss"%}selected{%endif%}>Santé et social</option>
                       <option value="opt-biotech" {%if profilUtilisateur['options'][1]=="opt-biotech"%}selected{%endif%}>Biotechnologies</option>
@@ -479,7 +479,7 @@
               </td>
             </tr>
 
-            <tr {% if profilUtilisateur['classe']=='2GT' %} style="display: none;" {% endif %}>
+            <tr {% if profilUtilisateur['classe']=='2nd' %} style="display: none;" {% endif %}>
               <td>
                 <i class="fas fa-book-open" style="font-size:25px;"></i>
                 &nbsp;&nbsp;Spécialités
@@ -529,7 +529,7 @@
                     </select>
                   </div>
 
-                  <div class="select" {% if profilUtilisateur['classe']=='TG' %} style="display: none;" {% endif %}>
+                  <div class="select" {% if profilUtilisateur['classe']=='Tle' %} style="display: none;" {% endif %}>
                     <select name="spe3">
                       <option value="none" {%if profilUtilisateur['spes'][2]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="spe-art" {%if profilUtilisateur['spes'][2]=="spe-art"%}selected{%endif%}>Spé Arts</option>

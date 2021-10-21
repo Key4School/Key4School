@@ -45,7 +45,7 @@
     </span>
   </nav>
   <form class="form_inscription" action="./" method="post" id="form">
-    {%if user['classe'] == '1ère' or user['classe'] == 'Tle'%}
+    {%if user['classe'] == '1e' or user['classe'] == 'Tle'%}
     <div class="input_inscription control has-icons-left has-icons-right">
       <input list="datalist_spe" class="color_input input" type="text" placeholder="Spécialité 1" id="spe1">
       <span class="icon is-small is-left">
@@ -67,7 +67,7 @@
       </span>
     </div>
     <input type="hidden" name="spe2" value="" id="spe2Value">
-    {%if user['classe'] == '1ère'%}
+    {%if user['classe'] == '1e'%}
     <br />
     <div class="input_inscription control has-icons-left has-icons-right">
       <input list="datalist_spe" id="spe3" class="color_input input" type="text" placeholder="Spécialité 3" >
