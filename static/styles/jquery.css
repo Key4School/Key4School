@@ -20,8 +20,7 @@
 --shadow-box:0 0.5em 0.5em -0.125em #2196f3c4, 0 0 0 1px #03a9f400;
 
 }
-[data-theme="dark"] {
-  :root {
+[data-theme="light"] {
   --text-color-hover:#3273dc;
   --background-hover:#f5f5f5;
   --page-background: #ffffff;
@@ -32,7 +31,6 @@
   --scrollbar-thumb-hover: #727272;
   --background-box:#fff;
   --shadow-box:0 .5em 1em -.125em rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .02);
-  }
 }
 
 .ui-helper-hidden {

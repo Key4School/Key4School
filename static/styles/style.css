@@ -20,7 +20,6 @@
 }
 
 [data-theme="dark"] {
-  --page-background: #212121;
   --block-background: #3c3c3c;
   --text-color: #ededed;
   --placeholder-color: #b1b1b1;
@@ -413,6 +412,41 @@ how to remove the virtical space around the range input in IE*/
 .color_audio{
   color:#767a7d;
 }
+.container_top_leaderboard{
+  display:flex;
+  align-items:center;
+  justify-content:space-evenly;
+}
+.container_top_leaderboard_items{
+  align-items:center;
+  display: flex;
+  flex-direction: column;
+}
+.photo_top_leaderboard_2_3{
+  height:70px;
+  width:70px;
+  object-fit: cover;
+  border-radius:50%;
+}
+.leaderboard_classement{
+  display:flex;
+  width:75%;
+  margin: 1% auto 3% auto;
+  align-items:center;
+  justify-content:space-between;
+  padding:1% 2%;
+  border-radius: 10px;
+}
+.leaderboard_nom_Img{
+  display:flex;align-items:center;
+  justify-content:space-between;
+}
+.leaderboard_img_classement{
+  margin: 0 10% 0 40%;
+  height:40px;width:40px;
+  object-fit: cover;
+  border-radius:50%;
+}
 /* Pour telephone */
 @media screen and (max-width:1023px) {
   .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
@@ -527,7 +561,7 @@ how to remove the virtical space around the range input in IE*/
   .container_profile{
     width: 90%;
   }
-  .divQuestion {
+  .divQuestion, .container_leaderboard {
     margin:auto;
     width: 90%;
   }
@@ -669,5 +703,8 @@ how to remove the virtical space around the range input in IE*/
   .divQuestion {
     margin:auto;
     width: 60%;
+  }
+  .container_leaderboard{
+    width:50%;margin:auto;
   }
 }

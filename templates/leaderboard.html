@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="system">
+<html lang="fr" data-theme="{{session['theme']}}">
 
 <head>
 
   <meta charset="UTF-8">
   <title>Key4School - Leader Board</title>
 {% include 'head.html' with context %}
+<script src="/static/js/leaderboard.js"></script>
 <style>
 </style>
 </head>
@@ -13,74 +14,75 @@
   {% include 'bandeau.html' %}
   <h1 class="title">Leaderboard</h1>
   <br />
-  <div style="width:50%;margin:auto;">
   <div class="tabs is-toggle is-toggle-rounded">
-  <ul style="    justify-content: center;">
-    <li class="is-active">
+  <ul style="justify-content: center;">
+    <li id="france" class="is-active">
       <a>
-        <span>All Time</span>
+        <span>Top France</span>
       </a>
     </li>
-    <li>
+    <li id="depart">
       <a>
-        <span>This Week</span>
+        <span>Top département</span>
       </a>
     </li>
-    <li>
+    <li id="lycee">
       <a>
-        <span>This Month</span>
+        <span>Top lycée</span>
       </a>
     </li>
   </ul>
 </div>
+  <div class="container_leaderboard">
   <br />
-  <div style="display:flex;align-items:center;justify-content:space-evenly;">
-    <div style="align-items:center;display: flex;flex-direction: column;">
+  <div class="container_top_leaderboard">
+    <div class="container_top_leaderboard_items">
       <p>
           <i style="font-size:1.5rem;color:#c0c0c0" class="fas fa-medal"></i>
       </p>
-      <img style="height:70px;width:70px;object-fit: cover;border-radius:50%;" src="/static/image/sans_profil.png"/>
+      <img class="photo_top_leaderboard_2_3" src="{%if users[1]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[1]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
       <p style="font-size:1rem;">
-        XP
+        {{users[1]['xp']}}
       </p>
       <p style="font-size:1rem;">
-        pseudo
+        {{users[1]['pseudo']}}
       </p>
     </div>
-    <div style="align-items:center;display: flex;flex-direction: column;">
+    <div class="container_top_leaderboard_items">
       <p>
           <i style="font-size:1.75rem;color:hsl(48, 100%, 67%);" class="fas fa-crown"></i>
       </p>
-      <img style="height:100px;width:100px;object-fit: cover;border-radius:50%;" src="/static/image/sans_profil.png"/>
+      <img style="height:100px;width:100px;object-fit: cover;border-radius:50%;" src="{%if users[0]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[0]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
       <p style="font-size:1.5rem;">
-        XP
+        {{users[0]['xp']}}
       </p>
       <p style="font-size:1.5rem;">
-        pseudo
+        {{users[0]['pseudo']}}
       </p>
     </div>
-    <div style="align-items:center;display: flex;flex-direction: column;">
+    <div class="container_top_leaderboard_items">
       <p>
           <i style="font-size:1.5rem;color:#614e1a" class="fas fa-medal"></i>
       </p>
-      <img style="height:70px;width:70px;object-fit: cover;border-radius:50%;" src="/static/image/sans_profil.png"/>
+      <img class="photo_top_leaderboard_2_3" src="{%if users[2]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[2]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
       <p style="font-size:1rem;">
-        XP
+        {{users[2]['xp']}}
       </p>
       <p style="font-size:1rem;">
-        pseudo
+        {{users[2]['pseudo']}}
       </p>
     </div>
   </div>
   <br /><br />
   <div style="width:100%;">
-    {%for utilisateur in users%}
-    <div style="display:flex;width:75%;margin: 1% auto 3% auto;align-items:center;justify-content:space-between;border:2px solid {%if utilisateur['_id']==sessionId%}{{session['couleur'][1]}}{%else%}gray{%endif%};padding:1% 2%;border-radius: 10px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
+    {%for utilisateur in users[3:-1]%}
+    {%set a= loop.index+3%}
+    <div class="leaderboard_classement" style="border:2px solid {%if utilisateur['_id']==sessionId%}{{session['couleur'][1]}}{%else%}gray{%endif%};">
+        <div class="leaderboard_nom_Img">
           <p>
-            4
+            {{a}}
           </p>
-          <img style="margin: 0 10% 0 40%;height:40px;width:40px;object-fit: cover;border-radius:50%;" src="{%if utilisateur['nomImg'] != '' %}{{url_for('userImg', profilImg = utilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+          <img class="leaderboard_img_classement" src="{%if utilisateur['nomImg'] != '' %}{{url_for('userImg', profilImg = utilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
           <p>
             {{utilisateur['pseudo']}}
           </p>

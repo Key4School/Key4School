@@ -3078,8 +3078,8 @@ a.tag:hover {
 }
 
 .input:active, .input:focus, .is-active.input, .is-active.textarea, .is-focused.input, .is-focused.textarea, .select select.is-active, .select select.is-focused, .select select:active, .select select:focus, .textarea:active, .textarea:focus {
-  border-color: #3273dc;
-  box-shadow: 0 0 0 .125em rgba(50, 115, 220, .25)
+  border-color: var(--color-theme0);
+  box-shadow: 0 0 0 .125em var(--color-shadow)
 }
 
 .input[disabled], .select fieldset[disabled] select, .select select[disabled], .textarea[disabled], fieldset[disabled] .input, fieldset[disabled] .select select, fieldset[disabled] .textarea {
@@ -6403,7 +6403,7 @@ a.panel-block:hover, label.panel-block:hover {
   border-bottom-color: #dbdbdb;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  color: #4a4a4a;
+  color: var(--text-color);
   display: flex;
   justify-content: center;
   margin-bottom: -1px;
@@ -6413,7 +6413,7 @@ a.panel-block:hover, label.panel-block:hover {
 
 .tabs a:hover {
   border-bottom-color: #363636;
-  color: #363636
+  color: var(--text-color-hover);
 }
 
 .tabs li {
@@ -6498,7 +6498,7 @@ a.panel-block:hover, label.panel-block:hover {
 }
 
 .tabs.is-toggle a:hover {
-  background-color: #f5f5f5;
+  background-color: var(--background-hover);
   border-color: #b5b5b5;
   z-index: 2
 }
@@ -6518,8 +6518,8 @@ a.panel-block:hover, label.panel-block:hover {
 }
 
 .tabs.is-toggle li.is-active a {
-  background-color: #3273dc;
-  border-color: #3273dc;
+  background-color: var(--color-theme0);
+  border-color: var(--color-theme0);
   color: #fff;
   z-index: 1
 }

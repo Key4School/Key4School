@@ -71,7 +71,7 @@ def about():
 def leaderboard():
     if 'id' in session:
         user = utilisateurs[session['id']].toDict()
-        users = utilisateurs.values()
+        users = list(utilisateurs.values())
         return render_template("leaderboard.html", users=users, user=user, sessionId=ObjectId(session['id']))
     else:
         session['redirect'] = request.path
