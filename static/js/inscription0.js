@@ -49,7 +49,8 @@ $(document).ready(function() {
   function verifPrenom() {
     if ($prenom.val().length < 2) { // si la chaîne de caractères est inférieure à 5
       $prenom.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $name_check.removeClass("fas fa-check");
       $name_check.addClass("fas fa-times");
@@ -58,8 +59,9 @@ $(document).ready(function() {
       });
       return false;
     } else {
-      $prenom.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+      $prenom.css({ // on rend le champ rouge
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $name_check.removeClass("fas fa-times");
       $name_check.addClass("fas fa-check");
@@ -73,7 +75,8 @@ $(document).ready(function() {
   function verifPseudo() {
     if ($pseudo.val().length < 4) { // si la chaîne de caractères est inférieure à 5
       $pseudo.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $pseudo_check.removeClass("fas fa-check");
       $pseudo_check.addClass("fas fa-times");
@@ -83,7 +86,8 @@ $(document).ready(function() {
       return false;
     } else {
       $pseudo.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $pseudo_check.removeClass("fas fa-times");
       $pseudo_check.addClass("fas fa-check");
@@ -97,7 +101,8 @@ $(document).ready(function() {
   function verifNom() {
     if ($nom.val().length < 3) { // si la chaîne de caractères est inférieure à 5
       $nom.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $familyName_check.removeClass("fas fa-check");
       $familyName_check.addClass("fas fa-times");
@@ -107,7 +112,8 @@ $(document).ready(function() {
       return false;
     } else {
       $nom.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $familyName_check.removeClass("fas fa-times");
       $familyName_check.addClass("fas fa-check");
@@ -183,7 +189,8 @@ $(document).ready(function() {
 
     if (boul1 == true && boul2 == true && boul3 == true && boul4 == true) {
       $mdp.css({ // on rend le champ rouge
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $password_check.removeClass("fas fa-times");
       $password_check.addClass("fas fa-check");
@@ -193,7 +200,8 @@ $(document).ready(function() {
       return true;
     } else {
       $mdp.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $password_check.removeClass("fas fa-check");
       $password_check.addClass("fas fa-times");
@@ -207,7 +215,8 @@ $(document).ready(function() {
   function verifConfMdp() {
     if ($confmdp.val() != $mdp.val() || $confmdp.val() == '') { // si la confirmation est différente du mot de passe
       $confmdp.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $confPassword_check.removeClass("fas fa-check");
       $confPassword_check.addClass("fas fa-times");
@@ -217,7 +226,8 @@ $(document).ready(function() {
       return false;
     } else {
       $confmdp.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $confPassword_check.removeClass("fas fa-times");
       $confPassword_check.addClass("fas fa-check");
@@ -235,7 +245,8 @@ $(document).ready(function() {
 
     if (!emailReg.test(emailaddressVal) || !emailblockReg.test(emailaddressVal) || emailaddressVal == '') {
       $email.css({ // si tout est bon, on le rend vert
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $email_check.removeClass("fas fa-check");
       $email_check.addClass("fas fa-times");
@@ -245,7 +256,8 @@ $(document).ready(function() {
       return false;
     } else {
       $email.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $email_check.removeClass("fas fa-times");
       $email_check.addClass("fas fa-check");

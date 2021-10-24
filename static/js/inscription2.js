@@ -87,7 +87,8 @@ $(document).ready(function() {
     if($spe1.length == 0) return true;
     if ($spes.indexOf($spe1.val()) === -1 || $spe1.val() == $spe2.val() || $spe1.val() == $spe3.val()) {
       $spe1.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $spe1_check.removeClass("fas fa-check");
       $spe1_check.addClass("fas fa-times");
@@ -97,7 +98,8 @@ $(document).ready(function() {
       return false;
     } else {
       $spe1.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $spe1_check.removeClass("fas fa-times");
       $spe1_check.addClass("fas fa-check");
@@ -113,7 +115,8 @@ $(document).ready(function() {
     if($spe2.length == 0) return true;
     if ($spes.indexOf($spe2.val()) === -1 || $spe2.val() == $spe1.val() || $spe2.val() == $spe3.val()) {
       $spe2.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $spe2_check.removeClass("fas fa-check");
       $spe2_check.addClass("fas fa-times");
@@ -123,7 +126,8 @@ $(document).ready(function() {
       return false;
     } else {
       $spe2.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $spe2_check.removeClass("fas fa-times");
       $spe2_check.addClass("fas fa-check");
@@ -139,7 +143,8 @@ $(document).ready(function() {
     if($spe3.length == 0) return true;
     if ($spes.indexOf($spe3.val()) === -1 || $spe3.val() == $spe1.val() || $spe3.val() == $spe2.val()) {
       $spe3.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $spe3_check.removeClass("fas fa-check");
       $spe3_check.addClass("fas fa-times");
@@ -149,7 +154,8 @@ $(document).ready(function() {
       return false;
     } else {
       $spe3.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $spe3_check.removeClass("fas fa-times");
       $spe3_check.addClass("fas fa-check");
@@ -164,7 +170,8 @@ $(document).ready(function() {
   function verifOption1() {
     if (($options.indexOf($option1.val()) === -1 || $option1.val() == $option2.val() || $option1.val() == $option3.val())  && $option3.val() != '') {
       $option1.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $option1_check.removeClass("fas fa-check");
       $option1_check.addClass("fas fa-times");
@@ -174,7 +181,8 @@ $(document).ready(function() {
       return false;
     } else {
       $option1.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $option1_check.removeClass("fas fa-times");
       $option1_check.addClass("fas fa-check");
@@ -189,7 +197,8 @@ $(document).ready(function() {
   function verifOption2() {
     if ($options.indexOf(($option1.val()) === -1 || $option2.val() == $option1.val() || $option2.val() == $option3.val())  && $option3.val() != '') {
       $option2.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $option2_check.removeClass("fas fa-check");
       $option2_check.addClass("fas fa-times");
@@ -199,7 +208,8 @@ $(document).ready(function() {
       return false;
     } else {
       $option2.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $option2_check.removeClass("fas fa-times");
       $option2_check.addClass("fas fa-check");
@@ -214,7 +224,8 @@ $(document).ready(function() {
   function verifOption3() {
     if ($options.indexOf(($option3.val()) === -1 || $option3.val() == $option1.val() || $option3.val() == $option2.val()) && $option3.val() != '') {
       $option3.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $option3_check.removeClass("fas fa-check");
       $option3_check.addClass("fas fa-times");
@@ -224,7 +235,8 @@ $(document).ready(function() {
       return false;
     } else {
       $option3.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $option3_check.removeClass("fas fa-times");
       $option3_check.addClass("fas fa-check");

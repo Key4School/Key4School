@@ -96,7 +96,7 @@ min-width: 20%;
   </div>
   {%if content['rep'] != None%}
   <div class="rep">
-    <div style="font-variant: small-caps;" ><a href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['_id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
+    <div style="font-variant: small-caps;" ><a style="color:{{session['couleur'][0]}};"href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['_id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
     <a onclick="goToMess('msg{{content['rep']['_id']}}');" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
       {%if 'audio' in content['rep'] and content['rep']['audio'] == True %}
       <i class="fas fa-volume-up"></i> Message Vocal

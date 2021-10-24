@@ -67,7 +67,8 @@ $(document).ready(function() {
 
     if (!phoneReg.test(phoneVal) & phoneVal != '') {
       $phone.css({ // si tout est bon, on le rend vert
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $phone_check.removeClass("fas fa-check");
       $phone_check.addClass("fas fa-times");
@@ -77,7 +78,8 @@ $(document).ready(function() {
       return false;
     } else {
       $phone.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $phone_check.removeClass("fas fa-times");
       $phone_check.addClass("fas fa-check");
@@ -94,7 +96,8 @@ $(document).ready(function() {
 
     if (!birthdayReg.test(birthdayVal) || birthdayVal == '') {
       $birthday.css({ // on rend le champ rouge
-        border: '3px solid red',
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
       });
       $birthday_check.removeClass("fas fa-check");
       $birthday_check.addClass("fas fa-times");
@@ -104,7 +107,8 @@ $(document).ready(function() {
       return false;
     } else {
       $birthday.css({ // si tout est bon, on le rend vert
-        border: '3px solid green',
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
       });
       $birthday_check.removeClass("fas fa-times");
       $birthday_check.addClass("fas fa-check");
@@ -150,7 +154,8 @@ $(document).ready(function() {
 
         if (lycee.indexOf($school.val()) === -1) {
           $school.css({ // on rend le champ rouge
-            border: '3px solid red',
+            borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
           });
           $school_check.removeClass("fas fa-check");
           $school_check.addClass("fas fa-times");
@@ -160,7 +165,8 @@ $(document).ready(function() {
           retour = false;
         } else {
           $school.css({ // si tout est bon, on le rend vert
-            border: '3px solid green',
+            borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
           });
           $school_check.removeClass("fas fa-times");
           $school_check.addClass("fas fa-check");
@@ -182,7 +188,8 @@ function verifClasse() {
 
   if (classeVal == classeNone) {
     $classe.css({ // on rend le champ rouge
-      border: '3px solid red',
+      borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
     });
     $classe_check.removeClass("fas fa-check");
     $classe_check.addClass("fas fa-times");
@@ -192,7 +199,8 @@ function verifClasse() {
     return false;
   } else {
     $classe.css({ // si tout est bon, on le rend vert
-      border: '3px solid green',
+      borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
     });
     $classe_check.removeClass("fas fa-times");
     $classe_check.addClass("fas fa-check");
@@ -220,7 +228,8 @@ function verifLva() {
   var lang = ["Allemand", "Allemand Euro", "Anglais", "Anglais Euro", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Italien", "Italien Euro", "Espagnol", "Espagnol Euro", "Hébreu", "Kanak", "Portugais", "Portugais Euro", "Russe"];
   if (lang.indexOf($lva.val()) === -1 || $lva.val() == $lvb.val()) {
     $lva.css({ // on rend le champ rouge
-      border: '3px solid red',
+      borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
     });
     $lva_check.removeClass("fas fa-check");
     $lva_check.addClass("fas fa-times");
@@ -230,7 +239,8 @@ function verifLva() {
     return false;
   } else {
     $lva.css({ // si tout est bon, on le rend vert
-      border: '3px solid green',
+      borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
     });
     $lva_check.removeClass("fas fa-times");
     $lva_check.addClass("fas fa-check");
@@ -259,7 +269,8 @@ function verifLvb() {
   var lang = ["Allemand", "Anglais", "Arabe", "Basque", "Catalan", "Chinois", "Créole", "Espagnol", "Hébreu", "Kanak", "Portugais", "Russe"];
   if (lang.indexOf($lvb.val()) === -1 || $lva.val() == $lvb.val()) {
     $lvb.css({ // on rend le champ rouge
-      border: '3px solid red',
+      borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
     });
     $lvb_check.removeClass("fas fa-check");
     $lvb_check.addClass("fas fa-times");
@@ -269,7 +280,8 @@ function verifLvb() {
     return false;
   } else {
     $lvb.css({ // si tout est bon, on le rend vert
-      border: '3px solid green',
+      borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
     });
     $lvb_check.removeClass("fas fa-times");
     $lvb_check.addClass("fas fa-check");

@@ -30,7 +30,7 @@
   --NetB: white;
   --background-form: #212121;
   --text-multicolor: -webkit-linear-gradient(left top, #008df7, #e124fe, #ff2700, #ffe600, #06ff5f);
-  --runnable-track:#5ca0c2;
+  --runnable-track:var(--color-theme2);
   --range-track:#3b4044;
 }
 
@@ -63,7 +63,7 @@
     --NetB: white;
     --background-form: #212121;
     --text-multicolor: -webkit-linear-gradient(left top, #008df7, #e124fe, #ff2700, #ffe600, #06ff5f);
-    --runnable-track:#5ca0c2;
+    --runnable-track:var(--color-theme2);
     --range-track:#3b4044;
   }
 }
@@ -610,6 +610,7 @@ how to remove the virtical space around the range input in IE*/
 
   .listeMatiereFiltre {
     width: calc(100% - 100px);
+    padding-top:5%;
   }
 
   .ImagePublication {
