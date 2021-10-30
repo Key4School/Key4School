@@ -2386,7 +2386,23 @@ a.box:active {
 }
 
 .progress.is-info:indeterminate {
-  background-image: linear-gradient(to right, #3298dc 30%, #ededed 30%)
+  background-image: linear-gradient(to right, var(--color-theme0) 30%, #ededed 30%)
+}
+
+.progress.is-theme::-webkit-progress-value {
+  background-color: var(--color-theme0)
+}
+
+.progress.is-theme::-moz-progress-bar {
+  background-color: var(--color-theme0)
+}
+
+.progress.is-theme::-ms-fill {
+  background-color: var(--color-theme0)
+}
+
+.progress.is-theme:indeterminate {
+  background-image: linear-gradient(to right, var(--color-theme0) 30%, #ededed 30%)
 }
 
 .progress.is-success::-webkit-progress-value {
@@ -5906,12 +5922,12 @@ body.has-navbar-fixed-bottom, html.has-navbar-fixed-bottom {
 
   .navbar-dropdown a.navbar-item:focus, .navbar-dropdown a.navbar-item:hover {
     background-color: var(--background-hover);
-    color: var(--text-color-hover)
+    color: var(--color-lien)
   }
 
   .navbar-dropdown a.navbar-item.is-active {
     background-color: #f5f5f5;
-    color: #3273dc
+    color: var(--color-lien)
   }
 
   .navbar-dropdown.is-boxed, .navbar.is-spaced .navbar-dropdown {

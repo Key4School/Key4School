@@ -2,8 +2,7 @@
   * Couleur 1 : bandeau + cadre messages
   * Couleur 2 : couleurs messages
   * Couleur 3 : icons (notification + post)
-  * Moyenne : (+ bande de citation message)
-  * couleur message darktheme : (+ bande de citation message)
+  * Moyenne : (+ bande de citation message) moyenne de la couleur 2 + blanc
 
 
 **Palette bleu theme clair**
@@ -88,8 +87,14 @@
 * Couleur 3 : ![#d189ff](https://via.placeholder.com/15/e68181/000000?text=+) `#d189ff`
 * Moyenne: ![#d397fd](https://via.placeholder.com/15/d397fd/000000?text=+) `#d397fd`
 
-**Palette rose theme clair & sombre**
+**Palette rose theme clair**
 * Couleur 1 : ![#db3056](https://via.placeholder.com/15/db3056/000000?text=+) `#db3056`
+* Couleur 2 : ![#ff6464](https://via.placeholder.com/15/ff6464/000000?text=+) `#ff6464`
+* Couleur 3 : ![#ffb99a](https://via.placeholder.com/15/ffb99a/000000?text=+) `#ffb99a`
+* Moyenne: ![#ffb2b2](https://via.placeholder.com/15/ffb2b2/000000?text=+) `#ffb2b2`
+
+**Palette rose theme  sombre**
+* Couleur 1 : ![#ef6483](https://via.placeholder.com/15/ef6483/000000?text=+) `#ef6483`
 * Couleur 2 : ![#ff6464](https://via.placeholder.com/15/ff6464/000000?text=+) `#ff6464`
 * Couleur 3 : ![#ffb99a](https://via.placeholder.com/15/ffb99a/000000?text=+) `#ffb99a`
 * Moyenne: ![#ffb2b2](https://via.placeholder.com/15/ffb2b2/000000?text=+) `#ffb2b2`

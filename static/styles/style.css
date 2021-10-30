@@ -608,9 +608,13 @@ how to remove the virtical space around the range input in IE*/
     margin-right: 14%;
   }
 
+  .progress_XP::-webkit-progress-bar {
+    color:var(--color-theme0);
+  }
+
   .listeMatiereFiltre {
     width: calc(100% - 100px);
-    padding-top:5%;
+    padding-top:5%
   }
 
   .ImagePublication {
