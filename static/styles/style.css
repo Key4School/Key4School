@@ -454,6 +454,9 @@ how to remove the virtical space around the range input in IE*/
   display:flex;
   align-items:center;
 }
+.participantmsg{
+  min-width: 20%;
+}
 /* Pour telephone */
 @media screen and (max-width:1023px) {
   .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
@@ -727,5 +730,8 @@ how to remove the virtical space around the range input in IE*/
   .inputNewGroup{
     width: 50%;
     margin-top:1%;
+  }
+  .participantmsgAudio{
+    width:30%;
   }
 }

@@ -9,11 +9,11 @@ min-width: 20%;
   <div style="align-self: flex-end;">
   {%else%}
 
-  <div class="participantmsg" style="word-break: break-word;
+  <div style="word-break: break-word;" class="participantmsg  
   {%if 'audio' in content and content['audio'] == true %}
-  width: 30%;
+  participantmsgAudio
   {%else%}
-  min-width: 20%;
+  participantmsg
   {%endif%}
   " id="msg{{content['_id']}}">
     <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
