@@ -28,6 +28,7 @@
   --scrollbar-thumb-hover: #313639aa;
   --border-box: #212121;
   --NetB: white;
+  --NetBinverse: black;
   --background-form: #212121;
   --text-multicolor: -webkit-linear-gradient(left top, #008df7, #e124fe, #ff2700, #ffe600, #06ff5f);
   --runnable-track:var(--color-theme2);
@@ -45,6 +46,7 @@
   --border-box: #e3e3e3;
   --text-multicolor: black;
   --NetB: black;
+  --NetBinverse: white;
   --background-form: #fafafa;
   --runnable-track:#30b6f6;
   --range-track:#e6e6e6;
@@ -61,6 +63,7 @@
     --scrollbar-thumb-hover: #313639aa;
     --border-box: #212121;
     --NetB: white;
+    --NetBinverse: black;
     --background-form: #212121;
     --text-multicolor: -webkit-linear-gradient(left top, #008df7, #e124fe, #ff2700, #ffe600, #06ff5f);
     --runnable-track:var(--color-theme2);
@@ -80,6 +83,7 @@
     --border-box: #e3e3e3;
     --text-multicolor: black;
     --NetB: black;
+    --NetBinverse: white;
     --background-form: #fafafa;
     --play-audio:#999999;
     --runnble-track:#30b6f6;
@@ -169,7 +173,6 @@ p {
 .txt_right {
   text-align: right;
 }
-
 .container_theme:hover {
   cursor: pointer;
 }
@@ -447,6 +450,10 @@ how to remove the virtical space around the range input in IE*/
   object-fit: cover;
   border-radius:50%;
 }
+.div_flex{
+  display:flex;
+  align-items:center;
+}
 /* Pour telephone */
 @media screen and (max-width:1023px) {
   .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
@@ -564,6 +571,11 @@ how to remove the virtical space around the range input in IE*/
   .divQuestion, .container_leaderboard {
     margin:auto;
     width: 90%;
+  }
+  .inputNewGroup{
+    width: 90%;
+    margin: auto;
+    margin-top:1%;
   }
 }
 
@@ -711,5 +723,9 @@ how to remove the virtical space around the range input in IE*/
   }
   .container_leaderboard{
     width:50%;margin:auto;
+  }
+  .inputNewGroup{
+    width: 50%;
+    margin-top:1%;
   }
 }

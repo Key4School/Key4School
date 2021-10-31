@@ -22,6 +22,18 @@
     #messages.dragover{
       border: 3px dashed {{session['couleur'][0]}};
     }
+    #divDansTitregroupe_DM{
+      display: flex;
+      align-items:center;
+      justify-content:space-between;
+      border: 3px solid {{session['couleur'][0]}};
+      padding:10px;
+      height: 100px;
+      border-bottom: none;
+    }
+    #divDansTitregroupe_DM.dragover{
+      border: 3px dashed {{session['couleur'][0]}};
+    }
     #divDansTitregroupe{
       display: flex;
       align-items:baseline;
@@ -146,6 +158,62 @@
         display: none;
       }
     }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+    .slider {
+      height: 34px;
+      width:60px;
+      position: absolute;
+      cursor: pointer;
+      left: 5%;
+      background-color: #ae1515;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    .slider:before {
+      position: absolute;
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+      content: "";
+      padding-bottom: 26px;
+      padding-top: 0px;
+    }
+    input:checked + .slider {
+      background-color: #00a609;
+    }
+    input:focus + .slider {
+      box-shadow: 0 0 1px white;
+    }
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+      background-color: white;
+      content: "";
+      padding-bottom: 27px;
+      padding-top: 0px;
+    }
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
   </style>
 </head>
 
@@ -174,16 +242,30 @@
             </header>
             <form action="{{url_for('createGroupe')}}" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <input placeholder="Nom du groupe" class="input" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25' required /><br><br>
-                <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
+                <div id="content_input_nom_groupe">
+                  <input placeholder="Nom du groupe" class="input inputNewGroup" type="text" name="nomnewgroupe" id="nomnewgroupe" maxlength='25'/><br><br>
+                </div>
+                <input class="input inputNewGroup" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" />
                 <br /><br />
+                <div id="switchGroupeMP" style="display:none;">
+                  <div class="div_flex">
+                    <p style="padding-right:3%;">
+                      Créer un groupe pour 2 participants :
+                    </p>
+                    <label class="switch">
+                      <input type="checkbox" id="checkGroupeMP">
+                      <span class="slider round"></i></span>
+                    </label>
+                  </div>
+                  <br />
+                </div>
                 <div id="listeuser" style="position: relative;overflow:auto; max-height: 500px;">
                   {% for user in users %}
                   {% if not sessionId == user['_id'] %}
                   {%set varApercuProfil = user%}
                   <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
                     data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
-                    <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
+                    <input onClick="checkboxTitle();" type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
                     <label class="survolPseudoCreationGroupe" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');" for="user_{{user['_id']}}">{{user['pseudo']}}{% include 'apercu2profil_creationGroupe.html' with context %}</label>
                     <br>
                   </div>
@@ -216,11 +298,20 @@
                       {%endif%}
 
                       {% if not content['is_DM'] %}
-                        {{content['nom']}}
-                      {% else %}
+                        {% if content['nom']=="" %}
                         {% for u in content['utilisateurs'] %}
                           {% if u['_id'] != sessionId %}
-                            » {{u['pseudo']}}
+                            {{u['pseudo']}}
+                          {% endif %}
+                        {% endfor %}
+                        {% else %}
+                          {{content['nom']}}
+                        {% endif %}
+                      {% else %}
+
+                        {% for u in content['utilisateurs'] %}
+                          {% if u['_id'] != sessionId %}
+                            {{u['pseudo']}}
                           {% endif %}
                         {% endfor %}
                       {% endif %}
@@ -265,21 +356,38 @@
       {%endif%}
 
       {% if msgDb != None %}
-
       <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative; width: 100%;">
-
-        <div id="divDansTitregroupe">
-
-          <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
-
-            <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages/" id="backButton" style="margin-right: 12px; color: var(--text-color);"><i class="fas fa-chevron-circle-left"></i></a>
-            <span class="grpName">
+            {% if infogroupe['nom']=="" or infogroupe['is_DM'] %}
+              {% for u in infogroupe['utilisateurs'] %}
+                {% if u['_id'] != sessionId %}
+                  <div id="divDansTitregroupe_DM">
+                    <div id="groupHeader" style="display: flex; align-items:center;justify-content:space-between;">
+                      <p id="groupTitle" style="font-weight:bold; display: flex;align-items:center"><a href="/messages/" id="backButton" style="margin-right: 12px; color: var(--text-color);"><i class="fas fa-chevron-circle-left"></i></a>
+                      <img alt="user" onclick="updateImgOpen();"
+                        src="{%if 'nomImg' in u and u['nomImg'] != "" %}{{url_for('userImg', profilImg = u['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+                        style="margin-top:5%;width:40px; height:40px;object-fit: cover;border-radius:50%; cursor: pointer;" />
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <div id="divDansTitregroupe">
+                <div id="groupHeader" style="display: flex;flex-direction:column; align-items:baseline;justify-content:space-between;">
+                  <p id="groupTitle" style="font-weight:bold; display: inline-block;"><a href="/messages/" id="backButton" style="margin-right: 12px; color: var(--text-color);"><i class="fas fa-chevron-circle-left"></i></a>
+            {% endif %}
+            <span class="grpName" style="font-size: 1.25rem;">
               {% if not infogroupe['is_DM'] %}
-                {{infogroupe['nom']}}
+                {% if infogroupe['nom']=="" %}
+                  {% for u in infogroupe['utilisateurs'] %}
+                    {% if u['_id'] != sessionId %}
+                      {{u['pseudo']}}
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  {{infogroupe['nom']}}
+                {% endif %}
               {% else %}
                 {% for u in infogroupe['utilisateurs'] %}
                   {% if u['_id'] != sessionId %}
-                    » {{u['pseudo']}}
+                    {{u['pseudo']}}
                   {% endif %}
                 {% endfor %}
               {% endif %}
@@ -297,9 +405,11 @@
                 <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
               {%endfor%}
             {% endif %}-->
+            {% if infogroupe['nom']!="" and not infogroupe['is_DM'] %}
               {% for content in infoUtilisateurs %}
                 <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['_id'])}}">{{content['pseudo']}}</a>, </span>
               {%endfor%}
+            {% endif %}
             </p>
           </div>
 
@@ -320,11 +430,19 @@
                 {%else%}
                   <h3 style="font-weight: bolder; font-size: 20px;">
                     {% if not infogroupe['is_DM'] %}
-                      {{infogroupe['nom']}}
+                      {% if infogroupe['nom']=="" %}
+                        {% for u in infogroupe['utilisateurs'] %}
+                          {% if u['_id'] != sessionId %}
+                            {{u['pseudo']}}
+                          {% endif %}
+                        {% endfor %}
+                      {% else %}
+                        {{infogroupe['nom']}}
+                      {% endif %}
                     {% else %}
                       {% for u in infogroupe['utilisateurs'] %}
                         {% if u['_id'] != sessionId %}
-                          » {{u['pseudo']}}
+                          {{u['pseudo']}}
                         {% endif %}
                       {% endfor %}
                     {% endif %}

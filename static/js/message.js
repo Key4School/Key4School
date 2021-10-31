@@ -19,6 +19,9 @@ $(document).ready(function() {
   $('#listeuser').css({
     height: (40 / 100 * ($(window).height())).toString() + 'px',
   });
+  $('#content_input_nom_groupe').css({
+    display:"none",
+  });
   /*searchUser();
   $('#searchUser').keyup(function() {
     searchUser();
@@ -53,6 +56,53 @@ const scroll = () => {
     return messagesDiv.scrollBy(0, scrollHeight);
   }
 };
+
+
+
+function checkboxTitle(){
+  var inputElems = document.getElementsByTagName("input"),
+  count = 0;
+  for (var i=0; i<inputElems.length; i++) {
+    if (inputElems[i].type === "checkbox" && inputElems[i].checked === true){
+        count++;
+        if (count > 1){
+          $('#content_input_nom_groupe').css({
+            display:"block"
+          });
+          $("[name='nomnewgroupe']").attr("required", true);
+          $('#switchGroupeMP').css({
+            display:"none"
+          });
+        }
+        if (count == 1){
+          $('#content_input_nom_groupe').css({
+            display:"none"
+          });
+          $("[name='nomnewgroupe']").attr("required", false);
+          $('#switchGroupeMP').css({
+            display:"block"
+          });
+        }
+      }
+    }
+}
+
+$('#checkGroupeMP').change(function() {
+  if($('#checkGroupeMP').hasClass("checked")==true){
+    $('#content_input_nom_groupe').css({
+      display:"none"
+    });
+    $("[name='nomnewgroupe']").attr("required", false);
+    $('#checkGroupeMP').removeClass("checked");
+  }
+  else{
+    $('#checkGroupeMP').addClass("checked");
+    $('#content_input_nom_groupe').css({
+      display:"block"
+    });
+    $("[name='nomnewgroupe']").attr("required", true);
+  }
+});
 
 function divnewgroupopen() {
   $("#newgrou").addClass("is-active");
