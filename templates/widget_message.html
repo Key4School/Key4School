@@ -9,7 +9,7 @@ min-width: 20%;
   <div style="align-self: flex-end;">
   {%else%}
 
-  <div style="word-break: break-word;" class="participantmsg  
+  <div style="word-break: break-word;" class="participantmsg
   {%if 'audio' in content and content['audio'] == true %}
   participantmsgAudio
   {%else%}
@@ -114,7 +114,7 @@ min-width: 20%;
       <div id="audio-player-container{{content['_id']}}" style="display: flex;justify-content:space-evenly;align-items: center;width: 100%;margin-top: 5px;">
         <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
         <button style="font-size:1.25rem;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="color_audio fas fa-play"></i></button>
-        <input style="margin-right:2%; width: 60%; background: transparent;padding:0 2% 0 2%;" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
+        <input style="margin-right:2%; width: 60%; background: transparent;padding:0 2% 0 2%;" step="0.0001" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
         <img id="img_msg_audio{{content['_id']}}" style="margin:0px;" class="img_msg_audio block" src="{%if 'nomImg' in content['utilisateur'] and content['utilisateur']['nomImg'] != '' %}{{url_for('userImg', profilImg = content['utilisateur']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" alt="photo de profile" />
         <button class="none" style="font-size:1rem;min-width:42px; height: 35px; border:transparent;background-color:{{session['couleur'][2]}};border-radius: 15px;padding-top: 2%;padding-bottom: 2%; margin-right: 15px; margin-top: 5px;margin-bottom:5px; cursor: pointer;" id="buttonAudio{{content['_id']}}" onclick="changeRate('{{content['_id']}}');">1x</button>
       </div>
@@ -196,7 +196,8 @@ min-width: 20%;
         }
 
         const whilePlaying{{content['_id']}} = () => {
-            seekSlider{{content['_id']}}.value = Math.floor(audio{{content['_id']}}.currentTime);
+            seekSlider{{content['_id']}}.value = audio{{content['_id']}}.currentTime;
+            console.log(audio{{content['_id']}}.currentTime);
             currentTimeContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(seekSlider{{content['_id']}}.value);
             audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', `${seekSlider{{content['_id']}}.value / seekSlider{{content['_id']}}.max * 100}%`);
             raf{{content['_id']}} = requestAnimationFrame(whilePlaying{{content['_id']}});
