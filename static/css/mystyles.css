@@ -3709,13 +3709,13 @@ a.tag:hover {
 }
 
 .file.is-info .file-cta {
-  background-color: #3298dc;
+  background-color: var(--color-theme0);
   border-color: transparent;
   color: #fff
 }
 
 .file.is-info.is-hovered .file-cta, .file.is-info:hover .file-cta {
-  background-color: #2793da;
+  background-color: var(--color-theme1);
   border-color: transparent;
   color: #fff
 }

@@ -365,7 +365,7 @@
                       <p id="groupTitle" style="font-weight:bold; display: flex;align-items:center"><a href="/messages/" id="backButton" style="margin-right: 12px; color: var(--text-color);"><i class="fas fa-chevron-circle-left"></i></a>
                       <img alt="user" onclick="updateImgOpen();"
                         src="{%if 'nomImg' in u and u['nomImg'] != "" %}{{url_for('userImg', profilImg = u['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
-                        style="margin-top:5%;width:40px; height:40px;object-fit: cover;border-radius:50%; cursor: pointer;" />
+                        style="margin-right: 15%;margin-top:5%;width:40px; height:40px;object-fit: cover;border-radius:50%; cursor: pointer;" />
                 {% endif %}
               {% endfor %}
             {% else %}
