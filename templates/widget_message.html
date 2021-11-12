@@ -1,4 +1,4 @@
-{%if content['id-utilisateur']==sessionId%}
+{%if content['id_utilisateur']==sessionId%}
 <div class="moimsg" id="msg{{content['id']}}">
   <div style="align-self: flex-end;">
   {%else%}
@@ -6,18 +6,18 @@
   <div class="participantmsg" style="word-break: break-word;" id="msg{{content['id']}}">
     <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
   {%endif%}
-    {%if content['id-utilisateur']!=sessionId%}
+    {%if content['id_utilisateur']!=sessionId%}
     <p style="font-weight: bold; font-variant:small-caps;margin:0px"><a href="{{url_for('profil' ,idUser=content['utilisateur']['id'])}}">{{content['utilisateur']['pseudo']}}</a></p>
     {%endif%}
     <div class="navbar-item has-dropdown is-hoverable">
       <div class="navbar-link">
       </div>
-      {%if content['id-utilisateur']==sessionId%}
+      {%if content['id_utilisateur']==sessionId%}
       <div class="navbar-dropdown is-right" style="z-index: 20;">
       {%else%}
       <div class="navbar-dropdown" style="z-index: 20;">
       {%endif%}
-        {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or 'ELEVE'== "ENSEIGNANT" or user['admin']== True%}
+        {%if content['id_utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or 'ELEVE'== "ENSEIGNANT" or user['admin']== True%}
         <div class="navbar-item">
           <form method="post" action="/suppressionMsg/" class="supprimer">
             <input type='hidden' name="msgSuppr" value="{{content['id']}}" />

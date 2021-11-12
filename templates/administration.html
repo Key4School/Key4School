@@ -107,7 +107,7 @@
   <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['id']}}'>
     <div>
       {%set varApercuProfil = content['user']%}
-      <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}" onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');">
+      <a href="{{url_for('profil' ,idUser=content['id_utilisateur'])}}" onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');">
         {{content['user']['prenom']}} {{content['user']['nom']}} {% include 'apercu2profil.html' with context %}</a> :
       <br />
       <br />

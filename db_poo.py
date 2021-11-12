@@ -3,8 +3,9 @@ from flask import session, escape, render_template
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import JSONB, UUID
-from uuid import uuid4
+from uuid import uuid1
 from sqlalchemy import create_engine
+from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
 from functools import wraps
@@ -20,6 +21,8 @@ import inspect
 Base = declarative_base()
 
 # gestionnaire de session
+
+
 @contextmanager
 def session_scope():
     session = dbSession()
@@ -33,8 +36,10 @@ def session_scope():
         session.close()
 
 # decorateur -> creer session et la ferme a la fin
+
+
 def db_session(func):
-    @wraps(func) # permet de garder le nom de la fonction pour Flask
+    @wraps(func)  # permet de garder le nom de la fonction pour Flask
     def return_func(*param, **param2):
         with session_scope() as s:
             func.__globals__.update({'s': s})
@@ -43,14 +48,20 @@ def db_session(func):
 
     return return_func
 
+
 def get_context(func):
     @wraps(func)
     def return_func(*param, **param2):
-        func.__globals__.update(inspect.currentframe().f_back.f_locals | inspect.currentframe().f_back.f_globals)
+        func.__globals__.update(inspect.currentframe(
+        ).f_back.f_locals | inspect.currentframe().f_back.f_globals)
         return_value = func(*param, **param2)
         return return_value
 
     return return_func
+
+
+def generate_uuid():
+    return str(uuid1())
 
 
 class Actions:
@@ -72,15 +83,23 @@ class Actions:
             else:
                 query = query.order_by(eval(order_by))
 
+        try:
+            del globals()['temp']
+            del locals()['temp']
+        except Exception:
+            pass
+
         if limit == 1:
             if query.count() == 0:
                 return None
-            query = query.one()
+            query = query.first()
         elif limit:
             if query.count() == 0:
                 return []
             query = query.limit(limit).all()
         else:
+            if query.count() == 0:
+                return []
             query = query.all()
 
         return query
@@ -112,7 +131,8 @@ class Translate_matiere_spes_options_lv:
 class User(Translate_matiere_spes_options_lv, Actions, Base):
     __tablename__ = 'users'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    id = Column(UUID(as_uuid=False), primary_key=True,
+                default=generate_uuid, unique=True)
     nom = Column(String)
     prenom = Column(String)
     pseudo = Column(String)
@@ -179,17 +199,19 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 
         self.options = params.get('options', [])
         self.spes = params.get('spes', [])
-        self.matiere = params.get('matiere', '') # pour les profs
-        self.matiere_autre = params.get('matiere_autre', []) # pour les profs
+        self.matiere = params.get('matiere', '')  # pour les profs
+        self.matiere_autre = params.get('matiere_autre', [])  # pour les profs
 
         self.nomImg = params.get('nomImg', '')
         self.imgProfile = params.get('imgProfile', '')
 
-        self.couleur = params.get('couleur', ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'])
+        self.couleur = params.get(
+            'couleur', ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'])
         self.theme = params.get('theme', 'system')
 
         self.elementPublic = params.get('elementPublic', [])
-        self.elementPrive = params.get('elementPrive', ['email', 'telephone', 'interets', 'birth_date'])
+        self.elementPrive = params.get(
+            'elementPrive', ['email', 'telephone', 'interets', 'birth_date'])
 
         self.interets = params.get('interets', '')
 
@@ -314,8 +336,10 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
                     else:
                         subjects += [subject]
             else:
-                subjects = ['ang', 'esp', 'all', 'it', 'chi', 'ru', 'por', 'ara']
-                subjects += [key for key, value in translations.items() if not 'lv'in key]
+                subjects = ['ang', 'esp', 'all',
+                            'it', 'chi', 'ru', 'por', 'ara']
+                subjects += [key for key,
+                             value in translations.items() if not 'lv' in key]
         return subjects
 
     @property
@@ -332,7 +356,7 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         methods = {
             'spes-str': (self.translate_matiere_spes_options_lv, self.spes),
             'langues-str': (self.translate_matiere_spes_options_lv, self.langues),
-            'options-str':(self.translate_matiere_spes_options_lv, self.options),
+            'options-str': (self.translate_matiere_spes_options_lv, self.options),
             'matiere-str': (self.translate_matiere_spes_options_lv, self.matiere),
             'matiere_autre-str': (self.translate_matiere_spes_options_lv, self.matiere_autre)
         }
@@ -345,7 +369,7 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         methods = {
             'spes-str': (self.translate_matiere_spes_options_lv, self.spes),
             'langues-str': (self.translate_matiere_spes_options_lv, self.langues),
-            'options-str':(self.translate_matiere_spes_options_lv, self.options),
+            'options-str': (self.translate_matiere_spes_options_lv, self.options),
             'matiere-str': (self.translate_matiere_spes_options_lv, self.matiere),
             'matiere_autre-str': (self.translate_matiere_spes_options_lv, self.matiere_autre)
         }
@@ -361,8 +385,9 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 class Request(Translate_matiere_spes_options_lv, Actions, Base):
     __tablename__ = 'help_requests'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
-    id_utilisateur = Column(UUID(as_uuid=True))
+    id = Column(UUID(as_uuid=False), primary_key=True,
+                default=generate_uuid, unique=True)
+    id_utilisateur = Column(UUID(as_uuid=False))
     titre = Column(String)
     contenu = Column(String)
     date_envoi = Column(DateTime)
@@ -385,7 +410,7 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
         self.resolu = params.get('resolu', False)
-        self.fileType = params.get('fileType', 'none')
+        self.fileType = params.get('fileType', None)
 
     def diffTemps(self):
         diff_temps = int((datetime.now() - self.date_envoi).total_seconds())
@@ -444,15 +469,18 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
         contenu = ''
         for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
-                '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
-                w)
+                              '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(
+                                  re.sub('^http(s?)://', '', w), w),
+                              w)
             contenu += ' '
 
         return contenu
 
     @property
     def rep(self):
-        return Response.get(filter="cls.id in self.reponses_associees")
+        temp = self.reponses_associees
+        print(type(temp))
+        return Response.get(filter="cls.id in temp")
 
     @property
     def nb_likes(self):
@@ -464,7 +492,8 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
 
     @property
     def user(self):
-        return User.get(filter="cls.id == self.id_utilisateur", limit=1)
+        temp = self.id_utilisateur
+        return User.get(filter="cls.id == temp", limit=1)
 
     def __setitem__(self, key, value):
         return setattr(self, key, value)
@@ -494,7 +523,8 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
 class Response(Actions, Base):
     __tablename__ = 'help_responses'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    id = Column(UUID(as_uuid=True), primary_key=True,
+                default=generate_uuid, unique=True)
     id_utilisateur = Column(UUID(as_uuid=True))
     contenu = Column(String)
     date_envoi = Column(DateTime)
@@ -551,8 +581,9 @@ class Response(Actions, Base):
         contenu = ''
         for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
-                '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
-                w)
+                              '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(
+                                  re.sub('^http(s?)://', '', w), w),
+                              w)
             contenu += ' '
 
         return contenu
@@ -563,7 +594,8 @@ class Response(Actions, Base):
 
     @property
     def user(self):
-        return User.get(filter="cls.id == self.id_utilisateur", limit=1)
+        temp = self.id_utilisateur
+        return User.get(filter="cls.id == temp", limit=1)
 
     def __setitem__(self, key, value):
         return setattr(self, key, value)
@@ -581,12 +613,13 @@ class Response(Actions, Base):
 class Message(Actions, Base):
     __tablename__ = 'messages'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
-    id_groupe = Column(UUID(as_uuid=True))
-    id_utilisateur = Column(UUID(as_uuid=True))
+    id = Column(UUID(as_uuid=True), primary_key=True,
+                default=generate_uuid, unique=True)
+    id_groupe = Column(UUID(as_uuid=False))
+    id_utilisateur = Column(UUID(as_uuid=False))
     contenu = Column(String)
     date_envoi = Column(DateTime)
-    reponse = Column(UUID(as_uuid=True))
+    reponse = Column(UUID(as_uuid=False))
     audio = Column(Boolean)
     image = Column(String)
     sign = Column(JSONB)
@@ -621,24 +654,28 @@ class Message(Actions, Base):
         contenu = ''
         for w in safe.split():
             contenu += re.sub("^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$",
-                '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(re.sub('^http(s?)://', '', w), w),
-                w)
+                              '<a href="//{}" target="_blank" style="overflow-wrap: break-word;">{}</a>'.format(
+                                  re.sub('^http(s?)://', '', w), w),
+                              w)
             contenu += ' '
 
         return contenu
 
     @property
     def utilisateur(self):
-        return User.get(filter="cls.id == self.id_utilisateur", limit=1)
+        temp = self.id_utilisateur
+        return User.get(filter="cls.id == temp", limit=1)
 
     @property
     def groupe(self):
-        return Groupe.get(filter="cls.id == self.id_groupe", limit=1)
+        temp = self.id_groupe
+        return Group.get(filter="cls.id == temp", limit=1)
 
     @property
     def rep(self):
-        if self.reponse != "None":
-            rep = Message.get(filter="cls.id == self.reponse", limit=1)
+        if self.reponse:
+            temp = self.reponse
+            rep = Message.get(filter="cls.id == temp", limit=1)
         else:
             rep = None
         return rep
@@ -659,7 +696,8 @@ class Message(Actions, Base):
 class Group(Actions, Base):
     __tablename__ = 'groups'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    id = Column(UUID(as_uuid=False), primary_key=True,
+                default=generate_uuid, unique=True)
     nom = Column(String)
     is_class = Column(Boolean)
     is_DM = Column(Boolean)
@@ -700,23 +738,26 @@ class Group(Actions, Base):
 
     @property
     def getAllMessages(self):
-        return Message.get(filter="cls.id_groupe == self.id", order_by="cls.date_envoi")
+        temp = self.id
+        return Message.get(filter="cls.id_groupe == temp", order_by="cls.date_envoi")
 
     @property
     def getAllMessagesSign(self):
-        return Message.get(filter="cls.id_groupe == self.id and cls.sign != '[]'", order_by="cls.date_envoi")
+        temp = self.id
+        return Message.get(filter="cls.id_groupe == temp and cls.sign != '[]'", order_by="cls.date_envoi")
 
     @property
     def lastMsg(self):
-        l = Message.get(filter="cls.id_groupe == self.id", order_by="cls.date_envoi")
-        return l[-1] if len(l) > 0 else None
+        temp = self.id
+        return Message.get(filter="cls.id_groupe == temp", order_by="cls.date_envoi", desc=True, limit=1)
 
     @property
     def nbNotif(self, uid=None):
         if uid == None:
             uid = session['id'] if session != None and 'id' in session else None
         if uid != None:
-            return len(Notification.get(filter="cls.type == 'msg' and cls.id_groupe == self.id and cls.destinataires.comparator.has(uid)"))
+            id = self.id
+            return len(Notification.get(filter="cls.type == 'msg' and cls.id_groupe == id and cls.destinataires.comparator.has(uid)"))
         else:
             return None
 
@@ -726,11 +767,13 @@ class Group(Actions, Base):
 
     @property
     def utilisateurs(self):
-        return User.get(filter="cls.id in self.id_utilisateurs")
+        temp = self.id_utilisateurs
+        return User.get(filter="cls.id in temp")
 
     @property
     def modos(self):
-        return User.get(filter="cls.id in self.moderateurs")
+        temp = self.moderateurs
+        return User.get(filter="cls.id in temp")
 
     def __setitem__(self, key, value):
         return setattr(self, key, value)
@@ -744,15 +787,18 @@ class Group(Actions, Base):
     def __repr__(self):
         return f'<Group id={self.id}, nom={self.nom}>'
 
+
 clientsNotif = {}
+
 
 class Notification(Actions, Base):
     __tablename__ = 'notifications'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, unique=True)
+    id = Column(UUID(as_uuid=False), primary_key=True,
+                default=generate_uuid, unique=True)
     type = Column(String)
-    id_groupe = Column(UUID(as_uuid=True))
-    id_msg = Column(UUID(as_uuid=True))
+    id_groupe = Column(UUID(as_uuid=False))
+    id_msg = Column(UUID(as_uuid=False))
     date = Column(DateTime)
     destinataires = Column(JSONB)
 
@@ -767,7 +813,8 @@ class Notification(Actions, Base):
     @classmethod
     def create(cls, type, id_groupe, id_msg, destinataires):
         if type == 'demande':
-            destinataires += User.get(filter="cls.savedDemands.comparator.has(id_groupe)")
+            for user in User.get(filter="cls.savedDemands.comparator.has_key(str(id_groupe))"):
+                destinataires.append(user['id'])
 
         if session['id'] in destinataires:
             destinataires.remove(session['id'])
@@ -775,9 +822,12 @@ class Notification(Actions, Base):
         destinataires = list(set(destinataires))
 
         if len(destinataires) > 0:
-            notification = Notification(type=type, id_groupe=id_groupe, id_msg=id_msg, destinataires=destinataires)
+            notification = Notification(
+                type=type, id_groupe=id_groupe, id_msg=id_msg, destinataires=destinataires)
             notification.insert()
             notification.send()
+        else:
+            notification = None
         return notification
 
     def diffTemps(self):
@@ -811,22 +861,26 @@ class Notification(Actions, Base):
     @get_context
     def send(self):
         notification = self
-        html = render_template("notification.html", notif=notification, similar=0)
+        html = render_template("notification.html",
+                               notif=notification, similar=0)
 
         for user in notification['userDest']:
             if user['id'] in clientsNotif:
-                socketio.emit('newNotif', {'html': html, 'sound': user['notifs']['sound']}, to=user['id'])
+                socketio.emit(
+                    'newNotif', {'html': html, 'sound': user['notifs']['sound']}, to=user['id'])
             elif user['email'] != "":
                 # si l'user a autorisé les notifs par mail
                 if (self.type == 'msg' and user['notifs']['messages']) or (self.type == 'demande' and user['notifs']['demandes']):
                     # si un mail n'a pas déja été envoyé pour ce groupe
-                    if (self.type == 'msg' and len(Notification.get(filter="cls.type == 'msg' and cls.id_groupe == self.id and cls.destinataires.comparator.has(user['id'])")) == 1) or self.type == 'demande':
+                    if (self.type == 'msg' and len(Notification.get(filter="cls.type == 'msg' and cls.id_groupe == self.id and cls.destinataires.comparator.has_key(str(user['id']))")) == 1) or self.type == 'demande':
                         if user['email'] != "":
                             To = user['email']
                         else:
                             pass
-                        htmlMail = render_template('mail.html', notif=notification, user=user)
-                        envoi = Thread(target=self.sendMail, args=(To, htmlMail, notification['sender']['pseudo']))
+                        htmlMail = render_template(
+                            'mail.html', notif=notification, user=user)
+                        envoi = Thread(target=self.sendMail, args=(
+                            To, htmlMail, notification['sender']['pseudo']))
                         envoi.start()
         return
 
@@ -899,11 +953,13 @@ class Notification(Actions, Base):
 
     @property
     def sender(self):
+        '''A REVOIR PEUT ETRE ERREUR'''
         return User.get(filter="cls.id == msg['id_utilisateur']", limit=1)
 
     @property
     def userDest(self):
-        return User.get(filter="cls.id in self.destinataires")
+        temp = self.destinataires
+        return User.get(filter="cls.id in temp")
 
     def __setitem__(self, key, value):
         if self.verifNotif():
@@ -921,6 +977,7 @@ class Notification(Actions, Base):
     def __repr__(self):
         return f'<Notification id={self.id}, type={self.type}>'
 
+
 # configuration de la database
 DATABASE_URI = 'postgresql://rxtmhycolmbxky:d66072b10150c9b7dbe86a026cc7e08f670b8fcf6a45ff71160863069c896ec2@ec2-52-210-120-210.eu-west-1.compute.amazonaws.com:5432/d3vkha7h4hsf16'
 engine = create_engine(DATABASE_URI)
@@ -930,4 +987,4 @@ if __name__ == "__main__":
         Base.metadata.drop_all(engine)
 else:
     Base.metadata.create_all(engine)
-dbSession = sessionmaker(bind=engine)
+dbSession = sessionmaker(bind=engine, expire_on_commit=False)

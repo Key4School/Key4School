@@ -7,7 +7,6 @@ from routing.functions import listeModeration, automoderation, Interval
 
 @db_session
 def question():
-
     if 'id' in session:
         if request.method == 'POST':
             # Impossibilité demande d'aide vide
@@ -22,7 +21,7 @@ def question():
                     else:
                         fileType = 'image'
                 else:
-                    fileType = 'none'
+                    fileType = None
 
                 demande = Request(id_utilisateur=session['id'], titre=automoderation(escape(request.form['titre'])), contenu=automoderation(request.form['demande']), matière=request.form['matiere'], fileType=fileType)
                 demande.insert()
@@ -34,7 +33,7 @@ def question():
                 # add XP
                 user.addXP(10)
 
-                return redirect('/comments/' + demande['id'])
+                return redirect(url_for("comments", idMsg=str(demande['id'])))
 
             else:
                 return redirect(url_for('accueil'))
@@ -56,12 +55,11 @@ def redirect_comments():
 
 @db_session
 def comments(idMsg):
-
     if 'id' in session:
         msg = Request.get(filter="cls.id == idMsg", limit=1)
         if request.method == 'GET':
             if msg:
-                for notif in Notification.get(filter="cls.id_groupe == idMsg and cls.type == 'demande' and cls.destinataires.comparator.has(session['id'])"):
+                for notif in Notification.get(filter="cls.id_groupe == idMsg and cls.type == 'demande' and cls.destinataires.comparator.has_key(str(session['id']))"):
                     notif.supprUser(session['id'])
                 return render_template("comments.html", d=msg, user=User.get(filter="cls.id == session['id']", limit=1))
             else:
@@ -71,28 +69,25 @@ def comments(idMsg):
         else:
             if 'rep' in request.form:
                 if msg:
-                    reponses = msg['reponses_associees']
-
                     reponse = Response(id_utilisateur=session['id'], contenu=automoderation(request.form.get('rep')))
                     reponse.insert()
 
-                    reponses.append(reponse['id'])
+                    msg['reponses_associees'].append(reponse['id'])
                     msg.update()
 
-                    Notification.create("demande", idMsg, id, [msg['idAuteur']])
+                    Notification.create("demande", idMsg, id, [msg['id_utilisateur']])
 
                     # add XP
-                    if not session['id'] == msg['idAuteur']:
+                    if not session['id'] == msg['id_utilisateur']:
                         User.get(filter="cls.id == session['id']", limit=1).addXP(15)
 
-            return redirect('/comments/' + idMsg)
+            return redirect(f'/comments/{idMsg}')
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @db_session
 def updateDemand():
-
     if 'id' in session:
         demand = Request.get(filter="cls.id  == request.form['idDemandModif']", limit=1)
         if session['id'] == demand.id_utilisateur:
@@ -147,11 +142,10 @@ def delete_file(path):
 
 @db_session
 def likePost(idPost):
-
     if 'id' in session:
         if 'idPost' != None:
             # on récupère les likes de la demande d'aide
-            demande = Request.get(filter="cls.id == idPost")
+            demande = Request.get(filter="cls.id == idPost", limit=1)
             likes = demande['likes']
 
             # on check mtn si l'utilisateur a déjà liké la demande
@@ -159,13 +153,13 @@ def likePost(idPost):
                 likes.remove(session['id'])  # on supprime son like
 
                 # remove XP
-                if not session['id'] == demande['idAuteur']:
+                if not session['id'] == demande['id_utilisateur']:
                     User.get(filter="cls.id == session['id']", limit=1).addXP(-2)
             else:
                 likes.append(session['id'])  # on ajoute son like
 
                 # add XP
-                if not session['id'] == demande['idAuteur']:
+                if not session['id'] == demande['id_utilisateur']:
                     User.get(filter="cls.id == session['id']", limit=1).addXP(2)
 
             # on update dans la DB
@@ -195,13 +189,13 @@ def likeRep(idRep):
                 likes.remove(session['id'])  # on supprime son like
 
                 # remove XP
-                if not session['id'] == demande['idAuteur']:
+                if not session['id'] == demande['id_utilisateur']:
                     User.get(filter="cls.id == session['id']", limit=1).addXP(-2)
             else:
                 likes.append(session['id'])  # on ajoute son like
 
                 # add XP
-                if not session['id'] == demande['idAuteur']:
+                if not session['id'] == demande['id_utilisateur']:
                     User.get(filter="cls.id == session['id']", limit=1).addXP(2)
 
             # on update dans la DB

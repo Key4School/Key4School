@@ -13,7 +13,7 @@ def connectToNotif():
         join_room(session['id'])
 
         alreadySend = []
-        notifs = Notification.get(filter="cls.destinataires.comparator.has(session['id'])")
+        notifs = Notification.get(filter="cls.destinataires.comparator.has_key(str(session['id']))")
         toSend = []
         for notif in notifs:
             if notif.id_groupe not in alreadySend:
@@ -42,7 +42,6 @@ def supprNotif(id):
 # Connection au groupe pour recevoir les nouveaux messages par la suite
 @db_session
 def connectToGroup(json):
-
     if 'id' in session:
         if 'room' in json:
             if json['room'] != 'None':
@@ -54,7 +53,6 @@ def connectToGroup(json):
 
 @db_session
 def postMsg(json):
-
     if 'id' in session:
         if 'room' in json:
             # Check authorized
@@ -64,7 +62,7 @@ def postMsg(json):
                     if json['reponse'] != "None":
                         reponse = json['reponse']
                     else:
-                        reponse = "None"
+                        reponse = None
 
                     if not json['contenuMessage'] == '':
                         contenu = automoderation(json['contenuMessage']) if grp['is_mod'] else json['contenuMessage']

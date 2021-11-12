@@ -90,7 +90,7 @@
         <input type="hidden" />
       </div>
 
-      {% if d['idAuteur'] == user['id'] %}
+      {% if d['id_utilisateur'] == user['id'] %}
       <div class="navbar-item">
         <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['id']}}')">
           <span class="icon is-small">
@@ -159,7 +159,7 @@
             <input type="hidden" />
           </div>
 
-          {% if d['idAuteur'] == user['id'] %}
+          {% if d['id_utilisateur'] == user['id'] %}
           <div class="navbar-item">
             <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['id']}}')">
               <span class="icon is-small">

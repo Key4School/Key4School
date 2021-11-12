@@ -13,20 +13,23 @@ def page_messages(idGroupe):
         users = User.get(order_by="cls.pseudo")
 
         groupe = Group.get(filter="cls.id == idGroupe", limit=1)
-        grp = sorted(Group.get(filter="cls.id_utilisateurs.comparator.has(session['id'])"), key = lambda groupe: groupe['lastMsg']['date_envoi'] if groupe['lastMsg'] != None else datetime.min, reverse=True)
+        grp = sorted(Group.get(filter="cls.id_utilisateurs.comparator.has_key(session['id'])"), key = lambda groupe: groupe['lastMsg']['date_envoi'] if groupe['lastMsg'] else datetime.min, reverse=True)
         if idGroupe != None and groupe:
-            for notif in Notification.get(filter="cls.id_groupe == idGroupe and cls.type == 'msg' and cls.destinataires.comparator.has(session['id'])"):
+            for notif in Notification.get(filter="cls.id_groupe == idGroupe and cls.type == 'msg' and cls.destinataires.comparator.has_key(session['id'])"):
                 notif.supprUser(session['id'])
 
             infoUtilisateurs = groupe['utilisateurs']
             if session['id'] in groupe['id_utilisateurs']: # verif autorization
                 '''A REFAIRE PAS OPTI'''
-                msgDb = groupe.getAllMessages()
+                msgDb = groupe['getAllMessages']
                 taille = len(msgDb)
                 msgDb = msgDb[taille-20:taille]
 
             elif user['admin'] == True:
-                msgDb = groupe.getAllMessagesSign().reverse()[:20].reverse()
+                msgDb = groupe['getAllMessagesSign']
+                msgDb.reverse()
+                msgDb = msgDb[:20]
+                msgDb.reverse()
 
             else:
                 msgDb = None
@@ -47,20 +50,20 @@ def page_messages(idGroupe):
 @db_session
 def redirectDM(idUser1, idUser2):
     if 'id' in session:
-        grp = Group.get(filter="cls.is_DM == True and cls.id_utilisateurs.comparator.has(idUser1) and cls.id_utilisateurs.comparator.has(idUser2)", limit=1)
+        grp = Group.get(filter="cls.is_DM == True and cls.id_utilisateurs.comparator.has_key(idUser1) and cls.id_utilisateurs.comparator.has_key(idUser2)", limit=1)
 
         if grp: # DM existing
-            return redirect('/messages/' + grp['id'])
+            return redirect(url_for('page_messages', idGroupe=grp['id']))
         else: # create DM
             participants = [idUser1, idUser2]
             user1 = User.get(filter="cls.id == idUser1", limit=1)
             user2 = User.get(filter="cls.id == idUser2", limit=1)
             nomGrp = '[DM]: {} - {}'.format(user1['pseudo'], user2['pseudo'])
 
-            groupe = Groupe(nom=nomGrp, is_DM=True, id_utilisateurs=participants)
+            groupe = Group(nom=nomGrp, is_DM=True, id_utilisateurs=participants)
             groupe.insert()
 
-            return redirect('/messages/' + id)
+            return redirect(url_for('page_messages', idGroupe=groupe['id']))
 
     else:
         session['redirect'] = request.path
@@ -75,7 +78,7 @@ def uploadAudio():
         if request.form['reponse'] != "None":
             reponse = request.form['reponse']
         else:
-            reponse = "None"
+            reponse = None
 
         message = Message(id_groupe=request.form['group'], id_utilisateur=session['id'], contenu=nom, audio=True, reponse=reponse)
         message.insert()
@@ -111,7 +114,7 @@ def uploadImage():
         if request.form['reponse'] != "None":
             reponse = request.form['reponse']
         else:
-            reponse = "None"
+            reponse = None
 
         message = Message(id_groupe=request.form['group'], id_utilisateur=session['id'], contenu=request.form['contenuMessage'], image=nom, reponse=reponse)
         message.insert()
@@ -148,10 +151,10 @@ def createGroupe():
             else:
                 participants.append(name)
 
-        groupe = Groupe(nom=request.form['nomnewgroupe'], id_utilisateurs=participants)
+        groupe = Group(nom=request.form['nomnewgroupe'], id_utilisateurs=participants)
         groupe.insert()
 
-        return redirect(url_for('page_messages', idGroupe=id))
+        return redirect(url_for('page_messages', idGroupe=groupe['id']))
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
@@ -171,7 +174,7 @@ def updateGroupe():
             groupe.id_utilisateurs = participants
             groupe.update()
 
-        return redirect(url_for('page_messages', idGroupe=request.form['IdGroupe']))
+        return redirect(url_for('page_messages', idGroupe=groupe['id']))
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
@@ -253,7 +256,7 @@ def moreMsg():
         users = groupe['utilisateurs']
 
         '''A REFAIRE PAS OPTI'''
-        messages = groupe.getAllMessages()
+        messages = groupe['getAllMessages']
         messages.reverse()
         messages = messages[lastMsg:lastMsg+10]
         messages.reverse()

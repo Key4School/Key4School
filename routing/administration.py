@@ -13,7 +13,7 @@ def administration():
         if utilisateur['admin'] == True:
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
-                    auteur = User.get(filter="cls.id == Request.get(filter=\"cls.id == request.form['idSuppr']\", limit=1)['idAuteur']", limit=1)
+                    auteur = User.get(filter="cls.id == Request.get(filter=\"cls.id == request.form['idSuppr']\", limit=1)['id_utilisateur']", limit=1)
                     sanction = auteur['Sanctions']
                     Request.get(filter="cls.id == request.form['idSuppr']", limit=1).delete()
                     auteur.addXP(-10)
@@ -139,8 +139,8 @@ def administration():
                 return 'sent'
 
             else:
-                demandeSignale = sorted(Request.get(filter="cls.sign != '[]']"), key = lambda d: len(d['sign']), reverse=True)
-                profilSignale = User.get(filter="cls.sign != []", order_by="len(cls.sign)", desc=True)
+                demandeSignale = sorted(Request.get(filter="cls.sign != '[]'"), key = lambda d: len(d['sign']), reverse=True)
+                profilSignale = User.get(filter="cls.sign != []", order_by="func.jsonb_array_length(cls.sign)", desc=True)
                 discussionSignale = sorted(Group.get(filter="cls.sign != '[]'"), key = lambda g: len(g['sign']), reverse=True)
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
         else:

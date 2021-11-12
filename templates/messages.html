@@ -273,17 +273,6 @@
             </span></p>
 
             <p id="listGroupUsers" style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.2;">
-              <!--{% if infogroupe['nbUtilisateurs'] > 8 %}
-              {% for i in range(8) %}
-                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i<7 %},{%endif%}
-              {%endfor%}
-              <br />&nbsp;
-              <a style="margin-left: 15px;" onclick="divoptionopen()"><em>et {{infogroupe['nbUtilisateurs']-8}} autres utilisateurs</em></a>
-            {% else %}
-              {% for i in range(infogroupe['nbUtilisateurs']) %}
-                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
-              {%endfor%}
-            {% endif %}-->
               {% for content in infoUtilisateurs %}
                 <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['id'])}}">{{content['pseudo']}}</a>, </span>
               {%endfor%}
@@ -462,7 +451,7 @@
                     <br /><br />
                     <div id="listeuser">
                       {% for user in users %}
-                        {% if not sessionId == user['id'] and not user['id'] in infogroupe['id-utilisateurs']%}
+                        {% if not sessionId == user['id'] and not user['id'] in infogroupe['id_utilisateurs']%}
                         <div class="listedUser" data-id="{{user['id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
                           data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
                           <input type="checkbox" id="user_{{user['id']}}" name="{{user['id']}}" style="margin-right: 18px;" />
