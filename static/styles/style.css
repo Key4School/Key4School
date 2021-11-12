@@ -374,6 +374,7 @@ how to remove the virtical space around the range input in IE*/
 
 .oeil {
   padding: 1%;
+  margin-left: 2%;
 }
 
 .oeil:hover {
@@ -384,14 +385,6 @@ how to remove the virtical space around the range input in IE*/
 }
 .iconeAbout{
   margin-right: 2%;
-}
-.connexion_txt {
-  display: block;
-  padding-bottom: 15%;
-  font-size: 2rem;
-  background: var(--text-multicolor);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 .contentmdp{
   display: flex;
@@ -458,12 +451,12 @@ how to remove the virtical space around the range input in IE*/
   min-width: 20%;
 }
 /* Pour telephone */
-@media screen and (max-width:1023px) {
+@media screen and (max-width:767px) {
   .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
 
-  .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -511,7 +504,10 @@ how to remove the virtical space around the range input in IE*/
   .contentPublicationTaille {
     max-width: 65%;
   }
-
+  .titre_phone{
+    display:flex;
+    margin-bottom:5%;
+  }
   .ImagePublication {
     height: 40px;
     width: 40px;
@@ -542,7 +538,7 @@ how to remove the virtical space around the range input in IE*/
   }
 
   .flex_connexion {
-    padding-top: 30%;
+    padding-top: 50%;
   }
 
   .progressBar {
@@ -582,13 +578,140 @@ how to remove the virtical space around the range input in IE*/
   }
 }
 
-/* Pour ordinateur */
-@media screen and (min-width:1023px) {
-  .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
+/* Pour tablette */
+@media screen and (min-width:768px) and (max-width:1023px){
+  .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+    display: block;
+  }
+
+  .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+    display: none;
+  }
+  .bloc{
+    background-color:var(--block-background);
+    border-radius: 10% 10% 10% 10%;
+    border:1px solid black;
+    padding:5%;
+    width: 90%;
+    margin: auto auto 4%;
+  }
+  .selectProfil {
+    max-width: 50%;
+  }
+
+  .boxAdmin {
+    padding: 3%;
+    margin-right: 2%;
+  }
+
+  .logo {
+    height: 40px;
+    width: 40px;
+    margin-top: 13%;
+    margin-left: 13%;
+  }
+
+  .filtreTelOrdi {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  #filters-container::-webkit-scrollbar {
     display: none;
   }
 
-  .formOrdi, .boutonPubliOrdi, .contentcredit, .inputfileAndLikeOrdi, .ordiFlexTelBlock, .key4schoolNavbar {
+  .listeMatiereFiltre {
+    width: 100%;
+  }
+
+  .maillogoNom {
+    margin-right: 23%;
+  }
+
+  .contentPublicationTaille {
+    max-width: 65%;
+  }
+  .titre_phone{
+    display:flex;
+    margin-bottom:5%;
+  }
+  .ImagePublication {
+    height: 40px;
+    width: 40px;
+  }
+
+  .form_inscription {
+    width: 90%;
+    margin: auto;
+    border: 1px solid var(--border-box);
+    padding: 2%;
+  }
+
+  .content_mdp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+  }
+  .form_connexion {
+    width: 90%;
+    padding: 2%;
+    margin: auto;
+  }
+  .form_mdp_forgotten {
+    width: 90%;
+    padding: 2%;
+    margin: 25% auto auto;
+  }
+
+  .flex_connexion {
+    padding-top: 5%;
+  }
+
+  .progressBar {
+    background-color: #d8d8d8;
+    border-radius: 20px;
+    margin-top: 5%;
+    height: 20px;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .progress-done {
+    position: relative;
+    align-self: left;
+    border-radius: 20px;
+    height: 100%;
+    width: 0;
+    opacity: 1;
+    transition: 1s ease 0.3s;
+  }
+
+  .indiq_verif.add {
+    padding-top: 5%;
+  }
+  .container_profile{
+    width: 90%;
+  }
+  .divQuestion, .container_leaderboard {
+    margin:auto;
+    width: 90%;
+  }
+  .inputNewGroup{
+    width: 90%;
+    margin: auto;
+    margin-top:1%;
+  }
+}
+/* Pour ordinateur */
+@media screen and (min-width:1024px) {
+  .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
+    display: none;
+  }
+
+  .titre_pc, .formOrdi, .boutonPubliOrdi, .contentcredit, .inputfileAndLikeOrdi, .ordiFlexTelBlock, .key4schoolNavbar {
     display: flex;
   }
 
@@ -604,7 +727,14 @@ how to remove the virtical space around the range input in IE*/
   .selectProfil {
     max-width: 30%;
   }
-
+  .connexion_txt {
+    display: block;
+    padding-bottom: 15%;
+    font-size: 2rem;
+    background: var(--text-multicolor);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
   .boxAdmin {
     padding: 1%;
     margin-left: 20%;

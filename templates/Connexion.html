@@ -128,7 +128,7 @@
 </head>
 
 <body>
-  <nav class="titre">
+  <nav class="titre titre_pc">
     <img src="/static/image/logo/favicon.png" style="height:30px;width:auto;" />
     <span class="key4schoolNavbar_Connexion">
       <p style="font-family: 'Roboto', sans-serif;">
@@ -148,6 +148,20 @@
       <p class="connexion_txt txt_centre">
         Connexion
       </p>
+      <div class="titre titre_phone">
+        <img src="/static/image/logo/favicon.png" style="height:30px;width:auto;" />
+        <span class="key4schoolNavbar_Connexion">
+          <p style="font-family: 'Roboto', sans-serif;">
+            Key
+          </p>
+          <p style="font-family: 'M PLUS Rounded 1c', sans-serif;">
+            4
+          </p>
+          <p style="font-family: 'Rochester', cursive;">
+            School
+          </p>
+        </span>
+      </div>
       <div class="control has-icons-left has-icons-right">
         <input class="color_input input" type="text" placeholder="Pseudo ou Email" name="username" autofocus>
         <span class="icon is-small is-left">
@@ -173,13 +187,14 @@
         </div>
       </div>
       <br>
-      <center>
-        <button type="submit" class="button">Connexion</button>
-      </center>
-      <br>
       <p class="txt_centre">
         <a href="" style="color:#3273dc;">Mot de passe oublié ?</a>
       </p>
+      <br>
+      <center>
+        <button type="submit" class="button">Connexion</button>
+      </center>
+
       {%if erreur%}
 
       <br>
