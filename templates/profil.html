@@ -261,7 +261,7 @@
     </div>
     <div style="display:flex;align-items: center;justify-content:space-between">
       <p style="font-size:1.125rem;">NIV {{niv}}</p>
-      <p style="font-size:1.125rem;">{{xp}} / ???</p>
+      <a href="{{url_for('leaderboard')}}"><p style="font-size:1.125rem;">{{xp}} / ???</p></a>
     </div>
       <progress class="progress is-theme progress_XP" value={{xplvl}} max="100" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
@@ -425,19 +425,19 @@
                       <option value="opt-mg" {%if profilUtilisateur['options'][0]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
                       <option value="opt-ss" {%if profilUtilisateur['options'][0]=="opt-ss"%}selected{%endif%}>Santé et social</option>
                       <option value="opt-biotech" {%if profilUtilisateur['options'][0]=="opt-biotech"%}selected{%endif%}>Biotechnologies</option>
-                      <option value="opt-sl" {%if profilUtilisateur['options'][0]=="opt-sl"%}selected{%endif%}>Sciences et laboratoire</option>
+                      <option value="opt-sl" {%if profilUtilisateur['options'][0]=="opt-sl"%}selected{%endif%}>Sciences & laboratoire</option>
                       <option value="opt-si" {%if profilUtilisateur['options'][0]=="opt-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
-                      <option value="opt-cit" {%if profilUtilisateur['options'][0]=="opt-cit"%}selected{%endif%}>Création et innovation technologiques</option>
-                      <option value="opt-ccd" {%if profilUtilisateur['options'][0]=="opt-ccd"%}selected{%endif%}>Création et culture - design</option>
+                      <option value="opt-cit" {%if profilUtilisateur['options'][0]=="opt-cit"%}selected{%endif%}>Création, innovation techno</option>
+                      <option value="opt-ccd" {%if profilUtilisateur['options'][0]=="opt-ccd"%}selected{%endif%}>Création, culture - design</option>
                       {% endif %}
                       {% if profilUtilisateur['classe'][0]=='T' %}
                       <option value="opt-maths-comp" {%if profilUtilisateur['options'][0]=="opt-maths-comp"%}selected{%endif%}>Maths complémentaires</option>
                       <option value="opt-maths-exp" {%if profilUtilisateur['options'][0]=="opt-maths-exp"%}selected{%endif%}>Maths expertes</option>
-                      <option value="opt-dgemc" {%if profilUtilisateur['options'][0]=="opt-dgemc"%}selected{%endif%}>Droits et grands enjeux du monde contemporain</option>
+                      <option value="opt-dgemc" {%if profilUtilisateur['options'][0]=="opt-dgemc"%}selected{%endif%}>DGEMC</option>
                       {% endif %}
-                      <option value="opt-equit" {%if profilUtilisateur['options'][0]=="opt-equit"%}selected{%endif%}>Hippologie et équitation</option>
-                      <option value="opt-aet" {%if profilUtilisateur['options'][0]=="opt-aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
-                      <option value="opt-psc" {%if profilUtilisateur['options'][0]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
+                      <option value="opt-equit" {%if profilUtilisateur['options'][0]=="opt-equit"%}selected{%endif%}>Hippologie & équitation</option>
+                      <option value="opt-aet" {%if profilUtilisateur['options'][0]=="opt-aet"%}selected{%endif%}>Agro.-éco.-terr.</option>
+                      <option value="opt-psc" {%if profilUtilisateur['options'][0]=="opt-psc"%}selected{%endif%}>Pratiques soci. & cultur.</option>
                     </select>
                   </div>
 
@@ -460,19 +460,19 @@
                       <option value="opt-mg" {%if profilUtilisateur['options'][1]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
                       <option value="opt-ss" {%if profilUtilisateur['options'][1]=="opt-ss"%}selected{%endif%}>Santé et social</option>
                       <option value="opt-biotech" {%if profilUtilisateur['options'][1]=="opt-biotech"%}selected{%endif%}>Biotechnologies</option>
-                      <option value="opt-sl" {%if profilUtilisateur['options'][1]=="opt-sl"%}selected{%endif%}>Sciences et laboratoire</option>
+                      <option value="opt-sl" {%if profilUtilisateur['options'][1]=="opt-sl"%}selected{%endif%}>Sciences & laboratoire</option>
                       <option value="opt-si" {%if profilUtilisateur['options'][1]=="opt-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
-                      <option value="opt-cit" {%if profilUtilisateur['options'][1]=="opt-cit"%}selected{%endif%}>Création et innovation technologiques</option>
-                      <option value="opt-ccd" {%if profilUtilisateur['options'][1]=="opt-ccd"%}selected{%endif%}>Création et culture - design</option>
+                      <option value="opt-cit" {%if profilUtilisateur['options'][1]=="opt-cit"%}selected{%endif%}>Création, innovation techno</option>
+                      <option value="opt-ccd" {%if profilUtilisateur['options'][1]=="opt-ccd"%}selected{%endif%}>Création, culture - design</option>
                       {% endif %}
                       {% if profilUtilisateur['classe'][0]=='T' %}
                       <option value="opt-maths-comp" {%if profilUtilisateur['options'][1]=="opt-maths-comp"%}selected{%endif%}>Maths complémentaires</option>
                       <option value="opt-maths-exp" {%if profilUtilisateur['options'][1]=="opt-maths-exp"%}selected{%endif%}>Maths expertes</option>
-                      <option value="opt-dgemc" {%if profilUtilisateur['options'][1]=="opt-dgemc"%}selected{%endif%}>Droits et grands enjeux du monde contemporain</option>
+                      <option value="opt-dgemc" {%if profilUtilisateur['options'][1]=="opt-dgemc"%}selected{%endif%}>DGEMC</option>
                       {% endif %}
-                      <option value="opt-equit" {%if profilUtilisateur['options'][1]=="opt-equit"%}selected{%endif%}>Hippologie et équitation</option>
-                      <option value="opt-aet" {%if profilUtilisateur['options'][1]=="opt-aet"%}selected{%endif%}>Agronomie-économie-territoires</option>
-                      <option value="opt-psc" {%if profilUtilisateur['options'][1]=="opt-psc"%}selected{%endif%}>Pratiques sociales et culturelles</option>
+                      <option value="opt-equit" {%if profilUtilisateur['options'][1]=="opt-equit"%}selected{%endif%}>Hippologie & équitation</option>
+                      <option value="opt-aet" {%if profilUtilisateur['options'][1]=="opt-aet"%}selected{%endif%}>Agro.-éco.-terr.</option>
+                      <option value="opt-psc" {%if profilUtilisateur['options'][1]=="opt-psc"%}selected{%endif%}>Pratiques soci. & cultur.</option>
                     </select>
                   </div>
                 </div>
@@ -590,11 +590,11 @@
                       <option value="opt-mg" {%if profilUtilisateur['matiere']=="opt-mg"%}selected{%endif%}>Option Management et Gestion</option>
                       <option value="opt-ss" {%if profilUtilisateur['matiere']=="opt-ss"%}selected{%endif%}>Option Santé et Social</option>
                       <option value="opt-biotech" {%if profilUtilisateur['matiere']=="opt-biotech"%}selected{%endif%}>Option Biotechnologies</option>
-                      <option value="opt-sl" {%if profilUtilisateur['matiere']=="opt-sl"%}selected{%endif%}>Option Sciences et Laboratoire</option>
+                      <option value="opt-sl" {%if profilUtilisateur['matiere']=="opt-sl"%}selected{%endif%}>Option Sciences & laboratoire</option>
                       <option value="opt-cit" {%if profilUtilisateur['matiere']=="opt-cit"%}selected{%endif%}>Option Création et innovations technologiques</option>
                       <option value="opt-ccd" {%if profilUtilisateur['matiere']=="opt-ccd"%}selected{%endif%}>Option Cration et culture - design</option>
-                      <option value="opt-equit" {%if profilUtilisateur['matiere']=="opt-equit"%}selected{%endif%}>Option Hippologie et équitation</option>
-                      <option value="opt-aet" {%if profilUtilisateur['matiere']=="opt-aet"%}selected{%endif%}>Option Agronomie-économie-territoires</option>
+                      <option value="opt-equit" {%if profilUtilisateur['matiere']=="opt-equit"%}selected{%endif%}>Option Hippologie & équitation</option>
+                      <option value="opt-aet" {%if profilUtilisateur['matiere']=="opt-aet"%}selected{%endif%}>Option Agro.-éco.-terr.</option>
                       <option value="opt-psc" {%if profilUtilisateur['matiere']=="opt-psc"%}selected{%endif%}>Option Pratiques sociales et culturelles</option>
                     </select>
                   </div>
@@ -1008,11 +1008,11 @@
             <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-mg" {%if "opt-mg" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-mg'%}checked disabled{%endif%} /> Option Management et Gestion</label></div>
             <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-ss" {%if "opt-ss" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-ss'%}checked disabled{%endif%} /> Option Santé et Social</label></div>
             <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-biotech" {%if "opt-biotech" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-biotech'%}checked disabled{%endif%} /> Option Biotechnologies</label></div>
-            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-sl" {%if "opt-sl" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-sl'%}checked disabled{%endif%} /> Option Sciences et Laboratoire</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-sl" {%if "opt-sl" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-sl'%}checked disabled{%endif%} /> Option Sciences & laboratoire</label></div>
             <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-cit" {%if "opt-cit" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-cit'%}checked disabled{%endif%} /> Option Création et innovations technologiques</label></div>
             <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-ccd" {%if "opt-ccd" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-ccd'%}checked disabled{%endif%} /> Option Cration et culture - design</label></div>
-            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-equit" {%if "opt-equit" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-equit'%}checked disabled{%endif%} /> Option Hippologie et équitation</label></div>
-            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-aet" {%if "opt-aet" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-aet'%}checked disabled{%endif%} /> Option Agronomie-économie-territoires</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-equit" {%if "opt-equit" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-equit'%}checked disabled{%endif%} /> Option Hippologie & équitation</label></div>
+            <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-aet" {%if "opt-aet" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-aet'%}checked disabled{%endif%} /> Option Agro.-éco.-terr.</label></div>
             <div class="listedUser"><label class="survolSubject"><input type="checkbox" name="opt-psc" {%if "opt-psc" in profilUtilisateur['matiere_autre'] %}checked{%endif%} {%if profilUtilisateur['matiere'] == 'opt-psc'%}checked disabled{%endif%} /> Option Pratiques sociales et culturelles</label></div>
           </div>
         </section>
