@@ -102,96 +102,101 @@
   <br />
   <h1 class="title" style="text-align:center;">Administration</h1>
   <br /><br />
-  <div style="font-weight: bold; font-size:large;">Publications signalées : </div>
-  {%for content in demandeSignale%}
-  <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['_id']}}'>
-    <div>
-      {%set varApercuProfil = content['user']%}
-      <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
-        {{content['user']['prenom']}} {{content['user']['nom']}} {% include 'apercu2profil.html' with context %}</a> :
+  {%if demandeSignale!=[]%}
+    <div style="font-weight: bold; font-size:large;">Publications signalées : </div>
+    {%for content in demandeSignale%}
+    <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['_id']}}'>
+      <div>
+        {%set varApercuProfil = content['user']%}
+        <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
+          {{content['user']['prenom']}} {{content['user']['nom']}} {% include 'apercu2profil.html' with context %}</a> :
+        <br />
+        <br />
+        <a href="{{url_for('comments' ,idMsg=content['_id'])}}"><b>{{content['titre']|safe}}</b></a>
+        <br />
+        <br />
+        {{content['contenu']|safe}}
+        <br /><br />
+        le : <em>{{content['date-envoi']}}</em><br />
+        matière : <b>{{content['matière']}}</b>
+      </div>
       <br />
-      <br />
-      <a href="{{url_for('comments' ,idMsg=content['_id'])}}"><b>{{content['titre']|safe}}</b></a>
-      <br />
-      <br />
-      {{content['contenu']|safe}}
-      <br /><br />
-      le : <em>{{content['date-envoi']}}</em><br />
-      matière : <b>{{content['matière']}}</b>
-    </div>
-    <br />
 
-    <ul class="menu-list">
-      <li><u>Motif :</u></li>
-      <li>
-        <ul>
-          {%for element in content['motif']%}
-          <li>
-            {{element['txt']}}
-          </li>
-          {%endfor%}
-        </ul>
-      </li>
-    </ul>
-    {%for element in content['réponses associées']%}
-    {%if element['sign']!=[]%}
-    <div id="divRep_{{element['_id']}}">
-      {{element['contenu']}}
-      <button onclick="validationRep('{{element['_id']}}','{{content['_id']}}')" class="button is-success is-outlined">
+      <ul class="menu-list">
+        <li><u>Motif :</u></li>
+        <li>
+          <ul>
+            {%for element in content['motif']%}
+            <li>
+              {{element['txt']}}
+            </li>
+            {%endfor%}
+          </ul>
+        </li>
+      </ul>
+      {%for element in content['réponses associées']%}
+      {%if element['sign']!=[]%}
+      <div id="divRep_{{element['_id']}}">
+        {{element['contenu']}}
+        <button onclick="validationRep('{{element['_id']}}','{{content['_id']}}')" class="button is-success is-outlined">
+          <span>Valider</span>
+          <span class="icon is-small">
+            <i class="fas fa-check"></i>
+          </span>
+        </button>
+        <button onclick="suppressionRep('{{element['_id']}}','{{content['_id']}}')" class="button is-danger is-outlined">
+          <span>Supprimer</span>
+          <span class="icon is-small">
+            <i class="fas fa-times"></i>
+          </span>
+        </button>
+      </div>
+      {%endif%}
+      {%endfor%}
+
+      <br />
+      <button onclick="validation('{{content['_id']}}')" class="button is-success is-outlined">
         <span>Valider</span>
         <span class="icon is-small">
           <i class="fas fa-check"></i>
         </span>
       </button>
-      <button onclick="suppressionRep('{{element['_id']}}','{{content['_id']}}')" class="button is-danger is-outlined">
+      <button onclick="suppression('{{content['_id']}}')" class="button is-danger is-outlined">
         <span>Supprimer</span>
         <span class="icon is-small">
           <i class="fas fa-times"></i>
         </span>
       </button>
     </div>
-    {%endif%}
+    <br /><br />
     {%endfor%}
-
-    <br />
-    <button onclick="validation('{{content['_id']}}')" class="button is-success is-outlined">
-      <span>Valider</span>
-      <span class="icon is-small">
-        <i class="fas fa-check"></i>
-      </span>
-    </button>
-    <button onclick="suppression('{{content['_id']}}')" class="button is-danger is-outlined">
-      <span>Supprimer</span>
-      <span class="icon is-small">
-        <i class="fas fa-times"></i>
-      </span>
-    </button>
-  </div>
-  <br /><br />
-  {%endfor%}
-  <div style="font-weight: bold; font-size:large;">Utilisteurs signalés :</div><br /><br />
-  {%for content in profilSignale%}
-  <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
-    <div>
-      {%set varApercuProfil = content%}
-      <a href="{{url_for('profil' ,idUser=content['_id'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
-        {{content['nom']}} {% include 'apercu2profil.html' with context %}
-      </a>
+  {%endif%}
+  {%if profilSignale!=[]%}
+    <div style="font-weight: bold; font-size:large;">Utilisteurs signalés :</div><br /><br />
+    {%for content in profilSignale%}
+    <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
+      <div>
+        {%set varApercuProfil = content%}
+        <a href="{{url_for('profil' ,idUser=content['_id'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">
+          {{content['nom']}} {% include 'apercu2profil.html' with context %}
+        </a>
+      </div>
+      <ul class="menu-list">
+        <li><u>Motif :</u></li>
+        <li>
+          <ul>
+            {%for element in content['motif']%}
+            <li>
+              {{element['txt']}}
+            </li>
+            {%endfor%}
+          </ul>
+        </li>
+      </ul>
     </div>
-    <ul class="menu-list">
-      <li><u>Motif :</u></li>
-      <li>
-        <ul>
-          {%for element in content['motif']%}
-          <li>
-            {{element['txt']}}
-          </li>
-          {%endfor%}
-        </ul>
-      </li>
-    </ul>
-  </div>
-  {%endfor%}
+    {%endfor%}
+  {%endif%}
+  {%if discussionSignale!=[]%}
   <div style="font-weight: bold; font-size:large;">Groupes signalés :</div><br /><br />
   {%if discussionSignale != []%}
   <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
@@ -211,7 +216,13 @@
       </li>
     </ul>
     {%endfor%}
+    {%endif%}
   </div>
+  {%endif%}
+  {%if demandeSignale==[] and discussionSignale==[] and profilSignale==[]%}
+    <p>
+      Aucun signalement !
+    </p>
   {%endif%}
   <br /><br />
 </body>
