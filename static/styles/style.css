@@ -418,28 +418,22 @@ how to remove the virtical space around the range input in IE*/
   display: flex;
   flex-direction: column;
 }
+.leaderboard_cellule{
+  vertical-align: middle;
+}
 .photo_top_leaderboard_2_3{
-  height:70px;
-  width:70px;
+  height:4.375rem;
+  width:4.375rem;
   object-fit: cover;
   border-radius:50%;
-}
-.leaderboard_classement{
-  display:flex;
-  width:75%;
-  margin: 1% auto 3% auto;
-  align-items:center;
-  justify-content:space-between;
-  padding:1% 2%;
-  border-radius: 10px;
 }
 .leaderboard_nom_Img{
   display:flex;align-items:center;
   justify-content:space-between;
 }
 .leaderboard_img_classement{
-  margin: 0 10% 0 40%;
-  height:40px;width:40px;
+  margin: 1% 3% 1% 0;
+  height:2.5rem;width:2.5rem;
   object-fit: cover;
   border-radius:50%;
 }
@@ -452,11 +446,11 @@ how to remove the virtical space around the range input in IE*/
 }
 /* Pour telephone */
 @media screen and (max-width:767px) {
-  .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .items_toggle_tel, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
 
-  .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .items_toggle_ordi, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -576,15 +570,21 @@ how to remove the virtical space around the range input in IE*/
     margin: auto;
     margin-top:1%;
   }
+  .leaderboard_classement{
+    table-layout: fixed;
+    width:90%;
+    margin: 1% auto 3% auto;
+    padding:1% 2%;
+    border-radius: 10px;
+  }
 }
 
 /* Pour tablette */
 @media screen and (min-width:768px) and (max-width:1023px){
-  .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .items_toggle_ordi, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
-
-  .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .items_toggle_tel, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -704,10 +704,17 @@ how to remove the virtical space around the range input in IE*/
     margin: auto;
     margin-top:1%;
   }
+  .leaderboard_classement{
+    table-layout: fixed;
+    width:75%;
+    margin: 1% auto 3% auto;
+    padding:1% 2%;
+    border-radius: 10px;
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1024px) {
-  .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
+  .items_toggle_tel, .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
     display: none;
   }
 
@@ -715,7 +722,7 @@ how to remove the virtical space around the range input in IE*/
     display: flex;
   }
 
-  .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
+  .items_toggle_ordi, .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
     display: block;
   }
 
@@ -863,5 +870,12 @@ how to remove the virtical space around the range input in IE*/
   }
   .participantmsgAudio{
     width:30%;
+  }
+  .leaderboard_classement{
+    table-layout: fixed;
+    width:75%;
+    margin: 1% auto 3% auto;
+    padding:1% 2%;
+    border-radius: 10px;
   }
 }
