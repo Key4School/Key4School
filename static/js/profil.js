@@ -69,6 +69,22 @@ function themeSysteme() {
     $(".moon").addClass("animate-moon");
   }
 }
+
+function depliable(parti){
+  var element="#content_"+parti;
+  var chevron="#chevron_"+parti;
+  if ($(element).is(":visible")){
+    $(element).css("display", "none");
+    $(chevron).removeClass("fa-chevron-up");
+    $(chevron).addClass("fa-chevron-down");
+  }
+  else{
+    $(element).css("display", "block");
+    $(chevron).removeClass("fa-chevron-down");
+    $(chevron).addClass("fa-chevron-up");
+  }
+}
+
 function inputNom(){
   var contenu = $('#nom').html().trim();
   $('#nom').replaceWith('<div style="width:95%;width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" class="input_inscription control has-icons-left has-icons-right"><input autocomplete="off" class="color_input input" placeholder="Nom" name="nom" id="nom" value="'+ contenu +'"><span class="icon is-small is-left"><i class="fas fa-user-alt"></i></span><span class="icon is-small is-right"><i class="fas fa-check" id="familyName_check"></i></span></div>'); // remplace le code HTML actuel par celui-ci
