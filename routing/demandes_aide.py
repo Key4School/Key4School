@@ -5,6 +5,7 @@ import os
 from db_poo import *
 from routing.functions import listeModeration, automoderation, Interval
 
+
 @db_session
 def question():
     if 'id' in session:
@@ -23,7 +24,8 @@ def question():
                 else:
                     fileType = None
 
-                demande = Request(id_utilisateur=session['id'], titre=automoderation(escape(request.form['titre'])), contenu=automoderation(request.form['demande']), matière=request.form['matiere'], fileType=fileType)
+                demande = Request(id_utilisateur=session['id'], titre=automoderation(escape(request.form['titre'])), contenu=automoderation(
+                    request.form['demande']), matière=request.form['matiere'], fileType=fileType)
                 demande.insert()
 
                 if request.files['file'].mimetype != 'application/octet-stream':
@@ -40,7 +42,8 @@ def question():
 
             # return render_template('question.html', envoi="Envoi réussi")
         else:
-            profilUtilisateur = User.get(filter="cls.id == session['id']", limit=1)
+            profilUtilisateur = User.get(
+                filter="cls.id == session['id']", limit=1)
 
             if profilUtilisateur["SanctionEnCour"] != "Spec" and profilUtilisateur['SanctionEnCour'] != "SpecForum":
                 return render_template('question.html', profilUtilisateur=profilUtilisateur, user=profilUtilisateur)
@@ -50,8 +53,10 @@ def question():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+
 def redirect_comments():
     return redirect('/')
+
 
 @db_session
 def comments(idMsg):
@@ -69,27 +74,28 @@ def comments(idMsg):
         else:
             if 'rep' in request.form:
                 if msg:
-                    reponse = Response(id_utilisateur=session['id'], contenu=automoderation(request.form.get('rep')))
+                    reponse = Response(
+                        id_utilisateur=session['id'], id_groupe=msg['id'], contenu=automoderation(request.form.get('rep')))
                     reponse.insert()
-
-                    msg['reponses_associees'].append(reponse['id'])
-                    msg.update()
-
-                    Notification.create("demande", idMsg, id, [msg['id_utilisateur']])
+                    Notification.create("demande", idMsg, id, [
+                                        msg['id_utilisateur']])
 
                     # add XP
                     if not session['id'] == msg['id_utilisateur']:
-                        User.get(filter="cls.id == session['id']", limit=1).addXP(15)
+                        User.get(
+                            filter="cls.id == session['id']", limit=1).addXP(15)
 
             return redirect(f'/comments/{idMsg}')
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+
 @db_session
 def updateDemand():
     if 'id' in session:
-        demand = Request.get(filter="cls.id  == request.form['idDemandModif']", limit=1)
+        demand = Request.get(
+            filter="cls.id  == request.form['idDemandModif']", limit=1)
         if session['id'] == demand.id_utilisateur:
             demand['contenu'] = automoderation(request.form['txtModif'])
             demand.update()
@@ -97,6 +103,7 @@ def updateDemand():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
 
 @db_session
 def file(fileName):
@@ -106,6 +113,7 @@ def file(fileName):
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
 
 @db_session
 def DL_file(fileName, fileType):
@@ -118,7 +126,8 @@ def DL_file(fileName, fileType):
             with open('static/temp/{}.png'.format(fileName), 'wb') as file:
                 file.write(fileBinary)
 
-            interval = Interval(2, delete_file, args=['static/temp/{}.png'.format(fileName)])
+            interval = Interval(2, delete_file, args=[
+                                'static/temp/{}.png'.format(fileName)])
             interval.start()
 
             return send_file('static/temp/{}.png'.format(fileName))
@@ -126,7 +135,8 @@ def DL_file(fileName, fileType):
             with open('static/temp/{}.pdf'.format(fileName), 'wb') as file:
                 file.write(fileBinary)
 
-            interval = Interval(2, delete_file, args=['static/temp/{}.pdf'.format(fileName)])
+            interval = Interval(2, delete_file, args=[
+                                'static/temp/{}.pdf'.format(fileName)])
             interval.start()
 
             return send_file('static/temp/{}.pdf'.format(fileName))
@@ -137,8 +147,10 @@ def DL_file(fileName, fileType):
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+
 def delete_file(path):
     return os.remove(path)
+
 
 @db_session
 def likePost(idPost):
@@ -154,13 +166,15 @@ def likePost(idPost):
 
                 # remove XP
                 if not session['id'] == demande['id_utilisateur']:
-                    User.get(filter="cls.id == session['id']", limit=1).addXP(-2)
+                    User.get(
+                        filter="cls.id == session['id']", limit=1).addXP(-2)
             else:
                 likes.append(session['id'])  # on ajoute son like
 
                 # add XP
                 if not session['id'] == demande['id_utilisateur']:
-                    User.get(filter="cls.id == session['id']", limit=1).addXP(2)
+                    User.get(
+                        filter="cls.id == session['id']", limit=1).addXP(2)
 
             # on update dans la DB
             demande.update()
@@ -172,6 +186,7 @@ def likePost(idPost):
             abort(403)  # il manque l'id du message
     else:
         abort(401)  # non autorisé
+
 
 @db_session
 def likeRep(idRep):
@@ -190,13 +205,15 @@ def likeRep(idRep):
 
                 # remove XP
                 if not session['id'] == demande['id_utilisateur']:
-                    User.get(filter="cls.id == session['id']", limit=1).addXP(-2)
+                    User.get(
+                        filter="cls.id == session['id']", limit=1).addXP(-2)
             else:
                 likes.append(session['id'])  # on ajoute son like
 
                 # add XP
                 if not session['id'] == demande['id_utilisateur']:
-                    User.get(filter="cls.id == session['id']", limit=1).addXP(2)
+                    User.get(
+                        filter="cls.id == session['id']", limit=1).addXP(2)
 
             # on update dans la DB
             reponse.update()
@@ -208,6 +225,7 @@ def likeRep(idRep):
             abort(400)  # il manque l'id du message
     else:
         abort(401)  # non autorisé
+
 
 @db_session
 def resoudre(idPost):
@@ -225,19 +243,20 @@ def resoudre(idPost):
 
                 return "ok", 200
             else:
-                abort(401) # non autorisé
-
+                abort(401)  # non autorisé
 
         else:
-            abort(403) # il manque l'id du message
+            abort(403)  # il manque l'id du message
     else:
-        abort(401) # non autorisé
+        abort(401)  # non autorisé
+
 
 @db_session
 def updateComment():
 
     if 'id' in session:
-        comment = Response.get(filter="cls.id == request.form['idCommentModif']", limit=1)
+        comment = Response.get(
+            filter="cls.id == request.form['idCommentModif']", limit=1)
         if session['id'] == comment['id_utilisateur']:
             comment[contenu] = automoderation(request.form['txtModif'])
             comment.update()
@@ -245,6 +264,7 @@ def updateComment():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
 
 @db_session
 def savePost(postId):

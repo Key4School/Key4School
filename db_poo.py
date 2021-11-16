@@ -392,7 +392,6 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
     contenu = Column(String)
     date_envoi = Column(DateTime)
     matiere = Column(String)
-    reponses_associees = Column(JSONB)
     likes = Column(JSONB)
     sign = Column(JSONB)
     motif = Column(JSONB)
@@ -405,7 +404,6 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
         self.contenu = params['contenu']
         self.date_envoi = params.get('date_envoi', datetime.now())
         self.matiere = params['matière']
-        self.reponses_associees = params.get('reponses_associees', [])
         self.likes = params.get('likes', [])
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
@@ -478,9 +476,8 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
 
     @property
     def rep(self):
-        temp = self.reponses_associees
-        print(type(temp))
-        return Response.get(filter="cls.id in temp")
+        temp = self.id
+        return Response.get(filter="cls.id_groupe == temp")
 
     @property
     def nb_likes(self):
@@ -488,7 +485,7 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
 
     @property
     def nb_comment(self):
-        return len(self.reponses_associees)
+        return len(self.rep)
 
     @property
     def user(self):
@@ -523,9 +520,10 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
 class Response(Actions, Base):
     __tablename__ = 'help_responses'
 
-    id = Column(UUID(as_uuid=True), primary_key=True,
+    id = Column(UUID(as_uuid=False), primary_key=True,
                 default=generate_uuid, unique=True)
-    id_utilisateur = Column(UUID(as_uuid=True))
+    id_groupe = Column(UUID(as_uuid=False))
+    id_utilisateur = Column(UUID(as_uuid=False))
     contenu = Column(String)
     date_envoi = Column(DateTime)
     likes = Column(JSONB)
@@ -533,6 +531,7 @@ class Response(Actions, Base):
     motif = Column(JSONB)
 
     def __init__(self, **params):
+        self.id_groupe = params['id_groupe']
         self.id_utilisateur = params['id_utilisateur']
         self.contenu = params['contenu']
         self.date_envoi = params.get('date_envoi', datetime.now())
@@ -613,7 +612,7 @@ class Response(Actions, Base):
 class Message(Actions, Base):
     __tablename__ = 'messages'
 
-    id = Column(UUID(as_uuid=True), primary_key=True,
+    id = Column(UUID(as_uuid=False), primary_key=True,
                 default=generate_uuid, unique=True)
     id_groupe = Column(UUID(as_uuid=False))
     id_utilisateur = Column(UUID(as_uuid=False))

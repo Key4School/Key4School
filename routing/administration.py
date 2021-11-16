@@ -65,7 +65,6 @@ def administration():
                     sanction.append({"SanctionType": "Réponse supprimée", "SanctionMotif": request.form['motif'], "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
                     auteur.update()
 
-                    demande.reponses_associees.pop(request.form['idSuppr'])
                     reponse.delete()
                     signDemande = demande['sign']
                     motifDemande = demande['motif']
