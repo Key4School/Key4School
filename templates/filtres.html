@@ -7,401 +7,401 @@
     <div id="filters-container" class="filtreTelOrdi" style="left:0;position: absolute; top: 10%; height: 80%; display: flex; flex-direction: row;">
       <div style="position: relative; height: 100%; width: 20px;"></div>
       <div class="filter" style="position: relative; height: 100%; margin-right: 20px;" data-subject="everything">
-        <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Toutes</button>
+        <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-icons "></i>Toutes</button>
       </div>
       {% if 'ELEVE'=='ELEVE'%}
-        
+
         {% if user['classe'][0]=='2' or user['classe'][0]=='1' %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="fr">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Français</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-book "></i>Français</button>
           </div>
         {% endif %}
         <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="hg">
-          <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Histoire-Géographie</button>
+          <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-landmark "></i>Histoire-Géographie</button>
         </div>
         <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="emc">
-          <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">EMC</button>
+          <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-balance-scale "></i>EMC</button>
         </div>
         {% if user['classe']=='2nd' %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="maths">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Mathématiques</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-square-root-alt "></i>Mathématiques</button>
           </div>
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="pc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Physique-Chimie</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-atom "></i>Physique-Chimie</button>
           </div>
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="svt">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">SVT</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microscope "></i>SVT</button>
           </div>
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="snt">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">SNT</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-laptop "></i>SNT</button>
           </div>
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ses">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">SES</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-coins "></i>SES</button>
           </div>
         {% endif %}
         {% if user['classe'][0]=='T' %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="philo">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Philosophie</button>
+            <button class="button" style="background-color:var(--color-items-bandeau);transition: all .5s;align-items: end;display: flex;" onclick="filter(this);"><p style="font-size:1.3rem; width: 20px; margin-right: 5px;" class=" ">φ</p><p>Philosophie</p></button>
           </div>
         {% endif %}
-        
+
         {% if 'lv1-ang' in user['langues'] or 'lv1-ang-euro' in user['langues'] or 'lv2-ang' in user['langues'] or 'opt-lv3-ang' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ang">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Anglais</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Anglais</button>
           </div>
         {% endif %}
         {% if 'lv1-esp' in user['langues'] or 'lv1-esp-euro' in user['langues'] or 'lv2-esp' in user['langues'] or 'opt-lv3-esp' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="esp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Espagnol</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Espagnol</button>
           </div>
         {% endif %}
         {% if 'lv1-all' in user['langues'] or 'lv1-all-euro' in user['langues'] or 'lv2-all' in user['langues'] or 'opt-lv3-all' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="all">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Allemand</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Allemand</button>
           </div>
         {% endif %}
         {% if 'lv1-it' in user['langues'] or 'lv1-it-euro' in user['langues'] or 'lv2-it' in user['langues'] or 'opt-lv3-it' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="it">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Italien</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Italien</button>
           </div>
         {% endif %}
         {% if 'lv1-chi' in user['langues'] or 'lv2-chi' in user['langues'] or 'opt-lv3-chi' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="chi">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Chinois</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Chinois</button>
           </div>
         {% endif %}
         {% if 'lv1-ru' in user['langues'] or 'lv2-ru' in user['langues'] or 'opt-lv3-ru' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ru">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Russe</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Russe</button>
           </div>
         {% endif %}
         {% if 'lv1-por' in user['langues'] or 'lv2-por' in user['langues'] or 'opt-lv3-por' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="por">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Portugais</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Portugais</button>
           </div>
         {% endif %}
         {% if 'lv1-ara' in user['langues'] or 'lv2-ara' in user['langues'] or 'opt-lv3-ara' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ara">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Arabe</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Arabe</button>
           </div>
         {% endif %}
-        
+
         {% if 'spe-art' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-art">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Arts</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-paint-brush "></i>Spé Arts</button>
           </div>
         {% endif %}
         {% if 'spe-hggsp' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-hggsp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé HGGSP</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-globe-americas ">Spé HGGSP</button>
           </div>
         {% endif %}
         {% if 'spe-hlp' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-hlp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé HLP</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-scroll ">Spé HLP</button>
           </div>
         {% endif %}
         {% if 'spe-ses' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-ses">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé SES</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-coins "></i>Spé SES</button>
           </div>
         {% endif %}
         {% if 'spe-maths' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-maths">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Mathématiques</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-square-root-alt "></i>Mathématiques</button>
           </div>
         {% endif %}
         {% if 'spe-pc' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-pc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Physique-Chimie</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-atom "></i>Spé Physique-Chimie</button>
           </div>
         {% endif %}
         {% if 'spe-svt' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-svt">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé SVT</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microscope "></i>Spé SVT</button>
           </div>
         {% endif %}
         {% if 'spe-nsi' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-nsi">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé NSI</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-laptop "></i>Spé NSI</button>
           </div>
         {% endif %}
         {% if 'spe-si' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-si">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Sciences de l'Ingénieur</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-cogs "></i>Spé Sciences de l'Ingénieur</button>
           </div>
         {% endif %}
         {% if 'spe-lca' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-lca">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LCA</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-landmark "></i>Spé LCA</button>
           </div>
         {% endif %}
         {% if 'spe-llcer-ang' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-llcer-ang">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LLCER Anglais</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Spé LLCER Anglais</button>
           </div>
         {% endif %}
         {% if 'spe-llcer-esp' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-llcer-esp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LLCER Espagnol</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Spé LLCER Espagnol</button>
           </div>
         {% endif %}
         {% if 'spe-llcer-all' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-llcer-all">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LLCER Allemand</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Spé LLCER Allemand</button>
           </div>
         {% endif %}
         {% if 'spe-llcer-it' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-llcer-it">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LLCER Italien</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Spé LLCER Italien</button>
           </div>
         {% endif %}
         {% if 'spe-bio-eco' in user['spes'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-bio-eco">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Biologie-écologie</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microscope "></i>Spé Biologie-écologie</button>
           </div>
         {% endif %}
-        
+
         {% if 'opt-lca-latin' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-lca-latin">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option LCA Latin</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Option LCA Latin</button>
           </div>
         {% endif %}
         {% if 'opt-lca-grec' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-lca-grec">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option LCA Grec</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Option LCA Grec</button>
           </div>
         {% endif %}
         {% if 'opt-arts' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-arts">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Arts</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-paint-brush "></i>Option Arts</button>
           </div>
         {% endif %}
         {% if 'opt-mg' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-mg">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Management et Gestion</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-tasks "></i>Option Management et Gestion</button>
           </div>
         {% endif %}
         {% if 'opt-ss' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-ss">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Santé et Social</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-file-medical "></i>Option Santé et Social</button>
           </div>
         {% endif %}
         {% if 'opt-biotech' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-biotech">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Biotechnologies</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-laptop-medical "></i>Option Biotechnologies</button>
           </div>
         {% endif %}
         {% if 'opt-sl' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-sl">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Sciences et Laboratoire</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microscope "></i>Option Sciences et Laboratoire</button>
           </div>
         {% endif %}
         {% if 'opt-si' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-si">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Sciences de l'Ingénieur</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-cogs "></i>Option Sciences de l'Ingénieur</button>
           </div>
         {% endif %}
         {% if 'opt-cit' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-cit">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Création et innovations technologiques</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microchip "></i>Option Création et innovations technologiques</button>
           </div>
         {% endif %}
         {% if 'opt-ccd' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-ccd">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Cration et culture - design</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-pencil-ruler "></i>Option Cration et culture - design</button>
           </div>
         {% endif %}
         {% if 'opt-maths-comp' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-maths-comp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Maths Complémentaires</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-square-root-alt "></i>Option Maths Complémentaires</button>
           </div>
         {% endif %}
         {% if 'opt-maths-exp' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-maths-exp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Maths Expertes</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-superscript "></i>Option Maths Expertes</button>
           </div>
         {% endif %}
         {% if 'opt-dgemc' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-dgemc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Droit et grands enjeux du monde contemporain</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-gavel "></i>DGEMC</button>
           </div>
         {% endif %}
         {% if 'opt-equit' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-equit">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Hippologie et équitation</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-horse-head "></i>Option Hippologie et équitation</button>
           </div>
         {% endif %}
         {% if 'opt-aet' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-aet">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Agronomie-économie-territoires</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-seedling "></i>Option Agronomie-économie-territoires</button>
           </div>
         {% endif %}
         {% if 'opt-psc' in user['options'] %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-psc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Pratiques sociales et culturelles</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-users "></i>Option Pratiques sociales et culturelles</button>
           </div>
         {% endif %}
         <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="eps">
-          <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">EPS</button>
+          <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-running "></i>EPS</button>
         </div>
       {%else%}
-        
+
         {% if user['matiere'] == 'fr' or 'fr' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="fr">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Français</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-book "></i>Français</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'hg' or 'hg' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="hg">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Histoire-Géographie</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-landmark "></i>Histoire-Géographie</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'emc' or 'emc' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="emc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">EMC</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-balance-scale "></i>EMC</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'maths' or 'maths' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="maths">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Mathématiques</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-square-root-alt "></i>Mathématiques</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'pc' or 'pc' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="pc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Physique-Chimie</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-atom "></i>Physique-Chimie</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'svt' or 'svt' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="svt">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">SVT</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microscope "></i>SVT</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'spe-nsi' or 'spe-nsi' in user['matiere_autre'] or user['matiere'] == 'snt' or 'snt' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="snt">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">SNT</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-laptop "></i>SNT</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'ses' or 'ses' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ses">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">SES</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-coins "></i>SES</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'philo' or 'philo' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="philo">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Philosophie</button>
+            <button class="button" style="background-color:var(--color-items-bandeau);transition: all .5s;align-items: end;display: flex;" onclick="filter(this);"><p style="font-size:1.3rem; width: 20px; margin-right: 5px;" class=" ">φ</p><p>Philosophie</p></button>
           </div>
         {% endif %}
-        
+
         {% if user['matiere'] == 'ang' or 'ang' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ang">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Anglais</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Anglais</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'esp' or 'esp' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="esp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Espagnol</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Espagnol</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'all' or 'all' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="all">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Allemand</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Allemand</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'it' or 'it' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="it">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Italien</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Italien</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'chi' or 'chi' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="chi">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Chinois</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Chinois</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'ru' or 'ru' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ru">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Russe</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Russe</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'por' or 'por' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="por">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Portugais</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Portugais</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'ara' or 'ara' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="ara">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Arabe</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Arabe</button>
           </div>
         {% endif %}
-        
+
         {% if user['matiere'] == 'art' or 'art' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-art">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Arts</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-paint-brush "></i>Spé Arts</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'hg' or 'hg' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-hggsp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé HGGSP</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-globe-americas ">Spé HGGSP</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'fr' or 'fr' in user['matiere_autre'] or user['matiere'] == 'philo' or 'philo' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-hlp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé HLP</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><p style="font-size:1.3rem; width: 20px; margin-right: 5px;" class=" ">φ</p><p>Spé HLP</p></button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'ses' or 'ses' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-ses">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé SES</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-coins "></i>Spé SES</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'maths' or 'maths' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-maths">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Mathématiques</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-square-root-alt "></i>Spé Mathématiques</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'pc' or 'pc' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-pc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Physique-Chimie</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-atom "></i>Spé Physique-Chimie</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'svt' or 'svt' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-svt">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé SVT</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microscope "></i>Spé SVT</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'spe-nsi' or 'spe-nsi' in user['matiere_autre'] or user['matiere'] == 'snt' or 'snt' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-nsi">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé NSI</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-laptop "></i>Spé NSI</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'si' or 'si' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-si">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Sciences de l'Ingénieur</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-cogs "></i>Spé Sciences de l'Ingénieur</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'lca-latin' or 'lca-latin' in user['matiere_autre'] or user['matiere'] == 'lca-grec' or 'lca-grec' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-lca">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LCA</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-landmark "></i>Spé LCA</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'ang' or 'ang' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-llcer-ang">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LLCER Anglais</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Spé LLCER Anglais</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'esp' or 'esp' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-llcer-esp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LLCER Espagnol</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Spé LLCER Espagnol</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'all' or 'all' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-llcer-all">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LLCER Allemand</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Spé LLCER Allemand</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'it' or 'it' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="spe-llcer-it">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé LLCER Italien</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Spé LLCER Italien</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'spe-bio-eco' or 'spe-bio-eco' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
@@ -409,90 +409,90 @@
             <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Spé Biologie-écologie</button>
           </div>
         {% endif %}
-        
+
         {% if user['matiere'] == 'lca-latin' or 'lca-latin' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-lca-latin">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option LCA Latin</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Option LCA Latin</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'lca-grec' or 'lca-grec' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0)%}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-lca-grec">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option LCA Grec</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-language "></i>Option LCA Grec</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'art' or 'art' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-arts">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Arts</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-paint-brush "></i>Option Arts</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-mg' or 'opt-mg' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-mg">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Management et Gestion</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-tasks "></i>Option Management et Gestion</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-ss' or 'opt-ss' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-ss">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Santé et Social</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-file-medical "></i>Option Santé et Social</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-biotech' or 'opt-biotech' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-biotech">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Biotechnologies</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-laptop-medical "></i>Option Biotechnologies</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-sl' or 'opt-sl' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-sl">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Sciences et Laboratoire</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microscope "></i> Sciences et Laboratoire</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'si' or 'si' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-si">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Sciences de l'Ingénieur</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-cogs "></i>Option Sciences de l'Ingénieur</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-cit' or 'opt-cit' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-cit">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Création et innovations technologiques</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-microchip "></i>Option Création et innovations technologiques</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-ccd' or 'opt-ccd' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-ccd">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Cration et culture - design</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-pencil-ruler "></i>Option Cration et culture - design</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'maths' or 'maths' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-maths-comp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Maths Complémentaires</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-square-root-alt "></i>Option Maths Complémentaires</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'maths' or 'maths' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-maths-exp">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Maths Expertes</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-superscript "></i>Option Maths Expertes</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'hg' or 'hg' in user['matiere_autre'] or user['matiere'] == 'ses' or 'ses' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-dgemc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Droit et grands enjeux du monde contemporain</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-gavel "></i>DGEMC</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-equit' or 'opt-equit' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-equit">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Hippologie et équitation</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-horse-head "></i>Option Hippologie et équitation</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-aet' or 'opt-aet' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-aet">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Agronomie-économie-territoires</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-seedling "></i>Option Agronomie-économie-territoires</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'opt-psc' or 'opt-psc' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="opt-psc">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">Option Pratiques sociales et culturelles</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-users "></i>Option Pratiques sociales et culturelles</button>
           </div>
         {% endif %}
         {% if user['matiere'] == 'eps' or 'eps' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="eps">
-            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);">EPS</button>
+            <button class="button" style="background-color:var(--color-items-bandeau); transition: all .5s;" onclick="filter(this);"><i style="font-size:1rem; width: 20px; margin-right: 5px;" class="fas fa-running "></i>EPS</button>
           </div>
         {% endif %}
       {% endif %}

@@ -272,7 +272,7 @@
 
     <div>
       <form method="POST" action="/updateprofile/" id="updateProfil">
-        <div id="infoPB" onClick="depliable(this.id);" style="display:flex;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_infoPB" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_infoPB" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Informations publiques :</div>
+        <div id="infoPB" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_infoPB" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_infoPB" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Informations publiques :</div>
         <br />
         <div id="content_infoPB" class="depliable">
           <table class="table is-narrow">
@@ -340,12 +340,12 @@
             <tr>
               <td>
                 <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
-                &nbsp;&nbsp;Lycée{%if 'ELEVE' == 'ELEVE'%}/Classe{%endif%}
+                &nbsp;&nbsp;Lycée{%if 'ELEVE' == 'ELEVE'%}&nbsp;/&nbsp;Classe{%endif%}
               </td>
               <td>
                 <div id="contentlycee" style="display: flex; flex-direction: row;">
                   <input type="hidden" value="{{profilUtilisateur['lycee']}}" name="lycee" />
-                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%} id="lycee">{{profilUtilisateur['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{%if profilUtilisateur['classe']=='2nd'%}Seconde{%endif%}{%if profilUtilisateur['classe']=='1e'%}Première{%endif%}{%if profilUtilisateur['classe']=='Tle'%}Terminale{%endif%}{%endif%}
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%} id="lycee">{{profilUtilisateur['lycee']}}&nbsp;{%if 'ELEVE' == 'ELEVE'%}/&nbsp;{%if profilUtilisateur['classe']=='2nd'%}Seconde{%endif%}{%if profilUtilisateur['classe']=='1e'%}Première{%endif%}{%if profilUtilisateur['classe']=='Tle'%}Terminale{%endif%}{%endif%}
                   </p>
                   <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%}></i>
                 </div>
@@ -677,7 +677,7 @@
         </div>
 
         {% if profilUtilisateur['elementPrive'] != [] %}
-        <div id="infoPV" onClick="depliable(this.id);" style="display:flex;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_infoPV" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_infoPV" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Informations privées :</div>
+        <div id="infoPV" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_infoPV" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_infoPV" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Informations privées :</div>
         <br />
         {% endif %}
         <div id="content_infoPV" class="depliable">
@@ -732,7 +732,7 @@
         </table>
         </div>
 
-        <div id="notifEmail" onClick="depliable(this.id);" style="display:flex;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_notifEmail" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_notifEmail" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Notifications par email :</div>
+        <div id="notifEmail" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_notifEmail" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_notifEmail" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Notifications par email :</div>
         <div id="content_notifEmail" class="depliable">
           <br />
           <table class="table is-narrow">
@@ -790,7 +790,7 @@
       </button>
     </div>
     <div class="ChoixCouleur">
-      <div id="theme" onClick="depliable(this.id);" style="display:flex;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_theme" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_theme" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Thème :</div>
+      <div id="theme" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_theme" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_theme" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Thème :</div>
       <div id="content_theme" class="depliable">
         <p>
           Chosir le thème principal :
@@ -937,15 +937,17 @@
 
   {% if demandes != [] %}
   <div style="margin-left: 15%;display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly; width: 70%;">
-    <div style="font-weight: bold; font-size:large; margin-top: 15px;">Mes demandes d'aide :</div>
-    <br />
-    {% endif %}
-    {%for d in demandes %}
+    <div id="publication" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large; margin-top: 15px;"><i id="chevron_publication" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_publication" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Mes demandes d'aide :</div>
+    <div id="content_publication" class="depliable">
+      <br />
+      {% endif %}
+      {%for d in demandes %}
 
-    {% include 'publication.html' with context %}
+      {% include 'publication.html' with context %}
 
-    <br />
-    {%endfor%}
+      <br />
+      {%endfor%}
+    </div>
   </div>
 
 
@@ -1025,7 +1027,7 @@
     </div>
   </div>
   {%endif%}
-
+  <br /><br />
 </body>
 
 </html>
