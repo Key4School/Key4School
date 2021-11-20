@@ -751,14 +751,18 @@ class Group(Actions, Base):
         return Message.get(filter="cls.id_groupe == temp", order_by="cls.date_envoi", desc=True, limit=1)
 
     @property
-    def nbNotif(self, uid=None):
+    def notifs(self, uid=None):
         if uid == None:
             uid = session['id'] if session != None and 'id' in session else None
         if uid != None:
             temp = self.id
-            return len(Notification.get(filter="(cls.type == 'msg') & (cls.id_groupe == temp) & (cls.destinataires.has_key(uid))"))
+            return Notification.get(filter="(cls.type == 'msg') & (cls.id_groupe == temp) & (cls.destinataires.has_key(uid))")
         else:
             return None
+
+    @property
+    def nbNotif(self, uid=None):
+        return len(self.notifs)
 
     @property
     def nbUtilisateurs(self):
@@ -991,4 +995,5 @@ if __name__ == "__main__":
         Base.metadata.drop_all(engine)
 else:
     Base.metadata.create_all(engine)
+dbSession = sessionmaker(bind=engine, expire_on_commit=False)
 dbSession = sessionmaker(bind=engine, expire_on_commit=False)
