@@ -5,18 +5,21 @@ from db_poo import *
 from routing.functions import listeModeration, automoderation
 from math import exp
 
+
 @db_session
 def accueil():
     if 'id' in session:
         user = User.get(filter="cls.id == session['id']", limit=1)
         # subjects = getUserSubjects(user)
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-        demandes = sorted(Request.get(filter="cls.matiere in user['matieres'] and cls.resolu == False and cls.id_utilisateur != session['id']"), key = lambda d: exp(2 * d['nb_likes']) / exp(d['nb_comment']), reverse=True)[:10]
+        demandes = sorted(Request.get(filter="(cls.matiere.in_(user['matieres'])) & (cls.resolu == False) & (cls.id_utilisateur != session['id'])"), key=lambda d: exp(
+            2 * d['nb_likes']) / exp(d['nb_comment']), reverse=True)[:10]
 
         return render_template("index.html", demandes=demandes, user=user)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
 
 @db_session
 def accueil2():
@@ -26,6 +29,7 @@ def accueil2():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+
 @db_session
 def tuto():
     if 'id' in session:
@@ -33,6 +37,7 @@ def tuto():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
 
 @db_session
 def XP_tuto():
@@ -43,6 +48,7 @@ def XP_tuto():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
 
 def mail_rendu():
     return render_template('mail_final.html')
@@ -55,12 +61,14 @@ def saved():
         user = User.get(filter="cls.id == session['id']", limit=1)
         # subjects = getUserSubjects(user)
         # ici on récupère les 10 dernières demandes les plus récentes non résolues corresppondant aux matières de l'utilisateur
-        demandes = sorted(Request.get(filter="cls.id in user['savedDemands']"), key = lambda d: d['nb_comment'] + d['nb_likes'], reverse=True)
+        demandes = sorted(Request.get(
+            filter="cls.id.in_(user['savedDemands'])"), key=lambda d: d['nb_comment'] + d['nb_likes'], reverse=True)
 
         return render_template("saved.html", demandes=demandes, user=user)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
 
 def about():
     return render_template('about.html')

@@ -64,11 +64,11 @@ def comments(idMsg):
         msg = Request.get(filter="cls.id == idMsg", limit=1)
         if request.method == 'GET':
             if msg:
-                for notif in Notification.get(filter="cls.id_groupe == idMsg and cls.type == 'demande' and cls.destinataires.comparator.has_key(str(session['id']))"):
+                for notif in Notification.get(filter="(cls.id_groupe == idMsg) & (cls.type == 'demande') & (cls.destinataires.comparator.has_key(str(session['id'])))"):
                     notif.supprUser(session['id'])
                 return render_template("comments.html", d=msg, user=User.get(filter="cls.id == session['id']", limit=1))
             else:
-                for notif in Notification.get(filter="cls.id_groupe == idMsg and cls.type == 'demande'"):
+                for notif in Notification.get(filter="(cls.id_groupe == idMsg) & (cls.type == 'demande')"):
                     notif.supprNotif()
                 return redirect('/')
         else:
@@ -77,7 +77,7 @@ def comments(idMsg):
                     reponse = Response(
                         id_utilisateur=session['id'], id_groupe=msg['id'], contenu=automoderation(request.form.get('rep')))
                     reponse.insert()
-                    Notification.create("demande", idMsg, id, [
+                    Notification.create("demande", idMsg, reponse['id'], [
                                         msg['id_utilisateur']])
 
                     # add XP

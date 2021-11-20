@@ -110,7 +110,7 @@ class Actions:
 
     @get_context
     def delete(self):
-        self.delete()
+        s.delete(self)
         s.commit()
 
 
@@ -743,7 +743,7 @@ class Group(Actions, Base):
     @property
     def getAllMessagesSign(self):
         temp = self.id
-        return Message.get(filter="cls.id_groupe == temp and cls.sign != '[]'", order_by="cls.date_envoi")
+        return Message.get(filter="(cls.id_groupe == temp) & (cls.sign != '[]')", order_by="cls.date_envoi")
 
     @property
     def lastMsg(self):
@@ -755,8 +755,8 @@ class Group(Actions, Base):
         if uid == None:
             uid = session['id'] if session != None and 'id' in session else None
         if uid != None:
-            id = self.id
-            return len(Notification.get(filter="cls.type == 'msg' and cls.id_groupe == id and cls.destinataires.comparator.has(uid)"))
+            temp = self.id
+            return len(Notification.get(filter="(cls.type == 'msg') & (cls.id_groupe == temp) & (cls.destinataires.has_key(uid))"))
         else:
             return None
 
@@ -767,12 +767,12 @@ class Group(Actions, Base):
     @property
     def utilisateurs(self):
         temp = self.id_utilisateurs
-        return User.get(filter="cls.id in temp")
+        return User.get(filter="cls.id.in_(temp)")
 
     @property
     def modos(self):
         temp = self.moderateurs
-        return User.get(filter="cls.id in temp")
+        return User.get(filter="cls.id.in_(temp)")
 
     def __setitem__(self, key, value):
         return setattr(self, key, value)
@@ -802,7 +802,6 @@ class Notification(Actions, Base):
     destinataires = Column(JSONB)
 
     def __init__(self, **params):
-        self.id = params['id']
         self.type = params['type']
         self.id_groupe = params['id_groupe']
         self.id_msg = params['id_msg']
@@ -812,14 +811,13 @@ class Notification(Actions, Base):
     @classmethod
     def create(cls, type, id_groupe, id_msg, destinataires):
         if type == 'demande':
-            for user in User.get(filter="cls.savedDemands.comparator.has_key(str(id_groupe))"):
+            for user in User.get(filter="cls.savedDemands.has_key(str(id_groupe))"):
                 destinataires.append(user['id'])
 
         if session['id'] in destinataires:
             destinataires.remove(session['id'])
 
         destinataires = list(set(destinataires))
-
         if len(destinataires) > 0:
             notification = Notification(
                 type=type, id_groupe=id_groupe, id_msg=id_msg, destinataires=destinataires)
@@ -857,6 +855,32 @@ class Notification(Actions, Base):
 
         return tempsStr
 
+    @property
+    def groupe(self):
+        temp = self.id_groupe
+        if self.type == 'msg':
+            return Group.get(filter="cls.id == temp", limit=1)
+        elif self.type == 'demande':
+            return Request.get(filter="cls.id == temp", limit=1)
+
+    @property
+    def message(self):
+        temp = self.id_msg
+        if self.type == 'msg':
+            return Message.get(filter="cls.id == temp", limit=1)
+        elif self.type == 'demande':
+            return Response.get(filter="cls.id == temp", limit=1)
+
+    @property
+    def sender(self):
+        temp = self.message.id_utilisateur
+        return User.get(filter="cls.id == temp", limit=1)
+
+    @property
+    def userDest(self):
+        temp = self.destinataires
+        return User.get(filter="cls.id.in_(temp)")
+
     @get_context
     def send(self):
         notification = self
@@ -867,15 +891,15 @@ class Notification(Actions, Base):
             if user['id'] in clientsNotif:
                 socketio.emit(
                     'newNotif', {'html': html, 'sound': user['notifs']['sound']}, to=user['id'])
-            elif user['email'] != "":
+            elif user['email']:
                 # si l'user a autorisé les notifs par mail
                 if (self.type == 'msg' and user['notifs']['messages']) or (self.type == 'demande' and user['notifs']['demandes']):
                     # si un mail n'a pas déja été envoyé pour ce groupe
-                    if (self.type == 'msg' and len(Notification.get(filter="cls.type == 'msg' and cls.id_groupe == self.id and cls.destinataires.comparator.has_key(str(user['id']))")) == 1) or self.type == 'demande':
+                    if (self.type == 'msg' and len(Notification.get(filter="(cls.type == 'msg') & (cls.id_groupe == self.id) & (cls.destinataires.has_key(str(user['id'])))")) == 1) or self.type == 'demande':
                         if user['email'] != "":
                             To = user['email']
                         else:
-                            pass
+                            continue
                         htmlMail = render_template(
                             'mail.html', notif=notification, user=user)
                         envoi = Thread(target=self.sendMail, args=(
@@ -907,7 +931,10 @@ class Notification(Actions, Base):
 
     def getSimilar(self, uid):
         '''récupère les notifs du même groupe plus récentes'''
-        return Notification.get(filter="cls.id_groupe == self.id_groupe and cls.date >= self.date and cls.id != self.id and cls.destinataires.comparator.has(uid)")
+        temp = self.id_groupe
+        date = self.date
+        id = self.id
+        return Notification.get(filter="(cls.id_groupe == temp) & (cls.date >= date) & (cls.id != id) & (cls.destinataires.has_key(uid))")
 
     def supprNotif(self):
         self.delete()
@@ -923,42 +950,20 @@ class Notification(Actions, Base):
         return
 
     def verifNotif(self):
+        temp = self.id_groupe
         if self.type == 'msg':
-            if not Group.get(filter="cls.id == self.id_groupe", limit=1) and not Message.get(filter="cls.id == self.id_msg", limit=1):
+            if not Group.get(filter="cls.id == temp", limit=1) and not Message.get(filter="cls.id == self.id_msg", limit=1):
                 self.supprNotif()
                 return True
         elif self.type == 'demande':
-            if Request.get(filter="cls.id == self.id_groupe", limit=1):
-                if not Response.get(filter="cls.id == self.id_msg", limit=1):
+            if Request.get(filter="cls.id == temp", limit=1):
+                id_msg = self.id_msg
+                if not Response.get(filter="cls.id == id_msg", limit=1):
                     self.supprNotif()
                     return True
             else:
                 self.supprNotif()
                 return True
-
-    @property
-    def groupe(self):
-        if self.type == 'msg':
-            return Group.get(filter="cls.id == self.id_groupe", limit=1)
-        elif self.type == 'demande':
-            return Request.get(filter="cls.id == self.id_groupe", limit=1)
-
-    @property
-    def message(self):
-        if self.type == 'msg':
-            return Message.get(filter="cls.id == self.id_msg", limit=1)
-        elif self.type == 'demande':
-            return Response.get(filter="cls.id == self.id_msg", limit=1)
-
-    @property
-    def sender(self):
-        '''A REVOIR PEUT ETRE ERREUR'''
-        return User.get(filter="cls.id == msg['id_utilisateur']", limit=1)
-
-    @property
-    def userDest(self):
-        temp = self.destinataires
-        return User.get(filter="cls.id in temp")
 
     def __setitem__(self, key, value):
         if self.verifNotif():
