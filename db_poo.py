@@ -936,9 +936,9 @@ class Notification(Actions, Base):
     def getSimilar(self, uid):
         '''récupère les notifs du même groupe plus récentes'''
         temp = self.id_groupe
-        date = self.date
+        datetime = self.date
         id = self.id
-        return Notification.get(filter="(cls.id_groupe == temp) & (cls.date >= date) & (cls.id != id) & (cls.destinataires.has_key(uid))")
+        return Notification.get(filter="(cls.id_groupe == temp) & (cls.date >= datetime) & (cls.id != id) & (cls.destinataires.has_key(uid))")
 
     def supprNotif(self):
         self.delete()
