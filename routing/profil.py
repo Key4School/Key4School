@@ -81,14 +81,24 @@ def updateprofile():
 
         user = User.get(filter="cls.id == session['id']", limit=1)
 
+        user['nom'] = automoderation(request.form['nom'])
+        user['prenom'] = automoderation(request.form['prenom'])
         user['pseudo'] = automoderation(request.form['pseudo'])
         user['email'] = automoderation(request.form['email'])
         user['telephone'] = automoderation(request.form['telephone'])
         user['interets'] = automoderation(request.form['interets'])
         if user['type'] == 'ELEVE':
             user['langues'] = [request.form['lv1'], request.form['lv2']]
-            user['options'] = [request.form['option1'], request.form['option2']]
-            user['spes'] = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
+            options = []
+            if request.form['option1'] != 'none':
+                options.append(request.form['option1'])
+            if request.form['option2'] != 'none':
+                options.append(request.form['option2'])
+            user['options'] = options
+            if user['classe'] == '1ère':
+                user['spes'] = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
+            elif user['classe'] == 'Tle':
+                user['spes'] = [request.form['spe1'], request.form['spe2']]
         elif user['type'] == 'ENSEIGNANT':
             user['matiere'] = request.form['matiere']
         user['elementPrive'] = elementPrive
