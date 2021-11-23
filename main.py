@@ -35,65 +35,47 @@ app.add_url_rule('/accueil/', 'accueil2', accueil2)
 app.add_url_rule('/morePost/', 'morePost', morePost, methods=['POST'])
 app.add_url_rule('/moreUser/', 'moreUser', moreUser, methods=['POST'])
 app.add_url_rule('/moreMsg/', 'moreMsg', moreMsg, methods=['POST'])
-app.add_url_rule('/modererGrp/<idGrp>/', 'modererGrp',
-                 modererGrp, methods=['POST'])
-app.add_url_rule('/messages/', 'page_messages',
-                 page_messages, defaults={'idGroupe': None})
+app.add_url_rule('/modererGrp/<idGrp>/', 'modererGrp', modererGrp, methods=['POST'])
+app.add_url_rule('/messages/', 'page_messages', page_messages, defaults={'idGroupe': None})
 app.add_url_rule('/messages/<idGroupe>/', 'page_messages', page_messages)
 app.add_url_rule('/redirectDM/<idUser1>/<idUser2>/', 'redirectDM', redirectDM)
 app.add_url_rule('/uploadImage/', 'uploadImage', uploadImage, methods=['POST'])
 app.add_url_rule('/image/<imageName>/', 'image', image)
 app.add_url_rule('/uploadAudio/', 'uploadAudio', uploadAudio, methods=['POST'])
 app.add_url_rule('/audio/<audioName>/', 'audio', audio)
-app.add_url_rule('/suppressionMsg/', 'suppressionMsg',
-                 suppressionMsg, methods=['POST'])
+app.add_url_rule('/suppressionMsg/', 'suppressionMsg', suppressionMsg, methods=['POST'])
 app.add_url_rule('/validerMsg/', 'validerMsg', validerMsg, methods=['POST'])
-app.add_url_rule('/createGroupe/', 'createGroupe',
-                 createGroupe, methods=['POST'])
-app.add_url_rule('/updateGroupe/', 'updateGroupe',
-                 updateGroupe, methods=['POST'])
-app.add_url_rule('/virerParticipant/', 'virerParticipant',
-                 virerParticipant, methods=['POST'])
+app.add_url_rule('/createGroupe/', 'createGroupe',createGroupe, methods=['POST'])
+app.add_url_rule('/updateGroupe/', 'updateGroupe', updateGroupe, methods=['POST'])
+app.add_url_rule('/virerParticipant/', 'virerParticipant', virerParticipant, methods=['POST'])
 app.add_url_rule('/modifRole/', 'modifRole', modifRole, methods=['POST'])
-app.add_url_rule('/supprGroupe/<idGrp>/', 'supprGroupe',
-                 supprGroupe, methods=['POST'])
-app.add_url_rule('/updateGrpName/<idGrp>/<newGrpName>/',
-                 'updateGrpName', updateGrpName, methods=['POST'])
+app.add_url_rule('/supprGroupe/<idGrp>/', 'supprGroupe', supprGroupe, methods=['POST'])
+app.add_url_rule('/updateGrpName/<idGrp>/<newGrpName>/', 'updateGrpName', updateGrpName, methods=['POST'])
 app.add_url_rule('/changeTheme/', 'changeTheme', changeTheme, methods=['POST'])
 app.add_url_rule('/theme/', 'theme', theme, methods=['POST'])
-app.add_url_rule('/profil/', 'profil', profil,
-                 methods=['POST', 'GET'], defaults={'idUser': None})
-app.add_url_rule('/profil/<idUser>/', 'profil',
-                 profil, methods=['POST', 'GET'])
-app.add_url_rule('/updateprofile/', 'updateprofile',
-                 updateprofile, methods=['POST'])
-app.add_url_rule('/otherSubject/', 'otherSubject',
-                 otherSubject, methods=['POST'])
+app.add_url_rule('/profil/', 'profil', profil, methods=['POST', 'GET'], defaults={'idUser': None})
+app.add_url_rule('/profil/<idUser>/', 'profil', profil, methods=['POST', 'GET'])
+app.add_url_rule('/updateprofile/', 'updateprofile', updateprofile, methods=['POST'])
+app.add_url_rule('/otherSubject/', 'otherSubject', otherSubject, methods=['POST'])
 app.add_url_rule('/userImg/<profilImg>/', 'userImg', userImg)
 app.add_url_rule('/updateImg/', 'updateImg', updateImg, methods=['POST'])
 app.add_url_rule('/question/', 'question', question, methods=['POST', 'GET'])
 app.add_url_rule('/comments/', 'redirect_comments', redirect_comments)
-app.add_url_rule('/comments/<idMsg>/', 'comments',
-                 comments, methods=['GET', 'POST'])
-app.add_url_rule('/updateDemand/', 'updateDemand',
-                 updateDemand, methods=['POST'])
-app.add_url_rule('/updateComment/', 'updateComment',
-                 updateComment, methods=['POST'])
+app.add_url_rule('/comments/<idMsg>/', 'comments', comments, methods=['GET', 'POST'])
+app.add_url_rule('/updateDemand/', 'updateDemand', updateDemand, methods=['POST'])
+app.add_url_rule('/updateComment/', 'updateComment', updateComment, methods=['POST'])
 app.add_url_rule('/file/<fileName>/', 'file', file)
 app.add_url_rule('/DL_file/<fileName>/<fileType>/', 'DL_file', DL_file)
 app.add_url_rule('/recherche/', 'recherche', recherche)
 app.add_url_rule('/rechercheUser/', 'recherche_user', recherche_user)
 app.add_url_rule('/likePost/<idPost>/', 'likePost', likePost, methods=['POST'])
 app.add_url_rule('/likeRep/<idRep>/', 'likeRep', likeRep, methods=['POST'])
-app.add_url_rule('/administration/', 'administration',
-                 administration, methods=['POST', 'GET'])
+app.add_url_rule('/administration/', 'administration', administration, methods=['POST', 'GET'])
 app.add_url_rule('/sanction/', 'sanction', sanction, methods=['POST'])
 app.add_url_rule('/signPost/', 'signPost', signPost, methods=['POST'])
 app.add_url_rule('/signRepPost/', 'signRepPost', signRepPost, methods=['POST'])
-app.add_url_rule('/signPostProfil/', 'signPostProfil',
-                 signPostProfil, methods=['POST'])
-app.add_url_rule('/signPostDiscussion/', 'signPostDiscussion',
-                 signPostDiscussion, methods=['POST'])
+app.add_url_rule('/signPostProfil/', 'signPostProfil', signPostProfil, methods=['POST'])
+app.add_url_rule('/signPostDiscussion/', 'signPostDiscussion', signPostDiscussion, methods=['POST'])
 app.add_url_rule('/signPostMsg/', 'signPostMsg', signPostMsg, methods=['POST'])
 app.add_url_rule('/resoudre/<idPost>/', 'resoudre', resoudre, methods=['POST'])
 app.add_url_rule('/help/', 'tuto', tuto)
