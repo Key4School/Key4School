@@ -99,35 +99,19 @@ def postMsg(json):
 
 
 def postLike(json):
-	if 'id' in session:
-		if 'type' in json:
-			if json['type'] == 'post':
-				if 'idPost' in json:
-					action = likePost(json['idPost'])
-					if action == 'add':
-						emit('newLike', json['idPost'], broadcast=True)
-					elif action == 'remove':
-						emit('removeLike', json['idPost'], broadcast=True)
-			elif json['type'] == 'rep':
-				if 'idPost' in json and 'idRep' in json:
-					action = likeRep(json['idRep'])
-					if action == 'add':
-						emit('newLike', json['idRep'], broadcast=True)
-					elif action == 'remove':
-						emit('removeLike', json['idRep'], broadcast=True)
-	if 'id' in session:
-		if 'type' in json:
-			if json['type'] == 'post':
-				if 'idPost' in json:
-					action = likePost(json['idPost'])
-					if action == 'add':
-						emit('newLike', json['idPost'], broadcast=True)
-					elif action == 'remove':
-						emit('removeLike', json['idPost'], broadcast=True)
-			elif json['type'] == 'rep':
-				if 'idPost' in json and 'idRep' in json:
-					action = likeRep(json['idRep'])
-					if action == 'add':
-						emit('newLike', json['idRep'], broadcast=True)
-					elif action == 'remove':
-						emit('removeLike', json['idRep'], broadcast=True)
+    if 'id' in session:
+        if 'type' in json:
+            if json['type'] == 'post':
+                if 'idPost' in json:
+                    action = likePost(json['idPost'])
+                    if action == 'add':
+                        emit('newLike', json['idPost'], broadcast=True)
+                    elif action == 'remove':
+                        emit('removeLike', json['idPost'], broadcast=True)
+            elif json['type'] == 'rep':
+                if 'idPost' in json and 'idRep' in json:
+                    action = likeRep(json['idRep'])
+                    if action == 'add':
+                        emit('newLike', json['idRep'], broadcast=True)
+                    elif action == 'remove':
+                        emit('removeLike', json['idRep'], broadcast=True)
