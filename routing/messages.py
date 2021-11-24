@@ -17,7 +17,6 @@ def page_messages(idGroupe):
         grp = sorted(Group.get(filter="cls.id_utilisateurs.comparator.has_key(session['id'])"), key=lambda groupe: groupe[
                      'lastMsg']['date_envoi'] if groupe['lastMsg'] else datetime.min, reverse=True)
         if idGroupe != None and groupe:
-            '''A REVOIR AVEC DES METH'''
             for notif in groupe['notifs']:
                 notif.supprUser(session['id'])
 
