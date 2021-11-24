@@ -158,7 +158,7 @@ def likePost(idPost):
         if 'idPost' != None:
             # on récupère les likes de la demande d'aide
             demande = Request.get(filter="cls.id == idPost", limit=1)
-            likes = demande['likes']
+            likes = demande['likes'].copy()
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
@@ -177,6 +177,7 @@ def likePost(idPost):
                         filter="cls.id == session['id']", limit=1).addXP(2)
 
             # on update dans la DB
+            demande['likes'] = likes
             demande.update()
 
             # on retourne enfin le nouveau nb de likes
@@ -197,7 +198,7 @@ def likeRep(idRep):
             if not reponse:
                 return abort(400)
 
-            likes = reponse['likes']
+            likes = reponse['likes'].copy()
 
             # on check mtn si l'utilisateur a déjà liké la demande
             if session['id'] in likes:
@@ -216,6 +217,7 @@ def likeRep(idRep):
                         filter="cls.id == session['id']", limit=1).addXP(2)
 
             # on update dans la DB
+            reponse['likes'] = likes
             reponse.update()
 
             # on retourne enfin le nouveau nb de likes
@@ -268,16 +270,17 @@ def updateComment():
 
 @db_session
 def savePost(postId):
-
+    '''A PASSER EN SOCKET'''
     if 'id' in session:
         user = User.get(filter="cls.id == session['id']", limit=1)
-        savedPost = user['savedDemands']
+        savedPost = user['savedDemands'].copy()
 
         if postId in savedPost:
             savedPost.remove(postId)
         else:
             savedPost.append(postId)
 
+        user['savedDemands'] = savedPost
         user.update()
 
         return 'sent'

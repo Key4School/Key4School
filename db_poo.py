@@ -439,21 +439,21 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
         return tempsStr
 
     @property
-    def aLike(self):
+    def a_like(self):
         if session['id'] in self.likes:
             return True
         else:
             return False
 
     @property
-    def aSign(self):
+    def a_sign(self):
         if session['id'] in self.sign:
             return True
         else:
             return False
 
     @property
-    def aSave(self):
+    def a_save(self):
         user = User.get(filter="cls.id == session['id']", limit=1)
 
         if self.id in user.savedDemands:
@@ -568,7 +568,7 @@ class Response(Actions, Base):
         return tempsStr
 
     @property
-    def aLike(self):
+    def a_like(self):
         if session['id'] in self.likes:
             return True
         else:
