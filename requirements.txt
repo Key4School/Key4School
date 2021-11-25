@@ -7,3 +7,4 @@ flask-hashing
 Flask-Migrate
 SQLAlchemy
 alembic
+psycopg2
