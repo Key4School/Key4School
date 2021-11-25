@@ -95,9 +95,9 @@ def updateprofile():
             if request.form['option2'] != 'none':
                 options.append(request.form['option2'])
             user['options'] = options
-            if user['classe'] == '1ère':
+            if user['classe'] == '1G':
                 user['spes'] = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
-            elif user['classe'] == 'Tle':
+            elif user['classe'] == 'TG':
                 user['spes'] = [request.form['spe1'], request.form['spe2']]
         elif user['type'] == 'ENSEIGNANT':
             user['matiere'] = request.form['matiere']
