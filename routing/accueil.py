@@ -75,8 +75,8 @@ def about():
 
 def leaderboard():
     if 'id' in session:
-        user = utilisateurs[session['id']].toDict()
-        users = list(utilisateurs.values())
+        user = User.get(filter="cls.id == session['id']", limit=1)
+        users = User.get(order_by="cls.xp", desc=True, limit=50)
         return render_template("leaderboard.html", users=users, user=user)
     else:
         session['redirect'] = request.path

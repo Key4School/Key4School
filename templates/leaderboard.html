@@ -40,6 +40,7 @@
   <br />
   <div class="container_top_leaderboard">
     <div class="container_top_leaderboard_items">
+      {%if users|length > 1%}
       <p>
           <i style="font-size:1.5rem;color:#c0c0c0" class="fas fa-medal"></i>
       </p>
@@ -50,8 +51,10 @@
       <p style="font-size:1rem;">
         {{users[1]['pseudo']}}
       </p>
+      {%endif%}
     </div>
     <div class="container_top_leaderboard_items">
+      {%if users|length > 0%}
       <p>
           <i style="font-size:1.75rem;color:hsl(48, 100%, 67%);" class="fas fa-crown"></i>
       </p>
@@ -62,8 +65,10 @@
       <p style="font-size:1.5rem;">
         {{users[0]['pseudo']}}
       </p>
+      {%endif%}
     </div>
     <div class="container_top_leaderboard_items">
+      {%if users|length > 2%}
       <p>
           <i style="font-size:1.5rem;color:#614e1a" class="fas fa-medal"></i>
       </p>
@@ -74,6 +79,7 @@
       <p style="font-size:1rem;">
         {{users[2]['pseudo']}}
       </p>
+      {%endif%}
     </div>
   </div>
   <br /><br />
