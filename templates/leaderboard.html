@@ -44,7 +44,7 @@
       <p>
           <i style="font-size:1.5rem;color:#c0c0c0" class="fas fa-medal"></i>
       </p>
-      <img class="photo_top_leaderboard_2_3" src="{%if users[1]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[1]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+      <img alt="photo profile" class="photo_top_leaderboard_2_3" src="{%if users[1]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[1]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
       <p style="font-size:1rem;">
         {{users[1]['xp']}}
       </p>
@@ -58,7 +58,7 @@
       <p>
           <i style="font-size:1.75rem;color:hsl(48, 100%, 67%);" class="fas fa-crown"></i>
       </p>
-      <img style="height:6.25rem;width:6.25rem;object-fit: cover;border-radius:50%;" src="{%if users[0]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[0]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+      <img alt="photo profile" style="height:6.25rem;width:6.25rem;object-fit: cover;border-radius:50%;" src="{%if users[0]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[0]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
       <p style="font-size:1.5rem;">
         {{users[0]['xp']}}
       </p>
@@ -72,7 +72,7 @@
       <p>
           <i style="font-size:1.5rem;color:#614e1a" class="fas fa-medal"></i>
       </p>
-      <img class="photo_top_leaderboard_2_3" src="{%if users[2]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[2]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+      <img alt="photo profile" class="photo_top_leaderboard_2_3" src="{%if users[2]['nomImg'] != '' %}{{url_for('userImg', profilImg = users[2]['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
       <p style="font-size:1rem;">
         {{users[2]['xp']}}
       </p>
@@ -94,7 +94,7 @@
           </p>
         </td>
         <td class="leaderboard_cellule" style="margin-left:5%;display:flex;align-items:center;justify-content:flex-start">
-          <img class="leaderboard_img_classement" src="{%if utilisateur['nomImg'] != '' %}{{url_for('userImg', profilImg = utilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+          <img alt="photo profile" class="leaderboard_img_classement" src="{%if utilisateur['nomImg'] != '' %}{{url_for('userImg', profilImg = utilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
         <!-- </td>
         <td class="leaderboard_cellule"> -->
           <p style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis;">
@@ -113,7 +113,7 @@
           <p>
             {{a}}
           </p>
-          <img class="leaderboard_img_classement" src="{%if utilisateur['nomImg'] != '' %}{{url_for('userImg', profilImg = utilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+          <img alt="photo profile" class="leaderboard_img_classement" src="{%if utilisateur['nomImg'] != '' %}{{url_for('userImg', profilImg = utilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
           <p>
             {{utilisateur['pseudo']}}
           </p>
