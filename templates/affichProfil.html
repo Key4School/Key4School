@@ -44,7 +44,7 @@
       <form onsubmit="signalerProfil(event); return false;" id="signalementProfil" method="POST" autocomplete="off">
         <section class="modal-card-body">
           <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous ce profil." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
-          <input type='hidden' id="idSignalé" name='idSignalé' value="{{profilUtilisateur['id']}}" />
+          <input type='hidden' id="idSignalé" name='idSignalé' value="{{user['id']}}" />
         </section>
         <footer class="modal-card-foot">
           <button type="submit" class="button is-success">Signaler</button>
@@ -61,7 +61,7 @@
       </header>
       <form onsubmit="designalerProfil(event); return false;" id="designalementProfil" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type='hidden' id="idDesignalé" name='idSignalé' value="{{profilUtilisateur['id']}}" />
+          <input type='hidden' id="idDesignalé" name='idSignalé' value="{{user['id']}}" />
           Etes-vous sûr de vouloir enlever ce signalement
         </section>
         <footer class="modal-card-foot">
@@ -80,7 +80,7 @@
         </header>
         <form onsubmit="sanctionner(event); return false;" id="SancForm" method="POST" autocomplete="off">
           <section class="modal-card-body">
-            <input type='hidden' id="idSanctionné" name='idSanctionné' value="{{profilUtilisateur['id']}}" />
+            <input type='hidden' id="idSanctionné" name='idSanctionné' value="{{user['id']}}" />
             <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Sanctionnez vous ce profil." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;"required/>
             <input id='inputSanction' class="input" type="text" placeholder="Quellle sanction mettez vous." autocomplete='off' name="Sanction" style="width: 75%;margin-left: 2%;padding:5px;"required/>
             <select name="SanctionType">
@@ -113,7 +113,7 @@
       </header>
       <form onsubmit="validerUser(event); return false;" id="ValUserForm" method="POST" autocomplete="off">
         <section class="modal-card-body">
-          <input type='hidden' id="idValidé" name='idValidé' value="{{profilUtilisateur['id']}}" />
+          <input type='hidden' id="idValidé" name='idValidé' value="{{user['id']}}" />
           <input type='hidden' name="demandeBut" value="ValUser" />
           <select name="motif">
             <option value="abusif">Signalement abusif</option>
@@ -136,9 +136,9 @@
   <div class="container_profile" style="align-items: center;text-align: center;margin:auto;">
     <p style="font-size:1.5rem;">
     </p>
-      {%if profilUtilisateur['admin']== true%}
+      {%if user['admin']== true%}
       <div style="flex-direction: column;align-items: flex-end;font-size:1.5rem;">
-        {{profilUtilisateur['pseudo']}}&nbsp;&nbsp;&nbsp;&nbsp;
+        {{user['pseudo']}}&nbsp;&nbsp;&nbsp;&nbsp;
           <span class="icon is-small ">
             <i class="fas fa-crown" aria-hidden="true" style="color:	hsl(48, 100%, 67%)"></i>
           </span>
@@ -148,17 +148,17 @@
       </div>
       {%else%}
       <p style="font-size:1.5rem;">
-        {{profilUtilisateur['pseudo']}}
+        {{user['pseudo']}}
       </p>
       {%endif%}
     <div style="position:relative;">
       <img alt="user" onclick="updateImgOpen();"
-        src="{%if 'nomImg' in profilUtilisateur and profilUtilisateur['nomImg'] != "" %}{{url_for('userImg', profilImg = profilUtilisateur['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        src="{%if 'nomImg' in user and user['nomImg'] != "" %}{{url_for('userImg', profilImg = user['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
         style="position: relative;margin-top:5%;width:100px; height:100px;object-fit: cover;border-radius:50%; cursor: pointer;" />
       <i class="fas fa-pen" style="font-size: 1.5rem; position: absolute; bottom: 30px; right: 30px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
     </div>
     <div style="display:flex;align-items: center;justify-content:space-between">
-      <p style="font-size:1.125rem;">NIV {{niv}}</p>
+      <p style="font-size:1.125rem;">NIV {{user['niv']}}</p>
       <p style="font-size:1.125rem;">{{xp}} / ???</p>
     </div>
       <progress class="progress is-info" value={{xplvl}} max="100" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
@@ -180,7 +180,7 @@
               &nbsp;&nbsp;Nom et Prenom
             </td>
             <td>
-              {{profilUtilisateur['nom']}} {{profilUtilisateur['prenom']}}
+              {{user['nom']}} {{user['prenom']}}
             </td>
           </tr>
 
@@ -191,7 +191,7 @@
             </td>
             <td>
               <div id="contentpseudo">
-                <p id="pseudo">{{profilUtilisateur['pseudo']}}</p>
+                <p id="pseudo">{{user['pseudo']}}</p>
               </div>
             </td>
           </tr>
@@ -215,7 +215,7 @@
               &nbsp;&nbsp;Lycée{%if 'ELEVE' == 'ELEVE'%}/Classe{%endif%}
             </td>
             <td>
-              {{profilUtilisateur['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{{profilUtilisateur['classe']}}{%endif%}
+              {{user['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{{user['classe']}}{%endif%}
             </td>
           </tr>
           {%if 'ELEVE' == 'ELEVE'%}
@@ -226,7 +226,7 @@
               &nbsp;&nbsp;Langue(s) vivante(s)
             <td>
               <div id="contentlangues">
-                <p id="langues">{{profilUtilisateur['langues-str']}}{%if profilUtilisateur['langues-str']==""%}Non-renseigné{%endif%}</p>
+                <p id="langues">{{user['langues-str']}}{%if user['langues-str']==""%}Non-renseigné{%endif%}</p>
               </div>
             </td>
           </tr>
@@ -239,13 +239,13 @@
             <td>
               <div id="contentoptions">
                 <p id="options">
-                  {{profilUtilisateur['options-str']}}{%if profilUtilisateur['options-str']==""%}Non-renseigné{%endif%}
+                  {{user['options-str']}}{%if user['options-str']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
           </tr>
 
-          <tr {% if profilUtilisateur['classe']=='2nd' %} style="display: none;" {% endif %}>
+          <tr {% if user['classe']=='2nd' %} style="display: none;" {% endif %}>
             <td>
               <i class="fas fa-book-open" style="font-size:25px;"></i>
               &nbsp;&nbsp;Spécialités
@@ -253,7 +253,7 @@
             <td>
               <div id="contentspe">
                 <p id="spe">
-                  {{profilUtilisateur['spes-str']}}{%if profilUtilisateur['spe']==""%}Non-renseigné{%endif%}
+                  {{user['spes-str']}}{%if user['spe']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
@@ -267,12 +267,12 @@
             <td>
               <div id="contentspe">
                 <p id="spe">
-                  {{profilUtilisateur['matiere-str']}}{%if profilUtilisateur['matiere-str']==""%}Non-renseigné{%endif%}
+                  {{user['matiere-str']}}{%if user['matiere-str']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
           </tr>
-          {%if profilUtilisateur['matiere_autre']|length != 0%}
+          {%if user['matiere_autre']|length != 0%}
           <tr>
             <td>
               <i class="fas fa-book-open" style="font-size:25px;"></i>
@@ -281,14 +281,14 @@
             <td>
               <div id="contentspe">
                 <p id="spe">
-                  {{profilUtilisateur['matiere_autre-str']}}{%if profilUtilisateur['matiere_autre-str']==""%}Non-renseigné{%endif%}
+                  {{user['matiere_autre-str']}}{%if user['matiere_autre-str']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
           </tr>
           {%endif%}
           {%else%}
-          {%if profilUtilisateur['matiere_autre']|length != 0%}
+          {%if user['matiere_autre']|length != 0%}
           <tr>
             <td>
               <i class="fas fa-book-open" style="font-size:25px;"></i>
@@ -297,22 +297,22 @@
             <td>
               <div id="contentspe">
                 <p id="spe">
-                  {{profilUtilisateur['matiere_autre-str']}}{%if profilUtilisateur['matiere_autre-str']==""%}Non-renseigné{%endif%}
+                  {{user['matiere_autre-str']}}{%if user['matiere_autre-str']==""%}Non-renseigné{%endif%}
                 </p>
               </div>
             </td>
           </tr>
           {%endif%}
           {%endif%}
-          {%for element in profilUtilisateur['elementPublic']%}
-          {%if element=="birth_date" and profilUtilisateur['birth_date'] != None%}
+          {%for element in user['elementPublic']%}
+          {%if element=="birth_date" and user['birth_date'] != None%}
           <tr>
             <td>
               <i class="fas fa-birthday-cake" style="font-size:25px;"></i>
               &nbsp;&nbsp;Date de naissance
             </td>
             <td>
-              {{profilUtilisateur['birth_date'].day}}/{{profilUtilisateur['birth_date'].month}}/{{profilUtilisateur['birth_date'].year}}
+              {{user['birth_date'].day}}/{{user['birth_date'].month}}/{{user['birth_date'].year}}
             </td>
           </tr>
           {%else%}
@@ -323,7 +323,7 @@
             </td>
             <td>
               <div id="content{{element}}">
-                <p id="{{element}}">{{profilUtilisateur[element]}}{%if profilUtilisateur[element]==""%}Non-renseigné{%endif%}</p>
+                <p id="{{element}}">{{user[element]}}{%if user[element]==""%}Non-renseigné{%endif%}</p>
               </div>
             </td>
           </tr>
@@ -336,7 +336,7 @@
 
     <br />
     <div class="navbar-item" style="display:block;">
-      <a href="/redirectDM/{{session['id']}}/{{profilUtilisateur['id']}}/">
+      <a href="/redirectDM/{{session['id']}}/{{user['id']}}/">
         <button class="button is-link is-outlined is-small">
           <span class="icon is-small">
             <i class="fas fa-comments"></i>
@@ -361,7 +361,7 @@
         </span>
         <span>Sanctionner</span>
       </button>
-      {%if profilUtilisateur['sign'] != []%}
+      {%if user['sign'] != []%}
       <button  class="button  is-success  is-outlined is-small" onClick="validationUser();">
         <span class="icon is-small">
           <i id="sign" class="fas fa-check" aria-hidden="true"></i>
@@ -371,11 +371,11 @@
       <br /><br />
       {%endif%}</div></div>
       <div style="margin-left:2%;">
-        {%if profilUtilisateur['SanctionEnCour'] != ""%}
-        Sanction en cours : {{profilUtilisateur['SanctionEnCour']}}, jusqu'au {{profilUtilisateur['SanctionDuree']}}
+        {%if user['SanctionEnCour'] != ""%}
+        Sanction en cours : {{user['SanctionEnCour']}}, jusqu'au {{user['SanctionDuree']}}
         {%endif%}
         <br />
-        {%for element in profilUtilisateur['Sanctions']%}
+        {%for element in user['Sanctions']%}
         <ul class="menu-list" style="margin-left:1%;">
           <li><u>Sanction : {{element['SanctionType']}}</u></li>
           <li>

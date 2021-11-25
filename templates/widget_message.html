@@ -1,4 +1,4 @@
-{%if content['id-utilisateur']==sessionId%}
+{%if content['id_utilisateur']==sessionId%}
 <div class="moimsg" style="
 {%if 'audio' in content and content['audio'] == true %}
 width: 30%;
@@ -73,9 +73,9 @@ min-width: 20%;
           {%if 'audio' in content and content['audio'] == True %}
           <i class='fas fa-volume-up'></i> Message Vocal
           {%elif 'image' in content and content['image'] != '' %}
-          <i class='fas fa-image'></i> {{content['original-contenu']}}
+          <i class='fas fa-image'></i> {{content['contenu']}}
           {%else%}
-          {{content['original-contenu']}}
+          {{content['contenu']}}
           {%endif%}
           " />
         </div>
@@ -101,9 +101,9 @@ min-width: 20%;
       {%if 'audio' in content['rep'] and content['rep']['audio'] == True %}
       <i class="fas fa-volume-up"></i> Message Vocal
       {%elif 'image' in content['rep'] and content['rep']['image'] != '' %}
-      <i class="fas fa-image"></i> {{content['rep']['original-contenu']}}
+      <i class="fas fa-image"></i> {{content['rep']['contenu']}}
       {%else%}
-      {{content['rep']['original-contenu']}}
+      {{content['rep']['contenu']}}
       {%endif%}
     </a>
   </div>
@@ -121,7 +121,7 @@ min-width: 20%;
       <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
         <span class="none" style="margin:0px;" id="current-time{{content['id']}}" class="time">0:00</span>
         <span class="block" style="margin:0px;" id="duration{{content['id']}}" class="time">0:00</span>
-        <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+        <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date_envoi'].day}}/{{content['date_envoi'].month}} à {{content['date_envoi'].hour}}h{{content['date_envoi'].minute}}</p>
       </div>
       <script>
         document.getElementById('audio{{content['id']}}').style.display='block';
@@ -257,6 +257,6 @@ min-width: 20%;
     </p>
     {%endif%}
     {%if 'audio' in content and content['audio'] == false %}
-    <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
+    <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date_envoi'].day}}/{{content['date_envoi'].month}} à {{content['date_envoi'].hour}}h{{content['date_envoi'].minute}}</p>
     {%endif%}
   </div>

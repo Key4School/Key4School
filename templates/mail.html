@@ -183,9 +183,9 @@
         {%if 'audio' in notif['message'] and notif['message']['audio'] == true %}
         <i class="fas fa-volume-up"></i> Message Vocal
         {%elif 'image' in notif['message'] and notif['message']['image'] != '' %}
-        <i class="fas fa-image"></i> {{notif['message']['original-contenu']}}
+        <i class="fas fa-image"></i> {{notif['message']['contenu']}}
         {%else%}
-        {{notif['message']['original-contenu']}}
+        {{notif['message']['contenu']}}
         {%endif%}
       </p>
     </td>

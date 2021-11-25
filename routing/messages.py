@@ -43,7 +43,7 @@ def page_messages(idGroupe):
             groupe = None
             infoUtilisateurs = None
 
-        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=groupe, infoUtilisateurs=infoUtilisateurs, users=users, sessionId=session['id'], user=user)
+        return render_template("messages.html", msgDb=msgDb, grpUtilisateur=grp, idgroupe=idGroupe, infogroupe=groupe, infoUtilisateurs=infoUtilisateurs, users=users, user=user)
 
     else:
         session['redirect'] = request.path

@@ -261,7 +261,7 @@
                 </div>
                 <div id="listeuser" style="position: relative;overflow:auto; max-height: 500px;">
                   {% for user in users %}
-                  {% if not sessionId == user['id'] %}
+                  {% if not session['id'] == user['id'] %}
                   {%set varApercuProfil = user%}
                   <div class="listedUser" data-id="{{user['id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
                     data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
@@ -300,7 +300,7 @@
                       {% if not content['is_DM'] %}
                         {% if content['nom']=="" %}
                         {% for u in content['utilisateurs'] %}
-                          {% if u['id'] != sessionId %}
+                          {% if u['id'] != session['id'] %}
                             {{u['pseudo']}}
                           {% endif %}
                         {% endfor %}
@@ -310,7 +310,7 @@
                       {% else %}
 
                         {% for u in content['utilisateurs'] %}
-                          {% if u['id'] != sessionId %}
+                          {% if u['id'] != session['id'] %}
                             {{u['pseudo']}}
                           {% endif %}
                         {% endfor %}
@@ -324,7 +324,7 @@
                         {%elif content['lastMsg']['image'] != '' %}
                           <i class="fas fa-image"></i>
                         {%else%}
-                          {{content['lastMsg']['original-contenu']}}
+                          {{content['lastMsg']['contenu']}}
                         {%endif%}
                       </i>
                       {%endif%}
@@ -359,7 +359,7 @@
       <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative; width: 100%;">
             {% if infogroupe['nom']=="" or infogroupe['is_DM'] %}
               {% for u in infogroupe['utilisateurs'] %}
-                {% if u['id'] != sessionId %}
+                {% if u['id'] != session['id'] %}
                   <div id="divDansTitregroupe_DM">
                     <div id="groupHeader" style="display: flex; align-items:center;justify-content:space-between;">
                       <p id="groupTitle" style="font-weight:bold; display: flex;align-items:center"><a href="/messages/" id="backButton" style="margin-right: 12px; color: var(--text-color);"><i class="fas fa-chevron-circle-left"></i></a>
@@ -377,7 +377,7 @@
               {% if not infogroupe['is_DM'] %}
                 {% if infogroupe['nom']=="" %}
                   {% for u in infogroupe['utilisateurs'] %}
-                    {% if u['id'] != sessionId %}
+                    {% if u['id'] != session['id'] %}
                       {{u['pseudo']}}
                     {% endif %}
                   {% endfor %}
@@ -386,7 +386,7 @@
                 {% endif %}
               {% else %}
                 {% for u in infogroupe['utilisateurs'] %}
-                  {% if u['id'] != sessionId %}
+                  {% if u['id'] != session['id'] %}
                     {{u['pseudo']}}
                   {% endif %}
                 {% endfor %}
@@ -422,7 +422,7 @@
                 <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
               </header>
               <section class="modal-card-body" style="overflow: auto; max-height: 700px;">
-                {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                {% if (session['id'] in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                 <div style="display: flex;">
                   <input class="input is-info" type="text" id="newGrpName" placeholder="Renommer le groupe..." value="{{infogroupe['nom']}}" onsubmit="console.log('test');" onkeydown="if(event.key === 'Enter') updateGroupName();" />
                   <i class="fas fa-pen" style="font-size:1.125rem; position: relative; margin-top: 5px; margin-left: 15px;" onclick="updateGroupName();"></i>
@@ -432,7 +432,7 @@
                     {% if not infogroupe['is_DM'] %}
                       {% if infogroupe['nom']=="" %}
                         {% for u in infogroupe['utilisateurs'] %}
-                          {% if u['id'] != sessionId %}
+                          {% if u['id'] != session['id'] %}
                             {{u['pseudo']}}
                           {% endif %}
                         {% endfor %}
@@ -441,7 +441,7 @@
                       {% endif %}
                     {% else %}
                       {% for u in infogroupe['utilisateurs'] %}
-                        {% if u['id'] != sessionId %}
+                        {% if u['id'] != session['id'] %}
                           {{u['pseudo']}}
                         {% endif %}
                       {% endfor %}
@@ -450,9 +450,9 @@
                 {%endif%}
                 <hr />
                 {% if infogroupe['is_mod'] %}
-                  <button id="infoGrpModeration" class="button is-outlined is-info " {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe auto-modéré</button>
+                  <button id="infoGrpModeration" class="button is-outlined is-info " {% if (session['id'] in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe auto-modéré</button>
                 {% else %}
-                  <button id="infoGrpModeration" class="button is-info" {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe non auto-modéré</button>
+                  <button id="infoGrpModeration" class="button is-info" {% if (session['id'] in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}onclick="modererGrp('{{idgroupe}}');"{%endif%}>Groupe non auto-modéré</button>
                 {% endif %}
                 <br /><br />
                 Informations utilisateurs : <br />
@@ -483,8 +483,8 @@
                       </a>
                       <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;">
                         <div class="navbar-item">
-                          {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] and sessionId != users['id'] %}
-                            <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['id']}}','{{users['id']}}', '{{sessionId}}')">
+                          {%if session['id'] in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] and session['id'] != users['id'] %}
+                            <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['id']}}','{{users['id']}}', '{{session['id']}}')">
                               <span class="icon is-small">
                                 <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                               </span>
@@ -495,7 +495,7 @@
                           </div>
                           <div class="navbar-item">
                           {%if users['id'] in infogroupe['moderateurs']%}
-                          <button class="button is-warning is-outlined is-small" {%if sessionId != users['id']%}onclick="modifRole('{{users['id']}}', '{{infogroupe['id']}}')"{%else%}disabled{%endif%}>
+                          <button class="button is-warning is-outlined is-small" {%if session['id'] != users['id']%}onclick="modifRole('{{users['id']}}', '{{infogroupe['id']}}')"{%else%}disabled{%endif%}>
                             <span class="icon is-small">
                               <i class="fas fa-crown" aria-hidden="true"></i>
                             </span>
@@ -504,7 +504,7 @@
                             </span>
                           </button>
                           {%else%}
-                          <button class="button is-info is-outlined is-small" {%if sessionId != users['id']%}onclick="modifRole('{{users['id']}}', '{{infogroupe['id']}}')"{%else%}disabled{%endif%}>
+                          <button class="button is-info is-outlined is-small" {%if session['id'] != users['id']%}onclick="modifRole('{{users['id']}}', '{{infogroupe['id']}}')"{%else%}disabled{%endif%}>
                             <span class="icon is-small">
                               <i class="fas fa-users" aria-hidden="true"></i>
                             </span>
@@ -541,7 +541,7 @@
                   <div class="navbar-item">
                   <button class="button is-warning is-outlined is-small" onClick="signalisationDiscussion();">
                     <span class="icon is-small">
-                      {% if sessionId in infogroupe['sign'] %}
+                      {% if session['id'] in infogroupe['sign'] %}
                       <i id="sign" class="fas fa-flag" aria-hidden="true"></i>
                       {% else %}
                       <i id="sign" class="far fa-flag" aria-hidden="true"></i>
@@ -582,7 +582,7 @@
                     </button>&emsp;
                   </div>
                   {%endif%}
-                  {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                  {% if (session['id'] in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                     <div class="navbar-item">
                     <button class="button is-danger is-outlined is-small" type="submit" onclick="supprimerGroupeOpen();">
                       <span class="icon is-small">
@@ -594,7 +594,7 @@
                   {%endif%}
                 </div>
               </div>
-                {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                {%if session['id'] in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
                 <button class="button is-link is-outlined is-small" onclick=ajouterParticipantVoir(); id="buttonAjouterParticipantOpen">
                   <span class="icon is-small">
                     <i class="fas fa-plus" aria-hidden="true"></i>
@@ -621,7 +621,7 @@
                     <br /><br />
                     <div id="listeuser">
                       {% for user in users %}
-                        {% if not sessionId == user['id'] and not user['id'] in infogroupe['id_utilisateurs']%}
+                        {% if not session['id'] == user['id'] and not user['id'] in infogroupe['id_utilisateurs']%}
                         <div class="listedUser" data-id="{{user['id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
                           data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
                           <input type="checkbox" id="user_{{user['id']}}" name="{{user['id']}}" style="margin-right: 18px;" />
@@ -645,7 +645,7 @@
               </footer>
             </div>
           </div>
-          {%if sessionId in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
+          {%if session['id'] in infogroupe['moderateurs'] and infogroupe['is_class'] == False%}
           <div class="modal" id="optionParticipant" style="overflow:hidden;">
             <div class="modal-card">
               <section class="modal-card-body">
@@ -749,7 +749,7 @@
             <form onsubmit="quitterGroupe(event); return false;" id="quitterGroupeForm" method="POST" autocomplete="off">
               <section class="modal-card-body">
                 <input type='hidden' id="quitteridViréGrp" name='idViréGrp' value="{{infogroupe['id']}}" />
-                <input type='hidden' id="quitteridviré" name='idViré' value="{{sessionId}}" />
+                <input type='hidden' id="quitteridviré" name='idViré' value="{{session['id']}}" />
                 <div id="pop up virer">
                   Etes-vous sûr de vouloir quitter le groupe ?
                 </div>
@@ -761,7 +761,7 @@
             </form>
           </div>
         </div>
-        {% if (sessionId in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] %}
+        {% if (session['id'] in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] %}
           <div class="modal" id="supprimerGroupe" style="overflow:hidden;">
             <div class="modal-background"></div>
             <div class="modal-card">
@@ -834,6 +834,7 @@
           </div>
           <div id="messages">
           {% for content in msgDb%}
+            {% set sessionId = session['id'] %}
             {% include "widget_message.html" %}
           {%endfor%}
         {% endif %}
@@ -854,7 +855,7 @@
 
               <input id='inputMsg' class="input" type="text" placeholder="Envoyer un message..." autocomplete='off' name="contenuMessage" style="width: calc(100% - 70px);margin-right: 1%;padding:5px;" autofocus>
               <input type='hidden' name="group" value="{{idgroupe}}" id="idGroupe" />
-              <input type="hidden" name="idUser" id="idUser" value="{{sessionId}}" />
+              <input type="hidden" name="idUser" id="idUser" value="{{session['id']}}" />
               <input type='hidden' id='reponse' name='reponse' value="None" />
               <button onclick="suppTmpMsg" style="color:var(--NetB);background-color:var(--page-background);border: 0px solid var(--page-background); position: relative;" type="submit"><i class="fas fa-arrow-circle-up logoBouton" style="font-size: 20px;"></i></button>
               <div style="position: relative; width: 30px; cursor: pointer;">

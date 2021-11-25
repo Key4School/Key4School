@@ -86,7 +86,6 @@ def postMsg(json):
                         groupe = message['groupe']
 
                         users = groupe['utilisateurs']
-
                         ownHTML = render_template("widget_message.html", content=message, sessionId=session['id'], infogroupe=groupe, infoUtilisateurs=users, idgroupe=json['room'], user=User.get(
                             filter="cls.id == session['id']", limit=1))
                         otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe,
