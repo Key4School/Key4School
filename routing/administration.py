@@ -1,41 +1,37 @@
 from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
 from datetime import *
 from flask.json import jsonify
-from bson.objectid import ObjectId
 from db_poo import *
 from routing.functions import listeModeration, automoderation
 
+@db_session
 def administration():
-    global utilisateurs
-    global demandes_aide
-    global groupes
-    global Reponse
 
     if 'id' in session:
-        utilisateur = utilisateurs[session['id']].toDict()
+        utilisateur = User.get(filter="cls.id == session['id']", limit=1)
 
         if utilisateur['admin'] == True:
             if request.method == 'POST':
                 if request.form['demandeBut'] == 'Suppr':
-                    auteur = utilisateurs[str(demandes_aide[request.form['idSuppr']].toDict()['idAuteur'])]
-                    sanction = auteur.toDict()['Sanctions']
-                    demandes_aide[request.form['idSuppr']].delete()
-                    del demandes_aide[request.form['idSuppr']]
+                    auteur = User.get(filter="cls.id == Request.get(filter=\"cls.id == request.form['idSuppr']\", limit=1)['id_utilisateur']", limit=1)
+                    sanction = auteur['Sanctions']
+                    Request.get(filter="cls.id == request.form['idSuppr']", limit=1).delete()
                     auteur.addXP(-10)
                     auteur.addXpModeration(10)
                     sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": request.form['motif'], "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
                     auteur.update()
 
                 elif request.form['demandeBut'] == 'Val':
-                    demande = demandes_aide[request.form['idVal']]
-                    sign = demande.sign
+                    demande = Request.get(filter="cls.id == request.form['idVal']", limit=1)
+                    sign = demande['sign']
                     if request.form['motif'] == "abusif":
                         for content in sign:
                             if "/" not in str(content):
-                                utilisateurs[str(content)].addXpModeration(5)
-                                sanction = utilisateurs[str(content)].toDict()['Sanctions']
+                                user = User.get(filter="cls.id == content", limit=1)
+                                user.addXpModeration(5)
+                                sanction = user['Sanctions']
                                 sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
-                                utilisateurs[str(content)].update()
+                                user.update()
                     motif = demande.motif
                     for i in range (len(sign)):
                         if "/" not in str(sign[i]):
@@ -44,32 +40,34 @@ def administration():
                         if "/" not in str(motif[a]):
                             del motif[a]
 
-                    demandes_aide[request.form['idVal']].update()
+                    demande.update()
 
                 elif request.form['demandeBut'] == 'ValUser':
-                    user = utilisateurs[request.form['idValidé']]
+                    user = User.get(filter="cls.id == request.form['idValidé']", limit=1)
                     if request.form['motif'] == "abusif":
                         for content in user.sign:
-                            utilisateurs[str(content)].addXpModeration(5)
-                            sanction = utilisateurs[str(content)].toDict()['Sanctions']
+                            userSanction = User.get(filter="cls.id == content", limit=1)
+                            userSanction.addXpModeration(5)
+                            sanction = userSanction['Sanctions']
                             sanction.append({"SanctionType": "Aucune", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
-                            utilisateurs[str(content)].update()
+                            userSanction.update()
                     user.sign = []
                     user.motif = []
-                    utilisateurs[request.form['idValidé']].update()
+                    user.update()
 
                 elif request.form['demandeBut'] == 'SupprRep':
-                    demande = demandes_aide[request.form['idDemandSuppr']]
-                    auteur = utilisateurs[str(demandes_aide[request.form['idDemandSuppr']].toDict()['reponsesDict'][request.form['idSuppr']]['id-utilisateur'])]
+                    demande = Request.get(filter="cls.id == request.form['idDemandSuppr']", limit=1)
+                    reponse = Response.get(filter="cls.id == [request.form['idSuppr']", limit=1)
+                    auteur = User.get(filter="cls.id == reponse['id_utilisateur']", limit=1)
                     auteur.addXpModeration(5)
                     auteur.addXP(-15)
-                    sanction = auteur.toDict()['Sanctions']
+                    sanction = auteur['Sanctions']
                     sanction.append({"SanctionType": "Réponse supprimée", "SanctionMotif": request.form['motif'], "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
                     auteur.update()
 
-                    demande.reponses_associees.pop(request.form['idSuppr'])
-                    signDemande = demande.sign
-                    motifDemande = demande.motif
+                    reponse.delete()
+                    signDemande = demande['sign']
+                    motifDemande = demande['motif']
 
                     for i in range (len(signDemande)):
                         if str(request.form['idSuppr']+"/") in str(signDemande[i]):
@@ -80,67 +78,69 @@ def administration():
                     demande.update()
 
                 elif request.form['demandeBut'] == 'ValRep':
-                    demande = demandes_aide[request.form['idDemandVal']]
+                    demande = Request.get(filter="cls.id == request.form['idDemandVal']", limit=1)
+                    reponse = Response.get(filter="cls.id == [request.form['idVal']", limit=1)
                     signDemande = demande.sign
                     motifDemande = demande.motif
-                    sign =  demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign']
+                    sign =  reponse['sign']
                     print ('sign')
                     if request.form['motif'] == "abusif":
                         for content in sign :
-                                sanction = utilisateurs[str(content)].toDict()['Sanctions']
-                                utilisateurs[str(content)].addXpModeration(5)
-                                sanction.append({"SanctionType": "Aucune", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
-                    demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['sign'].clear()
-                    demandes_aide[request.form['idDemandVal']].toDict()['reponsesDict'][request.form['idVal']]['motif'].clear()
+                            userSanction = User.get(filter="cls.id == content", limit=1)
+                            sanction = userSanction['Sanctions']
+                            userSanction.addXpModeration(5)
+                            sanction.append({"SanctionType": "Aucune", "SanctionMotif": 'Signalement abusif', "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})
+                    reponse['sign'].clear()
+                    reponse['motif'].clear()
                     for i in range(len(signDemande)):
                         if str(request.form['idVal']+"/") in str(signDemande[i]):
                             del signDemande[i]
                     for a in range(len(motifDemande)):
                         if str(request.form['idVal']+"/") in str(motifDemande[a]):
                             del motifDemande[a]
-                    demandes_aide[request.form['idDemandVal']].update()
+                    demande.update()
+                    reponse.update()
 
                 elif request.form['demandeBut'] == 'supprDisc':
-                    groupe = groupes[request.form['idDiscSuppr']].toDict()
+                    groupe = Group.get(filter="cls.id == request.form['idDiscSuppr']", limit=1)
                     sign = groupe['sign']
                     motif = groupe['motif']
-                    for auteur in groupe['id-utilisateurs'] :
-                        utilisateurs[str(auteur)].addXpModeration(10)
+                    for auteur in groupe['id_utilisateurs'] :
+                        User.get(filter="cls.id == content", limit=1).addXpModeration(10)
 
                     sign.clear()
                     motif.clear()
-                    grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idDiscSuppr'])]
+                    grpMsg = Message.get(filter="cls.id_groupe == request.form['idDiscSuppr']")
                     for m in grpMsg:
-                        messages[str(m['_id'])].suppr()
+                        m.suppr()
 
-                            # messages[str(m['_id'])].update()
-                    groupes[request.form['idDiscSuppr']].update()
+                    groupe.update()
 
                 elif request.form['demandeBut'] == 'valDisc':
-                    groupe = groupes[request.form['idDiscVal']].toDict()
+                    groupe = Group.get(filter="cls.id == request.form['idDiscVal']", limit=1)
                     sign = groupe['sign']
                     motif = groupe['motif']
                     if request.form['motif'] == "abusif":
                         for content in sign:
-                                utilisateurs[str(content)].addXpModeration(5)
+                                User.get(filter="cls.id == content", limit=1).addXpModeration(5)
                     # on supprime son signalement
                     sign.clear()
                     motif.clear()
 
-                    grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idDiscVal'])]
+                    grpMsg = Message.get(filter="cls.id_groupe == request.form['idDiscVal']")
                     for m in grpMsg:
                         m['motif'].clear()
                         m['sign'].clear()
-                        messages[str(m['_id'])].update()
-                    groupes[request.form['idDiscVal']].update()
+                        m.update()
+                    groupe.update()
 
 
                 return 'sent'
 
             else:
-                demandeSignale = sorted([d.toDict() for d in demandes_aide.values() if d.sign != []], key = lambda d: len(d['sign']), reverse=True)
-                profilSignale = sorted([u.toDict() for u in utilisateurs.values() if u.sign != []], key = lambda u: len(u['sign']), reverse=True)
-                discussionSignale = sorted([g.toDict() for g in groupes.values() if g.sign != []], key = lambda g: len(g['sign']), reverse=True)
+                demandeSignale = sorted(Request.get(filter="cls.sign != '[]'"), key = lambda d: len(d['sign']), reverse=True)
+                profilSignale = User.get(filter="cls.sign != []", order_by="func.jsonb_array_length(cls.sign)", desc=True)
+                discussionSignale = sorted(Group.get(filter="cls.sign != '[]'"), key = lambda g: len(g['sign']), reverse=True)
                 return render_template('administration.html', user=utilisateur, demandeSignale=demandeSignale, profilSignale=profilSignale, discussionSignale=discussionSignale)
         else:
             return redirect(url_for('accueil'))
@@ -148,56 +148,51 @@ def administration():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def suppressionMsg():
-    global messages
-    global utilisateurs
-    global groupes
 
     if 'id' in session:
-        idGroupe = request.form['grp']
-        user = utilisateurs[session['id']].toDict()
-        msg = messages[request.form['msgSuppr']].toDict()
-        groupe = groupes[request.form['grp']].toDict()
+        user = User.get(filter="cls.id == session['id']", limit=1)
+        msg = Message.get(filter="cls.id == request.form['msgSuppr']", limit=1)
+        groupe = Group.get(filter="cls.id == request.form['grp']", limit=1)
         sign=groupe['sign']
         motif = groupe['motif']
-        # grp = Groupe[request.form['grp']].toDict()
-        if user['admin'] or user['type']=="ENSEIGNANT" or msg['id-utilisateur']==ObjectId(session['id']) or ObjectId(session['id'] in grp['moderateurs']):
+        if user['admin'] or user['type']=="ENSEIGNANT" or msg['id_utilisateur']==session['id'] or session['id'] in groupe['moderateurs']:
             if msg['sign'] != []:
-                sign.remove(ObjectId(request.form['msgSuppr']))
-                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['msgSuppr'])), -1)
+                sign.remove(request.form['msgSuppr'])
+                index = next((i for i, item in enumerate(motif) if item['id'] == request.form['msgSuppr']), -1)
                 del motif[index]
-            messages[request.form['msgSuppr']].suppr()
-            groupes[request.form['grp']].update()
+            msg.suppr()
+            groupe.update()
 
-        return redirect(url_for('page_messages', idGroupe=idGroupe))
+        return redirect(url_for('page_messages', idGroupe=request.form['grp']))
 
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def validerMsg():
-    global messages
-    global groupes
 
     if 'id' in session:
-        user = utilisateurs[session['id']].toDict()
+        user = User.get(filter="cls.id == session['id']", limit=1)
         idGroupe = request.form['grp']
 
         if user['admin']:
-            message = messages[request.form['msgVal']].toDict()
+            message = Message.get(filter="cls.id == request.form['msgVal']", limit=1)
             signMsg = message['sign']
             motifMsg = message['motif']
             signMsg.clear()
             motifMsg.clear()
-            groupe = groupes[request.form['grp']].toDict()
+            groupe = Group.get(filter="cls.id == request.form['grp']", limit=1)
             sign = groupe['sign']
             motif = groupe['motif']
-            sign.remove(ObjectId(request.form['msgVal']))
-            index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['msgVal'])), -1)
+            sign.remove(request.form['msgVal'])
+            index = next((i for i, item in enumerate(motif) if item['id'] == request.form['msgVal']), -1)
             del motif[index]
 
-            groupes[request.form['grp']].update()
-            messages[request.form['msgVal']].update()
+            groupe.update()
+            message.update()
 
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
@@ -205,41 +200,40 @@ def validerMsg():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def sanction():
-    global utilisateurs
 
     if 'id' in session:
-        utilisateur = utilisateurs[session['id']].toDict()
+        utilisateur = User.get(filter="cls.id == session['id']", limit=1)
+        userSanction = User.get(filter="cls.id == request.form['idSanctionné']", limit=1)
 
         if utilisateur['admin'] == True:
-            user = utilisateurs[request.form['idSanctionné']]
-            userDict = user.toDict()
-            sanctions = userDict['Sanctions']
+            sanctions = userSanction['Sanctions']
 
             sanctions.append({"SanctionType": request.form['Sanction'], "SanctionMotif": request.form['Raison'], "SanctionNext": request.form['Next'], "dateSanction" : datetime.now()})
 
             time = datetime.now() + timedelta(days= int(request.form['SanctionDuree']))
 
             if request.form['SanctionType'] == 'Spec' or request.form['SanctionType'] == 'SpecProfil' or request.form['SanctionType'] == 'SpecForum' or request.form['SanctionType'] == 'SpecMsg':
-                user.SanctionEnCour = request.form['SanctionType']
-                user.SanctionDuree = time
-                utilisateurs[request.form['idSanctionné']].addXpModeration(50)
+                userSanction['SanctionEnCour'] = request.form['SanctionType']
+                userSanction['SanctionDuree'] = time
+                userSanction.addXpModeration(50)
 
             elif request.form['SanctionType'] == 'ResetProfil':
                 MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
-                utilisateurs[request.form['idSanctionné']].addXpModeration(25)
+                User.get(filter="cls.id == request.form['idSanctionné']", limit=1).addXpModeration(25)
                 for a in MyImage:
-                    DB.db_files.delete_one({'_id': a['_id']})
-                    DB.db_chunks.delete_many({'files_id': a['_id']})
+                    DB.db_files.delete_one({'id': a['id']})
+                    DB.db_chunks.delete_many({'filesid': a['id']})
 
-                user.imgProfile = ''
-                user.nomImg = ''
-                user.pseudo = '{}_{}'.format(user.nom, user.prenom)
-                user.telephone = ''
-                user.interets = ''
-                user.email = ''
+                userSanction.imgProfile = ''
+                userSanction.nomImg = ''
+                userSanction.pseudo = '{}_{}'.format(user.nom, user.prenom)
+                userSanction.telephone = ''
+                userSanction.interets = ''
+                userSanction.email = ''
 
-            utilisateurs[request.form['idSanctionné']].update()
+            userSanction.update()
 
             return 'sent'
 
@@ -249,29 +243,29 @@ def sanction():
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
+@db_session
 def signPost():
-    global demandes_aide
 
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            demande = demandes_aide[request.form['idSignalé']].toDict()
+            demande = Request.get(filter="cls.id == request.form['idSignalé']", limit=1)
             sign = demande['sign']
             motif = demande['motif']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
-            if ObjectId(session['id']) in sign:
+            if session['id'] in sign:
                 # on supprime son signalement
-                sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
+                sign.remove(session['id'])
+                index = next((i for i, item in enumerate(motif) if item['id'] == session['id']), -1)
                 del motif[index]
 
             else:
                 # on ajoute son signalement
-                sign.append(ObjectId(session['id'])) # on ajoute son signalement
-                motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+                sign.append(session['id']) # on ajoute son signalement
+                motif.append({'id': session['id'], 'txt': request.form['Raison']})
 
-            demandes_aide[request.form['idSignalé']].update()
+            demande.update()
 
             return 'sent'
 
@@ -280,21 +274,22 @@ def signPost():
     else:
         abort(401) # non autorisé
 
+@db_session
 def signRepPost():
-    global demandes_aide
     if 'id' in session:
         if request.form['idSignalé'] != None and request.form['idDemandSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            demande = demandes_aide[request.form['idDemandSignalé']].toDict()
-            sign = demande['reponsesDict'][request.form['idSignalé']]['sign']
-            motif = demande['reponsesDict'][request.form['idSignalé']]['motif']
+            demande = Request.get(filter="cls.id == request.form['idDemandSignalé']", limit=1)
+            reponse = Response.get(filter="cls.id == request.form['idSignalé']", limit=1)
+            sign = reponse['sign']
+            motif = reponse['motif']
             signDemand = demande['sign']
             motifDemand = demande['motif']
 
-            if ObjectId(session['id']) in sign:
+            if session['id'] in sign:
                 # on supprime son signalement
-                sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
+                sign.remove(session['id'])
+                index = next((i for i, item in enumerate(motif) if item['id'] == session['id']), -1)
                 del motif[index]
                 signDemand.remove(request.form['idSignalé']+"/"+session['id'])
                 index = next((i for i, item in enumerate(motifDemand) if item['id'] == str(request.form['idSignalé'])+"/"+str(session['id'])), -1)
@@ -302,13 +297,14 @@ def signRepPost():
 
             else:
                 # on ajoute son signalement
-                sign.append(ObjectId(session['id'])) # on ajoute son signalement
-                motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+                sign.append(session['id']) # on ajoute son signalement
+                motif.append({'id': session['id'], 'txt': request.form['Raison']})
                 signDemand.append(request.form['idSignalé']+"/"+session['id'])
                 motifDemand.append({'id': request.form['idSignalé']+"/"+session['id'], 'txt': 'Réponse Signalée'})
 
 
-            demandes_aide[request.form['idDemandSignalé']].update()
+            demande.update()
+            reponse.update()
             return 'sent'
 
         else:
@@ -316,29 +312,29 @@ def signRepPost():
     else:
         abort(401) # non autorisé
 
+@db_session
 def signPostProfil():
-    global utilisateurs
 
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements de l'utilisateur
-            user = utilisateurs[request.form['idSignalé']].toDict()
+            user = User.get(filter="cls.id == request.form['idSignalé']", limit=1)
             sign = user['sign']
             motif = user['motif']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
-            if ObjectId(session['id']) in sign:
+            if session['id'] in sign:
                 # on supprime son signalement
-                sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
+                sign.remove(session['id'])
+                index = next((i for i, item in enumerate(motif) if item['id'] == session['id']), -1)
                 del motif[index]
 
             else:
                 # on ajoute son signalement
-                sign.append(ObjectId(session['id']))
-                motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+                sign.append(session['id'])
+                motif.append({'id': session['id'], 'txt': request.form['Raison']})
 
-            utilisateurs[request.form['idSignalé']].update()
+            user.update()
 
             return 'sent'
 
@@ -347,51 +343,50 @@ def signPostProfil():
     else:
         abort(401) # non autorisé
 
+@db_session
 def signPostDiscussion():
-    global messages
-    global groupes
 
     if 'id' in session:
         if request.form['idSignalé'] != None:
             # on récupère les signalements du groupe
-            groupe = groupes[request.form['idSignalé']].toDict()
+            groupe = Group.get(filter="cls.id == request.form['idSignalé']", limit=1)
             sign = groupe['sign']
             motif = groupe['motif']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
-            if ObjectId(session['id']) in sign:
+            if session['id'] in sign:
                 # on supprime son signalement
-                sign.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(session['id'])), -1)
+                sign.remove(session['id'])
+                index = next((i for i, item in enumerate(motif) if item['id'] == session['id']), -1)
                 del motif[index]
 
-                grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idSignalé'])]
+                grpMsg = Message.get(filter="cls.id_groupe == request.form['idSignalé']")
                 for m in grpMsg:
                     mSign = m['sign']
                     mMotif = m['motif']
 
-                    mSign.remove(ObjectId(session['id']))
-                    mIndex = next((i for i, item in enumerate(mMotif) if item['id'] == ObjectId(session['id'])), -1)
+                    mSign.remove(session['id'])
+                    mIndex = next((i for i, item in enumerate(mMotif) if item['id'] == session['id']), -1)
                     del mMotif[mIndex]
 
-                    messages[str(m['_id'])].update()
+                    m.update()
 
             else:
                 # on ajoute son signalement
-                sign.append(ObjectId(session['id']))
-                motif.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+                sign.append(session['id'])
+                motif.append({'id': session['id'], 'txt': request.form['Raison']})
 
-                grpMsg = [m.toDict() for m in messages.values() if m.id_groupe == ObjectId(request.form['idSignalé'])]
+                grpMsg = Message.get(filter="cls.id_groupe == request.form['idSignalé']")
                 for m in grpMsg:
                     mSign = m['sign']
                     mMotif = m['motif']
 
-                    mSign.append(ObjectId(session['id']))
-                    mMotif.append({'id': ObjectId(session['id']), 'txt': "Discussion signalée pour : "+request.form['Raison']})
+                    mSign.append(session['id'])
+                    mMotif.append({'id': session['id'], 'txt': "Discussion signalée pour : "+request.form['Raison']})
 
-                    messages[str(m['_id'])].update()
+                    m.update()
 
-            groupe = groupes[request.form['idSignalé']].update()
+            groupe.update()
 
             return 'sent'
 
@@ -400,42 +395,40 @@ def signPostDiscussion():
     else:
         abort(401) # non autorisé
 
+@db_session
 def signPostMsg():
-    global messages
-    global groupes
 
     if 'id' in session:
         if request.form['idSignalé'] != None and request.form['idMsgSignalé'] != None:
             # on récupère les signalements de la demande d'aide
-            groupe = groupes[request.form['idSignalé']].toDict()
+            groupe = Group.get(filter="cls.id == request.form['idSignalé']", limit=1)
             sign = groupe['sign']
             motif = groupe['motif']
-            message = messages[request.form['idMsgSignalé']].toDict()
+            message = Message.get(filter="cls.id == request.form['idMsgSignalé']", limit=1)
             signMsg = message['sign']
             motifMsg = message['motif']
 
             # on check mtn si l'utilisateur a déjà signalé la demande
-            if ObjectId(session['id']) in signMsg:
+            if session['id'] in signMsg:
                 # on retire son signalement
-                signMsg.remove(ObjectId(session['id']))
-                index = next((i for i, item in enumerate(motifMsg) if item['id'] == ObjectId(session['id'])), -1)
+                signMsg.remove(session['id'])
+                index = next((i for i, item in enumerate(motifMsg) if item['id'] == session['id']), -1)
                 del motifMsg[index]
-                sign.remove(ObjectId(request.form['idMsgSignalé']))
-                index = next((i for i, item in enumerate(motif) if item['id'] == ObjectId(request.form['idMsgSignalé'])), -1)
+                sign.remove(request.form['idMsgSignalé'])
+                index = next((i for i, item in enumerate(motif) if item['id'] == request.form['idMsgSignalé']), -1)
                 del motif[index]
 
             else:
                 # on ajoute son signalement
-                signMsg.append(ObjectId(session['id']))
-                motifMsg.append({'id': ObjectId(session['id']), 'txt': request.form['Raison']})
+                signMsg.append(session['id'])
+                motifMsg.append({'id': session['id'], 'txt': request.form['Raison']})
 
-                if not ObjectId(session['id']) in sign:
-                    sign.append(ObjectId(request.form['idMsgSignalé']))
-                    motif.append({'id': ObjectId(request.form['idMsgSignalé']), 'txt': "Message signalé : "+request.form['Raison']})
+                if not session['id'] in sign:
+                    sign.append(request.form['idMsgSignalé'])
+                    motif.append({'id': request.form['idMsgSignalé'], 'txt': "Message signalé : "+request.form['Raison']})
 
-                    groupes[request.form['idSignalé']].update()
-
-            messages[request.form['idMsgSignalé']].update()
+            groupe.update()
+            message.update()
 
             return 'sent'
 

@@ -161,7 +161,7 @@
             {{notif['groupe']['nom']}}
           {% else %}
             {% for u in notif['groupe']['utilisateurs'] %}
-              {% if u['_id'] != user['_id'] %}
+              {% if u['id'] != user['id'] %}
                 » {{u['pseudo']}}
               {% endif %}
             {% endfor %}
@@ -218,7 +218,7 @@
       <p style="color:#c6c7c7;">
         Pour changer vos préférences de notifications, <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/profil/" target="_blank">cliquez ici</a>
         <br>
-        Si le mail ne s'affiche pas correctement merci de <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/notif/{{user['_id']}}/{{notif['_id']}}" target="_blank">cliquer ici</a>
+        Si le mail ne s'affiche pas correctement merci de <a style="color:#a3a4a7;text-decoration: none;" href="https://key4school.herokuapp.com/notif/{{user['id']}}/{{notif['id']}}" target="_blank">cliquer ici</a>
       </p>
     </td>
     <td>

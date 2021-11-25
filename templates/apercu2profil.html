@@ -1,4 +1,4 @@
-<div id="apercu2profil{{varApercuProfil['_id']}}" class="box profil elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 41%;display:None;position: absolute;
+<div id="apercu2profil{{varApercuProfil['id']}}" class="box profil elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 41%;display:None;position: absolute;
     z-index: 1;">
   <article class="media">
     <div class="media-left">
@@ -13,7 +13,7 @@
       <div class="content">
           
         <div style="font-variant: small-caps;">
-          <a href="{{url_for('profil' ,idUser=varApercuProfil['_id'])}}">{{varApercuProfil['nom']}} {{varApercuProfil['prenom']}}</a>
+          <a href="{{url_for('profil' ,idUser=varApercuProfil['id'])}}">{{varApercuProfil['nom']}} {{varApercuProfil['prenom']}}</a>
         </div>
     <b>XP : </b>{{varApercuProfil['xp']}}<br />
     <b>Lycée{%if 'ELEVE' == 'ELEVE'%}/Classe{%endif%} : </b>{{varApercuProfil['lycee']}}{%if 'ELEVE' == 'ELEVE'%}/{{varApercuProfil['classe']}}{%endif%}<br />

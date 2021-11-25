@@ -5,7 +5,7 @@ width: 30%;
 {%else%}
 min-width: 20%;
 {%endif%}
-" id="msg{{content['_id']}}">
+" id="msg{{content['id']}}">
   <div style="align-self: flex-end;">
   {%else%}
 
@@ -15,24 +15,24 @@ min-width: 20%;
   {%else%}
   participantmsg
   {%endif%}
-  " id="msg{{content['_id']}}">
+  " id="msg{{content['id']}}">
     <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
   {%endif%}
-    {%if content['id-utilisateur']!=sessionId%}
-    <p style="font-weight: bold; font-variant:small-caps;margin:0px"><a href="{{url_for('profil' ,idUser=content['utilisateur']['_id'])}}">{{content['utilisateur']['pseudo']}}</a></p>
+    {%if content['id_utilisateur']!=sessionId%}
+    <p style="font-weight: bold; font-variant:small-caps;margin:0px"><a href="{{url_for('profil' ,idUser=content['utilisateur']['id'])}}">{{content['utilisateur']['pseudo']}}</a></p>
     {%endif%}
     <div class="navbar-item has-dropdown is-hoverable">
       <div class="navbar-link">
       </div>
-      {%if content['id-utilisateur']==sessionId%}
+      {%if content['id_utilisateur']==sessionId%}
       <div class="navbar-dropdown is-right" style="z-index: 20;">
       {%else%}
       <div class="navbar-dropdown" style="z-index: 20;">
       {%endif%}
-        {%if content['id-utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or 'ELEVE'== "ENSEIGNANT" or user['admin']== True%}
+        {%if content['id_utilisateur']==sessionId or sessionId in infogroupe['moderateurs'] or 'ELEVE'== "ENSEIGNANT" or user['admin']== True%}
         <div class="navbar-item">
           <form method="post" action="/suppressionMsg/" class="supprimer">
-            <input type='hidden' name="msgSuppr" value="{{content['_id']}}" />
+            <input type='hidden' name="msgSuppr" value="{{content['id']}}" />
             <input type='hidden' name="grp" value="{{idgroupe}}" />
             <input type='hidden' name="audio" value="{{content['audio']}}" />
             {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
@@ -48,7 +48,7 @@ min-width: 20%;
         {%if user['admin'] and content['sign'] != []%}
         <div class="navbar-item">
           <form method="post" action="/validationMsg/" class="valider" id="ValidationMsg">
-            <input type='hidden' name="msgVal" value="{{content['_id']}}" />
+            <input type='hidden' name="msgVal" value="{{content['id']}}" />
             <input type='hidden' name="grp" value="{{idgroupe}}" />
             <input type='hidden' name="audio" value="{{content['audio']}}" />
             {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
@@ -62,14 +62,14 @@ min-width: 20%;
         </div>
         {%endif%}
         <div class="navbar-item">
-          <button value="{{content['_id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
+          <button value="{{content['id']}}" onclick="reponseMsg(value)" class="button is-success is-outlined is-small">
             <span class="icon is-small">
               <i class="fas fa-reply"></i>
             </span>
             <span>Répondre</span>
           </button>
-          <input type="hidden" id="user{{content['_id']}}" value="{{content['utilisateur']['pseudo']}}" />
-          <input type="hidden" id="contenu{{content['_id']}}" value="
+          <input type="hidden" id="user{{content['id']}}" value="{{content['utilisateur']['pseudo']}}" />
+          <input type="hidden" id="contenu{{content['id']}}" value="
           {%if 'audio' in content and content['audio'] == True %}
           <i class='fas fa-volume-up'></i> Message Vocal
           {%elif 'image' in content and content['image'] != '' %}
@@ -80,12 +80,12 @@ min-width: 20%;
           " />
         </div>
         <div class="navbar-item">
-        <button  class="button is-warning is-outlined is-small" onClick="signalisationMsg('{{content['_id']}}');">
+        <button  class="button is-warning is-outlined is-small" onClick="signalisationMsg('{{content['id']}}');">
           <span class="icon is-small">
             {% if sessionId in content['sign'] %}
-              <i id="signMsg_{{content['_id']}}" class="fas fa-flag" aria-hidden="true"></i>
+              <i id="signMsg_{{content['id']}}" class="fas fa-flag" aria-hidden="true"></i>
             {% else %}
-              <i id="signMsg_{{content['_id']}}" class="far fa-flag" aria-hidden="true"></i>
+              <i id="signMsg_{{content['id']}}" class="far fa-flag" aria-hidden="true"></i>
             {% endif %}
           </span>
           <span>Signaler</span>
@@ -96,8 +96,8 @@ min-width: 20%;
   </div>
   {%if content['rep'] != None%}
   <div class="rep">
-    <div style="font-variant: small-caps;" ><a style="color:{{session['couleur'][0]}};"href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['_id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
-    <a onclick="goToMess('msg{{content['rep']['_id']}}');" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
+    <div style="font-variant: small-caps;" ><a style="color:{{session['couleur'][0]}};"href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
+    <a onclick="goToMess('msg{{content['rep']['id']}}');" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
       {%if 'audio' in content['rep'] and content['rep']['audio'] == True %}
       <i class="fas fa-volume-up"></i> Message Vocal
       {%elif 'image' in content['rep'] and content['rep']['image'] != '' %}
@@ -111,140 +111,140 @@ min-width: 20%;
     <p style="margin:0px;word-wrap:break-word;" class="BlackOrWhite">
       {%if 'audio' in content and content['audio'] == true %}
 
-      <div id="audio-player-container{{content['_id']}}" style="display: flex;justify-content:space-evenly;align-items: center;width: 100%;margin-top: 5px;">
-        <audio id="audio{{content['_id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
-        <button style="font-size:1.25rem;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['_id']}}" ><i class="color_audio fas fa-play"></i></button>
-        <input style="margin-right:2%; width: 60%; background: transparent;padding:0 2% 0 2%;" step="0.0001" type="range" id="seek-slider{{content['_id']}}" max="100" value="0">
-        <img id="img_msg_audio{{content['_id']}}" style="margin:0px;" class="img_msg_audio block" src="{%if 'nomImg' in content['utilisateur'] and content['utilisateur']['nomImg'] != '' %}{{url_for('userImg', profilImg = content['utilisateur']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" alt="photo de profile" />
-        <button class="none" style="font-size:1rem;min-width:42px; height: 35px; border:transparent;background-color:{{session['couleur'][2]}};border-radius: 15px;padding-top: 2%;padding-bottom: 2%; margin-right: 15px; margin-top: 5px;margin-bottom:5px; cursor: pointer;" id="buttonAudio{{content['_id']}}" onclick="changeRate('{{content['_id']}}');">1x</button>
+      <div id="audio-player-container{{content['id']}}" style="display: flex;justify-content:space-evenly;align-items: center;width: 100%;margin-top: 5px;">
+        <audio id="audio{{content['id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
+        <button style="font-size:1.25rem;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['id']}}" ><i class="color_audio fas fa-play"></i></button>
+        <input style="margin-right:2%; width: 60%; background: transparent;padding:0 2% 0 2%;" step="0.0001" type="range" id="seek-slider{{content['id']}}" max="100" value="0">
+        <img id="img_msg_audio{{content['id']}}" style="margin:0px;" class="img_msg_audio block" src="{%if 'nomImg' in content['utilisateur'] and content['utilisateur']['nomImg'] != '' %}{{url_for('userImg', profilImg = content['utilisateur']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" alt="photo de profile" />
+        <button class="none" style="font-size:1rem;min-width:42px; height: 35px; border:transparent;background-color:{{session['couleur'][2]}};border-radius: 15px;padding-top: 2%;padding-bottom: 2%; margin-right: 15px; margin-top: 5px;margin-bottom:5px; cursor: pointer;" id="buttonAudio{{content['id']}}" onclick="changeRate('{{content['id']}}');">1x</button>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-        <span class="none" style="margin:0px;" id="current-time{{content['_id']}}" class="time">0:00</span>
-        <span class="block" style="margin:0px;" id="duration{{content['_id']}}" class="time">0:00</span>
+        <span class="none" style="margin:0px;" id="current-time{{content['id']}}" class="time">0:00</span>
+        <span class="block" style="margin:0px;" id="duration{{content['id']}}" class="time">0:00</span>
         <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date-envoi'].day}}/{{content['date-envoi'].month}} à {{content['date-envoi'].hour}}h{{content['date-envoi'].minute}}</p>
       </div>
       <script>
-        document.getElementById('audio{{content['_id']}}').style.display='block';
-        const playIconContainer{{content['_id']}} = document.getElementById('play-icon{{content['_id']}}');
-        const buttonAudio{{content['_id']}} = document.getElementById('buttonAudio{{content['_id']}}');
-        const audioPlayerContainer{{content['_id']}} = document.getElementById('audio-player-container{{content['_id']}}');
-        const seekSlider{{content['_id']}} = document.getElementById('seek-slider{{content['_id']}}');
-        let playState{{content['_id']}} = '<i class="fas fa-pause  color_audio"></i>';
+        document.getElementById('audio{{content['id']}}').style.display='block';
+        const playIconContainer{{content['id']}} = document.getElementById('play-icon{{content['id']}}');
+        const buttonAudio{{content['id']}} = document.getElementById('buttonAudio{{content['id']}}');
+        const audioPlayerContainer{{content['id']}} = document.getElementById('audio-player-container{{content['id']}}');
+        const seekSlider{{content['id']}} = document.getElementById('seek-slider{{content['id']}}');
+        let playState{{content['id']}} = '<i class="fas fa-pause  color_audio"></i>';
 
-        playIconContainer{{content['_id']}}.addEventListener('click', () => {
-            if(playState{{content['_id']}} === '<i class="fas fa-play  color_audio"></i>') {
-                audio{{content['_id']}}.pause();
-                cancelAnimationFrame(raf{{content['_id']}});
-                console.log($('img_msg_audio{{content['_id']}}'));
-                $('#buttonAudio{{content['_id']}}').removeClass('block');
-                $('#buttonAudio{{content['_id']}}').addClass('none');
-                $('#img_msg_audio{{content['_id']}}').removeClass('none');
-                $('#img_msg_audio{{content['_id']}}').addClass('block');
-                $('#current-time{{content['_id']}}').removeClass('block');
-                $('#current-time{{content['_id']}}').addClass('none');
-                $('#duration{{content['_id']}}').removeClass('none');
-                $('#duration{{content['_id']}}').addClass('block');
-                playState{{content['_id']}} = '<i class="fas fa-pause  color_audio"></i>';
-                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play  color_audio"></i>';
+        playIconContainer{{content['id']}}.addEventListener('click', () => {
+            if(playState{{content['id']}} === '<i class="fas fa-play  color_audio"></i>') {
+                audio{{content['id']}}.pause();
+                cancelAnimationFrame(raf{{content['id']}});
+                console.log($('img_msg_audio{{content['id']}}'));
+                $('#buttonAudio{{content['id']}}').removeClass('block');
+                $('#buttonAudio{{content['id']}}').addClass('none');
+                $('#img_msg_audio{{content['id']}}').removeClass('none');
+                $('#img_msg_audio{{content['id']}}').addClass('block');
+                $('#current-time{{content['id']}}').removeClass('block');
+                $('#current-time{{content['id']}}').addClass('none');
+                $('#duration{{content['id']}}').removeClass('none');
+                $('#duration{{content['id']}}').addClass('block');
+                playState{{content['id']}} = '<i class="fas fa-pause  color_audio"></i>';
+                playIconContainer{{content['id']}}.innerHTML = '<i class="fas fa-play  color_audio"></i>';
             } else {
-                audio{{content['_id']}}.play();
-                requestAnimationFrame(whilePlaying{{content['_id']}});
-                $('#buttonAudio{{content['_id']}}').removeClass('none');
-                $('#buttonAudio{{content['_id']}}').addClass('block');
-                $('#img_msg_audio{{content['_id']}}').removeClass('block');
-                $('#img_msg_audio{{content['_id']}}').addClass('none');
-                $('#current-time{{content['_id']}}').removeClass('none');
-                $('#current-time{{content['_id']}}').addClass('block');
-                $('#duration{{content['_id']}}').removeClass('block');
-                $('#duration{{content['_id']}}').addClass('none');
-                playState{{content['_id']}} = '<i class="fas fa-play  color_audio"></i>';
-                playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-pause  color_audio"></i>';
+                audio{{content['id']}}.play();
+                requestAnimationFrame(whilePlaying{{content['id']}});
+                $('#buttonAudio{{content['id']}}').removeClass('none');
+                $('#buttonAudio{{content['id']}}').addClass('block');
+                $('#img_msg_audio{{content['id']}}').removeClass('block');
+                $('#img_msg_audio{{content['id']}}').addClass('none');
+                $('#current-time{{content['id']}}').removeClass('none');
+                $('#current-time{{content['id']}}').addClass('block');
+                $('#duration{{content['id']}}').removeClass('block');
+                $('#duration{{content['id']}}').addClass('none');
+                playState{{content['id']}} = '<i class="fas fa-play  color_audio"></i>';
+                playIconContainer{{content['id']}}.innerHTML = '<i class="fas fa-pause  color_audio"></i>';
             }
         });
 
-        const showRangeProgress{{content['_id']}} = (rangeInput{{content['_id']}}) => {
-            if(rangeInput{{content['_id']}} === seekSlider{{content['_id']}})
-              audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', rangeInput{{content['_id']}}.value / rangeInput{{content['_id']}}.max * 100 + '%');
+        const showRangeProgress{{content['id']}} = (rangeInput{{content['id']}}) => {
+            if(rangeInput{{content['id']}} === seekSlider{{content['id']}})
+              audioPlayerContainer{{content['id']}}.style.setProperty('--seek-before-width', rangeInput{{content['id']}}.value / rangeInput{{content['id']}}.max * 100 + '%');
         };
 
-        seekSlider{{content['_id']}}.addEventListener('input', (e) => {
-            showRangeProgress{{content['_id']}}(e.target);
+        seekSlider{{content['id']}}.addEventListener('input', (e) => {
+            showRangeProgress{{content['id']}}(e.target);
         });
-        const audio{{content['_id']}} = document.querySelector('#audio{{content['_id']}}');
-        const durationContainer{{content['_id']}} = document.getElementById('duration{{content['_id']}}');
-        const currentTimeContainer{{content['_id']}} = document.getElementById('current-time{{content['_id']}}');
-        let raf{{content['_id']}} = null;
+        const audio{{content['id']}} = document.querySelector('#audio{{content['id']}}');
+        const durationContainer{{content['id']}} = document.getElementById('duration{{content['id']}}');
+        const currentTimeContainer{{content['id']}} = document.getElementById('current-time{{content['id']}}');
+        let raf{{content['id']}} = null;
 
-        const calculateTime{{content['_id']}} = (secs) => {
+        const calculateTime{{content['id']}} = (secs) => {
             const minutes = Math.floor(secs / 60);
             const seconds = Math.floor(secs % 60);
             const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
             return `${minutes}:${returnedSeconds}`;
         }
 
-        const displayDuration{{content['_id']}} = () => {
-            durationContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(audio{{content['_id']}}.duration);
+        const displayDuration{{content['id']}} = () => {
+            durationContainer{{content['id']}}.textContent = calculateTime{{content['id']}}(audio{{content['id']}}.duration);
         }
 
-        const setSliderMax{{content['_id']}} = () => {
-            seekSlider{{content['_id']}}.max = Math.floor(audio{{content['_id']}}.duration);
+        const setSliderMax{{content['id']}} = () => {
+            seekSlider{{content['id']}}.max = Math.floor(audio{{content['id']}}.duration);
         }
 
-        const displayBufferedAmount{{content['_id']}} = () => {
-            const bufferedAmount{{content['_id']}} = Math.floor(audio{{content['_id']}}.buffered.end(audio{{content['_id']}}.buffered.length - 1));
-            audioPlayerContainer{{content['_id']}}.style.setProperty('--buffered-width', `${(bufferedAmount{{content['_id']}} / seekSlider{{content['_id']}}.max) * 100}%`);
+        const displayBufferedAmount{{content['id']}} = () => {
+            const bufferedAmount{{content['id']}} = Math.floor(audio{{content['id']}}.buffered.end(audio{{content['id']}}.buffered.length - 1));
+            audioPlayerContainer{{content['id']}}.style.setProperty('--buffered-width', `${(bufferedAmount{{content['id']}} / seekSlider{{content['id']}}.max) * 100}%`);
         }
 
-        const whilePlaying{{content['_id']}} = () => {
-            seekSlider{{content['_id']}}.value = audio{{content['_id']}}.currentTime;
-            console.log(audio{{content['_id']}}.currentTime);
-            currentTimeContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(seekSlider{{content['_id']}}.value);
-            audioPlayerContainer{{content['_id']}}.style.setProperty('--seek-before-width', `${seekSlider{{content['_id']}}.value / seekSlider{{content['_id']}}.max * 100}%`);
-            raf{{content['_id']}} = requestAnimationFrame(whilePlaying{{content['_id']}});
+        const whilePlaying{{content['id']}} = () => {
+            seekSlider{{content['id']}}.value = audio{{content['id']}}.currentTime;
+            console.log(audio{{content['id']}}.currentTime);
+            currentTimeContainer{{content['id']}}.textContent = calculateTime{{content['id']}}(seekSlider{{content['id']}}.value);
+            audioPlayerContainer{{content['id']}}.style.setProperty('--seek-before-width', `${seekSlider{{content['id']}}.value / seekSlider{{content['id']}}.max * 100}%`);
+            raf{{content['id']}} = requestAnimationFrame(whilePlaying{{content['id']}});
         }
 
-        if (audio{{content['_id']}}.readyState >= 4) {
-            displayDuration{{content['_id']}}();
-            setSliderMax{{content['_id']}}();
-            displayBufferedAmount{{content['_id']}}();
+        if (audio{{content['id']}}.readyState >= 4) {
+            displayDuration{{content['id']}}();
+            setSliderMax{{content['id']}}();
+            displayBufferedAmount{{content['id']}}();
         } else {
-            audio{{content['_id']}}.addEventListener('loadedmetadata', async () => {
+            audio{{content['id']}}.addEventListener('loadedmetadata', async () => {
                 // A LAISSER ABSOLUMENT => fix bugs Chrome
-                while(audio{{content['_id']}}.duration === Infinity) {
+                while(audio{{content['id']}}.duration === Infinity) {
                   await new Promise(r => setTimeout(r, 200));
-                  audio{{content['_id']}}.currentTime = 10000000*Math.random();
-                  audio{{content['_id']}}.currentTime = 0;
+                  audio{{content['id']}}.currentTime = 10000000*Math.random();
+                  audio{{content['id']}}.currentTime = 0;
                 }
 
-                displayDuration{{content['_id']}}();
-                setSliderMax{{content['_id']}}();
-                displayBufferedAmount{{content['_id']}}();
+                displayDuration{{content['id']}}();
+                setSliderMax{{content['id']}}();
+                displayBufferedAmount{{content['id']}}();
             });
         }
 
-        audio{{content['_id']}}.addEventListener('progress', displayBufferedAmount{{content['_id']}});
+        audio{{content['id']}}.addEventListener('progress', displayBufferedAmount{{content['id']}});
 
-        seekSlider{{content['_id']}}.addEventListener('input', () => {
-            currentTimeContainer{{content['_id']}}.textContent = calculateTime{{content['_id']}}(seekSlider{{content['_id']}}.value);
-            if(!audio{{content['_id']}}.paused) {
-                cancelAnimationFrame(raf{{content['_id']}});
+        seekSlider{{content['id']}}.addEventListener('input', () => {
+            currentTimeContainer{{content['id']}}.textContent = calculateTime{{content['id']}}(seekSlider{{content['id']}}.value);
+            if(!audio{{content['id']}}.paused) {
+                cancelAnimationFrame(raf{{content['id']}});
             }
         });
 
-        seekSlider{{content['_id']}}.addEventListener('change', () => {
-            audio{{content['_id']}}.currentTime = seekSlider{{content['_id']}}.value;
-            if(!audio{{content['_id']}}.paused) {
-                requestAnimationFrame(whilePlaying{{content['_id']}});
+        seekSlider{{content['id']}}.addEventListener('change', () => {
+            audio{{content['id']}}.currentTime = seekSlider{{content['id']}}.value;
+            if(!audio{{content['id']}}.paused) {
+                requestAnimationFrame(whilePlaying{{content['id']}});
             }
         });
 
-        audio{{content['_id']}}.addEventListener("ended", function(){
-             audio{{content['_id']}}.currentTime = 0;
-             playState{{content['_id']}} = '<i class="fas fa-pause  color_audio"></i>';
-             playIconContainer{{content['_id']}}.innerHTML = '<i class="fas fa-play  color_audio"></i>';
-             audio{{content['_id']}}.pause();
-             cancelAnimationFrame(raf{{content['_id']}});
-             seekSlider{{content['_id']}}.value = 0;
+        audio{{content['id']}}.addEventListener("ended", function(){
+             audio{{content['id']}}.currentTime = 0;
+             playState{{content['id']}} = '<i class="fas fa-pause  color_audio"></i>';
+             playIconContainer{{content['id']}}.innerHTML = '<i class="fas fa-play  color_audio"></i>';
+             audio{{content['id']}}.pause();
+             cancelAnimationFrame(raf{{content['id']}});
+             seekSlider{{content['id']}}.value = 0;
         });
       </script>
       {%elif content['image'] != '' %}

@@ -1,18 +1,18 @@
-<div id="divDemande_{{d['idMsg']}}" class="box demande elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;" data-subject="{{d['tag-matière']}}">
+<div id="divDemande_{{d['id']}}" class="box demande elem" style="border-radius: 20px; margin-bottom: 0.8rem; width: 100%;" data-subject="{{d['tag-matière']}}">
   <article class="media">
     <div class="media-left">
-      
+
         <img alt="user" class="ImagePublication" src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
           style="object-fit: cover;border-radius: 50%;" />
     </div>
-    
+
     <div class="media-content contentPublicationTaille">
       <div class="content">
         <p style="margin-bottom: 5px;">
-          
+
         <div style="font-variant: small-caps;">
           {%set varApercuProfil = d['user']%}
-          <a href="{{url_for('profil' ,idUser=d['user']['_id'])}}" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');">{{d['user']['nom']}} {{d['user']['prenom']}}{% include 'apercu2profil.html' with context %}</a>
+          <a href="{{url_for('profil' ,idUser=d['user']['id'])}}" onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');">{{d['user']['nom']}} {{d['user']['prenom']}}{% include 'apercu2profil.html' with context %}</a>
           <span style="display: inline-block; margin-right: 40px;"></span>{{d['matière']}}
           {% if d['resolu'] %}
             <span style="color: #20A565;"><span style="display: inline-block; margin-right: 40px;"></span><i class="fas fa-check-circle"></i> Résolu !</span>
@@ -20,54 +20,54 @@
         </div>
         <small><em>@{{d['user']['pseudo']}}</em></small> <small>{{d['temps']}}</small>
         </p>
-        
-        <h4 style="margin-top: 0;"><a href="/comments/{{d['idMsg']}}">{{d['titre']|safe}}</a></h4>
-        
-        <p style="word-wrap:break-word;"><div id="contenu{{d['idMsg']}}">{{d['contenu']|safe}}</div></p>
+
+        <h4 style="margin-top: 0;"><a href="/comments/{{d['id']}}">{{d['titre']|safe}}</a></h4>
+
+        <p style="word-wrap:break-word;"><div id="contenu{{d['id']}}">{{d['contenuLink']|safe}}</div></p>
         </p>
         {% if d['fileType'] == 'image' %}
-        <a href="/DL_file/DemandeFile_{{d['idMsg']}}/image/" target="_blank" title="appuyer dessus pour l'ouvir dans un nouvel onglet">
-          <img src="/file/DemandeFile_{{d['idMsg']}}/" style="max-width: 100%; max-height: 25vh;" />
+        <a href="/DL_file/DemandeFile_{{d['id']}}/image/" target="_blank" title="appuyer dessus pour l'ouvir dans un nouvel onglet">
+          <img src="/file/DemandeFile_{{d['id']}}/" style="max-width: 100%; max-height: 25vh;" />
         </a>
         {% elif d['fileType'] == 'pdf' %}
-        <a href="/DL_file/DemandeFile_{{d['idMsg']}}/pdf/" target="_blank" title="appuyer dessus pour l'ouvir dans un nouvel onglet">
+        <a href="/DL_file/DemandeFile_{{d['id']}}/pdf/" target="_blank" title="appuyer dessus pour l'ouvir dans un nouvel onglet">
           <i class="fas fa-file-pdf" style="font-size: 36px; margin-right: 15px;"></i><span>1 fichier PDF joint</span>
         </a>
         {% endif %}
       </div>
-      
+
       <nav class="level is-mobile">
         <div class="level-left">
-          <a class="level-item" aria-label="like" onClick="like('{{d['idMsg']}}')">
+          <a class="level-item" aria-label="like" onClick="like('{{d['id']}}')">
             <span class="icon">
               {% if d['a_like'] %}
-              <i id="like_{{d['idMsg']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
+              <i id="like_{{d['id']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb_likes']}}</i>
               {% else %}
-              <i id="like_{{d['idMsg']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb-likes']}}</i>
+              <i id="like_{{d['id']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb_likes']}}</i>
               {% endif %}
             </span>
           </a>&emsp;&ensp;
-          <a class="level-item" style="margin-left:2%;" aria-label="comment" href="/comments/{{d['idMsg']}}">
+          <a class="level-item" style="margin-left:2%;" aria-label="comment" href="/comments/{{d['id']}}">
             <span class="icon is-small">
-              <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">&nbsp;{{d['réponses associées']|length}}</i>
+              <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">&nbsp;{{d['nb_comment']}}</i>
             </span>
           </a>&emsp;&ensp;
-          <a class="level-item" style="margin-left:2%;" aria-label="enregistrer" onClick="save('{{d['idMsg']}}')">
+          <a class="level-item" style="margin-left:2%;" aria-label="enregistrer" onClick="save('{{d['id']}}')">
             <span class="icon is-small">
               {% if d['a_save'] %}
-              <i id="save_{{d['idMsg']}}" style="color:{{session['couleur'][2]}};font-size: 20px;" class="fas fa-bookmark" aria-hidden="true"></i>
+              <i id="save_{{d['id']}}" style="color:{{session['couleur'][2]}};font-size: 20px;" class="fas fa-bookmark" aria-hidden="true"></i>
               {% else %}
-              <i id="save_{{d['idMsg']}}" style="color:{{session['couleur'][2]}};font-size: 20px;" class="far fa-bookmark" aria-hidden="true"></i>
+              <i id="save_{{d['id']}}" style="color:{{session['couleur'][2]}};font-size: 20px;" class="far fa-bookmark" aria-hidden="true"></i>
               {% endif %}
             </span>
             <span class="saveCaption" style="color:{{session['couleur'][2]}};font-size: 17px; margin-left: 5px;">Enregistrer</span>
           </a>
-          <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['idMsg']}}')">
+          <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['id']}}')">
               <span class="icon is-small">
                 {% if d['a_sign'] %}
-                  <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
+                  <i id="sign_{{d['id']}}" class="fas fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
                 {% else %}
-                  <i id="sign_{{d['idMsg']}}" class="far fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
+                  <i id="sign_{{d['id']}}" class="far fa-flag" aria-hidden="true" style="padding-left: 5px;"></i>
                 {% endif %}
               </span>
             </a> -->
@@ -75,24 +75,24 @@
       </nav>
     </div>
     <div class="boutonPubliOrdi" style="flex-direction: column;align-items: flex-end;">
-      
+
       <div class="navbar-item">
-        <button class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
+        <button class="button is-warning is-outlined is-small" onClick="sign('{{d['id']}}')">
           <span class="icon is-small">
             {% if d['a_sign'] %}
-            <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true"></i>
+            <i id="sign_{{d['id']}}" class="fas fa-flag" aria-hidden="true"></i>
             {% else %}
-            <i id="sign_{{d['idMsg']}}" class="far fa-flag" aria-hidden="true"></i>
+            <i id="sign_{{d['id']}}" class="far fa-flag" aria-hidden="true"></i>
             {% endif %}
           </span>
           <span>Signaler</span>
         </button>
         <input type="hidden" />
       </div>
-      
-      {% if d['idAuteur'] == user['_id'] %}
+
+      {% if d['id_utilisateur'] == user['id'] %}
       <div class="navbar-item">
-        <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['idMsg']}}')">
+        <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['id']}}')">
           <span class="icon is-small">
             {% if d['resolu'] %}
             <i class="fas fa-check-square" aria-hidden="true"></i>
@@ -104,9 +104,9 @@
         </button>
         <input type="hidden" />
       </div>
-      
+
       <div class="navbar-item">
-        <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['idMsg']}}');">
+        <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['id']}}');">
           <span class="icon is-small">
             <i class="fas fa-pen" aria-hidden="true"></i>
           </span>
@@ -118,7 +118,7 @@
       {%endif%}
       {%if user['admin']==true%}
         <div class="navbar-item">
-          <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
+          <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['id']}}')">
             <span class="icon is-small">
               <i class="fas fa-times"></i>
             </span>
@@ -128,7 +128,7 @@
         </div>
         {%if d['sign'] != []%}
           <div class="navbar-item">
-            <button class="button is-success is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
+            <button class="button is-success is-outlined is-small" onClick="validation('{{d['id']}}')">
               <span class="icon is-small">
                 <i class="fas fa-check"></i>
               </span>
@@ -144,24 +144,24 @@
         <a class="navbar-link">
         </a>
         <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;">
-          
+
           <div class="navbar-item">
-            <button class="button is-warning is-outlined is-small" onClick="sign('{{d['idMsg']}}')">
+            <button class="button is-warning is-outlined is-small" onClick="sign('{{d['id']}}')">
               <span class="icon is-small">
                 {% if d['a_sign'] %}
-                <i id="sign_{{d['idMsg']}}" class="fas fa-flag" aria-hidden="true"></i>
+                <i id="sign_{{d['id']}}" class="fas fa-flag" aria-hidden="true"></i>
                 {% else %}
-                <i id="sign_{{d['idMsg']}}" class="far fa-flag" aria-hidden="true"></i>
+                <i id="sign_{{d['id']}}" class="far fa-flag" aria-hidden="true"></i>
                 {% endif %}
               </span>
               <span>Signaler</span>
             </button>
             <input type="hidden" />
           </div>
-          
-          {% if d['idAuteur'] == user['_id'] %}
+
+          {% if d['id_utilisateur'] == user['id'] %}
           <div class="navbar-item">
-            <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['idMsg']}}')">
+            <button class="button is-success is-outlined is-small" onClick="resoudre('{{d['id']}}')">
               <span class="icon is-small">
                 {% if d['resolu'] %}
                 <i class="fas fa-check-square" aria-hidden="true"></i>
@@ -174,7 +174,7 @@
             <input type="hidden" />
           </div>
           <div class="navbar-item">
-          <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['idMsg']}}');">
+          <button class="button is-link is-outlined is-small" onclick="DemandModificationOpen('{{d['id']}}');">
             <span class="icon is-small">
               <i class="fas fa-pen" aria-hidden="true"></i>
             </span>
@@ -186,7 +186,7 @@
           {% endif %}
           {%if user['admin']==true%}
             <div class="navbar-item">
-              <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['idMsg']}}')">
+              <button class="button is-danger is-outlined is-small" onClick="suppression('{{d['id']}}')">
                 <span class="icon is-small">
                   <i class="fas fa-times"></i>
                 </span>
@@ -196,7 +196,7 @@
             </div>
             {%if d['sign'] != []%}
               <div class="navbar-item">
-                <button class="button is-success is-outlined is-small" onClick="validation('{{d['idMsg']}}')">
+                <button class="button is-success is-outlined is-small" onClick="validation('{{d['id']}}')">
                   <span class="icon is-small">
                     <i class="fas fa-check"></i>
                   </span>

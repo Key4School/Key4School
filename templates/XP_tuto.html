@@ -9,13 +9,13 @@
 <body style="text-align: center;">
     <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
 
-      <progress class="progress is-info" value={{xplvl}} max="100" style="width:250px;margin:auto;">70%</progress>
+      <progress class="progress is-info" value="{{user['xplvl']}}" max="100" style="width:250px;margin:auto;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <p>
         NIV:
-        {{niv}}
+        {{user['niv']}}
         XP :
-        {{xp}}
+        {{user['xp']}}
       </p>
     </div>
   <div class="ChoixCouleur" style="margin-top:0%;margin-right:0%;">
@@ -35,7 +35,7 @@
 
       <label class="radio" title="Niveau 2 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
-          {%if niv < 2%}
+          {%if user['niv'] < 2%}
             <i style="opacity: .8;" class="fas fa-lock"></i>
           {% else %}
             <input type="radio" name="couleur" value="1" {%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}checked{%endif%}>
@@ -49,7 +49,7 @@
 
       <label class="radio" title="Niveau 3 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
-          {% if niv < 3 %}
+          {% if user['niv'] < 3 %}
             <i style="opacity: .8;" class="fas fa-lock"></i>
           {% else %}
             <input type="radio" name="couleur" value="2" {%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}checked{%endif%}>
@@ -63,7 +63,7 @@
 
       <label class="radio" title="Niveau 4 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
-          {% if niv < 4 %}
+          {% if user['niv'] < 4 %}
             <i style="opacity: .8;" class="fas fa-lock"></i>
           {% else %}
             <input type="radio" name="couleur" value="3" {%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}checked{%endif%}>
@@ -77,7 +77,7 @@
 
       <label class="radio" title="Niveau 5 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
-          {% if niv < 5 %}
+          {% if user['niv'] < 5 %}
             <i style="opacity: .8;" class="fas fa-lock"></i>
           {% else %}
             <input type="radio" name="couleur" value="4" {%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}checked{%endif%}>
@@ -90,7 +90,7 @@
       <br />
       <label class="radio" title="Niveau 5 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
-          {% if niv < 5 %}
+          {% if user['niv'] < 5 %}
             <i style="opacity: .8;" class="fas fa-lock"></i>
           {% else %}
             <input type="radio" name="couleur" value="5" {%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>
@@ -103,7 +103,7 @@
       <br />
       <label class="radio" title="Niveau 5 requis">
         <div style="display: flex;align-items: center;justify-content:space-evenly;">
-          {% if niv < 5 %}
+          {% if user['niv'] < 5 %}
             <i style="opacity: .8;" class="fas fa-lock"></i>
           {% else %}
             <input type="radio" name="couleur" value="6" {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
@@ -113,9 +113,9 @@
               session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
               session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>
           {% endif %}&nbsp;&nbsp;
-          <input id="couleur" type="color" name="color1" value="{{session['couleur'][0]}}" {% if niv < 5 %} disabled {%endif%} />&nbsp;
-          <input id="couleur" type="color" name="color2" value="{{session['couleur'][1]}}" {% if niv < 5 %} disabled {%endif%} />&nbsp;
-          <input id="couleur" type="color" name="color3" value="{{session['couleur'][2]}}" {% if niv < 5 %} disabled {%endif%} />&nbsp;
+          <input id="couleur" type="color" name="color1" value="{{session['couleur'][0]}}" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
+          <input id="couleur" type="color" name="color2" value="{{session['couleur'][1]}}" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
+          <input id="couleur" type="color" name="color3" value="{{session['couleur'][2]}}" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
 
         </div>
       </label>

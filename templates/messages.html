@@ -261,12 +261,12 @@
                 </div>
                 <div id="listeuser" style="position: relative;overflow:auto; max-height: 500px;">
                   {% for user in users %}
-                  {% if not sessionId == user['_id'] %}
+                  {% if not sessionId == user['id'] %}
                   {%set varApercuProfil = user%}
-                  <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
+                  <div class="listedUser" data-id="{{user['id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
                     data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
-                    <input onClick="checkboxTitle();" type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
-                    <label class="survolPseudoCreationGroupe" onmouseover="apercuProfil('{{varApercuProfil['_id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['_id']}}');" for="user_{{user['_id']}}">{{user['pseudo']}}{% include 'apercu2profil_creationGroupe.html' with context %}</label>
+                    <input onClick="checkboxTitle();" type="checkbox" id="user_{{user['id']}}" name="{{user['id']}}" style="margin-right: 18px;" />
+                    <label class="survolPseudoCreationGroupe" onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');" for="user_{{user['id']}}">{{user['pseudo']}}{% include 'apercu2profil_creationGroupe.html' with context %}</label>
                     <br>
                   </div>
                   {% endif %}
@@ -285,10 +285,10 @@
           <tbody>
 
             {%for content in grpUtilisateur%}
-              <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['_id']}}"
+              <tr class="listedGrp" data-grpName="{{content['nom']}}" data-grpID="{{content['id']}}"
                 data-grpUsers='[{% for user in content["utilisateurs"] %}{"pseudo": "{{user["pseudo"]}}", "prenom": "{{user["prenom"]}}", "nom": "{{user["nom"]}}"},{% endfor %}{"pseudo":"","prenom":"","nom":""}]'>
                 <td style="max-width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-                  <a style="display: block; text-overflow: ellipsis; overflow: hidden; width: 100%; height: 100%;" class="liengroupe {%if content['_id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['_id'])}}">
+                  <a style="display: block; text-overflow: ellipsis; overflow: hidden; width: 100%; height: 100%;" class="liengroupe {%if content['id']|string==idgroupe%}current{%endif%}" href="{{url_for('page_messages', idGroupe=content['id'])}}">
                     <div class="grpName has-addons is-medium" style="white-space: nowrap;text-overflow: ellipsis;width: 100%; overflow: hidden; margin-top: 5px;margin-bottom: 5px;">
 
                       {%if content['nbNotif'] > 0%}
@@ -300,7 +300,7 @@
                       {% if not content['is_DM'] %}
                         {% if content['nom']=="" %}
                         {% for u in content['utilisateurs'] %}
-                          {% if u['_id'] != sessionId %}
+                          {% if u['id'] != sessionId %}
                             {{u['pseudo']}}
                           {% endif %}
                         {% endfor %}
@@ -310,7 +310,7 @@
                       {% else %}
 
                         {% for u in content['utilisateurs'] %}
-                          {% if u['_id'] != sessionId %}
+                          {% if u['id'] != sessionId %}
                             {{u['pseudo']}}
                           {% endif %}
                         {% endfor %}
@@ -359,7 +359,7 @@
       <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative; width: 100%;">
             {% if infogroupe['nom']=="" or infogroupe['is_DM'] %}
               {% for u in infogroupe['utilisateurs'] %}
-                {% if u['_id'] != sessionId %}
+                {% if u['id'] != sessionId %}
                   <div id="divDansTitregroupe_DM">
                     <div id="groupHeader" style="display: flex; align-items:center;justify-content:space-between;">
                       <p id="groupTitle" style="font-weight:bold; display: flex;align-items:center"><a href="/messages/" id="backButton" style="margin-right: 12px; color: var(--text-color);"><i class="fas fa-chevron-circle-left"></i></a>
@@ -377,7 +377,7 @@
               {% if not infogroupe['is_DM'] %}
                 {% if infogroupe['nom']=="" %}
                   {% for u in infogroupe['utilisateurs'] %}
-                    {% if u['_id'] != sessionId %}
+                    {% if u['id'] != sessionId %}
                       {{u['pseudo']}}
                     {% endif %}
                   {% endfor %}
@@ -386,7 +386,7 @@
                 {% endif %}
               {% else %}
                 {% for u in infogroupe['utilisateurs'] %}
-                  {% if u['_id'] != sessionId %}
+                  {% if u['id'] != sessionId %}
                     {{u['pseudo']}}
                   {% endif %}
                 {% endfor %}
@@ -396,18 +396,18 @@
             <p id="lisTleroupUsers" style="font-variant: small-caps; text-align: justify;word-wrap:break-word; line-height: 1.2;">
               <!--{% if infogroupe['nbUtilisateurs'] > 8 %}
               {% for i in range(8) %}
-                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i<7 %},{%endif%}
+                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i<7 %},{%endif%}
               {%endfor%}
               <br />&nbsp;
               <a style="margin-left: 15px;" onclick="divoptionopen()"><em>et {{infogroupe['nbUtilisateurs']-8}} autres utilisateurs</em></a>
             {% else %}
               {% for i in range(infogroupe['nbUtilisateurs']) %}
-                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['_id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
+                <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
               {%endfor%}
             {% endif %}-->
             {% if infogroupe['nom']!="" and not infogroupe['is_DM'] %}
               {% for content in infoUtilisateurs %}
-                <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['_id'])}}">{{content['pseudo']}}</a>, </span>
+                <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['id'])}}">{{content['pseudo']}}</a>, </span>
               {%endfor%}
             {% endif %}
             </p>
@@ -432,7 +432,7 @@
                     {% if not infogroupe['is_DM'] %}
                       {% if infogroupe['nom']=="" %}
                         {% for u in infogroupe['utilisateurs'] %}
-                          {% if u['_id'] != sessionId %}
+                          {% if u['id'] != sessionId %}
                             {{u['pseudo']}}
                           {% endif %}
                         {% endfor %}
@@ -441,7 +441,7 @@
                       {% endif %}
                     {% else %}
                       {% for u in infogroupe['utilisateurs'] %}
-                        {% if u['_id'] != sessionId %}
+                        {% if u['id'] != sessionId %}
                           {{u['pseudo']}}
                         {% endif %}
                       {% endfor %}
@@ -472,7 +472,7 @@
                         <p style="margin-bottom: 5px;">
 
                         <div style="font-variant: small-caps;">
-                          <a href="{{url_for('profil' ,idUser=users['_id'])}}">{{users['nom']}} {{users['prenom']}}</a>
+                          <a href="{{url_for('profil' ,idUser=users['id'])}}">{{users['nom']}} {{users['prenom']}}</a>
                         </div>
                         <small><em>@{{users['pseudo']}}</em></small>
                         </p>
@@ -483,8 +483,8 @@
                       </a>
                       <div class="navbar-dropdown is-boxed is-right" style="align-items: flex-end;">
                         <div class="navbar-item">
-                          {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] and sessionId != users['_id'] %}
-                            <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['_id']}}','{{users['_id']}}', '{{sessionId}}')">
+                          {%if sessionId in infogroupe['moderateurs'] and not infogroupe['is_class'] and not infogroupe['is_DM'] and sessionId != users['id'] %}
+                            <button class="button is-danger is-outlined is-small" style="margin-right: 5px;" onclick="quitterGroupeOpen('{{infogroupe['id']}}','{{users['id']}}', '{{sessionId}}')">
                               <span class="icon is-small">
                                 <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                               </span>
@@ -494,27 +494,27 @@
                             </button>
                           </div>
                           <div class="navbar-item">
-                          {%if users['_id'] in infogroupe['moderateurs']%}
-                          <button class="button is-warning is-outlined is-small" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
+                          {%if users['id'] in infogroupe['moderateurs']%}
+                          <button class="button is-warning is-outlined is-small" {%if sessionId != users['id']%}onclick="modifRole('{{users['id']}}', '{{infogroupe['id']}}')"{%else%}disabled{%endif%}>
                             <span class="icon is-small">
                               <i class="fas fa-crown" aria-hidden="true"></i>
                             </span>
-                            <span id="ModifRoleUser{{users['_id']}}">
+                            <span id="ModifRoleUser{{users['id']}}">
                               Admin
                             </span>
                           </button>
                           {%else%}
-                          <button class="button is-info is-outlined is-small" {%if sessionId != users['_id']%}onclick="modifRole('{{users['_id']}}', '{{infogroupe['_id']}}')"{%else%}disabled{%endif%}>
+                          <button class="button is-info is-outlined is-small" {%if sessionId != users['id']%}onclick="modifRole('{{users['id']}}', '{{infogroupe['id']}}')"{%else%}disabled{%endif%}>
                             <span class="icon is-small">
                               <i class="fas fa-users" aria-hidden="true"></i>
                             </span>
-                            <span id="ModifRoleUser{{users['_id']}}">
+                            <span id="ModifRoleUser{{users['id']}}">
                               Participant
                             </span>
                           </button>
                           {%endif%}
                           {%else%}
-                            {%if users['_id'] in infogroupe['moderateurs']%}
+                            {%if users['id'] in infogroupe['moderateurs']%}
                               <button class="button is-warning is-outlined is-small" disabled>
                                 <span class="icon is-small">
                                   <i class="fas fa-crown" aria-hidden="true"></i>
@@ -610,7 +610,7 @@
               </div>
                 <div id="ajouterParticipant" style="display:none;">
                   <form action="{{url_for('updateGroupe')}}" method="POST" autocomplete="off">
-                    <input type="hidden" name="IdGroupe" value="{{infogroupe['_id']}}" />
+                    <input type="hidden" name="IdGroupe" value="{{infogroupe['id']}}" />
                     <input class="input" type="text" id="searchUser" placeholder="Rechercher..." oninput="user_filter(this.value);" style="margin-top:1%;width: 50%;" />
                     <button class="button is-success is-outlined is-small" type="submit" style="margin-top:1%;height: 40px;">
                       <span class="icon is-small">
@@ -621,11 +621,11 @@
                     <br /><br />
                     <div id="listeuser">
                       {% for user in users %}
-                        {% if not sessionId == user['_id'] and not user['_id'] in infogroupe['id-utilisateurs']%}
-                        <div class="listedUser" data-id="{{user['_id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
+                        {% if not sessionId == user['id'] and not user['id'] in infogroupe['id_utilisateurs']%}
+                        <div class="listedUser" data-id="{{user['id']}}" data-pseudo="{{user['pseudo']}}" data-nom="{{user['nom']}}" data-prenom="{{user['prenom']}}" data-lycee="{{user['lycee']}}" {% if not 'email' in user['elementPrive'] %}
                           data-email="{{user['email']}}" {% endif %} {% if not 'telephone' in user['elementPrive'] %} data-telephone="{{user['telephone']}}" {% endif %}>
-                          <input type="checkbox" id="user_{{user['_id']}}" name="{{user['_id']}}" style="margin-right: 18px;" />
-                          <label for="user_{{user['_id']}}">{{user['pseudo']}}</label>
+                          <input type="checkbox" id="user_{{user['id']}}" name="{{user['id']}}" style="margin-right: 18px;" />
+                          <label for="user_{{user['id']}}">{{user['pseudo']}}</label>
                           <br><br />
                         </div>
                         {% endif %}
@@ -653,7 +653,7 @@
                 <a id="hrefParticipant" href="">Voir le profil:</a><br />
                 <form action="/virerParticipant/" id="virerParticipant" method="POST">
                   <input type='hidden' id="idViré2" name='idViré' value="" />
-                  <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" /><br />
+                  <input type='hidden' id="idViréGrp" name='idViréGrp' value="{{infogroupe['id']}}" /><br />
                   <button class="button is-danger is-outlined is-small" type="submit">
                     <span class="icon is-small">
                       <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
@@ -674,7 +674,7 @@
               <form onsubmit="signalerDiscussion(event); return false;" id="signalementDiscussion" method="POST" autocomplete="off">
                 <section class="modal-card-body">
                   <input id='inputRaison' class="input" type="text" placeholder="Pourquoi Signalez vous cette Discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
-                  <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['id']}}" />
                 </section>
                 <footer class="modal-card-foot">
                   <button type="submit" class="button is-success">Signaler</button>
@@ -691,7 +691,7 @@
               </header>
               <form onsubmit="designalerDiscussion(event); return false;" id="designalementDiscussion" method="POST" autocomplete="off">
                 <section class="modal-card-body">
-                  <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['id']}}" />
                   Etes-vous sûr de vouloir enlever ce signalement
                 </section>
                 <footer class="modal-card-foot">
@@ -710,7 +710,7 @@
               <form onsubmit="signalerMsg(event); return false;" id="signalementMsg" method="POST" autocomplete="off">
                 <section class="modal-card-body">
                   <input id='inputRaison' class="input" type="text" placeholder="Pourquoi souhaitez-vous signaler ce message ?" autocomplete='off' name="Raison" style="width: 96%;margin-left: 2%;padding:5px;" required />
-                  <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' id="idSignalé" name='idSignalé' value="{{infogroupe['id']}}" />
                   <input type='hidden' id="idMsgSignalé" name='idMsgSignalé' value="" />
                 </section>
                 <footer class="modal-card-foot">
@@ -728,7 +728,7 @@
               </header>
               <form onsubmit="designalerMsg(event); return false;" id="designalementMsg" method="POST" autocomplete="off">
                 <section class="modal-card-body">
-                  <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' id="idDesignalé" name='idSignalé' value="{{infogroupe['id']}}" />
                   <input type='hidden' id="idMsgDeSignalé" name='idMsgSignalé' value="" />
                   Etes-vous sûr de vouloir enlever ce signalement
                 </section>
@@ -748,8 +748,8 @@
             </header>
             <form onsubmit="quitterGroupe(event); return false;" id="quitterGroupeForm" method="POST" autocomplete="off">
               <section class="modal-card-body">
-                <input type='hidden' id="quitter_idViréGrp" name='idViréGrp' value="{{infogroupe['_id']}}" />
-                <input type='hidden' id="quitter_idviré" name='idViré' value="{{sessionId}}" />
+                <input type='hidden' id="quitteridViréGrp" name='idViréGrp' value="{{infogroupe['id']}}" />
+                <input type='hidden' id="quitteridviré" name='idViré' value="{{sessionId}}" />
                 <div id="pop up virer">
                   Etes-vous sûr de vouloir quitter le groupe ?
                 </div>
@@ -791,7 +791,7 @@
               <form onsubmit="supprDisc(event); return false;" id="supprDiscForm" method="POST" autocomplete="off">
                 <section class="modal-card-body">
                   <input class="input" id='inputRaison' class="input" type="text" placeholder="Pourquoi supprimez vous cette discussion." autocomplete='off' name="Raison" style="width: 75%;margin-left: 2%;padding:5px;" required />
-                  <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' id="idDiscSuppr" name='idDiscSuppr' value="{{infogroupe['id']}}" />
                   <input type='hidden' name="demandeBut" value="supprDisc" />
                 </section>
                 <footer class="modal-card-foot">
@@ -809,7 +809,7 @@
               </header>
               <form onsubmit="valDisc(event); return false;" id="valDiscForm" method="POST" autocomplete="off">
                 <section class="modal-card-body">
-                  <input type='hidden' id="idDiscVal" name='idDiscVal' value="{{infogroupe['_id']}}" />
+                  <input type='hidden' id="idDiscVal" name='idDiscVal' value="{{infogroupe['id']}}" />
                   <select name="motif">
                     <option value="abusif">Signalement abusif</option>
                     <option value="justifie">Justifié</option>
