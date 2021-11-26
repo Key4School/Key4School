@@ -169,9 +169,12 @@ def createGroupe():
         participants = [session['id']]
         for name, value in request.form.items():
             if name == 'nomnewgroupe':
-                pass
+                continue
             else:
                 participants.append(name)
+
+        if not request.form['nomnewgroupe'] and len(participants) > 1:
+            return redirect(url_for('redirectDM', idUser1=participants[0], idUser2=participants[1]))
 
         groupe = Group(
             nom=request.form['nomnewgroupe'], id_utilisateurs=participants)
@@ -188,7 +191,7 @@ def updateGroupe():
     if 'id' in session:
         groupe = Group.get(
             filter="cls.id == request.form['IdGroupe']", limit=1)
-        participants = groupe['id_utilisateurs']
+        participants = groupe['id_utilisateurs'].copy()
 
         if session['id'] in participants and session['id'] in groupe['moderateurs']:
             for name, value in request.form.items():
@@ -196,7 +199,7 @@ def updateGroupe():
                     pass
                 else:
                     participants.append(name)
-            groupe.id_utilisateurs = participants
+            groupe['id_utilisateurs'] = participants
             groupe.update()
 
         return redirect(url_for('page_messages', idGroupe=groupe['id']))
@@ -230,19 +233,19 @@ def virerParticipant():
 def modifRole():
     if 'id' in session:
         grp = Group.get(filter="cls.id == request.form['idGrp']", limit=1)
-        modos = grp['moderateurs']
-        participants = grp['id_utilisateurs']
+        modos = grp['moderateurs'].copy()
+        participants = grp['id_utilisateurs'].copy()
 
         if session['id'] in modos and request.form['idModifié'] in participants:
             if request.form['idModifié'] in modos:
                 modos.remove(request.form['idModifié'])
-                grp.moderateurs = modos
+                grp['moderateurs'] = modos
                 grp.update()
 
                 return 'participant'
             else:
                 modos.append(request.form['idModifié'])
-                grp.moderateurs = modos
+                grp['moderateurs'] = modos
                 grp.update()
 
                 return 'admin'

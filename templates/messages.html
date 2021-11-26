@@ -298,17 +298,8 @@
                       {%endif%}
 
                       {% if not content['is_DM'] %}
-                        {% if content['nom']=="" %}
-                        {% for u in content['utilisateurs'] %}
-                          {% if u['id'] != session['id'] %}
-                            {{u['pseudo']}}
-                          {% endif %}
-                        {% endfor %}
-                        {% else %}
-                          {{content['nom']}}
-                        {% endif %}
+                        {{content['nom']}}
                       {% else %}
-
                         {% for u in content['utilisateurs'] %}
                           {% if u['id'] != session['id'] %}
                             {{u['pseudo']}}
@@ -357,7 +348,7 @@
 
       {% if msgDb != None %}
       <div id="titreetmsg" style="margin-left: 8px; margin-right: 8px; margin-bottom: 8px; position: relative; width: 100%;">
-            {% if infogroupe['nom']=="" or infogroupe['is_DM'] %}
+            {% if infogroupe['is_DM'] %}
               {% for u in infogroupe['utilisateurs'] %}
                 {% if u['id'] != session['id'] %}
                   <div id="divDansTitregroupe_DM">
@@ -375,15 +366,7 @@
             {% endif %}
             <span class="grpName" style="font-size: 1.25rem;">
               {% if not infogroupe['is_DM'] %}
-                {% if infogroupe['nom']=="" %}
-                  {% for u in infogroupe['utilisateurs'] %}
-                    {% if u['id'] != session['id'] %}
-                      {{u['pseudo']}}
-                    {% endif %}
-                  {% endfor %}
-                {% else %}
-                  {{infogroupe['nom']}}
-                {% endif %}
+                {{infogroupe['nom']}}
               {% else %}
                 {% for u in infogroupe['utilisateurs'] %}
                   {% if u['id'] != session['id'] %}
@@ -405,7 +388,7 @@
                 <a href="{{url_for('profil', idUser=infoUtilisateurs[i]['id'])}}">{{infoUtilisateurs[i]['pseudo']}}</a>{% if i < (infogroupe['nbUtilisateurs']-1) %},{%endif%}
               {%endfor%}
             {% endif %}-->
-            {% if infogroupe['nom']!="" and not infogroupe['is_DM'] %}
+            {% if not infogroupe['is_DM'] %}
               {% for content in infoUtilisateurs %}
                 <span class="groupUser" style="display: inline;"><a href="{{url_for('profil', idUser=content['id'])}}">{{content['pseudo']}}</a>, </span>
               {%endfor%}
@@ -422,30 +405,18 @@
                 <button onclick="divoptionclose()" class="delete" aria-label="close"></button>
               </header>
               <section class="modal-card-body" style="overflow: auto; max-height: 700px;">
-                {% if (session['id'] in infogroupe['moderateurs'] or user['admin']) and not infogroupe['is_class'] and not infogroupe['is_DM'] %}
+                {% if (session['id'] in infogroupe['moderateurs'] or user['admin']) and (not infogroupe['is_class'] and not infogroupe['is_DM']) %}
                 <div style="display: flex;">
                   <input class="input is-info" type="text" id="newGrpName" placeholder="Renommer le groupe..." value="{{infogroupe['nom']}}" onsubmit="console.log('test');" onkeydown="if(event.key === 'Enter') updateGroupName();" />
                   <i class="fas fa-pen" style="font-size:1.125rem; position: relative; margin-top: 5px; margin-left: 15px;" onclick="updateGroupName();"></i>
                 </div>
                 {%else%}
                   <h3 style="font-weight: bolder; font-size: 20px;">
-                    {% if not infogroupe['is_DM'] %}
-                      {% if infogroupe['nom']=="" %}
-                        {% for u in infogroupe['utilisateurs'] %}
-                          {% if u['id'] != session['id'] %}
-                            {{u['pseudo']}}
-                          {% endif %}
-                        {% endfor %}
-                      {% else %}
-                        {{infogroupe['nom']}}
+                    {% for u in infogroupe['utilisateurs'] %}
+                      {% if u['id'] != session['id'] %}
+                        {{u['pseudo']}}
                       {% endif %}
-                    {% else %}
-                      {% for u in infogroupe['utilisateurs'] %}
-                        {% if u['id'] != session['id'] %}
-                          {{u['pseudo']}}
-                        {% endif %}
-                      {% endfor %}
-                    {% endif %}
+                    {% endfor %}
                   </h3>
                 {%endif%}
                 <hr />
