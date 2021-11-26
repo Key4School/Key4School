@@ -2,16 +2,16 @@
     z-index: 1;">
   <article class="media">
     <div class="media-left">
-      
+
       <figure class="image is-32x32">
-        <img alt="user" src="{%if 'nomImg' in varApercuProfil and varApercuProfil['nomImg'] != "" %}{{url_for('userImg', profilImg = varApercuProfil['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        <img alt="photo user" src="{%if 'nomImg' in varApercuProfil and varApercuProfil['nomImg'] != "" %}{{url_for('userImg', profilImg = varApercuProfil['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
           style="width:32px; height:32px;border-radius: 50%;object-fit: cover;" />
       </figure>
     </div>
-    
+
     <div class="media-content">
       <div class="content">
-          
+
         <div style="font-variant: small-caps;">
           <a href="{{url_for('profil' ,idUser=varApercuProfil['id'])}}">{{varApercuProfil['nom']}} {{varApercuProfil['prenom']}}</a>
         </div>
