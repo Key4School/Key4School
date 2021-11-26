@@ -4,7 +4,7 @@
     <div class="media-left">
 
       <figure class="image is-64x64">
-        <img alt="photo user" src="{%if 'nomImg' in varApercuProfil and varApercuProfil['nomImg'] != "" %}{{url_for('userImg', profilImg = varApercuProfil['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        <img alt="photo user" src="{%if varApercuProfil['idImg']%}{{url_for('userImg', profilImg = varApercuProfil['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
           style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
       </figure>
     </div>

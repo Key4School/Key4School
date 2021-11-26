@@ -4,7 +4,7 @@
     <div class="media-left">
 
       <figure class="image is-32x32">
-        <img alt="image sans profile" class="is-rounded" src="{%if 'nomImg' in notif['sender'] and notif['sender']['nomImg'] != "" %}{{url_for('userImg', profilImg = notif['sender']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}">
+        <img alt="image sans profile" class="is-rounded" src="{%if notif['sender']['idImg']%}{{url_for('userImg', profilImg = notif['sender']['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}">
       </figure>
     </div>
 

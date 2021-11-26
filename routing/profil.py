@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
+from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
 from db_poo import *
+import os
 from routing.functions import listeModeration, automoderation
 
 @db_session
@@ -128,6 +129,7 @@ def updateprofile():
 
 @db_session
 def otherSubject():
+    '''QUAND ON PRENDRA EN CHARGE LES AUTRES USERS'''
     if 'id' in session and session['type'] != 'ELEVE':  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         subjects = []
         for key, value in request.form.items():
@@ -144,39 +146,35 @@ def otherSubject():
 @db_session
 def userImg(profilImg):
     if 'id' in session:
-        return DB.cluster.send_file(profilImg)
+        path = getFile(profilImg)
+        ext = extension(path)
+        return send_file(path, mimetype=ext, attachment_filename=f'profil.{ext}')
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
 
 @db_session
 def updateImg():
-
     if 'id' in session:
+        user = User.get(filter="cls.id == session['id']", limit=1)
         if request.form['but'] == "remove":
-            MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
-            for a in MyImage:
-                DB.db_files.delete_one({'id': a['id']})
-                DB.db_chunks.delete_many({'filesid': a['id']})
+            oldPath = getFile(user['idImg'])
+            if oldPath and os.path.isfile(oldPath):
+                os.remove(oldPath)
 
-            user = User.get(filter="cls.id == session['id']", limit=1)
-            user['nomImg'] = ''
-            user['imgProfile'] = ''
+            user['idImg'] = None
             user.update()
 
         elif request.form['but'] == "replace":
-            ImgNom = request.files['Newpicture'].filename + 'imgProfile' + session['id']
-            MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + session['id']}})
-            for a in MyImage:
-                DB.db_files.delete_one({'id': a['id']})
-                DB.db_chunks.delete_many({'filesid': a['id']})
+            oldPath = getFile(user['idImg'])
+            if oldPath and os.path.isfile(oldPath):
+                os.remove(oldPath)
 
-            DB.cluster.save_file(ImgNom, request.files['Newpicture'])
-            image = DB.db_files.find_one({'filename': ImgNom})
+            id = generate_uuid()
+            newFile = request.files['Newpicture']
+            newFile.save(fr'files/{id}.{extension(newFile.filename)}')
 
-            user = User.get(filter="cls.id == session['id']", limit=1)
-            user['imgProfile'] = image['id']
-            user['nomImg'] = ImgNom
+            user['idImg'] = id
             user.update()
 
         return redirect(url_for('profil'))

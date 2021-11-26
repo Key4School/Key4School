@@ -226,8 +226,7 @@ def sanction():
                     DB.db_files.delete_one({'id': a['id']})
                     DB.db_chunks.delete_many({'filesid': a['id']})
 
-                userSanction.imgProfile = ''
-                userSanction.nomImg = ''
+                userSanction.idImg = None
                 userSanction.pseudo = '{}_{}'.format(user.nom, user.prenom)
                 userSanction.telephone = ''
                 userSanction.interets = ''

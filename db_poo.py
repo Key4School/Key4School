@@ -17,6 +17,8 @@ from threading import Thread
 from matieresDict import translations, translateProf
 from datetime import *
 import inspect
+import glob
+import os
 
 Base = declarative_base()
 
@@ -25,6 +27,7 @@ Base = declarative_base()
 
 @contextmanager
 def session_scope():
+    '''decorateur -> creer session et la ferme a la fin'''
     session = dbSession()
     try:
         yield session
@@ -34,8 +37,6 @@ def session_scope():
         raise
     finally:
         session.close()
-
-# decorateur -> creer session et la ferme a la fin
 
 
 def db_session(func):
@@ -62,6 +63,23 @@ def get_context(func):
 
 def generate_uuid():
     return str(uuid1())
+
+
+def extension(filename):
+    if type(filename) != str:
+        filename = str(filename)
+    return filename.split('.')[-1]
+
+
+def getFile(id):
+    files = glob.glob(fr'files/{id}.*')
+    if len(files) == 0:
+        return None
+    elif len(files) > 1:
+        for file in files[1:]:
+            os.remove(file)
+    return files[0]
+
 
 
 class Actions:
@@ -154,8 +172,7 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
     matiere = Column(String)
     matiere_autre = Column(JSONB)
 
-    nomImg = Column(String)
-    imgProfile = Column(String)
+    idImg = Column(UUID(as_uuid=False), unique=True)
 
     couleur = Column(JSONB)
     theme = Column(String)
@@ -202,8 +219,7 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         self.matiere = params.get('matiere', '')  # pour les profs
         self.matiere_autre = params.get('matiere_autre', [])  # pour les profs
 
-        self.nomImg = params.get('nomImg', '')
-        self.imgProfile = params.get('imgProfile', '')
+        self.idImg = params.get('idImg')
 
         self.couleur = params.get(
             'couleur', ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'])

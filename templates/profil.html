@@ -255,7 +255,7 @@
     </p>
     <div style="position:relative;">
       <img alt="photo user" onclick="updateImgOpen();"
-        src="{%if 'nomImg' in user and user['nomImg'] != "" %}{{url_for('userImg', profilImg = user['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        src="{%if user['idImg']%}{{url_for('userImg', profilImg = user['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
         style="position: relative;margin-top:5%;width:100px; height:100px;object-fit: cover;border-radius:50%; cursor: pointer;" />
       <i class="fas fa-pen" style="font-size: 1.5rem; position: absolute; bottom: 30px; right: 30px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
     </div>

@@ -2,7 +2,7 @@
   <article class="media">
     <div class="media-left">
 
-        <img alt="photo user" class="ImagePublication" src="{%if 'nomImg' in d['user'] and d['user']['nomImg'] != "" %}{{url_for('userImg', profilImg = d['user']['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+        <img alt="photo user" class="ImagePublication" src="{%if d['user']['idImg']%}{{url_for('userImg', profilImg = d['user']['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
           style="object-fit: cover;border-radius: 50%;" />
     </div>
 

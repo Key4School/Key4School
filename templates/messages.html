@@ -355,7 +355,7 @@
                     <div id="groupHeader" style="display: flex; align-items:center;justify-content:space-between;">
                       <p id="groupTitle" style="font-weight:bold; display: flex;align-items:center"><a href="/messages/" id="backButton" style="margin-right: 12px; color: var(--text-color);"><i class="fas fa-chevron-circle-left"></i></a>
                       <img alt="photo user" onclick="updateImgOpen();"
-                        src="{%if 'nomImg' in u and u['nomImg'] != "" %}{{url_for('userImg', profilImg = u['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+                        src="{%if u['idImg']%}{{url_for('userImg', profilImg = u['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
                         style="margin-right: 15%;margin-top:5%;width:40px; height:40px;object-fit: cover;border-radius:50%; cursor: pointer;" />
                 {% endif %}
               {% endfor %}
@@ -433,7 +433,7 @@
                     <div class="media-left">
 
                       <figure class="image is-64x64">
-                        <img alt="photo user" src="{%if 'nomImg' in users and users['nomImg'] != "" %}{{url_for('userImg', profilImg = users['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+                        <img alt="photo user" src="{%if users['idImg']%}{{url_for('userImg', profilImg = users['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
                           style="width:64px; height:64px;border-radius: 50%;object-fit: cover;" />
                       </figure>
                     </div>

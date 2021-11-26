@@ -21,7 +21,7 @@
           <article class="media">
             <div class="media-left img_Pub_question_Ordi">
               <figure class="image is-64x64">
-                <img alt="photo user" src="{%if 'nomImg' in user and user['nomImg'] != "" %}{{url_for('userImg', profilImg = user['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
+                <img alt="photo user" src="{%if user['idImg']%}{{url_for('userImg', profilImg = user['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
               </figure>
             </div>
 
@@ -36,7 +36,7 @@
                   </div>
                   <div class="media-left img_Pub_question_Tel">
                     <figure class="image is-64x64">
-                      <img alt="photo user" src="{%if 'nomImg' in user and user['nomImg'] != "" %}{{url_for('userImg', profilImg = user['nomImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
+                      <img alt="photo user" src="{%if user['idImg']%}{{url_for('userImg', profilImg = user['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" style="width:64px;height:64px;object-fit:cover;border-radius:50%;" />
                     </figure>
                   </div>
                   <div style="margin-left: 40px;" class="control has-icons-left selectMatiereOrdi">

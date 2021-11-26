@@ -25,8 +25,6 @@ app = Flask(__name__)
 hashing = Hashing(app)
 socketio = SocketIO(app)
 
-# DB POO
-
 # Routing
 from routing.accueil import accueil, accueil2, tuto, XP_tuto, mail_rendu, saved, about, leaderboard
 from routing.recherche import recherche, recherche_user, morePost, moreUser
