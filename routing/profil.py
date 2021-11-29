@@ -147,6 +147,8 @@ def otherSubject():
 def userImg(profilImg):
     if 'id' in session:
         path = getFile(profilImg)
+        if not path:
+            path = r"static/image/sans_profil.png"
         ext = extension(path)
         return send_file(path, mimetype=ext, attachment_filename=f'profil.{ext}')
     else:

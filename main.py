@@ -251,6 +251,8 @@ if __name__ == "__main__":
 
     # This allows us to use a plain HTTP callback
     app.secret_key = os.urandom(24)
+
+    # clé de hash
     cle = 'hqZcPsAkTaMIRHco1L1BhCxXo4LWwBBBRvGcydjH0Vb85uXB3ZQ1lfmvfg7laldlaosg21Ri8uPvDgxLYyUoAPVXaQbNvpvpcvuyIv7ckVGGS6Ro5tmh8TlphoG25Z13RftlviLXggzJ4LXVJFjZ3xtUQ27zUJzQZAoI9JOAxXAV3VBdATqX'
     # Lancement de l'application, à l'adresse 127.0.0.0 et sur le port 3000
     # app.run(host="127.0.0.1", port=3000, debug=True)
