@@ -220,17 +220,15 @@ def sanction():
                 userSanction.addXpModeration(50)
 
             elif request.form['SanctionType'] == 'ResetProfil':
-                MyImage = DB.db_files.find({'filename': {'$regex': 'imgProfile' + request.form['idSanctionné']}})
-                User.get(filter="cls.id == request.form['idSanctionné']", limit=1).addXpModeration(25)
-                for a in MyImage:
-                    DB.db_files.delete_one({'id': a['id']})
-                    DB.db_chunks.delete_many({'filesid': a['id']})
+                userSanction.addXpModeration(25)
+                oldPath = getFile(user['idImg'])
+                if oldPath and os.path.isfile(oldPath):
+                    os.remove(oldPath)
 
-                userSanction.idImg = None
-                userSanction.pseudo = '{}_{}'.format(user.nom, user.prenom)
-                userSanction.telephone = ''
-                userSanction.interets = ''
-                userSanction.email = ''
+                userSanction['idMsg'] = None
+                userSanction['pseudo'] = '{}_{}'.format(user.nom, user.prenom)
+                userSanction['telephone'] = ''
+                userSanction['interets'] = ''
 
             userSanction.update()
 

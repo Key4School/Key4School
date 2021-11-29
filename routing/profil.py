@@ -168,13 +168,17 @@ def updateImg():
             user.update()
 
         elif request.form['but'] == "replace":
+            id = generate_uuid()
+            newFile = request.files['Newpicture']
+            ext = extension(newFile.filename)
+            if ext not in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png']:
+                return redirect(url_for('profil'))
+
             oldPath = getFile(user['idImg'])
             if oldPath and os.path.isfile(oldPath):
                 os.remove(oldPath)
 
-            id = generate_uuid()
-            newFile = request.files['Newpicture']
-            newFile.save(fr'files/{id}.{extension(newFile.filename)}')
+            newFile.save(fr'files/{id}.{ext}')
 
             user['idImg'] = id
             user.update()
