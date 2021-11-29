@@ -72,6 +72,9 @@ def extension(filename):
 
 
 def getFile(id):
+    if not os.path.isdir('files'):
+        os.makedirs('files')
+
     files = glob.glob(fr'files/{id}.*')
     if len(files) == 0:
         return None
