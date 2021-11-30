@@ -130,22 +130,42 @@
                 </span>
               </span>
               <span class="file-name">
-                photo_de_profil.png
+                profil.png
               </span>
             </label>
           </div>
           <input type="hidden" name="but" value="replace" required />
         </section>
         <footer class="modal-card-foot">
-          <button type="submit" class="button is-success">Remplacer</button>
+
+          <button type="submit" class="button is-success is-outlined" style="margin-right:2%">
+            <span class="icon is-small">
+              <i class="fas fa-exchange-alt" aria-hidden="true"></i>
+            </span>
+            <span>
+              Remplacer
+            </span>
+          </button>
       </form>
-      <form method="post" action="{{url_for('updateImg')}}" autocomplete="off" id="deletePhoto">
+      <form method="post" action="{{url_for('updateImg')}}" autocomplete="off" id="deletePhoto" style="margin-right:2%">
         <input type="hidden" name="but" value="remove" required />
-        <button type="submit" class="button">
-          Supprimer photo profil
+        <button type="submit" class="button is-danger is-outlined">
+          <span class="icon is-small">
+            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+          </span>
+          <span>
+            Supprimer photo profil
+          </span>
         </button>
       </form>
-      <button onclick="updateImgClose(); return false;" class="button">Annuler</button>
+      <button type="submit" onclick="updateImgClose(); return false;" class="button is-info is-outlined">
+        <span class="icon is-small">
+          <i class="fas fa-window-close" aria-hidden="true"></i>
+        </span>
+        <span>
+          Annuler
+        </span>
+      </button>
       </footer>
     </div>
   </div>
@@ -261,9 +281,9 @@
     </div>
     <div style="display:flex;align-items: center;justify-content:space-between">
       <p style="font-size:1.125rem;">NIV {{user['niv']}}</p>
-      <a href="{{url_for('leaderboard')}}"><p style="font-size:1.125rem;">{{xp}} / ???</p></a>
+      <a href="{{url_for('leaderboard')}}"><p style="font-size:1.125rem;">{{user['xp']}} / {{user['xplvlMax']}}</p></a>
     </div>
-      <progress class="progress is-theme progress_XP" value={{xplvl}} max="100" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
+      <progress class="progress is-theme progress_XP" value={{user['xplvl']}} max="100" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
 
   </div>
@@ -456,6 +476,7 @@
                       <option value="opt-lv3-chi" {%if user['options'][1]=="opt-lv3-chi"%}selected{%endif%}>LV3 Chinois</option>
                       <option value="opt-eps" {%if user['options'][1]=="opt-eps"%}selected{%endif%}>EPS</option>
                       <option value="opt-arts" {%if user['options'][1]=="opt-arts"%}selected{%endif%}>Arts</option>
+                        <option value="opt-musique" {%if user['options'][0]=="opt-musique"%}selected{%endif%}>Musique</option>
                       {% if user['classe']!='1G' and user['classe']!='TG' and user['classe']!='1STMG' and user['classe']!='TSTMG' %}
                       <option value="opt-mg" {%if user['options'][1]=="opt-mg"%}selected{%endif%}>Management et gestion</option>
                       <option value="opt-ss" {%if user['options'][1]=="opt-ss"%}selected{%endif%}>Santé et social</option>
