@@ -169,12 +169,11 @@ def updateImg():
             newFile = FileUploader(request.files['Newpicture'])
             if newFile['ext'] not in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png']:
                 return redirect(url_for('profil'))
-            print(newFile)
+
             oldFile = File.get(user['idImg'])
             oldFile.delete()
 
             newFile.save()
-            print(newFile)
 
             user['idImg'] = newFile['id']
             user.update()
