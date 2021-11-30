@@ -149,7 +149,7 @@ def userImg(profilImg):
         file = File.get(profilImg)
         if not file:
             file = File('default', r"static/image/sans_profil.png")
-        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"profil.{file['path']}")
+        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"profil.{file['ext']}")
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
