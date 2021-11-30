@@ -221,9 +221,8 @@ def sanction():
 
             elif request.form['SanctionType'] == 'ResetProfil':
                 userSanction.addXpModeration(25)
-                oldPath = getFile(user['idImg'])
-                if oldPath and os.path.isfile(oldPath):
-                    os.remove(oldPath)
+                oldFile = File.get(user['idImg'])
+                oldFile.delete()
 
                 userSanction['idMsg'] = None
                 userSanction['pseudo'] = '{}_{}'.format(user.nom, user.prenom)

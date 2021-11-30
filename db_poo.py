@@ -65,24 +65,64 @@ def generate_uuid():
     return str(uuid1())
 
 
-def extension(filename):
-    if type(filename) != str:
-        filename = str(filename)
-    return filename.split('.')[-1]
+class File:
+    def __init__(self, id, path):
+        self.id = id
+        self.path = path
+        self.ext = self.getExtension(self.path)
+
+    def getExtension(self, filename):
+        if type(filename) != str:
+            filename = str(filename)
+        split = filename.split('.')
+        if len(split) == 0:
+            return None
+        return split[-1]
+
+    def delete(self):
+        if self.path and os.path.isfile(self.path):
+            os.remove(self.path)
+
+    @classmethod
+    def get(cls, id):
+        if not os.path.isdir('files'):
+            os.makedirs('files')
+
+        if not id:
+            return cls(id, None)
+
+        files = glob.glob(fr'files/{id}.*')
+        if len(files) == 0:
+            return cls(id, None)
+        elif len(files) > 1:
+            for file in files[1:]:
+                os.remove(file)
+
+        return cls(id, files[0])
+
+    def __getitem__(self, key):
+        return getattr(self, key)
+
+    def __repr__(self):
+        return f'<File id={self.id}, ext={self.ext}>'
 
 
-def getFile(id):
-    if not os.path.isdir('files'):
-        os.makedirs('files')
+class FileUploader(File):
+    def __init__(self, file):
+        self.id = generate_uuid()
+        self.file = file
+        self.ext = self.getExtension(self.file.filename)
 
-    files = glob.glob(fr'files/{id}.*')
-    if len(files) == 0:
-        return None
-    elif len(files) > 1:
-        for file in files[1:]:
-            os.remove(file)
-    return files[0]
+    def save(self):
+        self.path = fr'files/{self.id}.{self.ext}'
+        self.file.save(self.path)
+        self.__class__ = File
 
+    def __getitem__(self, key):
+        return getattr(self, key)
+
+    def __repr__(self):
+        return f'<FileUploader id={self.id}, ext={self.ext}>'
 
 
 class Actions:

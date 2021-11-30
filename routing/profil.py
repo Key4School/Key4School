@@ -146,11 +146,10 @@ def otherSubject():
 @db_session
 def userImg(profilImg):
     if 'id' in session:
-        path = getFile(profilImg)
-        if not path:
-            path = r"static/image/sans_profil.png"
-        ext = extension(path)
-        return send_file(path, mimetype=ext, attachment_filename=f'profil.{ext}')
+        file = File.get(profilImg)
+        if not file:
+            path = File('default', r"static/image/sans_profil.png")
+        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"profil.{file['path']}")
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
@@ -160,27 +159,24 @@ def updateImg():
     if 'id' in session:
         user = User.get(filter="cls.id == session['id']", limit=1)
         if request.form['but'] == "remove":
-            oldPath = getFile(user['idImg'])
-            if oldPath and os.path.isfile(oldPath):
-                os.remove(oldPath)
+            oldFile = File.get(user['idImg'])
+            oldFile.delete()
 
             user['idImg'] = None
             user.update()
 
         elif request.form['but'] == "replace":
-            id = generate_uuid()
-            newFile = request.files['Newpicture']
-            ext = extension(newFile.filename)
-            if ext not in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png']:
+            newFile = FileUploader(request.files['Newpicture'])
+            if newFile['ext'] not in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png']:
                 return redirect(url_for('profil'))
+            print(newFile)
+            oldFile = File.get(user['idImg'])
+            oldFile.delete()
 
-            oldPath = getFile(user['idImg'])
-            if oldPath and os.path.isfile(oldPath):
-                os.remove(oldPath)
+            newFile.save()
+            print(newFile)
 
-            newFile.save(fr'files/{id}.{ext}')
-
-            user['idImg'] = id
+            user['idImg'] = newFile['id']
             user.update()
 
         return redirect(url_for('profil'))
