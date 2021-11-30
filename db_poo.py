@@ -100,6 +100,12 @@ class File:
 
         return cls(id, files[0])
 
+    def __bool__(self):
+        if self.path and self.ext:
+            return True
+        else:
+            return False
+
     def __getitem__(self, key):
         return getattr(self, key)
 
@@ -455,7 +461,7 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
     sign = Column(JSONB)
     motif = Column(JSONB)
     resolu = Column(Boolean)
-    fileType = Column(String)
+    idFile = Column(UUID(as_uuid=False))
 
     def __init__(self, **params):
         self.id_utilisateur = params['id_utilisateur']
@@ -467,7 +473,7 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
         self.resolu = params.get('resolu', False)
-        self.fileType = params.get('fileType', None)
+        self.idFile = params.get('idFile', None)
 
     def diffTemps(self):
         diff_temps = int((datetime.now() - self.date_envoi).total_seconds())
@@ -537,6 +543,18 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
     def rep(self):
         temp = self.id
         return Response.get(filter="cls.id_groupe == temp")
+
+    @property
+    def fileType(self):
+        if not self.idFile:
+            return None
+        file = File.get(self.idFile)
+        if not file:
+            return None
+        if file['ext'] == 'pdf':
+            return 'pdf'
+        else:
+            return 'image'
 
     @property
     def nb_likes(self):

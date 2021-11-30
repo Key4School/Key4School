@@ -3,7 +3,7 @@ from datetime import *
 from flask.json import jsonify
 import os
 from db_poo import *
-from routing.functions import listeModeration, automoderation, Interval
+from routing.functions import listeModeration, automoderation
 
 
 @db_session
@@ -17,20 +17,18 @@ def question():
             user = User.get(filter="cls.id == session['id']", limit=1)
             if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
                 if request.files['file'].mimetype != 'application/octet-stream':
-                    if request.files['file'].mimetype == 'application/pdf':
-                        fileType = 'pdf'
+                    file = FileUploader(request.files['file'])
+                    if file['ext'] in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'pdf']:
+                        file.save()
+                        idFile = file['id']
                     else:
-                        fileType = 'image'
+                        idFile = None
                 else:
-                    fileType = None
+                    idFile = None
 
                 demande = Request(id_utilisateur=session['id'], titre=automoderation(escape(request.form['titre'])), contenu=automoderation(
-                    request.form['demande']), matière=request.form['matiere'], fileType=fileType)
+                    request.form['demande']), matière=request.form['matiere'], idFile=idFile)
                 demande.insert()
-
-                if request.files['file'].mimetype != 'application/octet-stream':
-                    nom = "DemandeFile_" + demande['id']
-                    DB.cluster.save_file(nom, request.files['file'])
 
                 # add XP
                 user.addXP(10)
@@ -106,9 +104,12 @@ def updateDemand():
 
 
 @db_session
-def file(fileName):
+def file(idFile):
     if 'id' in session:
-        return DB.cluster.send_file(fileName)
+        file = File.get(idFile)
+        if not file:
+            return abort(404)
+        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['path']}")
 
     else:
         session['redirect'] = request.path
@@ -116,40 +117,16 @@ def file(fileName):
 
 
 @db_session
-def DL_file(fileName, fileType):
-    if 'id' in session or fileType == 'img':
-        fileBinaryObj = DB.cluster.send_file(fileName)
-        fileBinaryObj.freeze()
-        fileBinary = fileBinaryObj.get_data()
-
-        if fileType == 'image' or fileType == 'img':
-            with open('static/temp/{}.png'.format(fileName), 'wb') as file:
-                file.write(fileBinary)
-
-            interval = Interval(2, delete_file, args=[
-                                'static/temp/{}.png'.format(fileName)])
-            interval.start()
-
-            return send_file('static/temp/{}.png'.format(fileName))
-        elif fileType == 'pdf':
-            with open('static/temp/{}.pdf'.format(fileName), 'wb') as file:
-                file.write(fileBinary)
-
-            interval = Interval(2, delete_file, args=[
-                                'static/temp/{}.pdf'.format(fileName)])
-            interval.start()
-
-            return send_file('static/temp/{}.pdf'.format(fileName))
-        else:
-            return ''
+def DL_file(idFile):
+    if 'id' in session:
+        file = File.get(idFile)
+        if not file:
+            return abort(404)
+        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['path']}", as_attachment=True)
 
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
-
-
-def delete_file(path):
-    return os.remove(path)
 
 
 @db_session

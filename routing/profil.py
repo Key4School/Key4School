@@ -148,7 +148,7 @@ def userImg(profilImg):
     if 'id' in session:
         file = File.get(profilImg)
         if not file:
-            path = File('default', r"static/image/sans_profil.png")
+            file = File('default', r"static/image/sans_profil.png")
         return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"profil.{file['path']}")
     else:
         session['redirect'] = request.path
