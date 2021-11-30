@@ -3309,7 +3309,7 @@ a.tag:hover {
 }
 
 .select:not(.is-multiple):not(.is-loading)::after {
-  border-color: #3273dc;
+  border-color: var(--color-theme1);
   right: 1.125em;
   z-index: 4
 }
