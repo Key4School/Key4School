@@ -1,6 +1,6 @@
 var num = 0;
 var numMax = 4;
-var img = ['Entraide.gif', 'everywhere.gif', "Une messagerie instantanée.gif", 'LeaderBoard.gif'];
+var img = ['Entraide.gif', 'everywhere.gif', "Une messagerie instantanée.gif", 'LeaderBoard.gif', 'sombreclaire.gif'];
 
 function photo() {
   $("#img_connexion").attr('src', '../static/image/connexion/' + img[num]);

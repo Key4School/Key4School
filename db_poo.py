@@ -341,7 +341,10 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 
     @property
     def xplvlMax(self):
-        return int((100*self.xp)/self.xplvl)
+        XpSup = self.xp
+        while int(0.473*XpSup**0.615) != int(0.473*self.xp**0.615) + 1:
+            XpSup += 1
+        return XpSup
 
     @property
     def matieres(self):

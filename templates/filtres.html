@@ -41,7 +41,7 @@
         {% endif %}
         {% if user['classe'][0]=='T' %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="philo">
-            <button class="button" style="background-color:var(--color-items-bandeau);transition: all .5s;align-items: end;display: flex;" onclick="filter(this);"><p style="font-size:1.3rem; width: 20px; margin-right: 5px;" class=" ">φ</p><p>Philosophie</p></button>
+            <button class="button" style="background-color:var(--color-items-bandeau);transition: all .5s;align-items: end;display: flex;" onclick="filter(this);"><i style="font-size:1.3rem; width: 20px; margin-right: 5px;" class=" ">φ</i>Philosophie</button>
           </div>
         {% endif %}
 
@@ -289,7 +289,7 @@
         {% endif %}
         {% if user['matiere'] == 'philo' or 'philo' in user['matiere_autre'] or (user['matiere'] == '' and user['matiere_autre']|length == 0) %}
           <div class="filter subject" style="position: relative; height: 100%; margin-right: 20px;" data-subject="philo">
-            <button class="button" style="background-color:var(--color-items-bandeau);transition: all .5s;align-items: end;display: flex;" onclick="filter(this);"><p style="font-size:1.3rem; width: 20px; margin-right: 5px;" class=" ">φ</p><p>Philosophie</p></button>
+            <button class="button" style="background-color:var(--color-items-bandeau);transition: all .5s;align-items: end;display: flex;" onclick="filter(this);"><i style="font-size:1.3rem; width: 20px; margin-right: 5px;" class=" ">φ</i>Philosophie</button>
           </div>
         {% endif %}
 

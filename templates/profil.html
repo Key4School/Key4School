@@ -289,8 +289,6 @@
   </div>
   <br />
   <div class="ordiFlexTelBlock" style="align-items: center;justify-content:space-evenly;margin:0% 2%;">
-
-    <div>
       <form method="POST" action="/updateprofile/" id="updateProfil">
         <div id="infoPB" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_infoPB" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_infoPB" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Informations publiques :</div>
         <br />
@@ -800,16 +798,18 @@
               </tr>
             </tbody>
           </table>
+          </div>
+          <br />
+          <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
+            <span class="icon is-small">
+              <i class="fas fa-check"></i>
+            </span>
+            <span>Modifier mes informations !</span>
+          </button>
         </form>
-      </div>
-      <br />
-      <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
-        <span class="icon is-small">
-          <i class="fas fa-check"></i>
-        </span>
-        <span>Modifier mes informations !</span>
-      </button>
-    </div>
+
+
+  <br />
     <div class="ChoixCouleur">
       <div id="theme" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_theme" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_theme" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Thème :</div>
       <div id="content_theme" class="depliable">
