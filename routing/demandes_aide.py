@@ -109,7 +109,7 @@ def file(idFile):
         file = File.get(idFile)
         if not file:
             return abort(404)
-        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['path']}")
+        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['ext']}")
 
     else:
         session['redirect'] = request.path
@@ -122,7 +122,7 @@ def DL_file(idFile):
         file = File.get(idFile)
         if not file:
             return abort(404)
-        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['path']}", as_attachment=True)
+        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['ext']}", as_attachment=True)
 
     else:
         session['redirect'] = request.path
