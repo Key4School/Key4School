@@ -9,7 +9,7 @@
 <body style="text-align: center;">
     <div class="ordiFlexTelBlock" style="align-items: center;justify-content:center;">
 
-      <progress class="progress is-info" value="{{user['xplvl']}}" max="100" style="width:250px;margin:auto;">70%</progress>
+      <progress class="progress is-info" value="{{user['xp'] - user['xplvlMin']}}" max="{{user['xplvlMax'] - user['xplvlMin']}}" style="width:250px;margin:auto;">70%</progress>
       &nbsp;&nbsp;&nbsp;&nbsp;
       <p>
         NIV:

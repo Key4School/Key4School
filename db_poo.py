@@ -333,18 +333,18 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 
     @property
     def niv(self):
+        '''niveau de l'utilisateur'''
         return int(0.473*self.xp**0.615)
 
     @property
-    def xplvl(self):
-        return int((0.473*self.xp**0.615-self.niv)*100)
+    def xplvlMin(self):
+        '''nombre d'xp pour le niveau précédent'''
+        return int((self.niv/0.473)**(1/0.615))
 
     @property
     def xplvlMax(self):
-        XpSup = self.xp
-        while int(0.473*XpSup**0.615) != int(0.473*self.xp**0.615) + 1:
-            XpSup += 1
-        return XpSup
+        '''nombre d'xp pour atteindre le niveau suivant'''
+        return int(((self.niv + 1)/0.473)**(1/0.615))
 
     @property
     def matieres(self):

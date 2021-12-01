@@ -159,9 +159,9 @@
     </div>
     <div style="display:flex;align-items: center;justify-content:space-between">
       <p style="font-size:1.125rem;">NIV {{user['niv']}}</p>
-      <p style="font-size:1.125rem;">{{xp}} / ???</p>
+      <p style="font-size:1.125rem;">{{user['xp']}} / user['xplvlMax']</p>
     </div>
-      <progress class="progress is-info" value={{xplvl}} max="100" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
+      <progress class="progress is-info" value="{{user['xp'] - user['xplvlMin']}}" max="{{user['xplvlMax'] - user['xplvlMin']}}" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
 <br />
   </div>
   <div align="center" style="margin:0% 2%;">
