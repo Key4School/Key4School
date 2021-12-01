@@ -307,12 +307,12 @@
                         {% endfor %}
                       {% endif %}
                       <br />
-                      {%if content['lastMsg']!=None%}
+                      {%if content['lastMsg'] != None%}
 
                       <i style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{content['lastMsg']['utilisateur']['pseudo']}} :
-                        {%if 'audio' in content['lastMsg'] and content['lastMsg']['audio'] == true %}
+                        {%if content['lastMsg']['audio'] %}
                           <i class="fas fa-volume-up"></i>
-                        {%elif content['lastMsg']['image'] != '' %}
+                        {%elif content['lastMsg']['image']%}
                           <i class="fas fa-image"></i>
                         {%else%}
                           {{content['lastMsg']['contenu']}}

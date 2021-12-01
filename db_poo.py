@@ -114,10 +114,10 @@ class File:
 
 
 class FileUploader(File):
-    def __init__(self, file):
+    def __init__(self, file, **params):
         self.id = generate_uuid()
         self.file = file
-        self.ext = self.getExtension(self.file.filename)
+        self.ext = params.get('ext', self.getExtension(self.file.filename))
 
     def save(self):
         self.path = fr'files/{self.id}.{self.ext}'
@@ -699,8 +699,8 @@ class Message(Actions, Base):
     contenu = Column(String)
     date_envoi = Column(DateTime)
     reponse = Column(UUID(as_uuid=False))
-    audio = Column(Boolean)
-    image = Column(String)
+    audio = Column(UUID(as_uuid=False))
+    image = Column(UUID(as_uuid=False))
     sign = Column(JSONB)
     motif = Column(JSONB)
 
@@ -710,17 +710,17 @@ class Message(Actions, Base):
         self.contenu = params['contenu']
         self.date_envoi = params.get('date_envoi', datetime.now())
         self.reponse = params['reponse']
-        self.audio = params.get('audio', False)
-        self.image = params.get('image', '')
+        self.audio = params.get('audio', None)
+        self.image = params.get('image', None)
         self.sign = params.get('sign', [])
         self.motif = params.get('motif', [])
 
     def suppr(self) -> None:
-        if self.audio == 'True':
+        if self.audio:
             MyAudio = DB.db_files.find_one({'filename': self.contenu})
             DB.db_files.delete_one({'id': MyAudio['id']})
             DB.db_chunks.delete_many({'filesid': MyAudio['id']})
-        if self.image != '':
+        if self.image:
             MyAudio = DB.db_files.find_one({'filename': self.image})
             DB.db_files.delete_one({'id': MyAudio['id']})
             DB.db_chunks.delete_many({'filesid': MyAudio['id']})

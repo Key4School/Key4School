@@ -180,9 +180,9 @@
     </td>
     <td>
       <p style="color:#3e97ff;">
-        {%if 'audio' in notif['message'] and notif['message']['audio'] == true %}
+        {%if notif['message']['audio'] %}
         <i class="fas fa-volume-up"></i> Message Vocal
-        {%elif 'image' in notif['message'] and notif['message']['image'] != '' %}
+        {%elif 'image' in notif['message'] and notif['message']['image']  %}
         <i class="fas fa-image"></i> {{notif['message']['contenu']}}
         {%else%}
         {{notif['message']['contenu']}}

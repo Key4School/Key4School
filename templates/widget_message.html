@@ -1,6 +1,6 @@
 {%if content['id_utilisateur']==sessionId%}
 <div class="moimsg" style="
-{%if 'audio' in content and content['audio'] == true %}
+{%if content['audio'] %}
 width: 30%;
 {%else%}
 min-width: 20%;
@@ -10,7 +10,7 @@ min-width: 20%;
   {%else%}
 
   <div style="word-break: break-word;" class="participantmsg
-  {%if 'audio' in content and content['audio'] == true %}
+  {%if content['audio'] %}
   participantmsgAudio
   {%else%}
   participantmsg
@@ -35,7 +35,7 @@ min-width: 20%;
             <input type='hidden' name="msgSuppr" value="{{content['id']}}" />
             <input type='hidden' name="grp" value="{{idgroupe}}" />
             <input type='hidden' name="audio" value="{{content['audio']}}" />
-            {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
+            {%if content['audio'] %}<input type='hidden' name="audioName" value="{{content['audio']}}" />{%endif%}
             <button type="submit" class="button is-danger is-outlined is-small">
               <span class="icon is-small">
                 <i class="fas fa-times"></i>
@@ -51,7 +51,7 @@ min-width: 20%;
             <input type='hidden' name="msgVal" value="{{content['id']}}" />
             <input type='hidden' name="grp" value="{{idgroupe}}" />
             <input type='hidden' name="audio" value="{{content['audio']}}" />
-            {%if 'audio' in content and content['audio'] == true %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
+            {%if content['audio'] %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
             <button type="submit" class="button is-success is-outlined is-small">
               <span class="icon is-small">
                 <i class="fas fa-check"></i>
@@ -70,9 +70,9 @@ min-width: 20%;
           </button>
           <input type="hidden" id="user{{content['id']}}" value="{{content['utilisateur']['pseudo']}}" />
           <input type="hidden" id="contenu{{content['id']}}" value="
-          {%if 'audio' in content and content['audio'] == True %}
+          {%if content['audio'] %}
           <i class='fas fa-volume-up'></i> Message Vocal
-          {%elif 'image' in content and content['image'] != '' %}
+          {%elif 'image' in content and content['image']  %}
           <i class='fas fa-image'></i> {{content['contenu']}}
           {%else%}
           {{content['contenu']}}
@@ -98,9 +98,9 @@ min-width: 20%;
   <div class="rep">
     <div style="font-variant: small-caps;" ><a style="color:{{session['couleur'][0]}};"href="{{url_for('profil' ,idUser=content['rep']['utilisateur']['id'])}}">{{content['rep']['utilisateur']['pseudo']}}</a></div>
     <a onclick="goToMess('msg{{content['rep']['id']}}');" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
-      {%if 'audio' in content['rep'] and content['rep']['audio'] == True %}
+      {%if content['rep']['audio'] %}
       <i class="fas fa-volume-up"></i> Message Vocal
-      {%elif 'image' in content['rep'] and content['rep']['image'] != '' %}
+      {%elif 'image' in content['rep'] and content['rep']['image']  %}
       <i class="fas fa-image"></i> {{content['rep']['contenu']}}
       {%else%}
       {{content['rep']['contenu']}}
@@ -109,10 +109,10 @@ min-width: 20%;
   </div>
   {%endif%}
     <p style="margin:0px;word-wrap:break-word;" class="BlackOrWhite">
-      {%if 'audio' in content and content['audio'] == true %}
+      {%if content['audio'] %}
 
       <div id="audio-player-container{{content['id']}}" style="display: flex;justify-content:space-evenly;align-items: center;width: 100%;margin-top: 5px;">
-        <audio id="audio{{content['id']}}" src="/audio/{{content['contenu']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
+        <audio id="audio{{content['id']}}" src="/audio/{{content['audio']}}/" type="audio/ogg" preload="metadata" style="display: none !important; width: 0px !important; height: 0px !important;"></audio>
         <button style="font-size:1.25rem;border:transparent;background-color:transparent; margin-left: 10px; margin-right:1%; cursor: pointer;" id="play-icon{{content['id']}}" ><i class="color_audio fas fa-play"></i></button>
         <input style="margin-right:2%; width: 60%; background: transparent;padding:0 2% 0 2%;" step="0.0001" type="range" id="seek-slider{{content['id']}}" max="100" value="0">
         <img alt="message audio" id="img_msg_audio{{content['id']}}" style="margin:0px;" class="img_msg_audio block" src="{%if content['utilisateur']['idImg']%}{{url_for('userImg', profilImg = content['utilisateur']['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}" alt="photo de profile" />
@@ -247,16 +247,16 @@ min-width: 20%;
              seekSlider{{content['id']}}.value = 0;
         });
       </script>
-      {%elif content['image'] != '' %}
+      {%elif content['image']  %}
         <a download="{{content['image']}}.png" href="/DL_file/{{content['image']}}/image/"><img alt="image content" src="{{url_for('image', imageName=content['image'])}}" style="height: 250px; width: auto; "/><br></a>
         {{content['contenu']|safe}}
       {%else%}
         {{content['contenu']|safe}}
       {%endif%}
-    {%if 'audio' in content and content['audio'] == false %}
+    {%if not content['audio']%}
     </p>
     {%endif%}
-    {%if 'audio' in content and content['audio'] == false %}
+    {%if not content['audio']%}
     <p class="date" style="align-self: flex-end;margin:0px;text-align:right;font-size:12px;margin-top:1%;">le {{content['date_envoi'].day}}/{{content['date_envoi'].month}} à {{content['date_envoi'].hour}}h{{content['date_envoi'].minute}}</p>
     {%endif%}
   </div>

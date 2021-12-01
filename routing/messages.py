@@ -79,16 +79,20 @@ def redirectDM(idUser1, idUser2):
 @get_context
 def uploadAudio():
     if 'id' in session:
-        nom = "MsgVocal" + request.form['group'] + \
-            session['id'] + str(datetime.now())
-        DB.cluster.save_file(nom, request.files['audio'])
+        if request.files['audio'].mimetype == 'audio/ogg':
+            file = FileUploader(request.files['audio'], ext='ogg')
+            file.save()
+            idFile = file['id']
+        else:
+            idFile = None
+
         if request.form['reponse'] != "None":
             reponse = request.form['reponse']
         else:
             reponse = None
 
         message = Message(
-            id_groupe=request.form['group'], id_utilisateur=session['id'], contenu=nom, audio=True, reponse=reponse)
+            id_groupe=request.form['group'], id_utilisateur=session['id'], contenu='', audio=idFile, reponse=reponse)
         message.insert()
 
         if message:
@@ -111,9 +115,12 @@ def uploadAudio():
 
 
 @db_session
-def audio(audioName):
+def audio(audioId):
     if 'id' in session:
-        return DB.cluster.send_file(audioName.strip())
+        file = File.get(audioId)
+        if not file:
+            return abort(404)
+        return send_file(file['path'], mimetype='audio/ogg', attachment_filename=f"audio.{file['ext']}")
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
