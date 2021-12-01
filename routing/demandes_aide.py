@@ -16,13 +16,10 @@ def question():
 
             user = User.get(filter="cls.id == session['id']", limit=1)
             if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
-                if request.files['file'].mimetype != 'application/octet-stream':
-                    file = FileUploader(request.files['file'])
-                    if file['ext'] in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'pdf']:
-                        file.save()
-                        idFile = file['id']
-                    else:
-                        idFile = None
+                file = FileUploader(request.files['file'])
+                if file['ext'] in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'pdf'] and file['file'].mimetype != 'application/octet-stream':
+                    file.save()
+                    idFile = file['id']
                 else:
                     idFile = None
 

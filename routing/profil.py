@@ -167,7 +167,7 @@ def updateImg():
 
         elif request.form['but'] == "replace":
             newFile = FileUploader(request.files['Newpicture'])
-            if newFile['ext'] not in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png']:
+            if newFile['ext'] not in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png'] and file['file'].mimetype == 'application/octet-stream':
                 return redirect(url_for('profil'))
 
             oldFile = File.get(user['idImg'])
