@@ -717,13 +717,11 @@ class Message(Actions, Base):
 
     def suppr(self) -> None:
         if self.audio:
-            MyAudio = DB.db_files.find_one({'filename': self.contenu})
-            DB.db_files.delete_one({'id': MyAudio['id']})
-            DB.db_chunks.delete_many({'filesid': MyAudio['id']})
+            file = File.get(self.audio)
+            file.delete()
         if self.image:
-            MyAudio = DB.db_files.find_one({'filename': self.image})
-            DB.db_files.delete_one({'id': MyAudio['id']})
-            DB.db_chunks.delete_many({'filesid': MyAudio['id']})
+            file = File.get(self.image)
+            file.delete()
         self.delete()
         return
 

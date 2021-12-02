@@ -34,8 +34,6 @@ min-width: 20%;
           <form method="post" action="/suppressionMsg/" class="supprimer">
             <input type='hidden' name="msgSuppr" value="{{content['id']}}" />
             <input type='hidden' name="grp" value="{{idgroupe}}" />
-            <input type='hidden' name="audio" value="{{content['audio']}}" />
-            {%if content['audio'] %}<input type='hidden' name="audioName" value="{{content['audio']}}" />{%endif%}
             <button type="submit" class="button is-danger is-outlined is-small">
               <span class="icon is-small">
                 <i class="fas fa-times"></i>
@@ -47,11 +45,9 @@ min-width: 20%;
         {%endif%}
         {%if user['admin'] and content['sign'] != []%}
         <div class="navbar-item">
-          <form method="post" action="/validationMsg/" class="valider" id="ValidationMsg">
+          <form method="post" action="/validerMsg/" class="valider" id="ValidationMsg">
             <input type='hidden' name="msgVal" value="{{content['id']}}" />
             <input type='hidden' name="grp" value="{{idgroupe}}" />
-            <input type='hidden' name="audio" value="{{content['audio']}}" />
-            {%if content['audio'] %}<input type='hidden' name="audioName" value="{{content['contenu']}}" />{%endif%}
             <button type="submit" class="button is-success is-outlined is-small">
               <span class="icon is-small">
                 <i class="fas fa-check"></i>

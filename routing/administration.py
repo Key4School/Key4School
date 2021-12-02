@@ -155,14 +155,16 @@ def suppressionMsg():
         user = User.get(filter="cls.id == session['id']", limit=1)
         msg = Message.get(filter="cls.id == request.form['msgSuppr']", limit=1)
         groupe = Group.get(filter="cls.id == request.form['grp']", limit=1)
-        sign=groupe['sign']
+        sign = groupe['sign']
         motif = groupe['motif']
-        if user['admin'] or user['type']=="ENSEIGNANT" or msg['id_utilisateur']==session['id'] or session['id'] in groupe['moderateurs']:
+        if user['admin'] or user['type'] == "ENSEIGNANT" or msg['id_utilisateur'] == session['id'] or session['id'] in groupe['moderateurs']:
             if msg['sign'] != []:
                 sign.remove(request.form['msgSuppr'])
                 index = next((i for i, item in enumerate(motif) if item['id'] == request.form['msgSuppr']), -1)
                 del motif[index]
             msg.suppr()
+            groupe['sign'] = sign
+            groupe['motif'] = motif
             groupe.update()
 
         return redirect(url_for('page_messages', idGroupe=request.form['grp']))
@@ -190,6 +192,9 @@ def validerMsg():
             sign.remove(request.form['msgVal'])
             index = next((i for i, item in enumerate(motif) if item['id'] == request.form['msgVal']), -1)
             del motif[index]
+
+            groupe['sign'] = sign
+            groupe['motif'] = motif
 
             groupe.update()
             message.update()
