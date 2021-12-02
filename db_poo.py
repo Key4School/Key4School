@@ -77,7 +77,7 @@ class File:
         split = filename.split('.')
         if len(split) == 0:
             return None
-        return split[-1]
+        return split[-1].lower()
 
     def delete(self):
         if self.path and os.path.isfile(self.path):

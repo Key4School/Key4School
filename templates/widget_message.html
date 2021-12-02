@@ -72,7 +72,7 @@ min-width: 20%;
           <input type="hidden" id="contenu{{content['id']}}" value="
           {%if content['audio'] %}
           <i class='fas fa-volume-up'></i> Message Vocal
-          {%elif 'image' in content and content['image']  %}
+          {%elif content['image']  %}
           <i class='fas fa-image'></i> {{content['contenu']}}
           {%else%}
           {{content['contenu']}}
@@ -100,7 +100,7 @@ min-width: 20%;
     <a onclick="goToMess('msg{{content['rep']['id']}}');" style="display: block; max-height: 48px; overflow: hidden; text-overflow: ellipsis; color:black;">
       {%if content['rep']['audio'] %}
       <i class="fas fa-volume-up"></i> Message Vocal
-      {%elif 'image' in content['rep'] and content['rep']['image']  %}
+      {%elif content['rep']['image']  %}
       <i class="fas fa-image"></i> {{content['rep']['contenu']}}
       {%else%}
       {{content['rep']['contenu']}}
@@ -247,8 +247,8 @@ min-width: 20%;
              seekSlider{{content['id']}}.value = 0;
         });
       </script>
-      {%elif content['image']  %}
-        <a download="{{content['image']}}.png" href="/DL_file/{{content['image']}}/image/"><img alt="image content" src="{{url_for('image', imageName=content['image'])}}" style="height: 250px; width: auto; "/><br></a>
+      {%elif content['image']%}
+        <a href="/DL_file/{{content['image']}}/"><img alt="image content" src="{{url_for('image', imageId=content['image'])}}" style="height: 250px; width: auto; "/><br></a>
         {{content['contenu']|safe}}
       {%else%}
         {{content['contenu']|safe}}

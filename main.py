@@ -46,7 +46,7 @@ app.add_url_rule('/messages/', 'page_messages', page_messages, defaults={'idGrou
 app.add_url_rule('/messages/<idGroupe>/', 'page_messages', page_messages)
 app.add_url_rule('/redirectDM/<idUser1>/<idUser2>/', 'redirectDM', redirectDM)
 app.add_url_rule('/uploadImage/', 'uploadImage', uploadImage, methods=['POST'])
-app.add_url_rule('/image/<imageName>/', 'image', image)
+app.add_url_rule('/image/<imageId>/', 'image', image)
 app.add_url_rule('/uploadAudio/', 'uploadAudio', uploadAudio, methods=['POST'])
 app.add_url_rule('/audio/<audioId>/', 'audio', audio)
 app.add_url_rule('/suppressionMsg/', 'suppressionMsg', suppressionMsg, methods=['POST'])

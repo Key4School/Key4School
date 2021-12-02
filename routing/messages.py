@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
+from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
 from flask_socketio import emit
@@ -130,16 +130,20 @@ def audio(audioId):
 @get_context
 def uploadImage():
     if 'id' in session:
-        nom = "Image" + request.form['group'] + \
-            session['id'] + str(datetime.now())
-        DB.cluster.save_file(nom, request.files['image'])
+        file = FileUploader(request.files['image'])
+        if file['ext'] in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png'] and file['file'].mimetype != 'application/octet-stream':
+            file.save()
+            idFile = file['id']
+        else:
+            idFile = None
+
         if request.form['reponse'] != "None":
             reponse = request.form['reponse']
         else:
             reponse = None
 
         message = Message(id_groupe=request.form['group'], id_utilisateur=session['id'],
-                          contenu=request.form['contenuMessage'], image=nom, reponse=reponse)
+                          contenu=request.form['contenuMessage'], image=idFile, reponse=reponse)
         message.insert()
 
         if message:
@@ -162,9 +166,12 @@ def uploadImage():
 
 
 @db_session
-def image(imageName):
+def image(imageId):
     if 'id' in session:
-        return DB.cluster.send_file(imageName)
+        file = File.get(imageId)
+        if not file:
+            return abort(404)
+        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['ext']}")
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
