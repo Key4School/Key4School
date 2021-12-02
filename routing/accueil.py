@@ -22,15 +22,6 @@ def accueil():
 
 
 @db_session
-def accueil2():
-    if 'id' in session:
-        return redirect(url_for('accueil'))
-    else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
-
-
-@db_session
 def tuto():
     if 'id' in session:
         return render_template('tuto.html', user=User.get(filter="cls.id == session['id']", limit=1))

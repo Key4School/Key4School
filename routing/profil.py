@@ -182,3 +182,8 @@ def updateImg():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
+
+
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
