@@ -17,7 +17,7 @@ def question():
             user = User.get(filter="cls.id == session['id']", limit=1)
             if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum":
                 file = FileUploader(request.files['file'])
-                if file['ext'] in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'pdf'] and file['file'].mimetype != 'application/octet-stream':
+                if file.verif('image', 'pdf'):
                     file.save()
                     idFile = file['id']
                 else:
@@ -106,7 +106,7 @@ def file(idFile):
         file = File.get(idFile)
         if not file:
             return abort(404)
-        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['ext']}")
+        return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"attachment.{file['ext']}")
 
     else:
         session['redirect'] = request.path
@@ -119,7 +119,7 @@ def DL_file(idFile):
         file = File.get(idFile)
         if not file:
             return abort(404)
-        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['ext']}", as_attachment=True)
+        return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"attachment.{file['ext']}", as_attachment=True)
 
     else:
         session['redirect'] = request.path

@@ -76,15 +76,15 @@ def redirectDM(idUser1, idUser2):
 
 
 @db_session
-@get_context
+@get_context # pour socket
 def uploadAudio():
     if 'id' in session:
-        if request.files['audio'].mimetype == 'audio/ogg':
-            file = FileUploader(request.files['audio'], ext='ogg')
+        file = FileUploader(request.files['audio'])
+        if file.verif('audio'):
             file.save()
-            idFile = file['id']
         else:
             idFile = None
+        idFile = file['id']
 
         if request.form['reponse'] != "None":
             reponse = request.form['reponse']
@@ -127,11 +127,11 @@ def audio(audioId):
 
 
 @db_session
-@get_context
+@get_context # pour socket
 def uploadImage():
     if 'id' in session:
         file = FileUploader(request.files['image'])
-        if file['ext'] in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png'] and file['file'].mimetype != 'application/octet-stream':
+        if file.verif('image'):
             file.save()
             idFile = file['id']
         else:
@@ -171,7 +171,7 @@ def image(imageId):
         file = File.get(imageId)
         if not file:
             return abort(404)
-        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"attachment.{file['ext']}")
+        return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"attachment.{file['ext']}")
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))

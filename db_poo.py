@@ -69,18 +69,25 @@ class File:
     def __init__(self, id, path):
         self.id = id
         self.path = path
-        self.ext = self.getExtension(self.path)
 
-    def getExtension(self, filename):
-        if type(filename) != str:
-            filename = str(filename)
-        split = filename.split('.')
+    @property
+    def ext(self):
+        split = self.path.split('.')
         if len(split) == 0:
             return None
-        return split[-1].lower()
+        return split[-1]
+
+    @property
+    def mimetype(self):
+        extToMime = {'png': 'image/png',
+                    'jpeg': 'image/jpeg',
+                    'oga': 'audio/ogg',
+                    'pdf': 'application/pdf'}
+        if self.ext in extToMime:
+            return extToMime[self.ext]
 
     def delete(self):
-        if self.path and os.path.isfile(self.path):
+        if self and os.path.isfile(self.path):
             os.remove(self.path)
 
     @classmethod
@@ -101,7 +108,7 @@ class File:
         return cls(id, files[0])
 
     def __bool__(self):
-        if self.path and self.ext:
+        if self.path and self.ext and self.mimetype:
             return True
         else:
             return False
@@ -113,16 +120,40 @@ class File:
         return f'<File id={self.id}, ext={self.ext}>'
 
 
-class FileUploader(File):
-    def __init__(self, file, **params):
+class FileUploader():
+    mime = {'image': {'image/png': 'png',
+                    'image/jpeg': 'jpeg'},
+            'audio': {'audio/ogg': 'oga'},
+            'pdf': {'application/pdf': 'pdf'}}
+
+    def __init__(self, file):
         self.id = generate_uuid()
         self.file = file
-        self.ext = params.get('ext', self.getExtension(self.file.filename))
+
+    @property
+    def ext(self):
+        mimeToExt = FileUploader.mime['image'].copy()
+        mimeToExt.update(FileUploader.mime['audio'])
+        mimeToExt.update(FileUploader.mime['pdf'])
+        if self.file.mimetype in mimeToExt:
+            return mimeToExt[self.file.mimetype]
+
+    def verif(self, *formats):
+        for format in formats:
+            if format in FileUploader.mime:
+                if self.file.mimetype in FileUploader.mime[format]:
+                    return True
 
     def save(self):
         self.path = fr'files/{self.id}.{self.ext}'
         self.file.save(self.path)
         self.__class__ = File
+
+    def __bool__(self):
+        if self.path and self.ext:
+            return True
+        else:
+            return False
 
     def __getitem__(self, key):
         return getattr(self, key)

@@ -149,7 +149,7 @@ def userImg(profilImg):
         file = File.get(profilImg)
         if not file:
             file = File('default', r"static/image/sans_profil.png")
-        return send_file(file['path'], mimetype=file['ext'], attachment_filename=f"profil.{file['ext']}")
+        return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"profil.{file['ext']}")
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
@@ -167,7 +167,7 @@ def updateImg():
 
         elif request.form['but'] == "replace":
             newFile = FileUploader(request.files['Newpicture'])
-            if newFile['ext'] not in ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png'] and file['file'].mimetype == 'application/octet-stream':
+            if not newFile.verif('image'):
                 return redirect(url_for('profil'))
 
             oldFile = File.get(user['idImg'])
