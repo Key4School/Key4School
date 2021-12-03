@@ -10,6 +10,9 @@ from routing.functions import listeModeration, automoderation
 def page_messages(idGroupe):
 
     if 'id' in session:
+        if not is_valid_uuid(idGroupe):
+            idGroupe = None
+
         user = User.get(filter="cls.id == session['id']", limit=1)
         users = User.get(order_by="cls.pseudo")
 
@@ -53,6 +56,9 @@ def page_messages(idGroupe):
 @db_session
 def redirectDM(idUser1, idUser2):
     if 'id' in session:
+        if not is_valid_uuid(idUser1) or not is_valid_uuid(idUser2):
+            return redirect(url_for('page_messages'))
+
         grp = Group.get(
             filter="(cls.is_DM == True) & (cls.id_utilisateurs.comparator.has_key(idUser1)) & (cls.id_utilisateurs.comparator.has_key(idUser2))", limit=1)
 
@@ -271,6 +277,9 @@ def modifRole():
 
 @db_session
 def supprGroupe(idGrp):
+    if not is_valid_uuid(idGrp):
+        return abort(404)
+
     user = User.get(filter="cls.id == session['id']", limit=1)
     groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
@@ -283,6 +292,9 @@ def supprGroupe(idGrp):
 
 @db_session
 def updateGrpName(idGrp, newGrpName):
+    if not is_valid_uuid(idGrp):
+        return abort(404)
+    
     user = User.get(filter="cls.id == session['id']", limit=1)
     groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
@@ -323,6 +335,8 @@ def moreMsg():
 
 @db_session
 def modererGrp(idGrp):
+    if not is_valid_uuid(idGrp):
+        return abort(404)
     user = User.get(filter="cls.id == session['id']", limit=1)
     groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
@@ -332,4 +346,4 @@ def modererGrp(idGrp):
 
         return 'group moderation edited', 200
     else:
-        abort(401)
+        return abort(401)

@@ -7,9 +7,11 @@ from routing.functions import listeModeration, automoderation
 
 @db_session
 def profil(idUser):
-
     if 'id' in session:
-        if idUser == None or idUser == session['id']:
+        if not is_valid_uuid(idUser):
+            idUser = None
+
+        if not idUser or idUser == session['id']:
             demandes = Request.get(filter="cls.id_utilisateur == session['id']", order_by="cls.date_envoi", desc=True)
 
             user = User.get(filter="cls.id == session['id']", limit=1)

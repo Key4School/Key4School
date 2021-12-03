@@ -49,13 +49,12 @@ def question():
         return redirect(url_for('login'))
 
 
-def redirect_comments():
-    return redirect('/')
-
-
 @db_session
 def comments(idMsg):
     if 'id' in session:
+        if not idMsg or not is_valid_uuid(idMsg):
+            return redirect('/')
+
         msg = Request.get(filter="cls.id == idMsg", limit=1)
         if request.method == 'GET':
             if msg:
@@ -129,36 +128,35 @@ def DL_file(idFile):
 @db_session
 def likePost(idPost):
     if 'id' in session:
-        if 'idPost' != None:
-            # on récupère les likes de la demande d'aide
-            demande = Request.get(filter="cls.id == idPost", limit=1)
-            likes = demande['likes'].copy()
+        if not idPost or not is_valid_uuid(idPost):
+            return abort(404)
 
-            # on check mtn si l'utilisateur a déjà liké la demande
-            if session['id'] in likes:
-                likes.remove(session['id'])  # on supprime son like
+        # on récupère les likes de la demande d'aide
+        demande = Request.get(filter="cls.id == idPost", limit=1)
+        likes = demande['likes'].copy()
 
-                # remove XP
-                if not session['id'] == demande['id_utilisateur']:
-                    User.get(
-                        filter="cls.id == session['id']", limit=1).addXP(-2)
-            else:
-                likes.append(session['id'])  # on ajoute son like
+        # on check mtn si l'utilisateur a déjà liké la demande
+        if session['id'] in likes:
+            likes.remove(session['id'])  # on supprime son like
 
-                # add XP
-                if not session['id'] == demande['id_utilisateur']:
-                    User.get(
-                        filter="cls.id == session['id']", limit=1).addXP(2)
-
-            # on update dans la DB
-            demande['likes'] = likes
-            demande.update()
-
-            # on retourne enfin le nouveau nb de likes
-            return {'newNbLikes': len(likes)}, 200
-
+            # remove XP
+            if not session['id'] == demande['id_utilisateur']:
+                User.get(
+                    filter="cls.id == session['id']", limit=1).addXP(-2)
         else:
-            abort(403)  # il manque l'id du message
+            likes.append(session['id'])  # on ajoute son like
+
+            # add XP
+            if not session['id'] == demande['id_utilisateur']:
+                User.get(
+                    filter="cls.id == session['id']", limit=1).addXP(2)
+
+        # on update dans la DB
+        demande['likes'] = likes
+        demande.update()
+
+        # on retourne enfin le nouveau nb de likes
+        return {'newNbLikes': len(likes)}, 200
     else:
         abort(401)  # non autorisé
 
@@ -167,38 +165,37 @@ def likePost(idPost):
 def likeRep(idRep):
 
     if 'id' in session:
-        if idRep != None:
-            reponse = Response.get(filter="cls.id == idRep", limit=1)
-            if not reponse:
-                return abort(400)
+        if not idRep or not is_valid_uuid(idRep):
+            return abort(404)
 
-            likes = reponse['likes'].copy()
+        reponse = Response.get(filter="cls.id == idRep", limit=1)
+        if not reponse:
+            return abort(400)
 
-            # on check mtn si l'utilisateur a déjà liké la demande
-            if session['id'] in likes:
-                likes.remove(session['id'])  # on supprime son like
+        likes = reponse['likes'].copy()
 
-                # remove XP
-                if not session['id'] == demande['id_utilisateur']:
-                    User.get(
-                        filter="cls.id == session['id']", limit=1).addXP(-2)
-            else:
-                likes.append(session['id'])  # on ajoute son like
+        # on check mtn si l'utilisateur a déjà liké la demande
+        if session['id'] in likes:
+            likes.remove(session['id'])  # on supprime son like
 
-                # add XP
-                if not session['id'] == demande['id_utilisateur']:
-                    User.get(
-                        filter="cls.id == session['id']", limit=1).addXP(2)
-
-            # on update dans la DB
-            reponse['likes'] = likes
-            reponse.update()
-
-            # on retourne enfin le nouveau nb de likes
-            return {'newNbLikes': len(likes)}, 200
-
+            # remove XP
+            if not session['id'] == demande['id_utilisateur']:
+                User.get(
+                    filter="cls.id == session['id']", limit=1).addXP(-2)
         else:
-            abort(400)  # il manque l'id du message
+            likes.append(session['id'])  # on ajoute son like
+
+            # add XP
+            if not session['id'] == demande['id_utilisateur']:
+                User.get(
+                    filter="cls.id == session['id']", limit=1).addXP(2)
+
+        # on update dans la DB
+        reponse['likes'] = likes
+        reponse.update()
+
+        # on retourne enfin le nouveau nb de likes
+        return {'newNbLikes': len(likes)}, 200
     else:
         abort(401)  # non autorisé
 
@@ -207,22 +204,21 @@ def likeRep(idRep):
 def resoudre(idPost):
 
     if 'id' in session:
-        if idPost != None:
-            demande = Request.get(filter="cls.id == idPost", limit=1)
+        if not idPost or not is_valid_uuid(idPost):
+            return abort(404)
 
-            # on check mtn si l'utilisateur a déjà liké la demande
-            if demande['id_utilisateur'] == session['id']:
-                # on update dans la DB
-                demande.resolu = True
+        demande = Request.get(filter="cls.id == idPost", limit=1)
 
-                demande.update()
+        # on check mtn si l'utilisateur a déjà liké la demande
+        if demande['id_utilisateur'] == session['id']:
+            # on update dans la DB
+            demande.resolu = True
 
-                return "ok", 200
-            else:
-                abort(401)  # non autorisé
+            demande.update()
 
+            return "ok", 200
         else:
-            abort(403)  # il manque l'id du message
+            abort(401)  # non autorisé
     else:
         abort(401)  # non autorisé
 
@@ -246,6 +242,9 @@ def updateComment():
 def savePost(postId):
     '''A PASSER EN SOCKET'''
     if 'id' in session:
+        if not postId or not is_valid_uuid(postId):
+            return abort(404)
+
         user = User.get(filter="cls.id == session['id']", limit=1)
         savedPost = user['savedDemands'].copy()
 
@@ -259,5 +258,4 @@ def savePost(postId):
 
         return 'sent'
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé

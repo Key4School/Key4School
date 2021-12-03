@@ -20,7 +20,7 @@ socketio = SocketIO(app)
 # Routing
 from routing.functions import listeModeration, automoderation, afficheNotif
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
-from routing.demandes_aide import question, redirect_comments, comments, updateDemand, updateComment, file, DL_file, likePost, likeRep, resoudre, savePost
+from routing.demandes_aide import question, comments, updateDemand, updateComment, file, DL_file, likePost, likeRep, resoudre, savePost
 from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject, logout
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, uploadImage, image, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg, modererGrp
@@ -57,7 +57,7 @@ app.add_url_rule('/otherSubject/', view_func=otherSubject, methods=['POST'])
 app.add_url_rule('/userImg/<profilImg>/', view_func=userImg)
 app.add_url_rule('/updateImg/', view_func=updateImg, methods=['POST'])
 app.add_url_rule('/question/', view_func=question, methods=['POST', 'GET'])
-app.add_url_rule('/comments/', view_func=redirect_comments)
+app.add_url_rule('/comments/', view_func=comments, defaults={'idMsg': None})
 app.add_url_rule('/comments/<idMsg>/', view_func=comments, methods=['GET', 'POST'])
 app.add_url_rule('/updateDemand/', view_func=updateDemand, methods=['POST'])
 app.add_url_rule('/updateComment/', view_func=updateComment, methods=['POST'])

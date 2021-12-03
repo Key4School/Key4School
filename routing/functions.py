@@ -38,6 +38,9 @@ def automoderation(stringModerer: str) -> str:
 
 @db_session
 def afficheNotif(userId, notifId):
+    if not is_valid_uuid(userId) or not is_valid_uuid(notifId):
+        return redirect(url_for('login'))
+
     user = User.get(filter="cls.id == userId", limit=1)
     notif = Notification.get(filter="cls.id == notifId", limit=1)
     if user and notif:
