@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
+from flask import Flask, current_app as app, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
-from flask_socketio import emit
 from db_poo import *
 from routing.functions import listeModeration, automoderation
 
@@ -82,7 +81,6 @@ def redirectDM(idUser1, idUser2):
 
 
 @db_session
-@get_context # pour socket
 def uploadAudio():
     if 'id' in session:
         file = FileUploader(request.files['audio'])
@@ -110,7 +108,7 @@ def uploadAudio():
             otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe,
                                         infoUtilisateurs=users, idgroupe=groupe['id'], user=User.get(filter="cls.id == session['id']", limit=1))
 
-            socketio.emit('newMsg', {
+            app.config['socketio'].emit('newMsg', {
                           'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=groupe['id'])
             Notification.create("msg", groupe['id'], message['id'], list(
                 groupe['id_utilisateurs']))
@@ -133,7 +131,6 @@ def audio(audioId):
 
 
 @db_session
-@get_context # pour socket
 def uploadImage():
     if 'id' in session:
         file = FileUploader(request.files['image'])
@@ -161,7 +158,7 @@ def uploadImage():
             otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe,
                                         infoUtilisateurs=users, idgroupe=groupe['id'], user=User.get(filter="cls.id == session['id']", limit=1))
 
-            socketio.emit('newMsg', {
+            app.config['socketio'].emit('newMsg', {
                           'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=groupe['id'])
             Notification.create("msg", groupe['id'], message['id'], list(
                 groupe['id_utilisateurs']))
@@ -294,7 +291,7 @@ def supprGroupe(idGrp):
 def updateGrpName(idGrp, newGrpName):
     if not is_valid_uuid(idGrp):
         return abort(404)
-    
+
     user = User.get(filter="cls.id == session['id']", limit=1)
     groupe = Group.get(filter="cls.id == idGrp", limit=1)
 

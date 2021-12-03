@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
+from flask import Flask, current_app as app, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
 from db_poo import *
@@ -18,7 +18,6 @@ def profil(idUser):
             return render_template("profil.html", demandes=demandes, user=user)
 
         else:
-
             user = User.get(filter="cls.id == session['id']", limit=1)
             profilUtilisateur = User.get(filter="cls.id == idUser", limit=1)
 
@@ -59,6 +58,7 @@ def changeTheme():
 
 @db_session
 def theme():
+    '''thème clair/sombre'''
     if not 'id' in session:
         return 'error'
 
@@ -71,7 +71,6 @@ def theme():
 
 @db_session
 def updateprofile():
-
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
         elementPrive = []
@@ -87,8 +86,8 @@ def updateprofile():
         user['nom'] = automoderation(request.form['nom'])
         user['prenom'] = automoderation(request.form['prenom'])
         user['pseudo'] = automoderation(request.form['pseudo'])
-        user['email'] = automoderation(request.form['email'])
-        user['telephone'] = automoderation(request.form['telephone'])
+        user['email'] = request.form['email']
+        user['telephone'] = request.form['telephone']
         user['interets'] = automoderation(request.form['interets'])
         if user['type'] == 'ELEVE':
             user['langues'] = [request.form['lv1'], request.form['lv2']]
@@ -184,8 +183,3 @@ def updateImg():
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
-
-
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
