@@ -19,14 +19,6 @@ hashing = Hashing(app)
 
 '''Routing'''
 
-'''login.py'''
-from routing.login import login, signIn0, signIn1, signIn2, logout
-app.add_url_rule('/login/', view_func=login, methods=['GET', 'POST'])
-app.add_url_rule('/sign-in/0/', view_func=signIn0, methods=['GET', 'POST'])
-app.add_url_rule('/sign-in/1/', view_func=signIn1, methods=['GET', 'POST'])
-app.add_url_rule('/sign-in/2/', view_func=signIn2, methods=['GET', 'POST'])
-app.add_url_rule('/logout/', view_func=logout)
-
 '''accueil.py'''
 from routing.accueil import accueil, tuto, XP_tuto, mail_rendu, saved, about, leaderboard
 app.add_url_rule('/', view_func=accueil)
@@ -38,16 +30,17 @@ app.add_url_rule('/saved/', view_func=saved)
 app.add_url_rule('/about/', view_func=about)
 app.add_url_rule('/leaderboard/', view_func=leaderboard)
 
-'''profil.py'''
-from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject
-app.add_url_rule('/profil/', view_func=profil, defaults={'idUser': None})
-app.add_url_rule('/profil/<idUser>/', view_func=profil)
-app.add_url_rule('/changeTheme/', view_func=changeTheme, methods=['POST'])
-app.add_url_rule('/theme/', view_func=theme, methods=['POST'])
-app.add_url_rule('/updateprofile/', view_func=updateprofile, methods=['POST'])
-app.add_url_rule('/userImg/<profilImg>/', view_func=userImg)
-app.add_url_rule('/updateImg/', view_func=updateImg, methods=['POST'])
-app.add_url_rule('/otherSubject/', view_func=otherSubject, methods=['POST'])
+'''administration.py'''
+from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
+app.add_url_rule('/administration/', view_func=administration, methods=['POST', 'GET'])
+app.add_url_rule('/suppressionMsg/', view_func=suppressionMsg, methods=['POST'])
+app.add_url_rule('/validerMsg/', view_func=validerMsg, methods=['POST'])
+app.add_url_rule('/sanction/', view_func=sanction, methods=['POST'])
+app.add_url_rule('/signPost/', view_func=signPost, methods=['POST'])
+app.add_url_rule('/signRepPost/', view_func=signRepPost, methods=['POST'])
+app.add_url_rule('/signPostProfil/', view_func=signPostProfil, methods=['POST'])
+app.add_url_rule('/signPostDiscussion/', view_func=signPostDiscussion, methods=['POST'])
+app.add_url_rule('/signPostMsg/', view_func=signPostMsg, methods=['POST'])
 
 '''demandes_aide.py'''
 from routing.demandes_aide import question, comments, updateDemand, updateComment, file, DL_file, likePost, likeRep, resoudre, savePost
@@ -62,6 +55,18 @@ app.add_url_rule('/likePost/<idPost>/', view_func=likePost, methods=['POST'])
 app.add_url_rule('/likeRep/<idRep>/', view_func=likeRep, methods=['POST'])
 app.add_url_rule('/resoudre/<idPost>/', view_func=resoudre, methods=['POST'])
 app.add_url_rule('/savePost/<postId>/', view_func=savePost, methods=['POST'])
+
+'''functions.py'''
+from routing.functions import afficheNotif
+app.add_url_rule('/notif/<userId>/<notifId>/', view_func=afficheNotif)
+
+'''login.py'''
+from routing.login import login, signIn0, signIn1, signIn2, logout
+app.add_url_rule('/login/', view_func=login, methods=['GET', 'POST'])
+app.add_url_rule('/sign-in/0/', view_func=signIn0, methods=['GET', 'POST'])
+app.add_url_rule('/sign-in/1/', view_func=signIn1, methods=['GET', 'POST'])
+app.add_url_rule('/sign-in/2/', view_func=signIn2, methods=['GET', 'POST'])
+app.add_url_rule('/logout/', view_func=logout)
 
 '''messages.py'''
 from routing.messages import page_messages, redirectDM, uploadAudio, audio, uploadImage, image, createGroupe, updateGroupe, virerParticipant, modifRole, supprGroupe, updateGrpName, moreMsg, modererGrp
@@ -81,28 +86,23 @@ app.add_url_rule('/updateGrpName/<idGrp>/<newGrpName>/', view_func=updateGrpName
 app.add_url_rule('/moreMsg/', view_func=moreMsg, methods=['POST'])
 app.add_url_rule('/modererGrp/<idGrp>/', view_func=modererGrp, methods=['POST'])
 
+'''profil.py'''
+from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject
+app.add_url_rule('/profil/', view_func=profil, defaults={'idUser': None})
+app.add_url_rule('/profil/<idUser>/', view_func=profil)
+app.add_url_rule('/changeTheme/', view_func=changeTheme, methods=['POST'])
+app.add_url_rule('/theme/', view_func=theme, methods=['POST'])
+app.add_url_rule('/updateprofile/', view_func=updateprofile, methods=['POST'])
+app.add_url_rule('/userImg/<profilImg>/', view_func=userImg)
+app.add_url_rule('/updateImg/', view_func=updateImg, methods=['POST'])
+app.add_url_rule('/otherSubject/', view_func=otherSubject, methods=['POST'])
+
 '''recherche.py'''
 from routing.recherche import recherche, recherche_user, morePost, moreUser
 app.add_url_rule('/recherche/', view_func=recherche)
 app.add_url_rule('/rechercheUser/', view_func=recherche_user)
 app.add_url_rule('/morePost/', view_func=morePost, methods=['POST'])
 app.add_url_rule('/moreUser/', view_func=moreUser, methods=['POST'])
-
-'''administration.py'''
-from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
-app.add_url_rule('/administration/', view_func=administration, methods=['POST', 'GET'])
-app.add_url_rule('/suppressionMsg/', view_func=suppressionMsg, methods=['POST'])
-app.add_url_rule('/validerMsg/', view_func=validerMsg, methods=['POST'])
-app.add_url_rule('/sanction/', view_func=sanction, methods=['POST'])
-app.add_url_rule('/signPost/', view_func=signPost, methods=['POST'])
-app.add_url_rule('/signRepPost/', view_func=signRepPost, methods=['POST'])
-app.add_url_rule('/signPostProfil/', view_func=signPostProfil, methods=['POST'])
-app.add_url_rule('/signPostDiscussion/', view_func=signPostDiscussion, methods=['POST'])
-app.add_url_rule('/signPostMsg/', view_func=signPostMsg, methods=['POST'])
-
-'''functions.py'''
-from routing.functions import afficheNotif
-app.add_url_rule('/notif/<userId>/<notifId>/', view_func=afficheNotif)
 
 '''sockets.py'''
 from routing.sockets import connectToNotif, disconnect, supprNotif, connectToGroup, postMsg, postLike
