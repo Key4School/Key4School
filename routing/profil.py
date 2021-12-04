@@ -53,14 +53,14 @@ def changeTheme():
 
         return redirect(url_for('profil'))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
 
 @db_session
 def theme():
     '''thème clair/sombre'''
     if not 'id' in session:
-        return 'error'
+        return 'error', 401
 
     user = User.get(filter="cls.id == session['id']", limit=1)
     user['theme'] = request.form['theme']
@@ -125,7 +125,7 @@ def updateprofile():
 
         return redirect(url_for('profil'))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
 
 @db_session
@@ -141,7 +141,7 @@ def otherSubject():
         user.update()
         return redirect(url_for('profil'))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
 
 @db_session
@@ -152,8 +152,7 @@ def userImg(profilImg):
             file = File('default', r"static/image/sans_profil.png")
         return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"profil.{file['ext']}")
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 @db_session
 def updateImg():
@@ -181,5 +180,5 @@ def updateImg():
 
         return redirect(url_for('profil'))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('profil')
         return redirect(url_for('login'))

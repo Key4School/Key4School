@@ -170,7 +170,7 @@ def suppressionMsg():
         return redirect(url_for('page_messages', idGroupe=request.form['grp']))
 
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('page_messages', idGroupe=request.form['grp'])
         return redirect(url_for('login'))
 
 @db_session
@@ -202,7 +202,7 @@ def validerMsg():
         return redirect(url_for('page_messages', idGroupe=idGroupe))
 
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('page_messages', idGroupe=request.form['grp'])
         return redirect(url_for('login'))
 
 @db_session
@@ -239,10 +239,9 @@ def sanction():
             return 'sent'
 
         else:
-            return redirect(url_for('accueil'))
+            return abort(401) # non autorisé
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 @db_session
 def signPost():

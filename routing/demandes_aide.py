@@ -79,7 +79,7 @@ def comments(idMsg):
                         User.get(
                             filter="cls.id == session['id']", limit=1).addXP(15)
 
-            return redirect(f'/comments/{idMsg}')
+            return redirect(url_for('comments', idMsg=idMsg))
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
@@ -95,7 +95,7 @@ def updateDemand():
             demand.update()
         return 'sent'
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('comments', idMsg=request.form['idDemandModif'])
         return redirect(url_for('login'))
 
 
@@ -108,8 +108,7 @@ def file(idFile):
         return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"attachment.{file['ext']}")
 
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -121,8 +120,7 @@ def DL_file(idFile):
         return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"attachment.{file['ext']}", as_attachment=True)
 
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -225,16 +223,15 @@ def resoudre(idPost):
 
 @db_session
 def updateComment():
-
+    comment = Response.get(
+        filter="cls.id == request.form['idCommentModif']", limit=1)
     if 'id' in session:
-        comment = Response.get(
-            filter="cls.id == request.form['idCommentModif']", limit=1)
         if session['id'] == comment['id_utilisateur']:
             comment[contenu] = automoderation(request.form['txtModif'])
             comment.update()
         return 'sent'
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('comments', idMsg=comment['id_groupe'])
         return redirect(url_for('login'))
 
 

@@ -114,8 +114,7 @@ def uploadAudio():
                 groupe['id_utilisateurs']))
             return 'yes'
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -126,8 +125,7 @@ def audio(audioId):
             return abort(404)
         return send_file(file['path'], mimetype='audio/ogg', attachment_filename=f"audio.{file['ext']}")
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -164,8 +162,7 @@ def uploadImage():
                 groupe['id_utilisateurs']))
             return 'yes'
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -176,8 +173,7 @@ def image(imageId):
             return abort(404)
         return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"attachment.{file['ext']}")
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -199,7 +195,7 @@ def createGroupe():
 
         return redirect(url_for('page_messages', idGroupe=groupe['id']))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('page_messages')
         return redirect(url_for('login'))
 
 
@@ -221,7 +217,7 @@ def updateGroupe():
 
         return redirect(url_for('page_messages', idGroupe=groupe['id']))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('page_messages', idGroupe=request.form['IdGroupe'])
         return redirect(url_for('login'))
 
 
@@ -240,10 +236,9 @@ def virerParticipant():
             else:
                 return 'reload grp'
         else:
-            return redirect(url_for('page_messages'))
+            return abort(401) # non autorisé
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -269,7 +264,7 @@ def modifRole():
         else:
             abort(401)  # non autorisé
     else:
-        abort(403)  # doit se connecter
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -284,7 +279,7 @@ def supprGroupe(idGrp):
         groupe.supprGroupe()
         return 'group deleted', 200
     else:
-        abort(401)
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -301,12 +296,11 @@ def updateGrpName(idGrp, newGrpName):
 
         return 'group name edited', 200
     else:
-        abort(401)
+        return abort(401) # non autorisé
 
 
 @db_session
 def moreMsg():
-
     if 'id' in session:
         lastMsg = int(request.form['lastMsg'])
         groupe = Group.get(
@@ -327,7 +321,7 @@ def moreMsg():
         return {'html': html}
 
     else:
-        abort(401)  # non connecté
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -343,4 +337,4 @@ def modererGrp(idGrp):
 
         return 'group moderation edited', 200
     else:
-        return abort(401)
+        return abort(401) # non autorisé

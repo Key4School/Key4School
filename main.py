@@ -1,6 +1,6 @@
 from db_poo import *
 from flask import Flask
-from flask_socketio import SocketIO 
+from flask_socketio import SocketIO
 from flask_hashing import Hashing
 from datetime import *
 from flask_session import Session
