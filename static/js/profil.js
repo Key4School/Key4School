@@ -3,6 +3,12 @@ var boul2 = false;
 var boul3 = false;
 var boul4 = false;
 $(document).ready(function() {
+  $('#delete').click(function() {
+    console.log('ok');
+    $('.contenu').addClass("active"),
+      $("#delete").css("zIndex", "-1");
+    $("#ConfSupp-filtre").css("display", "block");
+  });
   $('#updateProfil').on('submit', function() {
     alert(verifNom(), verifPrenom(), verifPseudo(), verifSchool(false), verifMdp(), verifConfMdp());
     if (verifNom() && verifPrenom() && verifPseudo() && verifSchool(false) && verifMdp() && verifConfMdp()) {
@@ -485,4 +491,9 @@ function divsubjectopen() {
 
 function divsubjectclose(e) {
   $("#subjects").removeClass("is-active");
+}
+function closeCont() {
+  $('.contenu').removeClass("active"),
+    $("#delete").css("zIndex", "1");
+  $("#ConfSupp-filtre").css("display", "none");
 }

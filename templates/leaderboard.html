@@ -16,26 +16,26 @@
   <br />
   <div class="tabs is-toggle is-toggle-rounded">
   <ul style="justify-content: center;">
-    <li id="france" class="is-active">
+    <li id="lb-france" class="is-active">
       <a>
         <span class="items_toggle_ordi">Top France</span>
         <span class="items_toggle_tel">France</span>
       </a>
     </li>
-    <li id="depart">
+    <li id="lb-depart">
       <a>
         <span class="items_toggle_ordi">Top département</span>
         <span class="items_toggle_tel">Département</span>
       </a>
     </li>
-    <li id="lycee">
+    <li id="lb-lycee">
       <a>
         <span class="items_toggle_ordi">Top lycée</span>
         <span class="items_toggle_tel">Lycée</span>
       </a>
     </li>
   </ul>
-</div>
+  </div>
   <div class="container_leaderboard">
   <br />
   <div class="container_top_leaderboard">
@@ -108,24 +108,11 @@
         </td>
       </tr>
     </table>
-    <!-- <div class="leaderboard_classement" style="border:2px solid {%if utilisateur['id']==session['id']%}{{session['couleur'][1]}}{%else%}gray{%endif%};">
-        <div class="leaderboard_nom_Img">
-          <p>
-            {{a}}
-          </p>
-          <img alt="photo profile" class="leaderboard_img_classement" src="{%if utilisateur['idImg']%}{{url_for('userImg', profilImg = utilisateur['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
-          <p>
-            {{utilisateur['pseudo']}}
-          </p>
-        </div>
-        <p>
-          {{utilisateur['xp']}}
-        </p>
-    </div> -->
     {%endfor%}
 
   </div>
 
-</div>
+  </div>
+
 </body>
 </html>
