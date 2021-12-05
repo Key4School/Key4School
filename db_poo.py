@@ -3,7 +3,7 @@ from flask import session, escape, render_template
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import JSONB, UUID
-from uuid import uuid1
+from uuid import uuid1, UUID as uUID
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import sessionmaker
@@ -59,6 +59,22 @@ def get_context(func):
         return return_value
 
     return return_func
+
+
+def is_valid_uuid(uuid_to_test, version=1):
+    """
+    Check if uuid_to_test is a valid UUID.
+    """
+    if not uuid_to_test:
+        return None
+    elif type(uuid_to_test) != str:
+        uuid_to_test = str(uuid_to_test)
+
+    try:
+        uuid_obj = uUID(uuid_to_test)
+    except ValueError:
+        return False
+    return str(uuid_obj) == uuid_to_test
 
 
 def generate_uuid():
@@ -861,9 +877,9 @@ class Group(Actions, Base):
 
     @property
     def notifs(self, uid=None):
-        if uid == None:
+        if not uid:
             uid = session['id'] if session != None and 'id' in session else None
-        if uid != None:
+        if uid:
             temp = self.id
             return Notification.get(filter="(cls.type == 'msg') & (cls.id_groupe == temp) & (cls.destinataires.has_key(uid))")
         else:

@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
+from flask import Flask, current_app as app, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
-from flask_socketio import emit
 from db_poo import *
 from routing.functions import listeModeration, automoderation
 
@@ -10,6 +9,9 @@ from routing.functions import listeModeration, automoderation
 def page_messages(idGroupe):
 
     if 'id' in session:
+        if not is_valid_uuid(idGroupe):
+            idGroupe = None
+
         user = User.get(filter="cls.id == session['id']", limit=1)
         users = User.get(order_by="cls.pseudo")
 
@@ -53,6 +55,9 @@ def page_messages(idGroupe):
 @db_session
 def redirectDM(idUser1, idUser2):
     if 'id' in session:
+        if not is_valid_uuid(idUser1) or not is_valid_uuid(idUser2):
+            return redirect(url_for('page_messages'))
+
         grp = Group.get(
             filter="(cls.is_DM == True) & (cls.id_utilisateurs.comparator.has_key(idUser1)) & (cls.id_utilisateurs.comparator.has_key(idUser2))", limit=1)
 
@@ -76,7 +81,6 @@ def redirectDM(idUser1, idUser2):
 
 
 @db_session
-@get_context # pour socket
 def uploadAudio():
     if 'id' in session:
         file = FileUploader(request.files['audio'])
@@ -104,14 +108,13 @@ def uploadAudio():
             otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe,
                                         infoUtilisateurs=users, idgroupe=groupe['id'], user=User.get(filter="cls.id == session['id']", limit=1))
 
-            socketio.emit('newMsg', {
+            app.config['socketio'].emit('newMsg', {
                           'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=groupe['id'])
             Notification.create("msg", groupe['id'], message['id'], list(
                 groupe['id_utilisateurs']))
             return 'yes'
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -122,12 +125,10 @@ def audio(audioId):
             return abort(404)
         return send_file(file['path'], mimetype='audio/ogg', attachment_filename=f"audio.{file['ext']}")
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
-@get_context # pour socket
 def uploadImage():
     if 'id' in session:
         file = FileUploader(request.files['image'])
@@ -155,14 +156,13 @@ def uploadImage():
             otherHTML = render_template("widget_message.html", content=message, sessionId=None, infogroupe=groupe,
                                         infoUtilisateurs=users, idgroupe=groupe['id'], user=User.get(filter="cls.id == session['id']", limit=1))
 
-            socketio.emit('newMsg', {
+            app.config['socketio'].emit('newMsg', {
                           'fromUser': session['id'], 'ownHTML': ownHTML, 'otherHTML': otherHTML}, to=groupe['id'])
             Notification.create("msg", groupe['id'], message['id'], list(
                 groupe['id_utilisateurs']))
             return 'yes'
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -173,8 +173,7 @@ def image(imageId):
             return abort(404)
         return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"attachment.{file['ext']}")
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -196,7 +195,7 @@ def createGroupe():
 
         return redirect(url_for('page_messages', idGroupe=groupe['id']))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('page_messages')
         return redirect(url_for('login'))
 
 
@@ -218,7 +217,7 @@ def updateGroupe():
 
         return redirect(url_for('page_messages', idGroupe=groupe['id']))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('page_messages', idGroupe=request.form['IdGroupe'])
         return redirect(url_for('login'))
 
 
@@ -237,10 +236,9 @@ def virerParticipant():
             else:
                 return 'reload grp'
         else:
-            return redirect(url_for('page_messages'))
+            return abort(401) # non autorisé
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 
 @db_session
@@ -266,11 +264,14 @@ def modifRole():
         else:
             abort(401)  # non autorisé
     else:
-        abort(403)  # doit se connecter
+        return abort(401) # non autorisé
 
 
 @db_session
 def supprGroupe(idGrp):
+    if not is_valid_uuid(idGrp):
+        return abort(404)
+
     user = User.get(filter="cls.id == session['id']", limit=1)
     groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
@@ -278,11 +279,14 @@ def supprGroupe(idGrp):
         groupe.supprGroupe()
         return 'group deleted', 200
     else:
-        abort(401)
+        return abort(401) # non autorisé
 
 
 @db_session
 def updateGrpName(idGrp, newGrpName):
+    if not is_valid_uuid(idGrp):
+        return abort(404)
+
     user = User.get(filter="cls.id == session['id']", limit=1)
     groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
@@ -292,12 +296,11 @@ def updateGrpName(idGrp, newGrpName):
 
         return 'group name edited', 200
     else:
-        abort(401)
+        return abort(401) # non autorisé
 
 
 @db_session
 def moreMsg():
-
     if 'id' in session:
         lastMsg = int(request.form['lastMsg'])
         groupe = Group.get(
@@ -318,11 +321,13 @@ def moreMsg():
         return {'html': html}
 
     else:
-        abort(401)  # non connecté
+        return abort(401) # non autorisé
 
 
 @db_session
 def modererGrp(idGrp):
+    if not is_valid_uuid(idGrp):
+        return abort(404)
     user = User.get(filter="cls.id == session['id']", limit=1)
     groupe = Group.get(filter="cls.id == idGrp", limit=1)
 
@@ -332,4 +337,4 @@ def modererGrp(idGrp):
 
         return 'group moderation edited', 200
     else:
-        abort(401)
+        return abort(401) # non autorisé

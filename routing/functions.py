@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
+from flask import Flask, current_app as app, render_template, request, redirect, session, url_for, abort, escape
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from datetime import *
 from flask.json import jsonify
@@ -38,6 +38,9 @@ def automoderation(stringModerer: str) -> str:
 
 @db_session
 def afficheNotif(userId, notifId):
+    if not is_valid_uuid(userId) or not is_valid_uuid(notifId):
+        return redirect(url_for('login'))
+
     user = User.get(filter="cls.id == userId", limit=1)
     notif = Notification.get(filter="cls.id == notifId", limit=1)
     if user and notif:

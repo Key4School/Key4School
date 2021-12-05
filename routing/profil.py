@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape, send_file
+from flask import Flask, current_app as app, render_template, request, redirect, session, url_for, abort, escape, send_file
 from datetime import *
 from flask.json import jsonify
 from db_poo import *
@@ -7,16 +7,17 @@ from routing.functions import listeModeration, automoderation
 
 @db_session
 def profil(idUser):
-
     if 'id' in session:
-        if idUser == None or idUser == session['id']:
+        if not is_valid_uuid(idUser):
+            idUser = None
+
+        if not idUser or idUser == session['id']:
             demandes = Request.get(filter="cls.id_utilisateur == session['id']", order_by="cls.date_envoi", desc=True)
 
             user = User.get(filter="cls.id == session['id']", limit=1)
             return render_template("profil.html", demandes=demandes, user=user)
 
         else:
-
             user = User.get(filter="cls.id == session['id']", limit=1)
             profilUtilisateur = User.get(filter="cls.id == idUser", limit=1)
 
@@ -52,13 +53,14 @@ def changeTheme():
 
         return redirect(url_for('profil'))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
 
 @db_session
 def theme():
+    '''thème clair/sombre'''
     if not 'id' in session:
-        return 'error'
+        return 'error', 401
 
     user = User.get(filter="cls.id == session['id']", limit=1)
     user['theme'] = request.form['theme']
@@ -69,7 +71,6 @@ def theme():
 
 @db_session
 def updateprofile():
-
     if 'id' in session:  # on vérifie que l'utilisateur est bien connecté sinon on le renvoie vers la connexion
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
         elementPrive = []
@@ -85,8 +86,8 @@ def updateprofile():
         user['nom'] = automoderation(request.form['nom'])
         user['prenom'] = automoderation(request.form['prenom'])
         user['pseudo'] = automoderation(request.form['pseudo'])
-        user['email'] = automoderation(request.form['email'])
-        user['telephone'] = automoderation(request.form['telephone'])
+        user['email'] = request.form['email']
+        user['telephone'] = request.form['telephone']
         user['interets'] = automoderation(request.form['interets'])
         if user['type'] == 'ELEVE':
             user['langues'] = [request.form['lv1'], request.form['lv2']]
@@ -124,7 +125,7 @@ def updateprofile():
 
         return redirect(url_for('profil'))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
 
 @db_session
@@ -140,7 +141,7 @@ def otherSubject():
         user.update()
         return redirect(url_for('profil'))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
 
 @db_session
@@ -151,8 +152,7 @@ def userImg(profilImg):
             file = File('default', r"static/image/sans_profil.png")
         return send_file(file['path'], mimetype=file['mimetype'], attachment_filename=f"profil.{file['ext']}")
     else:
-        session['redirect'] = request.path
-        return redirect(url_for('login'))
+        return abort(401) # non autorisé
 
 @db_session
 def updateImg():
@@ -180,10 +180,5 @@ def updateImg():
 
         return redirect(url_for('profil'))
     else:
-        session['redirect'] = request.path
+        session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
-
-
-def logout():
-    session.clear()
-    return redirect(url_for('login'))

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, abort, escape
+from flask import Flask, current_app as app, render_template, request, redirect, session, url_for, abort, escape
 from datetime import *
 from flask.json import jsonify
 from db_poo import *
