@@ -520,7 +520,7 @@ how to remove the virtical space around the range input in IE*/
     justify-content: center;
     margin: auto;
   }
-  .form_connexion {
+  .form_connexion, .connexion_content_img_inscription {
     width: 90%;
     padding: 2%;
     margin: auto;
@@ -654,7 +654,7 @@ how to remove the virtical space around the range input in IE*/
     justify-content: center;
     margin: auto;
   }
-  .form_connexion {
+  .form_connexion, .connexion_content_img_inscription {
     width: 90%;
     padding: 2%;
     margin: auto;
@@ -809,6 +809,9 @@ how to remove the virtical space around the range input in IE*/
     border: 1px solid var(--scrollbar-thumb-hover);
     padding: 2%;
   }
+  .connexion_content_img_inscription {
+    width: 40%;
+  }
   .form_mdp_forgotten {
     padding-top: 5%;
     width: 40%;
@@ -822,13 +825,16 @@ how to remove the virtical space around the range input in IE*/
     justify-content: space-evenly;
     align-items: center;
     padding-top: 2%;
+    flex-direction: row-reverse;
   }
 
 
   .img_connexion {
-    width: 25%;
+    width: 70%;
     height: auto;
+    margin:auto;
     display: block;
+    padding-bottom: 4%;
   }
 
   .progressBar {
