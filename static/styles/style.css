@@ -444,13 +444,16 @@ how to remove the virtical space around the range input in IE*/
 .participantmsg{
   min-width: 20%;
 }
+.content_button_profil{
+  margin-left: 5%;
+}
 /* Pour telephone */
 @media screen and (max-width:767px) {
-  .depliableTel, .items_toggle_tel, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .bd-phone-items, .depliableTel, .items_toggle_tel, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
 
-  .depliable, .depliableOrdi, .items_toggle_ordi, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+   .bd-profil, .depliable, .depliableOrdi, .items_toggle_ordi, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -520,7 +523,7 @@ how to remove the virtical space around the range input in IE*/
     justify-content: center;
     margin: auto;
   }
-  .form_connexion {
+  .form_connexion, .connexion_content_img_inscription {
     width: 90%;
     padding: 2%;
     margin: auto;
@@ -581,10 +584,10 @@ how to remove the virtical space around the range input in IE*/
 
 /* Pour tablette */
 @media screen and (min-width:768px) and (max-width:1023px){
-  .depliable, .depliableOrdi, .items_toggle_ordi, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .bd-phone-items, .depliable, .depliableOrdi, .items_toggle_ordi, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
-  .depliableTel, .items_toggle_tel, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .depliableTel, .bd-profil, .items_toggle_tel, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -654,7 +657,7 @@ how to remove the virtical space around the range input in IE*/
     justify-content: center;
     margin: auto;
   }
-  .form_connexion {
+  .form_connexion, .connexion_content_img_inscription {
     width: 90%;
     padding: 2%;
     margin: auto;
@@ -714,7 +717,7 @@ how to remove the virtical space around the range input in IE*/
 }
 /* Pour ordinateur */
 @media screen and (min-width:1024px) {
-  .depliableTel, .items_toggle_tel, .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
+  .bd-phone-items, .depliableTel, .items_toggle_tel, .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
     display: none;
   }
 
@@ -722,15 +725,9 @@ how to remove the virtical space around the range input in IE*/
     display: flex;
   }
 
-  .depliable, .depliableOrdi, .items_toggle_ordi, .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
+  .bd-profil, .depliable, .depliableOrdi, .items_toggle_ordi, .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
     display: block;
   }
-
-  .ChoixCouleur {
-    margin-top: 24%;
-    margin-right: 5%;
-  }
-
   .selectProfil {
     max-width: 30%;
   }
@@ -809,6 +806,9 @@ how to remove the virtical space around the range input in IE*/
     border: 1px solid var(--scrollbar-thumb-hover);
     padding: 2%;
   }
+  .connexion_content_img_inscription {
+    width: 40%;
+  }
   .form_mdp_forgotten {
     padding-top: 5%;
     width: 40%;
@@ -822,13 +822,16 @@ how to remove the virtical space around the range input in IE*/
     justify-content: space-evenly;
     align-items: center;
     padding-top: 2%;
+    flex-direction: row-reverse;
   }
 
 
   .img_connexion {
-    width: 25%;
+    width: 70%;
     height: auto;
+    margin:auto;
     display: block;
+    padding-bottom: 4%;
   }
 
   .progressBar {

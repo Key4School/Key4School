@@ -39,14 +39,6 @@
       </form>
       <button onclick="recherche()" class="telRecherche" style="background-color:var(--bandeau-color); border: 1px solid var(--bandeau-color);font-size: 20px;margin:auto;"><i style="font-size: 1.725rem;color:var(--NetB)" class="fas fa-search logoBouton" ></i></button>
       {%if user['SanctionEnCour'] == "Spec"%}<div style="color: red;margin-top: 1%;">mode spectateur</div>{%endif%}
-
-      <!-- <a href="{{url_for('profil')}}">
-        <i style="color:black;font-size:30px;margin-top:40%;" class="fas fa-user-circle"></i>
-      </a>
-      <div style="width:20%; margin-top: 10px; padding:10px;">
-      <progress class="progress is-link" value="70" max="100">70%</progress>
-      </div> -->
-
       {%if user['SanctionEnCour'] != "Spec" and user['SanctionEnCour'] != "SpecForum" %}
       <div class="navbarhover questionNavbarOrdi" style="margin-top: 0.5%; transition: all .5s; border-radius: 4px;" >
         <a class="navbar-item " href="{{url_for('question')}}">
@@ -83,6 +75,34 @@
           <br />
         </div>
       </div>
+      <div class="navbar-item has-dropdown is-hoverable navbarhover bd-profil" style="transition: all .1s;">
+        <a class="navbar-link">
+          <img alt="photo user" onclick="updateImgOpen();"
+            src="{%if user['idImg']%}{{url_for('userImg', profilImg = user['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"
+            style="position: relative;margin-top:5%;width:1.725rem; height:1.725rem;object-fit: cover;border-radius:50%; cursor: pointer;" />
+        </a>
+
+        <div class="navbar-dropdown is-boxed is-right" style="width: 300%;max-height:500px;overflow-y: auto;" id="notifContent">
+          <a class="navbar-item" href="{{url_for('profil')}}">
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-user-circle BlackOrWhite"></i>
+            &nbsp;&nbsp;Profil et préférences
+          </a>
+          <a class="navbar-item" href="{{url_for('leaderboard')}}">
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-crown BlackOrWhite"></i>
+            &nbsp;&nbsp;Leader Board
+          </a>
+          {%if user['admin']== true%}
+          <a class="navbar-item" href="{{url_for('administration')}}">
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-user-shield BlackOrWhite"></i>
+            &nbsp;&nbsp;Administration
+          </a>
+          {%endif%}
+          <a class="navbar-item" >
+            <i style="font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-sign-out-alt BlackOrWhite"></i>
+            &nbsp;&nbsp;Déconnexion
+          </a>
+        </div>
+      </div>
       <div class="navbar-item has-dropdown is-hoverable navbarhover" style="transition: all .1s;">
         <a class="navbar-link">
           <i style="font-size: 1.725rem;" class="fas fa-bars BlackOrWhite"></i>
@@ -99,30 +119,30 @@
             <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-envelope BlackOrWhite"></i>
             &nbsp;&nbsp;Messages privés
           </a>
-
+          <a class="navbar-item bd-phone-items" href="{{url_for('profil')}}">
+            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-user-circle BlackOrWhite"></i>
+            &nbsp;&nbsp;Profil et préférences
+          </a>
           <a class="navbar-item" href="{{url_for('saved')}}">
             <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-bookmark BlackOrWhite"></i>
             &nbsp;&nbsp;Demandes enregistrées
           </a>
           {%if user['admin']== true%}
-          <a class="navbar-item" href="{{url_for('administration')}}">
+          <a class="navbar-item bd-phone-items" href="{{url_for('administration')}}">
             <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-user-shield BlackOrWhite"></i>
             &nbsp;&nbsp;Administration
           </a>
           {%endif%}
 
-          <a class="navbar-item" href="{{url_for('profil')}}">
-            <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-user-circle BlackOrWhite"></i>
-            &nbsp;&nbsp;Profil et préférences
-          </a>
-          <a class="navbar-item" href="{{url_for('leaderboard')}}">
+
+          <!-- <a class="navbar-item" href="{{url_for('leaderboard')}}">
             <i style=" font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-crown BlackOrWhite"></i>
             &nbsp;&nbsp;Leader Board
           </a>
-          <a class="navbar-item" href="{{url_for('logout')}}">
+          <a class="navbar-item" >
             <i style="font-size:1.30rem; width: 20px; margin-right: 5px;" class="fas fa-sign-out-alt BlackOrWhite"></i>
             &nbsp;&nbsp;Déconnexion
-          </a>
+          </a> -->
 
           <hr class="navbar-divider">
 
@@ -134,17 +154,7 @@
       </div>
     </div>
   </div>
-  <div id="rechercheTel" style="
-    left: 0;
-    padding: 1rem;
-    position: fixed;
-    right: 0;
-    top: 3.25rem;
-    /* z-index: 100; */
-    background-color: {{session['couleur'][0]}};;
-    box-shadow: ;
-    box-shadow: 0 0.5em 1em {{session['couleur'][0]}};
-    display: none;">
+  <div id="rechercheTel" style="left: 0;padding: 1rem;position: fixed;right: 0;top: 3.25rem;/* z-index: 100; */background-color: {{session['couleur'][0]}};;box-shadow: ;box-shadow: 0 0.5em 1em {{session['couleur'][0]}};display: none;">
     <form action="/recherche" method="GET" style="/* margin-top: 2px; *//* width: 40%; */display:flex;">
       <input type="text" name="search" placeholder="Recherche..." style="width: 80%;height: 80%;border-radius: 4px;border: none;outline: none;padding: 2%;padding-left: 8px;" spellcheck="false" data-ms-editor="true">
       <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i style="" class="fas fa-search logoBouton" aria-hidden="true"></i></button>

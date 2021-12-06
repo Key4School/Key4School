@@ -9,11 +9,11 @@
   <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <link rel ="stylesheet" href="http://jqueryui.com/ressources/demos/style.css" />
   <script src="../static/js/voir_mdp.js"></script>
+  <script src="/static/js/leaderboard.js"></script>
   <style>
     .logoBouton:hover {
       cursor: pointer;
     }
-
     @media screen and (max-width:1023px) {
 
       table,
@@ -102,6 +102,166 @@
 
     .slider.round:before {
       border-radius: 50%;
+    }
+    /* .confSupp{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: rgb(38, 45, 63);
+      width: 100%;
+    } */
+
+    .contenu {
+      display: flex;
+      flex-direction: column;
+      /* width: 200px; */
+      justify-content: center;
+      align-items: center;
+      /* height: 60px; */
+      border-radius: 10px;
+      /* position: relative; */
+      background-color: var(--page-background);
+      overflow: hidden;
+      position: fixed;
+      top:50%;
+      left:50%;
+      z-index: -1;
+      transform: translate(-50%, -50%);
+     }
+    h3{
+      position: absolute;
+      top: 12%;
+      font-size: 35px;
+      color: var(--text-color);
+      transform: translate(-100px);
+      opacity: 0;
+      user-select: none;
+     }
+
+    .sub-heading{
+      position: absolute;
+      top: 25%;
+      width: 60%;
+      text-align: center;
+      font-size: 16px;
+      color: var(--text-color);
+      font-weight: 600;
+      line-height: 20px;
+      letter-spacing: 1px;
+      transform: translate(-100px);
+      opacity: 0;
+    }
+
+    p{
+      user-select: none:
+    }
+
+    .warning{
+      top: 5%;
+      height: 120px;
+      border-radius: 10px;
+      position: relative;
+      width: 80%;
+      background: rgba(255, 143, 116, 0.116);
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      opacity: 0;
+     }
+    #allclose{
+      position: absolute;
+      right: 5%;
+      top: 5%;
+      font-size: 30px;
+      color: var(--NetB);
+      cursor: pointer;
+    }
+
+    #allclose:hover{
+      color: var(--text-color-hover);
+    }
+    .warning .fast{
+      position: absolute;
+      left: 15%;
+      font-size: 40px;
+      color: rgb(255, 87, 87);
+      opacity:0;
+    }
+
+    .warn-para{
+      position: absolute;
+      right: 0;
+      font-size: 20px;
+      padding: 20px;
+      width: 75%;
+      color: var(--text-color);
+      opacity: 0;
+      }
+    .cancel{
+      position: absolute;
+      bottom: 10%;
+      /* width:150px; */
+      left: 10%;
+      /* height: 50px; */
+      /* border: 2px solid rgb(87, 89, 117); */
+      /* background: transparent;
+      border-radius: 5px;
+      color: rgb(87, 89, 117); */
+      opacity: 0;
+      transform: translateY(100px);
+      }
+    .yes-delete{
+      position: absolute;
+      right: 10%;
+      bottom: 10%;
+      /* width: 220px;
+      height: 50px;
+      background: rgb(255, 94, 94);
+      border-radius: 5px; */
+      transform: translateY(100px);
+      opacity: 0;
+    }
+    .contenu.active{
+      width: 30%;
+      height: 50%;
+      transition: .1s;
+      /* margin: auto; */
+      z-index: 200;
+    }
+    .contenu.active .yes-delete{
+      opacity: 1;
+      transform: translateY(0);
+      transition: 1s;
+      transition-delay: .3s;
+    }
+    .contenu.active .cancel{
+       opacity: 1;
+       transform: translateY(0);
+       transition: 1s;
+       transition-delay: .3s;
+    }
+    .contenu.active h3{
+      transition: 1s;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .contenu.active .sub-heading{
+      opacity: 1;
+      transform: translateY(0);
+      transition: 1s;
+      transition-delay: .3s;
+    }
+    .contenu.active .warning {
+      opacity: 1;
+      transition: 1s;
+      transition-delay: .6s;
+    }
+    .contenu.active .warn-para{
+    opacity: 1;
+    }
+    .contenu.active .fas{
+      opacity: 1;
     }
   </style>
 </head>
@@ -280,10 +440,10 @@
       <i class="fas fa-pen" style="font-size: 1.5rem; position: absolute; bottom: 30px; right: 30px; transform: scale(-1, 1); cursor: pointer;" onclick="updateImgOpen();"></i>
     </div>
     <div style="display:flex;align-items: center;justify-content:space-between">
-      <p style="font-size:1.125rem;">NIV {{user['niv']}}</p>
-      <a href="{{url_for('leaderboard')}}"><p style="font-size:1.125rem;">{{user['xp']}} / {{user['xplvlMax']}}</p></a>
+      <a title="Voir le LeaderBoard" href="{{url_for('leaderboard')}}"><p style="font-size:1.125rem;">NIV {{user['niv']}}</p></a>
+      <a title="Voir le LeaderBoard" href="{{url_for('leaderboard')}}"><p style="font-size:1.125rem;">{{user['xp']}} / {{user['xplvlMax']}}</p></a>
     </div>
-      <progress class="progress is-theme progress_XP" value="{{user['xp'] - user['xplvlMin']}}" max="{{user['xplvlMax'] - user['xplvlMin']}}" style="width:100%;margin:auto;margin-top:5%;">70%</progress>
+      <a title="Voir le LeaderBoard" href="{{url_for('leaderboard')}}"><progress class="progress is-theme progress_XP" value="{{user['xp'] - user['xplvlMin']}}" max="{{user['xplvlMax'] - user['xplvlMin']}}" style="width:100%;margin:auto;margin-top:5%;">70%</progress></a>
       &nbsp;&nbsp;&nbsp;&nbsp;
 
   </div>
@@ -810,8 +970,121 @@
 
 
   <br />
+  <div>
+    <div class="leaderboard_profile">
+      <div id="leaderboard" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_leaderboard" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_leaderboard" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;LeaderBoard :</div>
+      <br />
+      <div id="content_leaderboard" class="depliable">
+        <div class="tabs is-toggle is-toggle-rounded">
+        <ul style="justify-content: center;">
+          <li id="lb-france" class="is-active">
+            <a>
+              <span class="items_toggle_ordi">Top France</span>
+              <span class="items_toggle_tel">France</span>
+            </a>
+          </li>
+          <li id="lb-depart">
+            <a>
+              <span class="items_toggle_ordi">Top département</span>
+              <span class="items_toggle_tel">Département</span>
+            </a>
+          </li>
+          <li id="lb-lycee">
+            <a>
+              <span class="items_toggle_ordi">Top lycée</span>
+              <span class="items_toggle_tel">Lycée</span>
+            </a>
+          </li>
+        </ul>
+        </div>
+        <div >
+        <br />
+        <div class="container_top_leaderboard">
+          <div class="container_top_leaderboard_items">
+            {%if users|length > 1%}
+            <p>
+                <i style="font-size:1.5rem;color:#c0c0c0" class="fas fa-medal"></i>
+            </p>
+            <img alt="photo profile" class="photo_top_leaderboard_2_3" src="{%if users[1]['idImg']%}{{url_for('userImg', profilImg = users[1]['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+            <p style="font-size:1rem;">
+              {{users[1]['xp']}}
+            </p>
+            <p style="font-size:1rem;">
+              {{users[1]['pseudo']}}
+            </p>
+            {%endif%}
+          </div>
+          <div class="container_top_leaderboard_items">
+            {%if users|length > 0%}
+            <p>
+                <i style="font-size:1.75rem;color:hsl(48, 100%, 67%);" class="fas fa-crown"></i>
+            </p>
+            <img alt="photo profile" style="height:6.25rem;width:6.25rem;object-fit: cover;border-radius:50%;" src="{%if users[0]['idImg']%}{{url_for('userImg', profilImg = users[0]['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+            <p style="font-size:1.5rem;">
+              {{users[0]['xp']}}
+            </p>
+            <p style="font-size:1.5rem;">
+              {{users[0]['pseudo']}}
+            </p>
+            {%endif%}
+          </div>
+          <div class="container_top_leaderboard_items">
+            {%if users|length > 2%}
+            <p>
+                <i style="font-size:1.5rem;color:#614e1a" class="fas fa-medal"></i>
+            </p>
+            <img alt="photo profile" class="photo_top_leaderboard_2_3" src="{%if users[2]['idImg']%}{{url_for('userImg', profilImg = users[2]['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+            <p style="font-size:1rem;">
+              {{users[2]['xp']}}
+            </p>
+            <p style="font-size:1rem;">
+              {{users[2]['pseudo']}}
+            </p>
+            {%endif%}
+          </div>
+        </div>
+        <br /><br />
+        <div style="width:100%;">
+          {%for utilisateur in users[3:-1]%}
+          {%set a= loop.index+3%}
+          <table class="leaderboard_classement">
+            {%if utilisateur['id']==session['id']%}
+            <tr style="border:2px solid {%if utilisateur['id']==session['id']%}{{session['couleur'][1]}}{%else%}gray{%endif%};">
+              <td style="width:2rem;" class="leaderboard_cellule">
+                <p style="margin:auto;width:1rem;">
+                  {{a}}
+                </p>
+              </td>
+              <td class="leaderboard_cellule" style="margin-left:5%;display:flex;align-items:center;justify-content:flex-start">
+                <img alt="photo profile" class="leaderboard_img_classement" src="{%if utilisateur['idImg']%}{{url_for('userImg', profilImg = utilisateur['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
+              <!-- </td>
+              <td class="leaderboard_cellule"> -->
+                <p style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis;">
+                  {{utilisateur['pseudo']}}
+                </p>
+              </td>
+              <td style="width:auto;" class="leaderboard_cellule">
+                <p style="width:auto;text-align:right;margin-right:1rem;">
+                  {{utilisateur['xp']}}
+                </p>
+              </td>
+            </tr>
+            {%endif%}
+          </table>
+          {%endfor%}
+
+        </div>
+
+        </div>
+
+        <a href="{{url_for('leaderboard')}}">Voir plus</a>
+      </div>
+
+    </div>
+    <br />
     <div class="ChoixCouleur">
       <div id="theme" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_theme" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_theme" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Thème :</div>
+      <br />
       <div id="content_theme" class="depliable">
         <p>
           Chosir le thème principal :
@@ -945,6 +1218,8 @@
         </form>
       </div>
     </div>
+  </div>
+
     <br />
   </div>
   {%if user['admin']==true and user['sign'] != []%}
@@ -1048,6 +1323,47 @@
     </div>
   </div>
   {%endif%}
+  <div class="content_button_profil" >
+    <a class="button is-danger is-outlined" href="{{url_for('logout')}}" style="margin-bottom: 20px;">
+      <span class="icon is-small">
+        <i class="fas fa-sign-out-alt"></i>
+      </span>
+      <span>Déconnexion</span>
+    </a>
+    <br />
+    <div class="confSupp">
+      <div id="ConfSupp-filtre" class="modal-background" style="display:none;width: 100%;height: 100%;z-index: 100;position: fixed;"></div>
+    <div id="contenu" class="contenu">
+      <i id="allclose" class="fas fa-times" onclick="closeCont();"></i>
+      <h3>Etes-vous sur ?</h3>
+      <p class="sub-heading">Cela va supprimer définitivement votre compte?</p>
+      <div class="warning" >
+        <i style="font-size: 2.5rem;color:#f14668;margin-left: 5%;" class="fas fa-exclamation-triangle"></i>
+        <p class="warn-para">Après avoir supprimer votre compte vous ne pourrez le récuperer</p>
+      </div>
+      <button class="button is-info is-outlined yes-delete cancel" onclick="closeCont();">
+        <span class="icon is-small">
+          <i class="fas fa-times"></i>
+        </span>
+        <span>Annuler</span>
+      </button>
+      <button class="button is-danger is-outlined yes-delete">
+        <span class="icon is-small">
+          <i class="fas fa-trash-alt"></i>
+        </span>
+        <span>Oui, Supprimer</span>
+      </button>
+  </div>
+  </div>
+  <button class="button is-danger is-outlined" id="delete" style="margin-bottom: 20px;">
+    <span class="icon is-small">
+      <i class="fas fa-trash-alt"></i>
+    </span>
+    <span>Supprimer mon compte</span>
+  </button>
+
+
+  </div>
   <br /><br />
 </body>
 

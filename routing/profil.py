@@ -15,7 +15,8 @@ def profil(idUser):
             demandes = Request.get(filter="cls.id_utilisateur == session['id']", order_by="cls.date_envoi", desc=True)
 
             user = User.get(filter="cls.id == session['id']", limit=1)
-            return render_template("profil.html", demandes=demandes, user=user)
+            users = User.get(order_by="cls.xp", desc=True, limit=50)
+            return render_template("profil.html", demandes=demandes, user=user, users=users)
 
         else:
             user = User.get(filter="cls.id == session['id']", limit=1)

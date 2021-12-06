@@ -143,7 +143,6 @@
     </span>
   </nav>
   <div class="flex_connexion">
-    <img id="img_connexion" class="img_connexion" src="/static/image/connexion/Entraide.gif" alt="apercu du site" />
     <form class="form_connexion" action="./" method="post">
       <p class="connexion_txt txt_centre">
         Connexion
@@ -162,7 +161,7 @@
           </p>
         </span>
       </div>
-      <div class="control has-icons-left has-icons-right">
+      <div class="control has-icons-left has-icons-right" style="max-width: 20rem;margin: auto;">
         <input class="color_input input" type="text" placeholder="Pseudo ou Email" name="username" autofocus>
         <span class="icon is-small is-left">
           <i class="far fa-smile-wink"></i>
@@ -172,7 +171,7 @@
         </span>
       </div>
       <br />
-      <div class="content_mdp">
+      <div class="content_mdp" style="max-width: 20rem;margin: auto;">
         <div class="control has-icons-left has-icons-right" style="width: 100%;">
           <input class="color_input input" type="password" id="mdp" placeholder="Mot de passe" name="password">
           <span class="icon is-small is-left">
@@ -201,14 +200,18 @@
       <p class="erreurP">{{erreur}}</p>
       {%endif%}
     </form>
+    <div class="connexion_content_img_inscription">
+      <img id="img_connexion" class="img_connexion" src="/static/image/connexion/Entraide.gif" alt="apercu du site" />
+      <p class="txt_centre" style="width: max-content;margin: auto;">
+        Vous n'avez pas de compte ? <a href="{{url_for('signIn0')}}" style="color:#3273dc;">Inscrivez vous !</a>
+      </p>
+    </div>
     <br />
   </div>
 
 
   <br><br>
-  <p class="txt_centre">
-    Vous n'avez pas de compte ? <a href="{{url_for('signIn0')}}" style="color:#3273dc;">Inscrivez vous !</a>
-  </p>
+
   <br>
 
   <div class="contact scroll">
