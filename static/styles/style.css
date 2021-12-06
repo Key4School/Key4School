@@ -453,7 +453,7 @@ how to remove the virtical space around the range input in IE*/
     display: block;
   }
 
-   .bd-profil, .depliable, .depliableOrdi, .items_toggle_ordi, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .leaderboard_profile, .bd-profil, .depliable, .depliableOrdi, .items_toggle_ordi, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -587,7 +587,7 @@ how to remove the virtical space around the range input in IE*/
   .bd-phone-items, .depliable, .depliableOrdi, .items_toggle_ordi, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
-  .depliableTel, .bd-profil, .items_toggle_tel, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .depliableTel, .leaderboard_profile, .bd-profil, .items_toggle_tel, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -725,7 +725,7 @@ how to remove the virtical space around the range input in IE*/
     display: flex;
   }
 
-  .bd-profil, .depliable, .depliableOrdi, .items_toggle_ordi, .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
+  .bd-profil, .leaderboard_profile, .depliable, .depliableOrdi, .items_toggle_ordi, .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
     display: block;
   }
   .selectProfil {

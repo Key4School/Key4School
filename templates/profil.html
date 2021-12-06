@@ -1060,19 +1060,18 @@
             {%endif%}
           </div>
         </div>
-        <br /><br />
-        <div style="width:100%;">
+        <br />
           {%for utilisateur in users[3:]%}
           {%set a= loop.index+3%}
-          <table class="leaderboard_classement">
+          <table style="width: 100%;margin: 0% auto 3% auto;padding: 1% 2%;border-radius: 10px;">
             {%if utilisateur['id']==session['id']%}
             <tr style="border:2px solid {%if utilisateur['id']==session['id']%}{{session['couleur'][1]}}{%else%}gray{%endif%};">
-              <td style="width:2rem;" class="leaderboard_cellule">
+              <td style="width:2rem;border:none;" class="leaderboard_cellule">
                 <p style="margin:auto;width:1rem;">
                   {{a}}
                 </p>
               </td>
-              <td class="leaderboard_cellule" style="margin-left:5%;display:flex;align-items:center;justify-content:flex-start">
+              <td class="leaderboard_cellule" style="border:none;margin-left:5%;display:flex;align-items:center;justify-content:flex-start">
                 <img alt="photo profile" class="leaderboard_img_classement" src="{%if utilisateur['idImg']%}{{url_for('userImg', profilImg = utilisateur['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
               <!-- </td>
               <td class="leaderboard_cellule"> -->
@@ -1080,7 +1079,7 @@
                   {{utilisateur['pseudo']}}
                 </p>
               </td>
-              <td style="width:auto;" class="leaderboard_cellule">
+              <td style="width:auto;border:none;" class="leaderboard_cellule">
                 <p style="width:auto;text-align:right;margin-right:1rem;">
                   {{utilisateur['xp']}}
                 </p>
@@ -1091,9 +1090,7 @@
           {%endfor%}
 
         </div>
-
-        </div>
-
+        <br />
         <a href="{{url_for('leaderboard')}}">Voir plus</a>
       </div>
 
