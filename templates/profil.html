@@ -463,10 +463,10 @@
               </td>
               <td>
                 <div id="contentnom" style="display: flex; flex-direction: row;">
-                  <input type="hidden" value="{{user['nom']}}" name="nom" />
+                  <input type="hidden" id="hiddenNom" value="{{user['nom']}}" name="nom" />
                   <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputNom()" {%endif%} id="nom">{{user['nom']}}
                   </p>
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputNom()" {%endif%}></i>
+                  <i class="fas fa-pen" id="penNom" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputNom()" {%endif%}></i>
                 </div>
 
               </td>
@@ -477,11 +477,11 @@
                 &nbsp;&nbsp;Prenom
               </td>
               <td>
-                <div id="contentnom" style="display: flex; flex-direction: row;">
-                  <input type="hidden" value="{{user['prenom']}}" name="prenom" />
+                <div id="contentprenom" style="display: flex; flex-direction: row;">
+                  <input type="hidden" id="hiddenPrenom" value="{{user['prenom']}}" name="prenom" />
                   <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPrenom()" {%endif%} id="prenom">{{user['prenom']}}
                   </p>
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPrenom()" {%endif%}></i>
+                  <i class="fas fa-pen" id="penPrenom" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPrenom()" {%endif%}></i>
                 </div>
 
               </td>
@@ -494,10 +494,10 @@
               </td>
               <td>
                 <div id="contentpseudo" style="display: flex; flex-direction: row;">
-                  <input type="hidden" value="{{user['pseudo']}}" name="pseudo" />
+                  <input type="hidden" id="hiddenPseudo"  value="{{user['pseudo']}}" name="pseudo" />
                   <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPseudo()" {%endif%} id="pseudo">{{user['pseudo']}}
                   </p>
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPseudo()" {%endif%}></i>
+                  <i class="fas fa-pen" id="penPseudo" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputPseudo()" {%endif%}></i>
                 </div>
               </td>
             </tr>
@@ -508,28 +508,45 @@
               </td>
               <td>
                 <div id="contentmdp" class="contentmdp" >
-                  <input type="hidden" value="••••••••" name="mdp" />
-                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputMdp()" {%endif%} id="mdp">••••••••
-                  </p>
-                  <i id="logoModifieMdp" class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputMdp()" {%endif%}></i>
+                  <input type="hidden" id="hiddenMdp" value="" name="mdp" />
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputMdp()" {%endif%} id="mdp">••••••••</p>
+                  <i id="logoModifieMdp" id="penMdp" class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputMdp()" {%endif%}></i>
                 </div>
               </td>
             </tr>
             <tr>
               <td>
                 <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
-                &nbsp;&nbsp;Lycée{%if 'ELEVE' == 'ELEVE'%}&nbsp;/&nbsp;Classe{%endif%}
+                &nbsp;&nbsp;Lycée
               </td>
               <td>
                 <div id="contentlycee" style="display: flex; flex-direction: row;">
-                  <input type="hidden" value="{{user['lycee']}}" name="lycee" />
-                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%} id="lycee">{{user['lycee']}}&nbsp;{%if 'ELEVE' == 'ELEVE'%}/&nbsp;{%if user['classe']=='2GT'%}Seconde{%endif%}{%if user['classe']=='1G'%}Première{%endif%}{%if user['classe']=='TG'%}Terminale{%endif%}{%endif%}
-                  </p>
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%}></i>
+                  <input type="hidden" id="hiddenLycee"  value="{{user['lycee']}}" name="lycee" />
+                  <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%} id="school">{{user['lycee']}}</p>
+                  <i class="fas fa-pen" id="penLycee" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%}></i>
                 </div>
 
               </td>
             </tr>
+            {%if 'ELEVE' == 'ELEVE'%}
+            <tr>
+              <td>
+                <i class="fas fa-graduation-cap" style="font-size:25px;"></i>
+                &nbsp;Classe
+              </td>
+              <td>
+                <div id="contentlycee">
+                <div class="select">
+                  <select name="classe">
+                    <option value="2GT" {%if user['classe']=='2GT'%}selected{%endif%}>Seconde</option>
+                    <option value="1G" {%if user['classe']=='1G'%}selected{%endif%}>Première</option>
+                    <option value="TG" {%if user['classe']=='TG'%}selected{%endif%}>Terminale</option>
+                  </select>
+                </div>
+                </div>
+              </td>
+            </tr>
+            {%endif%}
 
             {%if 'ELEVE' == 'ELEVE'%}
             <tr>
@@ -833,11 +850,11 @@
               </td>
               <td>
                 <div id="content{{element}}" style="display: flex; flex-direction: row;">
-                  <input type="hidden" name="{{element}}" type="{{element}}" value="{{user[element]}}" />
+                  <input type="hidden" id="hidden{{element}}" name="{{element}}" type="{{element}}" value="{{user[element]}}" />
                   <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>
                     {{user[element]}}{%if user[element]==""%}Non-renseigné{%endif%}
                   </p>
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}></i>
+                  <i class="fas fa-pen" id="pen{{element}}" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}></i>
                 </div>
               </td>
               <td>
@@ -889,11 +906,11 @@
               </td>
               <td>
                 <div id="content{{element}}" style="display: flex; flex-direction: row;">
-                  <input type="hidden" name="{{element}}" type="{{element}}" value="{{user[element]}}" />
+                  <input type="hidden" id="hidden{{element}}" name="{{element}}" type="{{element}}" value="{{user[element]}}" />
                   <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" id="{{element}}" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}>
                     {{user[element]}}{%if user[element]==""%}Non-renseigné{%endif%}
                   </p>
-                  <i class="fas fa-pen" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}></i>
+                  <i class="fas fa-pen" id="pen{{element}}" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="input('{{element}}')" {%endif%}></i>
                 </div>
               </td>
               <td>
