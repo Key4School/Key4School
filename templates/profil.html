@@ -1045,7 +1045,7 @@
         </div>
         <br /><br />
         <div style="width:100%;">
-          {%for utilisateur in users[3:-1]%}
+          {%for utilisateur in users[3:]%}
           {%set a= loop.index+3%}
           <table class="leaderboard_classement">
             {%if utilisateur['id']==session['id']%}
