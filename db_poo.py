@@ -67,8 +67,7 @@ def is_valid_uuid(uuid_to_test, version=1):
     """
     if not uuid_to_test:
         return None
-    elif type(uuid_to_test) != str:
-        uuid_to_test = str(uuid_to_test)
+    uuid_to_test = str(uuid_to_test)
 
     try:
         uuid_obj = uUID(uuid_to_test)

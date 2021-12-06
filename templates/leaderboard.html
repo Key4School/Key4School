@@ -84,7 +84,7 @@
   </div>
   <br /><br />
   <div style="width:100%;">
-    {%for utilisateur in users[3:-1]%}
+    {%for utilisateur in users[3:]%}
     {%set a= loop.index+3%}
     <table class="leaderboard_classement">
       <tr style="border:2px solid {%if utilisateur['id']==session['id']%}{{session['couleur'][1]}}{%else%}gray{%endif%};">

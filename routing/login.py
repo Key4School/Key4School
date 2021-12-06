@@ -1,6 +1,7 @@
 from flask import Flask, current_app as app, render_template, request, redirect, session, url_for, abort, escape
 from datetime import *
 from db_poo import *
+import json
 from routing.functions import automoderation
 
 
