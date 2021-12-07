@@ -113,9 +113,9 @@
               session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
               session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}checked{%endif%}>
           {% endif %}&nbsp;&nbsp;
-          <input id="couleur" type="color" name="color1" value="{{session['couleur'][0]}}" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
-          <input id="couleur" type="color" name="color2" value="{{session['couleur'][1]}}" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
-          <input id="couleur" type="color" name="color3" value="{{session['couleur'][2]}}" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
+          <input id="couleur" type="color" name="color1" value="var(--color-theme0)" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
+          <input id="couleur" type="color" name="color2" value="var(--color-theme1)" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
+          <input id="couleur" type="color" name="color3" value="var(--color-theme2)" {% if user['niv'] < 5 %} disabled {%endif%} />&nbsp;
 
         </div>
       </label>
