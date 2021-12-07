@@ -1,6 +1,6 @@
-var min=0;
-var sec=0;
-var tmp="";
+var min = 0;
+var sec = 0;
+var tmp = "";
 var idMsg;
 
 $(document).ready(function() {
@@ -20,7 +20,7 @@ $(document).ready(function() {
     height: (40 / 100 * ($(window).height())).toString() + 'px',
   });
   $('#content_input_nom_groupe').css({
-    display:"none",
+    display: "none",
   });
   /*searchUser();
   $('#searchUser').keyup(function() {
@@ -29,11 +29,11 @@ $(document).ready(function() {
   // Affichage nb de participants, en fonction de la taille de l'écran
   const groupTitle_size = parseInt(window.getComputedStyle(document.getElementById('groupTitle'), null).getPropertyValue('height').replace(/px/, ''));
   let listGroupUsers_size = parseInt(window.getComputedStyle(document.getElementById('listGroupUsers'), null).getPropertyValue('height').replace(/px/, ''));
-  if(groupTitle_size + listGroupUsers_size > 88) {
+  if (groupTitle_size + listGroupUsers_size > 88) {
     document.getElementById('listGroupUsers').innerHTML += `<br />&nbsp;<a style="margin-left: 15px;" onclick="divoptionopen()"><em>et <span id="lastedGroupUsers">0</span> autres utilisateurs</em></a>`;
     const lastedGroupUsers_count = document.getElementById('lastedGroupUsers');
 
-    while(groupTitle_size + listGroupUsers_size > 88) {
+    while (groupTitle_size + listGroupUsers_size > 88) {
       listGroupUsers_size = parseInt(window.getComputedStyle(document.getElementById('listGroupUsers'), null).getPropertyValue('height').replace(/px/, ''));
       showedGroupUsers = document.querySelectorAll('.groupUser[style="display: inline;"]');
       // hide last user
@@ -50,7 +50,7 @@ $(document).ready(function() {
 
 const scroll = () => {
   const messagesDiv = document.getElementById('messages');
-  if (messagesDiv !== null){
+  if (messagesDiv !== null) {
     const scrollHeight = messagesDiv.scrollHeight;
 
     return messagesDiv.scrollBy(0, scrollHeight);
@@ -59,46 +59,46 @@ const scroll = () => {
 
 
 
-function checkboxTitle(){
+function checkboxTitle() {
   var inputElems = document.getElementsByTagName("input"),
-  count = 0;
-  for (var i=0; i<inputElems.length; i++) {
-    if (inputElems[i].type === "checkbox" && inputElems[i].checked === true){
-        count++;
-        if (count > 1){
-          $('#content_input_nom_groupe').css({
-            display:"block"
-          });
-          $("[name='nomnewgroupe']").attr("required", true);
-          $('#switchGroupeMP').css({
-            display:"none"
-          });
-        }
-        if (count == 1){
-          $('#content_input_nom_groupe').css({
-            display:"none"
-          });
-          $("[name='nomnewgroupe']").attr("required", false);
-          $('#switchGroupeMP').css({
-            display:"block"
-          });
-        }
+    count = 0;
+  for (var i = 0; i < inputElems.length; i++) {
+    if (inputElems[i].type === "checkbox" && inputElems[i].checked === true) {
+      count++;
+      if (count > 1) {
+        $('#content_input_nom_groupe').css({
+          display: "block"
+        });
+        $("[name='nomnewgroupe']").attr("required", true);
+        $('#switchGroupeMP').css({
+          display: "none"
+        });
+      }
+      if (count == 1) {
+        $('#content_input_nom_groupe').css({
+          display: "none"
+        });
+        $("[name='nomnewgroupe']").attr("required", false);
+        $('#switchGroupeMP').css({
+          display: "block"
+        });
       }
     }
+  }
 }
 
 $('#checkGroupeMP').change(function() {
-  if($('#checkGroupeMP').hasClass("checked")==true){
+  if ($('#checkGroupeMP').hasClass("checked") == true) {
     $('#content_input_nom_groupe').css({
-      display:"none"
+      display: "none"
     });
     $("[name='nomnewgroupe']").attr("required", false);
     $('#checkGroupeMP').removeClass("checked");
   }
-  else{
+  else {
     $('#checkGroupeMP').addClass("checked");
     $('#content_input_nom_groupe').css({
-      display:"block"
+      display: "block"
     });
     $("[name='nomnewgroupe']").attr("required", true);
   }
@@ -129,8 +129,8 @@ function envoi(e) {
   const contenuMsg = document.getElementById('inputMsg').value || '';
   const reponse = document.getElementById('reponse').value || 'None';
 
-  if(contenuMsg !== '')
-    socket.emit('postMsg', {room: idGroupe, contenuMessage: contenuMsg, reponse: reponse});
+  if (contenuMsg !== '')
+    socket.emit('postMsg', { room: idGroupe, contenuMessage: contenuMsg, reponse: reponse });
 
   $('#messageForm').trigger("reset");
   enleverRep();
@@ -158,52 +158,54 @@ function envoi(e) {
 
 var $dropzone = document.querySelector('#titreetmsg');
 
-$dropzone.ondragover = function (e) {
+$dropzone.ondragover = function(e) {
   e.preventDefault();
   $('#messages').addClass('dragover');
   $('#divDansTitregroupe').addClass('dragover');
 };
-$dropzone.ondragleave = function (e) {
-    e.preventDefault();
-    $('#messages').removeClass('dragover');
-    $('#divDansTitregroupe').removeClass('dragover');
-    resetImage();
+$dropzone.ondragleave = function(e) {
+  e.preventDefault();
+  $('#messages').removeClass('dragover');
+  $('#divDansTitregroupe').removeClass('dragover');
+  resetImage();
 };
-$dropzone.ondrop = function (e) {
+$dropzone.ondrop = function(e) {
   e.preventDefault();
   $('#messages').removeClass('dragover');
   $('#divDansTitregroupe').removeClass('dragover');
   document.getElementById('inputImage').files = e.dataTransfer.files;
   var fichier = e.dataTransfer.files;
   var reader = new FileReader();
-  reader.onload = function (event) {
-      $('#image').attr('src', event.target.result);
+  reader.onload = function(event) {
+    // $('#image').attr('src', event.target.result);
+    $("#divImgTmp").append('<img alt="image messages" src="' + event.target.result + '"style="height: auto;max-height:80%;max-width:80%;bottom: 0;right: calc(50% - 100px);" id="image" />');
   }
   reader.readAsDataURL(fichier[0]);
   imageUploaded();
 }
 
 function imageUploaded() {
-  document.getElementById('inputImage').style.display = 'none';
-  document.getElementById('uploadImageIcon').style.display = 'none';
-  document.getElementById('resetImageIcon1').style.display = 'inline-block';
-  document.getElementById('resetImageIcon2').style.display = 'inline-block';
-  document.getElementById('messages').style.display = 'none';
-  document.getElementById('divImgTmp').style.display = 'block';
+  $('#inputImage').css('display', 'none');
+  $('#uploadImageIcon').css('display', 'none');
+  $('#resetImageIcon1').css('display', 'inline-block');
+  $('#resetImageIcon2').css('display', 'inline-block');
+  $('#messages').css('display', 'none');
+  $('#divImgTmp').css('display', 'block');
 }
 
-function suppTmpMsg(){
-  document.getElementById("image").src = "";
-  document.getElementById('messages').style.display = 'flex'
-  document.getElementById('divImgTmp').style.display = 'none';
+function suppTmpMsg() {
+  // $("#image").attr("src", "");
+  $("#image").remove();
+  $('#messages').css('display', 'flex');
+  $('#divImgTmp').css('display', 'none');
 }
 
 function resetImage() {
-  document.getElementById('inputImage').value = '';
-  document.getElementById('inputImage').style.display = 'block';
-  document.getElementById('uploadImageIcon').style.display = 'inline-block';
-  document.getElementById('resetImageIcon1').style.display = 'none';
-  document.getElementById('resetImageIcon2').style.display = 'none';
+  $('#inputImage').val('');
+  $('#inputImage').css('display', 'block');
+  $('#uploadImageIcon').css('display', 'inline-block');
+  $('#resetImageIcon1').css('display', 'none');
+  $('#resetImageIcon2').css('display', 'none');
   suppTmpMsg()
 }
 
@@ -261,20 +263,20 @@ const idGroupe = document.getElementById('idGroupe').value || undefined;
 const idUser = document.getElementById('idUser').value || undefined;
 
 socket.on('connect', function() {
-  if (idGroupe != "None"){
-    socket.emit('connectToGroup', {room: idGroupe});
+  if (idGroupe != "None") {
+    socket.emit('connectToGroup', { room: idGroupe });
   }
 });
 
 socket.on('newMsg', (data) => {
   var scrollHeight = $('#messages')[0].scrollHeight - $('#messages')[0].offsetHeight;
 
-  if(data.fromUser == idUser)
+  if (data.fromUser == idUser)
     $('#messages').append(data.ownHTML); // on veut ajouter les nouveaux messages au début du bloc #messages
   else
     $('#messages').append(data.otherHTML); // on veut ajouter les nouveaux messages au début du bloc #messages
 
-  if ($('#messages').scrollTop() >= scrollHeight){
+  if ($('#messages').scrollTop() >= scrollHeight) {
     scroll();
   }
 });
@@ -282,7 +284,7 @@ socket.on('newMsg', (data) => {
 $(window).data('ajaxready', true);
 
 // load 40 messages at loading
-for(let i=0 ; i<2 ; i++) {
+for (let i = 0; i < 2; i++) {
   $.ajax({
     url: "/moreMsg/", // on donne l'URL du fichier de traitement
     type: "POST", // la requête est de type POST
@@ -336,11 +338,11 @@ function reponseMsg(nb) {
   document.getElementById('divrepmsg').style.backgroundColor = couleur_deux;
   //document.getElementById('messages').style.height = "65%";
   document.getElementById('champReponse').innerHTML =
-  "<div style='background-color:"+ couleur_deux +";padding:0.5%;padding-left:2%;border-left:4px solid "+ couleur_un +";border-radius:7px;'>"
-   + pseudo +
-   '<br>' +
-   contentMsg +
-   "</div>";
+    "<div style='background-color:" + couleur_deux + ";padding:0.5%;padding-left:2%;border-left:4px solid " + couleur_un + ";border-radius:7px;'>"
+    + pseudo +
+    '<br>' +
+    contentMsg +
+    "</div>";
   document.getElementById('reponse').value = nb;
   idMsg = "None";
   contentMsg = "";
@@ -370,8 +372,8 @@ var accessMicro = false;
 var estEnregistre = "";
 var final;
 var options = {
-      audioBitsPerSecond : 56000
-    }
+  audioBitsPerSecond: 56000
+}
 
 function micro() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -465,10 +467,10 @@ function enregistrerTel() {
   if (stopped == true) {
     if (accessMicro == true) {
       navigator.mediaDevices.getUserMedia(
-          // constraints - only audio needed for this app
-          {
-            audio: true
-          })
+        // constraints - only audio needed for this app
+        {
+          audio: true
+        })
 
         // Success callback
         .then(function(stream) {
@@ -477,16 +479,16 @@ function enregistrerTel() {
           mediaRecorder.start();
           stopped = false;
           sec = 0;
-          min =0;
+          min = 0;
           document.getElementById('txtAudio').innerHTML = "0:0";
-          chrono = setInterval(function(){
-            sec+=1
-            if (sec>=60){
-              sec=0
-              min+=1
+          chrono = setInterval(function() {
+            sec += 1
+            if (sec >= 60) {
+              sec = 0
+              min += 1
             }
-          tmp= min + ":" + sec
-          document.getElementById('txtAudio').innerHTML = tmp;
+            tmp = min + ":" + sec
+            document.getElementById('txtAudio').innerHTML = tmp;
           }, 1000);
           console.log(mediaRecorder.state);
           console.log("recorder started");
@@ -506,9 +508,9 @@ function enregistrerTel() {
             form.append('audio', blob);
             estEnregistre = true;
             clearTimeout(chrono);
-            if (final == "jeter"){
+            if (final == "jeter") {
               deleteAudio();
-            }else if (final == "garder"){
+            } else if (final == "garder") {
               sendAudio();
             }
           }
@@ -525,7 +527,7 @@ function enregistrerTel() {
 }
 
 function stopTel(but) {
-  final = but ;
+  final = but;
   if (stopped == false) {
     mediaRecorder.stop();
     console.log(mediaRecorder.state);
@@ -561,7 +563,7 @@ function sendAudio() {
 function deleteAudio() {
   form = new FormData();
   estEnregistre = false;
-  while (document.getElementById('txtAudio').innerHTML != ""){
+  while (document.getElementById('txtAudio').innerHTML != "") {
     document.getElementById('txtAudio').innerHTML = "";
   }
   boutonAudioClose();
@@ -575,125 +577,125 @@ function boutonAudioOpen() {
 function boutonAudioClose() {
   document.getElementById('buttonAudio1').style.display = "none";
   document.getElementById('buttonAudio2').style.display = "none";
-  while (document.getElementById('txtAudio').innerHTML != ""){
+  while (document.getElementById('txtAudio').innerHTML != "") {
     document.getElementById('txtAudio').innerHTML = "";
   }
 }
 
 function changeRate(id) {
-  myaudio=document.getElementById("audio"+id);
-  if (myaudio.playbackRate==2){
-    myaudio.playbackRate=1;
-    document.getElementById("buttonAudio"+id).innerHTML = "1x";
-  }else if(myaudio.playbackRate==1){
-    myaudio.playbackRate=1.5;
-    document.getElementById("buttonAudio"+id).innerHTML = "1.5x";
-  }else if(myaudio.playbackRate==1.5){
-    myaudio.playbackRate=2;
-    document.getElementById("buttonAudio"+id).innerHTML = "2x";
+  myaudio = document.getElementById("audio" + id);
+  if (myaudio.playbackRate == 2) {
+    myaudio.playbackRate = 1;
+    document.getElementById("buttonAudio" + id).innerHTML = "1x";
+  } else if (myaudio.playbackRate == 1) {
+    myaudio.playbackRate = 1.5;
+    document.getElementById("buttonAudio" + id).innerHTML = "1.5x";
+  } else if (myaudio.playbackRate == 1.5) {
+    myaudio.playbackRate = 2;
+    document.getElementById("buttonAudio" + id).innerHTML = "2x";
   }
 }
 
 
 
 
-  // const playIconContainer = document.getElementById('play-icon');
-  // const audioPlayerContainer = document.getElementById('audio-player-container');
-  // const seekSlider = document.getElementById('seek-slider');
-  // const audio = document.querySelector('audio');
-  // let playState = 'pause';
-  //
-  // playIconContainer.removeAttribute('onclick');
-  //
-  //
-  // playIconContainer.addEventListener('click', () => {
-  //     if(playState === 'play') {
-  //         audio.pause();
-  //         cancelAnimationFrame(raf);
-  //         playState = 'pause';
-  //         playIconContainer.innerHTML = "play";
-  //     } else {
-  //         audio.play();
-  //         requestAnimationFrame(whilePlaying);
-  //         playState = 'play';
-  //         playIconContainer.innerHTML = "pause";
-  //     }
-  // });
-  //
-  //
-  //
-  // const showRangeProgress = (rangeInput) => {
-  //     if(rangeInput === seekSlider) audioPlayerContainer.style.setProperty('--seek-before-width', rangeInput.value / rangeInput.max * 100 + '%');
-  // }
-  //
-  // seekSlider.addEventListener('input', (e) => {
-  //     showRangeProgress(e.target);
-  // });
-  //
-  // const durationContainer = document.getElementById('duration');
-  // const currentTimeContainer = document.getElementById('current-time');
-  // let raf = null;
-  //
-  // const calculateTime = (secs) => {
-  //     const minutes = Math.floor(secs / 60);
-  //     const seconds = Math.floor(secs % 60);
-  //     const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
-  //     return `${minutes}:${returnedSeconds}`;
-  // }
-  //
-  // const displayDuration = () => {
-  //     durationContainer.textContent = calculateTime(audio.duration);
-  // }
-  //
-  // const setSliderMax = () => {
-  //     seekSlider.max = Math.floor(audio.duration);
-  // }
-  //
-  // const displayBufferedAmount = () => {
-  //     const bufferedAmount = Math.floor(audio.buffered.end(audio.buffered.length - 1));
-  //     audioPlayerContainer.style.setProperty('--buffered-width', `${(bufferedAmount / seekSlider.max) * 100}%`);
-  // }
-  //
-  // const whilePlaying = () => {
-  //     seekSlider.value = Math.floor(audio.currentTime);
-  //     currentTimeContainer.textContent = calculateTime(seekSlider.value);
-  //     audioPlayerContainer.style.setProperty('--seek-before-width', `${seekSlider.value / seekSlider.max * 100}%`);
-  //     raf = requestAnimationFrame(whilePlaying);
-  // }
-  //
-  // if (audio.readyState > 0) {
-  //     displayDuration();
-  //     setSliderMax();
-  //     displayBufferedAmount();
-  // } else {
-  //     audio.addEventListener('loadedmetadata', () => {
-  //         displayDuration();
-  //         setSliderMax();
-  //         displayBufferedAmount();
-  //     });
-  // }
-  //
-  // audio.addEventListener('progress', displayBufferedAmount);
-  //
-  // seekSlider.addEventListener('input', () => {
-  //     currentTimeContainer.textContent = calculateTime(seekSlider.value);
-  //     if(!audio.paused) {
-  //         cancelAnimationFrame(raf);
-  //     }
-  // });
-  //
-  // seekSlider.addEventListener('change', () => {
-  //     audio.currentTime = seekSlider.value;
-  //     if(!audio.paused) {
-  //         requestAnimationFrame(whilePlaying);
-  //     }
-  // });
-  //
-  // audio.addEventListener("ended", function(){
-  //      audio.currentTime = 0;
-  //      playState = 'pause';
-  //      playIconContainer.innerHTML = "play";
-  // });
+// const playIconContainer = document.getElementById('play-icon');
+// const audioPlayerContainer = document.getElementById('audio-player-container');
+// const seekSlider = document.getElementById('seek-slider');
+// const audio = document.querySelector('audio');
+// let playState = 'pause';
+//
+// playIconContainer.removeAttribute('onclick');
+//
+//
+// playIconContainer.addEventListener('click', () => {
+//     if(playState === 'play') {
+//         audio.pause();
+//         cancelAnimationFrame(raf);
+//         playState = 'pause';
+//         playIconContainer.innerHTML = "play";
+//     } else {
+//         audio.play();
+//         requestAnimationFrame(whilePlaying);
+//         playState = 'play';
+//         playIconContainer.innerHTML = "pause";
+//     }
+// });
+//
+//
+//
+// const showRangeProgress = (rangeInput) => {
+//     if(rangeInput === seekSlider) audioPlayerContainer.style.setProperty('--seek-before-width', rangeInput.value / rangeInput.max * 100 + '%');
+// }
+//
+// seekSlider.addEventListener('input', (e) => {
+//     showRangeProgress(e.target);
+// });
+//
+// const durationContainer = document.getElementById('duration');
+// const currentTimeContainer = document.getElementById('current-time');
+// let raf = null;
+//
+// const calculateTime = (secs) => {
+//     const minutes = Math.floor(secs / 60);
+//     const seconds = Math.floor(secs % 60);
+//     const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+//     return `${minutes}:${returnedSeconds}`;
+// }
+//
+// const displayDuration = () => {
+//     durationContainer.textContent = calculateTime(audio.duration);
+// }
+//
+// const setSliderMax = () => {
+//     seekSlider.max = Math.floor(audio.duration);
+// }
+//
+// const displayBufferedAmount = () => {
+//     const bufferedAmount = Math.floor(audio.buffered.end(audio.buffered.length - 1));
+//     audioPlayerContainer.style.setProperty('--buffered-width', `${(bufferedAmount / seekSlider.max) * 100}%`);
+// }
+//
+// const whilePlaying = () => {
+//     seekSlider.value = Math.floor(audio.currentTime);
+//     currentTimeContainer.textContent = calculateTime(seekSlider.value);
+//     audioPlayerContainer.style.setProperty('--seek-before-width', `${seekSlider.value / seekSlider.max * 100}%`);
+//     raf = requestAnimationFrame(whilePlaying);
+// }
+//
+// if (audio.readyState > 0) {
+//     displayDuration();
+//     setSliderMax();
+//     displayBufferedAmount();
+// } else {
+//     audio.addEventListener('loadedmetadata', () => {
+//         displayDuration();
+//         setSliderMax();
+//         displayBufferedAmount();
+//     });
+// }
+//
+// audio.addEventListener('progress', displayBufferedAmount);
+//
+// seekSlider.addEventListener('input', () => {
+//     currentTimeContainer.textContent = calculateTime(seekSlider.value);
+//     if(!audio.paused) {
+//         cancelAnimationFrame(raf);
+//     }
+// });
+//
+// seekSlider.addEventListener('change', () => {
+//     audio.currentTime = seekSlider.value;
+//     if(!audio.paused) {
+//         requestAnimationFrame(whilePlaying);
+//     }
+// });
+//
+// audio.addEventListener("ended", function(){
+//      audio.currentTime = 0;
+//      playState = 'pause';
+//      playIconContainer.innerHTML = "play";
+// });
 // }
 
 
@@ -704,24 +706,24 @@ function signalisationDiscussion() {
 
 
   }
-  if (selectionSign == "fas fa-flag"){
+  if (selectionSign == "fas fa-flag") {
     designalisationDiscussionOpen();
   }
 }
 
-function signalisationDiscussionClose(){
+function signalisationDiscussionClose() {
   $("#signalisationDiscussion").removeClass("is-active");
 }
 
-function signalisationDiscussionOpen(){
+function signalisationDiscussionOpen() {
   $("#signalisationDiscussion").addClass("is-active");
 }
 
-function designalisationDiscussionClose(){
+function designalisationDiscussionClose() {
   $("#designalisationDiscussion").removeClass("is-active");
 }
 
-function designalisationDiscussionOpen(){
+function designalisationDiscussionOpen() {
   $("#designalisationDiscussion").addClass("is-active");
 }
 
@@ -755,31 +757,31 @@ function designalerDiscussion(e) {
 }
 
 var idMsg;
-function signalisationMsg (idMsg) {
-  selectionSignMsg = document.getElementById("signMsg_"+idMsg).className
+function signalisationMsg(idMsg) {
+  selectionSignMsg = document.getElementById("signMsg_" + idMsg).className
   if (selectionSignMsg == "far fa-flag") {
     document.getElementById("idMsgSignalé").value = idMsg;
     signalisationMsgOpen();
   }
-  if (selectionSignMsg == "fas fa-flag"){
+  if (selectionSignMsg == "fas fa-flag") {
     document.getElementById("idMsgDeSignalé").value = idMsg;
     designalisationMsgOpen();
   }
 }
 
-function signalisationMsgClose(){
+function signalisationMsgClose() {
   $("#signalisationMsg").removeClass("is-active");
 }
 
-function signalisationMsgOpen(){
+function signalisationMsgOpen() {
   $("#signalisationMsg").addClass("is-active");
 }
 
-function designalisationMsgClose(){
+function designalisationMsgClose() {
   $("#designalisationMsg").removeClass("is-active");
 }
 
-function designalisationMsgOpen(){
+function designalisationMsgOpen() {
   $("#designalisationMsg").addClass("is-active");
 }
 
@@ -792,8 +794,8 @@ function signalerMsg(e) {
     data: donnees, // et on envoie nos données
     success: function(response) {
       signalisationMsgClose();
-      idMsg=document.getElementById('idMsgSignalé').value;
-      document.getElementById("signMsg_"+idMsg).className = "fas fa-flag";
+      idMsg = document.getElementById('idMsgSignalé').value;
+      document.getElementById("signMsg_" + idMsg).className = "fas fa-flag";
       document.getElementById("sign").className = "fas fa-flag";
       $('#signalementMsg').trigger("reset");
     },
@@ -808,59 +810,59 @@ function designalerMsg(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      idMsg=document.getElementById('idMsgDeSignalé').value;
-      document.getElementById("signMsg_"+idMsg).className = "far fa-flag";
+      idMsg = document.getElementById('idMsgDeSignalé').value;
+      document.getElementById("signMsg_" + idMsg).className = "far fa-flag";
       document.getElementById("sign").className = "far fa-flag";
       designalisationMsgClose();
     },
   });
 }
 
-function optionParticipantOpen(id){
+function optionParticipantOpen(id) {
   $("#optionParticipant").addClass("is-active");
-  document.getElementById("hrefParticipant").href="/profil/"+id;
-  document.getElementById("idViré2").value=id;
+  document.getElementById("hrefParticipant").href = "/profil/" + id;
+  document.getElementById("idViré2").value = id;
 }
 
-function optionParticipantClose(){
+function optionParticipantClose() {
   $("#optionParticipant").removeClass("is-active");
 }
 
-function modifRole(id, idGrp){
+function modifRole(id, idGrp) {
   $.ajax({
     url: '/modifRole/', // on donne l'URL du fichier de traitement
     type: "POST", // la requête est de type POST
-    data: ({idModifié :  id, idGrp : idGrp}), // et on envoie nos données
+    data: ({ idModifié: id, idGrp: idGrp }), // et on envoie nos données
     success: function(response) {
-      if(response === 'participant') {
-        document.getElementById("ModifRoleUser"+id).parentElement.innerHTML= '<span class="icon is-small">' +
-                                                                              '<i class="fas fa-users" aria-hidden="true"></i>' +
-                                                                            '</span>' +
-                                                                            `<span id="ModifRoleUser${id}">Participant</span>`;
-        document.getElementById("ModifRoleUser"+id).parentElement.classList.remove('is-warning');
-        document.getElementById("ModifRoleUser"+id).parentElement.classList.add('is-info');
+      if (response === 'participant') {
+        document.getElementById("ModifRoleUser" + id).parentElement.innerHTML = '<span class="icon is-small">' +
+          '<i class="fas fa-users" aria-hidden="true"></i>' +
+          '</span>' +
+          `<span id="ModifRoleUser${id}">Participant</span>`;
+        document.getElementById("ModifRoleUser" + id).parentElement.classList.remove('is-warning');
+        document.getElementById("ModifRoleUser" + id).parentElement.classList.add('is-info');
       }
-      else if(response === 'admin') {
-        document.getElementById("ModifRoleUser"+id).parentElement.innerHTML= '<span class="icon is-small">' +
-                                                                              '<i class="fas fa-crown" aria-hidden="true"></i>' +
-                                                                            '</span>' +
-                                                                            `<span id="ModifRoleUser${id}">Admin</span>`;
-        document.getElementById("ModifRoleUser"+id).parentElement.classList.remove('is-info');
-        document.getElementById("ModifRoleUser"+id).parentElement.classList.add('is-warning');
+      else if (response === 'admin') {
+        document.getElementById("ModifRoleUser" + id).parentElement.innerHTML = '<span class="icon is-small">' +
+          '<i class="fas fa-crown" aria-hidden="true"></i>' +
+          '</span>' +
+          `<span id="ModifRoleUser${id}">Admin</span>`;
+        document.getElementById("ModifRoleUser" + id).parentElement.classList.remove('is-info');
+        document.getElementById("ModifRoleUser" + id).parentElement.classList.add('is-warning');
       }
     },
   });
 }
 
-function ajouterParticipantVoir(){
-  if (document.getElementById("ajouterParticipant").style.display== "none"){
-    document.getElementById("ajouterParticipant").style.display= "block";
-    document.getElementById("buttonAjouterParticipantOpen").style.display= "none";
-    document.getElementById("buttonAjouterParticipantClose").style.display= "block";
-  }else{
-    document.getElementById("ajouterParticipant").style.display= "none";
-    document.getElementById("buttonAjouterParticipantOpen").style.display= "block"
-    document.getElementById("buttonAjouterParticipantClose").style.display= "none";
+function ajouterParticipantVoir() {
+  if (document.getElementById("ajouterParticipant").style.display == "none") {
+    document.getElementById("ajouterParticipant").style.display = "block";
+    document.getElementById("buttonAjouterParticipantOpen").style.display = "none";
+    document.getElementById("buttonAjouterParticipantClose").style.display = "block";
+  } else {
+    document.getElementById("ajouterParticipant").style.display = "none";
+    document.getElementById("buttonAjouterParticipantOpen").style.display = "block"
+    document.getElementById("buttonAjouterParticipantClose").style.display = "none";
 
   }
 }
@@ -873,9 +875,9 @@ function quitterGroupe(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      if (response == 'reload msg'){
+      if (response == 'reload msg') {
         document.location.href = '/messages';
-      }else {
+      } else {
         location.reload();
       }
     },
@@ -884,14 +886,14 @@ function quitterGroupe(e) {
 
 function quitterGroupeOpen(grpID, userID, id) {
   $("#quitterGroupe").addClass("is-active");
-  if (userID == id){
+  if (userID == id) {
     document.getElementById('pop up virer').innerHTML = "Etes-vous sûr de vouloir quitter le groupe ?";
   } else {
     document.getElementById('pop up virer').innerHTML = "Etes-vous sûr de vouloir enlever ce participant ?";
   }
 }
 
-function quitterGroupeClose(){
+function quitterGroupeClose() {
   $("#quitterGroupe").removeClass("is-active");
 }
 
@@ -919,7 +921,7 @@ function supprimerGroupeClose() {
 function updateGroupName() {
   const newGrpName = document.getElementById('newGrpName').value.trim();
 
-  if(newGrpName !== '') {
+  if (newGrpName !== '') {
     document.querySelector(`.listedGrp[data-grpid="${idGroupe}"] .grpName`).innerHTML = newGrpName;
     document.querySelector(`.listedGrp[data-grpid="${idGroupe}"]`).dataset.grpname = newGrpName;
     document.querySelector('#groupTitle > .grpName').innerHTML = newGrpName;
@@ -939,7 +941,7 @@ function updateGroupName() {
 function modererGrp(idGrp) {
   const infoGrpModeration = document.getElementById('infoGrpModeration');
 
-  if(infoGrpModeration.innerHTML === 'Groupe auto-modéré')
+  if (infoGrpModeration.innerHTML === 'Groupe auto-modéré')
     infoGrpModeration.innerHTML = 'Groupe non auto-modéré';
   else
     infoGrpModeration.innerHTML = 'Groupe auto-modéré';
@@ -954,7 +956,7 @@ function modererGrp(idGrp) {
 }
 
 const goToMess = async (idMsg) => {
-  if(document.getElementById(idMsg) === null) {
+  if (document.getElementById(idMsg) === null) {
     await $.ajax({
       url: "/moreMsg/", // on donne l'URL du fichier de traitement
       type: "POST", // la requête est de type POST
@@ -972,7 +974,7 @@ const goToMess = async (idMsg) => {
   }
 
   // return window.location.hash = `#${idMsg}`;
-  await document.getElementById(idMsg).scrollIntoView({behavior: "smooth"});
+  await document.getElementById(idMsg).scrollIntoView({ behavior: "smooth" });
   setTimeout(() => {
     document.getElementById(idMsg).scrollIntoView()
   }, 500);
@@ -980,14 +982,15 @@ const goToMess = async (idMsg) => {
   return;
 };
 
-document.getElementById("inputImage").onchange = function () {
-    var reader = new FileReader();
+document.getElementById("inputImage").onchange = function() {
+  var reader = new FileReader();
 
-    reader.onload = function (e) {
-        // get loaded data and render thumbnail.
-        document.getElementById("image").src = e.target.result;
-    };
+  reader.onload = function(e) {
+    // get loaded data and render thumbnail.
+    // document.getElementById("image").src = e.target.result;
+    $("#divImgTmp").append('<img alt="image messages" src="' + e.target.result + '"style="height: auto;max-height:80%;max-width:80%;bottom: 0;right: calc(50% - 100px);" id="image" />');
+  };
 
-    // read the image file as a data URL.
-    reader.readAsDataURL(this.files[0]);
+  // read the image file as a data URL.
+  reader.readAsDataURL(this.files[0]);
 };

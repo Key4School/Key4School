@@ -76,6 +76,7 @@ def updateprofile():
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
         elementPrive = []
         elementPublic = []
+        print(request.form)
         for content in request.form:
             if request.form[content] == "pv":
                 elementPrive.append(content.replace('Visibilite', ''))
@@ -83,7 +84,6 @@ def updateprofile():
                 elementPublic.append(content.replace('Visibilite', ''))
 
         user = User.get(filter="cls.id == session['id']", limit=1)
-
         user['nom'] = automoderation(request.form['nom'])
         user['prenom'] = automoderation(request.form['prenom'])
         user['pseudo'] = automoderation(request.form['pseudo'])

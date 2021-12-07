@@ -447,13 +447,50 @@ how to remove the virtical space around the range input in IE*/
 .content_button_profil{
   margin-left: 5%;
 }
+.pf-contenu-confSup.active .pf-yes-delete-ConfSup{
+  opacity: 1;
+  transform: translateY(0);
+  transition: 1s;
+  transition-delay: .3s;
+}
+.pf-contenu-confSup.active .pf-cancel-ConfSup{
+   opacity: 1;
+   transform: translateY(0);
+   transition: 1s;
+   transition-delay: .3s;
+}
+.pf-contenu-confSup.active h3{
+  transition: 1s;
+  opacity: 1;
+  transform: translateY(0);
+}
+.pf-contenu-confSup.active .pf-sub-heading-ConfSup{
+  opacity: 1;
+  transform: translateY(0);
+  transition: 1s;
+  transition-delay: .3s;
+}
+.pf-contenu-confSup.active .pf-warning-ConfSup {
+  opacity: 1;
+  transition: 1s;
+  transition-delay: .6s;
+}
+.pf-contenu-confSup.active .pf-warn-para-ConfSup{
+opacity: 1;
+}
+.pf-contenu-confSup.active .fas{
+  opacity: 1;
+}
+#pf-allclose-confSup:hover{
+  color: var(--text-color-hover);
+}
 /* Pour telephone */
 @media screen and (max-width:767px) {
-  .bd-phone-items, .depliableTel, .items_toggle_tel, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .deconnexion, .bd-phone-items, .depliableTel, .items_toggle_tel, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
 
-   .bd-profil, .depliable, .depliableOrdi, .items_toggle_ordi, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .leaderboard_profile, .bd-profil, .depliable, .depliableOrdi, .items_toggle_ordi, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -580,14 +617,126 @@ how to remove the virtical space around the range input in IE*/
     padding:1% 2%;
     border-radius: 10px;
   }
+  .pf-contenu-confSup {
+    display: flex;
+    flex-direction: column;
+    /* width: 200px; */
+    justify-content: center;
+    align-items: center;
+    /* height: 60px; */
+    border-radius: 10px;
+    /* position: relative; */
+    background-color: var(--page-background);
+    overflow: hidden;
+    position: fixed;
+    top:50%;
+    left:50%;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+   }
+  .pf-h3-ConfSup{
+    position: absolute;
+    top: 12%;
+    font-size: 35px;
+    color: var(--text-color);
+    transform: translate(-100px);
+    opacity: 0;
+    user-select: none;
+   }
+
+  .pf-sub-heading-ConfSup{
+    position: absolute;
+    top: 25%;
+    width: 60%;
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-color);
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 1px;
+    transform: translate(-100px);
+    opacity: 0;
+  }
+
+  .pf-warning-ConfSup{
+    top: 5%;
+    height: 33%;
+    border-radius: 10px;
+    position: relative;
+    width: 80%;
+    background: rgba(255, 143, 116, 0.116);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    opacity: 0;
+   }
+  #pf-allclose-confSup{
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    font-size: 30px;
+    color: var(--NetB);
+    cursor: pointer;
+  }
+  .pf-warning-ConfSup .fast{
+    position: absolute;
+    left: 15%;
+    font-size: 40px;
+    color: rgb(255, 87, 87);
+    opacity:0;
+  }
+
+  .pf-warn-para-ConfSup{
+    position: absolute;
+    right: 0;
+    font-size: 20px;
+    padding: 20px;
+    width: 75%;
+    color: var(--text-color);
+    opacity: 0;
+    }
+  .pf-cancel-ConfSup{
+    position: absolute;
+    bottom: 10%;
+    /* width:150px; */
+    left: 10%;
+    /* height: 50px; */
+    /* border: 2px solid rgb(87, 89, 117); */
+    /* background: transparent;
+    border-radius: 5px;
+    color: rgb(87, 89, 117); */
+    opacity: 0;
+    transform: translateY(100px);
+    }
+  .pf-yes-delete-ConfSup{
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    /* width: 220px;
+    height: 50px;
+    background: rgb(255, 94, 94);
+    border-radius: 5px; */
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  .pf-contenu-confSup.active{
+    width: 90%;
+    height: 65%;
+    transition: .1s;
+    /* margin: auto; */
+    z-index: 200;
+  }
+  .pf-oui-supp-ConfSup::after{
+    content:"Supprimer";
+  }
 }
 
 /* Pour tablette */
 @media screen and (min-width:768px) and (max-width:1023px){
-  .bd-phone-items, .depliable, .depliableOrdi, .items_toggle_ordi, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .deconnexion, .bd-phone-items, .depliable, .depliableOrdi, .items_toggle_ordi, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
-  .depliableTel, .bd-profil, .items_toggle_tel, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
+  .depliableTel, .leaderboard_profile, .bd-profil, .items_toggle_tel, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
     display: none;
   }
   .bloc{
@@ -714,10 +863,122 @@ how to remove the virtical space around the range input in IE*/
     padding:1% 2%;
     border-radius: 10px;
   }
+  .pf-contenu-confSup {
+    display: flex;
+    flex-direction: column;
+    /* width: 200px; */
+    justify-content: center;
+    align-items: center;
+    /* height: 60px; */
+    border-radius: 10px;
+    /* position: relative; */
+    background-color: var(--page-background);
+    overflow: hidden;
+    position: fixed;
+    top:50%;
+    left:50%;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+   }
+  .pf-h3-ConfSup{
+    position: absolute;
+    top: 12%;
+    font-size: 35px;
+    color: var(--text-color);
+    transform: translate(-100px);
+    opacity: 0;
+    user-select: none;
+   }
+
+  .pf-sub-heading-ConfSup{
+    position: absolute;
+    top: 25%;
+    width: 60%;
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-color);
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 1px;
+    transform: translate(-100px);
+    opacity: 0;
+  }
+
+  .pf-warning-ConfSup{
+    top: 5%;
+    height: 33%;
+    border-radius: 10px;
+    position: relative;
+    width: 80%;
+    background: rgba(255, 143, 116, 0.116);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    opacity: 0;
+   }
+  #pf-allclose-confSup{
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    font-size: 30px;
+    color: var(--NetB);
+    cursor: pointer;
+  }
+  .pf-warning-ConfSup .fast{
+    position: absolute;
+    left: 15%;
+    font-size: 40px;
+    color: rgb(255, 87, 87);
+    opacity:0;
+  }
+
+  .pf-warn-para-ConfSup{
+    position: absolute;
+    right: 0;
+    font-size: 20px;
+    padding: 20px;
+    width: 75%;
+    color: var(--text-color);
+    opacity: 0;
+    }
+  .pf-cancel-ConfSup{
+    position: absolute;
+    bottom: 10%;
+    /* width:150px; */
+    left: 10%;
+    /* height: 50px; */
+    /* border: 2px solid rgb(87, 89, 117); */
+    /* background: transparent;
+    border-radius: 5px;
+    color: rgb(87, 89, 117); */
+    opacity: 0;
+    transform: translateY(100px);
+    }
+  .pf-yes-delete-ConfSup{
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    /* width: 220px;
+    height: 50px;
+    background: rgb(255, 94, 94);
+    border-radius: 5px; */
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  .pf-contenu-confSup.active{
+    width: 90%;
+    height: 65%;
+    transition: .1s;
+    /* margin: auto; */
+    z-index: 200;
+  }
+  .pf-oui-supp-ConfSup::after{
+    content:"Supprimer";
+  }
 }
 /* Pour ordinateur */
 @media screen and (min-width:1024px) {
-  .bd-phone-items, .depliableTel, .items_toggle_tel, .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
+  .deconnexion, .bd-phone-items, .depliableTel, .items_toggle_tel, .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
     display: none;
   }
 
@@ -725,7 +986,7 @@ how to remove the virtical space around the range input in IE*/
     display: flex;
   }
 
-  .bd-profil, .depliable, .depliableOrdi, .items_toggle_ordi, .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
+  .bd-profil, .leaderboard_profile, .depliable, .depliableOrdi, .items_toggle_ordi, .selectMatiereOrdi, .questionNavbarOrdi, .flecheFiltre, .img_Pub_question_Ordi {
     display: block;
   }
   .selectProfil {
@@ -880,5 +1141,117 @@ how to remove the virtical space around the range input in IE*/
     margin: 1% auto 3% auto;
     padding:1% 2%;
     border-radius: 10px;
+  }
+  .pf-contenu-confSup {
+    display: flex;
+    flex-direction: column;
+    /* width: 200px; */
+    justify-content: center;
+    align-items: center;
+    /* height: 60px; */
+    border-radius: 10px;
+    /* position: relative; */
+    background-color: var(--page-background);
+    overflow: hidden;
+    position: fixed;
+    top:50%;
+    left:50%;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+   }
+  .pf-h3-ConfSup{
+    position: absolute;
+    top: 12%;
+    font-size: 35px;
+    color: var(--text-color);
+    transform: translate(-100px);
+    opacity: 0;
+    user-select: none;
+   }
+
+  .pf-sub-heading-ConfSup{
+    position: absolute;
+    top: 25%;
+    width: 60%;
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-color);
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: 1px;
+    transform: translate(-100px);
+    opacity: 0;
+  }
+
+  .pf-warning-ConfSup{
+    top: 5%;
+    height: 120px;
+    border-radius: 10px;
+    position: relative;
+    width: 80%;
+    background: rgba(255, 143, 116, 0.116);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    opacity: 0;
+   }
+  #pf-allclose-confSup{
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    font-size: 30px;
+    color: var(--NetB);
+    cursor: pointer;
+  }
+  .pf-warning-ConfSup .fast{
+    position: absolute;
+    left: 15%;
+    font-size: 40px;
+    color: rgb(255, 87, 87);
+    opacity:0;
+  }
+
+  .pf-warn-para-ConfSup{
+    position: absolute;
+    right: 0;
+    font-size: 20px;
+    padding: 20px;
+    width: 75%;
+    color: var(--text-color);
+    opacity: 0;
+    }
+  .pf-cancel-ConfSup{
+    position: absolute;
+    bottom: 10%;
+    /* width:150px; */
+    left: 10%;
+    /* height: 50px; */
+    /* border: 2px solid rgb(87, 89, 117); */
+    /* background: transparent;
+    border-radius: 5px;
+    color: rgb(87, 89, 117); */
+    opacity: 0;
+    transform: translateY(100px);
+    }
+  .pf-yes-delete-ConfSup{
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    /* width: 220px;
+    height: 50px;
+    background: rgb(255, 94, 94);
+    border-radius: 5px; */
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  .pf-contenu-confSup.active{
+    width: 30%;
+    height: 50%;
+    transition: .1s;
+    /* margin: auto; */
+    z-index: 200;
+  }
+  .pf-oui-supp-ConfSup::after{
+    content:"Oui, supprimer";
   }
 }
