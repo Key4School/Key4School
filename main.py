@@ -28,7 +28,8 @@ app.add_url_rule('/XP_tuto/', view_func=XP_tuto)
 app.add_url_rule('/mail_rendu/', view_func=mail_rendu)
 app.add_url_rule('/saved/', view_func=saved)
 app.add_url_rule('/about/', view_func=about)
-app.add_url_rule('/leaderboard/', view_func=leaderboard)
+app.add_url_rule('/leaderboard/', view_func=leaderboard, defaults={'top': 'france'})
+app.add_url_rule('/leaderboard/<top>/', view_func=leaderboard)
 
 '''administration.py'''
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg

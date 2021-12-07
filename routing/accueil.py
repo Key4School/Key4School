@@ -64,11 +64,24 @@ def saved():
 def about():
     return render_template('about.html')
 
-def leaderboard():
+
+def leaderboard(top):
     if 'id' in session:
         user = User.get(filter="cls.id == session['id']", limit=1)
-        users = User.get(order_by="cls.xp", desc=True, limit=50)
-        return render_template("leaderboard.html", users=users, user=user)
+
+        topFilter = {'france': None,
+                     'departement': "User.lyceeId.like(f\"{user['lyceeId'][0:3]}%\")",
+                     'lycee': "User.lyceeId == user['lyceeId']"}
+        if top not in topFilter:
+            top = 'france'
+        filter = topFilter[top]
+
+        users = User.get(filter=filter, order_by="cls.xp", desc=True, limit=50)
+
+        if user not in users:
+            user['rank'] = user.getRank(filter)
+
+        return render_template("leaderboard.html", users=users, user=user, top=top)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))

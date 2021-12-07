@@ -185,8 +185,23 @@ class Actions:
 
     @classmethod
     @get_context
-    def get(cls, filter=None, limit=None, order_by=None, desc=False):
-        query = s.query(cls)
+    def get(cls, filter=None, select=[], limit=None, order_by=None, desc=False, subquery=False):
+        """
+        filter: filtre de la requete
+        select: autre élément à selectionner
+        limit: nombre d'element a récupérer None si all
+        order_by: odre de tri de la requete
+        desc: ordre decroissant
+        subquery: si la on souhaite réaliser une sous requete
+        noCls: ne pas select l'objet d'appel
+        """
+        select = [eval(slct) for slct in select]
+
+        if cls == Actions and len(select) > 0:
+            query = s.query(*select)
+        else:
+            query = s.query(cls, *select)
+
         if filter:
             query = query.filter(eval(filter))
 
@@ -201,6 +216,9 @@ class Actions:
             del locals()['temp']
         except Exception:
             pass
+
+        if subquery:
+            return query.subquery()
 
         if limit == 1:
             if query.count() == 0:
@@ -463,6 +481,11 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
             return True
         else:
             return False
+
+    def getRank(self, filter):
+        sub = User.get(filter=filter, select=["func.rank().over(order_by=User.xp.desc()).label('rank')"], subquery=True)
+        user = Actions.get(select=["sub.c.rank"], filter="sub.c.id == self.id", limit=1)
+        return user['rank']
 
     def __setitem__(self, key, value):
         return setattr(self, key, value)

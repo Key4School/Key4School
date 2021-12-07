@@ -301,6 +301,7 @@ def updateGrpName(idGrp, newGrpName):
 
 @db_session
 def moreMsg():
+    '''BUG SCROLL INFINI'''
     if 'id' in session:
         lastMsg = int(request.form['lastMsg'])
         groupe = Group.get(
