@@ -3,9 +3,9 @@ var boul2 = false;
 var boul3 = false;
 var boul4 = false;
 $(document).ready(function() {
-  $('#delete').click(function() {
-    $('.contenu').addClass("active"),
-      $("#delete").css("zIndex", "-1");
+  $('#pf-delete-ConfSup').click(function() {
+    $('.pf-contenu-confSup').addClass("active"),
+      $("#pf-delete-ConfSup").css("zIndex", "-1");
     $("#ConfSupp-filtre").css("display", "block");
   });
   $('#updateProfil').submit(function() {
@@ -683,7 +683,7 @@ function divsubjectclose(e) {
   $("#subjects").removeClass("is-active");
 }
 function closeCont() {
-  $('.contenu').removeClass("active"),
-    $("#delete").css("zIndex", "1");
+  $('.pf-contenu-confSup').removeClass("active"),
+    $("#pf-delete-ConfSup").css("zIndex", "1");
   $("#ConfSupp-filtre").css("display", "none");
 }

@@ -111,158 +111,6 @@
       background: rgb(38, 45, 63);
       width: 100%;
     } */
-
-    .contenu {
-      display: flex;
-      flex-direction: column;
-      /* width: 200px; */
-      justify-content: center;
-      align-items: center;
-      /* height: 60px; */
-      border-radius: 10px;
-      /* position: relative; */
-      background-color: var(--page-background);
-      overflow: hidden;
-      position: fixed;
-      top:50%;
-      left:50%;
-      z-index: -1;
-      transform: translate(-50%, -50%);
-     }
-    h3{
-      position: absolute;
-      top: 12%;
-      font-size: 35px;
-      color: var(--text-color);
-      transform: translate(-100px);
-      opacity: 0;
-      user-select: none;
-     }
-
-    .sub-heading{
-      position: absolute;
-      top: 25%;
-      width: 60%;
-      text-align: center;
-      font-size: 16px;
-      color: var(--text-color);
-      font-weight: 600;
-      line-height: 20px;
-      letter-spacing: 1px;
-      transform: translate(-100px);
-      opacity: 0;
-    }
-
-    p{
-      user-select: none:
-    }
-
-    .warning{
-      top: 5%;
-      height: 120px;
-      border-radius: 10px;
-      position: relative;
-      width: 80%;
-      background: rgba(255, 143, 116, 0.116);
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      opacity: 0;
-     }
-    #allclose{
-      position: absolute;
-      right: 5%;
-      top: 5%;
-      font-size: 30px;
-      color: var(--NetB);
-      cursor: pointer;
-    }
-
-    #allclose:hover{
-      color: var(--text-color-hover);
-    }
-    .warning .fast{
-      position: absolute;
-      left: 15%;
-      font-size: 40px;
-      color: rgb(255, 87, 87);
-      opacity:0;
-    }
-
-    .warn-para{
-      position: absolute;
-      right: 0;
-      font-size: 20px;
-      padding: 20px;
-      width: 75%;
-      color: var(--text-color);
-      opacity: 0;
-      }
-    .cancel{
-      position: absolute;
-      bottom: 10%;
-      /* width:150px; */
-      left: 10%;
-      /* height: 50px; */
-      /* border: 2px solid rgb(87, 89, 117); */
-      /* background: transparent;
-      border-radius: 5px;
-      color: rgb(87, 89, 117); */
-      opacity: 0;
-      transform: translateY(100px);
-      }
-    .yes-delete{
-      position: absolute;
-      right: 10%;
-      bottom: 10%;
-      /* width: 220px;
-      height: 50px;
-      background: rgb(255, 94, 94);
-      border-radius: 5px; */
-      transform: translateY(100px);
-      opacity: 0;
-    }
-    .contenu.active{
-      width: 30%;
-      height: 50%;
-      transition: .1s;
-      /* margin: auto; */
-      z-index: 200;
-    }
-    .contenu.active .yes-delete{
-      opacity: 1;
-      transform: translateY(0);
-      transition: 1s;
-      transition-delay: .3s;
-    }
-    .contenu.active .cancel{
-       opacity: 1;
-       transform: translateY(0);
-       transition: 1s;
-       transition-delay: .3s;
-    }
-    .contenu.active h3{
-      transition: 1s;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .contenu.active .sub-heading{
-      opacity: 1;
-      transform: translateY(0);
-      transition: 1s;
-      transition-delay: .3s;
-    }
-    .contenu.active .warning {
-      opacity: 1;
-      transition: 1s;
-      transition-delay: .6s;
-    }
-    .contenu.active .warn-para{
-    opacity: 1;
-    }
-    .contenu.active .fas{
-      opacity: 1;
-    }
   </style>
 </head>
 
@@ -1338,7 +1186,7 @@
   </div>
   {%endif%}
   <div class="content_button_profil" >
-    <a class="button is-danger is-outlined deconnexion" href="{{url_for('logout')}}" style="margin-bottom: 20px;">
+    <a class="button is-danger is-outlined deconnexion" href="{{url_for('logout')}}" style="margin-top: 5%;width: min-content;">
       <span class="icon is-small">
         <i class="fas fa-sign-out-alt"></i>
       </span>
@@ -1347,29 +1195,29 @@
     <br />
     <div class="confSupp">
       <div id="ConfSupp-filtre" class="modal-background" style="display:none;width: 100%;height: 100%;z-index: 100;position: fixed;"></div>
-    <div id="contenu" class="contenu">
-      <i id="allclose" class="fas fa-times" onclick="closeCont();"></i>
-      <h3>Etes-vous sur ?</h3>
-      <p class="sub-heading">Cela va supprimer définitivement votre compte?</p>
-      <div class="warning" >
+    <div id="pf-contenu-confSup" class="pf-contenu-confSup">
+      <i id="pf-allclose-confSup" class="fas fa-times" onclick="closeCont();"></i>
+      <h3 class="pf-h3-ConfSup">Etes-vous sur ?</h3>
+      <p class="pf-sub-heading-ConfSup">Cela va supprimer définitivement votre compte?</p>
+      <div class="pf-warning-ConfSup" >
         <i style="font-size: 2.5rem;color:#f14668;margin-left: 5%;" class="fas fa-exclamation-triangle"></i>
-        <p class="warn-para">Après avoir supprimer votre compte vous ne pourrez le récuperer</p>
+        <p class="pf-warn-para-ConfSup">Après avoir supprimer votre compte vous ne pourrez le récuperer</p>
       </div>
-      <button class="button is-info is-outlined yes-delete cancel" onclick="closeCont();">
+      <button class="button is-info is-outlined pf-yes-delete-ConfSup pf-cancel-ConfSup" onclick="closeCont();">
         <span class="icon is-small">
           <i class="fas fa-times"></i>
         </span>
         <span>Annuler</span>
       </button>
-      <button class="button is-danger is-outlined yes-delete">
+      <button class="button is-danger is-outlined pf-yes-delete-ConfSup">
         <span class="icon is-small">
           <i class="fas fa-trash-alt"></i>
         </span>
-        <span>Oui, Supprimer</span>
+        <span class="pf-oui-supp-ConfSup"></span>
       </button>
   </div>
   </div>
-  <button class="button is-danger is-outlined" id="delete" style="margin-bottom: 20px;">
+  <button class="button is-danger is-outlined" id="pf-delete-ConfSup" style="margin-bottom: 20px;">
     <span class="icon is-small">
       <i class="fas fa-trash-alt"></i>
     </span>
