@@ -11,9 +11,10 @@ def login():
         if 'password' not in request.form or 'username' not in request.form:
             return render_template('connexion.html', erreur='Veuillez compléter tous les champs')
         user = User.get(
-            filter="cls.email == request.form['username'] or cls.pseudo == request.form['username']", limit=1)
+            filter="(cls.email == request.form['username']) | (cls.pseudo == request.form['username'])", limit=1)
         if not user or not app.config['hashing'].check_value(user['mdp'], request.form['password'], salt=app.config['hashingKey']):
             return render_template('connexion.html', erreur='Identifiant ou mot de passe incorrect')
+
         session['id'] = user['id']
         session['pseudo'] = user['pseudo']
         session['couleur'] = user['couleur']
@@ -26,10 +27,12 @@ def login():
             session['idInscri'] = user['id']
             session['etapeInscription'] = user['etapeInscription']
             return redirect(url_for(f"signIn{session['etapeInscription']}"))
+
         elif 'redirect' in session:
             path = session['redirect']
             session.pop('redirect')
             return redirect(path)
+
         else:
             return redirect(url_for('accueil'))
     else:
