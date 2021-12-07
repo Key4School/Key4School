@@ -13,43 +13,43 @@
   <style type="text/css">
     #messages{
       overflow-y: auto; overflow-x:hidden;height: calc(100% - 100px);
-      border: 3px solid {{session['couleur'][0]}};
+      border: 3px solid var(--color-theme0);
       padding-top:2%;
       display: flex;
       flex-direction:column;
       align-items: flex-start;
     }
     #messages.dragover{
-      border: 3px dashed {{session['couleur'][0]}};
+      border: 3px dashed var(--color-theme0);
     }
     #divDansTitregroupe_DM{
       display: flex;
       align-items:center;
       justify-content:space-between;
-      border: 3px solid {{session['couleur'][0]}};
+      border: 3px solid var(--color-theme0);
       padding:10px;
       height: 100px;
       border-bottom: none;
     }
     #divDansTitregroupe_DM.dragover{
-      border: 3px dashed {{session['couleur'][0]}};
+      border: 3px dashed var(--color-theme0);
     }
     #divDansTitregroupe{
       display: flex;
       align-items:baseline;
       justify-content:space-between;
-      border: 3px solid {{session['couleur'][0]}};
+      border: 3px solid var(--color-theme0);
       padding:10px;
       height: 100px;
       border-bottom: none;
     }
     #divDansTitregroupe.dragover{
-      border: 3px dashed {{session['couleur'][0]}};
+      border: 3px dashed var(--color-theme0);
     }
     .moimsg {
       max-width: 75%;
       align-self: flex-end;
-      border: 2px solid {{session['couleur'][0]}};
+      border: 2px solid var(--color-theme0);
       margin-right: 1%;
       margin-bottom: 12px;
       border-radius: 20px 0 20px 20px;
@@ -72,7 +72,7 @@
       display: flex;
       flex-direction:column;
       align-items: flex-start;
-      background-color: {{session['couleur'][1]}};
+      background-color: var(--color-theme1);
     }
 
     td:hover {
@@ -82,10 +82,10 @@
     }
 
     .rep {
-      background-color: {{session['couleur'][3]}};
+      background-color: var(--color-theme3);
       padding:1%;
       padding-left:2%;
-      border-left:4px solid {{session['couleur'][0]}};
+      border-left:4px solid var(--color-theme0);
       border-radius:5px;
       margin-top:1%;
       margin-bottom:2%;
@@ -328,7 +328,7 @@
         </table>
       </div>
       {%if msgDb == none%}
-      <div id="divCoteMessage" style="border: 3px solid {{session['couleur'][0]}};width: 100%;margin: 3% 3%;text-align:center;padding-top:3%;padding-bottom:3%;">
+      <div id="divCoteMessage" style="border: 3px solid var(--color-theme0);width: 100%;margin: 3% 3%;text-align:center;padding-top:3%;padding-bottom:3%;">
         <i class="fas fa-paper-plane" style="border: 2px solid var(--background-hover);border-radius:50%;padding: 2%;font-size: 2rem;background-color:var(--background-hover)"></i><br />
         <br />
         <p style="font-size: 20px">
@@ -396,7 +396,7 @@
             </p>
           </div>
 
-          <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:{{session['couleur'][0]}};font-size: 20px;"></i>
+          <i onclick="divoptionopen()" class="fas fa-ellipsis-v logoBouton" style="color:var(--color-theme0);font-size: 20px;"></i>
           <div class="modal" id="option">
             <div class="modal-background"></div>
             <div class="modal-card" style="height: 87%;margin-top: 3%;">
@@ -795,7 +795,7 @@
             </div>
           </div>
         {%endif%}
-          <div id="divImgTmp" style="position:relative;height: calc(100% - 100px);border: 3px solid {{session['couleur'][0]}};padding-top:2%;display:none;text-align:center;">
+          <div id="divImgTmp" style="position:relative;height: calc(100% - 100px);border: 3px solid var(--color-theme0);padding-top:2%;display:none;text-align:center;">
             <div style="position: relative; width: 30px; cursor: pointer;padding:1%">
               <div style="position: absolute; width: 30px; height: 30px; overflow: hidden; top: 50%; transform: translateY(-50%); cursor: pointer;">
                 <i id="resetImageIcon1" class="fas fa-trash-alt" style="font-size: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; display: none;" onclick="resetImage();"></i>
@@ -813,7 +813,7 @@
         </div>
         <div id="divrepmsg" style="padding:0.5%;width:100%;display:none;align-items: center;width: 100%; position: absolute;">
           <div style="width: 95%;" id='champReponse'></div>&nbsp;&nbsp;
-          <button onclick="enleverRep()" id="buttonRep" style="border-radius: 50%;display:none;background-color:{{session['couleur'][3]}};border: 0px solid {{session['couleur'][0]}}" class="icon is-medium logoBouton">
+          <button onclick="enleverRep()" id="buttonRep" style="border-radius: 50%;display:none;background-color:var(--color-theme3);border: 0px solid var(--color-theme0)" class="icon is-medium logoBouton">
             <i class="fas fa-times"></i>
           </button>
         </div>
@@ -869,10 +869,33 @@
     </div>
   </div>
   <script type="text/javascript">
-    var couleur_un = "{{session['couleur'][0]}}";
-    var couleur_deux = "{{session['couleur'][1]}}";
-    var couleur_trois = "{{session['couleur'][2]}}";
-    var couleur_quatre = "{{session['couleur'][3]}}";
+  if ($("html").attr('data-theme') == "light"){
+    var couleur_un = "{{session['couleur']['light'][0]}}";
+    var couleur_deux = "{{session['couleur']['light'][1]}}";
+    var couleur_trois = "{{session['couleur']['light'][2]}}";
+    var couleur_quatre = "{{session['couleur']['light'][3]}}";
+  }
+  if ($("html").attr('data-theme') == "dark"){
+    var couleur_un = "{{session['couleur']['dark'][0]}}";
+    var couleur_deux = "{{session['couleur']['dark'][1]}}";
+    var couleur_trois = "{{session['couleur']['dark'][2]}}";
+    var couleur_quatre = "{{session['couleur']['dark'][3]}}";
+  }
+  if ($("html").attr('data-theme') == "system"){
+    if(window.matchMedia('(prefers-color-scheme: light)')){
+      var couleur_un = "{{session['couleur']['light'][0]}}";
+      var couleur_deux = "{{session['couleur']['light'][1]}}";
+      var couleur_trois = "{{session['couleur']['light'][2]}}";
+      var couleur_quatre = "{{session['couleur']['light'][3]}}";
+    }
+    if(window.matchMedia('(prefers-color-scheme: dark)')){
+      var couleur_un = "{{session['couleur']['dark'][0]}}";
+      var couleur_deux = "{{session['couleur']['dark'][1]}}";
+      var couleur_trois = "{{session['couleur']['dark'][2]}}";
+      var couleur_quatre = "{{session['couleur']['dark'][3]}}";
+    }
+  }
+
   </script>
 </body>
 

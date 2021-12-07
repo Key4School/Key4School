@@ -41,26 +41,26 @@
           <a class="level-item" aria-label="like" onClick="like('{{d['id']}}')">
             <span class="icon">
               {% if d['a_like'] %}
-              <i id="like_{{d['id']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb_likes']}}</i>
+              <i id="like_{{d['id']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:var(--color-theme2);font-size: 20px;">{{d['nb_likes']}}</i>
               {% else %}
-              <i id="like_{{d['id']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{d['nb_likes']}}</i>
+              <i id="like_{{d['id']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:var(--color-theme2);font-size: 20px;">{{d['nb_likes']}}</i>
               {% endif %}
             </span>
           </a>&emsp;&ensp;
           <a class="level-item" style="margin-left:2%;" aria-label="comment" href="/comments/{{d['id']}}">
             <span class="icon is-small">
-              <i class="far fa-comment" style="color:{{session['couleur'][2]}};font-size: 20px;" aria-hidden="true">&nbsp;{{d['nb_comment']}}</i>
+              <i class="far fa-comment" style="color:var(--color-theme2);font-size: 20px;" aria-hidden="true">&nbsp;{{d['nb_comment']}}</i>
             </span>
           </a>&emsp;&ensp;
           <a class="level-item" style="margin-left:2%;" aria-label="enregistrer" onClick="save('{{d['id']}}')">
             <span class="icon is-small">
               {% if d['a_save'] %}
-              <i id="save_{{d['id']}}" style="color:{{session['couleur'][2]}};font-size: 20px;" class="fas fa-bookmark" aria-hidden="true"></i>
+              <i id="save_{{d['id']}}" style="color:var(--color-theme2);font-size: 20px;" class="fas fa-bookmark" aria-hidden="true"></i>
               {% else %}
-              <i id="save_{{d['id']}}" style="color:{{session['couleur'][2]}};font-size: 20px;" class="far fa-bookmark" aria-hidden="true"></i>
+              <i id="save_{{d['id']}}" style="color:var(--color-theme2);font-size: 20px;" class="far fa-bookmark" aria-hidden="true"></i>
               {% endif %}
             </span>
-            <span class="saveCaption" style="color:{{session['couleur'][2]}};font-size: 17px; margin-left: 5px;">Enregistrer</span>
+            <span class="saveCaption" style="color:var(--color-theme2);font-size: 17px; margin-left: 5px;">Enregistrer</span>
           </a>
           <!-- <a class="level-item" aria-label="sign" onClick="sign('{{d['id']}}')">
               <span class="icon is-small">

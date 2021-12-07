@@ -2,7 +2,6 @@
 <meta charset="UTF-8">
 <meta name="author" content="Flavien Mathieu - Baptiste Drouillet - Thibault Chaudouard" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="{{session['couleur'][0]}}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <link rel="stylesheet" href="/static/css/mystyles.css?v={{session['cacheRandomKey']}}">
 <script src="https://kit.fontawesome.com/87544e3da3.js" crossorigin="anonymous"></script>
@@ -24,19 +23,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/favico.js/0.3.10/favico.min.js" integrity="sha512-d9sMcIBjQTs74UtVxBT8z7b4NRFZrwD2rn5VJe/pBxjwMmxOuBDmYFzLmwssH9AUIhFKtWzoeZgDIp6Yc0g+jw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
 [data-theme="dark"] {
-  --shadow-box:0 0.5em 0.5em -0.125em {{session['couleur'][0]}}, 0 0 0 1px #03a9f400;
+  --shadow-box:0 0.5em 0.5em -0.125em {{session['couleur']['dark'][0]}}, 0 0 0 1px #03a9f400;
   --text-color: #ededed;
   --page-background: #212121;
   --bandeau-color:#1e1e1e;
-  --color-items-bandeau:{{session['couleur'][0]}};
+  --color-items-bandeau:{{session['couleur']['dark'][0]}};
   --logo:url("{{url_for('static',filename='image/logo/favicon.png')}}");
-  --varlogosearch:{{session['couleur'][0]}};
+  --varlogosearch:{{session['couleur']['dark'][0]}};
   --barreSearch:#ffffff2b;
-  --color-shadow:{{session['couleur'][0]}}99;
-  --color-theme0:{{session['couleur'][0]}};
-  --color-theme1:{{session['couleur'][1]}};
-  --color-theme2:{{session['couleur'][2]}};
-  --color-theme3:{{session['couleur'][3]}};
+  --color-shadow:{{session['couleur']['dark'][0]}}99;
+  --color-theme0:{{session['couleur']['dark'][0]}};
+  --color-theme1:{{session['couleur']['dark'][1]}};
+  --color-theme2:{{session['couleur']['dark'][2]}};
+  --color-theme3:{{session['couleur']['dark'][3]}};
   --background-hover:#383737;
   --text-color-hover:#858585;
   --NetBinverse:black;
@@ -49,33 +48,43 @@
     --barreSearch:white;
     --page-background: #ffffff;
     --background-hover:#f5f5f5;
-    --color-shadow:{{session['couleur'][0]}}99;
-    --color-theme0:{{session['couleur'][0]}};
-    --color-theme1:{{session['couleur'][1]}};
-    --color-theme2:{{session['couleur'][2]}};
-    --color-theme3:{{session['couleur'][3]}};
-    --bandeau-color:{{session['couleur'][0]}};
-    --color-items-bandeau:{{session['couleur'][2]}};
-    --logo:url("{%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}{{url_for('static',filename='image/logo/Nuances_bleu.png')}}{%endif%}{%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}{{url_for('static',filename='image/logo/Nuances_rouge.png')}}{%endif%}{%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}{{url_for('static',filename='image/logo/Nuances_vert.png')}}{%endif%}{%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}{{url_for('static',filename='image/logo/Nuances_orange.png')}}{%endif%}{%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}{{url_for('static',filename='image/logo/Framboise_bleu.png')}}{%endif%}{%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/Moutarde_rose.png')}}{%endif%}{%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/cle_blanche.png')}}{%endif%}");
+    --color-shadow:{{session['couleur']['light'][0]}}99;
+    --color-theme0:{{session['couleur']['light'][0]}};
+    --color-theme1:{{session['couleur']['light'][1]}};
+    --color-theme2:{{session['couleur']['light'][2]}};
+    --color-theme3:{{session['couleur']['dark'][3]}};
+    --bandeau-color:{{session['couleur']['light'][0]}};
+    --color-items-bandeau:{{session['couleur']['light'][2]}};
+    --logo:url("
+    {%if session['couleur']['light']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}{{url_for('static',filename='image/logo/Nuances_bleu.png')}}{%endif%}
+    {%if session['couleur']['light']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}{{url_for('static',filename='image/logo/Nuances_rouge.png')}}{%endif%}
+    {%if session['couleur']['light']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}{{url_for('static',filename='image/logo/Nuances_vert.png')}}{%endif%}
+    {%if session['couleur']['light']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}{{url_for('static',filename='image/logo/Nuances_orange.png')}}{%endif%}
+    {%if session['couleur']['light']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}{{url_for('static',filename='image/logo/Framboise_bleu.png')}}{%endif%}
+    {%if session['couleur']['light']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/Moutarde_rose.png')}}{%endif%}
+    {%if session['couleur']['light']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and session['couleur']['light']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and session['couleur']['light']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and session['couleur']['light']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and session['couleur']['light']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and session['couleur']['light']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+    {{url_for('static',filename='image/logo/cle_blanche.png')}}
+    {%endif%}"
+    );
     }
     @media (prefers-color-scheme: dark) {
     [data-theme="system"] {
-      --shadow-box:0 0.5em 0.5em -0.125em {{session['couleur'][0]}}, 0 0 0 1px #03a9f400;
+      --shadow-box:0 0.5em 0.5em -0.125em {{session['couleur']['dark'][0]}}, 0 0 0 1px #03a9f400;
       --text-color: #ededed;
       --page-background: #212121;
       --bandeau-color:#1e1e1e;
-      --color-items-bandeau:{{session['couleur'][0]}};
+      --color-items-bandeau:{{session['couleur']['dark'][0]}};
       --logo:url("{{url_for('static',filename='image/logo/favicon.png')}}");
-      --varlogosearch:{{session['couleur'][0]}};
+      --varlogosearch:{{session['couleur']['dark'][0]}};
       --barreSearch:#ffffff2b;
       --background-hover:#383737;
       --text-color-hover:#858585;
       --NetBinverse:black;
-      --color-shadow:{{session['couleur'][0]}}99;
-      --color-theme0:{{session['couleur'][0]}};
-      --color-theme1:{{session['couleur'][1]}};
-      --color-theme2:{{session['couleur'][2]}};
-      --color-theme3:{{session['couleur'][3]}};
+      --color-shadow:{{session['couleur']['dark'][0]}}99;
+      --color-theme0:{{session['couleur']['dark'][0]}};
+      --color-theme1:{{session['couleur']['dark'][1]}};
+      --color-theme2:{{session['couleur']['dark'][2]}};
+      --color-theme3:{{session['couleur']['dark'][3]}};
     }
   }
 
@@ -89,14 +98,24 @@
       --barreSearch:white;
       --background-hover:#f5f5f5;
       --background-hover:#f5f5f5;
-      --color-shadow:{{session['couleur'][0]}}99;
-      --bandeau-color:{{session['couleur'][0]}};
-      --color-theme0:{{session['couleur'][0]}};
-      --color-theme1:{{session['couleur'][1]}};
-      --color-theme2:{{session['couleur'][2]}};
-      --color-theme3:{{session['couleur'][3]}};
-      --color-items-bandeau:{{session['couleur'][2]}};
-      --logo:url("{%if session['couleur']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}{{url_for('static',filename='image/logo/Nuances_bleu.png')}}{%endif%}{%if session['couleur']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}{{url_for('static',filename='image/logo/Nuances_rouge.png')}}{%endif%}{%if session['couleur']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}{{url_for('static',filename='image/logo/Nuances_vert.png')}}{%endif%}{%if session['couleur']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}{{url_for('static',filename='image/logo/Nuances_orange.png')}}{%endif%}{%if session['couleur']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}{{url_for('static',filename='image/logo/Framboise_bleu.png')}}{%endif%}{%if session['couleur']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/Moutarde_rose.png')}}{%endif%}{%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/cle_blanche.png')}}{%endif%}");
+      --color-shadow:{{session['couleur']['light'][0]}}99;
+      --bandeau-color:{{session['couleur']['light'][0]}};
+      --color-theme0:{{session['couleur']['light'][0]}};
+      --color-theme1:{{session['couleur']['light'][1]}};
+      --color-theme2:{{session['couleur']['light'][2]}};
+      --color-theme3:{{session['couleur']['dark'][3]}};
+      --color-items-bandeau:{{session['couleur']['light'][2]}};
+      --logo:url("
+      {%if session['couleur']['light']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}{{url_for('static',filename='image/logo/Nuances_bleu.png')}}{%endif%}
+      {%if session['couleur']['light']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}{{url_for('static',filename='image/logo/Nuances_rouge.png')}}{%endif%}
+      {%if session['couleur']['light']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}{{url_for('static',filename='image/logo/Nuances_vert.png')}}{%endif%}
+      {%if session['couleur']['light']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}{{url_for('static',filename='image/logo/Nuances_orange.png')}}{%endif%}
+      {%if session['couleur']['light']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}{{url_for('static',filename='image/logo/Framboise_bleu.png')}}{%endif%}
+      {%if session['couleur']['light']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/Moutarde_rose.png')}}{%endif%}
+      {%if session['couleur']['light']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and session['couleur']['light']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and session['couleur']['light']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and session['couleur']['light']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and session['couleur']['light']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and session['couleur']['light']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+      {{url_for('static',filename='image/logo/cle_blanche.png')}}
+      {%endif%}"
+      );
     }
   }
   .navbarhover:hover{
@@ -115,5 +134,6 @@
     padding: 1.25rem
   }
 </style>
+<meta name="theme-color" content="var(--color-theme0)">
 <link rel="stylesheet" href="/static/css/mystyles.css?v={{session['cacheRandomKey']}}">
 <link rel="stylesheet" type="text/css" href="/static/styles/style.css?v={{session['cacheRandomKey']}}">

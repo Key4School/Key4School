@@ -280,9 +280,9 @@
                   <a class="level-item" aria-label="like" onClick="like_rep('{{d['id']}}', '{{r['idRep']}}')">
                     <span class="icon is-small">
                       {% if r['a_like'] %}
-                        <i id="like_{{r['idRep']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb_likes']}}</i>
+                        <i id="like_{{r['idRep']}}" class="fas fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:var(--color-theme2);font-size: 20px;">{{r['nb_likes']}}</i>
                       {% else %}
-                        <i id="like_{{r['idRep']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:{{session['couleur'][2]}};font-size: 20px;">{{r['nb_likes']}}</i>
+                        <i id="like_{{r['idRep']}}" class="far fa-thumbs-up" aria-hidden="true" style="padding-left: 5px;color:var(--color-theme2);font-size: 20px;">{{r['nb_likes']}}</i>
                       {% endif %}
                     </span>
                   </a>

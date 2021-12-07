@@ -7,14 +7,14 @@
       <a href="{{url_for('accueil')}}" style="display:flex;align-items:center;">
         <img alt="logo Key4School" class="logo logochange"
         style="
-        {%if session['couleur']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
-        session['couleur']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
-        session['couleur']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
-        session['couleur']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
-        session['couleur']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
-        session['couleur']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
+        {%if session['couleur']['light']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and
+        session['couleur']['light']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and
+        session['couleur']['light']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and
+        session['couleur']['light']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and
+        session['couleur']['light']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and
+        session['couleur']['light']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
 
-        background: linear-gradient(to bottom right, {{session['couleur'][0]}}, {{session['couleur'][1]}}, {{session['couleur'][2]}});{%endif%}border-radius: 8px;
+        background: linear-gradient(to bottom right, var(--color-theme0), var(--color-theme1), var(--color-theme2));{%endif%}border-radius: 8px;
         "
          />
         <span class="key4schoolNavbar" style="margin-left: 1%;font-weight:bold;font-size:30px;margin:auto; position: absolute; left: 50px; top: 50%; transform: translateY(-50%);">
@@ -154,10 +154,10 @@
       </div>
     </div>
   </div>
-  <div id="rechercheTel" style="left: 0;padding: 1rem;position: fixed;right: 0;top: 3.25rem;/* z-index: 100; */background-color: {{session['couleur'][0]}};;box-shadow: ;box-shadow: 0 0.5em 1em {{session['couleur'][0]}};display: none;">
+  <div id="rechercheTel" style="left: 0;padding: 1rem;position: fixed;right: 0;top: 3.25rem;/* z-index: 100; */background-color: var(--color-theme0);box-shadow: ;box-shadow: 0 0.5em 1em var(--color-theme0);display: none;">
     <form action="/recherche" method="GET" style="/* margin-top: 2px; *//* width: 40%; */display:flex;">
       <input type="text" name="search" placeholder="Recherche..." style="width: 80%;height: 80%;border-radius: 4px;border: none;outline: none;padding: 2%;padding-left: 8px;" spellcheck="false" data-ms-editor="true">
-      <button type="submit" style="background-color:{{session['couleur'][0]}}; border: 1px solid {{session['couleur'][0]}}; margin-top:1%;font-size: 20px;margin-right:10%;"><i style="" class="fas fa-search logoBouton" aria-hidden="true"></i></button>
+      <button type="submit" style="background-color:var(--color-theme0); border: 1px solid var(--color-theme0); margin-top:1%;font-size: 20px;margin-right:10%;"><i style="" class="fas fa-search logoBouton" aria-hidden="true"></i></button>
     </form>
   </div>
 

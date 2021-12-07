@@ -344,7 +344,7 @@ how to remove the virtical space around the range input in IE*/
 }
 
 
-#couleur {
+.couleur {
   border-radius: 100%;
   width: 15px;
   height: 15px;
@@ -363,11 +363,11 @@ how to remove the virtical space around the range input in IE*/
   text-align: center;
 }
 
-#couleur::-webkit-color-swatch-wrapper {
+.couleur::-webkit-color-swatch-wrapper {
   padding: 0;
 }
 
-#couleur::-webkit-color-swatch {
+.couleur::-webkit-color-swatch {
   border: none;
   border-radius: 100%;
 }

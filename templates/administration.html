@@ -106,7 +106,7 @@
   {%if demandeSignale!=[]%}
     <div style="font-weight: bold; font-size:large;">Publications signalées : </div>
     {%for content in demandeSignale%}
-    <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};" id='divDemande_{{content['id']}}'>
+    <div class="boxAdmin" style="border:2px solid var(--color-theme1);" id='divDemande_{{content['id']}}'>
       <div>
         {%set varApercuProfil = content['user']%}
         <a href="{{url_for('profil' ,idUser=content['idAuteur'])}}" onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');">
@@ -175,7 +175,7 @@
   {%if profilSignale!=[]%}
     <div style="font-weight: bold; font-size:large;">Utilisteurs signalés :</div><br /><br />
     {%for content in profilSignale%}
-    <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
+    <div class="boxAdmin" style="border:2px solid var(--color-theme1);">
       <div>
         {%set varApercuProfil = content%}
         <a href="{{url_for('profil' ,idUser=content['id'])}}" onmouseover="apercuProfil('{{varApercuProfil['id']}}');" onmouseleave="hideApercuProfil('{{varApercuProfil['id']}}');">
@@ -200,7 +200,7 @@
   {%if discussionSignale!=[]%}
   <div style="font-weight: bold; font-size:large;">Groupes signalés :</div><br /><br />
   {%if discussionSignale != []%}
-  <div class="boxAdmin" style="border:2px solid {{session['couleur'][1]}};">
+  <div class="boxAdmin" style="border:2px solid var(--color-theme1);">
 
     {%for content in discussionSignale%}
     <a href="{{url_for('page_messages', idGroupe=content['id'])}}">{{content['nom']}}</a>

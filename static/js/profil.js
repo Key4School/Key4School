@@ -2,7 +2,43 @@ var boul1 = false;
 var boul2 = false;
 var boul3 = false;
 var boul4 = false;
+var theme = "";
+var listColor = [{
+  'light': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'],
+  'dark': ['#0a7dff', '#6595d1', '#a4e1f9', '#b2cae8']
+},
+{
+  'light': ['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'],
+  'dark': ['#bb0404', '#cc0000', '#ff8585', '#e68080']
+},
+{
+  'light': ['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3',],
+  'dark': ['#14db14', '#5ab953', '#a0ff94', '#addca9']
+},
+{
+  'light': ['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'],
+  'dark': ['#dfa300', '#c5a73c', '#ffe294', '#ffe68c']
+},
+{
+  'light': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'],
+  'dark': ['#ff6780', '#cd7d8b', '#afe2e7', '#e6bec5']
+},
+{
+  'light': ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0'],
+  'dark': ['#deb72f', '#876e19', '#e68181', '#ffeca9']
+},
+{
+  'light': ['#7a08fa', '#a82ffc', '#d189ff', '#d397fd'],
+  'dark': ['#7a08fa', '#a82ffc', '#d189ff', '#d397fd']
+},
+{
+  'light': ['#db3056', '#ff6464', '#ffb99a', '#ffb2b2'],
+  'dark': ['#ef6483', '#ff6464', '#ffb99a', '#ffb2b2']
+}]
 $(document).ready(function() {
+  $('#couleur9-1').val(couleur_un);
+  $('#couleur9-2').val(couleur_deux);
+  $('#couleur9-3').val(couleur_trois);
   $('#pf-delete-ConfSup').click(function() {
     $('.pf-contenu-confSup').addClass("active"),
       $("#pf-delete-ConfSup").css("zIndex", "-1");
@@ -19,10 +55,12 @@ $(document).ready(function() {
   if (document.documentElement.getAttribute("data-theme") == "dark") {
     $(".sun").addClass("sun-logo");
     $(".moon").addClass("moon-logo");
+    theme = "dark"
   }
   if (document.documentElement.getAttribute("data-theme") == "light") {
     $(".sun").addClass("animate-sun");
     $(".moon").addClass("animate-moon");
+    theme = "light"
   }
   if (document.documentElement.getAttribute("data-theme") == "system") {
     $("#systemTheme").prop('checked', true);
@@ -31,13 +69,39 @@ $(document).ready(function() {
       $(".moon").addClass("moon-logo");
       $(".sun").removeClass("animate-sun");
       $(".moon").removeClass("animate-moon");
+      theme = "dark"
     } else {
       $(".sun").removeClass("sun-logo");
       $(".moon").removeClass("moon-logo");
       $(".sun").addClass("animate-sun");
       $(".moon").addClass("animate-moon");
+      theme = "light"
     }
   }
+  $('#couleur1-1').css("backgroundColor", listColor[0][theme][0]);
+  $('#couleur1-2').css("backgroundColor", listColor[0][theme][1]);
+  $('#couleur1-3').css("backgroundColor", listColor[0][theme][2]);
+  $('#couleur2-1').css("backgroundColor", listColor[1][theme][0]);
+  $('#couleur2-2').css("backgroundColor", listColor[1][theme][1]);
+  $('#couleur2-3').css("backgroundColor", listColor[1][theme][2]);
+  $('#couleur3-1').css("backgroundColor", listColor[2][theme][0]);
+  $('#couleur3-2').css("backgroundColor", listColor[2][theme][1]);
+  $('#couleur3-3').css("backgroundColor", listColor[2][theme][2]);
+  $('#couleur4-1').css("backgroundColor", listColor[3][theme][0]);
+  $('#couleur4-2').css("backgroundColor", listColor[3][theme][1]);
+  $('#couleur4-3').css("backgroundColor", listColor[3][theme][2]);
+  $('#couleur5-1').css("backgroundColor", listColor[4][theme][0]);
+  $('#couleur5-2').css("backgroundColor", listColor[4][theme][1]);
+  $('#couleur5-3').css("backgroundColor", listColor[4][theme][2]);
+  $('#couleur6-1').css("backgroundColor", listColor[5][theme][0]);
+  $('#couleur6-2').css("backgroundColor", listColor[5][theme][1]);
+  $('#couleur6-3').css("backgroundColor", listColor[5][theme][2]);
+  $('#couleur7-1').css("backgroundColor", listColor[6][theme][0]);
+  $('#couleur7-2').css("backgroundColor", listColor[6][theme][1]);
+  $('#couleur7-3').css("backgroundColor", listColor[6][theme][2]);
+  $('#couleur8-1').css("backgroundColor", listColor[7][theme][0]);
+  $('#couleur8-2').css("backgroundColor", listColor[7][theme][1]);
+  $('#couleur8-3').css("backgroundColor", listColor[7][theme][2]);
 });
 
 function themeRequest(theme) {
