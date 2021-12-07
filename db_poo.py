@@ -1,5 +1,5 @@
 from datetime import *
-from flask import session, escape, render_template
+from flask import session, current_app as app, escape, render_template
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -1009,7 +1009,6 @@ class Notification(Actions, Base):
         temp = self.destinataires
         return User.get(filter="cls.id.in_(temp)")
 
-    @get_context
     def send(self):
         notification = self
         html = render_template("notification.html",
@@ -1017,7 +1016,7 @@ class Notification(Actions, Base):
 
         for user in notification['userDest']:
             if user['id'] in clientsNotif:
-                socketio.emit(
+                app.config['socketio'].emit(
                     'newNotif', {'html': html, 'sound': user['notifs']['sound']}, to=user['id'])
             elif user['email']:
                 # si l'user a autorisé les notifs par mail
