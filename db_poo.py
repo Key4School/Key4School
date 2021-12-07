@@ -949,8 +949,9 @@ class Notification(Actions, Base):
         if len(destinataires) > 0:
             notification = Notification(
                 type=type, id_groupe=id_groupe, id_msg=id_msg, destinataires=destinataires)
-            notification.insert()
-            notification.send()
+            '''TROP BUGUER'''
+            # notification.insert()
+            # notification.send()
         else:
             notification = None
         return notification

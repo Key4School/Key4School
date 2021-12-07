@@ -3,6 +3,7 @@ from datetime import *
 from flask.json import jsonify
 from db_poo import *
 import os
+import json
 from routing.functions import listeModeration, automoderation
 
 @db_session
@@ -90,20 +91,36 @@ def updateprofile():
         user['email'] = request.form['email']
         user['telephone'] = request.form['telephone']
         user['interets'] = automoderation(request.form['interets'])
+
+        if request.form.get('mdp'):
+            hash = app.config['hashing'].hash_value(request.form['password'], salt=app.config['hashingKey'])
+            user['mdp'] = hash
+
+        if request.form.get('school'):
+            school = json.loads(request.form['school'])
+            user['lycee'] = school['nomVille']
+            user['lyceeId'] = school['id']
+
+        user['classe'] = request.form['classe']
+
         if user['type'] == 'ELEVE':
             user['langues'] = [request.form['lv1'], request.form['lv2']]
+
             options = []
             if request.form['option1'] != 'none':
                 options.append(request.form['option1'])
             if request.form['option2'] != 'none':
                 options.append(request.form['option2'])
             user['options'] = options
+
             if user['classe'] == '1G':
                 user['spes'] = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
             elif user['classe'] == 'TG':
                 user['spes'] = [request.form['spe1'], request.form['spe2']]
+
         elif user['type'] == 'ENSEIGNANT':
             user['matiere'] = request.form['matiere']
+
         user['elementPrive'] = elementPrive
         user['elementPublic'] = elementPublic
 
