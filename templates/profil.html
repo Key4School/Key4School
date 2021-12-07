@@ -830,11 +830,11 @@
               <i class="fas fa-check"></i>
             </span>
             <span>Modifier mes informations !</span>
-          </button>
+          </button
+            <br />
         </form>
 
 
-  <br />
   <div>
     <div class="leaderboard_profile">
       <div id="leaderboard" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_leaderboard" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_leaderboard" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;LeaderBoard :</div>
@@ -941,13 +941,12 @@
         <br />
         <a href="{{url_for('leaderboard')}}">Voir plus</a>
       </div>
-
+      <br />
     </div>
-    <br />
     <div class="ChoixCouleur">
       <div id="theme" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large;"><i id="chevron_theme" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_theme" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Thème :</div>
-      <br />
       <div id="content_theme" class="depliable">
+        <br />
         <p>
           Chosir le thème principal :
         </p>
@@ -1078,11 +1077,11 @@
             <span>Modifier ma couleur !</span>
           </button>
         </form>
+        <br />
       </div>
+
     </div>
   </div>
-
-    <br />
   </div>
   {%if user['admin']==true and user['sign'] != []%}
   <button class="button  is-danger is-outlined is-small" onClick="validationUser();">
@@ -1094,7 +1093,7 @@
   {%endif%}
 
   {% if demandes != [] %}
-  <div style="margin-left: 15%;display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly; width: 70%;">
+  <div id="pf-content-publication" style="display: flex; flex-direction:column; align-items:baseline;justify-content: space-evenly;">
     <div id="publication" onClick="depliable(this.id);" style="display:flex;align-items:center;cursor:pointer;font-weight: bold; font-size:large; margin-top: 15px;"><i id="chevron_publication" class="fas fa-chevron-up BlackOrWhite depliableOrdi"></i><i id="chevron_publication" class="fas fa-chevron-down BlackOrWhite depliableTel"></i>&nbsp;Mes demandes d'aide :</div>
     <div id="content_publication" class="depliable">
       <br />
