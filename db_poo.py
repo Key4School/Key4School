@@ -317,7 +317,8 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         self.idImg = params.get('idImg')
 
         self.couleur = params.get(
-            'couleur', ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'])
+            'couleur', {'light': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'],
+                        'dark': ['#0a7dff', '#6595d1', '#a4e1f9', '#b2cae8']})
         self.theme = params.get('theme', 'system')
 
         self.elementPublic = params.get('elementPublic', [])
