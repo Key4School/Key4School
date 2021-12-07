@@ -729,6 +729,13 @@ opacity: 1;
   .pf-oui-supp-ConfSup::after{
     content:"Supprimer";
   }
+  #pf-content-publication{
+    padding-left: 2%;
+  }
+  #content_publication{
+    width: 90%;
+    margin: auto;
+  }
 }
 
 /* Pour tablette */
@@ -974,6 +981,13 @@ opacity: 1;
   }
   .pf-oui-supp-ConfSup::after{
     content:"Supprimer";
+  }
+  #pf-content-publication{
+    padding-left: 2%;
+  }
+  #content_publication{
+    width: 90%;
+    margin: auto;
   }
 }
 /* Pour ordinateur */
@@ -1245,13 +1259,17 @@ opacity: 1;
     opacity: 0;
   }
   .pf-contenu-confSup.active{
-    width: 30%;
-    height: 50%;
+    width: 50%;
+    height: 75%;
     transition: .1s;
     /* margin: auto; */
     z-index: 200;
   }
   .pf-oui-supp-ConfSup::after{
     content:"Oui, supprimer";
+  }
+  #pf-content-publication{
+    margin-left: 15%;
+    width: 70%;
   }
 }
