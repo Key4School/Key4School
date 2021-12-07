@@ -3,6 +3,7 @@ from datetime import *
 from flask.json import jsonify
 from db_poo import *
 import os
+import json
 from routing.functions import listeModeration, automoderation
 
 @db_session
@@ -31,18 +32,29 @@ def profil(idUser):
 def changeTheme():
 
     if 'id' in session:
-        if int(request.form['couleur']) == 6:
+        listColor = [{'light': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'],
+                        'dark': ['#0a7dff', '#6595d1', '#a4e1f9', '#b2cae8']},
+                    {'light': ['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'],
+                        'dark': ['#bb0404', '#cc0000', '#ff8585', '#e68080']},
+                    {'light': ['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3',],
+                        'dark': ['#14db14', '#5ab953', '#a0ff94', '#addca9']},
+                    {'light': ['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'],
+                        'dark': ['#dfa300', '#c5a73c', '#ffe294', '#ffe68c']},
+                    {'light': ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'],
+                        'dark': ['#ff6780', '#cd7d8b', '#afe2e7', '#e6bec5']},
+                    {'light': ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0'],
+                        'dark': ['#deb72f', '#876e19', '#e68181', '#ffeca9']},
+                    {'light': ['#7a08fa', '#a82ffc', '#d189ff', '#d397fd'],
+                        'dark': ['#7a08fa', '#a82ffc', '#d189ff', '#d397fd']},
+                    {'light': ['#db3056', '#ff6464', '#ffb99a', '#ffb2b2'],
+                        'dark': ['#ef6483', '#ff6464', '#ffb99a', '#ffb2b2']}]
+
+        if int(request.form['couleur']) >= len(listColor):
             color2 = tuple(int(request.form['color2'].lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
             moyenne = '#%02x%02x%02x' % tuple((color+255)//2 for color in color2)
-            couleurs = [request.form['color1'], request.form['color2'], request.form['color3'], moyenne]
-
+            colors = [request.form['color1'], request.form['color2'], request.form['color3'], moyenne]
+            couleurs = {'light': colors, 'dark': colors}
         else:
-            listColor = [['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff', '#6595d1'],
-                        ['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3', '#ab3333'],
-                        ['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3', '#5ab953'],
-                        ['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac', '#c5a73c'],
-                        ['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9', '#cd7d8b'],
-                        ['#deb72f', '#e6cf81', '#e68181', '#f3e7c0', '#9f8f57']]
             couleurs = listColor[int(request.form['couleur'])]
 
         user = User.get(filter="cls.id == session['id']", limit=1)
@@ -76,7 +88,6 @@ def updateprofile():
         # je vérifie que c pas vide  #Pour chaque info que je récupère dans le formulaire qui est dans profil.html
         elementPrive = []
         elementPublic = []
-        print(request.form)
         for content in request.form:
             if request.form[content] == "pv":
                 elementPrive.append(content.replace('Visibilite', ''))
@@ -90,20 +101,36 @@ def updateprofile():
         user['email'] = request.form['email']
         user['telephone'] = request.form['telephone']
         user['interets'] = automoderation(request.form['interets'])
+
+        if request.form.get('mdp'):
+            hash = app.config['hashing'].hash_value(request.form['password'], salt=app.config['hashingKey'])
+            user['mdp'] = hash
+
+        if request.form.get('school'):
+            school = json.loads(request.form['school'])
+            user['lycee'] = school['nomVille']
+            user['lyceeId'] = school['id']
+
+        user['classe'] = request.form['classe']
+
         if user['type'] == 'ELEVE':
             user['langues'] = [request.form['lv1'], request.form['lv2']]
+
             options = []
             if request.form['option1'] != 'none':
                 options.append(request.form['option1'])
             if request.form['option2'] != 'none':
                 options.append(request.form['option2'])
             user['options'] = options
+
             if user['classe'] == '1G':
                 user['spes'] = [request.form['spe1'], request.form['spe2'], request.form['spe3']]
             elif user['classe'] == 'TG':
                 user['spes'] = [request.form['spe1'], request.form['spe2']]
+
         elif user['type'] == 'ENSEIGNANT':
             user['matiere'] = request.form['matiere']
+
         user['elementPrive'] = elementPrive
         user['elementPublic'] = elementPublic
 

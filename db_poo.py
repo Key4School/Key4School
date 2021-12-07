@@ -1,5 +1,5 @@
 from datetime import *
-from flask import session, escape, render_template
+from flask import session, current_app as app, escape, render_template
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -317,7 +317,8 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         self.idImg = params.get('idImg')
 
         self.couleur = params.get(
-            'couleur', ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'])
+            'couleur', {'light': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'],
+                        'dark': ['#0a7dff', '#6595d1', '#a4e1f9', '#b2cae8']})
         self.theme = params.get('theme', 'system')
 
         self.elementPublic = params.get('elementPublic', [])
@@ -949,8 +950,9 @@ class Notification(Actions, Base):
         if len(destinataires) > 0:
             notification = Notification(
                 type=type, id_groupe=id_groupe, id_msg=id_msg, destinataires=destinataires)
-            notification.insert()
-            notification.send()
+            '''TROP BUGUER'''
+            # notification.insert()
+            # notification.send()
         else:
             notification = None
         return notification
@@ -1009,7 +1011,6 @@ class Notification(Actions, Base):
         temp = self.destinataires
         return User.get(filter="cls.id.in_(temp)")
 
-    @get_context
     def send(self):
         notification = self
         html = render_template("notification.html",
@@ -1017,7 +1018,7 @@ class Notification(Actions, Base):
 
         for user in notification['userDest']:
             if user['id'] in clientsNotif:
-                socketio.emit(
+                app.config['socketio'].emit(
                     'newNotif', {'html': html, 'sound': user['notifs']['sound']}, to=user['id'])
             elif user['email']:
                 # si l'user a autorisé les notifs par mail
