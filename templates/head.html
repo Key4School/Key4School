@@ -55,17 +55,7 @@
     --color-theme3:{{session['couleur']['dark'][3]}};
     --bandeau-color:{{session['couleur']['light'][0]}};
     --color-items-bandeau:{{session['couleur']['light'][2]}};
-    --logo:url("
-    {%if session['couleur']['light']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}{{url_for('static',filename='image/logo/Nuances_bleu.png')}}{%endif%}
-    {%if session['couleur']['light']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}{{url_for('static',filename='image/logo/Nuances_rouge.png')}}{%endif%}
-    {%if session['couleur']['light']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}{{url_for('static',filename='image/logo/Nuances_vert.png')}}{%endif%}
-    {%if session['couleur']['light']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}{{url_for('static',filename='image/logo/Nuances_orange.png')}}{%endif%}
-    {%if session['couleur']['light']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}{{url_for('static',filename='image/logo/Framboise_bleu.png')}}{%endif%}
-    {%if session['couleur']['light']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/Moutarde_rose.png')}}{%endif%}
-    {%if session['couleur']['light']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and session['couleur']['light']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and session['couleur']['light']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and session['couleur']['light']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and session['couleur']['light']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and session['couleur']['light']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
-    {{url_for('static',filename='image/logo/cle_blanche.png')}}
-    {%endif%}"
-    );
+    --logo:url("{%if session['couleur']['light']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}{{url_for('static',filename='image/logo/Nuances_bleu.png')}}{%endif%}{%if session['couleur']['light']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}{{url_for('static',filename='image/logo/Nuances_rouge.png')}}{%endif%}{%if session['couleur']['light']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}{{url_for('static',filename='image/logo/Nuances_vert.png')}}{%endif%}{%if session['couleur']['light']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}{{url_for('static',filename='image/logo/Nuances_orange.png')}}{%endif%}{%if session['couleur']['light']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}{{url_for('static',filename='image/logo/Framboise_bleu.png')}}{%endif%}{%if session['couleur']['light']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/Moutarde_rose.png')}}{%endif%}{%if session['couleur']['light']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and session['couleur']['light']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and session['couleur']['light']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and session['couleur']['light']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and session['couleur']['light']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and session['couleur']['light']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/cle_blanche.png')}}{%endif%}");
     }
     @media (prefers-color-scheme: dark) {
     [data-theme="system"] {
@@ -105,17 +95,7 @@
       --color-theme2:{{session['couleur']['light'][2]}};
       --color-theme3:{{session['couleur']['dark'][3]}};
       --color-items-bandeau:{{session['couleur']['light'][2]}};
-      --logo:url("
-      {%if session['couleur']['light']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}{{url_for('static',filename='image/logo/Nuances_bleu.png')}}{%endif%}
-      {%if session['couleur']['light']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}{{url_for('static',filename='image/logo/Nuances_rouge.png')}}{%endif%}
-      {%if session['couleur']['light']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}{{url_for('static',filename='image/logo/Nuances_vert.png')}}{%endif%}
-      {%if session['couleur']['light']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}{{url_for('static',filename='image/logo/Nuances_orange.png')}}{%endif%}
-      {%if session['couleur']['light']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}{{url_for('static',filename='image/logo/Framboise_bleu.png')}}{%endif%}
-      {%if session['couleur']['light']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/Moutarde_rose.png')}}{%endif%}
-      {%if session['couleur']['light']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and session['couleur']['light']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and session['couleur']['light']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and session['couleur']['light']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and session['couleur']['light']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and session['couleur']['light']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}
-      {{url_for('static',filename='image/logo/cle_blanche.png')}}
-      {%endif%}"
-      );
+      --logo:url("{%if session['couleur']['light']==['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff']%}{{url_for('static',filename='image/logo/Nuances_bleu.png')}}{%endif%}{%if session['couleur']['light']==['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3']%}{{url_for('static',filename='image/logo/Nuances_rouge.png')}}{%endif%}{%if session['couleur']['light']==['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3']%}{{url_for('static',filename='image/logo/Nuances_vert.png')}}{%endif%}{%if session['couleur']['light']==['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac']%}{{url_for('static',filename='image/logo/Nuances_orange.png')}}{%endif%}{%if session['couleur']['light']==['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9']%}{{url_for('static',filename='image/logo/Framboise_bleu.png')}}{%endif%}{%if session['couleur']['light']==['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/Moutarde_rose.png')}}{%endif%}{%if session['couleur']['light']!=['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'] and session['couleur']['light']!=['#ff0000', '#ffa8a8', '#ff9494', '#ffd3d3'] and session['couleur']['light']!=['#14db14', '#aeffa8', '#a0ff94', '#d6ffd3'] and session['couleur']['light']!=['#ffbb00', '#e8c959', '#ffe294', '#f3e4ac'] and session['couleur']['light']!=['#e6445f', '#f3a6b3', '#afe2e7', '#f9d3d9'] and session['couleur']['light']!=['#deb72f', '#e6cf81', '#e68181', '#f3e7c0']%}{{url_for('static',filename='image/logo/cle_blanche.png')}}{%endif%}");
     }
   }
   .navbarhover:hover{
