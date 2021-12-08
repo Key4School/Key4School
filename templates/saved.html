@@ -3,6 +3,7 @@
 
 <head>
   {% include 'head.html' with context %}
+  <script src="/static/js/publication.js?v={{session['cacheRandomKey']}}" type="text/javascript" defer></script>
   <script type="text/javascript" src="/static/js/filtres.js?v={{session['cacheRandomKey']}}" defer></script>
   <title>Key4School - Demandes enregistréees</title>
   <style>
