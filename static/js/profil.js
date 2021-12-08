@@ -3,6 +3,7 @@ var boul2 = false;
 var boul3 = false;
 var boul4 = false;
 var theme = "";
+var champsFaux = [];
 var listColor = [{
   'light': ['#00b7ff', '#a7ceff', '#94e1ff', '#d3e6ff'],
   'dark': ['#0a7dff', '#6595d1', '#a4e1f9', '#b2cae8']
@@ -36,6 +37,27 @@ var listColor = [{
   'dark': ['#ef6483', '#ff6464', '#ffb99a', '#ffb2b2']
 }]
 $(document).ready(function() {
+  $('#lv1').change(function() {
+    verifLangue();
+  });
+  $('#lv2').change(function() {
+    verifLangue();
+  });
+  $('#option1').change(function() {
+    verifOption();
+  });
+  $('#option2').change(function() {
+    verifOption();
+  });
+  $('#spe1').change(function() {
+    verifSpe();
+  });
+  $('#spe2').change(function() {
+    verifSpe();
+  });
+  $('#spe3').change(function() {
+    verifSpe();
+  });
   $('#couleur9-1').val(couleur_un);
   $('#couleur9-2').val(couleur_deux);
   $('#couleur9-3').val(couleur_trois);
@@ -45,9 +67,33 @@ $(document).ready(function() {
     $("#ConfSupp-filtre").css("display", "block");
   });
   $('#updateProfil').submit(function() {
-    if (verifNom() && verifPrenom() && verifPseudo() && verifSchool(false) && verifMdp() && verifConfMdp() && verifPhone() && verifEmail()) {
+    // if (verifNom() && verifPrenom() && verifPseudo() && verifSchool(false) && verifMdp() && verifConfMdp() && verifPhone() && verifEmail() && verifLangue() && verifOption() && verifSpe()) {
+    //   return true;
+    // }
+    verifNom()
+    verifPrenom()
+    verifPseudo()
+    verifSchool(false)
+    verifMdp()
+    verifConfMdp()
+    verifPhone()
+    verifEmail()
+    verifLangue()
+    verifOption()
+    verifSpe()
+    if (champsFaux.length == 0) {
       return true;
-    } else {
+    }
+    else {
+      if (champsFaux.length == 1) {
+        var adj = "le champ"
+      }
+      else {
+        var adj = "les champs"
+      }
+      $('#msgErreur').empty();
+      $('#msgErreur').css("marginBottom", "3%");
+      $('#msgErreur').append("Il y a une erreur avec " + adj + " : " + champsFaux.join(', '))
       return false;
     }
   });
@@ -195,8 +241,11 @@ function verifNom() {
         color: 'red',
       });
     }
+    if (champsFaux.indexOf("nom") === -1) {
+      champsFaux.push('nom');
+    }
 
-    return false;
+    // return false;
   } else {
     if ($nom.get(0).tagName == 'INPUT') {
       $nom.css({ // si tout est bon, on le rend vert
@@ -209,7 +258,11 @@ function verifNom() {
         color: 'green',
       });
     }
-    return true;
+    const index = champsFaux.indexOf("nom");
+    if (index > -1) {
+      champsFaux.splice(index, 1);
+    }
+    // return true;
   }
 }
 function inputPrenom() {
@@ -242,7 +295,9 @@ function verifPrenom() {
         color: 'red',
       });
     }
-    return false;
+    if (champsFaux.indexOf("prénom") === -1) {
+      champsFaux.push('prénom');
+    }
   } else {
     if ($prenom.get(0).tagName == 'INPUT') {
       $prenom.css({ // si tout est bon, on le rend vert
@@ -255,7 +310,11 @@ function verifPrenom() {
         color: 'green',
       });
     }
-    return true;
+    const index = champsFaux.indexOf("prénom");
+    if (index > -1) {
+      champsFaux.splice(index, 1);
+    }
+    // return true;
   }
 }
 function inputPseudo() {
@@ -288,7 +347,10 @@ function verifPseudo() {
         color: 'red',
       });
     }
-    return false;
+    if (champsFaux.indexOf("pseudo") === -1) {
+      champsFaux.push('pseudo');
+    }
+    // return false;
   } else {
     if ($pseudo.get(0).tagName == 'INPUT') {
       $pseudo.css({ // si tout est bon, on le rend vert
@@ -301,7 +363,11 @@ function verifPseudo() {
         color: 'green',
       });
     }
-    return true;
+    const index = champsFaux.indexOf("pseudo");
+    if (index > -1) {
+      champsFaux.splice(index, 1);
+    }
+    // return true;
   }
 }
 
@@ -322,7 +388,7 @@ function inputMdp() {
 
 function verifMdp() {
   if ($('#mdp').get(0).tagName == 'P') {
-    return true;
+    // return true;
   }
   else {
     var $content_mdp = $('#mdp').val();
@@ -403,7 +469,11 @@ function verifMdp() {
       $password_check.css({ // on rend le champ rouge
         color: 'green',
       });
-      return true;
+      const index = champsFaux.indexOf("mot de passe");
+      if (index > -1) {
+        champsFaux.splice(index, 1);
+      }
+      // return true;
     } else {
       $mdp.css({ // on rend le champ rouge
         borderColor: 'red',
@@ -414,7 +484,10 @@ function verifMdp() {
       $password_check.css({ // on rend le champ rouge
         color: 'red',
       });
-      return false;
+      if (champsFaux.indexOf("mot de passe") === -1) {
+        champsFaux.push('mot de passe');
+      }
+      // return false;
     }
   }
 
@@ -422,7 +495,7 @@ function verifMdp() {
 
 function verifConfMdp() {
   if ($('#mdp').get(0).tagName == 'P') {
-    return true;
+    // return true;
   }
   else {
     if ($('#confmdp').val() == '' || $('#confmdp').val() == undefined) {
@@ -449,7 +522,10 @@ function verifConfMdp() {
       $confPassword_check.css({ // on rend le champ rouge
         color: 'red',
       });
-      return false;
+      if (champsFaux.indexOf("confirmation de mot de passe") === -1) {
+        champsFaux.push('confirmation de mot de passe');
+      }
+      // return false;
     } else {
       $confmdp.css({ // si tout est bon, on le rend vert
         borderColor: 'green',
@@ -460,7 +536,11 @@ function verifConfMdp() {
       $confPassword_check.css({ // on rend le champ rouge
         color: 'green',
       });
-      return true;
+      const index = champsFaux.indexOf("confirmation de mot de passe");
+      if (index > -1) {
+        champsFaux.splice(index, 1);
+      }
+      // return true;
     }
   }
 
@@ -480,7 +560,7 @@ function inputLycee() {
 function verifSchool(asynch) {
   if ($('#school').get(0).tagName == 'P') {
     $('#hiddenLycee').val('');
-    return true;
+    // return true;
   }
   else {
     if ($('#school').val() == '' || $('#school').val() == undefined) {
@@ -533,7 +613,10 @@ function verifSchool(asynch) {
               color: 'red',
             });
           }
-          retour = false;
+          if (champsFaux.indexOf("lycée") === -1) {
+            champsFaux.push('lycée');
+          }
+          // retour = false;
         } else {
           if ($school.get(0).tagName == 'INPUT') {
             $school.css({ // si tout est bon, on le rend vert
@@ -547,12 +630,16 @@ function verifSchool(asynch) {
             });
           }
           $('#schoolValue').val(lyceesValues[$content_school]);
-          retour = true;
+          const index = champsFaux.indexOf("lycée");
+          if (index > -1) {
+            champsFaux.splice(index, 1);
+          }
+          // retour = true;
         }
       }
     });
   }
-  return retour;
+  // return retour;
 }
 
 
@@ -602,7 +689,10 @@ function verifEmail() {
         color: 'red',
       });
     }
-    return false;
+    if (champsFaux.indexOf("email") === -1) {
+      champsFaux.push('email');
+    }
+    // return false;
   } else {
     if ($email.get(0).tagName == 'INPUT') {
       $email.css({ // si tout est bon, on le rend vert
@@ -615,7 +705,11 @@ function verifEmail() {
         color: 'green',
       });
     }
-    return true;
+    const index = champsFaux.indexOf("email");
+    if (index > -1) {
+      champsFaux.splice(index, 1);
+    }
+    // return true;
   }
 }
 
@@ -648,7 +742,10 @@ function verifPhone() {
           color: 'red',
         });
       }
-      return false;
+      if (champsFaux.indexOf("téléphone") === -1) {
+        champsFaux.push('téléphone');
+      }
+      // return false;
     } else {
       if ($phone.get(0).tagName == 'INPUT') {
         $phone.css({ // si tout est bon, on le rend vert
@@ -661,12 +758,163 @@ function verifPhone() {
           color: 'green',
         });
       }
-      return true;
+      const index = champsFaux.indexOf("téléphone");
+      if (index > -1) {
+        champsFaux.splice(index, 1);
+      }
+      // return true;
     }
   }
 }
 
+function verifLangue() {
+  const lv1 = $('#lv1').val().split('-');
+  const lv2 = $('#lv2').val().split('-');
+  if (lv1[1] == lv2[1]) {
+    $('#lv1').css({ // si tout est bon, on le rend vert
+      borderColor: 'red',
+      boxShadow: '0 0 0 0.125em #ff000099',
+    });
+    $('#lv2').css({ // si tout est bon, on le rend vert
+      borderColor: 'red',
+      boxShadow: '0 0 0 0.125em #ff000099',
+    });
+    if (champsFaux.indexOf("langues") === -1) {
+      champsFaux.push('langues');
+    }
 
+    // return false;
+  }
+  else {
+    $('#lv1').css({ // si tout est bon, on le rend vert
+      borderColor: 'green',
+      boxShadow: '0 0 0 0.125em #00800099',
+    });
+    $('#lv2').css({ // si tout est bon, on le rend vert
+      borderColor: 'green',
+      boxShadow: '0 0 0 0.125em #00800099',
+    });
+    const index = champsFaux.indexOf("langues");
+    if (index > -1) {
+      champsFaux.splice(index, 1);
+    }
+    // return true;
+  }
+}
+
+function verifOption() {
+  const option1 = $('#option1').val().split('-');
+  const option2 = $('#option2').val().split('-');
+  if (option1[1] == option2[1]) {
+    $('#option1').css({ // si tout est bon, on le rend vert
+      borderColor: 'red',
+      boxShadow: '0 0 0 0.125em #ff000099',
+    });
+    $('#option2').css({ // si tout est bon, on le rend vert
+      borderColor: 'red',
+      boxShadow: '0 0 0 0.125em #ff000099',
+    });
+    if (champsFaux.indexOf("options") === -1) {
+      champsFaux.push('options');
+    }
+
+    // return false;
+  }
+  else {
+    $('#option1').css({ // si tout est bon, on le rend vert
+      borderColor: 'green',
+      boxShadow: '0 0 0 0.125em #00800099',
+    });
+    $('#option2').css({ // si tout est bon, on le rend vert
+      borderColor: 'green',
+      boxShadow: '0 0 0 0.125em #00800099',
+    });
+    const index = champsFaux.indexOf("options");
+    if (index > -1) {
+      champsFaux.splice(index, 1);
+    }
+    // return true;
+  }
+}
+
+function verifSpe() {
+  if (classe == '1G') {
+    const spe1 = $('#spe1').val().split('-');
+    const spe2 = $('#spe2').val().split('-');
+    const spe3 = $('#spe3').val().split('-');
+    if (spe1[1] == spe2[1] || spe1[1] == spe3[1] || spe3[1] == spe2[1]) {
+      $('#spe1').css({ // si tout est bon, on le rend vert
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
+      });
+      $('#spe2').css({ // si tout est bon, on le rend vert
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
+      });
+      $('#spe3').css({ // si tout est bon, on le rend vert
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
+      });
+      if (champsFaux.indexOf("spécialités") === -1) {
+        champsFaux.push('spécialités');
+      }
+
+      // return false;
+    }
+    else {
+      $('#spe1').css({ // si tout est bon, on le rend vert
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
+      });
+      $('#spe2').css({ // si tout est bon, on le rend vert
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
+      });
+      $('#spe3').css({ // si tout est bon, on le rend vert
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
+      });
+      const index = champsFaux.indexOf("spécialités");
+      if (index > -1) {
+        champsFaux.splice(index, 1);
+      }
+      // return true;
+    }
+  }
+  if (classe == 'TG') {
+    const spe1 = $('#spe1').val().split('-');
+    const spe2 = $('#spe2').val().split('-');
+    if (spe1[1] == spe2[1]) {
+      $('#spe1').css({ // si tout est bon, on le rend vert
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
+      });
+      $('#spe1').css({ // si tout est bon, on le rend vert
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
+      });
+      if (champsFaux.indexOf("nom") === -1) {
+        champsFaux.push('spécialités');
+      }
+      // return false;
+    }
+    else {
+      $('#spe1').css({ // si tout est bon, on le rend vert
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
+      });
+      $('#spe2').css({ // si tout est bon, on le rend vert
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
+      });
+      const index = champsFaux.indexOf("spécialités");
+      if (index > -1) {
+        champsFaux.splice(index, 1);
+      }
+      // return true;
+    }
+  }
+}
 
 
 function updateImgOpen() {

@@ -405,7 +405,7 @@
                 <div id="contentlangues">
 
                   <div class="select" class="selectProfil">
-                    <select name="lv1">
+                    <select name="lv1" id="lv1">
                       <option value="none" {%if user['langues'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="lv1-ang" {%if user['langues'][0]=="lv1-ang"%}selected{%endif%}>LV1 Anglais</option>
                       <option value="lv1-ang-euro" {%if user['langues'][0]=="lv1-ang-euro"%}selected{%endif%}>LV1 Anglais Euro</option>
@@ -424,7 +424,7 @@
                   </div>
 
                   <div class="select" class="selectProfil">
-                    <select name="lv2">
+                    <select name="lv2" id="lv2">
                       <option value="none" {%if user['langues'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="lv2-ang" {%if user['langues'][1]=="lv2-ang"%}selected{%endif%}>LV2 Anglais</option>
                       <option value="lv2-esp" {%if user['langues'][1]=="lv2-esp"%}selected{%endif%}>LV2 Espagnol</option>
@@ -449,7 +449,7 @@
                 <div id="contentoptions">
 
                   <div class="select" class="selectProfil">
-                    <select name="option1">
+                    <select name="option1" id="option1">
                       <option value="none" {%if user['options'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="opt-lca-latin" {%if user['options'][0]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
                       <option value="opt-lca-grec" {%if user['options'][0]=="opt-lca-grec"%}selected{%endif%}>LCA Grec</option>
@@ -485,7 +485,7 @@
                   </div>
 
                   <div class="select" class="selectProfil">
-                    <select name="option2">
+                    <select name="option2" id="option2">
                       <option value="none" {%if user['options'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
                       <option value="opt-lca-latin" {%if user['options'][1]=="opt-lca-latin"%}selected{%endif%}>LCA Latin</option>
                       <option value="opt-lca-grec" {%if user['options'][1]=="opt-lca-grec"%}selected{%endif%}>LCA Grec</option>
@@ -532,65 +532,65 @@
                 <div id="contentspes">
 
                   <div class="select" class="selectProfil">
-                    <select name="spe1">
+                    <select name="spe1" id="spe1">
                       <option value="none" {%if user['spes'][0]=="none"%}selected{%endif%}>Non renseignée...</option>
-                      <option value="spe-art" {%if user['spes'][0]=="spe-art"%}selected{%endif%}>Spé Arts</option>
-                      <option value="spe-hggsp" {%if user['spes'][0]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                      <option value="spe-hlp" {%if user['spes'][0]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
-                      <option value="spe-ses" {%if user['spes'][0]=="spe-ses"%}selected{%endif%}>Spé SES</option>
-                      <option value="spe-maths" {%if user['spes'][0]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
-                      <option value="spe-pc" {%if user['spes'][0]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                      <option value="spe-svt" {%if user['spes'][0]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
-                      <option value="spe-nsi" {%if user['spes'][0]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
-                      <option value="spe-si" {%if user['spes'][0]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                      <option value="spe-lca" {%if user['spes'][0]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
-                      <option value="spe-llcer-ang" {%if user['spes'][0]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                      <option value="spe-llcer-esp" {%if user['spes'][0]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                      <option value="spe-llcer-all" {%if user['spes'][0]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                      <option value="spe-llcer-it" {%if user['spes'][0]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
-                      <option value="spe-bio-eco" {%if user['spes'][0]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                      <option value="spe-art" {%if user['spes'][0]=="spe-art"%}selected{%endif%}>Arts</option>
+                      <option value="spe-hggsp" {%if user['spes'][0]=="spe-hggsp"%}selected{%endif%}>HGGSP</option>
+                      <option value="spe-hlp" {%if user['spes'][0]=="spe-hlp"%}selected{%endif%}>HLP</option>
+                      <option value="spe-ses" {%if user['spes'][0]=="spe-ses"%}selected{%endif%}>SES</option>
+                      <option value="spe-maths" {%if user['spes'][0]=="spe-maths"%}selected{%endif%}>Mathématiques</option>
+                      <option value="spe-pc" {%if user['spes'][0]=="spe-pc"%}selected{%endif%}>Physique-Chimie</option>
+                      <option value="spe-svt" {%if user['spes'][0]=="spe-svt"%}selected{%endif%}>SVT</option>
+                      <option value="spe-nsi" {%if user['spes'][0]=="spe-nsi"%}selected{%endif%}>NSI</option>
+                      <option value="spe-si" {%if user['spes'][0]=="spe-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
+                      <option value="spe-lca" {%if user['spes'][0]=="spe-lca"%}selected{%endif%}>LCA</option>
+                      <option value="spe-llcer-ang" {%if user['spes'][0]=="spe-llcer-ang"%}selected{%endif%}>LLCER Anglais</option>
+                      <option value="spe-llcer-esp" {%if user['spes'][0]=="spe-llcer-esp"%}selected{%endif%}>LLCER Espagnol</option>
+                      <option value="spe-llcer-all" {%if user['spes'][0]=="spe-llcer-all"%}selected{%endif%}>LLCER Allemand</option>
+                      <option value="spe-llcer-it" {%if user['spes'][0]=="spe-llcer-it"%}selected{%endif%}>LLCER Italien</option>
+                      <option value="spe-bio-eco" {%if user['spes'][0]=="spe-bio-eco"%}selected{%endif%}>Biologie-écologie</option>
                     </select>
                   </div>
 
                   <div class="select" class="selectProfil">
-                    <select name="spe2">
+                    <select name="spe2" id="spe2">
                       <option value="none" {%if user['spes'][1]=="none"%}selected{%endif%}>Non renseignée...</option>
-                      <option value="spe-art" {%if user['spes'][1]=="spe-art"%}selected{%endif%}>Spé Arts</option>
-                      <option value="spe-hggsp" {%if user['spes'][1]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                      <option value="spe-hlp" {%if user['spes'][1]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
-                      <option value="spe-ses" {%if user['spes'][1]=="spe-ses"%}selected{%endif%}>Spé SES</option>
-                      <option value="spe-maths" {%if user['spes'][1]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
-                      <option value="spe-pc" {%if user['spes'][1]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                      <option value="spe-svt" {%if user['spes'][1]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
-                      <option value="spe-nsi" {%if user['spes'][1]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
-                      <option value="spe-si" {%if user['spes'][1]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                      <option value="spe-lca" {%if user['spes'][1]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
-                      <option value="spe-llcer-ang" {%if user['spes'][1]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                      <option value="spe-llcer-esp" {%if user['spes'][1]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                      <option value="spe-llcer-all" {%if user['spes'][1]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                      <option value="spe-llcer-it" {%if user['spes'][1]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
-                      <option value="spe-bio-eco" {%if user['spes'][1]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                      <option value="spe-art" {%if user['spes'][1]=="spe-art"%}selected{%endif%}>Arts</option>
+                      <option value="spe-hggsp" {%if user['spes'][1]=="spe-hggsp"%}selected{%endif%}>HGGSP</option>
+                      <option value="spe-hlp" {%if user['spes'][1]=="spe-hlp"%}selected{%endif%}>HLP</option>
+                      <option value="spe-ses" {%if user['spes'][1]=="spe-ses"%}selected{%endif%}>SES</option>
+                      <option value="spe-maths" {%if user['spes'][1]=="spe-maths"%}selected{%endif%}>Mathématiques</option>
+                      <option value="spe-pc" {%if user['spes'][1]=="spe-pc"%}selected{%endif%}>Physique-Chimie</option>
+                      <option value="spe-svt" {%if user['spes'][1]=="spe-svt"%}selected{%endif%}>SVT</option>
+                      <option value="spe-nsi" {%if user['spes'][1]=="spe-nsi"%}selected{%endif%}>NSI</option>
+                      <option value="spe-si" {%if user['spes'][1]=="spe-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
+                      <option value="spe-lca" {%if user['spes'][1]=="spe-lca"%}selected{%endif%}>LCA</option>
+                      <option value="spe-llcer-ang" {%if user['spes'][1]=="spe-llcer-ang"%}selected{%endif%}>LLCER Anglais</option>
+                      <option value="spe-llcer-esp" {%if user['spes'][1]=="spe-llcer-esp"%}selected{%endif%}>LLCER Espagnol</option>
+                      <option value="spe-llcer-all" {%if user['spes'][1]=="spe-llcer-all"%}selected{%endif%}>LLCER Allemand</option>
+                      <option value="spe-llcer-it" {%if user['spes'][1]=="spe-llcer-it"%}selected{%endif%}>LLCER Italien</option>
+                      <option value="spe-bio-eco" {%if user['spes'][1]=="spe-bio-eco"%}selected{%endif%}>Biologie-écologie</option>
                     </select>
                   </div>
 
                   <div class="select" {% if user['classe']=='TG' %} style="display: none;" {% endif %}>
-                    <select name="spe3">
+                    <select name="spe3" id="spe3">
                       <option value="none" {%if user['spes'][2]=="none"%}selected{%endif%}>Non renseignée...</option>
-                      <option value="spe-art" {%if user['spes'][2]=="spe-art"%}selected{%endif%}>Spé Arts</option>
-                      <option value="spe-hggsp" {%if user['spes'][2]=="spe-hggsp"%}selected{%endif%}>Spé HGGSP</option>
-                      <option value="spe-hlp" {%if user['spes'][2]=="spe-hlp"%}selected{%endif%}>Spé HLP</option>
-                      <option value="spe-ses" {%if user['spes'][2]=="spe-ses"%}selected{%endif%}>Spé SES</option>
-                      <option value="spe-maths" {%if user['spes'][2]=="spe-maths"%}selected{%endif%}>Spé Mathématiques</option>
-                      <option value="spe-pc" {%if user['spes'][2]=="spe-pc"%}selected{%endif%}>Spé Physique-Chimie</option>
-                      <option value="spe-svt" {%if user['spes'][2]=="spe-svt"%}selected{%endif%}>Spé SVT</option>
-                      <option value="spe-nsi" {%if user['spes'][2]=="spe-nsi"%}selected{%endif%}>Spé NSI</option>
-                      <option value="spe-si" {%if user['spes'][2]=="spe-si"%}selected{%endif%}>Spé Sciences de l'Ingénieur</option>
-                      <option value="spe-lca" {%if user['spes'][2]=="spe-lca"%}selected{%endif%}>Spé LCA</option>
-                      <option value="spe-llcer-ang" {%if user['spes'][2]=="spe-llcer-ang"%}selected{%endif%}>Spé LLCER Anglais</option>
-                      <option value="spe-llcer-esp" {%if user['spes'][2]=="spe-llcer-esp"%}selected{%endif%}>Spé LLCER Espagnol</option>
-                      <option value="spe-llcer-all" {%if user['spes'][2]=="spe-llcer-all"%}selected{%endif%}>Spé LLCER Allemand</option>
-                      <option value="spe-llcer-it" {%if user['spes'][2]=="spe-llcer-it"%}selected{%endif%}>Spé LLCER Italien</option>
-                      <option value="spe-bio-eco" {%if user['spes'][2]=="spe-bio-eco"%}selected{%endif%}>Spé Biologie-écologie</option>
+                      <option value="spe-art" {%if user['spes'][2]=="spe-art"%}selected{%endif%}>Arts</option>
+                      <option value="spe-hggsp" {%if user['spes'][2]=="spe-hggsp"%}selected{%endif%}>HGGSP</option>
+                      <option value="spe-hlp" {%if user['spes'][2]=="spe-hlp"%}selected{%endif%}>HLP</option>
+                      <option value="spe-ses" {%if user['spes'][2]=="spe-ses"%}selected{%endif%}>SES</option>
+                      <option value="spe-maths" {%if user['spes'][2]=="spe-maths"%}selected{%endif%}>Mathématiques</option>
+                      <option value="spe-pc" {%if user['spes'][2]=="spe-pc"%}selected{%endif%}>Physique-Chimie</option>
+                      <option value="spe-svt" {%if user['spes'][2]=="spe-svt"%}selected{%endif%}>SVT</option>
+                      <option value="spe-nsi" {%if user['spes'][2]=="spe-nsi"%}selected{%endif%}>NSI</option>
+                      <option value="spe-si" {%if user['spes'][2]=="spe-si"%}selected{%endif%}>Sciences de l'Ingénieur</option>
+                      <option value="spe-lca" {%if user['spes'][2]=="spe-lca"%}selected{%endif%}>LCA</option>
+                      <option value="spe-llcer-ang" {%if user['spes'][2]=="spe-llcer-ang"%}selected{%endif%}>LLCER Anglais</option>
+                      <option value="spe-llcer-esp" {%if user['spes'][2]=="spe-llcer-esp"%}selected{%endif%}>LLCER Espagnol</option>
+                      <option value="spe-llcer-all" {%if user['spes'][2]=="spe-llcer-all"%}selected{%endif%}>LLCER Allemand</option>
+                      <option value="spe-llcer-it" {%if user['spes'][2]=="spe-llcer-it"%}selected{%endif%}>LLCER Italien</option>
+                      <option value="spe-bio-eco" {%if user['spes'][2]=="spe-bio-eco"%}selected{%endif%}>Biologie-écologie</option>
                     </select>
                   </div>
                 </div>
@@ -825,6 +825,8 @@
           </table>
           </div>
           <br />
+          <p style="color:red;" id="msgErreur">
+          </p>
           <button type="submit" class="button is-success is-outlined" style="margin-bottom: 20px;">
             <span class="icon is-small">
               <i class="fas fa-check"></i>
@@ -1273,6 +1275,7 @@
   </div>
   <br /><br />
   <script type="text/javascript">
+  var classe="{{user['classe']}}";
   if ($("html").attr('data-theme') == "light"){
     var couleur_un = "{{session['couleur']['light'][0]}}";
     var couleur_deux = "{{session['couleur']['light'][1]}}";
