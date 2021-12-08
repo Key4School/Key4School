@@ -28,8 +28,9 @@ app.add_url_rule('/XP_tuto/', view_func=XP_tuto)
 app.add_url_rule('/mail_rendu/', view_func=mail_rendu)
 app.add_url_rule('/saved/', view_func=saved)
 app.add_url_rule('/about/', view_func=about)
-app.add_url_rule('/leaderboard/', view_func=leaderboard, defaults={'top': 'france'})
-app.add_url_rule('/leaderboard/<top>/', view_func=leaderboard)
+app.add_url_rule('/leaderboard/', view_func=leaderboard, defaults={'top': 'france', 'widget': 0})
+app.add_url_rule('/leaderboard/<top>/', view_func=leaderboard, defaults={'widget': 0})
+app.add_url_rule('/leaderboard/<top>/<int:widget>', view_func=leaderboard)
 
 '''administration.py'''
 from routing.administration import administration, suppressionMsg, validerMsg, sanction, signPost, signRepPost, signPostProfil, signPostDiscussion, signPostMsg
@@ -88,7 +89,7 @@ app.add_url_rule('/moreMsg/', view_func=moreMsg, methods=['POST'])
 app.add_url_rule('/modererGrp/<idGrp>/', view_func=modererGrp, methods=['POST'])
 
 '''profil.py'''
-from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject
+from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject, topLeaderboard
 app.add_url_rule('/profil/', view_func=profil, defaults={'idUser': None})
 app.add_url_rule('/profil/<idUser>/', view_func=profil)
 app.add_url_rule('/changeTheme/', view_func=changeTheme, methods=['POST'])
@@ -97,6 +98,7 @@ app.add_url_rule('/updateprofile/', view_func=updateprofile, methods=['POST'])
 app.add_url_rule('/userImg/<profilImg>/', view_func=userImg)
 app.add_url_rule('/updateImg/', view_func=updateImg, methods=['POST'])
 app.add_url_rule('/otherSubject/', view_func=otherSubject, methods=['POST'])
+app.add_url_rule('/topLeaderboard/<top>/', view_func=topLeaderboard)
 
 '''recherche.py'''
 from routing.recherche import recherche, recherche_user, morePost, moreUser

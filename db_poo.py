@@ -311,6 +311,7 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
     savedDemands = Column(JSONB)
 
     def __init__(self, **params):
+        self.id = params['id']
         self.nom = params['nom']
         self.prenom = params['prenom']
         self.pseudo = params['pseudo']
@@ -482,10 +483,25 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         else:
             return False
 
-    def getRank(self, filter):
+    def getRank(self, filter, beforeAfter):
         sub = User.get(filter=filter, select=["func.rank().over(order_by=User.xp.desc()).label('rank')"], subquery=True)
-        user = Actions.get(select=["sub.c.rank"], filter="sub.c.id == self.id", limit=1)
-        return user['rank']
+        rank = Actions.get(select=["sub.c.rank"], filter="sub.c.id == self.id", limit=1)['rank']
+        if not beforeAfter:
+            return rank
+
+        before = Actions.get(select=["sub"], filter="sub.c.rank < rank", order_by="sub.c.rank", desc=True, limit=2)
+        if before:
+            before.reverse()
+        for key, user in enumerate(before):
+            before[key] = User(**user)
+            before[key]['rank'] = user['rank']
+
+        after = Actions.get(select=["sub"], filter="sub.c.rank > rank", order_by="sub.c.rank", limit=2)
+        for key, user in enumerate(after):
+            after[key] = User(**user)
+            after[key]['rank'] = user['rank']
+
+        return before, rank, after
 
     def __setitem__(self, key, value):
         return setattr(self, key, value)
