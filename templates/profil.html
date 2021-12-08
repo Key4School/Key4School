@@ -369,7 +369,7 @@
               </td>
               <td>
                 <div id="contentlycee" style="display: flex; flex-direction: row;">
-                  <input type="hidden" id="hiddenLycee"  value="{{user['lycee']}}" name="lycee" />
+                  <input type="hidden" id="hiddenLycee"  value="{{user['lycee']}}" name="school" />
                   <p style="width: calc(100% - 35px); margin-right: 15px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%} id="school">{{user['lycee']}}</p>
                   <i class="fas fa-pen" id="penLycee" style="width: 25px; font-size: 20px; cursor: pointer;" {% if user['SanctionEnCour']!="Spec" and user['SanctionEnCour']!="SpecProfil"%}onClick="inputLycee()" {%endif%}></i>
                 </div>

@@ -478,74 +478,80 @@ function inputLycee() {
 }
 
 function verifSchool(asynch) {
-  if ($('#school').val() == '' || $('#school').val() == undefined) {
-    var $content_school = $('#school').html().trim();
+  if ($('#school').get(0).tagName == 'P') {
+    $('#hiddenLycee').val('');
+    return true;
   }
   else {
-    var $content_school = $('#school').val();
-  }
-  var $school = $('#school'),
-    $school_check = $('#school_check');
-  var retour;
-  $.ajax({
-    url: 'https://data.education.gouv.fr/api/records/1.0/search/?dataset=fr-en-annuaire-education&facet=nom_etablissement&facet=nom_commune&refine.type_etablissement=Lycée',
-    dataType: 'json',
-    async: asynch,
-    data: {
-      q: $content_school
-    },
-    success: function(donnee) {
-      lycee = [];
-      lyceesValues = {};
-      $.map(donnee, function() {
-        for (let i = 0; i < donnee["records"].length; i++) {
-          if (lycee.length <= 10) {
-            var nomVille = donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"];
-            var lyceeVal = JSON.stringify({ 'nomVille': nomVille, 'id': donnee["records"][i]["fields"]["identifiant_de_l_etablissement"] });
-            if (lycee.indexOf(nomVille) === -1) {
-              lycee.push(nomVille);
-              lyceesValues[nomVille] = lyceeVal;
+    if ($('#school').val() == '' || $('#school').val() == undefined) {
+      var $content_school = $('#school').html().trim();
+    }
+    else {
+      var $content_school = $('#school').val();
+    }
+    var $school = $('#school'),
+      $school_check = $('#school_check');
+    var retour;
+    $.ajax({
+      url: 'https://data.education.gouv.fr/api/records/1.0/search/?dataset=fr-en-annuaire-education&facet=nom_etablissement&facet=nom_commune&refine.type_etablissement=Lycée',
+      dataType: 'json',
+      async: asynch,
+      data: {
+        q: $content_school
+      },
+      success: function(donnee) {
+        lycee = [];
+        lyceesValues = {};
+        $.map(donnee, function() {
+          for (let i = 0; i < donnee["records"].length; i++) {
+            if (lycee.length <= 10) {
+              var nomVille = donnee["records"][i]["fields"]["nom_etablissement"] + ' ' + donnee["records"][i]["fields"]["nom_commune"];
+              var lyceeVal = JSON.stringify({ 'nomVille': nomVille, 'id': donnee["records"][i]["fields"]["identifiant_de_l_etablissement"] });
+              if (lycee.indexOf(nomVille) === -1) {
+                lycee.push(nomVille);
+                lyceesValues[nomVille] = lyceeVal;
+              }
             }
           }
-        }
-      });
+        });
 
-      $('#school').autocomplete({
-        autoFocus: true,
-        source: lycee,
-        minLength: 0
-      });
+        $('#school').autocomplete({
+          autoFocus: true,
+          source: lycee,
+          minLength: 0
+        });
 
-      if (lycee.indexOf($content_school) === -1) {
-        if ($school.get(0).tagName == 'INPUT') {
-          $school.css({ // on rend le champ rouge
-            borderColor: 'red',
-            boxShadow: '0 0 0 0.125em #ff000099',
-          });
-          $school_check.removeClass("fas fa-check");
-          $school_check.addClass("fas fa-times");
-          $school_check.css({ // on rend le champ rouge
-            color: 'red',
-          });
+        if (lycee.indexOf($content_school) === -1) {
+          if ($school.get(0).tagName == 'INPUT') {
+            $school.css({ // on rend le champ rouge
+              borderColor: 'red',
+              boxShadow: '0 0 0 0.125em #ff000099',
+            });
+            $school_check.removeClass("fas fa-check");
+            $school_check.addClass("fas fa-times");
+            $school_check.css({ // on rend le champ rouge
+              color: 'red',
+            });
+          }
+          retour = false;
+        } else {
+          if ($school.get(0).tagName == 'INPUT') {
+            $school.css({ // si tout est bon, on le rend vert
+              borderColor: 'green',
+              boxShadow: '0 0 0 0.125em #00800099',
+            });
+            $school_check.removeClass("fas fa-times");
+            $school_check.addClass("fas fa-check");
+            $school_check.css({ // on rend le champ rouge
+              color: 'green',
+            });
+          }
+          $('#schoolValue').val(lyceesValues[$content_school]);
+          retour = true;
         }
-        retour = false;
-      } else {
-        if ($school.get(0).tagName == 'INPUT') {
-          $school.css({ // si tout est bon, on le rend vert
-            borderColor: 'green',
-            boxShadow: '0 0 0 0.125em #00800099',
-          });
-          $school_check.removeClass("fas fa-times");
-          $school_check.addClass("fas fa-check");
-          $school_check.css({ // on rend le champ rouge
-            color: 'green',
-          });
-        }
-        $('#schoolValue').val(lyceesValues[$content_school]);
-        retour = true;
       }
-    }
-  });
+    });
+  }
   return retour;
 }
 
@@ -568,9 +574,6 @@ function input(type) {
   });
   $('#telephone').keyup(function() {
     verifPhone();
-  });
-  $('#interets').keyup(function() {
-    verifInterets();
   });
 }
 
