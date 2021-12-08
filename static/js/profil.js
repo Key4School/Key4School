@@ -102,6 +102,47 @@ $(document).ready(function() {
   $('#couleur8-1').css("backgroundColor", listColor[7][theme][0]);
   $('#couleur8-2').css("backgroundColor", listColor[7][theme][1]);
   $('#couleur8-3').css("backgroundColor", listColor[7][theme][2]);
+
+  // leaderboard selection du top
+  $('#lb-france').click(function() {
+    $('#lb-france').addClass('is-active');
+    $('#lb-depart').removeClass('is-active');
+    $('#lb-lycee').removeClass('is-active');
+    $.ajax({
+      type: 'GET',
+      url: '/topLeaderboard/france',
+      async: true,
+      success: function(result){
+        $("#leaderboard_content").html(result);
+      }
+    });
+  });
+  $('#lb-depart').click(function() {
+    $('#lb-depart').addClass('is-active');
+    $('#lb-france').removeClass('is-active');
+    $('#lb-lycee').removeClass('is-active');
+    $.ajax({
+      type: 'GET',
+      url: '/topLeaderboard/departement',
+      async: true,
+      success: function(result){
+        $("#leaderboard_content").html(result);
+      }
+    });
+  });
+  $('#lb-lycee').click(function() {
+    $('#lb-lycee').addClass('is-active');
+    $('#lb-france').removeClass('is-active');
+    $('#lb-depart').removeClass('is-active');
+    $.ajax({
+      type: 'GET',
+      url: '/topLeaderboard/lycee',
+      async: true,
+      success: function(result){
+        $("#leaderboard_content").html(result);
+      }
+    });
+  });
 });
 
 function themeRequest(theme) {

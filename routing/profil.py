@@ -16,7 +16,10 @@ def profil(idUser):
             demandes = Request.get(filter="cls.id_utilisateur == session['id']", order_by="cls.date_envoi", desc=True)
 
             user = User.get(filter="cls.id == session['id']", limit=1)
-            users = User.get(order_by="cls.xp", desc=True, limit=50)
+            users = User.get(order_by="cls.xp", desc=True, limit=3)
+            if user not in users:
+                user['rank'] = user.getRank(None, False)
+
             return render_template("profil.html", demandes=demandes, user=user, users=users)
 
         else:
@@ -210,3 +213,22 @@ def updateImg():
     else:
         session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
+
+
+@db_session
+def topLeaderboard(top):
+    '''changer selection du top du leaderboard dans le profil'''
+    user = User.get(filter="cls.id == session['id']", limit=1)
+
+    topFilter = {'france': None,
+                 'departement': "User.lyceeId.like(f\"{user['lyceeId'][0:3]}%\")",
+                 'lycee': "User.lyceeId == user['lyceeId']"}
+    if top not in topFilter:
+        top = 'france'
+    filtre = topFilter[top]
+
+    users = User.get(filter=filtre, order_by="cls.xp", desc=True, limit=3)
+    if user not in users:
+        user['rank'] = user.getRank(filtre, False)
+
+    return render_template('widget_leaderboard_profil.html', user=user, users=users)

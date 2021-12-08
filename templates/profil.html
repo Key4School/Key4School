@@ -9,7 +9,6 @@
   <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <link rel ="stylesheet" href="http://jqueryui.com/ressources/demos/style.css" />
   <script src="../static/js/voir_mdp.js"></script>
-  <script src="/static/js/leaderboard.js"></script>
   <style>
     .logoBouton:hover {
       cursor: pointer;
@@ -862,81 +861,8 @@
           </li>
         </ul>
         </div>
-        <div >
-        <br />
-        <div class="container_top_leaderboard">
-          <div class="container_top_leaderboard_items">
-            {%if users|length > 1%}
-            <p>
-                <i style="font-size:1.5rem;color:#c0c0c0" class="fas fa-medal"></i>
-            </p>
-            <img alt="photo profile" class="photo_top_leaderboard_2_3" src="{%if users[1]['idImg']%}{{url_for('userImg', profilImg = users[1]['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
-            <p style="font-size:1rem;">
-              {{users[1]['xp']}}
-            </p>
-            <p style="font-size:1rem;">
-              {{users[1]['pseudo']}}
-            </p>
-            {%endif%}
-          </div>
-          <div class="container_top_leaderboard_items">
-            {%if users|length > 0%}
-            <p>
-                <i style="font-size:1.75rem;color:hsl(48, 100%, 67%);" class="fas fa-crown"></i>
-            </p>
-            <img alt="photo profile" style="height:6.25rem;width:6.25rem;object-fit: cover;border-radius:50%;" src="{%if users[0]['idImg']%}{{url_for('userImg', profilImg = users[0]['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
-            <p style="font-size:1.5rem;">
-              {{users[0]['xp']}}
-            </p>
-            <p style="font-size:1.5rem;">
-              {{users[0]['pseudo']}}
-            </p>
-            {%endif%}
-          </div>
-          <div class="container_top_leaderboard_items">
-            {%if users|length > 2%}
-            <p>
-                <i style="font-size:1.5rem;color:#614e1a" class="fas fa-medal"></i>
-            </p>
-            <img alt="photo profile" class="photo_top_leaderboard_2_3" src="{%if users[2]['idImg']%}{{url_for('userImg', profilImg = users[2]['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
-            <p style="font-size:1rem;">
-              {{users[2]['xp']}}
-            </p>
-            <p style="font-size:1rem;">
-              {{users[2]['pseudo']}}
-            </p>
-            {%endif%}
-          </div>
-        </div>
-        <br />
-          {%for utilisateur in users[3:]%}
-          {%set a= loop.index+3%}
-          <table style="width: 100%;margin: 0% auto 3% auto;padding: 1% 2%;border-radius: 10px;">
-            {%if utilisateur['id']==session['id']%}
-            <tr style="border:2px solid {%if utilisateur['id']==session['id']%}var(--color-theme1){%else%}gray{%endif%};">
-              <td style="width:2rem;border:none;" class="leaderboard_cellule">
-                <p style="margin:auto;width:1rem;">
-                  {{a}}
-                </p>
-              </td>
-              <td class="leaderboard_cellule" style="border:none;margin-left:5%;display:flex;align-items:center;justify-content:flex-start">
-                <img alt="photo profile" class="leaderboard_img_classement" src="{%if utilisateur['idImg']%}{{url_for('userImg', profilImg = utilisateur['idImg'])}}{%else%}{{url_for('static',filename='image/sans_profil.png')}}{%endif%}"/>
-              <!-- </td>
-              <td class="leaderboard_cellule"> -->
-                <p style="white-space:nowrap;overflow: hidden;text-overflow: ellipsis;">
-                  {{utilisateur['pseudo']}}
-                </p>
-              </td>
-              <td style="width:auto;border:none;" class="leaderboard_cellule">
-                <p style="width:auto;text-align:right;margin-right:1rem;">
-                  {{utilisateur['xp']}}
-                </p>
-              </td>
-            </tr>
-            {%endif%}
-          </table>
-          {%endfor%}
-
+        <div id="leaderboard_content">
+          {% include 'widget_leaderboard_profil.html' with context %}
         </div>
         <br />
         <a href="{{url_for('leaderboard')}}">Voir plus</a>

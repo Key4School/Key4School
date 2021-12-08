@@ -65,7 +65,7 @@ def about():
     return render_template('about.html')
 
 
-def leaderboard(top):
+def leaderboard(top, widget):
     if 'id' in session:
         user = User.get(filter="cls.id == session['id']", limit=1)
 
@@ -74,14 +74,20 @@ def leaderboard(top):
                      'lycee': "User.lyceeId == user['lyceeId']"}
         if top not in topFilter:
             top = 'france'
-        filter = topFilter[top]
+        filtre = topFilter[top]
 
-        users = User.get(filter=filter, order_by="cls.xp", desc=True, limit=50)
+        users = User.get(filter=filtre, order_by="cls.xp", desc=True, limit=50)
 
         if user not in users:
-            user['rank'] = user.getRank(filter)
+            before, user['rank'], after = user.getRank(filtre, True)
+            before = list(filter(lambda user: user in users, before))
+        else:
+            before, after = None, None
 
-        return render_template("leaderboard.html", users=users, user=user, top=top)
+        if widget:
+            return render_template("widget_leaderboard.html", users=users, user=user, top=top, before=before, after=after)
+
+        return render_template("leaderboard.html", users=users, user=user, top=top, before=before, after=after)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
