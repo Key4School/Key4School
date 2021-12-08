@@ -71,7 +71,7 @@
       </form>
     </div>
   </div>
-    {%if user['admin']==true%}
+    {%if moiUser['admin']%}
     <div class="modal" id="sanction" style="overflow:hidden;">
       <div class="modal-background"></div>
       <div class="modal-card">
@@ -136,14 +136,14 @@
   <div class="container_profile" style="align-items: center;text-align: center;margin:auto;">
     <p style="font-size:1.5rem;">
     </p>
-      {%if user['admin']== true%}
+      {%if user['admin']%}
       <div style="flex-direction: column;align-items: flex-end;font-size:1.5rem;">
         {{user['pseudo']}}&nbsp;&nbsp;&nbsp;&nbsp;
           <span class="icon is-small ">
             <i class="fas fa-crown" aria-hidden="true" style="color:	hsl(48, 100%, 67%)"></i>
           </span>
           <span style="color:	hsl(48, 100%, 67%)">
-             &nbsp; Admin
+             &nbsp;Admin
           </span>
       </div>
       {%else%}
@@ -346,7 +346,7 @@
       </a>
       <button  class="button is-warning is-outlined is-small" onClick="signalisationProfil();">
         <span class="icon is-small">
-          {% if a_sign %}
+          {% if user['a_sign'] %}
           <i id="signProfil" class="fas fa-flag" aria-hidden="true"></i>
           {% else %}
             <i id="signProfil" class="far fa-flag" aria-hidden="true"></i>
@@ -354,7 +354,7 @@
         </span>
         <span>Signaler</span>
       </button>
-      {%if user['admin']==true%}
+      {%if moiUser['admin']%}
       <button  class="button  is-danger is-outlined is-small" onClick="sanction();">
         <span class="icon is-small">
           <i id="sign" class="fas fa-ban" aria-hidden="true"></i>

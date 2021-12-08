@@ -23,10 +23,10 @@ def profil(idUser):
             return render_template("profil.html", demandes=demandes, user=user, users=users)
 
         else:
-            user = User.get(filter="cls.id == session['id']", limit=1)
-            profilUtilisateur = User.get(filter="cls.id == idUser", limit=1)
+            moiUser = User.get(filter="cls.id == session['id']", limit=1)
+            user = User.get(filter="cls.id == idUser", limit=1)
 
-            return render_template("affichProfil.html", profilUtilisateur=profilUtilisateur, a_sign=profilUtilisateur['a_sign'], user=user)
+            return render_template("affichProfil.html", user=user, moiUser=moiUser)
     else:
         session['redirect'] = request.path
         return redirect(url_for('login'))
