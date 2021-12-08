@@ -158,7 +158,7 @@ $(document).ready(function() {
       type: 'GET',
       url: '/topLeaderboard/france',
       async: true,
-      success: function(result){
+      success: function(result) {
         $("#leaderboard_content").html(result);
       }
     });
@@ -171,7 +171,7 @@ $(document).ready(function() {
       type: 'GET',
       url: '/topLeaderboard/departement',
       async: true,
-      success: function(result){
+      success: function(result) {
         $("#leaderboard_content").html(result);
       }
     });
@@ -184,7 +184,7 @@ $(document).ready(function() {
       type: 'GET',
       url: '/topLeaderboard/lycee',
       async: true,
-      success: function(result){
+      success: function(result) {
         $("#leaderboard_content").html(result);
       }
     });
@@ -964,63 +964,6 @@ function updateImgOpen() {
 
 function updateImgClose() {
   $("#replaceImg").removeClass("is-active");
-}
-
-function signalisationProfil() {
-  selectionSign = document.getElementById("signProfil").className
-  if (selectionSign == "far fa-flag") {
-    signalisationProfilOpen();
-
-
-  }
-  if (selectionSign == "fas fa-flag") {
-    designalisationProfilOpen();
-  }
-}
-
-function signalisationProfilOpen() {
-  $("#signalisationProfil").addClass("is-active");
-}
-
-function signalisationProfilClose() {
-  $("#signalisationProfil").removeClass("is-active");
-}
-
-function designalisationProfilOpen() {
-  $("#designalisationProfil").addClass("is-active");
-}
-
-function designalisationProfilClose() {
-  $("#designalisationProfil").removeClass("is-active");
-}
-
-function signalerProfil(e) {
-  e.preventDefault();
-  var donnees = $('#signalementProfil').serialize();
-  $.ajax({
-    url: '/signPostProfil/', // on donne l'URL du fichier de traitement
-    type: "POST", // la requête est de type POST
-    data: donnees, // et on envoie nos données
-    success: function(response) {
-      $('#signalementProfil').trigger("reset");
-      signalisationProfilClose();
-      document.getElementById("signProfil").className = "fas fa-flag";
-    },
-  });
-}
-
-function designalerProfil(e) {
-  e.preventDefault();
-  var donnees = $('#signalementProfil').serialize();
-  $.ajax({
-    url: '/signPostProfil/', // on donne l'URL du fichier de traitement
-    type: "POST", // la requête est de type POST
-    data: donnees, // et on envoie nos données
-    success: function(response) {
-      designalisationProfilClose();
-      document.getElementById("signProfil").className = "far fa-flag";
-    },
-  });
 }
 
 function divsubjectopen() {
