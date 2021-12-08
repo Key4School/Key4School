@@ -311,7 +311,7 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
     savedDemands = Column(JSONB)
 
     def __init__(self, **params):
-        self.id = params['id']
+        self.id = params.get('id')
         self.nom = params['nom']
         self.prenom = params['prenom']
         self.pseudo = params['pseudo']
