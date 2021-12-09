@@ -188,9 +188,13 @@ def createGroupe():
 
         if not request.form['nomnewgroupe'] and len(participants) > 1:
             return redirect(url_for('redirectDM', idUser1=participants[0], idUser2=participants[1]))
+        elif len(participants) == 1:
+            nom = 'moi'
+        else:
+            nom = request.form['nomnewgroupe']
 
         groupe = Group(
-            nom=request.form['nomnewgroupe'], id_utilisateurs=participants)
+            nom=nom,id_utilisateurs=participants)
         groupe.insert()
 
         return redirect(url_for('page_messages', idGroupe=groupe['id']))
