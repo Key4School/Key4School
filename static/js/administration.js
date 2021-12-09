@@ -7,26 +7,26 @@ function supprimer(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      document.getElementById('divDemande_'+id).style.display='None';
+      document.getElementById('divDemande_' + id).style.display = 'None';
       supprimerClose();
       url = window.location.href;
-      if ( url.search("comments") > 0){
-          location.reload();
+      if (url.search("comments") > 0) {
+        location.reload();
       }
     },
   });
 }
 
-function suppression(id){
+function suppression(id) {
   document.getElementById("idSupprimé").value = id;
   supprimerOpen();
 }
 
-function supprimerOpen(){
+function supprimerOpen() {
   $("#suppression").addClass("is-active");
 }
 
-function supprimerClose(){
+function supprimerClose() {
   $("#suppression").removeClass("is-active");
 }
 
@@ -39,26 +39,26 @@ function valider(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      if (document.location.href.indexOf('comments') > -1){
+      if (document.location.href.indexOf('comments') > -1) {
         window.location.reload(false);
-    }else {
-      document.getElementById('divDemande_'+id).style.display='None';
-      validerClose();
-    }
+      } else {
+        document.getElementById('divDemande_' + id).style.display = 'None';
+        validerClose();
+      }
     },
   });
 }
 
-function validation(id){
+function validation(id) {
   document.getElementById("idValidé").value = id;
   validerOpen();
 }
 
-function validerOpen(){
+function validerOpen() {
   $("#validation").addClass("is-active");
 }
 
-function validerClose(){
+function validerClose() {
   $("#validation").removeClass("is-active");
 }
 
@@ -77,15 +77,15 @@ function sanctionner(e) {
   });
 }
 
-function sanction(){
+function sanction() {
   sanctionnerOpen();
 }
 
-function sanctionnerOpen(){
+function sanctionnerOpen() {
   $("#sanction").addClass("is-active");
 }
 
-function sanctionnerClose(){
+function sanctionnerClose() {
   $("#sanction").removeClass("is-active");
 }
 
@@ -102,15 +102,15 @@ function validerUser(e) {
   });
 }
 
-function validationUser(){
+function validationUser() {
   validerUserOpen();
 }
 
-function validerUserOpen(){
+function validerUserOpen() {
   $("#validationUser").addClass("is-active");
 }
 
-function validerUserClose(){
+function validerUserClose() {
   $("#validationUser").removeClass("is-active");
 }
 
@@ -123,23 +123,23 @@ function supprimerRep(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      document.getElementById('divRep_'+id).style.display='None';
+      document.getElementById('divRep_' + id).style.display = 'None';
       supprimerRepClose();
     },
   });
 }
 
-function suppressionRep(id, idDemand){
+function suppressionRep(id, idDemand) {
   document.getElementById("idRepSupprimé").value = id;
   document.getElementById("idrepDemandSupprimé").value = idDemand;
   supprimerRepOpen();
 }
 
-function supprimerRepOpen(){
+function supprimerRepOpen() {
   $("#suppressionRep").addClass("is-active");
 }
 
-function supprimerRepClose(){
+function supprimerRepClose() {
   $("#suppressionRep").removeClass("is-active");
 }
 
@@ -152,23 +152,23 @@ function validerRep(e) {
     type: "POST", // la requête est de type POST
     data: donnees, // et on envoie nos données
     success: function(response) {
-      document.getElementById('divRep_'+id).style.display='None';
+      document.getElementById('divRep_' + id).style.display = 'None';
       validerRepClose();
     },
   });
 }
 
-function validationRep(id, idDemand){
+function validationRep(id, idDemand) {
   document.getElementById("idRepValidé").value = id;
   document.getElementById("idrepDemandValidé").value = idDemand;
   validerRepOpen();
 }
 
-function validerRepOpen(){
+function validerRepOpen() {
   $("#validationRep").addClass("is-active");
 }
 
-function validerRepClose(){
+function validerRepClose() {
   $("#validationRep").removeClass("is-active");
 }
 
@@ -188,11 +188,11 @@ function supprDisc(e) {
 }
 
 
-function supprDiscOpen(){
+function supprDiscOpen() {
   $("#supprDisc").addClass("is-active");
 }
 
-function supprDiscClose(){
+function supprDiscClose() {
   $("#supprDisc").removeClass("is-active");
 }
 
@@ -210,12 +210,10 @@ function valDisc(e) {
   });
 }
 
-
-
-function valDiscOpen(){
+function valDiscOpen() {
   $("#valDisc").addClass("is-active");
 }
 
-function valDiscClose(){
+function valDiscClose() {
   $("#valDisc").removeClass("is-active");
 }
