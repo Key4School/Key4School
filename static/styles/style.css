@@ -486,7 +486,7 @@ opacity: 1;
 }
 /* Pour telephone */
 @media screen and (max-width:767px) {
-  .deconnexion, .bd-phone-items, .depliableTel, .items_toggle_tel, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .lb-bandeau, .deconnexion, .bd-phone-items, .depliableTel, .items_toggle_tel, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
 
@@ -740,7 +740,7 @@ opacity: 1;
 
 /* Pour tablette */
 @media screen and (min-width:768px) and (max-width:1023px){
-  .deconnexion, .bd-phone-items, .depliable, .depliableOrdi, .items_toggle_ordi, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
+  .lb-bandeau, .deconnexion, .bd-phone-items, .depliable, .depliableOrdi, .items_toggle_ordi, .flex_connexion, .contentcredit, .img_Pub_question_Tel, .telRecherche, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .ordiFlexTelBlock, .questionNavbarTel {
     display: block;
   }
   .depliableTel, .leaderboard_profile, .bd-profil, .items_toggle_tel, .connexion_txt, .titre_pc, .img_connexion, .img_Pub_question_Ordi, .formOrdi, .boutonPubliOrdi, .selectMatiereOrdi, .inputfileAndLikeOrdi, .questionNavbarOrdi, .key4schoolNavbar, .flecheFiltre {
@@ -992,7 +992,7 @@ opacity: 1;
 }
 /* Pour ordinateur */
 @media screen and (min-width:1024px) {
-  .deconnexion, .bd-phone-items, .depliableTel, .items_toggle_tel, .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
+  .lb-bandeau, .deconnexion, .bd-phone-items, .depliableTel, .items_toggle_tel, .titre_phone, .telRecherche, .img_Pub_question_Tel, .boutonPubliTel, .selectMatiereTel, .inputfileAndLikeTel, .questionNavbarTel {
     display: none;
   }
 
