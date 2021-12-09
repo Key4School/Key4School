@@ -503,6 +503,25 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 
         return before, rank, after
 
+    def deleteAccount(self):
+        temp = self.id
+        for message in Message.get(filter="cls.id_utilisateur == temp"):
+            messages.suppr()
+        for groupe in Group.get(filter="cls.id_utilisateurs.comparator.has_key(temp)"):
+            if groupe['is_DM']:
+                groupe.supprGroupe()
+            else:
+                groupe.supprUser(self.id)
+        for request in Request.get(filter="cls.id_utilisateur == temp"):
+            request.suppr()
+        for response in Response.get(filter="cls.id_utilisateur == temp"):
+            response.delete()
+        for notification in Notification.get(filter="cls.destinataires.comparator.has_key(temp)"):
+            notification.supprUser(self.id)
+        if self.idImg:
+            File.get(self.idImg)
+        self.delete()
+
     def __setitem__(self, key, value):
         return setattr(self, key, value)
 
@@ -657,6 +676,16 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
     def user(self):
         temp = self.id_utilisateur
         return User.get(filter="cls.id == temp", limit=1)
+
+    def suppr(self):
+        if self.idFile:
+            File.get(idFile).delete()
+        temp = self.id
+        for user in User.get("cls.savedDemands.comparator.has_key(temp)"):
+            requests = user['savedDemands']
+            requests.remove(self.id)
+            user['savedDemands'] = requests
+        self.delete()
 
     def __setitem__(self, key, value):
         return setattr(self, key, value)
@@ -889,14 +918,18 @@ class Group(Actions, Base):
         return
 
     def supprUser(self, uid):
-        self.id_utilisateurs.remove(uid)
-        if uid in self.moderateurs:
-            self.moderateurs.remove(uid)
+        id_utilisateurs = self.id_utilisateurs
+        moderateurs = self.moderateurs
+        id_utilisateurs_.remove(uid)
+        if uid in moderateurs:
+            moderateurs.remove(uid)
         if len(self.id_utilisateurs) == 0:
             self.supprGroupe()
             return
-        elif len(self.moderateurs) == 0 and self.is_class == False:
-            self.moderateurs.append(self.id_utilisateurs[0])
+        elif len(moderateurs) == 0 and self.is_class == False:
+            moderateurs.append(id_utilisateurs[0])
+        self.id_utilisateurs = id_utilisateurs
+        self.moderateurs = moderateurs
         self.update()
 
     @property

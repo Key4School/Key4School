@@ -105,7 +105,7 @@ def updateprofile():
         user['telephone'] = request.form['telephone']
         user['interets'] = automoderation(request.form['interets'])
 
-        if request.form.get('mdp'):
+        if request.form.get('password'):
             hash = app.config['hashing'].hash_value(request.form['password'], salt=app.config['hashingKey'])
             user['mdp'] = hash
 
@@ -232,3 +232,11 @@ def topLeaderboard(top):
         user['rank'] = user.getRank(filtre, False)
 
     return render_template('widget_leaderboard_profil.html', user=user, users=users)
+
+
+def deleteAccount():
+    if 'id' not in session:
+        session['redirect'] = url_for('profil')
+        return redirect(url_for('login'))
+    User.get(filter="cls.id == session['id']", limit=1).deleteAccount()
+    return redirect(url_for('login'))
