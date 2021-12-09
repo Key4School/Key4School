@@ -158,6 +158,7 @@ $(document).ready(function() {
       type: 'GET',
       url: '/topLeaderboard/france',
       async: true,
+      beforeSend: loading,
       success: function(result){
         $("#leaderboard_content").html(result);
       }
@@ -171,6 +172,7 @@ $(document).ready(function() {
       type: 'GET',
       url: '/topLeaderboard/departement',
       async: true,
+      beforeSend: loading,
       success: function(result){
         $("#leaderboard_content").html(result);
       }
@@ -184,12 +186,44 @@ $(document).ready(function() {
       type: 'GET',
       url: '/topLeaderboard/lycee',
       async: true,
+      beforeSend: loading,
       success: function(result){
         $("#leaderboard_content").html(result);
       }
     });
   });
 });
+
+// loading pour le leaderboard
+function loading(){
+  var color = window.getComputedStyle(document.body).getPropertyValue('--color-theme0');
+  $("#leaderboard_content").html(`
+    <style>
+      .loading {
+        position: relative;
+        margin: auto;
+        margin-top: 20%;
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 50%;
+        box-shadow:
+          0 -3em ` + color + `ff,
+          2.25em -2.25em ` + color + `dc,
+          3em 0 ` + color + `be,
+          2.25em 2.25em ` + color + `a0,
+          0 3em ` + color + `82,
+          -2.25em 2.25em ` + color + `5f,
+          -3em 0 ` + color + `3c,
+          -2.25em -2.25em ` + color + `1e;
+        animation: spin 1.5s linear infinite;
+      }
+
+      @keyframes spin {
+        100% { transform: rotate(-360deg) }
+      }
+    </style>
+    <div class="loading"></div>`);
+}
 
 function themeRequest(theme) {
   $.ajax({
