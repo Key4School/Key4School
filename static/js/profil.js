@@ -844,24 +844,7 @@ function verifLangue() {
 }
 
 function verifOption() {
-  const option1 = $('#option1').val().split('-');
-  const option2 = $('#option2').val().split('-');
-  if (option1[1] == option2[1]) {
-    $('#option1').css({ // si tout est bon, on le rend vert
-      borderColor: 'red',
-      boxShadow: '0 0 0 0.125em #ff000099',
-    });
-    $('#option2').css({ // si tout est bon, on le rend vert
-      borderColor: 'red',
-      boxShadow: '0 0 0 0.125em #ff000099',
-    });
-    if (champsFaux.indexOf("options") === -1) {
-      champsFaux.push('options');
-    }
-
-    // return false;
-  }
-  else {
+  if ($('#option1').val() == "none" || $('#option2').val() == "none") {
     $('#option1').css({ // si tout est bon, on le rend vert
       borderColor: 'green',
       boxShadow: '0 0 0 0.125em #00800099',
@@ -874,7 +857,40 @@ function verifOption() {
     if (index > -1) {
       champsFaux.splice(index, 1);
     }
-    // return true;
+  }
+  else {
+    const option1 = $('#option1').val().split('-');
+    const option2 = $('#option2').val().split('-');
+    if (option1[1] == option2[1]) {
+      $('#option1').css({ // si tout est bon, on le rend vert
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
+      });
+      $('#option2').css({ // si tout est bon, on le rend vert
+        borderColor: 'red',
+        boxShadow: '0 0 0 0.125em #ff000099',
+      });
+      if (champsFaux.indexOf("options") === -1) {
+        champsFaux.push('options');
+      }
+
+      // return false;
+    }
+    else {
+      $('#option1').css({ // si tout est bon, on le rend vert
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
+      });
+      $('#option2').css({ // si tout est bon, on le rend vert
+        borderColor: 'green',
+        boxShadow: '0 0 0 0.125em #00800099',
+      });
+      const index = champsFaux.indexOf("options");
+      if (index > -1) {
+        champsFaux.splice(index, 1);
+      }
+      // return true;
+    }
   }
 }
 
