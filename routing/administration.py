@@ -15,7 +15,7 @@ def administration():
                 if request.form['demandeBut'] == 'Suppr':
                     auteur = User.get(filter="cls.id == Request.get(filter=\"cls.id == request.form['idSuppr']\", limit=1)['id_utilisateur']", limit=1)
                     sanction = auteur['Sanctions']
-                    Request.get(filter="cls.id == request.form['idSuppr']", limit=1).delete()
+                    Request.get(filter="cls.id == request.form['idSuppr']", limit=1).suppr()
                     auteur.addXP(-10)
                     auteur.addXpModeration(10)
                     sanction.append({"SanctionType": "Demandes d'aide supprimée", "SanctionMotif": request.form['motif'], "SanctionNext": 'Aucune', "dateSanction" : datetime.now()})

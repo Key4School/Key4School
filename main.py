@@ -89,7 +89,7 @@ app.add_url_rule('/moreMsg/', view_func=moreMsg, methods=['POST'])
 app.add_url_rule('/modererGrp/<idGrp>/', view_func=modererGrp, methods=['POST'])
 
 '''profil.py'''
-from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject, topLeaderboard
+from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject, topLeaderboard, deleteAccount
 app.add_url_rule('/profil/', view_func=profil, defaults={'idUser': None})
 app.add_url_rule('/profil/<idUser>/', view_func=profil)
 app.add_url_rule('/changeTheme/', view_func=changeTheme, methods=['POST'])
@@ -99,6 +99,7 @@ app.add_url_rule('/userImg/<profilImg>/', view_func=userImg)
 app.add_url_rule('/updateImg/', view_func=updateImg, methods=['POST'])
 app.add_url_rule('/otherSubject/', view_func=otherSubject, methods=['POST'])
 app.add_url_rule('/topLeaderboard/<top>/', view_func=topLeaderboard)
+app.add_url_rule('/deleteAccount/', view_func=deleteAccount, methods=['POST'])
 
 '''recherche.py'''
 from routing.recherche import recherche, recherche_user, morePost, moreUser

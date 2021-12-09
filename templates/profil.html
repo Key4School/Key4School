@@ -1183,12 +1183,14 @@
         </span>
         <span>Annuler</span>
       </button>
-      <button class="button is-danger is-outlined pf-yes-delete-ConfSup">
-        <span class="icon is-small">
-          <i class="fas fa-trash-alt"></i>
-        </span>
-        <span class="pf-oui-supp-ConfSup"></span>
-      </button>
+      <form action="{{url_for('deleteAccount')}}" method="post">
+        <button type="submit" class="button is-danger is-outlined pf-yes-delete-ConfSup">
+          <span class="icon is-small">
+            <i class="fas fa-trash-alt"></i>
+          </span>
+          <span class="pf-oui-supp-ConfSup"></span>
+        </button>
+      </form>
   </div>
   </div>
   <button class="button is-danger is-outlined" id="pf-delete-ConfSup" style="margin-bottom: 20px;">
