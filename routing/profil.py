@@ -105,7 +105,7 @@ def updateprofile():
         user['telephone'] = request.form['telephone']
         user['interets'] = automoderation(request.form['interets'])
 
-        if request.form.get('mdp'):
+        if request.form.get('password'):
             hash = app.config['hashing'].hash_value(request.form['password'], salt=app.config['hashingKey'])
             user['mdp'] = hash
 
