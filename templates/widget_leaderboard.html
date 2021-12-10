@@ -72,7 +72,8 @@
   {%endfor%}
 
   {%if 'rank' in user%}
-
+  <!-- ajouter un divider ici et peut etre enlever le br -->
+  <br/>
   {%for user in before%}
   <table class="leaderboard_classement">
     <tr style="border:2px solid {%if user['id']==session['id']%}var(--color-theme1){%else%}gray{%endif%};">

@@ -551,6 +551,10 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         else:
             return hasattr(self, key)
 
+    def __delitem__(self, key):
+        if key in self:
+            delattr(self, key)
+
     def __repr__(self):
         return f'<User id={self.id}, pseudo={self.pseudo}>'
 
@@ -708,6 +712,10 @@ class Request(Translate_matiere_spes_options_lv, Actions, Base):
         else:
             return hasattr(self, key)
 
+    def __delitem__(self, key):
+        if key in self:
+            delattr(self, key)
+
     def __repr__(self):
         return f'<Request id={self.id}, title={self.titre}>'
 
@@ -800,6 +808,10 @@ class Response(Actions, Base):
     def __contains__(self, key):
         return hasattr(self, key)
 
+    def __delitem__(self, key):
+        if key in self:
+            delattr(self, key)
+
     def __repr__(self):
         return f'<Response id={self.id}, content={self.contenu[0:15]}>'
 
@@ -880,6 +892,10 @@ class Message(Actions, Base):
 
     def __contains__(self, key):
         return hasattr(self, key)
+
+    def __delitem__(self, key):
+        if key in self:
+            delattr(self, key)
 
     def __repr__(self):
         return f'<Message id={self.id}, content={self.contenu[0:15]}>'
@@ -983,6 +999,10 @@ class Group(Actions, Base):
 
     def __contains__(self, key):
         return hasattr(self, key)
+
+    def __delitem__(self, key):
+        if key in self:
+            delattr(self, key)
 
     def __repr__(self):
         return f'<Group id={self.id}, nom={self.nom}>'
@@ -1179,6 +1199,10 @@ class Notification(Actions, Base):
 
     def __contains__(self, key):
         return hasattr(self, key)
+
+    def __delitem__(self, key):
+        if key in self:
+            delattr(self, key)
 
     def __repr__(self):
         return f'<Notification id={self.id}, type={self.type}>'

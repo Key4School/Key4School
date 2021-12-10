@@ -80,14 +80,16 @@ def leaderboard(top, widget):
 
         if user not in users:
             before, user['rank'], after = user.getRank(filtre, True)
-            before = list(filter(lambda user: user in users, before))
+            before = list(filter(lambda user: user['id'] not in [user['id'] for user in users], before))
         else:
-            before, after = None, None
-
+            del user['rank']
+            before, after = [], []
         if widget:
             return render_template("widget_leaderboard.html", users=users, user=user, top=top, before=before, after=after)
 
         return render_template("leaderboard.html", users=users, user=user, top=top, before=before, after=after)
     else:
+        if widget:
+            return abort(404)
         session['redirect'] = request.path
         return redirect(url_for('login'))
