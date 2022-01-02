@@ -22,6 +22,10 @@ def login():
         session['type'] = user['type']
         session['cacheRandomKey'] = app.config['cacheRandomKey']
 
+        if not user['confirmed_email'] and session.get('redirect') != '/emailVerifiction/':
+            user.confirmationEmail()
+            return redirect(url_for('emailNotVerify'))
+
         if user['etapeInscription'] is not None:
             session.pop('id')
             session['idInscri'] = user['id']
@@ -53,6 +57,7 @@ def signIn0():
             user = User(nom=automoderation(request.form['nom']), prenom=automoderation(request.form['prenom']),
                         pseudo=automoderation(request.form['pseudo']), email=request.form['email'], mdp=hash, etapeInscription=1)
             user.insert()
+            user.confirmationEmail()
 
             session['idInscri'] = user['id']
             session['cacheRandomKey'] = app.config['cacheRandomKey']

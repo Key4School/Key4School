@@ -5,6 +5,7 @@ from flask_hashing import Hashing
 from datetime import *
 from flask_session import Session
 from flask.json import jsonify
+from dotenv import load_dotenv
 import json
 import sys
 import os
@@ -89,7 +90,7 @@ app.add_url_rule('/moreMsg/', view_func=moreMsg, methods=['POST'])
 app.add_url_rule('/modererGrp/<idGrp>/', view_func=modererGrp, methods=['POST'])
 
 '''profil.py'''
-from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject, topLeaderboard, deleteAccount
+from routing.profil import profil, changeTheme, theme, updateprofile, userImg, updateImg, otherSubject, topLeaderboard, deleteAccount, emailNotVerify, emailVerification
 app.add_url_rule('/profil/', view_func=profil, defaults={'idUser': None})
 app.add_url_rule('/profil/<idUser>/', view_func=profil)
 app.add_url_rule('/changeTheme/', view_func=changeTheme, methods=['POST'])
@@ -100,6 +101,8 @@ app.add_url_rule('/updateImg/', view_func=updateImg, methods=['POST'])
 app.add_url_rule('/otherSubject/', view_func=otherSubject, methods=['POST'])
 app.add_url_rule('/topLeaderboard/<top>/', view_func=topLeaderboard)
 app.add_url_rule('/deleteAccount/', view_func=deleteAccount, methods=['POST'])
+app.add_url_rule('/emailNotVerify/', view_func=emailNotVerify)
+app.add_url_rule('/emailVerification/<id>/', view_func=emailVerification)
 
 '''recherche.py'''
 from routing.recherche import recherche, recherche_user, morePost, moreUser
@@ -142,6 +145,9 @@ if __name__ == "__main__":
     app.config['cacheRandomKey'] = uuid4()
     app.config['socketio'] = socketio
     app.config['hashing'] = hashing
+
+    if os.path.exists('.env'):
+        load_dotenv()
 
     # This allows us to use a plain HTTP callback
     app.secret_key = os.urandom(24)

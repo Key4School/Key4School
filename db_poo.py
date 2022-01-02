@@ -1,5 +1,5 @@
 from datetime import *
-from flask import session, current_app as app, escape, render_template
+from flask import session, current_app as app, escape, render_template, url_for
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -23,8 +23,6 @@ import os
 Base = declarative_base()
 
 # gestionnaire de session
-
-
 @contextmanager
 def session_scope():
     '''decorateur -> creer session et la ferme a la fin'''
@@ -78,6 +76,28 @@ def is_valid_uuid(uuid_to_test, version=1):
 
 def generate_uuid():
     return str(uuid1())
+
+
+def sendMail(To, subject, htmlMail):
+    serveur = 'smtp.gmail.com'
+    port = '465'
+    From = os.environ.get('EMAIL')
+    password = os.environ.get('PASSWORD')
+    codage = 'utf-8'
+    with smtplib.SMTP_SSL(serveur, port) as mailserver:
+        mailserver.login(From, password)
+
+        msg = MIMEMultipart()
+        msg['From'] = From
+        msg['To'] = To
+        msg['Subject'] = subject
+        msg['Charset'] = codage
+
+        # attache message HTML
+        msg.attach(MIMEText(htmlMail.encode(codage),
+                            'html', _charset=codage))
+
+        mailserver.sendmail(From, To, msg.as_string())
 
 
 class File:
@@ -267,11 +287,14 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
     nom = Column(String)
     prenom = Column(String)
     pseudo = Column(String)
-    email = Column(String)
     mdp = Column(String)
     type = Column(String)
     dateInscription = Column(DateTime)
     etapeInscription = Column(Integer)
+
+    email = Column(String)
+    confirmed_email = Column(Boolean)
+    confirmationId = Column(UUID(as_uuid=False), unique=True)
 
     birth_date = Column(DateTime)
     classe = Column(String)
@@ -315,11 +338,14 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         self.nom = params['nom']
         self.prenom = params['prenom']
         self.pseudo = params['pseudo']
-        self.email = params['email']
         self.mdp = params['mdp']
         self.type = 'ELEVE'
         self.dateInscription = params.get('dateInscription', datetime.now())
         self.etapeInscription = params.get('etapeInscription', 1)
+
+        self.email = params['email']
+        self.confirmed_email = params.get('confirmed_email')
+        self.confirmationId = params.get('confirmationId')
 
         self.birth_date = params.get('birth_date')
         self.classe = params.get('classe')
@@ -379,6 +405,12 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
 
         self.etapeInscription = None
         self.update()
+
+    def confirmationEmail(self):
+        self.confirmed_email = False
+        self.confirmationId = generate_uuid()
+        sendMail(self.email, 'Key4School - Vérifier Votre adresse mail',
+                    f'<a href=\'http://127.0.0.1:3000{url_for("emailVerification", id=self.confirmationId)}\'>Vérifier votre adresse mail</a>')
 
     def addXP(self, amount: int) -> None:
         """
@@ -1129,25 +1161,7 @@ class Notification(Actions, Base):
         return
 
     def sendMail(self, To, htmlMail, pseudo):
-        serveur = 'key4school.com'
-        port = '465'
-        From = 'no-reply@key4school.com'
-        password = os.environ['SMTP_password']
-        codage = 'utf-8'
-        with smtplib.SMTP_SSL(serveur, port) as mailserver:
-            mailserver.login(From, password)
-
-            msg = MIMEMultipart()
-            msg['From'] = From
-            msg['To'] = To
-            msg['Subject'] = f'Key4School - Nouvelle notification de {pseudo}'
-            msg['Charset'] = codage
-
-            # attache message HTML
-            msg.attach(MIMEText(htmlMail.encode(codage),
-                                'html', _charset=codage))
-
-            mailserver.sendmail(From, To, msg.as_string())
+        sendMail(To, f'Key4School - Nouvelle notification de {pseudo}', htmlMail)
         return
 
     def getSimilar(self, uid):

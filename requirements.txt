@@ -8,3 +8,4 @@ Flask-Migrate
 SQLAlchemy
 alembic
 psycopg2
+dotenv

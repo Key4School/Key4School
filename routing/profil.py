@@ -101,7 +101,9 @@ def updateprofile():
         user['nom'] = automoderation(request.form['nom'])
         user['prenom'] = automoderation(request.form['prenom'])
         user['pseudo'] = automoderation(request.form['pseudo'])
-        user['email'] = request.form['email']
+        if request.form['email'] != user['email']:
+            user['email'] = request.form['email']
+            user.confirmationEmail()
         user['telephone'] = request.form['telephone']
         user['interets'] = automoderation(request.form['interets'])
 
@@ -234,9 +236,31 @@ def topLeaderboard(top):
     return render_template('widget_leaderboard_profil.html', user=user, users=users)
 
 
+@db_session
 def deleteAccount():
     if 'id' not in session:
         session['redirect'] = url_for('profil')
         return redirect(url_for('login'))
     User.get(filter="cls.id == session['id']", limit=1).deleteAccount()
     return redirect(url_for('login'))
+
+
+@db_session
+def emailNotVerify():
+    '''RAJOUTER BOUTON RENVOYER UN MAIL'''
+    return f'Veuillez vérifier votre email'
+
+
+@db_session
+def emailVerification(id):
+    if 'id' not in session:
+        session['redirect'] = request.path
+        return redirect(url_for('login'))
+
+    user = User.get(filter="cls.id == session['id']", limit=1)
+    if user['confirmationId'] != id:
+        return redirect(url_for('emailNotVerify'))
+
+    user['confirmed_email'] = True
+    user['confirmationId'] = None
+    return f'Email Vérifié <a href=\'{url_for("accueil")}\'>Accueil</a>'
