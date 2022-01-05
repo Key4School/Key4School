@@ -22,10 +22,6 @@ def login():
         session['type'] = user['type']
         session['cacheRandomKey'] = app.config['cacheRandomKey']
 
-        if not user['confirmed_email'] and session.get('redirect') != '/emailVerifiction/':
-            user.confirmationEmail()
-            return redirect(url_for('emailNotVerify'))
-
         if user['etapeInscription'] is not None:
             session.pop('id')
             session['idInscri'] = user['id']

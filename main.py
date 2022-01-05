@@ -59,6 +59,10 @@ app.add_url_rule('/likeRep/<idRep>/', view_func=likeRep, methods=['POST'])
 app.add_url_rule('/resoudre/<idPost>/', view_func=resoudre, methods=['POST'])
 app.add_url_rule('/savePost/<postId>/', view_func=savePost, methods=['POST'])
 
+'''flask_error.py'''
+# from routing.flask_error import custom_404
+# app.errorhandler(404)(custom_404)
+
 '''functions.py'''
 from routing.functions import afficheNotif
 app.add_url_rule('/notif/<userId>/<notifId>/', view_func=afficheNotif)

@@ -1,5 +1,5 @@
 from datetime import *
-from flask import session, current_app as app, escape, render_template, url_for
+from flask import session, current_app as app, escape, render_template, request, redirect, url_for, abort
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -76,6 +76,52 @@ def is_valid_uuid(uuid_to_test, version=1):
 
 def generate_uuid():
     return str(uuid1())
+
+
+def login_required(endpoint=None, ajax=None, socket=None, admin=None, allowType=None):
+    def decorator(func):
+        @wraps(func)  # permet de garder le nom de la fonction pour Flask
+        def return_func(*param, **param2):
+            if 'id' not in session:
+                if ajax or (request.method == 'POST' and not endpoint):
+                    return abort(401)
+                if socket:
+                    return
+                if endpoint:
+                    session['redirect'] = url_for(endpoint)
+                else:
+                    session['redirect'] = request.path
+                return redirect(url_for('login'))
+
+            user = User.get(filter="cls.id == session['id']", limit=1)
+
+            if not user['confirmed_email'] and request.path != '/emailVerifiction/':
+                user.confirmationEmail()
+                if ajax or (request.method == 'POST' and not endpoint):
+                    return abort(403)
+                if socket:
+                    return
+                return redirect(url_for('emailNotVerify'))
+
+            if admin:
+                if not user['admin']:
+                    if ajax or (request.method == 'POST' and not endpoint):
+                        return abort(403)
+                    if socket:
+                        return
+                    return redirect(url_for(endpoint or 'accueil'))
+
+            if allowType is not None:  # to handle empty list
+                if not user['type'] in allowType:
+                    if ajax or (request.method == 'POST' and not endpoint):
+                        return abort(403)
+                    if socket:
+                        return
+                    return redirect(url_for(endpoint or 'accueil'))
+
+            return func(*param, **param2)
+        return return_func
+    return decorator
 
 
 def sendMail(To, subject, htmlMail):
@@ -344,7 +390,7 @@ class User(Translate_matiere_spes_options_lv, Actions, Base):
         self.etapeInscription = params.get('etapeInscription', 1)
 
         self.email = params['email']
-        self.confirmed_email = params.get('confirmed_email')
+        self.confirmed_email = params.get('confirmed_email', False)
         self.confirmationId = params.get('confirmationId')
 
         self.birth_date = params.get('birth_date')
@@ -998,7 +1044,7 @@ class Group(Actions, Base):
     @property
     def notifs(self, uid=None):
         if not uid:
-            uid = session['id'] if session != None and 'id' in session else None
+            uid = session.get('id') or None
         if uid:
             temp = self.id
             return Notification.get(filter="(cls.type == 'msg') & (cls.id_groupe == temp) & (cls.destinataires.has_key(uid))")
